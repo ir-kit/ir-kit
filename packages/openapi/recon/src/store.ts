@@ -1,5 +1,14 @@
+import { canonicalJSON } from "./infer/canonical";
 import { inferSchema, mergeSchema } from "./infer/schema";
-import type { OperationObservation, Sample, Schema } from "./types";
+import type {
+  ExampleBucket,
+  OperationObservation,
+  ResponseContent,
+  Sample,
+} from "./types";
+
+const JSON_CT_RE = /^application\/(.*\+)?json$/i;
+const FALLBACK_CT = "application/octet-stream";
 
 /** Group key for aggregation by (origin, method) — within an origin we'll later template paths together. */
 function groupKey(origin: string, method: string): string {
@@ -14,6 +23,8 @@ function groupKey(origin: string, method: string): string {
  *     the same template).
  */
 export class Store {
+  constructor(private readonly maxExamples: number = 3) {}
+
   /** group key → folded observation working state */
   private readonly groups = new Map<
     string,
@@ -43,8 +54,8 @@ export class Store {
         rawPathnames: new Set(),
         templatedPath: null,
         pathParams: {},
-        requestBodySchema: null,
-        responseSchemas: new Map(),
+        requestContent: new Map(),
+        responseContent: new Map(),
         queryParams: inferQueryParamTypes(sample.query),
         sampleCount: 0,
         authSchemes: new Set(),
@@ -55,24 +66,28 @@ export class Store {
     obs.sampleCount += 1;
     if (sample.authSchemeId) obs.authSchemes.add(sample.authSchemeId);
 
-    if (sample.requestBody !== null && sample.requestBody !== undefined) {
-      const inferred = inferIfJson(sample.requestBody);
-      if (inferred) {
-        obs.requestBodySchema = obs.requestBodySchema
-          ? mergeSchema(obs.requestBodySchema, inferred)
-          : inferred;
-      }
+    if (sample.requestContentType) {
+      const slot = ensureContent(obs.requestContent, sample.requestContentType);
+      foldBody(
+        slot,
+        sample.requestContentType,
+        sample.requestBody,
+        this.maxExamples,
+      );
     }
 
-    if (sample.responseBody !== null && sample.responseBody !== undefined) {
-      const inferred = inferIfJson(sample.responseBody);
-      if (inferred) {
-        const existing = obs.responseSchemas.get(sample.status);
-        obs.responseSchemas.set(
-          sample.status,
-          existing ? mergeSchema(existing, inferred) : inferred,
-        );
-      }
+    // Always record the status, even when the body is null (cached/binary/
+    // unreadable). That way the spec surfaces the real status code instead
+    // of collapsing to `default`.
+    let byCt = obs.responseContent.get(sample.status);
+    if (!byCt) {
+      byCt = new Map();
+      obs.responseContent.set(sample.status, byCt);
+    }
+    if (sample.responseContentType || sample.responseBody != null) {
+      const ct = sample.responseContentType ?? FALLBACK_CT;
+      const slot = ensureContent(byCt, ct);
+      foldBody(slot, ct, sample.responseBody, this.maxExamples);
     }
 
     // Widen query param types if a new value disagrees.
@@ -144,7 +159,47 @@ function primitiveType(v: string): "string" | "integer" | "boolean" {
   return "string";
 }
 
-function inferIfJson(value: unknown): Schema | null {
-  if (value === undefined) return null;
-  return inferSchema(value);
+function ensureContent(
+  map: Map<string, ResponseContent>,
+  contentType: string,
+): ResponseContent {
+  let slot = map.get(contentType);
+  if (!slot) {
+    slot = { schema: null, examples: new Map() };
+    map.set(contentType, slot);
+  }
+  return slot;
+}
+
+/**
+ * Fold a body sample into a `ResponseContent` slot. JSON bodies contribute
+ * to schema inference + structured examples; text bodies contribute string
+ * examples only (no schema). Null bodies are recorded as "seen this status
+ * and content-type" without an example.
+ */
+function foldBody(
+  slot: ResponseContent,
+  contentType: string,
+  body: unknown,
+  cap: number,
+): void {
+  if (body == null) return;
+  if (JSON_CT_RE.test(contentType) && typeof body === "object") {
+    const inferred = inferSchema(body);
+    slot.schema = slot.schema ? mergeSchema(slot.schema, inferred) : inferred;
+    addExample(slot.examples, body, cap);
+    return;
+  }
+  if (typeof body === "string") {
+    addExample(slot.examples, body, cap);
+  }
+}
+
+/** Insert into a capped example bucket. Dedup by canonical JSON. */
+function addExample(bucket: ExampleBucket, value: unknown, cap: number): void {
+  if (cap <= 0) return;
+  if (bucket.size >= cap) return;
+  const key = canonicalJSON(value);
+  if (bucket.has(key)) return;
+  bucket.set(key, value);
 }

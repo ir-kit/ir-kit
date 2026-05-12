@@ -3,6 +3,7 @@ import type { OpenAPIV3_1 } from "@hey-api/spec-types";
 import type { DetectedAuth } from "../infer/auth";
 import { templatePathFor } from "../infer/path";
 import type { OperationObservation } from "../types";
+import { dedupeSchemas } from "./dedupe";
 import { OperationBuilder } from "./operation";
 
 export interface AssembleOptions {
@@ -10,6 +11,8 @@ export interface AssembleOptions {
   title: string;
   version: string;
   detectedAuthSchemes: ReadonlyMap<string, DetectedAuth | null>;
+  refDedupeThreshold: number;
+  maxExamples: number;
 }
 
 export type GroupSnapshot = ReadonlyMap<
@@ -26,10 +29,18 @@ export function assembleDocument(
   groups: GroupSnapshot,
   opts: AssembleOptions,
 ): OpenAPIV3_1.Document {
-  const operationsByOrigin = aggregateOperations(groups, opts.pathTemplating);
+  const operationsByOrigin = aggregateOperations(
+    groups,
+    opts.pathTemplating,
+    opts.maxExamples,
+  );
   const origins = new Set(operationsByOrigin.keys());
 
   const paths = renderPaths(operationsByOrigin, origins.size > 1);
+  const sharedSchemas = dedupeSchemas(
+    paths as Record<string, unknown>,
+    opts.refDedupeThreshold,
+  );
   const servers: OpenAPIV3_1.ServerObject[] = [...origins].map((url) => ({
     url,
   }));
@@ -41,9 +52,11 @@ export function assembleDocument(
     servers,
     paths: paths as OpenAPIV3_1.Document["paths"],
   };
-  if (Object.keys(securitySchemes).length > 0) {
-    doc.components = { securitySchemes };
-  }
+  const components: OpenAPIV3_1.ComponentsObject = {};
+  if (Object.keys(sharedSchemas).length > 0) components.schemas = sharedSchemas;
+  if (Object.keys(securitySchemes).length > 0)
+    components.securitySchemes = securitySchemes;
+  if (Object.keys(components).length > 0) doc.components = components;
   return doc;
 }
 
@@ -54,6 +67,7 @@ type OriginMap = Map<string, Map<string, OperationMap>>;
 function aggregateOperations(
   groups: GroupSnapshot,
   pathTemplating: boolean,
+  maxExamples: number,
 ): OriginMap {
   const out: OriginMap = new Map();
   for (const group of groups.values()) {
@@ -62,7 +76,11 @@ function aggregateOperations(
       const tpl = pathTemplating
         ? templatePathFor(rawPath, rawPaths)
         : { template: rawPath, paramTypes: {} };
-      const next = OperationBuilder.fromObservation(obs, tpl.paramTypes);
+      const next = OperationBuilder.fromObservation(
+        obs,
+        tpl.paramTypes,
+        maxExamples,
+      );
 
       const byPath = ensureMap(out, group.origin);
       const byMethod = ensureMap(byPath, tpl.template);

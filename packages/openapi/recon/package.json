@@ -46,9 +46,10 @@
     "provenance": true
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "typecheck": "tsc --noEmit"
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "@hey-api/spec-types": ">=0.2.0"
@@ -56,7 +57,8 @@
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",
     "@hey-api/spec-types": "^0.2.0",
-    "@types/node": "catalog:"
+    "@types/node": "catalog:",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": ">=20.19.0"
