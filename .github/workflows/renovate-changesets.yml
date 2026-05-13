@@ -1,0 +1,25 @@
+name: Renovate changesets
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # Renovate (the Mend-hosted app) can't run `postUpgradeTasks` for us, so
+  # we generate the changeset from CI on every Renovate-authored PR. The
+  # action commits the new `.changeset/*.md` back to the PR branch.
+  changeset:
+    if: ${{ github.actor == 'renovate[bot]' || github.actor == 'renovate-bot' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: mscharley/dependency-changesets-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
