@@ -9,11 +9,6 @@ interface DownloadsState {
 
 const EMPTY: DownloadsState = { items: [], loading: false, error: null };
 
-/**
- * Runs the page scanner via `chrome.devtools.inspectedWindow.eval` and
- * keeps the result in React state. Refreshes whenever the inspected page
- * navigates and on explicit `refresh()` calls.
- */
 export function useDownloads(): DownloadsState & { refresh: () => void } {
   const [state, setState] = useState<DownloadsState>(EMPTY);
 
@@ -42,7 +37,6 @@ export function useDownloads(): DownloadsState & { refresh: () => void } {
     );
   }, []);
 
-  // Initial scan + re-scan on page navigation.
   useEffect(() => {
     refresh();
     const onNavigated = () => refresh();

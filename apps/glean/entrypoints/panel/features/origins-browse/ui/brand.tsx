@@ -1,6 +1,5 @@
 import { useOrigins } from "../model/origins-context";
 
-/** "Glean" wordmark; becomes a back button when an origin is selected. */
 export function Brand() {
   const { selected, back } = useOrigins();
   if (!selected) {

@@ -3,7 +3,6 @@ import { stripScheme } from "../../../shared/lib/origin";
 import { useOrigins } from "../model/origins-context";
 import { OriginRow } from "./origin-row";
 
-/** In-header switcher visible only when an origin is selected. */
 export function OriginDropdown() {
   const { origins, selected, select } = useOrigins();
   const [open, setOpen] = useState(false);

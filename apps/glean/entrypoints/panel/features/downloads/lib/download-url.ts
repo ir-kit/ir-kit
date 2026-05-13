@@ -1,10 +1,3 @@
-/**
- * Fetch a URL from the panel context and trigger a browser download with a
- * sensible filename. Falls back to opening the URL in a new tab when fetch
- * fails (e.g. CORS-restricted). Only handles `http(s):` — other schemes
- * (`javascript:`, `data:`, `file:`) are rejected to avoid open-redirect /
- * script-execution surfaces from arbitrary scanned URLs.
- */
 const SAFE_PROTOCOLS = new Set(["http:", "https:"]);
 
 export async function downloadUrl(url: string): Promise<void> {
@@ -19,8 +12,6 @@ export async function downloadUrl(url: string): Promise<void> {
     const blob = await res.blob();
     triggerSave(blob, filename);
   } catch {
-    // CORS or network failure — open in a new tab and let the user save it.
-    // Already protocol-checked above.
     window.open(url, "_blank", "noopener,noreferrer");
   }
 }

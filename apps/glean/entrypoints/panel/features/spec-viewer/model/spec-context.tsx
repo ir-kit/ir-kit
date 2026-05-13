@@ -10,9 +10,7 @@ import { useOrigins } from "../../origins-browse/model/origins-context";
 
 interface SpecValue {
   spec: object | null;
-  /** True while a fetch is in flight for the currently selected origin. */
   loading: boolean;
-  /** Last fetch failure message, cleared on next successful load. */
   error: string | null;
 }
 

@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { recon } from "../../../app/recon-proxy";
@@ -13,7 +14,6 @@ import type { OriginStats } from "../../../recon-service";
 const INITIAL: OriginStats = { totalSamples: 0, origins: [] };
 
 interface OriginsValue extends OriginStats {
-  /** Currently inspected origin, `null` when the picker is showing. */
   selected: string | null;
   select: (origin: string) => void;
   back: () => void;
@@ -27,13 +27,20 @@ export function OriginsProvider({ children }: { children: ReactNode }) {
   const [stats, setStats] = useState<OriginStats>(INITIAL);
   const [selected, setSelected] = useState<string | null>(null);
 
+  const clearVersion = useRef(0);
+
   useEffect(() => {
     let unsub: (() => void) | null = null;
     let cancelled = false;
-    void recon.subscribe(setStats).then((u) => {
-      if (cancelled) u();
-      else unsub = u;
-    });
+    recon
+      .subscribe(setStats)
+      .then((u) => {
+        if (cancelled) u();
+        else unsub = u;
+      })
+      .catch((err) => {
+        console.error("[glean] recon.subscribe failed", err);
+      });
     return () => {
       cancelled = true;
       unsub?.();
@@ -50,11 +57,13 @@ export function OriginsProvider({ children }: { children: ReactNode }) {
   const back = useCallback(() => setSelected(null), []);
 
   const clearAll = useCallback(() => {
+    const token = ++clearVersion.current;
     const prev = { stats, selected };
     setStats(INITIAL);
     setSelected(null);
     recon.clear().catch((err) => {
-      console.error("[glean] recon.clear failed; restoring UI", err);
+      console.error("[glean] recon.clear failed", err);
+      if (token !== clearVersion.current) return;
       setStats(prev.stats);
       setSelected(prev.selected);
     });
@@ -62,6 +71,7 @@ export function OriginsProvider({ children }: { children: ReactNode }) {
 
   const clearOrigin = useCallback(
     (origin: string) => {
+      const token = ++clearVersion.current;
       const prev = { stats, selected };
       setStats((s) => ({
         ...s,
@@ -69,7 +79,8 @@ export function OriginsProvider({ children }: { children: ReactNode }) {
       }));
       setSelected((current) => (current === origin ? null : current));
       recon.clearOrigin(origin).catch((err) => {
-        console.error("[glean] recon.clearOrigin failed; restoring UI", err);
+        console.error("[glean] recon.clearOrigin failed", err);
+        if (token !== clearVersion.current) return;
         setStats(prev.stats);
         setSelected(prev.selected);
       });
