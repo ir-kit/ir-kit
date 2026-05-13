@@ -19,9 +19,13 @@ on:
 # pin a specific package + module name; the fixture round-trip is enough to
 # catch a broken action.
 
+permissions: {}
+
 jobs:
   regen:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -50,7 +54,9 @@ jobs:
             manifest: ''
             manifest-sentinel: ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Run sdk-regen (with manifest)
         id: regen

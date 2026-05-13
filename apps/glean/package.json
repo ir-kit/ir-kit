@@ -11,6 +11,8 @@
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
+    "install:chrome": "pnpm --filter @ahmedrowaihi/openapi-recon build && wxt build && node scripts/install-chrome.mjs",
+    "install:firefox": "pnpm --filter @ahmedrowaihi/openapi-recon build && wxt build -b firefox && node scripts/install-firefox.mjs",
     "typecheck": "tsc --noEmit",
     "postinstall": "wxt prepare",
     "icons": "for s in 16 32 48 96 128; do rsvg-convert -w $s -h $s branding/icon.svg -o public/icon/$s.png; done"
