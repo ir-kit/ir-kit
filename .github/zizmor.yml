@@ -1,0 +1,7 @@
+rules:
+  cache-poisoning:
+    ignore:
+      - glean-release.yml
+  use-trusted-publishing:
+    ignore:
+      - pr-pkg.yml

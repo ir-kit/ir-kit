@@ -5,19 +5,23 @@ on:
     tags: ["glean-v*"]
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "20"
           cache: "pnpm"
@@ -44,10 +48,14 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Publish release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            ${{ steps.artifacts.outputs.chrome }}
-            ${{ steps.artifacts.outputs.firefox }}
-          generate_release_notes: true
-          fail_on_unmatched_files: false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHROME_ZIP: ${{ steps.artifacts.outputs.chrome }}
+          FIREFOX_ZIP: ${{ steps.artifacts.outputs.firefox }}
+        run: |
+          set -euo pipefail
+          assets=("$CHROME_ZIP")
+          [ -n "$FIREFOX_ZIP" ] && assets+=("$FIREFOX_ZIP")
+          gh release create "$GITHUB_REF_NAME" \
+            --generate-notes \
+            "${assets[@]}"
