@@ -39,6 +39,7 @@ export function OriginRow({
           e.stopPropagation();
           clearOrigin(origin);
         }}
+        aria-label={`Drop ${origin}`}
         title={`Drop ${origin}`}
         className="px-2 text-xs text-zinc-600 opacity-0 transition-opacity group-hover:opacity-100 hover:text-rose-400"
       >

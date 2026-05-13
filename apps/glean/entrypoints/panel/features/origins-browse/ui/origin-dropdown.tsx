@@ -36,6 +36,10 @@ export function OriginDropdown() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls="glean-origin-dropdown-list"
+        aria-label={`Switch origin (currently ${stripScheme(selected)})`}
         className="flex items-center gap-2 rounded-md border border-white/10 bg-zinc-800/60 px-2 py-1 font-mono text-[11px] text-zinc-200 hover:bg-zinc-800"
       >
         <span className="truncate">{stripScheme(selected)}</span>
@@ -59,10 +63,15 @@ export function OriginDropdown() {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter origins…"
+              aria-label="Filter origins"
               className="w-full rounded-md bg-zinc-950 px-2 py-1 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-white/30"
             />
           </div>
-          <ul className="max-h-80 overflow-y-auto py-1">
+          <ul
+            id="glean-origin-dropdown-list"
+            role="listbox"
+            className="max-h-80 overflow-y-auto py-1"
+          >
             {visible.length === 0 && (
               <li className="px-3 py-2 text-xs text-zinc-600">No matches.</li>
             )}

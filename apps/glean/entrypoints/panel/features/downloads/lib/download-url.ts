@@ -1,9 +1,17 @@
 /**
  * Fetch a URL from the panel context and trigger a browser download with a
  * sensible filename. Falls back to opening the URL in a new tab when fetch
- * fails (e.g. CORS-restricted).
+ * fails (e.g. CORS-restricted). Only handles `http(s):` — other schemes
+ * (`javascript:`, `data:`, `file:`) are rejected to avoid open-redirect /
+ * script-execution surfaces from arbitrary scanned URLs.
  */
+const SAFE_PROTOCOLS = new Set(["http:", "https:"]);
+
 export async function downloadUrl(url: string): Promise<void> {
+  if (!isSafeUrl(url)) {
+    console.warn("[glean] refusing unsafe download URL", url);
+    return;
+  }
   const filename = filenameFor(url);
   try {
     const res = await fetch(url, { credentials: "include" });
@@ -12,7 +20,16 @@ export async function downloadUrl(url: string): Promise<void> {
     triggerSave(blob, filename);
   } catch {
     // CORS or network failure — open in a new tab and let the user save it.
-    window.open(url, "_blank", "noopener");
+    // Already protocol-checked above.
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
+function isSafeUrl(url: string): boolean {
+  try {
+    return SAFE_PROTOCOLS.has(new URL(url).protocol);
+  } catch {
+    return false;
   }
 }
 
@@ -32,6 +49,10 @@ function triggerSave(blob: Blob, filename: string): void {
   const a = document.createElement("a");
   a.href = objectUrl;
   a.download = filename;
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(objectUrl);
+  setTimeout(() => {
+    a.remove();
+    URL.revokeObjectURL(objectUrl);
+  }, 0);
 }

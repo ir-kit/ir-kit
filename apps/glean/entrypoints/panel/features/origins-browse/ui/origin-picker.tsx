@@ -26,6 +26,7 @@ export function OriginPicker() {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         placeholder="Filter origins…"
+        aria-label="Filter origins"
         className="rounded-md border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-white/30"
       />
       <ul className="flex flex-1 flex-col gap-0.5 overflow-y-auto">

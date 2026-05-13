@@ -78,6 +78,7 @@ function Item({ item }: { item: ScannedDownload }) {
       <button
         type="button"
         onClick={() => void downloadUrl(item.url)}
+        aria-label={`Download ${item.url}`}
         title="Download (falls back to opening in a new tab if blocked by CORS)"
         className="px-3 text-xs text-zinc-300 opacity-0 transition-opacity group-hover:opacity-100 hover:text-white"
       >

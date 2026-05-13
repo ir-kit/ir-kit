@@ -23,7 +23,7 @@ const JSON_RE = /^application\/(.*\+)?json$/i;
  * into the spec as if they were endpoints.
  */
 const TEXT_LIKE_RE =
-  /^(text\/(plain|csv|x-yaml|yaml|tab-separated-values)|application\/(.*\+)?(yaml|xml|graphql|x-www-form-urlencoded)$)/i;
+  /^(text\/(plain|csv|x-yaml|yaml|tab-separated-values)|application\/(.*\+)?(yaml|xml|graphql|x-www-form-urlencoded))$/i;
 /** Content-types we explicitly drop — page documents, scripts, styles, fonts. */
 const SKIP_RESPONSE_CONTENT_TYPES =
   /^(text\/(html|css|javascript|ecmascript|x-component)|application\/(javascript|ecmascript|x-javascript|xhtml\+xml)|font\/|image\/|video\/|audio\/)/i;

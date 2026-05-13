@@ -50,19 +50,32 @@ export function OriginsProvider({ children }: { children: ReactNode }) {
   const back = useCallback(() => setSelected(null), []);
 
   const clearAll = useCallback(() => {
+    const prev = { stats, selected };
     setStats(INITIAL);
     setSelected(null);
-    void recon.clear();
-  }, []);
+    recon.clear().catch((err) => {
+      console.error("[glean] recon.clear failed; restoring UI", err);
+      setStats(prev.stats);
+      setSelected(prev.selected);
+    });
+  }, [stats, selected]);
 
-  const clearOrigin = useCallback((origin: string) => {
-    setStats((s) => ({
-      ...s,
-      origins: s.origins.filter(([o]) => o !== origin),
-    }));
-    setSelected((current) => (current === origin ? null : current));
-    void recon.clearOrigin(origin);
-  }, []);
+  const clearOrigin = useCallback(
+    (origin: string) => {
+      const prev = { stats, selected };
+      setStats((s) => ({
+        ...s,
+        origins: s.origins.filter(([o]) => o !== origin),
+      }));
+      setSelected((current) => (current === origin ? null : current));
+      recon.clearOrigin(origin).catch((err) => {
+        console.error("[glean] recon.clearOrigin failed; restoring UI", err);
+        setStats(prev.stats);
+        setSelected(prev.selected);
+      });
+    },
+    [stats, selected],
+  );
 
   const value = useMemo<OriginsValue>(
     () => ({

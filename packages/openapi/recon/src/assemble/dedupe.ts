@@ -17,7 +17,14 @@ interface SchemaLike {
   items?: unknown;
   $ref?: string;
   required?: unknown;
+  allOf?: unknown;
+  anyOf?: unknown;
+  oneOf?: unknown;
+  not?: unknown;
 }
+
+/** Schema composition keywords whose values are schema(s) — walk + rewrite. */
+const COMPOSITION_KEYS = ["allOf", "anyOf", "oneOf"] as const;
 
 const MAX_DEDUPE_PASSES = 5;
 
@@ -139,6 +146,17 @@ function walkSchema(schema: Schema, visit: (s: Schema) => void): void {
   if (s.items && typeof s.items === "object") {
     walkSchema(s.items as Schema, visit);
   }
+  for (const key of COMPOSITION_KEYS) {
+    const arr = s[key];
+    if (Array.isArray(arr)) {
+      for (const v of arr) {
+        if (v && typeof v === "object") walkSchema(v as Schema, visit);
+      }
+    }
+  }
+  if (s.not && typeof s.not === "object") {
+    walkSchema(s.not as Schema, visit);
+  }
 }
 
 function isHoistable(schema: Schema): boolean {
@@ -176,6 +194,17 @@ function rewrite(
   }
   if (s.items && typeof s.items === "object") {
     out.items = rewrite(s.items as Schema, hashToName, null);
+  }
+  for (const key of COMPOSITION_KEYS) {
+    const arr = s[key];
+    if (Array.isArray(arr)) {
+      out[key] = arr.map((v) =>
+        v && typeof v === "object" ? rewrite(v as Schema, hashToName, null) : v,
+      );
+    }
+  }
+  if (s.not && typeof s.not === "object") {
+    out.not = rewrite(s.not as Schema, hashToName, null);
   }
   return out as Schema;
 }
