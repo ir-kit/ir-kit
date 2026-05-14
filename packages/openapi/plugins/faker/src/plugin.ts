@@ -1,6 +1,6 @@
-import { generateFactories } from "./generators";
-import { registerExternalSymbols } from "./symbols/external";
-import type { FakerPlugin } from "./types";
+import { generateFactories } from "./generators/index.js";
+import { registerExternalSymbols } from "./symbols/external.js";
+import type { FakerPlugin } from "./types.js";
 
 /**
  * Main faker plugin handler.

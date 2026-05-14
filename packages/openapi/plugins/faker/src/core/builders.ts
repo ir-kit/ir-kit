@@ -2,13 +2,13 @@ import type { Symbol as CodegenSymbol } from "@hey-api/codegen-core";
 import { $, type TsDsl } from "@hey-api/openapi-ts";
 import type ts from "typescript";
 
-import { DATE_METHODS } from "./hints";
+import { DATE_METHODS } from "./hints.js";
 import {
   type FakerCallSpec,
   type ResolveOptions,
   resolveFakerCall,
-} from "./resolve";
-import type { PropertyInfo } from "./types";
+} from "./resolve.js";
+import type { PropertyInfo } from "./types.js";
 
 export type FakerSymbol = CodegenSymbol;
 export type FakerExpr = TsDsl<ts.Expression>;

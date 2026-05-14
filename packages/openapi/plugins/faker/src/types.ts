@@ -1,12 +1,12 @@
 import type { DefinePlugin, IR, Plugin } from "@hey-api/shared";
 
-import type { FieldNameHints, FormatMapping } from "./core/types";
+import type { FieldNameHints, FormatMapping } from "./core/types.js";
 
 export type {
   FakerMethodPath,
   FieldNameHints,
   FormatMapping,
-} from "./core/types";
+} from "./core/types.js";
 
 export type SchemaFilter = (schema: IR.SchemaObject) => boolean;
 

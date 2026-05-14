@@ -1,10 +1,10 @@
-import { DEFAULT_FORMAT_MAPPING } from "./hints";
+import { DEFAULT_FORMAT_MAPPING } from "./hints.js";
 import type {
   FakerMethodPath,
   FieldNameHints,
   FormatMapping,
   PropertyInfo,
-} from "./types";
+} from "./types.js";
 
 const NULL_METHOD = "__null__" as const;
 export type ResolvedFakerMethod = FakerMethodPath | typeof NULL_METHOD;

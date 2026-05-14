@@ -1,0 +1,25 @@
+{
+  "name": "@ahmedrowaihi/example-k6-petstore",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "k6-tools sync",
+    "run": "k6-tools run -- --base-url https://petstore3.swagger.io/api/v3",
+    "run:smoke": "k6-tools run --base-url https://petstore3.swagger.io/api/v3",
+    "run:load": "k6-tools run --base-url https://petstore3.swagger.io/api/v3 --k6-arg=--stage --k6-arg=1m:50,2m:50,30s:0",
+    "run:stress": "k6-tools run --base-url https://petstore3.swagger.io/api/v3 --k6-arg=--stage --k6-arg=1m:50,1m:100,1m:150,1m:200,30s:0",
+    "run:spike": "k6-tools run --base-url https://petstore3.swagger.io/api/v3 --k6-arg=--stage --k6-arg=30s:10,30s:200,1m:10"
+  },
+  "dependencies": {
+    "@ahmedrowaihi/k6": "workspace:*",
+    "@faker-js/faker": "^10.4.0"
+  },
+  "devDependencies": {
+    "@ahmedrowaihi/k6-tools": "workspace:*",
+    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@types/k6": "^1.7.0",
+    "@types/node": "catalog:",
+    "typescript": "5.9.3"
+  }
+}
