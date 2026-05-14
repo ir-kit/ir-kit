@@ -24,20 +24,23 @@ All targets share one normalization layer ([`@hey-api`](https://github.com/hey-a
 
 ## How the pieces fit
 
-```text
-                  ┌─ openapi-{go,kotlin,swift,typescript}    (native SDKs)
-                  │
-   OpenAPI spec ──┼─ @hey-api/openapi-ts + plugins           (hey-api ecosystem)
-                  │     └─ faker · orpc · paths · typia · k6
-                  │
-                  └─ k6-tools → k6-gen → k6                  (typed load tests)
+```mermaid
+flowchart LR
+  ospec["OpenAPI spec"]
+  aspec["AsyncAPI spec"]
+  traffic["HTTP traffic"]
+  ts["TS source"]
 
-   AsyncAPI spec ──→ asyncapi-typescript                     (events SDK)
+  ospec --> native["openapi-{go,kotlin,swift,typescript}"]
+  ospec --> hey["@hey-api/openapi-ts<br/>+ faker · orpc · paths · typia · k6"]
+  ospec --> k6tools["k6-tools"] --> k6gen["k6-gen"] --> k6fw["@ahmedrowaihi/k6"]
 
-   HTTP traffic ────→ openapi-recon ────→ OpenAPI spec       (library)
-                  └─→ glean (Chrome) ───→ OpenAPI spec       (interactive)
+  aspec --> async["asyncapi-typescript"]
 
-   TS source ───────→ fn-schema-cli ────→ JSON Schema        (function-level)
+  traffic --> recon["openapi-recon (lib)"] -.-> ospec
+  traffic --> glean["glean (Chrome)"] -.-> ospec
+
+  ts --> fn["fn-schema-cli"]
 ```
 
 Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyncapi-core`) are listed under **Shared primitives** below — you usually consume one of the higher-level packages instead.
