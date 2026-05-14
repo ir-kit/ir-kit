@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.0.2
+
+### Patch Changes
+
+- Updated dependencies [6c9e57d]
+  - @ahmedrowaihi/openapi-ts-faker@4.0.2
+
 ## 4.0.1
 
 ### Patch Changes

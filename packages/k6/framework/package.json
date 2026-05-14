@@ -1,6 +1,6 @@
 {
   "name": "@ahmedrowaihi/k6",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Framework for authoring k6 load tests in TypeScript: defineLoadTest, flow().step() chaining, pace presets, budgets, auth middleware. Compiles to standard k6.",
   "keywords": [
     "k6",

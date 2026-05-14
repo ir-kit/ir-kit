@@ -1,6 +1,6 @@
 {
   "name": "@ahmedrowaihi/k6-tools",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "CLI for the @ahmedrowaihi/k6 framework. Scaffold load tests (init), regenerate the typed client (sync), bundle+run scripts against the real k6 binary, replay recorded traffic.",
   "keywords": [
     "k6",
