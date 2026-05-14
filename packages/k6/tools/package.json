@@ -49,7 +49,7 @@
     "build": "tsc -p tsconfig.build.json && chmod +x dist/bin.js",
     "dev": "tsc -p tsconfig.build.json --watch",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@ahmedrowaihi/k6-gen": "workspace:*",
