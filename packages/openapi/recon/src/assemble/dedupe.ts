@@ -1,7 +1,7 @@
 import type { OpenAPIV3_1 } from "@hey-api/spec-types";
 
-import { canonicalJSON } from "../infer/canonical";
-import type { Schema } from "../types";
+import { canonicalJSON } from "../infer/canonical.js";
+import type { Schema } from "../types.js";
 
 const REF_PREFIX = "#/components/schemas/";
 

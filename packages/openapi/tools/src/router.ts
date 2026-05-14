@@ -1,6 +1,6 @@
-import type { ExtractParams } from "./match";
-import { match } from "./match";
-import type { Route } from "./route";
+import type { ExtractParams } from "./match.js";
+import { match } from "./match.js";
+import type { Route } from "./route.js";
 
 type RouteHandler<R extends Route, TResult = unknown> = (
   request: Request,

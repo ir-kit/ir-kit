@@ -1,10 +1,10 @@
 import type { OpenAPIV3_1 } from "@hey-api/spec-types";
 
-import type { DetectedAuth } from "../infer/auth";
-import { templatePathFor } from "../infer/path";
-import type { OperationObservation } from "../types";
-import { dedupeSchemas } from "./dedupe";
-import { OperationBuilder } from "./operation";
+import type { DetectedAuth } from "../infer/auth.js";
+import { templatePathFor } from "../infer/path.js";
+import type { OperationObservation } from "../types.js";
+import { dedupeSchemas } from "./dedupe.js";
+import { OperationBuilder } from "./operation.js";
 
 export interface AssembleOptions {
   pathTemplating: boolean;

@@ -1,13 +1,13 @@
 import type { OpenAPIV3_1 } from "@hey-api/spec-types";
 
-import { mergeSchema } from "../infer/schema";
+import { mergeSchema } from "../infer/schema.js";
 import type {
   ExampleBucket,
   OperationObservation,
   ResponseContent,
   Schema,
-} from "../types";
-import { describeStatus } from "./status";
+} from "../types.js";
+import { describeStatus } from "./status.js";
 
 /**
  * Accumulator for one OpenAPI operation, merged from multiple observations

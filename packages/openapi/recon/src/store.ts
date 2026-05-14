@@ -1,11 +1,11 @@
-import { canonicalJSON } from "./infer/canonical";
-import { inferSchema, mergeSchema } from "./infer/schema";
+import { canonicalJSON } from "./infer/canonical.js";
+import { inferSchema, mergeSchema } from "./infer/schema.js";
 import type {
   ExampleBucket,
   OperationObservation,
   ResponseContent,
   Sample,
-} from "./types";
+} from "./types.js";
 
 const JSON_CT_RE = /^application\/(.*\+)?json$/i;
 const FALLBACK_CT = "application/octet-stream";

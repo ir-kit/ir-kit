@@ -6,15 +6,15 @@ export {
   type RequiredChange,
   type ShapeDiff,
   type TypeChange,
-} from "./diff";
-export { routesFromIR } from "./ir";
+} from "./diff.js";
+export { routesFromIR } from "./ir.js";
 export {
   type ExtractParams,
   isInSpec,
   type MatchResult,
   match,
-} from "./match";
-export type { IR } from "./parse";
-export { parseSpec } from "./parse";
-export type { Route } from "./route";
-export { createRouter, type Router } from "./router";
+} from "./match.js";
+export type { IR } from "./parse.js";
+export { parseSpec } from "./parse.js";
+export type { Route } from "./route.js";
+export { createRouter, type Router } from "./router.js";

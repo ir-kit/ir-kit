@@ -1,6 +1,6 @@
 import { URLPattern } from "urlpattern-polyfill";
 
-import type { Route } from "./route";
+import type { Route } from "./route.js";
 
 /** `/users/{id}/posts/{postId}` → `{ id: string; postId: string }` (URL params are always strings). */
 export type ExtractParams<P extends string> =

@@ -1,8 +1,8 @@
-import { assembleDocument, type GroupSnapshot } from "./assemble";
-import { type DetectedAuth, detectAuthScheme } from "./infer/auth";
-import { sanitizeHeaders } from "./sanitize";
-import { Store } from "./store";
-import type { HttpMethod, ReconConfig, Sample } from "./types";
+import { assembleDocument, type GroupSnapshot } from "./assemble/index.js";
+import { type DetectedAuth, detectAuthScheme } from "./infer/auth.js";
+import { sanitizeHeaders } from "./sanitize.js";
+import { Store } from "./store.js";
+import type { HttpMethod, ReconConfig, Sample } from "./types.js";
 
 const HTTP_METHODS = new Set<HttpMethod>([
   "get",

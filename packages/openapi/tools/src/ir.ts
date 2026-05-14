@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 
-import type { Route } from "./route";
+import type { Route } from "./route.js";
 
 const HTTP_METHODS = [
   "get",
