@@ -8,6 +8,7 @@ packages:
   - "apps/*"
   - "examples/*"
   - "tooling/*"
+  - "!tooling/template/**"
 
 catalog:
   "@asyncapi/modelina": "^5.0.0"

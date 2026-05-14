@@ -6,3 +6,20 @@ find the full documentation for it [in our repository](https://github.com/change
 
 We have a quick list of common questions to get you started engaging with this project in
 [our documentation](https://github.com/changesets/changesets/blob/main/docs/common-questions.md).
+
+## House conventions
+
+### Lockstep group: `openapi-ts-faker` / `openapi-ts-orpc` / `openapi-ts-typia`
+
+These three plugins share enough internal contract (faker hints feed the orpc generator; typia schemas walk the same IR) that diverging versions cause subtle resolution bugs. They're pinned together in [`config.json`'s `fixed` group](./config.json) — bumping one bumps all to the same number.
+
+**Not in the lockstep group:**
+
+- `openapi-ts-paths` — independent, just emits route consts.
+- `openapi-ts-k6` — independent, thin wrapper around the standalone `@ahmedrowaihi/k6-gen` package.
+
+Add a plugin to the lockstep group only when it gains a hard contract dependency on the others. Otherwise leave it independent.
+
+### Voice
+
+One sentence per change. No code blocks, no sub-lists. The release-notes UI is a flat list, not a manual — save deep prose for PR descriptions or package READMEs.
