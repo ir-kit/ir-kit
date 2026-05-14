@@ -1,4 +1,4 @@
-import type { FormatMapping } from "./types";
+import type { FormatMapping } from "./types.js";
 
 export const DEFAULT_FORMAT_MAPPING: FormatMapping = {
   email: "internet.email",

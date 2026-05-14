@@ -1,14 +1,14 @@
 import { $ } from "@hey-api/openapi-ts";
 import { buildGraph, type IR } from "@hey-api/shared";
 
-import { buildFakerExpression, type FakerSymbol } from "../core/builders";
-import type { PropertyInfo } from "../core/types";
+import { buildFakerExpression, type FakerSymbol } from "../core/builders.js";
+import type { PropertyInfo } from "../core/types.js";
 import {
   schemaToBatchFactoryName,
   schemaToFactoryName,
   shouldIncludeSchema,
-} from "../utils/helpers";
-import type { FakerPluginInstance, GenerateFactoriesInput } from "./types";
+} from "../utils/helpers.js";
+import type { FakerPluginInstance, GenerateFactoriesInput } from "./types.js";
 
 const schemaNameFromRef = (ref: string): string | null => {
   const m = ref.match(/\/([^/]+)$/);

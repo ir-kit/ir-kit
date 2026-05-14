@@ -4,18 +4,18 @@ export {
   buildFakerExpression,
   type FakerExpr,
   type FakerSymbol,
-} from "./builders";
-export { DATE_METHODS, DEFAULT_FORMAT_MAPPING } from "./hints";
+} from "./builders.js";
+export { DATE_METHODS, DEFAULT_FORMAT_MAPPING } from "./hints.js";
 export {
   type FakerCallSpec,
   type ResolvedFakerMethod,
   type ResolveOptions,
   resolveFakerCall,
-} from "./resolve";
+} from "./resolve.js";
 export type {
   FakerMethodPath,
   FieldNameHints,
   FormatMapping,
   PropertyInfo,
   ResponseSchemaInfo,
-} from "./types";
+} from "./types.js";

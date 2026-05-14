@@ -1,4 +1,4 @@
-import type { FakerPlugin } from "../types";
+import type { FakerPlugin } from "../types.js";
 
 /**
  * Plugin instance type for Faker generators

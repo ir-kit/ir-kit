@@ -1,4 +1,4 @@
-import type { FakerPluginInstance } from "../generators/types";
+import type { FakerPluginInstance } from "../generators/types.js";
 
 /**
  * Register external symbols from faker library

@@ -1,8 +1,8 @@
 import { definePluginConfig } from "@hey-api/shared";
 
-import { DEFAULT_FORMAT_MAPPING } from "./core/hints";
-import { handler } from "./plugin";
-import type { FakerPlugin, FieldNameHints } from "./types";
+import { DEFAULT_FORMAT_MAPPING } from "./core/hints.js";
+import { handler } from "./plugin.js";
+import type { FakerPlugin, FieldNameHints } from "./types.js";
 
 export { DEFAULT_FORMAT_MAPPING };
 

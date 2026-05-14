@@ -1,6 +1,6 @@
 // Import for side effects to load module augmentation
-import "./types";
+import "./types.js";
 
-export { defaultConfig, defineConfig } from "./config";
-export * from "./core";
-export type { FakerPlugin } from "./types";
+export { defaultConfig, defineConfig } from "./config.js";
+export * from "./core/index.js";
+export type { FakerPlugin } from "./types.js";
