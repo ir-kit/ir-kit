@@ -27,47 +27,54 @@ const END = "<!-- @packages-end -->";
  * get categorized explicitly.
  */
 const CATEGORIES = [
-  "Codegen shared",
-  "OpenAPI primitives",
-  "OpenAPI runtime utilities",
+  "Native client SDK generators",
+  "Spec → other targets",
   "`@hey-api/openapi-ts` plugins",
-  "OpenAPI generators",
-  "OpenAPI spec discovery",
-  "AsyncAPI primitives",
-  "AsyncAPI generators",
-  "fn-schema primitives",
-  "fn-schema TypeScript",
-  "k6 load testing",
+  "Spec discovery from traffic",
+  "TypeScript function schemas",
+  "Shared primitives",
   "Apps",
   "Other",
 ];
 
 const CATEGORY_BY_NAME = {
-  "@ahmedrowaihi/codegen-core": "Codegen shared",
-  "@ahmedrowaihi/openapi-core": "OpenAPI primitives",
-  "@ahmedrowaihi/openapi-tools": "OpenAPI runtime utilities",
-  "@ahmedrowaihi/openapi-ts-orpc": "`@hey-api/openapi-ts` plugins",
+  // Native generators emit idiomatic code for their target language —
+  // no TypeScript runtime in the loop.
+  "@ahmedrowaihi/openapi-go": "Native client SDK generators",
+  "@ahmedrowaihi/openapi-kotlin": "Native client SDK generators",
+  "@ahmedrowaihi/openapi-swift": "Native client SDK generators",
+  "@ahmedrowaihi/openapi-typescript": "Native client SDK generators",
+
+  // Specs become things that aren't clients.
+  "@ahmedrowaihi/k6": "Spec → other targets",
+  "@ahmedrowaihi/k6-gen": "Spec → other targets",
+  "@ahmedrowaihi/k6-tools": "Spec → other targets",
+  "@ahmedrowaihi/asyncapi-typescript": "Spec → other targets",
+
+  // Drop into an existing `openapi-ts.config.ts`.
   "@ahmedrowaihi/openapi-ts-faker": "`@hey-api/openapi-ts` plugins",
+  "@ahmedrowaihi/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
+  "@ahmedrowaihi/openapi-ts-orpc": "`@hey-api/openapi-ts` plugins",
   "@ahmedrowaihi/openapi-ts-paths": "`@hey-api/openapi-ts` plugins",
   "@ahmedrowaihi/openapi-ts-typia": "`@hey-api/openapi-ts` plugins",
-  "@ahmedrowaihi/openapi-go": "OpenAPI generators",
-  "@ahmedrowaihi/openapi-kotlin": "OpenAPI generators",
-  "@ahmedrowaihi/openapi-swift": "OpenAPI generators",
-  "@ahmedrowaihi/openapi-typescript": "OpenAPI generators",
-  "@ahmedrowaihi/openapi-recon": "OpenAPI spec discovery",
-  "@ahmedrowaihi/asyncapi-core": "AsyncAPI primitives",
-  "@ahmedrowaihi/asyncapi-typescript": "AsyncAPI generators",
-  "@ahmedrowaihi/fn-schema-core": "fn-schema primitives",
-  "@ahmedrowaihi/fn-schema-typescript": "fn-schema TypeScript",
-  "@ahmedrowaihi/fn-schema-cli": "fn-schema TypeScript",
-  "@ahmedrowaihi/fn-schema-loader": "fn-schema TypeScript",
-  "@ahmedrowaihi/fn-schema-unplugin": "fn-schema TypeScript",
-  "@ahmedrowaihi/fn-schema-transformer": "fn-schema TypeScript",
-  "@ahmedrowaihi/k6": "k6 load testing",
-  "@ahmedrowaihi/k6-gen": "k6 load testing",
-  "@ahmedrowaihi/k6-tools": "k6 load testing",
-  "@ahmedrowaihi/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
-  "@ahmedrowaihi/glean": "Apps",
+
+  // Reverse direction: traffic → spec.
+  "@ahmedrowaihi/openapi-recon": "Spec discovery from traffic",
+  "@ahmedrowaihi/glean": "Spec discovery from traffic",
+
+  // fn-schema family — TypeScript function signatures → JSON Schema.
+  "@ahmedrowaihi/fn-schema-core": "TypeScript function schemas",
+  "@ahmedrowaihi/fn-schema-typescript": "TypeScript function schemas",
+  "@ahmedrowaihi/fn-schema-cli": "TypeScript function schemas",
+  "@ahmedrowaihi/fn-schema-loader": "TypeScript function schemas",
+  "@ahmedrowaihi/fn-schema-unplugin": "TypeScript function schemas",
+  "@ahmedrowaihi/fn-schema-transformer": "TypeScript function schemas",
+
+  // Internal building blocks consumed by other packages above.
+  "@ahmedrowaihi/codegen-core": "Shared primitives",
+  "@ahmedrowaihi/openapi-core": "Shared primitives",
+  "@ahmedrowaihi/openapi-tools": "Shared primitives",
+  "@ahmedrowaihi/asyncapi-core": "Shared primitives",
 };
 
 /**
