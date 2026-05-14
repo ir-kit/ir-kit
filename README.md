@@ -31,6 +31,7 @@ OpenAPI contract toolchain — `@hey-api/openapi-ts` plugins, runtime utilities,
 | Package | Description |
 | --- | --- |
 | [`@ahmedrowaihi/openapi-ts-faker`](./packages/openapi/plugins/faker) | Faker.js plugin for @hey-api/openapi-ts - Generate realistic mock data factories from OpenAPI specs |
+| [`@ahmedrowaihi/openapi-ts-k6`](./packages/k6/hey-api) | Thin @hey-api/openapi-ts plugin that delegates to @ahmedrowaihi/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise prefer the k6-tools CLI. |
 | [`@ahmedrowaihi/openapi-ts-orpc`](./packages/openapi/plugins/orpc) | oRPC plugin for @hey-api/openapi-ts - Generate type-safe RPC clients and servers from OpenAPI specs |
 | [`@ahmedrowaihi/openapi-ts-paths`](./packages/openapi/plugins/paths) | Plugin for @hey-api/openapi-ts — emit per-operation route consts (spec template, URLPattern, method, operationId) for tree-shakable runtime routing and matching |
 | [`@ahmedrowaihi/openapi-ts-typia`](./packages/openapi/plugins/typia) | Typia plugin for @hey-api/openapi-ts — generate compile-time Standard Schema validators from OpenAPI specs |
@@ -77,6 +78,14 @@ OpenAPI contract toolchain — `@hey-api/openapi-ts` plugins, runtime utilities,
 | [`@ahmedrowaihi/fn-schema-transformer`](./packages/fn-schema/transformer) | TypeScript compiler-API transformer that inlines fn-schema results into emitted code. Replaces `schemaOf(myFunction)` calls with the literal JSON Schema at build time, eliminating runtime extraction cost. Plug into ts-patch, swc, esbuild, or any tool that accepts a custom TS transformer. |
 | [`@ahmedrowaihi/fn-schema-typescript`](./packages/fn-schema/typescript) | TypeScript extractor for fn-schema. Walks source via ts-morph, synthesizes virtual type aliases for each function's parameters and return, then converts them to JSON Schema via ts-json-schema-generator. Re-exports a pre-wired `extract` for single-language use. |
 | [`@ahmedrowaihi/fn-schema-unplugin`](./packages/fn-schema/unplugin) | Bundler plugin for fn-schema. Exposes a virtual module that resolves to the extracted bundle, with HMR on source change in dev. Built on unplugin so the same package powers Vite, webpack, Rollup, esbuild, Rspack, Rolldown, and Farm. |
+
+### k6 load testing
+
+| Package | Description |
+| --- | --- |
+| [`@ahmedrowaihi/k6`](./packages/k6/framework) | Framework for authoring k6 load tests in TypeScript: defineLoadTest, flow().step() chaining, pace presets, budgets, auth middleware. Compiles to standard k6. |
+| [`@ahmedrowaihi/k6-gen`](./packages/k6/gen) | Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required. |
+| [`@ahmedrowaihi/k6-tools`](./packages/k6/tools) | CLI for the @ahmedrowaihi/k6 framework. Scaffold load tests (init), regenerate the typed client (sync), bundle+run scripts against the real k6 binary, replay recorded traffic. |
 
 ### Apps
 

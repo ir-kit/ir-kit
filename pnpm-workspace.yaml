@@ -4,6 +4,7 @@ packages:
   - "packages/openapi/plugins/*"
   - "packages/asyncapi/*"
   - "packages/fn-schema/*"
+  - "packages/k6/*"
   - "apps/*"
   - "examples/*"
   - "tooling/*"

@@ -37,6 +37,7 @@ const CATEGORIES = [
   "AsyncAPI generators",
   "fn-schema primitives",
   "fn-schema TypeScript",
+  "k6 load testing",
   "Apps",
   "Other",
 ];
@@ -62,6 +63,10 @@ const CATEGORY_BY_NAME = {
   "@ahmedrowaihi/fn-schema-loader": "fn-schema TypeScript",
   "@ahmedrowaihi/fn-schema-unplugin": "fn-schema TypeScript",
   "@ahmedrowaihi/fn-schema-transformer": "fn-schema TypeScript",
+  "@ahmedrowaihi/k6": "k6 load testing",
+  "@ahmedrowaihi/k6-gen": "k6 load testing",
+  "@ahmedrowaihi/k6-tools": "k6 load testing",
+  "@ahmedrowaihi/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
   "@ahmedrowaihi/glean": "Apps",
 };
 

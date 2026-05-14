@@ -1,0 +1,10 @@
+{
+  "extends": "@ahmedrowaihi/tsconfig/base.json",
+  "compilerOptions": {
+    "types": ["node", "k6"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src/**/*.ts", "k6-tools.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}
