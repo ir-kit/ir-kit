@@ -1,32 +1,50 @@
+import { safeIdent } from "@ahmedrowaihi/codegen-core";
+import {
+  getEnumLiterals,
+  isEnumSchema,
+  isUnionSchema,
+} from "@ahmedrowaihi/openapi-tools";
 import { $, type TsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import ts from "typescript";
 
-import { refToTypeName, toPascalCase } from "./identifiers.js";
+import { refToTypeName } from "./identifiers.js";
 
 type TypeExpr = TsDsl<ts.TypeNode>;
 
-/**
- * Map an IR schema to a TS type DSL node. Inline objects stay inline;
- * named refs / symbolRefs resolve to a type reference by name.
- */
+// `.const` and `type === "enum"` MUST come before the items-bearing
+// union branch — enum schemas carry both `type: "enum"` and items, and
+// falling through to the union path collapses each item to its base
+// type (`string | string | string` instead of the literal union).
 export function schemaToTypeNode(schema: IR.SchemaObject): TypeExpr {
   if (schema.$ref) return $.type(refToTypeName(schema.$ref));
-  if (schema.symbolRef) return $.type(toPascalCase(schema.symbolRef.name));
+  if (schema.symbolRef) return $.type(safeIdent(schema.symbolRef.name));
+
+  if (schema.const !== undefined) {
+    return $.type.literal(schema.const as string | number | boolean | null);
+  }
+
+  if (isEnumSchema(schema)) return enumToUnion(schema);
+
+  if (isUnionSchema(schema)) {
+    const operator = schema.logicalOperator ?? "or";
+    return combine(schema.items!.map(schemaToTypeNode), operator);
+  }
 
   if (schema.items && schema.items.length) {
-    const operator = schema.logicalOperator ?? "or";
     if (schema.type === "array") {
       const inner =
         schema.items.length === 1
           ? schemaToTypeNode(schema.items[0])
-          : combine(schema.items.map(schemaToTypeNode), operator);
+          : combine(
+              schema.items.map(schemaToTypeNode),
+              schema.logicalOperator ?? "or",
+            );
       return arrayOf(inner);
     }
     if (schema.type === "tuple") {
       return $.type.tuple(...schema.items.map(schemaToTypeNode));
     }
-    return combine(schema.items.map(schemaToTypeNode), operator);
   }
 
   switch (schema.type) {
@@ -39,8 +57,6 @@ export function schemaToTypeNode(schema: IR.SchemaObject): TypeExpr {
       return $.type("boolean");
     case "null":
       return $.type.literal(null);
-    case "enum":
-      return enumToUnion(schema);
     case "array":
       return arrayOf($.type("unknown"));
     case "object":
@@ -66,14 +82,10 @@ function combine(types: TypeExpr[], operator: "and" | "or"): TypeExpr {
 }
 
 function enumToUnion(schema: IR.SchemaObject): TypeExpr {
-  const items = schema.items ?? [];
-  if (!items.length) return $.type("string");
-  const literals = items
-    .map((item) => item.const)
-    .filter((v) => v !== undefined)
-    .map((v) => $.type.literal(v as string | number | boolean | null));
+  const literals = getEnumLiterals(schema);
   if (!literals.length) return $.type("string");
-  return literals.length === 1 ? literals[0] : $.type.or(...literals);
+  const nodes = literals.map((v) => $.type.literal(v));
+  return nodes.length === 1 ? nodes[0] : $.type.or(...nodes);
 }
 
 export function objectToTypeLiteral(schema: IR.SchemaObject): TypeExpr {

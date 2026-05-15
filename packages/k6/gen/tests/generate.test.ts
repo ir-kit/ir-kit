@@ -83,4 +83,59 @@ describe("@ahmedrowaihi/k6-gen", () => {
       /StatusEnum: \(overrides\?: StatusEnum\): StatusEnum =>/,
     );
   });
+
+  it("emits literal unions for enums (not collapsed `string | string`)", () => {
+    expect(files["types.ts"]).toMatch(
+      /export type StatusEnum =\s*'placed' \| 'approved' \| 'delivered';/,
+    );
+    expect(files["types.ts"]).not.toMatch(/string \| string/);
+  });
+});
+
+describe("@ahmedrowaihi/k6-gen — identifier sanitization", () => {
+  it("sanitizes schema names that start with a digit", async () => {
+    const { generate } = await import("../src/index.ts");
+    const spec = {
+      openapi: "3.0.0",
+      info: { title: "t", version: "1" },
+      paths: {},
+      components: {
+        schemas: {
+          "0Enum": { type: "string", enum: ["a", "b"] },
+        },
+      },
+    };
+    const { files } = await generate({
+      input: spec,
+      output: "/tmp/_k6_unused",
+      dryRun: true,
+    });
+    const types = files.find((f) => f.path === "types.ts")!.content;
+    expect(types).toMatch(/export type _0Enum =\s*'a' \| 'b';/);
+    expect(types).not.toMatch(/export type 0Enum/);
+  });
+
+  it("wraps the types import onto multiple lines when >1 name", async () => {
+    const { generate } = await import("../src/index.ts");
+    const spec = {
+      openapi: "3.0.0",
+      info: { title: "t", version: "1" },
+      paths: {},
+      components: {
+        schemas: {
+          A: { type: "string" },
+          B: { type: "string" },
+        },
+      },
+    };
+    const { files } = await generate({
+      input: spec,
+      output: "/tmp/_k6_unused",
+      dryRun: true,
+    });
+    const client = files.find((f) => f.path === "client.ts")!.content;
+    expect(client).toMatch(
+      /import type \{\n  A,\n  B,\n\} from "\.\/types\.js";/,
+    );
+  });
 });

@@ -1,3 +1,4 @@
+import { getEnumLiterals } from "@ahmedrowaihi/openapi-tools";
 import type { IR } from "@hey-api/shared";
 import {
   type KtType,
@@ -35,7 +36,7 @@ export function buildEnumFromIR(
   schema: IR.SchemaObject,
   emit: TypeCtx["emit"],
 ): KtType {
-  const rawValues = (schema.items ?? []).map((i) => i.const);
+  const rawValues = getEnumLiterals(schema);
   const allStrings = rawValues.every((v) => typeof v === "string");
   const allIntegers = rawValues.every(
     (v) => typeof v === "number" && Number.isInteger(v),

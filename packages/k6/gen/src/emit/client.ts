@@ -1,3 +1,4 @@
+import { safeIdent } from "@ahmedrowaihi/codegen-core";
 import { $, type TsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import type ts from "typescript";
@@ -5,11 +6,11 @@ import type ts from "typescript";
 import {
   schemaToTypeNode,
   toIdent,
-  toPascalCase,
   type WalkedOperation,
   walkOperations,
 } from "../ir/index.js";
 import { GENERATED_HEADER, printDslNodes } from "../print.js";
+import { formatTypeImport } from "./type-import.js";
 
 type Expr = TsDsl<ts.Expression>;
 type TypeExpr = TsDsl<ts.TypeNode>;
@@ -24,10 +25,8 @@ export function emitClientFile(
   opts: ClientEmitOptions = {},
 ): string {
   const defaultUrl = JSON.stringify(opts.defaultBaseUrl ?? "");
-  const typeNames = (opts.schemaNames ?? []).map(toPascalCase);
-  const typeImport = typeNames.length
-    ? `import type { ${typeNames.join(", ")} } from "./types.js";\n`
-    : "";
+  const typeNames = (opts.schemaNames ?? []).map(safeIdent);
+  const typeImport = formatTypeImport(typeNames);
   const preamble = `${GENERATED_HEADER}
 import * as http from "k6/http";
 import { applyMiddlewareHeaders } from "@ahmedrowaihi/k6/runtime";
