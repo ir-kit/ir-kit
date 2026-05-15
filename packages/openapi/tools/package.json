@@ -1,6 +1,6 @@
 {
   "name": "@ahmedrowaihi/openapi-tools",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend",
   "keywords": [
     "openapi",
