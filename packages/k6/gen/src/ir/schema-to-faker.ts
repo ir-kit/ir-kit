@@ -1,3 +1,5 @@
+import { safeIdent } from "@ahmedrowaihi/codegen-core";
+import { getEnumLiterals } from "@ahmedrowaihi/openapi-tools";
 import {
   DATE_METHODS,
   DEFAULT_FORMAT_MAPPING,
@@ -9,7 +11,7 @@ import { $, type TsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import type ts from "typescript";
 
-import { refToTypeName, toPascalCase } from "./identifiers.js";
+import { refToTypeName } from "./identifiers.js";
 
 type Expr = TsDsl<ts.Expression>;
 
@@ -25,7 +27,7 @@ export function schemaToFakerExpr(
   propName?: string,
 ): Expr {
   if (schema.$ref) return dataCall(refToTypeName(schema.$ref));
-  if (schema.symbolRef) return dataCall(toPascalCase(schema.symbolRef.name));
+  if (schema.symbolRef) return dataCall(safeIdent(schema.symbolRef.name));
 
   if (schema.const !== undefined) return literalExpr(schema.const);
 
@@ -109,11 +111,7 @@ function schemaToPropertyInfo(
 }
 
 function enumFaker(schema: IR.SchemaObject): Expr {
-  const literals = (schema.items ?? [])
-    .map((i) => i.const)
-    .filter(
-      (v): v is string | number | boolean => v !== undefined && v !== null,
-    );
+  const literals = getEnumLiterals(schema);
   if (!literals.length) return $.literal("");
   return $("faker")
     .attr("helpers")

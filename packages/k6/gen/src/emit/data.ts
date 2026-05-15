@@ -1,17 +1,17 @@
+import { safeIdent } from "@ahmedrowaihi/codegen-core";
 import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 
-import { schemaToFakerExpr, toPascalCase } from "../ir/index.js";
+import { schemaToFakerExpr } from "../ir/index.js";
 import { GENERATED_HEADER, printDslNodes } from "../print.js";
+import { formatTypeImport } from "./type-import.js";
 
 export function emitDataFile(
   schemas: Record<string, IR.SchemaObject> | undefined,
 ): string {
   const entries = Object.entries(schemas ?? {});
-  const typeNames = entries.map(([n]) => toPascalCase(n));
-  const typeImport = typeNames.length
-    ? `import type { ${typeNames.join(", ")} } from "./types.js";\n`
-    : "";
+  const typeNames = entries.map(([n]) => safeIdent(n));
+  const typeImport = formatTypeImport(typeNames);
   const preamble = `${GENERATED_HEADER}
 import { faker } from "@faker-js/faker";
 ${typeImport}`;
@@ -22,7 +22,7 @@ ${typeImport}`;
 
   let dataObj = $.object();
   for (const [rawName, schema] of entries) {
-    const name = toPascalCase(rawName);
+    const name = safeIdent(rawName);
     const typeRef = $.type(name);
     const isObject = schema.type === "object" || !!schema.properties;
 

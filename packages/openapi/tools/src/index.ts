@@ -18,3 +18,9 @@ export type { IR } from "./parse.js";
 export { parseSpec } from "./parse.js";
 export type { Route } from "./route.js";
 export { createRouter, type Router } from "./router.js";
+export {
+  type EnumLiteral,
+  getEnumLiterals,
+  isEnumSchema,
+  isUnionSchema,
+} from "./schema.js";

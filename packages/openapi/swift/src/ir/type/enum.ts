@@ -1,4 +1,5 @@
 import { safeCaseName } from "@ahmedrowaihi/codegen-core";
+import { getEnumLiterals } from "@ahmedrowaihi/openapi-tools";
 import type { IR } from "@hey-api/shared";
 
 import type { SwType } from "../../sw-dsl/index.js";
@@ -27,7 +28,7 @@ export function buildEnumFromIR(
   schema: IR.SchemaObject,
   emit: TypeCtx["emit"],
 ): SwType {
-  const rawValues = (schema.items ?? []).map((i) => i.const);
+  const rawValues = getEnumLiterals(schema);
   const allStrings = rawValues.every((v) => typeof v === "string");
   const allIntegers = rawValues.every(
     (v) => typeof v === "number" && Number.isInteger(v),
