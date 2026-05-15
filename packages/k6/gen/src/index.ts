@@ -5,7 +5,12 @@ export {
   emitIndexFile,
   emitTypesFile,
 } from "./emit/index.js";
-export type { BuiltFile, GenerateOptions, GenerateResult } from "./generate.js";
+export type {
+  BuiltFile,
+  GenerateOptions,
+  GenerateResult,
+  ScaffoldOptions,
+} from "./generate.js";
 export { generate } from "./generate.js";
 
 export type { WalkedOperation } from "./ir/index.js";

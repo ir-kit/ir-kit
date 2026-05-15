@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
@@ -9,11 +10,13 @@ import {
 } from "@ahmedrowaihi/openapi-core";
 import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
 import { $RefParser } from "@hey-api/json-schema-ref-parser";
+import type { IR } from "@hey-api/shared";
 
 import {
   emitClientFile,
   emitDataFile,
   emitIndexFile,
+  emitLoadtestStubs,
   emitTypesFile,
 } from "./emit/index.js";
 
@@ -21,6 +24,13 @@ export interface BuiltFile {
   /** Path relative to the output dir. */
   path: string;
   content: string;
+}
+
+export interface ScaffoldOptions {
+  /** Subdirectory inside `output` for the stubs. Default: `loadtests`. */
+  dir?: string;
+  /** How the stubs import the generated client. Default: `../index.js`. */
+  clientImport?: string;
 }
 
 export interface GenerateOptions {
@@ -34,12 +44,20 @@ export interface GenerateOptions {
   normalize?: boolean | NormalizeOptions;
   /** Don't write to disk — just return the files. */
   dryRun?: boolean;
+  /**
+   * Emit one minimal `loadtests/<op>.ts` skeleton per operation alongside
+   * the typed client. `true` uses defaults; pass an object to customize.
+   * Files are written, not overwritten — pre-existing stubs are left alone.
+   */
+  scaffold?: boolean | ScaffoldOptions;
 }
 
 export interface GenerateResult {
   files: BuiltFile[];
   /** Absolute path to the output directory. */
   output: string;
+  /** Parsed IR — exposed so callers can run secondary passes (rename diffs, doc gen). */
+  ir: IR.Model;
 }
 
 /** Generate the typed k6 client + types + faker-backed data builders. */
@@ -70,6 +88,14 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     { path: "index.ts", content: emitIndexFile() },
   ];
 
+  const stubs = opts.scaffold
+    ? emitLoadtestStubs(
+        ir.paths,
+        ir.components?.schemas as Record<string, unknown> | undefined,
+        typeof opts.scaffold === "object" ? opts.scaffold : {},
+      )
+    : [];
+
   const out = resolve(opts.output);
   if (!opts.dryRun) {
     assertSafeOutputDir(out);
@@ -78,7 +104,14 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
       await mkdir(dirname(full), { recursive: true });
       await writeFile(full, file.content);
     }
+    // Stubs are user-editable — never overwrite once they exist.
+    for (const file of stubs) {
+      const full = join(out, file.path);
+      if (existsSync(full)) continue;
+      await mkdir(dirname(full), { recursive: true });
+      await writeFile(full, file.content);
+    }
   }
 
-  return { files, output: out };
+  return { files: [...files, ...stubs], output: out, ir };
 }

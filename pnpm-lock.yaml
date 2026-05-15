@@ -570,6 +570,9 @@ importers:
       '@ahmedrowaihi/k6-gen':
         specifier: workspace:*
         version: link:../gen
+      '@ahmedrowaihi/openapi-tools':
+        specifier: workspace:*
+        version: link:../../openapi/tools
       c12:
         specifier: ^3.3.0
         version: 3.3.4(magicast@0.5.2)
@@ -582,6 +585,9 @@ importers:
       esbuild:
         specifier: ^0.27.7
         version: 0.27.7
+      tinyglobby:
+        specifier: ^0.2.10
+        version: 0.2.16
     devDependencies:
       '@ahmedrowaihi/tsconfig':
         specifier: workspace:*

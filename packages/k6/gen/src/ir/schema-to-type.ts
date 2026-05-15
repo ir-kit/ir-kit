@@ -12,13 +12,23 @@ import { refToTypeName } from "./identifiers.js";
 
 type TypeExpr = TsDsl<ts.TypeNode>;
 
-// `.const` and `type === "enum"` MUST come before the items-bearing
-// union branch — enum schemas carry both `type: "enum"` and items, and
-// falling through to the union path collapses each item to its base
-// type (`string | string | string` instead of the literal union).
-export function schemaToTypeNode(schema: IR.SchemaObject): TypeExpr {
-  if (schema.$ref) return $.type(refToTypeName(schema.$ref));
-  if (schema.symbolRef) return $.type(safeIdent(schema.symbolRef.name));
+export interface SchemaToTypeOpts {
+  /** Namespace prefix for named refs (e.g. "T" → `T.Pet`). Default none. */
+  typeNamespace?: string;
+}
+
+// Dispatch order: `.const` and `type === "enum"` MUST come before the
+// items branch. Enum schemas carry both `type: "enum"` and items, and
+// falling through to union collapses each item to its base type
+// (`string | string | string`).
+export function schemaToTypeNode(
+  schema: IR.SchemaObject,
+  opts: SchemaToTypeOpts = {},
+): TypeExpr {
+  if (schema.$ref) return $.type(qualify(refToTypeName(schema.$ref), opts));
+  if (schema.symbolRef) {
+    return $.type(qualify(safeIdent(schema.symbolRef.name), opts));
+  }
 
   if (schema.const !== undefined) {
     return $.type.literal(schema.const as string | number | boolean | null);
@@ -28,25 +38,41 @@ export function schemaToTypeNode(schema: IR.SchemaObject): TypeExpr {
 
   if (isUnionSchema(schema)) {
     const operator = schema.logicalOperator ?? "or";
-    return combine(schema.items!.map(schemaToTypeNode), operator);
+    return combine(
+      schema.items!.map((s) => schemaToTypeNode(s, opts)),
+      operator,
+    );
   }
 
   if (schema.items && schema.items.length) {
     if (schema.type === "array") {
       const inner =
         schema.items.length === 1
-          ? schemaToTypeNode(schema.items[0])
+          ? schemaToTypeNode(schema.items[0], opts)
           : combine(
-              schema.items.map(schemaToTypeNode),
+              schema.items.map((s) => schemaToTypeNode(s, opts)),
               schema.logicalOperator ?? "or",
             );
       return arrayOf(inner);
     }
     if (schema.type === "tuple") {
-      return $.type.tuple(...schema.items.map(schemaToTypeNode));
+      return $.type.tuple(
+        ...schema.items.map((s) => schemaToTypeNode(s, opts)),
+      );
     }
   }
 
+  return primitiveToTypeNode(schema, opts);
+}
+
+function qualify(name: string, opts: SchemaToTypeOpts): string {
+  return opts.typeNamespace ? `${opts.typeNamespace}.${name}` : name;
+}
+
+function primitiveToTypeNode(
+  schema: IR.SchemaObject,
+  opts: SchemaToTypeOpts,
+): TypeExpr {
   switch (schema.type) {
     case "string":
       return $.type("string");
@@ -60,7 +86,7 @@ export function schemaToTypeNode(schema: IR.SchemaObject): TypeExpr {
     case "array":
       return arrayOf($.type("unknown"));
     case "object":
-      return objectToTypeLiteral(schema);
+      return objectToTypeLiteral(schema, opts);
     case "void":
     case "never":
     case "undefined":
@@ -71,7 +97,6 @@ export function schemaToTypeNode(schema: IR.SchemaObject): TypeExpr {
 }
 
 function arrayOf(inner: TypeExpr): TypeExpr {
-  // The DSL doesn't ship a dedicated array builder for type-position, but
   // `Array<T>` renders identically to `T[]` after the printer's normalize pass.
   return $.type("Array").generic(inner);
 }
@@ -88,7 +113,10 @@ function enumToUnion(schema: IR.SchemaObject): TypeExpr {
   return nodes.length === 1 ? nodes[0] : $.type.or(...nodes);
 }
 
-export function objectToTypeLiteral(schema: IR.SchemaObject): TypeExpr {
+export function objectToTypeLiteral(
+  schema: IR.SchemaObject,
+  opts: SchemaToTypeOpts = {},
+): TypeExpr {
   const required = new Set(schema.required ?? []);
   const propEntries = Object.entries(schema.properties ?? {});
   const additional = schema.additionalProperties;
@@ -101,7 +129,7 @@ export function objectToTypeLiteral(schema: IR.SchemaObject): TypeExpr {
 
   let obj = $.type.object();
   for (const [name, propSchema] of propEntries) {
-    const propType = schemaToTypeNode(propSchema);
+    const propType = schemaToTypeNode(propSchema, opts);
     obj = obj.prop(name, (p) => {
       const out = p.type(propType);
       return required.has(name) ? out : out.optional();
@@ -110,7 +138,8 @@ export function objectToTypeLiteral(schema: IR.SchemaObject): TypeExpr {
   if (additional && typeof additional === "object") {
     obj = obj.idxSig(
       "key",
-      (s) => void s.key($.type("string")).type(schemaToTypeNode(additional)),
+      (s) =>
+        void s.key($.type("string")).type(schemaToTypeNode(additional, opts)),
     );
   }
   return obj;

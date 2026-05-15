@@ -4,14 +4,17 @@ import type { IR } from "@hey-api/shared";
 
 import { schemaToFakerExpr } from "../ir/index.js";
 import { GENERATED_HEADER, printDslNodes } from "../print.js";
-import { formatTypeImport } from "./type-import.js";
+
+/** Matches the namespace alias used by `emitClientFile`. */
+const TYPE_NAMESPACE = "T";
 
 export function emitDataFile(
   schemas: Record<string, IR.SchemaObject> | undefined,
 ): string {
   const entries = Object.entries(schemas ?? {});
-  const typeNames = entries.map(([n]) => safeIdent(n));
-  const typeImport = formatTypeImport(typeNames);
+  const typeImport = entries.length
+    ? `import type * as ${TYPE_NAMESPACE} from "./types.js";\n`
+    : "";
   const preamble = `${GENERATED_HEADER}
 import { faker } from "@faker-js/faker";
 ${typeImport}`;
@@ -23,7 +26,7 @@ ${typeImport}`;
   let dataObj = $.object();
   for (const [rawName, schema] of entries) {
     const name = safeIdent(rawName);
-    const typeRef = $.type(name);
+    const typeRef = $.type(`${TYPE_NAMESPACE}.${name}`);
     const isObject = schema.type === "object" || !!schema.properties;
 
     const body = isObject

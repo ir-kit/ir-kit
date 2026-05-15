@@ -1,7 +1,12 @@
 import { type Budgets, compileBudgets } from "./budgets.js";
 import { FlowBuilder } from "./flow.js";
 import type { Scenario } from "./pace.js";
-import { type Middleware, makeStepCtx, setMiddleware } from "./runtime.js";
+import {
+  type Middleware,
+  makeStepCtx,
+  setBaseUrl,
+  setMiddleware,
+} from "./runtime.js";
 
 export interface ScenarioConfig {
   pace: Scenario;
@@ -9,6 +14,8 @@ export interface ScenarioConfig {
   flow?: FlowBuilder<unknown>;
   /** Per-scenario middleware. Inherits top-level `use` if omitted. */
   use?: ReadonlyArray<Middleware>;
+  /** Per-scenario BASE_URL override. Falls back to __ENV.BASE_URL → client default. */
+  baseUrl?: string;
 }
 
 export interface LoadTestConfig {
@@ -20,6 +27,8 @@ export interface LoadTestConfig {
   pace?: Scenario;
   test?: () => unknown;
   flow?: FlowBuilder<unknown>;
+  /** Override BASE_URL for the single-scenario shorthand. */
+  baseUrl?: string;
   /** Named scenarios — each becomes its own k6 exec function. */
   scenarios?: Record<string, ScenarioConfig>;
   /** k6 `setup()` — runs once before all VUs. */
@@ -76,6 +85,7 @@ export function defineLoadTest(config: LoadTestConfig): CompiledLoadTest {
       pace: config.pace,
       test: config.test,
       flow: config.flow,
+      baseUrl: config.baseUrl,
     });
   }
 
@@ -101,6 +111,8 @@ function buildExec(
   return () => {
     if (sc.use && sc.use.length) setMiddleware(sc.use);
     else if (inherit) setMiddleware(inherit);
+
+    setBaseUrl(sc.baseUrl);
 
     const ctx = makeStepCtx();
     if (sc.flow) sc.flow.run(ctx);
