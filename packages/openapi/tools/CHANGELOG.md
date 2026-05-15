@@ -1,5 +1,11 @@
 # @ahmedrowaihi/openapi-tools
 
+## 1.3.0
+
+### Minor Changes
+
+- 6cb0943: Add `getEnumLiterals`, `isEnumSchema`, `isUnionSchema` helpers for IR schema introspection. Lets downstream generators share the `items[].const` extraction and the `items && !type` union shape predicate instead of re-implementing them per target language.
+
 ## 1.2.1
 
 ### Patch Changes

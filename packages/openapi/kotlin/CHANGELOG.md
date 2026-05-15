@@ -1,5 +1,13 @@
 # @ahmedrowaihi/openapi-kotlin
 
+## 2.0.0
+
+### Patch Changes
+
+- 6cb0943: Consume `getEnumLiterals` from `@ahmedrowaihi/openapi-tools` instead of inlining the `items[].const` extraction. No behavior change — the helper applies the same filter for `string | number | boolean` values.
+- Updated dependencies [6cb0943]
+  - @ahmedrowaihi/openapi-tools@1.3.0
+
 ## 1.1.1
 
 ### Patch Changes
