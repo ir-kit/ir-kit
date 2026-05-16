@@ -22,6 +22,34 @@ All targets share one normalization layer ([`@hey-api`](https://github.com/hey-a
 | Emit AsyncAPI 3.0 → TypeScript | [`@ahmedrowaihi/asyncapi-typescript`](./packages/asyncapi/typescript) | `generate({ spec, output })` |
 | Extract JSON Schema from TS function signatures | [`@ahmedrowaihi/fn-schema-cli`](./packages/fn-schema/cli) | `fn-schema scan / extract / inspect` |
 
+## Use with AI coding agents
+
+Install the contract-kit skills into your project so Claude Code, Cursor, GitHub Copilot, Codex, Cline, Windsurf, and ~50 other agents know how to drive these packages without you re-explaining the API each session:
+
+```bash
+# Install all skills (auto-detects your installed agents)
+npx skills add ahmedrowaihi/contract-kit
+
+# Pick specific skills
+npx skills add ahmedrowaihi/contract-kit --skill k6-loadtest --skill openapi-sdk
+
+# Install globally for every project
+npx skills add ahmedrowaihi/contract-kit -g
+```
+
+Ships six skills, each scoped to one workflow:
+
+| Skill | Triggers on |
+| --- | --- |
+| `k6-loadtest` | "load test", "k6", "perf test from OpenAPI", `defineLoadTest`, `runK6` |
+| `openapi-sdk` | "Go SDK", "Kotlin client", "Swift SDK", "generate client from OpenAPI" |
+| `openapi-from-traffic` | "reverse engineer API", "OpenAPI from HAR", "discover spec from traffic" |
+| `asyncapi-typescript` | "AsyncAPI", "AMQP from spec", "event types", "pub/sub types" |
+| `fn-schema` | "JSON Schema from TypeScript", "function signature to schema", `schemaOf` |
+| `heyapi-plugin-author` | "hey-api plugin", "openapi-ts plugin", "extend hey-api" |
+
+This repo is also a **Claude Code plugin** — `.claude-plugin/plugin.json` + `marketplace.json` are committed at the root, so adding the repo as a marketplace in Claude Code automatically surfaces all six skills.
+
 ## How the pieces fit
 
 ```mermaid
