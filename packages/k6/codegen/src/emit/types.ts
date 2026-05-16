@@ -11,5 +11,6 @@ export function emitTypesFile(
   const decls = Object.entries(schemas ?? {}).map(([rawName, schema]) =>
     $.type.alias(safeIdent(rawName)).export().type(schemaToTypeNode(schema)),
   );
+  if (!decls.length) return `${GENERATED_HEADER}\n\nexport {};\n`;
   return printDslNodes(decls, GENERATED_HEADER);
 }

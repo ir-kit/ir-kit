@@ -139,3 +139,32 @@ describe("@ahmedrowaihi/k6-gen — identifier sanitization", () => {
     expect(types).not.toMatch(/export type 0Enum/);
   });
 });
+
+describe("@ahmedrowaihi/k6-gen — empty schemas", () => {
+  async function generateEmpty() {
+    const { generate } = await import("../src/index.ts");
+    return generate({
+      input: {
+        openapi: "3.0.0",
+        info: { title: "t", version: "1" },
+        paths: {},
+      },
+      output: "/tmp/_k6_unused",
+      dryRun: true,
+    });
+  }
+
+  it("data.ts has no dead faker import when there are no schemas", async () => {
+    const { files } = await generateEmpty();
+    const data = files.find((f) => f.path === "data.ts")!.content;
+    expect(data).toContain("export const data = {} as const;");
+    expect(data).not.toContain("@faker-js/faker");
+    expect(data).not.toMatch(/import type \* as T/);
+  });
+
+  it("types.ts emits `export {};` so the file is a valid module", async () => {
+    const { files } = await generateEmpty();
+    const types = files.find((f) => f.path === "types.ts")!.content;
+    expect(types).toMatch(/export \{\};/);
+  });
+});

@@ -12,16 +12,15 @@ export function emitDataFile(
   schemas: Record<string, IR.SchemaObject> | undefined,
 ): string {
   const entries = Object.entries(schemas ?? {});
-  const typeImport = entries.length
-    ? `import type * as ${TYPE_NAMESPACE} from "./types.js";\n`
-    : "";
-  const preamble = `${GENERATED_HEADER}
-import { faker } from "@faker-js/faker";
-${typeImport}`;
 
   if (!entries.length) {
-    return `${preamble}\nexport const data = {} as const;\n`;
+    return `${GENERATED_HEADER}\nexport const data = {} as const;\n`;
   }
+
+  const preamble = `${GENERATED_HEADER}
+import { faker } from "@faker-js/faker";
+import type * as ${TYPE_NAMESPACE} from "./types.js";
+`;
 
   let dataObj = $.object();
   for (const [rawName, schema] of entries) {
