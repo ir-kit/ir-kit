@@ -1,5 +1,13 @@
 # @ahmedrowaihi/k6-gen
 
+## 0.2.1
+
+### Patch Changes
+
+- d8b5702: Drop the redundant `|| {}` fallback from spread in generated `applyMiddlewareHeaders` calls. Spreading `undefined`/`null` into an object literal is already a no-op; the fallback only existed to silence type-checkers and now trips `no-useless-fallback-in-spread` in downstream oxc-eslint setups.
+- Updated dependencies [d8b5702]
+  - @ahmedrowaihi/openapi-ts-faker@4.0.3
+
 ## 0.2.0
 
 ### Minor Changes

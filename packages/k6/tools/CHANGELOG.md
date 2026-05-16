@@ -1,5 +1,12 @@
 # @ahmedrowaihi/k6-tools
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [d8b5702]
+  - @ahmedrowaihi/k6-gen@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
