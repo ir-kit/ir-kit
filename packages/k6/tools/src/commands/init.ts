@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 
-import { generate } from "@ahmedrowaihi/k6-gen";
+import { generate } from "@ahmedrowaihi/k6-toolkit";
 import { defineCommand } from "citty";
 import { consola } from "consola";
 

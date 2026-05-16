@@ -104,6 +104,12 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 | [`@ahmedrowaihi/openapi-core`](./packages/openapi/core) | Shared building blocks for native-client SDK generators on top of OpenAPI 3.x — identifier transforms, security-scheme walkers, ref helpers, filesystem safety. Used by @ahmedrowaihi/openapi-go, @ahmedrowaihi/openapi-kotlin, @ahmedrowaihi/openapi-swift. |
 | [`@ahmedrowaihi/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 
+### Other
+
+| Package | Description |
+| --- | --- |
+| [`@ahmedrowaihi/k6-toolkit`](./packages/k6/toolkit) | Programmatic toolkit for k6 workflows. Bundle loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from OpenAPI specs. The library that @ahmedrowaihi/k6-tools (the CLI) is built on. |
+
 <!-- @packages-end -->
 
 > The package list above is auto-generated from each `package.json`'s `description` field, with categories driven by [`scripts/sync-readme.mjs`](./scripts/sync-readme.mjs). The lefthook pre-commit hook keeps it current; run `pnpm sync:readme` manually if needed.

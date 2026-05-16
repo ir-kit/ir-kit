@@ -1,3 +1,4 @@
+import type { BundleOpts } from "@ahmedrowaihi/k6-toolkit";
 import { loadConfig } from "c12";
 
 export interface K6ToolsConfig {
@@ -22,6 +23,12 @@ export interface K6ToolsConfig {
    * `init`. Pre-existing stubs are never overwritten. Default: `false`.
    */
   scaffoldAll?: boolean;
+  /**
+   * Bundler options forwarded to tsdown verbatim. `entry` + `outDir`
+   * are controlled by the CLI (derived from the loadtest path), so
+   * they're excluded — everything else passes through.
+   */
+  bundle?: Partial<Omit<BundleOpts, "entry" | "outDir">>;
 }
 
 /** Helper for typed config files: `export default defineConfig({...})`. */

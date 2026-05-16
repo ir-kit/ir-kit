@@ -1,18 +1,10 @@
-import { join, resolve } from "node:path";
+import { resolve } from "node:path";
 
-import { generate } from "@ahmedrowaihi/k6-gen";
+import { sync } from "@ahmedrowaihi/k6-toolkit";
 import { defineCommand } from "citty";
 import { consola } from "consola";
 
 import { loadK6ToolsConfig } from "../config.js";
-import {
-  diffOperationIds,
-  extractOperationMap,
-  loadSnapshotOps,
-  type OperationDiff,
-  SNAPSHOT_FILENAME,
-  writeSnapshotOps,
-} from "../sync/index.js";
 
 export const syncCommand = defineCommand({
   meta: {
@@ -56,41 +48,31 @@ export const syncCommand = defineCommand({
     const output = resolve(cwd, args.output ?? config.output ?? "./src/gen");
     const scaffold =
       args["scaffold-all"] === true || config.scaffoldAll === true;
-
-    const snapshotPath = join(output, SNAPSHOT_FILENAME);
-    const prevOps = args["report-renames"]
-      ? await loadSnapshotOps(snapshotPath)
-      : null;
+    const reportRenames = args["report-renames"] === true;
 
     consola.start(`Generating typed client from ${spec} → ${output}`);
-    const result = await generate({
+    const result = await sync({
       input: resolve(cwd, spec),
       output,
       normalize: config.normalize ?? true,
       defaultBaseUrl: config.defaultBaseUrl,
       scaffold,
+      reportRenames,
     });
     consola.success(`Wrote ${result.files.length} files to ${output}`);
     for (const f of result.files) consola.info(`  ${f.path}`);
 
-    const nextOps = extractOperationMap(result.ir);
-    await writeSnapshotOps(snapshotPath, nextOps);
-
-    if (args["report-renames"]) reportRenames(prevOps, nextOps);
+    if (reportRenames) logDiff(result.diff);
   },
 });
 
-function reportRenames(
-  prev: ReturnType<typeof extractOperationMap> | null,
-  next: ReturnType<typeof extractOperationMap>,
-): void {
-  if (!prev) {
+function logDiff(diff: Awaited<ReturnType<typeof sync>>["diff"]): void {
+  if (!diff) {
     consola.info(
       "No previous snapshot found — saved one for the next sync to compare against.",
     );
     return;
   }
-  const diff: OperationDiff = diffOperationIds(prev, next);
   if (!diff.renamed.length && !diff.removed.length && !diff.added.length) {
     consola.success("No operation-id drift since last sync.");
     return;
