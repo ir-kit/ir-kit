@@ -1,6 +1,6 @@
 {
   "name": "@ahmedrowaihi/k6-gen",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required.",
   "keywords": [
     "k6",
