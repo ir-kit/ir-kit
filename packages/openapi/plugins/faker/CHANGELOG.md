@@ -1,5 +1,11 @@
 # @ahmedrowaihi/openapi-ts-faker
 
+## 4.0.3
+
+### Patch Changes
+
+- d8b5702: Widen `@faker-js/faker` peerDependency range to include v10 (`^10 || ^9 || ^8`). Matches the dev install and lets downstream consumers on faker v10 install without unmet-peer warnings.
+
 ## 4.0.2
 
 ### Patch Changes
