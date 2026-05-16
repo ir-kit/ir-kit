@@ -1,5 +1,12 @@
 # @ahmedrowaihi/k6-toolkit
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [008fdf4]
+  - @ahmedrowaihi/k6-gen@0.2.3
+
 ## 0.2.0
 
 ### Minor Changes
