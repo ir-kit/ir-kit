@@ -25,6 +25,8 @@
     "test": "turbo run test --filter=!./examples/*",
     "format": "biome check --write .",
     "format:check": "biome ci .",
+    "deps:check": "manypkg check",
+    "deps:fix": "manypkg fix",
     "sync:readme": "node scripts/sync-readme.mjs",
     "new-package": "node scripts/new-package.mjs",
     "changeset": "changeset",
@@ -34,9 +36,10 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.13",
     "@changesets/cli": "^2.31.0",
+    "@manypkg/cli": "^0.25.1",
     "lefthook": "^2.1.6",
     "turbo": "^2.9.6",
-    "typescript": "5.9.3"
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.28.2",
   "engines": {

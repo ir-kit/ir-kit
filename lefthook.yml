@@ -14,3 +14,5 @@ pre-push:
       run: pnpm typecheck
     - name: format-check
       run: pnpm format:check
+    - name: deps-check
+      run: pnpm deps:check

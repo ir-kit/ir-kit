@@ -7,7 +7,7 @@ import {
 } from "@ahmedrowaihi/fn-schema-core";
 import { typescript } from "@ahmedrowaihi/fn-schema-typescript";
 import chokidar from "chokidar";
-import fg from "fast-glob";
+import { glob } from "tinyglobby";
 import { createUnplugin, type UnpluginInstance } from "unplugin";
 
 export interface FnSchemaPluginOptions
@@ -65,7 +65,7 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
     };
 
     const generate = async (): Promise<string> => {
-      const files = await fg(patterns, {
+      const files = await glob(patterns, {
         cwd,
         absolute: true,
         onlyFiles: true,
