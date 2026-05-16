@@ -1,14 +1,16 @@
 {
-  "name": "@ahmedrowaihi/k6-tools",
-  "version": "0.2.1",
-  "description": "CLI for the @ahmedrowaihi/k6 framework. Scaffold load tests (init), regenerate the typed client (sync), bundle+run scripts against the real k6 binary, replay recorded traffic.",
+  "name": "@ahmedrowaihi/k6-toolkit",
+  "version": "0.1.0",
+  "description": "Programmatic toolkit for k6 workflows. Bundle loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from OpenAPI specs. One library covering the bundle → run → sync flow.",
   "keywords": [
     "k6",
     "load-testing",
-    "cli",
-    "openapi"
+    "openapi",
+    "codegen",
+    "bundler",
+    "tsdown"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/tools",
+  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/toolkit",
   "bugs": {
     "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
   },
@@ -20,15 +22,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
-    "directory": "packages/k6/tools"
+    "directory": "packages/k6/toolkit"
   },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "bin": {
-    "k6-tools": "./dist/bin.js"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -46,7 +45,7 @@
     "provenance": true
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && chmod +x dist/bin.js",
+    "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
@@ -54,11 +53,8 @@
   "dependencies": {
     "@ahmedrowaihi/k6-gen": "workspace:*",
     "@ahmedrowaihi/openapi-tools": "workspace:*",
-    "c12": "catalog:",
-    "citty": "catalog:",
-    "consola": "catalog:",
-    "esbuild": "catalog:",
-    "tinyglobby": "catalog:"
+    "tinyglobby": "catalog:",
+    "tsdown": "catalog:"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",

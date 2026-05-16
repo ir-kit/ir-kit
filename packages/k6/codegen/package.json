@@ -54,7 +54,6 @@
     "@ahmedrowaihi/openapi-core": "workspace:*",
     "@ahmedrowaihi/openapi-tools": "workspace:*",
     "@ahmedrowaihi/openapi-ts-faker": "workspace:*",
-    "@hey-api/json-schema-ref-parser": "catalog:",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",
     "typescript": "catalog:"

@@ -1,16 +1,15 @@
 {
-  "name": "@ahmedrowaihi/openapi-typescript",
-  "version": "0.2.1",
-  "description": "Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ahmedrowaihi/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline.",
+  "name": "@ahmedrowaihi/create-k6",
+  "version": "0.1.0",
+  "description": "Wizard scaffolder for the @ahmedrowaihi/k6 stack. Run `npm create @ahmedrowaihi/k6` to generate a typed client from your OpenAPI spec and a starter loadtest.ts in one shot.",
   "keywords": [
-    "openapi",
-    "typescript",
-    "codegen",
-    "sdk",
-    "client",
-    "hey-api"
+    "k6",
+    "load-testing",
+    "scaffold",
+    "wizard",
+    "openapi"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/typescript",
+  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/create",
   "bugs": {
     "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
   },
@@ -22,12 +21,15 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
-    "directory": "packages/openapi/typescript"
+    "directory": "packages/k6/create"
   },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "create-k6": "./dist/bin.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -45,21 +47,17 @@
     "provenance": true
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && chmod +x dist/bin.js",
     "dev": "tsc -p tsconfig.build.json --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
-  "peerDependencies": {
-    "@hey-api/openapi-ts": ">=0.97.0"
-  },
   "dependencies": {
-    "@ahmedrowaihi/openapi-core": "workspace:*",
-    "@ahmedrowaihi/openapi-tools": "workspace:*"
+    "@ahmedrowaihi/k6-toolkit": "workspace:*",
+    "@clack/prompts": "catalog:"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",
-    "@hey-api/openapi-ts": "catalog:",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

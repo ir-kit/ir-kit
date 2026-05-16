@@ -5,9 +5,9 @@ import { join } from "node:path";
 import type { IR } from "@ahmedrowaihi/openapi-tools";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { extractOperationMap } from "../src/sync/operation-map.ts";
-import { diffOperationIds } from "../src/sync/rename-report.ts";
-import { loadSnapshotOps } from "../src/sync/snapshot.ts";
+import { extractOperationMap } from "../src/operation-map.ts";
+import { diffOperationIds } from "../src/rename-report.ts";
+import { loadSnapshotOps } from "../src/snapshot.ts";
 
 const prev = new Map([
   ["GET /pets", "listPets"],

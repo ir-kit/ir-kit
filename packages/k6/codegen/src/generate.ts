@@ -3,13 +3,9 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
 import { assertSafeOutputDir } from "@ahmedrowaihi/codegen-core";
-import {
-  type NormalizeOptions,
-  normalizeSpec,
-  SAFE_NORMALIZE,
-} from "@ahmedrowaihi/openapi-core";
+import type { NormalizeOptions } from "@ahmedrowaihi/openapi-core";
+import { loadSpec } from "@ahmedrowaihi/openapi-tools";
 import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
-import { $RefParser } from "@hey-api/json-schema-ref-parser";
 import type { IR } from "@hey-api/shared";
 
 import {
@@ -62,17 +58,10 @@ export interface GenerateResult {
 
 /** Generate the typed k6 client + types + faker-backed data builders. */
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const parser = new $RefParser();
-  const bundled = (await parser.bundle({
-    pathOrUrlOrSchema: opts.input,
-  })) as Record<string, unknown>;
-
-  if (opts.normalize) {
-    normalizeSpec(
-      bundled,
-      opts.normalize === true ? SAFE_NORMALIZE : opts.normalize,
-    );
-  }
+  const bundled = await loadSpec({
+    input: opts.input,
+    normalize: opts.normalize,
+  });
   const ir = parseSpec(bundled);
 
   const defaultBaseUrl = opts.defaultBaseUrl ?? ir.servers?.[0]?.url ?? "";

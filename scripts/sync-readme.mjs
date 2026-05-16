@@ -28,7 +28,8 @@ const END = "<!-- @packages-end -->";
  */
 const CATEGORIES = [
   "Native client SDK generators",
-  "Spec → other targets",
+  "Load testing (k6)",
+  "Spec → AsyncAPI targets",
   "`@hey-api/openapi-ts` plugins",
   "Spec discovery from traffic",
   "TypeScript function schemas",
@@ -45,11 +46,14 @@ const CATEGORY_BY_NAME = {
   "@ahmedrowaihi/openapi-swift": "Native client SDK generators",
   "@ahmedrowaihi/openapi-typescript": "Native client SDK generators",
 
-  // Specs become things that aren't clients.
-  "@ahmedrowaihi/k6": "Spec → other targets",
-  "@ahmedrowaihi/k6-gen": "Spec → other targets",
-  "@ahmedrowaihi/k6-tools": "Spec → other targets",
-  "@ahmedrowaihi/asyncapi-typescript": "Spec → other targets",
+  // Load-testing track.
+  "@ahmedrowaihi/k6": "Load testing (k6)",
+  "@ahmedrowaihi/k6-gen": "Load testing (k6)",
+  "@ahmedrowaihi/k6-toolkit": "Load testing (k6)",
+  "@ahmedrowaihi/create-k6": "Load testing (k6)",
+
+  // AsyncAPI track.
+  "@ahmedrowaihi/asyncapi-typescript": "Spec → AsyncAPI targets",
 
   // Drop into an existing `openapi-ts.config.ts`.
   "@ahmedrowaihi/openapi-ts-faker": "`@hey-api/openapi-ts` plugins",

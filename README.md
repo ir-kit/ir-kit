@@ -9,14 +9,14 @@ A toolchain for everything you actually do with an OpenAPI / AsyncAPI spec besid
 - **Spec discovery from traffic** — reverse-engineer an OpenAPI 3.1 spec from observed HTTP, either as a library or a Chrome extension.
 - **Drop-in plugins for `@hey-api/openapi-ts`** — faker factories, oRPC clients, route maps, typia validators, and the k6 generator.
 
-All targets share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`@ahmedrowaihi/openapi-{go,kotlin,swift,typescript}`, `@ahmedrowaihi/k6-gen`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site — the CLI wrappers (`k6-tools`, etc.) work standalone.
+All targets share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`@ahmedrowaihi/openapi-{go,kotlin,swift,typescript}`, `@ahmedrowaihi/k6-gen`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site.
 
 ## Pick a tool
 
 | You want to… | Reach for | Surface |
 | --- | --- | --- |
 | Generate a Go / Kotlin / Swift / TypeScript SDK | [`@ahmedrowaihi/openapi-<lang>`](#native-client-sdk-generators) | `generate({ spec, output })` or hey-api plugin |
-| Load-test an OpenAPI API | [`@ahmedrowaihi/k6-tools`](./packages/k6/tools) on top of [`@ahmedrowaihi/k6`](./packages/k6/framework) | `k6-tools init / sync / run` |
+| Load-test an OpenAPI API | [`@ahmedrowaihi/k6-toolkit`](./packages/k6/toolkit) on top of [`@ahmedrowaihi/k6`](./packages/k6/framework) | `sync()`, `runK6()`, `bundle()` |
 | Reverse-engineer a spec from real traffic | [`@ahmedrowaihi/glean`](./apps/glean) (browser) or [`@ahmedrowaihi/openapi-recon`](./packages/openapi/recon) (lib) | DevTools extension / programmatic |
 | Add faker mocks, oRPC clients, route maps, typia validators | hey-api [plugins](#hey-apiopenapi-ts-plugins) | `openapi-ts.config.ts` |
 | Emit AsyncAPI 3.0 → TypeScript | [`@ahmedrowaihi/asyncapi-typescript`](./packages/asyncapi/typescript) | `generate({ spec, output })` |
@@ -33,7 +33,7 @@ flowchart LR
 
   ospec --> native["openapi-{go,kotlin,swift,typescript}"]
   ospec --> hey["@hey-api/openapi-ts<br/>+ faker · orpc · paths · typia · k6"]
-  ospec --> k6tools["k6-tools"] --> k6gen["k6-gen"] --> k6fw["@ahmedrowaihi/k6"]
+  ospec --> k6tk["k6-toolkit"] --> k6gen["k6-gen"] --> k6fw["@ahmedrowaihi/k6"]
 
   aspec --> async["asyncapi-typescript"]
 
@@ -58,21 +58,27 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 | [`@ahmedrowaihi/openapi-swift`](./packages/openapi/swift) | Generate idiomatic Swift (Codable + URLSession + async throws) client SDKs from an OpenAPI 3.x spec. |
 | [`@ahmedrowaihi/openapi-typescript`](./packages/openapi/typescript) | Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ahmedrowaihi/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline. |
 
-### Spec → other targets
+### Load testing (k6)
+
+| Package | Description |
+| --- | --- |
+| [`@ahmedrowaihi/create-k6`](./packages/k6/create) | Wizard scaffolder for the @ahmedrowaihi/k6 stack. Run `npm create @ahmedrowaihi/k6` to generate a typed client from your OpenAPI spec and a starter loadtest.ts in one shot. |
+| [`@ahmedrowaihi/k6`](./packages/k6/framework) | Framework for authoring k6 load tests in TypeScript: defineLoadTest, flow().step() chaining, pace presets, budgets, auth middleware. Compiles to standard k6. |
+| [`@ahmedrowaihi/k6-gen`](./packages/k6/codegen) | Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required. |
+| [`@ahmedrowaihi/k6-toolkit`](./packages/k6/toolkit) | Programmatic toolkit for k6 workflows. Bundle loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from OpenAPI specs. One library covering the bundle → run → sync flow. |
+
+### Spec → AsyncAPI targets
 
 | Package | Description |
 | --- | --- |
 | [`@ahmedrowaihi/asyncapi-typescript`](./packages/asyncapi/typescript) | AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture: a small core orchestrates parser → IR → registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema → TS via @asyncapi/modelina, file orchestration via @hey-api/codegen-core. |
-| [`@ahmedrowaihi/k6`](./packages/k6/framework) | Framework for authoring k6 load tests in TypeScript: defineLoadTest, flow().step() chaining, pace presets, budgets, auth middleware. Compiles to standard k6. |
-| [`@ahmedrowaihi/k6-gen`](./packages/k6/codegen) | Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required. |
-| [`@ahmedrowaihi/k6-tools`](./packages/k6/tools) | CLI for the @ahmedrowaihi/k6 framework. Scaffold load tests (init), regenerate the typed client (sync), bundle+run scripts against the real k6 binary, replay recorded traffic. |
 
 ### `@hey-api/openapi-ts` plugins
 
 | Package | Description |
 | --- | --- |
 | [`@ahmedrowaihi/openapi-ts-faker`](./packages/openapi/plugins/faker) | Faker.js plugin for @hey-api/openapi-ts - Generate realistic mock data factories from OpenAPI specs |
-| [`@ahmedrowaihi/openapi-ts-k6`](./packages/k6/hey-api) | Thin @hey-api/openapi-ts plugin that delegates to @ahmedrowaihi/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise prefer the k6-tools CLI. |
+| [`@ahmedrowaihi/openapi-ts-k6`](./packages/k6/hey-api) | Thin @hey-api/openapi-ts plugin that delegates to @ahmedrowaihi/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise reach for @ahmedrowaihi/k6-toolkit. |
 | [`@ahmedrowaihi/openapi-ts-orpc`](./packages/openapi/plugins/orpc) | oRPC plugin for @hey-api/openapi-ts - Generate type-safe RPC clients and servers from OpenAPI specs |
 | [`@ahmedrowaihi/openapi-ts-paths`](./packages/openapi/plugins/paths) | Plugin for @hey-api/openapi-ts — emit per-operation route consts (spec template, URLPattern, method, operationId) for tree-shakable runtime routing and matching |
 | [`@ahmedrowaihi/openapi-ts-typia`](./packages/openapi/plugins/typia) | Typia plugin for @hey-api/openapi-ts — generate compile-time Standard Schema validators from OpenAPI specs |
@@ -115,7 +121,7 @@ Three `@hey-api/openapi-ts` plugins ship in lockstep via Changesets' `fixed` con
 | Example | Shows |
 | --- | --- |
 | [`petstore-sdk`](./examples/petstore-sdk) | Generate Go / Kotlin / Swift / TypeScript SDKs from the petstore spec. Each language has a buildable consumer app under `<lang>/example/` exercising CRUD, auth, multipart, per-call options, response headers, validators, transformers. |
-| [`k6-petstore`](./examples/k6-petstore) | End-to-end k6 track: `k6-tools sync` generates a typed client from `petstore.yaml`, then `loadtest.ts` composes 4 scenarios (browse / write / stress / spike) with flat budgets, per-op overrides, step chaining, and `data.<Type>()` faker payloads. `pnpm run:smoke` runs against the public petstore demo. |
+| [`k6-petstore`](./examples/k6-petstore) | End-to-end k6 track: `pnpm sync` (driving `@ahmedrowaihi/k6-toolkit`'s `sync()`) generates a typed client from `petstore.yaml`, then `loadtest.ts` composes 4 scenarios (browse / write / stress / spike) with flat budgets, per-op overrides, step chaining, and `data.<Type>()` faker payloads. `pnpm run:smoke` runs against the public petstore demo. |
 | [`orpc-basic`](./examples/orpc-basic) | Minimal `@ahmedrowaihi/openapi-ts-orpc` setup — wire the plugin into `openapi-ts.config.ts` and consume the generated oRPC clients/servers. |
 | [`asyncapi-events-playground`](./examples/asyncapi-events-playground) | `@ahmedrowaihi/asyncapi-typescript` against an AsyncAPI 3.0 spec — emits typed event constants, dispatch helpers, AMQP bindings, framework adapters. |
 | [`fn-schema-basic`](./examples/fn-schema-basic) | `fn-schema-cli` extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |

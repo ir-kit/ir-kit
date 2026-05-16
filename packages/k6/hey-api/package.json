@@ -1,7 +1,7 @@
 {
   "name": "@ahmedrowaihi/openapi-ts-k6",
   "version": "0.1.3",
-  "description": "Thin @hey-api/openapi-ts plugin that delegates to @ahmedrowaihi/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise prefer the k6-tools CLI.",
+  "description": "Thin @hey-api/openapi-ts plugin that delegates to @ahmedrowaihi/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise reach for @ahmedrowaihi/k6-toolkit.",
   "keywords": [
     "openapi",
     "openapi-ts",
