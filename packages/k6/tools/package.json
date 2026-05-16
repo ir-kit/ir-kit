@@ -54,11 +54,11 @@
   "dependencies": {
     "@ahmedrowaihi/k6-gen": "workspace:*",
     "@ahmedrowaihi/openapi-tools": "workspace:*",
-    "c12": "^3.3.0",
-    "citty": "^0.1.6",
-    "consola": "^3.4.2",
-    "esbuild": "^0.27.7",
-    "tinyglobby": "^0.2.10"
+    "c12": "catalog:",
+    "citty": "catalog:",
+    "consola": "catalog:",
+    "esbuild": "catalog:",
+    "tinyglobby": "catalog:"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",

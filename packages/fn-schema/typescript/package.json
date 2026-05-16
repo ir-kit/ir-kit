@@ -59,7 +59,7 @@
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "5.9.3",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {

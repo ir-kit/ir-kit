@@ -52,12 +52,12 @@
   "dependencies": {
     "@ahmedrowaihi/codegen-core": "workspace:*",
     "@ahmedrowaihi/openapi-core": "workspace:*",
-    "@ahmedrowaihi/openapi-ts-faker": "workspace:*",
     "@ahmedrowaihi/openapi-tools": "workspace:*",
+    "@ahmedrowaihi/openapi-ts-faker": "workspace:*",
     "@hey-api/json-schema-ref-parser": "catalog:",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",
-    "typescript": "5.9.3"
+    "typescript": "catalog:"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",

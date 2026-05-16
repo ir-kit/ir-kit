@@ -4,7 +4,7 @@ import type {
   ExtractOptions,
   IncludeFilter,
 } from "@ahmedrowaihi/fn-schema-core";
-import fg from "fast-glob";
+import { glob } from "tinyglobby";
 import type { FnSchemaConfig } from "../config.js";
 
 export interface CommonArgs {
@@ -35,7 +35,7 @@ export function makeListFiles(
   cwd: string,
 ): () => Promise<string[]> {
   return () =>
-    fg(patternList, {
+    glob(patternList, {
       cwd,
       absolute: true,
       onlyFiles: true,

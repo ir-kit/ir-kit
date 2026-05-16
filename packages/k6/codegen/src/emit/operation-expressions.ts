@@ -52,7 +52,7 @@ export function headersExpression(op: WalkedOperation): Expr {
       $.literal(op.body.mediaType || "application/json"),
     );
   }
-  obj = obj.spread($("opts").attr("headers").optional().or($.object()));
+  obj = obj.spread($("opts").attr("headers").optional());
   return $("applyMiddlewareHeaders").call(obj);
 }
 

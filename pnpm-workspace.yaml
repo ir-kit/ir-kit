@@ -19,6 +19,13 @@ catalog:
   "@hey-api/shared": "^0.4.2"
   "@hey-api/spec-types": "^0.2.0"
   "@types/node": "^22"
+  c12: "^3.3.4"
+  chokidar: "^4.0.3"
+  citty: "^0.2.2"
+  consola: "^3.4.2"
+  esbuild: "^0.27.7"
+  tinyglobby: "^0.2.10"
+  typescript: "5.9.3"
   vitest: "^4.0.0"
 
 patchedDependencies:

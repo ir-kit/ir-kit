@@ -75,7 +75,7 @@
     "@types/node": "catalog:",
     "amqplib": "^0.10.4",
     "testcontainers": "^11.14.0",
-    "typescript": "^5.9.3",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {

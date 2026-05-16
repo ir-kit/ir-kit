@@ -82,8 +82,8 @@
   "dependencies": {
     "@ahmedrowaihi/fn-schema-core": "workspace:*",
     "@ahmedrowaihi/fn-schema-typescript": "workspace:*",
-    "chokidar": "^4.0.3",
-    "fast-glob": "^3.3.3",
+    "chokidar": "catalog:",
+    "tinyglobby": "catalog:",
     "unplugin": "^3.0.0"
   },
   "devDependencies": {
