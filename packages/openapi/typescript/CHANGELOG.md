@@ -1,5 +1,13 @@
 # @ahmedrowaihi/openapi-typescript
 
+## 0.2.2
+
+### Patch Changes
+
+- 361d85f: Replace the per-package `$RefParser.bundle()` + `normalizeSpec()` boilerplate with a single `loadSpec()` call from `@ahmedrowaihi/openapi-tools`. URL inputs that previously got mangled when relative-resolved now pass through. Dropped the now-unused direct dep on `@hey-api/json-schema-ref-parser` from go/kotlin/swift/k6-gen — openapi-tools owns it transitively.
+- Updated dependencies [361d85f]
+  - @ahmedrowaihi/openapi-tools@1.4.0
+
 ## 0.2.1
 
 ### Patch Changes

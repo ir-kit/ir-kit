@@ -1,6 +1,6 @@
 {
   "name": "@ahmedrowaihi/k6-toolkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Programmatic toolkit for k6 workflows. Bundle loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from OpenAPI specs. One library covering the bundle → run → sync flow.",
   "keywords": [
     "k6",
