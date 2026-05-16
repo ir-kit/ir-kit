@@ -1,3 +1,5 @@
+import { resolve } from "node:path";
+
 import { type BundleOpts, bundle } from "./bundle.js";
 import {
   buildK6Args,
@@ -32,9 +34,10 @@ export interface RunK6Result {
  * CLI level.
  */
 export async function runK6(opts: RunK6Options): Promise<RunK6Result> {
+  const cwd = opts.cwd ?? process.cwd();
   const { outfile } = await bundle({
-    entry: opts.entry,
     ...(opts.bundle ?? {}),
+    entry: resolve(cwd, opts.entry),
   });
 
   const k6Args = buildK6Args(outfile, {
@@ -48,7 +51,7 @@ export async function runK6(opts: RunK6Options): Promise<RunK6Result> {
 
   const exitCode = await spawnK6(k6Args, {
     binary: opts.binary,
-    cwd: opts.cwd,
+    cwd,
     stdio: opts.stdio,
   });
 

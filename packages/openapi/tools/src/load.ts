@@ -56,6 +56,9 @@ export function resolveSpecInput(
 ): SpecInput {
   if (typeof input !== "string") return input;
   const trimmed = input.trim();
+  if (trimmed === "") {
+    throw new Error("OpenAPI spec input is empty or only whitespace.");
+  }
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
   if (isAbsolute(trimmed)) return trimmed;
   return resolve(cwd, trimmed);

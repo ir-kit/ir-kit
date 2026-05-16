@@ -1,4 +1,5 @@
 import { type StdioOptions, spawn } from "node:child_process";
+import { constants as osConstants } from "node:os";
 
 export interface K6FlagArgs {
   baseUrl?: string;
@@ -51,17 +52,14 @@ export function spawnK6(
   return new Promise((resolve, reject) => {
     child.on("exit", (code, signal) => {
       if (code !== null) return resolve(code);
-      if (signal) return resolve(128 + (SIGNALS[signal] ?? 1));
+      if (signal) return resolve(128 + (signalNumber(signal) ?? 1));
       resolve(1);
     });
     child.on("error", reject);
   });
 }
 
-const SIGNALS: Record<string, number> = {
-  SIGHUP: 1,
-  SIGINT: 2,
-  SIGQUIT: 3,
-  SIGKILL: 9,
-  SIGTERM: 15,
-};
+/** Look up the platform-correct signum from Node's os.constants. */
+function signalNumber(signal: NodeJS.Signals): number | undefined {
+  return (osConstants.signals as Record<string, number | undefined>)[signal];
+}

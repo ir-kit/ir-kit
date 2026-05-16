@@ -37,4 +37,13 @@ describe("resolveSpecInput", () => {
     const spec = { openapi: "3.1.0", info: { title: "t", version: "1" } };
     expect(resolveSpecInput(spec, "/proj")).toBe(spec);
   });
+
+  it("throws on empty input instead of resolving to cwd", () => {
+    expect(() => resolveSpecInput("", "/proj")).toThrow(
+      /empty or only whitespace/,
+    );
+    expect(() => resolveSpecInput("   ", "/proj")).toThrow(
+      /empty or only whitespace/,
+    );
+  });
 });

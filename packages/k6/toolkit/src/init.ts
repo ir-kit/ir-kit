@@ -3,6 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 
 import type { GenerateOptions, GenerateResult } from "@ahmedrowaihi/k6-gen";
+import type { IR } from "@ahmedrowaihi/openapi-tools";
 
 import {
   type AuthFlavor,
@@ -26,12 +27,21 @@ export interface InitOptions
   loadtestPath?: string;
   /** Auth recipe wired into the scaffold. Default: `"none"`. */
   auth?: AuthFlavor;
-  /** Env var holding the bearer token. Only used when `auth === "bearer"`. */
+  /** Env var holding the bearer token (only used when `auth === "bearer"`). */
   bearerEnv?: string;
+  /** Header name for the API key (only used when `auth === "apiKey"`). */
+  apiKeyHeader?: string;
+  /** Env var holding the API key (only used when `auth === "apiKey"`). */
+  apiKeyEnv?: string;
   /** Pace preset baked into the scaffold. Default: `"smoke"`. */
   pace?: ScaffoldLoadtestOpts["pace"];
   /** Scaffold pace duration string. Default: `"30s"`. */
   duration?: string;
+  /**
+   * When set, emit `scenarios: { … }` with one entry per name instead of
+   * the single-pace shape. Each scenario gets its own pace + flow.
+   */
+  scenarios?: ReadonlyArray<string>;
   /** Refuse to overwrite an existing loadtest file. Default: `true`. */
   noOverwrite?: boolean;
   /** Don't touch disk — return what would have been written. */
@@ -46,15 +56,15 @@ export interface InitFile {
 }
 
 export interface InitResult {
-  /** Scaffolded loadtest entry plus everything the codegen step emitted. */
   files: InitFile[];
   generated: GenerateResult;
 }
 
 /**
  * Scaffold a fresh k6 project: generate the typed client and emit a
- * starter `loadtest.ts` parameterized on `auth` / `pace`. One-shot —
- * subsequent regens go through {@link sync}.
+ * starter `loadtest.ts` parameterized on `auth` / `pace` / `scenarios`.
+ * The first param-less GET operation seeds the flow step so the file
+ * runs out of the box.
  */
 export async function init(opts: InitOptions): Promise<InitResult> {
   const cwd = opts.cwd ?? process.cwd();
@@ -76,8 +86,12 @@ export async function init(opts: InitOptions): Promise<InitResult> {
     clientImportPath: relativeClientImport(loadtestPath, output),
     auth,
     bearerEnv: opts.bearerEnv,
+    apiKeyHeader: opts.apiKeyHeader,
+    apiKeyEnv: opts.apiKeyEnv,
     pace: opts.pace,
     duration: opts.duration,
+    scenarios: opts.scenarios,
+    seedOperation: pickSeedOperation(generated.ir),
   });
 
   const exists = existsSync(loadtestPath);
@@ -99,4 +113,28 @@ export async function init(opts: InitOptions): Promise<InitResult> {
 function relativeClientImport(loadtestPath: string, outputDir: string): string {
   const rel = relative(dirname(loadtestPath), outputDir).replaceAll("\\", "/");
   return `./${rel || "."}/index.js`;
+}
+
+/** First GET op with no required path params + no required body. */
+function pickSeedOperation(ir: IR.Model): string | undefined {
+  const paths = (ir as { paths?: Record<string, Record<string, unknown>> })
+    .paths;
+  if (!paths) return undefined;
+  for (const pathItem of Object.values(paths)) {
+    const op = pathItem?.get as
+      | {
+          id?: string;
+          parameters?: { path?: Record<string, { required?: boolean }> };
+          body?: { required?: boolean };
+        }
+      | undefined;
+    if (!op?.id) continue;
+    const requiredPathParams = Object.values(op.parameters?.path ?? {}).filter(
+      (p) => p.required,
+    );
+    if (requiredPathParams.length > 0) continue;
+    if (op.body?.required) continue;
+    return op.id;
+  }
+  return undefined;
 }
