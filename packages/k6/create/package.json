@@ -1,14 +1,15 @@
 {
-  "name": "@ahmedrowaihi/k6-tools",
-  "version": "0.2.1",
-  "description": "CLI for the @ahmedrowaihi/k6 framework. Scaffold load tests (init), regenerate the typed client (sync), bundle+run scripts against the real k6 binary, replay recorded traffic.",
+  "name": "@ahmedrowaihi/create-k6",
+  "version": "0.1.0",
+  "description": "Wizard scaffolder for the @ahmedrowaihi/k6 stack. Run `npm create @ahmedrowaihi/k6` to generate a typed client from your OpenAPI spec and a starter loadtest.ts in one shot.",
   "keywords": [
     "k6",
     "load-testing",
-    "cli",
+    "scaffold",
+    "wizard",
     "openapi"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/tools",
+  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/create",
   "bugs": {
     "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
   },
@@ -20,14 +21,14 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
-    "directory": "packages/k6/tools"
+    "directory": "packages/k6/create"
   },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "k6-tools": "./dist/bin.js"
+    "create-k6": "./dist/bin.js"
   },
   "exports": {
     ".": {
@@ -53,9 +54,7 @@
   },
   "dependencies": {
     "@ahmedrowaihi/k6-toolkit": "workspace:*",
-    "c12": "catalog:",
-    "citty": "catalog:",
-    "consola": "catalog:"
+    "@clack/prompts": "catalog:"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",

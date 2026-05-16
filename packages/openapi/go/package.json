@@ -58,8 +58,7 @@
   },
   "dependencies": {
     "@ahmedrowaihi/codegen-core": "workspace:*",
-    "@ahmedrowaihi/openapi-core": "workspace:*",
-    "@hey-api/json-schema-ref-parser": "catalog:"
+    "@ahmedrowaihi/openapi-core": "workspace:*"
   },
   "devDependencies": {
     "@ahmedrowaihi/openapi-tools": "workspace:*",

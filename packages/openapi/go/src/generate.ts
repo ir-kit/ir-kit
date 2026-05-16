@@ -5,11 +5,9 @@ import { assertSafeOutputDir } from "@ahmedrowaihi/codegen-core";
 import {
   extractSecuritySchemeNames,
   type NormalizeOptions,
-  normalizeSpec,
-  SAFE_NORMALIZE,
 } from "@ahmedrowaihi/openapi-core";
+import { loadSpec } from "@ahmedrowaihi/openapi-tools";
 import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
-import { $RefParser } from "@hey-api/json-schema-ref-parser";
 
 import {
   type OperationsOptions,
@@ -62,16 +60,10 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const parser = new $RefParser();
-  const bundled = (await parser.bundle({
-    pathOrUrlOrSchema: opts.input,
-  })) as Record<string, unknown>;
-  if (opts.normalize) {
-    normalizeSpec(
-      bundled,
-      opts.normalize === true ? SAFE_NORMALIZE : opts.normalize,
-    );
-  }
+  const bundled = await loadSpec({
+    input: opts.input,
+    normalize: opts.normalize,
+  });
   const ir = parseSpec(bundled);
 
   const schemaDecls = schemasToDecls(ir.components?.schemas ?? {});

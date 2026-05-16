@@ -2,4 +2,4 @@
 "@ahmedrowaihi/k6-toolkit": minor
 ---
 
-New programmatic library that `@ahmedrowaihi/k6-tools` is built on. Exports `bundle()` (tsdown passthrough — every option reachable), `runK6()` (bundle + spawn k6 binary), `sync()` (drives `generate` + snapshot/diff), `spawnK6()`, `buildK6Args()`, `resolveTargets()`, plus a re-export of `generate` and the operation-id map/diff helpers. Consumers can now drive bundle + run + sync flows from their own scripts without shelling out to the CLI.
+New programmatic library for the k6 workflow. Exports `bundle()` (tsdown passthrough — every option reachable), `runK6()` (bundle + spawn k6 binary), `sync()` (drives `generate` + snapshot/diff), `init()` (one-shot scaffold: generates the typed client + AST-builds a starter `loadtest.ts` parameterized on `auth`/`pace`), plus a re-export of `generate` from `@ahmedrowaihi/k6-gen`. Replaces the deleted `@ahmedrowaihi/k6-tools` CLI — consumers drive the bundle/run/sync flow directly from their scripts. Bundler is tsdown.

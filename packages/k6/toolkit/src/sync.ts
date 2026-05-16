@@ -5,6 +5,7 @@ import {
   type GenerateResult,
   generate,
 } from "@ahmedrowaihi/k6-gen";
+import { resolveSpecInput } from "@ahmedrowaihi/openapi-tools";
 
 import { extractOperationMap } from "./operation-map.js";
 import { diffOperationIds, type OperationDiff } from "./rename-report.js";
@@ -21,6 +22,8 @@ export interface SyncOptions
   > {
   /** Output directory for the generated client. */
   output: string;
+  /** Working directory used to resolve relative `input` / `output`. Default: `process.cwd()`. */
+  cwd?: string;
   /** Diff operationIds against the prior sync's snapshot. */
   reportRenames?: boolean;
   /** Persist a fresh snapshot after generate. Default: `true`. */
@@ -38,7 +41,9 @@ export interface SyncResult extends GenerateResult {
  * `GenerateResult` (files + ir) so callers can chain.
  */
 export async function sync(opts: SyncOptions): Promise<SyncResult> {
-  const output = resolve(opts.output);
+  const cwd = opts.cwd ?? process.cwd();
+  const output = resolve(cwd, opts.output);
+  const input = resolveSpecInput(opts.input, cwd);
   const snapshotPath = join(output, SNAPSHOT_FILENAME);
 
   const prevOps = opts.reportRenames
@@ -46,7 +51,7 @@ export async function sync(opts: SyncOptions): Promise<SyncResult> {
     : null;
 
   const result = await generate({
-    input: opts.input,
+    input,
     output,
     normalize: opts.normalize,
     defaultBaseUrl: opts.defaultBaseUrl,

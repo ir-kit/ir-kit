@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@ahmedrowaihi/openapi-core": "workspace:*",
-    "@hey-api/json-schema-ref-parser": "catalog:"
+    "@ahmedrowaihi/openapi-tools": "workspace:*"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",
