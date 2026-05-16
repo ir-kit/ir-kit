@@ -42,12 +42,21 @@ describe("@ahmedrowaihi/k6-gen", () => {
   it("client.ts imports framework runtime + k6/http", () => {
     expect(files["client.ts"]).toMatch(/from "k6\/http"/);
     expect(files["client.ts"]).toMatch(
-      /applyMiddlewareHeaders.*from "@ahmedrowaihi\/k6\/runtime"/s,
+      /import \{[^}]*applyMiddlewareHeaders[^}]*\} from "@ahmedrowaihi\/k6\/runtime"/s,
     );
   });
 
+  it("client.ts pulls buildQuery/parseJson/mergeTags from runtime — no inline helpers", () => {
+    expect(files["client.ts"]).toMatch(
+      /import \{[^}]*\bbuildQuery\b[^}]*\bmergeTags\b[^}]*\bparseJson\b[^}]*\} from "@ahmedrowaihi\/k6\/runtime"/s,
+    );
+    expect(files["client.ts"]).not.toMatch(/function __buildQuery/);
+    expect(files["client.ts"]).not.toMatch(/function __parseJson/);
+    expect(files["client.ts"]).not.toMatch(/function __mergeTags/);
+  });
+
   it("client.ts emits one typed wrapper per operation", () => {
-    expect(files["client.ts"]).toMatch(/export function addPet\(body: Pet/);
+    expect(files["client.ts"]).toMatch(/export function addPet\(body: T\.Pet/);
     expect(files["client.ts"]).toMatch(
       /export function getPetById\(petId: number/,
     );
@@ -56,17 +65,32 @@ describe("@ahmedrowaihi/k6-gen", () => {
     );
   });
 
+  it("client.ts namespace-imports types as `T`", () => {
+    expect(files["client.ts"]).toMatch(
+      /^import type \* as T from "\.\/types\.js";$/m,
+    );
+  });
+
   it("client.ts maps delete to k6's `del`", () => {
     expect(files["client.ts"]).toMatch(/http\.del\(url/);
   });
 
   it("client.ts tags every request with `operation` for budget filtering", () => {
-    expect(files["client.ts"]).toMatch(/__mergeTags\(['"]addPet['"]/);
-    expect(files["client.ts"]).toMatch(/__mergeTags\(['"]getPetById['"]/);
+    expect(files["client.ts"]).toMatch(/mergeTags\(['"]addPet['"]/);
+    expect(files["client.ts"]).toMatch(/mergeTags\(['"]getPetById['"]/);
   });
 
-  it("client.ts inlines BASE_URL from spec servers", () => {
-    expect(files["client.ts"]).toMatch(/BASE_URL.*petstore3\.swagger\.io/);
+  it("client.ts inlines DEFAULT_BASE_URL from spec servers", () => {
+    expect(files["client.ts"]).toMatch(
+      /DEFAULT_BASE_URL.*petstore3\.swagger\.io/,
+    );
+  });
+
+  it("client.ts calls getBaseUrl(DEFAULT_BASE_URL) — enables defineLoadTest({ baseUrl })", () => {
+    expect(files["client.ts"]).toMatch(/getBaseUrl\(DEFAULT_BASE_URL\)/);
+    expect(files["client.ts"]).toMatch(
+      /import \{[^}]*\bgetBaseUrl\b[^}]*\} from "@ahmedrowaihi\/k6\/runtime"/s,
+    );
   });
 
   it("types.ts has one alias per schema", () => {
@@ -77,10 +101,10 @@ describe("@ahmedrowaihi/k6-gen", () => {
 
   it("data.ts emits typed faker builders for objects and primitives", () => {
     expect(files["data.ts"]).toMatch(
-      /Pet: \(overrides\?: Partial<Pet>\): Pet =>/,
+      /Pet: \(overrides\?: Partial<T\.Pet>\): T\.Pet =>/,
     );
     expect(files["data.ts"]).toMatch(
-      /StatusEnum: \(overrides\?: StatusEnum\): StatusEnum =>/,
+      /StatusEnum: \(overrides\?: T\.StatusEnum\): T\.StatusEnum =>/,
     );
   });
 
@@ -113,29 +137,5 @@ describe("@ahmedrowaihi/k6-gen — identifier sanitization", () => {
     const types = files.find((f) => f.path === "types.ts")!.content;
     expect(types).toMatch(/export type _0Enum =\s*'a' \| 'b';/);
     expect(types).not.toMatch(/export type 0Enum/);
-  });
-
-  it("wraps the types import onto multiple lines when >1 name", async () => {
-    const { generate } = await import("../src/index.ts");
-    const spec = {
-      openapi: "3.0.0",
-      info: { title: "t", version: "1" },
-      paths: {},
-      components: {
-        schemas: {
-          A: { type: "string" },
-          B: { type: "string" },
-        },
-      },
-    };
-    const { files } = await generate({
-      input: spec,
-      output: "/tmp/_k6_unused",
-      dryRun: true,
-    });
-    const client = files.find((f) => f.path === "client.ts")!.content;
-    expect(client).toMatch(
-      /import type \{\n  A,\n  B,\n\} from "\.\/types\.js";/,
-    );
   });
 });

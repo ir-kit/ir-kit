@@ -78,7 +78,7 @@ See [`.changeset/README.md`](./.changeset/README.md) — one sentence per change
 
 ### `gen` as a path component
 
-CodeRabbit's path filter `!**/gen/**` skips reviews on directories named `gen` (intended for generated example output). When we name a *source* package `gen` (e.g. `packages/k6/gen`), reviews get silently skipped. Already-shipped exception: `@ahmedrowaihi/k6-gen` lives at `packages/k6/gen`. If you add another generator package, prefer `generator/` over `gen/` for the directory.
+CodeRabbit's path filter `!**/gen/**` skips reviews on directories named `gen` (intended for generated example output). Don't name a source-code directory `gen` — use `codegen/`, `generator/`, or anything else. Example: the k6 codegen package lives at `packages/k6/codegen`, not `packages/k6/gen`.
 
 ## Scaffolding a new package
 

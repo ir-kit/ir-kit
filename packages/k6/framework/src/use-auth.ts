@@ -86,5 +86,24 @@ function custom(opts: CustomOpts): Middleware {
   return { headers: opts.headers };
 }
 
+export interface SessionOpts {
+  /** Called once per VU; result cached for the VU's lifetime. */
+  signIn: () => string;
+  /** @default "Cookie" */
+  headerName?: string;
+}
+
+/** Cookie/session auth — one `signIn()` per VU, cached. */
+function session(opts: SessionOpts): Middleware {
+  const headerName = opts.headerName ?? "Cookie";
+  let cached: string | undefined;
+  return {
+    headers(): HeaderMap {
+      if (cached === undefined) cached = opts.signIn();
+      return { [headerName]: cached };
+    },
+  };
+}
+
 /** Auth recipes. Pass via `defineLoadTest({ use: [auth] })` to inject headers into every request. */
-export const useAuth = { bearer, basic, apiKey, custom } as const;
+export const useAuth = { bearer, basic, apiKey, custom, session } as const;

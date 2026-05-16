@@ -1,3 +1,5 @@
+export { buildQuery, mergeTags, parseJson } from "./client-runtime.js";
+
 export type HeaderMap = Record<string, string>;
 
 export interface Middleware {
@@ -16,6 +18,21 @@ export function applyMiddlewareHeaders(into: HeaderMap = {}): HeaderMap {
     if (h) Object.assign(into, h);
   }
   return into;
+}
+
+/** Per-scenario BASE_URL override; `undefined` → __ENV.BASE_URL → fallback. */
+let __baseUrl: string | undefined;
+
+export function setBaseUrl(url: string | undefined): void {
+  __baseUrl = url;
+}
+
+declare const __ENV: Record<string, string | undefined> | undefined;
+
+export function getBaseUrl(fallback: string): string {
+  if (__baseUrl !== undefined) return __baseUrl;
+  const env = typeof __ENV !== "undefined" ? __ENV?.BASE_URL : undefined;
+  return env ?? fallback;
 }
 
 export interface StepCtx {

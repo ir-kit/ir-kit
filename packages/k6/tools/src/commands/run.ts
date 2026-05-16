@@ -1,18 +1,19 @@
-import { spawn } from "node:child_process";
 import { mkdir } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname } from "node:path";
 
 import { defineCommand } from "citty";
 import { consola } from "consola";
 
 import { bundle } from "../bundle.js";
 import { loadK6ToolsConfig } from "../config.js";
+import { buildK6Args, runK6 } from "../run/k6-runner.js";
+import { type RunTarget, resolveTargets } from "../run/targets.js";
 
 export const runCommand = defineCommand({
   meta: {
     name: "run",
     description:
-      "Bundle the loadtest entry with esbuild and execute it with the k6 binary.",
+      "Bundle the loadtest entry with esbuild and execute it with the k6 binary. Supports glob patterns and named loadtests for multi-target projects.",
   },
   args: {
     entry: {
@@ -22,8 +23,19 @@ export const runCommand = defineCommand({
     },
     outfile: {
       type: "string",
-      description: "Bundle output path.",
+      description:
+        "Bundle output path. Single-target only — multi-target bundles get distinct paths derived from the entry filename.",
       default: "./dist/loadtest.js",
+    },
+    pattern: {
+      type: "string",
+      description:
+        "Glob pattern to select multiple loadtests (e.g. 'loadtests/*.ts'). Runs the matches in sequence.",
+    },
+    name: {
+      type: "string",
+      description:
+        "Pick a single named loadtest from `config.loadtests`. Repeatable for a subset.",
     },
     "base-url": {
       type: "string",
@@ -38,6 +50,22 @@ export const runCommand = defineCommand({
       description:
         "Override duration (drives the implicit `default` scenario).",
     },
+    out: {
+      type: "string",
+      description:
+        "k6 `--out` shorthand. Pass once (e.g. `json=results.json`) or as a comma-separated list for multiple outputs.",
+    },
+    summary: {
+      type: "string",
+      description:
+        "k6 `--summary-export` shorthand. Writes the end-of-test summary JSON to this path.",
+    },
+    "continue-on-error": {
+      type: "boolean",
+      description:
+        "Multi-target only: keep running remaining loadtests if one fails. Default fails fast.",
+      default: false,
+    },
     "k6-arg": {
       type: "string",
       description:
@@ -47,35 +75,69 @@ export const runCommand = defineCommand({
   async run({ args }) {
     const cwd = process.cwd();
     const config = await loadK6ToolsConfig(cwd);
-    const entry = resolve(
-      cwd,
-      args.entry ?? config.loadtest ?? "./loadtest.ts",
-    );
-    const outfile = resolve(cwd, args.outfile);
+    const targets = await resolveTargets(cwd, args, config);
 
-    consola.start(`Bundling ${entry} → ${outfile}`);
-    await mkdir(dirname(outfile), { recursive: true });
-    await bundle({ entry, outfile });
-    consola.success("Bundle complete.");
+    if (!targets.length) {
+      consola.error("No loadtest targets matched.");
+      process.exit(1);
+    }
 
-    const k6Args: string[] = ["run"];
-    if (args["base-url"]) k6Args.push("-e", `BASE_URL=${args["base-url"]}`);
-    if (args.vus) k6Args.push("--vus", args.vus);
-    if (args.duration) k6Args.push("--duration", args.duration);
-    const extras = Array.isArray(args["k6-arg"])
-      ? args["k6-arg"]
-      : args["k6-arg"]
-        ? [args["k6-arg"]]
-        : [];
-    k6Args.push(...extras);
-    k6Args.push(outfile);
+    const failures = await runAll(targets, args);
 
-    consola.start(`Running: k6 ${k6Args.join(" ")}`);
-    const child = spawn("k6", k6Args, { stdio: "inherit" });
-    const code: number = await new Promise((res, rej) => {
-      child.on("exit", (c) => res(c ?? 0));
-      child.on("error", rej);
-    });
-    process.exit(code);
+    if (failures.length) {
+      consola.error(
+        `${failures.length}/${targets.length} loadtest(s) failed: ${failures
+          .map((f) => f.name)
+          .join(", ")}`,
+      );
+      process.exit(failures[0].code);
+    }
+    if (targets.length > 1) {
+      consola.success(`All ${targets.length} loadtests passed.`);
+    }
   },
 });
+
+interface Failure {
+  name: string;
+  code: number;
+}
+
+async function runAll(
+  targets: ReadonlyArray<RunTarget>,
+  args: Parameters<typeof buildK6Args>[1] & { "continue-on-error"?: boolean },
+): Promise<Failure[]> {
+  const continueOnError = args["continue-on-error"] === true;
+  const failures: Failure[] = [];
+
+  for (const target of targets) {
+    consola.start(
+      `[${target.name}] bundling ${target.entry} → ${target.outfile}`,
+    );
+
+    try {
+      await mkdir(dirname(target.outfile), { recursive: true });
+      await bundle({ entry: target.entry, outfile: target.outfile });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      consola.error(`[${target.name}] bundling failed: ${msg}`);
+      failures.push({ name: target.name, code: 1 });
+      if (!continueOnError) process.exit(1);
+      continue;
+    }
+    consola.success(`[${target.name}] bundle complete.`);
+
+    const code = await runK6(target, buildK6Args(target, args));
+    if (code === 0) continue;
+
+    failures.push({ name: target.name, code });
+    if (!continueOnError) {
+      consola.error(
+        `[${target.name}] k6 exited with code ${code}. Stopping (pass --continue-on-error to keep going).`,
+      );
+      process.exit(code);
+    }
+    consola.warn(`[${target.name}] k6 exited with code ${code}.`);
+  }
+  return failures;
+}

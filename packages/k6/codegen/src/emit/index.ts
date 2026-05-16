@@ -3,6 +3,10 @@ import { GENERATED_HEADER } from "../print.js";
 export type { ClientEmitOptions } from "./client.js";
 export { emitClientFile } from "./client.js";
 export { emitDataFile } from "./data.js";
+export {
+  emitLoadtestStubs,
+  type ScaffoldStubsOptions,
+} from "./loadtest-stubs.js";
 export { emitTypesFile } from "./types.js";
 
 /** Emit the umbrella `index.ts` re-exporting client, types, data. */

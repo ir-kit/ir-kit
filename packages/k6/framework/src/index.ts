@@ -1,5 +1,6 @@
 export type { Budgets, OpBudget, ThresholdMap } from "./budgets.js";
 export { compileBudgets } from "./budgets.js";
+export { buildQuery, mergeTags, parseJson } from "./client-runtime.js";
 export type {
   CompiledLoadTest,
   CompiledOptions,
@@ -20,10 +21,12 @@ export type {
 } from "./pace.js";
 export { load, repro, smoke, soak, spike, stress } from "./pace.js";
 export type { HeaderMap, Middleware, StepCtx } from "./runtime.js";
+export { getBaseUrl, setBaseUrl } from "./runtime.js";
 export type {
   ApiKeyOpts,
   BasicOpts,
   BearerOpts,
   CustomOpts,
+  SessionOpts,
 } from "./use-auth.js";
 export { useAuth } from "./use-auth.js";
