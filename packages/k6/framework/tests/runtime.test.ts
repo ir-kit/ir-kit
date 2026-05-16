@@ -30,6 +30,21 @@ describe("client-runtime helpers", () => {
       foo: "bar",
     });
   });
+
+  it("mergeTags — `op` wins over a colliding `extra.operation`", () => {
+    expect(mergeTags("addPet", { operation: "evil" })).toEqual({
+      operation: "addPet",
+    });
+  });
+
+  it("parseJson — decodes ArrayBuffer bodies as UTF-8", () => {
+    const buf = new TextEncoder().encode('{"a":1,"name":"ÜñÏ"}').buffer;
+    expect(parseJson({ body: buf })).toEqual({ a: 1, name: "ÜñÏ" });
+  });
+
+  it("parseJson — returns undefined for empty ArrayBuffer", () => {
+    expect(parseJson({ body: new ArrayBuffer(0) })).toBeUndefined();
+  });
 });
 
 describe("getBaseUrl / setBaseUrl", () => {

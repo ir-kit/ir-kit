@@ -9,7 +9,7 @@
     "load-testing",
     "typescript"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/gen",
+  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/codegen",
   "bugs": {
     "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
   },
@@ -21,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
-    "directory": "packages/k6/gen"
+    "directory": "packages/k6/codegen"
   },
   "type": "module",
   "sideEffects": false,

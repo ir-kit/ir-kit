@@ -1,4 +1,3 @@
-import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
@@ -14,14 +13,31 @@ interface SnapshotShape {
 export async function loadSnapshotOps(
   path: string,
 ): Promise<OperationMap | null> {
-  if (!existsSync(path)) return null;
+  let raw: string;
   try {
-    const data = JSON.parse(await readFile(path, "utf8")) as SnapshotShape;
-    if (data?.v !== 1 || !data.operations) return null;
-    return new Map(Object.entries(data.operations));
-  } catch {
-    return null;
+    raw = await readFile(path, "utf8");
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw new Error(
+      `Failed to read snapshot at ${path}: ${(err as Error).message}`,
+    );
   }
+
+  let data: SnapshotShape;
+  try {
+    data = JSON.parse(raw) as SnapshotShape;
+  } catch (err) {
+    throw new Error(
+      `Malformed snapshot at ${path}: ${(err as Error).message}. Delete the file to regenerate.`,
+    );
+  }
+
+  if (data?.v !== 1 || !data.operations) {
+    throw new Error(
+      `Unrecognized snapshot schema at ${path} (expected v=1). Delete the file to regenerate.`,
+    );
+  }
+  return new Map(Object.entries(data.operations));
 }
 
 /** Persist the current op map for the next sync to diff against. */

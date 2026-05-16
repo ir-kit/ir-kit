@@ -17,12 +17,18 @@ export function buildQuery(p: Record<string, unknown>): string {
   return parts.length ? `?${parts.join("&")}` : "";
 }
 
-/** Parse a k6 response body as JSON, returning `undefined` for empty bodies. */
+/** Parse a k6 response body as JSON. Decodes ArrayBuffer bodies as UTF-8. */
 export function parseJson(res: { body: string | ArrayBuffer | null }): unknown {
-  return res.body ? JSON.parse(res.body as string) : undefined;
+  const body = res.body;
+  if (body === null || body === undefined) return undefined;
+  if (typeof body === "string") {
+    return body.length ? JSON.parse(body) : undefined;
+  }
+  if (body.byteLength === 0) return undefined;
+  return JSON.parse(new TextDecoder("utf-8").decode(body));
 }
 
-/** Stamp every k6 request with `{ operation: id }` so per-op metrics work. */
+/** Stamp every k6 request with `{ operation: id }`; `op` always wins. */
 export function mergeTags(op: string, extra: HeaderMap | undefined): HeaderMap {
-  return { operation: op, ...(extra ?? {}) };
+  return { ...(extra ?? {}), operation: op };
 }

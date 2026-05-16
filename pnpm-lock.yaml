@@ -491,22 +491,7 @@ importers:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
-  packages/k6/framework:
-    devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
-      '@types/k6':
-        specifier: ^1.7.0
-        version: 1.7.0
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.17
-      vitest:
-        specifier: 'catalog:'
-        version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
-
-  packages/k6/gen:
+  packages/k6/codegen:
     dependencies:
       '@ahmedrowaihi/codegen-core':
         specifier: workspace:*
@@ -543,11 +528,26 @@ importers:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
+  packages/k6/framework:
+    devDependencies:
+      '@ahmedrowaihi/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
+      '@types/k6':
+        specifier: ^1.7.0
+        version: 1.7.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.17
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+
   packages/k6/hey-api:
     dependencies:
       '@ahmedrowaihi/k6-gen':
         specifier: workspace:*
-        version: link:../gen
+        version: link:../codegen
     devDependencies:
       '@ahmedrowaihi/tsconfig':
         specifier: workspace:*
@@ -569,7 +569,7 @@ importers:
     dependencies:
       '@ahmedrowaihi/k6-gen':
         specifier: workspace:*
-        version: link:../gen
+        version: link:../codegen
       '@ahmedrowaihi/openapi-tools':
         specifier: workspace:*
         version: link:../../openapi/tools

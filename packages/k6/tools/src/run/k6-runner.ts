@@ -47,7 +47,26 @@ export function runK6(target: RunTarget, k6Args: string[]): Promise<number> {
   consola.start(`[${target.name}] running: k6 ${k6Args.join(" ")}`);
   const child = spawn("k6", k6Args, { stdio: "inherit" });
   return new Promise((resolve, reject) => {
-    child.on("exit", (code) => resolve(code ?? 0));
+    child.on("exit", (code, signal) => {
+      if (code !== null) return resolve(code);
+      if (signal) {
+        consola.warn(`[${target.name}] k6 terminated by signal ${signal}.`);
+        return resolve(128 + (signalToNumber(signal) ?? 1));
+      }
+      resolve(1);
+    });
     child.on("error", reject);
   });
+}
+
+const SIGNALS: Record<string, number> = {
+  SIGHUP: 1,
+  SIGINT: 2,
+  SIGQUIT: 3,
+  SIGKILL: 9,
+  SIGTERM: 15,
+};
+
+function signalToNumber(signal: NodeJS.Signals): number | undefined {
+  return SIGNALS[signal];
 }

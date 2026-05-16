@@ -22,8 +22,9 @@ export function extractOperationMap(ir: IR.Model): OperationMap {
     if (!pathItem) continue;
     for (const method of HTTP_METHODS) {
       const op = pathItem[method] as { operationId?: string } | undefined;
-      if (!op?.operationId) continue;
-      out.set(`${method.toUpperCase()} ${path}`, op.operationId);
+      const id = op?.operationId?.trim();
+      if (!id) continue;
+      out.set(`${method.toUpperCase()} ${path}`, id);
     }
   }
   return out;

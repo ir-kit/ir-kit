@@ -51,6 +51,14 @@ export async function resolveTargets(
     return resolveNamed(cwd, config.loadtests, args.name, outDir);
   }
 
+  if (args.name !== undefined) {
+    const wanted = Array.isArray(args.name) ? args.name.join(", ") : args.name;
+    consola.error(
+      `--name "${wanted}" was provided but no \`loadtests\` map is defined in k6-tools.config.{ts,js}.`,
+    );
+    process.exit(1);
+  }
+
   return [
     {
       name: "default",

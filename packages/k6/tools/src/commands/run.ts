@@ -114,8 +114,17 @@ async function runAll(
     consola.start(
       `[${target.name}] bundling ${target.entry} → ${target.outfile}`,
     );
-    await mkdir(dirname(target.outfile), { recursive: true });
-    await bundle({ entry: target.entry, outfile: target.outfile });
+
+    try {
+      await mkdir(dirname(target.outfile), { recursive: true });
+      await bundle({ entry: target.entry, outfile: target.outfile });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      consola.error(`[${target.name}] bundling failed: ${msg}`);
+      failures.push({ name: target.name, code: 1 });
+      if (!continueOnError) process.exit(1);
+      continue;
+    }
     consola.success(`[${target.name}] bundle complete.`);
 
     const code = await runK6(target, buildK6Args(target, args));

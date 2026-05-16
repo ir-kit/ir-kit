@@ -64,7 +64,7 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 | --- | --- |
 | [`@ahmedrowaihi/asyncapi-typescript`](./packages/asyncapi/typescript) | AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture: a small core orchestrates parser → IR → registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema → TS via @asyncapi/modelina, file orchestration via @hey-api/codegen-core. |
 | [`@ahmedrowaihi/k6`](./packages/k6/framework) | Framework for authoring k6 load tests in TypeScript: defineLoadTest, flow().step() chaining, pace presets, budgets, auth middleware. Compiles to standard k6. |
-| [`@ahmedrowaihi/k6-gen`](./packages/k6/gen) | Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required. |
+| [`@ahmedrowaihi/k6-gen`](./packages/k6/codegen) | Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required. |
 | [`@ahmedrowaihi/k6-tools`](./packages/k6/tools) | CLI for the @ahmedrowaihi/k6 framework. Scaffold load tests (init), regenerate the typed client (sync), bundle+run scripts against the real k6 binary, replay recorded traffic. |
 
 ### `@hey-api/openapi-ts` plugins
