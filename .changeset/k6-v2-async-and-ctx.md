@@ -25,6 +25,6 @@ V2 — async + full k6 exec surface + fluent ops + custom metrics + digest/ntlm 
 
 **Middleware shape widened**: `Middleware` may now contribute `params()` returning a partial `Params` shape (used by digest/ntlm for k6's `auth:` field) in addition to `headers()`.
 
-**Runtime bridge**: framework requires the generated client (`@ahmedrowaihi/k6-gen` ≥ 0.3) to install runtime bridges (`installK6Bridge`, `setExecModule`, `installMetricsFactory`) at module load. Importing the generated client from `loadtest.ts` is now the wiring point.
+**Runtime bridge**: framework requires the generated client (`@ahmedrowaihi/k6-gen` ≥ 1.0) to install runtime bridges (`installK6Bridge`, `setExecModule`, `installMetricsFactory`) at module load. Importing the generated client from `loadtest.ts` is now the wiring point.
 
 Migration: rename `pace` → `scenario` in your config, replace `ctx.vu`/`ctx.iter` with `ctx.vu.idInTest`/`ctx.vu.iterationInScenario`, regenerate the client with the new codegen.

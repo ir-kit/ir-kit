@@ -191,7 +191,7 @@ function buildExec<VuState>(
   let vuStateReady = false;
 
   return async () => {
-    if (binding.use && binding.use.length) setMiddleware(binding.use);
+    if (binding.use !== undefined) setMiddleware(binding.use);
     else if (inherit) setMiddleware(inherit);
 
     setBaseUrl(binding.baseUrl);

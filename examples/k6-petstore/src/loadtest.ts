@@ -64,7 +64,10 @@ const lt = defineLoadTest({
         }))
         .check(
           "all branches resolved",
-          (res) => res.pet !== null && res.available.length >= 0,
+          (res) =>
+            res.pet !== null &&
+            Array.isArray(res.available) &&
+            Array.isArray(res.pending),
         ),
     },
 
