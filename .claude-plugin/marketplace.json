@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "name": "contract-kit",
+    "description": "Skills for the @ahmedrowaihi/contract-kit toolchain — k6 load testing, native SDK codegen (Go/Kotlin/Swift/TS), AsyncAPI types, fn-schema extraction, OpenAPI reverse-engineering from traffic, and hey-api plugin authoring."
+  },
+  "plugins": [
+    {
+      "name": "contract-kit",
+      "source": ".",
+      "skills": [
+        "./skills/k6-loadtest",
+        "./skills/openapi-sdk",
+        "./skills/openapi-from-traffic",
+        "./skills/asyncapi-typescript",
+        "./skills/fn-schema",
+        "./skills/heyapi-plugin-author"
+      ]
+    }
+  ]
+}
