@@ -1,5 +1,11 @@
 # @ahmedrowaihi/k6-gen
 
+## 1.0.2
+
+### Patch Changes
+
+- a92f011: `WalkedOperation` now exposes the OpenAPI `tags: ReadonlyArray<string>` on each yielded op. Pre-existing callers see no behavior change — the field is additive. Consumed by `@ahmedrowaihi/k6-toolkit`'s scaffolder to group ops by tag for the `--tags` batch mode.
+
 ## 1.0.1
 
 ### Patch Changes

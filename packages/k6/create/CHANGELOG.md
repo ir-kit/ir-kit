@@ -1,5 +1,12 @@
 # @ahmedrowaihi/create-k6
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [a92f011]
+  - @ahmedrowaihi/k6-toolkit@0.5.0
+
 ## 0.3.1
 
 ### Patch Changes

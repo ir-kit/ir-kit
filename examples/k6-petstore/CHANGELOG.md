@@ -1,5 +1,12 @@
 # @ahmedrowaihi/example-k6-petstore
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [fc069db]
+  - @ahmedrowaihi/k6@1.1.0
+
 ## 0.0.4
 
 ### Patch Changes
