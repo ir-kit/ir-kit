@@ -68,7 +68,7 @@ function defineLoadTestConst(input: LoadtestStubInput): ts.Statement {
   const ltConfig = f.createObjectLiteralExpression(
     [
       f.createPropertyAssignment(
-        "pace",
+        "scenario",
         f.createCallExpression(f.createIdentifier("smoke"), undefined, [
           f.createObjectLiteralExpression(
             [

@@ -2,6 +2,12 @@ import ts from "typescript";
 
 import { namedImport, namespaceImport } from "./ast-imports.js";
 import { printStatements } from "./print.js";
+import {
+  defaultExportProp,
+  objLit,
+  reExportConst,
+  varConst,
+} from "./scaffold/ast-helpers.js";
 
 export type AuthFlavor = "none" | "bearer" | "basic" | "apiKey" | "session";
 
@@ -39,12 +45,15 @@ const f = ts.factory;
 /** Render a starter `loadtest.ts` via `ts.factory` — no template strings. */
 export function scaffoldLoadtest(opts: ScaffoldLoadtestOpts): string {
   const pace = opts.pace ?? "smoke";
+  const symbols = ["defineLoadTest", "flow", pace];
+  if (opts.auth !== "none") symbols.push("useAuth");
+
   const stmts: ts.Statement[] = [
-    k6FrameworkImport(opts.auth, pace),
+    k6FrameworkImport(symbols),
     namespaceImport("api", opts.clientImportPath),
   ];
 
-  if (opts.auth !== "none") stmts.push(authDecl(opts));
+  if (opts.auth !== "none") stmts.push(authVarDecl(opts));
 
   stmts.push(loadtestDecl(opts, pace));
   stmts.push(reExportConst("options", "lt", "options"));
@@ -53,23 +62,34 @@ export function scaffoldLoadtest(opts: ScaffoldLoadtestOpts): string {
   return printStatements(stmts);
 }
 
-function k6FrameworkImport(
-  auth: AuthFlavor,
-  pace: NonNullable<ScaffoldLoadtestOpts["pace"]>,
+/**
+ * Compose the `import { defineLoadTest, flow, smoke, useAuth, batch?, ... }
+ * from "@ahmedrowaihi/k6"` line. Shared across both `scaffoldLoadtest` and
+ * `scaffoldScenario`. The caller chooses which framework symbols to add.
+ */
+export function k6FrameworkImport(
+  symbols: ReadonlyArray<string>,
 ): ts.ImportDeclaration {
-  const names = new Set(["defineLoadTest", "flow", pace]);
-  if (auth !== "none") names.add("useAuth");
   return namedImport(
-    [...names].map((name) => ({ name })),
+    Array.from(new Set(symbols)).map((name) => ({ name })),
     "@ahmedrowaihi/k6",
   );
 }
 
-function authDecl(opts: ScaffoldLoadtestOpts): ts.Statement {
+/** `const auth = useAuth.<flavor>({ … });` */
+export function authVarDecl(opts: AuthScaffoldOpts): ts.Statement {
   return varConst("auth", authCallExpr(opts));
 }
 
-function authCallExpr(opts: ScaffoldLoadtestOpts): ts.Expression {
+/** Subset of opts needed to build an auth decl. */
+export interface AuthScaffoldOpts {
+  auth: AuthFlavor;
+  bearerEnv?: string;
+  apiKeyHeader?: string;
+  apiKeyEnv?: string;
+}
+
+function authCallExpr(opts: AuthScaffoldOpts): ts.Expression {
   const useAuth = f.createIdentifier("useAuth");
   switch (opts.auth) {
     case "bearer":
@@ -168,7 +188,7 @@ function paceEntry(
   duration: string,
 ): ts.PropertyAssignment {
   return f.createPropertyAssignment(
-    "pace",
+    "scenario",
     f.createCallExpression(f.createIdentifier(pace), undefined, [
       objLit({ duration: f.createStringLiteral(duration) }),
     ]),
@@ -239,9 +259,11 @@ function scenariosEntry(
         name,
         objLit(
           {
-            pace: f.createCallExpression(f.createIdentifier(pace), undefined, [
-              objLit({ duration: f.createStringLiteral(duration) }),
-            ]),
+            scenario: f.createCallExpression(
+              f.createIdentifier(pace),
+              undefined,
+              [objLit({ duration: f.createStringLiteral(duration) })],
+            ),
             flow: flowExpr(seedOp),
           },
           true,
@@ -251,62 +273,4 @@ function scenariosEntry(
     true,
   );
   return f.createPropertyAssignment("scenarios", scenarioObj);
-}
-
-function objLit(
-  props: Record<string, ts.Expression>,
-  multiline = false,
-): ts.ObjectLiteralExpression {
-  return f.createObjectLiteralExpression(
-    Object.entries(props).map(([k, v]) => f.createPropertyAssignment(k, v)),
-    multiline,
-  );
-}
-
-function varConst(name: string, init: ts.Expression): ts.Statement {
-  return f.createVariableStatement(
-    undefined,
-    f.createVariableDeclarationList(
-      [f.createVariableDeclaration(name, undefined, undefined, init)],
-      ts.NodeFlags.Const,
-    ),
-  );
-}
-
-function reExportConst(
-  localName: string,
-  sourceVar: string,
-  sourceProp: string,
-): ts.Statement {
-  return f.createVariableStatement(
-    [f.createModifier(ts.SyntaxKind.ExportKeyword)],
-    f.createVariableDeclarationList(
-      [
-        f.createVariableDeclaration(
-          localName,
-          undefined,
-          undefined,
-          f.createPropertyAccessExpression(
-            f.createIdentifier(sourceVar),
-            f.createIdentifier(sourceProp),
-          ),
-        ),
-      ],
-      ts.NodeFlags.Const,
-    ),
-  );
-}
-
-function defaultExportProp(
-  sourceVar: string,
-  sourceProp: string,
-): ts.Statement {
-  return f.createExportAssignment(
-    undefined,
-    false,
-    f.createPropertyAccessExpression(
-      f.createIdentifier(sourceVar),
-      f.createIdentifier(sourceProp),
-    ),
-  );
 }

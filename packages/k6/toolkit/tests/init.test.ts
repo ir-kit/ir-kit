@@ -40,7 +40,7 @@ describe("scaffoldLoadtest", () => {
       pace: "smoke",
       duration: "2m",
     });
-    expect(out).toMatch(/pace:\s*smoke\(\{\s*duration:\s*"2m"\s*\}\)/);
+    expect(out).toMatch(/scenario:\s*smoke\(\{\s*duration:\s*"2m"\s*\}\)/);
   });
 
   it("imports the selected pace helper (not just `smoke`) when `pace` is set", () => {
@@ -53,7 +53,7 @@ describe("scaffoldLoadtest", () => {
     expect(out).toMatch(
       /import \{ defineLoadTest, flow, stress \} from "@ahmedrowaihi\/k6"/,
     );
-    expect(out).toMatch(/pace:\s*stress\(/);
+    expect(out).toMatch(/scenario:\s*stress\(/);
   });
 
   it("emits valid runnable shape — re-exports options + default", () => {

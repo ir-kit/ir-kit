@@ -6,6 +6,7 @@ import { constants as osConstants } from "node:os";
 import { resolve } from "node:path";
 
 import { bundle } from "./bundle.js";
+import { runScaffoldCommand } from "./scaffold/cli-handler.js";
 
 const CACHE_DIR = ".k6-ts-cache";
 
@@ -36,6 +37,12 @@ function signalToExitCode(signal: NodeJS.Signals): number {
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
+
+  if (args[0] === "scaffold") {
+    await runScaffoldCommand(args.slice(1));
+    return;
+  }
+
   let toExec: ReadonlyArray<string> = args;
 
   const tsEntry = findTsEntry(args);
