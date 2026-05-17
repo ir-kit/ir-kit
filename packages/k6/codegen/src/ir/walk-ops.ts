@@ -7,6 +7,7 @@ export interface WalkedOperation {
   path: string;
   summary?: string;
   description?: string;
+  tags: ReadonlyArray<string>;
   pathParams: ReadonlyArray<IR.ParameterObject>;
   queryParams: ReadonlyArray<IR.ParameterObject>;
   headerParams: ReadonlyArray<IR.ParameterObject>;
@@ -39,6 +40,7 @@ export function* walkOperations(
         path: pathStr,
         summary: op.summary,
         description: op.description,
+        tags: (op as { tags?: ReadonlyArray<string> }).tags ?? [],
         pathParams: Object.values(params.path ?? {}),
         queryParams: Object.values(params.query ?? {}),
         headerParams: Object.values(params.header ?? {}),

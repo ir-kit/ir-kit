@@ -1,6 +1,6 @@
 ---
 name: k6-loadtest
-description: Load-test an HTTP API with the @ahmedrowaihi/k6 v2 stack — generate a typed k6 client (sync + async parallel via http.asyncRequest) from an OpenAPI spec, scaffold a runnable loadtest.ts, then bundle and spawn k6 programmatically. Use when the user wants to write k6 load tests in TypeScript, perf-test an API from its OpenAPI spec, run smoke/load/stress/spike/soak/arrival-rate scenarios, do parallel fan-out from one VU, declare custom metrics, write group/check assertions, or invoke `k6 run` from a script instead of shelling out. Triggers on "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", "arrival rate", "RPS test", "parallel HTTP", `defineLoadTest`, `runK6`, `useAuth`, `arrivalRate`, `rampingArrivalRate`, `handleSummary`, `flow.batch`, `flow.group`, `flow.check`, "k6 scenarios", "k6 budgets", "k6 thresholds", "OpenAPI to k6". Do NOT use for unit tests, integration tests, non-HTTP workloads, or generic Go-based k6 scripting unrelated to the @ahmedrowaihi/k6 framework.
+description: Load-test an HTTP API with the @ahmedrowaihi/k6 v2 stack — generate a typed k6 client (sync + async parallel via http.asyncRequest) from an OpenAPI spec, scaffold scenario files interactively or via flags, then bundle and spawn k6 (CLI or programmatic). Use when the user wants to write k6 load tests in TypeScript, perf-test an API from its OpenAPI spec, run smoke/load/stress/spike/soak/arrival-rate scenarios, do parallel fan-out from one VU, declare custom metrics, write group/check assertions, scaffold scenarios from spec tags, or invoke `k6 run` from a script. Triggers on "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", "arrival rate", "RPS test", "parallel HTTP", "scaffold scenario", "k6-ts", "k6-ts scaffold", `defineLoadTest`, `runK6`, `useAuth`, `arrivalRate`, `rampingArrivalRate`, `handleSummary`, `flow.batch`, `flow.group`, `flow.check`, "k6 scenarios", "k6 budgets", "k6 thresholds", "OpenAPI to k6". Do NOT use for unit tests, integration tests, non-HTTP workloads, or generic Go-based k6 scripting unrelated to the @ahmedrowaihi/k6 framework.
 ---
 
 # k6 load testing — `@ahmedrowaihi/k6` v2
@@ -43,6 +43,42 @@ k6-ts --help
 ```
 
 Use it when you want `k6`-CLI muscle memory without a `pnpm run` wrapper. For CI scripts or custom orchestration, reach for the programmatic `runK6()` instead.
+
+## `k6-ts scaffold` — interactive + flag-driven scenario generator
+
+Three modes, same backing scaffolder:
+
+```bash
+# 1. Interactive wizard — picks tags, ops, chain, pace, auth from prompts
+k6-ts scaffold
+
+# 2. Discovery — list ops grouped by tag (agent-friendly)
+k6-ts scaffold list-ops --spec ./openapi.yaml
+k6-ts scaffold list-ops --spec ./openapi.yaml --json
+
+# 3. Flag-driven (non-interactive, CI/agent)
+k6-ts scaffold \
+  --spec ./openapi.yaml \
+  --name browse-pets \
+  --ops findPetsByStatus,getPetById \
+  --chain sequential \
+  --pace smoke \
+  --auth bearer \
+  --output ./loadtests/browse-pets.ts
+
+# 4. Batch — one scenario per tag with smart defaults
+k6-ts scaffold --spec ./openapi.yaml --tags pet,user --output-dir ./loadtests
+```
+
+**Output**: one standalone `.ts` file per scenario. Self-contained (own `options`, `default`, budgets, auth). Run via `k6-ts run ./loadtests/browse-pets.ts`.
+
+**Chain modes**:
+- `sequential` — `.step("op1", () => api.op1()).step("op2", () => api.op2())`. Output of one feeds the next.
+- `batch` — `.batch("fan-out", () => ({ a: api.async.op1(), b: api.async.op2() }))`. True parallel via `http.asyncRequest` + `Promise.all`.
+
+**Workflow for agents**: call `list-ops --json` to discover, then pick ops and call `scaffold --name ... --ops ...`. No YAML config needed — the spec is the source of truth.
+
+Generated files have placeholder args (`api.getPet(petId)`, `api.addPet({})`) — you fill those in. The scaffold gives you the shape, you fill the body.
 
 ## First-run quick start (new project)
 
