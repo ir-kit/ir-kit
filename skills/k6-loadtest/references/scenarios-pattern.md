@@ -102,47 +102,67 @@ scenarios: {
 
 ## Budgets (k6 thresholds, but flat)
 
-`budgets:` compiles to k6's nested `thresholds` block automatically.
+`budgets:` is our **flat DSL on top of k6 [`thresholds`](https://grafana.com/docs/k6/latest/using-k6/thresholds/)**. It compiles 1:1 to the k6 shape. The vocabulary is intentionally narrower than what k6 supports — `budgets` covers the common SLO knobs; everything else escapes via `options.thresholds`.
 
 ```ts
 defineLoadTest({
   scenario: smoke(),
   budgets: {
-    p95: "500ms",         // → http_req_duration: ['p(95)<500']
-    p99: "1.5s",          // → http_req_duration: ['p(99)<1500']
-    errors: "1%",         // → http_req_failed: ['rate<0.01']
+    // HTTP latency — http_req_duration
+    p95:     "500ms",       // → http_req_duration: ['p(95)<500']
+    p99:     "1.5s",        // → http_req_duration: ['p(99)<1500']
+    errors:  "1%",          // → http_req_failed: ['rate<0.01']
+
+    // Iteration-level
+    iterations: "100/m",    // → iterations: ['rate>1.667']  (rate per sec)
+    checks:     "99%",      // → checks: ['rate>0.99']
+    iterationDuration: {    // → iteration_duration: ['p(95)<2000']
+      p95: "2s",
+    },
+
+    // Failure behavior
+    abortOnFail: true,      // wraps every spec in `{ threshold, abortOnFail: true }`
+    // abortOnFail: "10s",  // grace window before evaluation (delayAbortEval)
+
+    // Per-operation overrides
+    ops: {
+      getPetById: { p95: "200ms" },
+      addPet:     { p95: "800ms", errors: "0%" },
+    },
   },
   flow: ...,
 });
 ```
 
-### Per-operation budgets
+### What `budgets` models — and what it doesn't
 
-`ops:` keys target a single operationId — every generated request is auto-tagged with `{operation: "<opId>"}`:
+| k6 capability | `budgets` field | Escape via `options.thresholds`? |
+|---|---|---|
+| `http_req_duration` p95/p99 | `p95` / `p99` | ✓ |
+| `http_req_failed` rate | `errors` | ✓ |
+| Per-op `http_req_duration{operation:X}` | `ops:` | ✓ |
+| `iterations` rate floor | `iterations` (e.g. `"100/m"`) | ✓ |
+| `checks` pass-rate | `checks` (e.g. `"99%"`) | ✓ |
+| `iteration_duration` p95/p99 | `iterationDuration: { p95, p99 }` | ✓ |
+| `abortOnFail` + `delayAbortEval` | `abortOnFail: true \| Duration` | ✓ |
+| Other percentiles (`p(50)`, `p(99.9)`), `avg`/`min`/`med`/`max` | ✗ | ✓ |
+| Sub-timings (`http_req_waiting`, `connecting`, `tls_handshaking`, `sending`, `receiving`, `blocked`) | ✗ | ✓ |
+| `data_sent`, `data_received`, `dropped_iterations`, `vus`, `vus_max` | ✗ | ✓ |
+| Custom-metric thresholds (from `metrics:`) | ✗ | ✓ |
+| Tagged thresholds for non-`operation:` tags | ✗ | ✓ |
 
-```ts
-budgets: {
-  p95: "500ms",
-  ops: {
-    getPetById: { p95: "200ms" },
-    addPet:     { p95: "800ms", errors: "0%" },
-  },
-}
-```
-
-### Custom thresholds beyond budgets
-
-`budgets` only models the three HTTP basics (`http_req_duration`, `http_req_failed`, per-op variants). For anything else — `checks`, `iteration_duration`, custom metrics, `abortOnFail` — drop into `options.thresholds`. The two maps **union-merge per metric**, so they coexist:
+`budgets` is intentionally opinionated for the SLO common case. The escape hatch (`options.thresholds`) covers everything else and **union-merges** per metric — both shapes coexist on the same metric key:
 
 ```ts
 defineLoadTest({
   scenario: smoke(),
-  budgets: { p95: "500ms" },
+  budgets: { p95: "500ms" },           // → http_req_duration: ['p(95)<500']
   options: {
     thresholds: {
-      checks: ["rate>0.99"],
-      iteration_duration: [{ threshold: "p(95)<2000", abortOnFail: true }],
-      my_custom_metric: ["count<10"],
+      http_req_duration:  ["avg<300"],        // merged: ['avg<300', 'p(95)<500']
+      http_req_waiting:   ["p(95)<200"],
+      data_received:      ["rate>1000"],
+      my_custom_metric:   ["count<10"],
     },
   },
   flow: ...,

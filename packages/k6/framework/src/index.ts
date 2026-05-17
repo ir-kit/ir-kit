@@ -1,4 +1,9 @@
-export type { Budgets, OpBudget, ThresholdMap } from "./budgets.js";
+export type {
+  Budgets,
+  DurationBudget,
+  OpBudget,
+  ThresholdMap,
+} from "./budgets.js";
 export { compileBudgets } from "./budgets.js";
 export { buildQuery, mergeTags, parseJson } from "./client-runtime.js";
 export type {
@@ -19,7 +24,12 @@ export type {
   StepFn,
 } from "./flow.js";
 export { FlowBuilder, FlowExpectError, flow } from "./flow.js";
-export type { Duration, Percent } from "./format.js";
+export type { Duration, Percent, Rate } from "./format.js";
+export {
+  parseDurationMs,
+  parsePercentRate,
+  parseRatePerSecond,
+} from "./format.js";
 export type {
   ArrivalRateOpts,
   LoadOpts,
