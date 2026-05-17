@@ -1,5 +1,12 @@
 # @ahmedrowaihi/openapi-ts-k6
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [e3eb564]
+  - @ahmedrowaihi/k6-gen@1.1.0
+
 ## 0.2.2
 
 ### Patch Changes

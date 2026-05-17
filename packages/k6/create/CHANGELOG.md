@@ -1,5 +1,11 @@
 # @ahmedrowaihi/create-k6
 
+## 0.3.3
+
+### Patch Changes
+
+- @ahmedrowaihi/k6-toolkit@0.5.1
+
 ## 0.3.2
 
 ### Patch Changes
