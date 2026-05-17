@@ -41,36 +41,83 @@ export type CallOpts = {
   responseType?: "text" | "binary" | "none";
 };
 
-export function addPet(body: T.Pet, opts?: CallOpts): T.Pet {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("addPet", opts?.tags),
+type RequestSpec = {
+  method: string;
+  url: string;
+  body: string | null;
+  params: Record<string, unknown>;
+};
+
+function buildSpec(
+  method: string,
+  url: string,
+  opId: string,
+  body: string | null,
+  opts?: CallOpts,
+): RequestSpec {
+  const contentType: Record<string, string> =
+    body !== null ? { "Content-Type": "application/json" } : {};
+  return {
+    method,
+    url,
+    body,
+    params: {
+      ...applyMiddlewareParams(),
+      ...opts,
+      headers: applyMiddlewareHeaders({ ...contentType, ...opts?.headers }),
+      tags: mergeTags(opId, opts?.tags),
+    },
   };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as T.Pet;
+}
+
+function call<T>(
+  method: string,
+  url: string,
+  opId: string,
+  body: string | null,
+  opts?: CallOpts,
+): T {
+  const spec = buildSpec(method, url, opId, body, opts);
+  return parseJson(
+    http.request(spec.method, spec.url, spec.body, spec.params),
+  ) as T;
+}
+
+async function callAsync<T>(
+  method: string,
+  url: string,
+  opId: string,
+  body: string | null,
+  opts?: CallOpts,
+): Promise<T> {
+  const spec = buildSpec(method, url, opId, body, opts);
+  const res = await http.asyncRequest(
+    spec.method,
+    spec.url,
+    spec.body,
+    spec.params,
+  );
+  return parseJson(res) as T;
+}
+
+export function addPet(body: T.Pet, opts?: CallOpts): T.Pet {
+  return call<T.Pet>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+    "addPet",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function updatePet(body: T.Pet, opts?: CallOpts): T.Pet {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updatePet", opts?.tags),
-  };
-  const res = http.put(url, JSON.stringify(body), params);
-  return parseJson(res) as T.Pet;
+  return call<T.Pet>(
+    "PUT",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+    "updatePet",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function findPetsByStatus(
@@ -79,19 +126,15 @@ export function findPetsByStatus(
   },
   opts?: CallOpts,
 ): Array<T.Pet> {
-  const url =
+  return call<Array<T.Pet>>(
+    "GET",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/findByStatus" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("findPetsByStatus", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as Array<T.Pet>;
+      "/pet/findByStatus" +
+      buildQuery(query as Record<string, unknown>),
+    "findPetsByStatus",
+    null,
+    opts,
+  );
 }
 
 export function findPetsByTags(
@@ -100,32 +143,25 @@ export function findPetsByTags(
   },
   opts?: CallOpts,
 ): Array<T.Pet> {
-  const url =
+  return call<Array<T.Pet>>(
+    "GET",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/findByTags" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("findPetsByTags", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as Array<T.Pet>;
+      "/pet/findByTags" +
+      buildQuery(query as Record<string, unknown>),
+    "findPetsByTags",
+    null,
+    opts,
+  );
 }
 
 export function getPetById(petId: number, opts?: CallOpts): T.Pet {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getPetById", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as T.Pet;
+  return call<T.Pet>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+    "getPetById",
+    null,
+    opts,
+  );
 }
 
 export function updatePetWithForm(
@@ -136,33 +172,26 @@ export function updatePetWithForm(
   },
   opts?: CallOpts,
 ): T.Pet {
-  const url =
+  return call<T.Pet>(
+    "POST",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/" +
-    petId +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updatePetWithForm", opts?.tags),
-  };
-  const res = http.post(url, null, params);
-  return parseJson(res) as T.Pet;
+      "/pet/" +
+      petId +
+      buildQuery(query as Record<string, unknown>),
+    "updatePetWithForm",
+    null,
+    opts,
+  );
 }
 
 export function deletePet(petId: number, opts?: CallOpts): unknown {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("deletePet", opts?.tags),
-  };
-  const res = http.del(url, null, params);
-  return parseJson(res) as unknown;
+  return call<unknown>(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+    "deletePet",
+    null,
+    opts,
+  );
 }
 
 export function uploadFile(
@@ -173,24 +202,17 @@ export function uploadFile(
   body?: string,
   opts?: CallOpts,
 ): T.ApiResponse {
-  const url =
+  return call<T.ApiResponse>(
+    "POST",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/" +
-    petId +
-    "/uploadImage" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/octet-stream",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("uploadFile", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as T.ApiResponse;
+      "/pet/" +
+      petId +
+      "/uploadImage" +
+      buildQuery(query as Record<string, unknown>),
+    "uploadFile",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function uploadPetDocument(
@@ -202,110 +224,76 @@ export function uploadPetDocument(
   },
   opts?: CallOpts,
 ): T.ApiResponse {
-  const url =
-    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId + "/uploadDocument";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "multipart/form-data",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("uploadPetDocument", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as T.ApiResponse;
+  return call<T.ApiResponse>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId + "/uploadDocument",
+    "uploadPetDocument",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function getInventory(opts?: CallOpts): Record<string, unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/inventory";
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getInventory", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as Record<string, unknown>;
+  return call<Record<string, unknown>>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/inventory",
+    "getInventory",
+    null,
+    opts,
+  );
 }
 
 export function placeOrder(body?: T.Order, opts?: CallOpts): T.Order {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/order";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("placeOrder", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as T.Order;
+  return call<T.Order>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order",
+    "placeOrder",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function getOrderById(orderId: number, opts?: CallOpts): T.Order {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getOrderById", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as T.Order;
+  return call<T.Order>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+    "getOrderById",
+    null,
+    opts,
+  );
 }
 
 export function deleteOrder(orderId: number, opts?: CallOpts): unknown {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("deleteOrder", opts?.tags),
-  };
-  const res = http.del(url, null, params);
-  return parseJson(res) as unknown;
+  return call<unknown>(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+    "deleteOrder",
+    null,
+    opts,
+  );
 }
 
 export function createUser(body?: T.User, opts?: CallOpts): T.User {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("createUser", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as T.User;
+  return call<T.User>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user",
+    "createUser",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function createUsersWithListInput(
   body?: Array<T.User>,
   opts?: CallOpts,
 ): T.User {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/createWithList";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("createUsersWithListInput", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as T.User;
+  return call<T.User>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/createWithList",
+    "createUsersWithListInput",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function loginUser(
@@ -315,45 +303,35 @@ export function loginUser(
   },
   opts?: CallOpts,
 ): string {
-  const url =
+  return call<string>(
+    "GET",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/user/login" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("loginUser", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as string;
+      "/user/login" +
+      buildQuery(query as Record<string, unknown>),
+    "loginUser",
+    null,
+    opts,
+  );
 }
 
 export function logoutUser(opts?: CallOpts): unknown {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/logout";
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("logoutUser", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as unknown;
+  return call<unknown>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/logout",
+    "logoutUser",
+    null,
+    opts,
+  );
 }
 
 export function getUserByName(username: string, opts?: CallOpts): T.User {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getUserByName", opts?.tags),
-  };
-  const res = http.get(url, params);
-  return parseJson(res) as T.User;
+  return call<T.User>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "getUserByName",
+    null,
+    opts,
+  );
 }
 
 export function updateUser(
@@ -361,32 +339,23 @@ export function updateUser(
   body?: T.User,
   opts?: CallOpts,
 ): unknown {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username;
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updateUser", opts?.tags),
-  };
-  const res = http.put(url, JSON.stringify(body), params);
-  return parseJson(res) as unknown;
+  return call<unknown>(
+    "PUT",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "updateUser",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function deleteUser(username: string, opts?: CallOpts): unknown {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("deleteUser", opts?.tags),
-  };
-  const res = http.del(url, null, params);
-  return parseJson(res) as unknown;
+  return call<unknown>(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "deleteUser",
+    null,
+    opts,
+  );
 }
 
 export function submitTags(
@@ -397,21 +366,15 @@ export function submitTags(
 ): {
   count?: number;
 } {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/tags";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("submitTags", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as {
+  return call<{
     count?: number;
-  };
+  }>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/tags",
+    "submitTags",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function updateProfile(
@@ -423,21 +386,15 @@ export function updateProfile(
 ): {
   ok?: boolean;
 } {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/profile";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updateProfile", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as {
+  return call<{
     ok?: boolean;
-  };
+  }>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/profile",
+    "updateProfile",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function createShape(
@@ -452,21 +409,15 @@ export function createShape(
 ): {
   id?: string;
 } {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/shapes";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("createShape", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as {
+  return call<{
     id?: string;
-  };
+  }>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/shapes",
+    "createShape",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 export function submitMeasurement(
@@ -475,56 +426,33 @@ export function submitMeasurement(
   },
   opts?: CallOpts,
 ): unknown {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/measurements";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("submitMeasurement", opts?.tags),
-  };
-  const res = http.post(url, JSON.stringify(body), params);
-  return parseJson(res) as unknown;
+  return call<unknown>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/measurements",
+    "submitMeasurement",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 async function addPet_async(body: T.Pet, opts?: CallOpts): Promise<T.Pet> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("addPet", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<T.Pet>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+    "addPet",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as T.Pet;
 }
 
 async function updatePet_async(body: T.Pet, opts?: CallOpts): Promise<T.Pet> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updatePet", opts?.tags),
-  };
-  const res = await http.asyncRequest("PUT", url, JSON.stringify(body), params);
-  return parseJson(res) as T.Pet;
+  return callAsync<T.Pet>(
+    "PUT",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+    "updatePet",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 async function findPetsByStatus_async(
@@ -533,19 +461,15 @@ async function findPetsByStatus_async(
   },
   opts?: CallOpts,
 ): Promise<Array<T.Pet>> {
-  const url =
+  return callAsync<Array<T.Pet>>(
+    "GET",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/findByStatus" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("findPetsByStatus", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as Array<T.Pet>;
+      "/pet/findByStatus" +
+      buildQuery(query as Record<string, unknown>),
+    "findPetsByStatus",
+    null,
+    opts,
+  );
 }
 
 async function findPetsByTags_async(
@@ -554,35 +478,28 @@ async function findPetsByTags_async(
   },
   opts?: CallOpts,
 ): Promise<Array<T.Pet>> {
-  const url =
+  return callAsync<Array<T.Pet>>(
+    "GET",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/findByTags" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("findPetsByTags", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as Array<T.Pet>;
+      "/pet/findByTags" +
+      buildQuery(query as Record<string, unknown>),
+    "findPetsByTags",
+    null,
+    opts,
+  );
 }
 
 async function getPetById_async(
   petId: number,
   opts?: CallOpts,
 ): Promise<T.Pet> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getPetById", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as T.Pet;
+  return callAsync<T.Pet>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+    "getPetById",
+    null,
+    opts,
+  );
 }
 
 async function updatePetWithForm_async(
@@ -593,36 +510,29 @@ async function updatePetWithForm_async(
   },
   opts?: CallOpts,
 ): Promise<T.Pet> {
-  const url =
+  return callAsync<T.Pet>(
+    "POST",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/" +
-    petId +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updatePetWithForm", opts?.tags),
-  };
-  const res = await http.asyncRequest("POST", url, null, params);
-  return parseJson(res) as T.Pet;
+      "/pet/" +
+      petId +
+      buildQuery(query as Record<string, unknown>),
+    "updatePetWithForm",
+    null,
+    opts,
+  );
 }
 
 async function deletePet_async(
   petId: number,
   opts?: CallOpts,
 ): Promise<unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("deletePet", opts?.tags),
-  };
-  const res = await http.asyncRequest("DELETE", url, null, params);
-  return parseJson(res) as unknown;
+  return callAsync<unknown>(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+    "deletePet",
+    null,
+    opts,
+  );
 }
 
 async function uploadFile_async(
@@ -633,29 +543,17 @@ async function uploadFile_async(
   body?: string,
   opts?: CallOpts,
 ): Promise<T.ApiResponse> {
-  const url =
-    getBaseUrl(DEFAULT_BASE_URL) +
-    "/pet/" +
-    petId +
-    "/uploadImage" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/octet-stream",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("uploadFile", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<T.ApiResponse>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) +
+      "/pet/" +
+      petId +
+      "/uploadImage" +
+      buildQuery(query as Record<string, unknown>),
+    "uploadFile",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as T.ApiResponse;
 }
 
 async function uploadPetDocument_async(
@@ -667,144 +565,90 @@ async function uploadPetDocument_async(
   },
   opts?: CallOpts,
 ): Promise<T.ApiResponse> {
-  const url =
-    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId + "/uploadDocument";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "multipart/form-data",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("uploadPetDocument", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<T.ApiResponse>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId + "/uploadDocument",
+    "uploadPetDocument",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as T.ApiResponse;
 }
 
 async function getInventory_async(
   opts?: CallOpts,
 ): Promise<Record<string, unknown>> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/inventory";
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getInventory", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as Record<string, unknown>;
+  return callAsync<Record<string, unknown>>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/inventory",
+    "getInventory",
+    null,
+    opts,
+  );
 }
 
 async function placeOrder_async(
   body?: T.Order,
   opts?: CallOpts,
 ): Promise<T.Order> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/order";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("placeOrder", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<T.Order>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order",
+    "placeOrder",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as T.Order;
 }
 
 async function getOrderById_async(
   orderId: number,
   opts?: CallOpts,
 ): Promise<T.Order> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getOrderById", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as T.Order;
+  return callAsync<T.Order>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+    "getOrderById",
+    null,
+    opts,
+  );
 }
 
 async function deleteOrder_async(
   orderId: number,
   opts?: CallOpts,
 ): Promise<unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("deleteOrder", opts?.tags),
-  };
-  const res = await http.asyncRequest("DELETE", url, null, params);
-  return parseJson(res) as unknown;
+  return callAsync<unknown>(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+    "deleteOrder",
+    null,
+    opts,
+  );
 }
 
 async function createUser_async(
   body?: T.User,
   opts?: CallOpts,
 ): Promise<T.User> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("createUser", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<T.User>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) + "/user",
+    "createUser",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as T.User;
 }
 
 async function createUsersWithListInput_async(
   body?: Array<T.User>,
   opts?: CallOpts,
 ): Promise<T.User> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/createWithList";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("createUsersWithListInput", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<T.User>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/createWithList",
+    "createUsersWithListInput",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as T.User;
 }
 
 async function loginUser_async(
@@ -814,48 +658,38 @@ async function loginUser_async(
   },
   opts?: CallOpts,
 ): Promise<string> {
-  const url =
+  return callAsync<string>(
+    "GET",
     getBaseUrl(DEFAULT_BASE_URL) +
-    "/user/login" +
-    buildQuery(query as Record<string, unknown>);
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("loginUser", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as string;
+      "/user/login" +
+      buildQuery(query as Record<string, unknown>),
+    "loginUser",
+    null,
+    opts,
+  );
 }
 
 async function logoutUser_async(opts?: CallOpts): Promise<unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/logout";
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("logoutUser", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as unknown;
+  return callAsync<unknown>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/logout",
+    "logoutUser",
+    null,
+    opts,
+  );
 }
 
 async function getUserByName_async(
   username: string,
   opts?: CallOpts,
 ): Promise<T.User> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("getUserByName", opts?.tags),
-  };
-  const res = await http.asyncRequest("GET", url, null, params);
-  return parseJson(res) as T.User;
+  return callAsync<T.User>(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "getUserByName",
+    null,
+    opts,
+  );
 }
 
 async function updateUser_async(
@@ -863,35 +697,26 @@ async function updateUser_async(
   body?: T.User,
   opts?: CallOpts,
 ): Promise<unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username;
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updateUser", opts?.tags),
-  };
-  const res = await http.asyncRequest("PUT", url, JSON.stringify(body), params);
-  return parseJson(res) as unknown;
+  return callAsync<unknown>(
+    "PUT",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "updateUser",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 async function deleteUser_async(
   username: string,
   opts?: CallOpts,
 ): Promise<unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username;
-  const headers = applyMiddlewareHeaders({ ...opts?.headers });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("deleteUser", opts?.tags),
-  };
-  const res = await http.asyncRequest("DELETE", url, null, params);
-  return parseJson(res) as unknown;
+  return callAsync<unknown>(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "deleteUser",
+    null,
+    opts,
+  );
 }
 
 async function submitTags_async(
@@ -902,26 +727,15 @@ async function submitTags_async(
 ): Promise<{
   count?: number;
 }> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/tags";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("submitTags", opts?.tags),
-  };
-  const res = await http.asyncRequest(
-    "POST",
-    url,
-    JSON.stringify(body),
-    params,
-  );
-  return parseJson(res) as {
+  return callAsync<{
     count?: number;
-  };
+  }>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/tags",
+    "submitTags",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 async function updateProfile_async(
@@ -933,26 +747,15 @@ async function updateProfile_async(
 ): Promise<{
   ok?: boolean;
 }> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/profile";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("updateProfile", opts?.tags),
-  };
-  const res = await http.asyncRequest(
-    "POST",
-    url,
-    JSON.stringify(body),
-    params,
-  );
-  return parseJson(res) as {
+  return callAsync<{
     ok?: boolean;
-  };
+  }>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/profile",
+    "updateProfile",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 async function createShape_async(
@@ -967,26 +770,15 @@ async function createShape_async(
 ): Promise<{
   id?: string;
 }> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/shapes";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("createShape", opts?.tags),
-  };
-  const res = await http.asyncRequest(
-    "POST",
-    url,
-    JSON.stringify(body),
-    params,
-  );
-  return parseJson(res) as {
+  return callAsync<{
     id?: string;
-  };
+  }>(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/shapes",
+    "createShape",
+    JSON.stringify(body),
+    opts,
+  );
 }
 
 async function submitMeasurement_async(
@@ -995,25 +787,306 @@ async function submitMeasurement_async(
   },
   opts?: CallOpts,
 ): Promise<unknown> {
-  const url = getBaseUrl(DEFAULT_BASE_URL) + "/measurements";
-  const headers = applyMiddlewareHeaders({
-    "Content-Type": "application/json",
-    ...opts?.headers,
-  });
-  const params = {
-    ...applyMiddlewareParams(),
-    ...opts,
-    headers,
-    tags: mergeTags("submitMeasurement", opts?.tags),
-  };
-  const res = await http.asyncRequest(
+  return callAsync<unknown>(
     "POST",
-    url,
+    getBaseUrl(DEFAULT_BASE_URL) + "/measurements",
+    "submitMeasurement",
     JSON.stringify(body),
-    params,
+    opts,
   );
-  return parseJson(res) as unknown;
 }
+
+addPet.spec = (body: T.Pet, opts?: CallOpts) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+    "addPet",
+    JSON.stringify(body),
+    opts,
+  );
+
+updatePet.spec = (body: T.Pet, opts?: CallOpts) =>
+  buildSpec(
+    "PUT",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+    "updatePet",
+    JSON.stringify(body),
+    opts,
+  );
+
+findPetsByStatus.spec = (
+  query: {
+    status: T.SchemaEnum;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) +
+      "/pet/findByStatus" +
+      buildQuery(query as Record<string, unknown>),
+    "findPetsByStatus",
+    null,
+    opts,
+  );
+
+findPetsByTags.spec = (
+  query: {
+    tags: Array<string>;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) +
+      "/pet/findByTags" +
+      buildQuery(query as Record<string, unknown>),
+    "findPetsByTags",
+    null,
+    opts,
+  );
+
+getPetById.spec = (petId: number, opts?: CallOpts) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+    "getPetById",
+    null,
+    opts,
+  );
+
+updatePetWithForm.spec = (
+  petId: number,
+  query?: {
+    name?: string;
+    status?: string;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) +
+      "/pet/" +
+      petId +
+      buildQuery(query as Record<string, unknown>),
+    "updatePetWithForm",
+    null,
+    opts,
+  );
+
+deletePet.spec = (petId: number, opts?: CallOpts) =>
+  buildSpec(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+    "deletePet",
+    null,
+    opts,
+  );
+
+uploadFile.spec = (
+  petId: number,
+  query?: {
+    additionalMetadata?: string;
+  },
+  body?: string,
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) +
+      "/pet/" +
+      petId +
+      "/uploadImage" +
+      buildQuery(query as Record<string, unknown>),
+    "uploadFile",
+    JSON.stringify(body),
+    opts,
+  );
+
+uploadPetDocument.spec = (
+  petId: number,
+  body: {
+    file: string;
+    title?: string;
+    description?: string;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId + "/uploadDocument",
+    "uploadPetDocument",
+    JSON.stringify(body),
+    opts,
+  );
+
+getInventory.spec = (opts?: CallOpts) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/inventory",
+    "getInventory",
+    null,
+    opts,
+  );
+
+placeOrder.spec = (body?: T.Order, opts?: CallOpts) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order",
+    "placeOrder",
+    JSON.stringify(body),
+    opts,
+  );
+
+getOrderById.spec = (orderId: number, opts?: CallOpts) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+    "getOrderById",
+    null,
+    opts,
+  );
+
+deleteOrder.spec = (orderId: number, opts?: CallOpts) =>
+  buildSpec(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+    "deleteOrder",
+    null,
+    opts,
+  );
+
+createUser.spec = (body?: T.User, opts?: CallOpts) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user",
+    "createUser",
+    JSON.stringify(body),
+    opts,
+  );
+
+createUsersWithListInput.spec = (body?: Array<T.User>, opts?: CallOpts) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/createWithList",
+    "createUsersWithListInput",
+    JSON.stringify(body),
+    opts,
+  );
+
+loginUser.spec = (
+  query?: {
+    username?: string;
+    password?: string;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) +
+      "/user/login" +
+      buildQuery(query as Record<string, unknown>),
+    "loginUser",
+    null,
+    opts,
+  );
+
+logoutUser.spec = (opts?: CallOpts) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/logout",
+    "logoutUser",
+    null,
+    opts,
+  );
+
+getUserByName.spec = (username: string, opts?: CallOpts) =>
+  buildSpec(
+    "GET",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "getUserByName",
+    null,
+    opts,
+  );
+
+updateUser.spec = (username: string, body?: T.User, opts?: CallOpts) =>
+  buildSpec(
+    "PUT",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "updateUser",
+    JSON.stringify(body),
+    opts,
+  );
+
+deleteUser.spec = (username: string, opts?: CallOpts) =>
+  buildSpec(
+    "DELETE",
+    getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+    "deleteUser",
+    null,
+    opts,
+  );
+
+submitTags.spec = (
+  body: {
+    tags: Array<string>;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/tags",
+    "submitTags",
+    JSON.stringify(body),
+    opts,
+  );
+
+updateProfile.spec = (
+  body: {
+    name: string;
+    nickname?: string | null;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/profile",
+    "updateProfile",
+    JSON.stringify(body),
+    opts,
+  );
+
+createShape.spec = (
+  body:
+    | ({
+        kind: "circle";
+      } & T.Circle)
+    | ({
+        kind: "rect";
+      } & T.Rect),
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/shapes",
+    "createShape",
+    JSON.stringify(body),
+    opts,
+  );
+
+submitMeasurement.spec = (
+  body: {
+    value: number;
+  },
+  opts?: CallOpts,
+) =>
+  buildSpec(
+    "POST",
+    getBaseUrl(DEFAULT_BASE_URL) + "/measurements",
+    "submitMeasurement",
+    JSON.stringify(body),
+    opts,
+  );
 
 export const async = {
   addPet: addPet_async,
