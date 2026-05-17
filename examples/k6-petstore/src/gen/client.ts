@@ -1015,6 +1015,411 @@ async function submitMeasurement_async(
   return parseJson(res) as unknown;
 }
 
+addPet.spec = (body: T.Pet, opts?: CallOpts) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("addPet", opts?.tags),
+  },
+});
+
+updatePet.spec = (body: T.Pet, opts?: CallOpts) => ({
+  method: "PUT",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/pet",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("updatePet", opts?.tags),
+  },
+});
+
+findPetsByStatus.spec = (
+  query: {
+    status: T.SchemaEnum;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "GET",
+  url:
+    getBaseUrl(DEFAULT_BASE_URL) +
+    "/pet/findByStatus" +
+    buildQuery(query as Record<string, unknown>),
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("findPetsByStatus", opts?.tags),
+  },
+});
+
+findPetsByTags.spec = (
+  query: {
+    tags: Array<string>;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "GET",
+  url:
+    getBaseUrl(DEFAULT_BASE_URL) +
+    "/pet/findByTags" +
+    buildQuery(query as Record<string, unknown>),
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("findPetsByTags", opts?.tags),
+  },
+});
+
+getPetById.spec = (petId: number, opts?: CallOpts) => ({
+  method: "GET",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("getPetById", opts?.tags),
+  },
+});
+
+updatePetWithForm.spec = (
+  petId: number,
+  query?: {
+    name?: string;
+    status?: string;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url:
+    getBaseUrl(DEFAULT_BASE_URL) +
+    "/pet/" +
+    petId +
+    buildQuery(query as Record<string, unknown>),
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("updatePetWithForm", opts?.tags),
+  },
+});
+
+deletePet.spec = (petId: number, opts?: CallOpts) => ({
+  method: "DELETE",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId,
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("deletePet", opts?.tags),
+  },
+});
+
+uploadFile.spec = (
+  petId: number,
+  query?: {
+    additionalMetadata?: string;
+  },
+  body?: string,
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url:
+    getBaseUrl(DEFAULT_BASE_URL) +
+    "/pet/" +
+    petId +
+    "/uploadImage" +
+    buildQuery(query as Record<string, unknown>),
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/octet-stream",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("uploadFile", opts?.tags),
+  },
+});
+
+uploadPetDocument.spec = (
+  petId: number,
+  body: {
+    file: string;
+    title?: string;
+    description?: string;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/pet/" + petId + "/uploadDocument",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "multipart/form-data",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("uploadPetDocument", opts?.tags),
+  },
+});
+
+getInventory.spec = (opts?: CallOpts) => ({
+  method: "GET",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/store/inventory",
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("getInventory", opts?.tags),
+  },
+});
+
+placeOrder.spec = (body?: T.Order, opts?: CallOpts) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/store/order",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("placeOrder", opts?.tags),
+  },
+});
+
+getOrderById.spec = (orderId: number, opts?: CallOpts) => ({
+  method: "GET",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("getOrderById", opts?.tags),
+  },
+});
+
+deleteOrder.spec = (orderId: number, opts?: CallOpts) => ({
+  method: "DELETE",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/store/order/" + orderId,
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("deleteOrder", opts?.tags),
+  },
+});
+
+createUser.spec = (body?: T.User, opts?: CallOpts) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/user",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("createUser", opts?.tags),
+  },
+});
+
+createUsersWithListInput.spec = (body?: Array<T.User>, opts?: CallOpts) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/user/createWithList",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("createUsersWithListInput", opts?.tags),
+  },
+});
+
+loginUser.spec = (
+  query?: {
+    username?: string;
+    password?: string;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "GET",
+  url:
+    getBaseUrl(DEFAULT_BASE_URL) +
+    "/user/login" +
+    buildQuery(query as Record<string, unknown>),
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("loginUser", opts?.tags),
+  },
+});
+
+logoutUser.spec = (opts?: CallOpts) => ({
+  method: "GET",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/user/logout",
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("logoutUser", opts?.tags),
+  },
+});
+
+getUserByName.spec = (username: string, opts?: CallOpts) => ({
+  method: "GET",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("getUserByName", opts?.tags),
+  },
+});
+
+updateUser.spec = (username: string, body?: T.User, opts?: CallOpts) => ({
+  method: "PUT",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("updateUser", opts?.tags),
+  },
+});
+
+deleteUser.spec = (username: string, opts?: CallOpts) => ({
+  method: "DELETE",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/user/" + username,
+  body: null,
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({ ...opts?.headers }),
+    tags: mergeTags("deleteUser", opts?.tags),
+  },
+});
+
+submitTags.spec = (
+  body: {
+    tags: Array<string>;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/tags",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("submitTags", opts?.tags),
+  },
+});
+
+updateProfile.spec = (
+  body: {
+    name: string;
+    nickname?: string | null;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/profile",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("updateProfile", opts?.tags),
+  },
+});
+
+createShape.spec = (
+  body:
+    | ({
+        kind: "circle";
+      } & T.Circle)
+    | ({
+        kind: "rect";
+      } & T.Rect),
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/shapes",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("createShape", opts?.tags),
+  },
+});
+
+submitMeasurement.spec = (
+  body: {
+    value: number;
+  },
+  opts?: CallOpts,
+) => ({
+  method: "POST",
+  url: getBaseUrl(DEFAULT_BASE_URL) + "/measurements",
+  body: JSON.stringify(body),
+  params: {
+    ...applyMiddlewareParams(),
+    ...opts,
+    headers: applyMiddlewareHeaders({
+      "Content-Type": "application/json",
+      ...opts?.headers,
+    }),
+    tags: mergeTags("submitMeasurement", opts?.tags),
+  },
+});
+
 export const async = {
   addPet: addPet_async,
   updatePet: updatePet_async,

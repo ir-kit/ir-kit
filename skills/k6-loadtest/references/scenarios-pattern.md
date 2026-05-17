@@ -331,6 +331,40 @@ flow().step("legacy", () => {
 
 For non-HTTP protocols (WebSocket, gRPC, browser), add jslib URLs / module names to `bundle.external` when running through `runK6` so the bundler doesn't try to inline them.
 
+### Raw call to a typed op — `.spec()`
+
+When you want full response access (status, headers, timings) on a *typed* op without rebuilding URL / tags / headers / middleware by hand, every generated op exposes `.spec(args)` returning the request bits ready to feed into `http.request()` (or `http.batch()`):
+
+```ts
+import http from "k6/http";
+import { check } from "k6";
+import * as api from "./src/gen/index.js";
+import { parseJson } from "@ahmedrowaihi/k6/runtime";
+
+flow().step("manual control", () => {
+  // Same args as api.getPetById(...) — types match.
+  const { method, url, body, params } = api.getPetById.spec(1);
+  const res = http.request(method, url, body, params);
+
+  // Full response is available — status, headers, timings, etc.
+  check(res, { "200 ok": (r) => r.status === 200 });
+  if (res.status >= 500) throw new Error(`upstream ${res.status}`);
+
+  return parseJson(res) as ReturnType<typeof api.getPetById>;
+});
+
+// Parallel via http.batch (k6's other parallel primitive beyond Promise.all):
+flow().step("batch", () => {
+  const specs = [1, 2, 3].map((id) => api.getPetById.spec(id));
+  const responses = http.batch(specs.map((s) => [s.method, s.url, s.body, s.params]));
+  return responses.map((r) => parseJson(r));
+});
+```
+
+What `.spec()` wires for you: URL templating (path params interpolated), op tagging (`operation:<id>` for budgets), header injection (auth middleware), middleware params (digest/NTLM `auth:`). What it leaves to you: status checking, parsing, error handling, response-metadata inspection.
+
+This is the "I want axios-style throwing" or "I need response headers" escape hatch — without re-typing the URL or forgetting a tag.
+
 ### Per-scenario baseUrl
 
 Lets one run hit prod/staging/canary side-by-side:

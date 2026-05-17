@@ -12,6 +12,7 @@ import { GENERATED_HEADER, printStatements } from "../print.js";
 import { clientPreambleStatements } from "./client-preamble.js";
 import {
   asyncCallExpression,
+  bodyArg,
   headersExpression,
   paramsExpression,
   syncCallExpression,
@@ -51,10 +52,11 @@ export function emitClientFile(
   const asyncDecls = operations.map(
     (op) => asyncOperationFn(op).toAst() as ts.Statement,
   );
+  const specAssignments = operations.map(emitSpecAssignment);
   const asyncExport = asyncNamespaceExport(operations);
 
   return printStatements(
-    [...preamble, ...syncDecls, ...asyncDecls, asyncExport],
+    [...preamble, ...syncDecls, ...asyncDecls, ...specAssignments, asyncExport],
     GENERATED_HEADER,
   );
 }
@@ -70,7 +72,7 @@ function syncOperationFn(op: WalkedOperation): TsDsl<ts.FunctionDeclaration> {
     fn.returns(returnType);
     fn.do($.const("url").assign(urlExpression(op)));
     fn.do($.const("headers").assign(headersExpression(op)));
-    fn.do($.const("params").assign(paramsExpression(op)));
+    fn.do($.const("params").assign(paramsExpression(op, $("headers"))));
     fn.do($.const("res").assign(syncCallExpression(op)));
     if (op.successSchema) {
       fn.do($.return($("parseJson").call($("res")).as(returnType)));
@@ -94,7 +96,7 @@ function asyncOperationFn(op: WalkedOperation): TsDsl<ts.FunctionDeclaration> {
     fn.returns(promiseReturn);
     fn.do($.const("url").assign(urlExpression(op)));
     fn.do($.const("headers").assign(headersExpression(op)));
-    fn.do($.const("params").assign(paramsExpression(op)));
+    fn.do($.const("params").assign(paramsExpression(op, $("headers"))));
     fn.do($.const("res").assign($.await(asyncCallExpression(op))));
     if (op.successSchema) {
       fn.do($.return($("parseJson").call($("res")).as(returnType)));
@@ -104,6 +106,129 @@ function asyncOperationFn(op: WalkedOperation): TsDsl<ts.FunctionDeclaration> {
 
 function asyncInternalName(op: WalkedOperation): string {
   return `${toIdent(op.id)}_async`;
+}
+
+/**
+ * Attach `.spec(args) => { method, url, body, params }` to each generated op.
+ *
+ * Lets users drop to raw `http.request(spec.method, spec.url, spec.body, spec.params)`
+ * with the URL templating, op tagging, header injection, and middleware-params
+ * wiring done for them — preserving access to the raw Response for status checks,
+ * timings, headers, `http.batch()` composition, etc.
+ *
+ * Emits: `getPet.spec = (id, opts?) => ({ method: "GET", url: ..., body: null, params: ... });`
+ */
+function emitSpecAssignment(op: WalkedOperation): ts.Statement {
+  const params = buildParamDeclarations(op);
+
+  const specObj = f.createObjectLiteralExpression(
+    [
+      f.createPropertyAssignment(
+        "method",
+        f.createStringLiteral(op.method.toUpperCase()),
+      ),
+      f.createPropertyAssignment(
+        "url",
+        urlExpression(op).toAst() as ts.Expression,
+      ),
+      f.createPropertyAssignment("body", bodyArg(op).toAst() as ts.Expression),
+      f.createPropertyAssignment(
+        "params",
+        paramsExpression(op, headersExpression(op)).toAst() as ts.Expression,
+      ),
+    ],
+    true,
+  );
+
+  const arrow = f.createArrowFunction(
+    undefined,
+    undefined,
+    params,
+    undefined,
+    f.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+    f.createParenthesizedExpression(specObj),
+  );
+
+  return f.createExpressionStatement(
+    f.createAssignment(
+      f.createPropertyAccessExpression(
+        f.createIdentifier(toIdent(op.id)),
+        f.createIdentifier("spec"),
+      ),
+      arrow,
+    ),
+  );
+}
+
+/**
+ * Build the parameter list shared by all three variants (sync function, async
+ * sibling, spec arrow). Mirrors `addParams` but returns the AST directly so the
+ * arrow function in `emitSpecAssignment` can attach them without going through
+ * the DSL's function builder.
+ */
+function buildParamDeclarations(
+  op: WalkedOperation,
+): ts.ParameterDeclaration[] {
+  const out: ts.ParameterDeclaration[] = [];
+
+  for (const p of op.pathParams) {
+    out.push(
+      f.createParameterDeclaration(
+        undefined,
+        undefined,
+        toIdent(p.name),
+        undefined,
+        typed(p.schema).toAst() as ts.TypeNode,
+      ),
+    );
+  }
+
+  if (op.queryParams.length) {
+    const allOptional = op.queryParams.every((p) => !p.required);
+    const members = op.queryParams.map((p) =>
+      f.createPropertySignature(
+        undefined,
+        p.name,
+        p.required ? undefined : f.createToken(ts.SyntaxKind.QuestionToken),
+        typed(p.schema).toAst() as ts.TypeNode,
+      ),
+    );
+    out.push(
+      f.createParameterDeclaration(
+        undefined,
+        undefined,
+        "query",
+        allOptional ? f.createToken(ts.SyntaxKind.QuestionToken) : undefined,
+        f.createTypeLiteralNode(members),
+      ),
+    );
+  }
+
+  if (op.body) {
+    out.push(
+      f.createParameterDeclaration(
+        undefined,
+        undefined,
+        "body",
+        op.body.required
+          ? undefined
+          : f.createToken(ts.SyntaxKind.QuestionToken),
+        typed(op.body.schema).toAst() as ts.TypeNode,
+      ),
+    );
+  }
+
+  out.push(
+    f.createParameterDeclaration(
+      undefined,
+      undefined,
+      "opts",
+      f.createToken(ts.SyntaxKind.QuestionToken),
+      f.createTypeReferenceNode("CallOpts"),
+    ),
+  );
+
+  return out;
 }
 
 /**

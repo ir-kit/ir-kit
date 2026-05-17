@@ -58,13 +58,16 @@ export function headersExpression(op: WalkedOperation): Expr {
 }
 
 /**
- * Params object passed to k6's http call:
+ * Params object passed to k6's http call. `headersExpr` decides how the
+ * `headers` property is resolved — sync/async siblings declare a local
+ * `const headers = …` and pass `$("headers")` here; the `.spec` arrow has
+ * no locals and passes `headersExpression(op)` to inline it.
  *
  * ```ts
  * {
  *   ...applyMiddlewareParams(),
  *   ...opts,
- *   headers,
+ *   headers: <headersExpr>,
  *   tags: mergeTags("opId", opts?.tags),
  * }
  * ```
@@ -72,11 +75,11 @@ export function headersExpression(op: WalkedOperation): Expr {
  * Order ensures middleware params (auth) seed defaults, user opts override,
  * and computed headers/tags always win — they're the merged results.
  */
-export function paramsExpression(op: WalkedOperation): Expr {
+export function paramsExpression(op: WalkedOperation, headersExpr: Expr): Expr {
   return $.object()
     .spread($("applyMiddlewareParams").call())
     .spread($("opts"))
-    .prop("headers", $("headers"))
+    .prop("headers", headersExpr)
     .prop(
       "tags",
       $("mergeTags").call($.literal(op.id), $("opts").attr("tags").optional()),
