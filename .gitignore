@@ -10,6 +10,7 @@ dist
 .turbo
 .wxt
 .output
+.k6-ts-cache
 
 # Native-client build artifacts (Go binaries, Swift / Kotlin build dirs)
 .build

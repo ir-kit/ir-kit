@@ -24,6 +24,7 @@ const DEFAULTS: UserConfig = {
   target: "es2022",
   platform: "neutral",
   external: [...K6_EXTERNAL_DEFAULTS],
+  noExternal: [/.*/],
   logLevel: "error",
   dts: false,
 };

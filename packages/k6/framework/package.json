@@ -53,11 +53,17 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
-  "dependencies": {
-    "@types/k6": "^1.7.0"
+  "peerDependencies": {
+    "@types/k6": ">=1.7.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/k6": {
+      "optional": false
+    }
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@types/k6": "^1.7.0",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

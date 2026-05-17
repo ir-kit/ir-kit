@@ -22,9 +22,27 @@ Skip this skill for: framework-agnostic k6 scripting, JS-based unit tests, non-H
 |---|---|
 | `@ahmedrowaihi/k6` | Runtime framework — `defineLoadTest`, `flow`, `useAuth`, pace presets, async `Ctx`. Imported by the user-written `loadtest.ts`. |
 | `@ahmedrowaihi/k6-gen` | Codegen — OpenAPI spec → typed client (`client.ts`, `types.ts`, `data.ts`). Emits sync + `async` namespace per op. |
-| `@ahmedrowaihi/k6-toolkit` | Programmatic API the user calls from scripts. Re-exports `generate` from k6-gen. |
+| `@ahmedrowaihi/k6-toolkit` | Programmatic API the user calls from scripts. Re-exports `generate` from k6-gen. Also ships the `k6-ts` CLI. |
 
 For a brand-new project, the cowpath is **`npm create @ahmedrowaihi/k6`** — interactive wizard that runs `init()`.
+
+## The `k6-ts` CLI — drop-in `k6` replacement for TypeScript entries
+
+Installed with `@ahmedrowaihi/k6-toolkit`. Behaves exactly like `k6` from the terminal except it bundles `.ts` entries on the fly (tsdown, `k6`/`k6/*` external, `.k6-ts-cache/` for output). cwd is preserved so `open("./fixtures/data.csv")` resolves as expected. SIGINT/SIGTERM forwarded to k6; signal-killed runs return `128+signum`.
+
+```bash
+# Runs k6 against the bundled output of loadtest.ts
+k6-ts run loadtest.ts --vus 50 --duration 1m
+k6-ts run loadtest.ts -e BASE_URL=https://staging.example.com --out json=results.json
+k6-ts archive loadtest.ts -O archive.tar
+k6-ts inspect loadtest.ts
+
+# Anything without a .ts entry passes straight through to k6
+k6-ts version
+k6-ts --help
+```
+
+Use it when you want `k6`-CLI muscle memory without a `pnpm run` wrapper. For CI scripts or custom orchestration, reach for the programmatic `runK6()` instead.
 
 ## First-run quick start (new project)
 
@@ -224,7 +242,7 @@ See [references/scenarios-pattern.md](references/scenarios-pattern.md) for budge
 - **`cwd` matters when running from a subdirectory** — pass `cwd: __dirname` if the caller's script lives outside the project root.
 - **k6's VM only supports a subset of JS.** Externals (`k6`, `k6/*`) are auto-marked external by the bundler; jslib URLs must be added to `bundle.external`.
 - **Signal-killed runs return `128 + signum`** — check for signal interruption before treating as a perf failure.
-- **The generated client installs framework bridges on first import** — make sure `loadtest.ts` imports `./src/gen/index.js` (or `client.js`) at module top level before defining the load test.
+- **The generated `client.ts` self-installs k6 runtime bridges** as top-level side effects (`installK6Bridge`, `setExecModule`, `installMetricsFactory`). Importing any named operation from `./gen/index.js` or `./gen/client.js` triggers those side effects, and ESM hoists imports so order doesn't matter. Just don't bundle with tree-shaking that drops the top-level side-effect statements.
 - **`api.async.<op>` returns `Promise<T>`, `api.<op>` returns `T`** — match the call site to whether you're inside an async step or sync.
 
 ## How AI agents should use this
