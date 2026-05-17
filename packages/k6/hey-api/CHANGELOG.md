@@ -1,5 +1,16 @@
 # @ahmedrowaihi/openapi-ts-k6
 
+## 0.2.0
+
+### Minor Changes
+
+- b17e354: Pass-through bump for `@ahmedrowaihi/k6` v2 + `@ahmedrowaihi/k6-gen` v2 — no API changes here, just propagating the new generated output (async namespace per op, widened CallOpts, runtime bridges) and the new framework shape (`scenario:` field name, async flow, `Ctx`, `flow.batch/group/check/sleep`, custom metrics, digest/ntlm).
+
+### Patch Changes
+
+- Updated dependencies [b17e354]
+  - @ahmedrowaihi/k6-gen@1.0.0
+
 ## 0.1.5
 
 ### Patch Changes
