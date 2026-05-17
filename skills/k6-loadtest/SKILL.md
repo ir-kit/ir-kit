@@ -26,6 +26,32 @@ Skip this skill for: framework-agnostic k6 scripting, JS-based unit tests, non-H
 
 For a brand-new project, the cowpath is **`npm create @ahmedrowaihi/k6`** — interactive wizard that runs `init()`.
 
+## End-to-end pipeline: HAR → typed loadtest
+
+When the user has no spec, the full chain from captured browser traffic to a runnable typed loadtest is now four shell lines:
+
+```bash
+# 1. HAR → OpenAPI spec (from openapi-recon)
+openapi-recon ./traffic.har --out spec.json
+
+# 2. Spec → typed k6 client (gen/client.ts, types.ts, data.ts, index.ts)
+k6-ts sync ./spec.json --output ./src/gen
+
+# 3. Scaffold one scenario per tag (or pick ops manually)
+k6-ts scaffold --spec ./spec.json --tags pets --output-dir loadtests/
+
+# 4. Run with live charts
+K6_WEB_DASHBOARD=true k6-ts run loadtests/pets.ts
+```
+
+Steps 1-2 also chain via stdin so no intermediate file is needed:
+
+```bash
+openapi-recon ./traffic.har | k6-ts sync - --output ./src/gen
+```
+
+Each step works standalone — pick the entry that matches what you have (HAR, spec, gen output, loadtest file).
+
 ## The `k6-ts` CLI — drop-in `k6` replacement for TypeScript entries
 
 Installed with `@ahmedrowaihi/k6-toolkit`. Behaves exactly like `k6` from the terminal except it bundles `.ts` entries on the fly (tsdown, `k6`/`k6/*` external, `.k6-ts-cache/` for output). cwd is preserved so `open("./fixtures/data.csv")` resolves as expected. SIGINT/SIGTERM forwarded to k6; signal-killed runs return `128+signum`.
@@ -43,6 +69,28 @@ k6-ts --help
 ```
 
 Use it when you want `k6`-CLI muscle memory without a `pnpm run` wrapper. For CI scripts or custom orchestration, reach for the programmatic `runK6()` instead.
+
+## `k6-ts sync` — spec → typed client CLI
+
+```bash
+# File or URL
+k6-ts sync ./openapi.yaml --output ./src/gen
+k6-ts sync https://api.example.com/openapi.json --output ./src/gen
+
+# Compose with openapi-recon (HAR → spec → typed client)
+openapi-recon ./traffic.har | k6-ts sync - --output ./src/gen
+
+# Per-spec base URL override
+k6-ts sync ./openapi.yaml --output ./src/gen --base-url https://staging.example.com
+
+# Emit one stub loadtest per operation alongside the client
+k6-ts sync ./openapi.yaml --output ./src/gen --scaffold
+
+# Diff op-ids against the prior sync (useful in CI after spec changes)
+k6-ts sync ./openapi.yaml --output ./src/gen --report-renames
+```
+
+Flags: `--output`, `--base-url`, `--scaffold`, `--no-normalize`, `--dry-run`, `--report-renames`, `--help`. Wraps the existing programmatic `sync()` API — same options, same output.
 
 ## `k6-ts scaffold` — interactive + flag-driven scenario generator
 
