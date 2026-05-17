@@ -1,6 +1,6 @@
 ---
 name: openapi-from-traffic
-description: Reverse-engineer an OpenAPI 3.1 spec from observed HTTP traffic. Use `@ahmedrowaihi/openapi-recon` (a runtime-agnostic lib that accepts standard Web Fetch `Request` / `Response` pairs and folds them into a JSON Schema 2020-12 document) when the user has live traffic but no spec, wants to discover a third-party API's shape, capture an internal API from real usage, or generate a starting `openapi.yaml` from a HAR/proxy log. For interactive capture from a browser, point them at `@ahmedrowaihi/glean` (the Chrome DevTools extension built on `openapi-recon`). Triggers on "reverse engineer API", "discover spec from traffic", "OpenAPI from HAR", "capture API in DevTools", "infer schema from requests", "spec from observed HTTP", "generate spec from network tab". Do NOT use when the user already has an OpenAPI spec — see openapi-sdk or k6-loadtest instead.
+description: Reverse-engineer an OpenAPI 3.1 spec from observed HTTP traffic. Use `@ahmedrowaihi/openapi-recon` (a runtime-agnostic lib that accepts standard Web Fetch `Request` / `Response` pairs and folds them into a JSON Schema 2020-12 document) when the user has live traffic but no spec, wants to discover a third-party API's shape, capture an internal API from real usage, or generate a starting `openapi.yaml` from a HAR/proxy log. Ships a `fromHAR()` helper that one-lines HAR-file ingestion — works with HARs exported from k6 Studio Recorder, browser DevTools, mitmproxy, Charles, Postman, anything. For interactive capture from a browser, point them at `@ahmedrowaihi/glean` (the Chrome DevTools extension built on `openapi-recon`). Triggers on "reverse engineer API", "discover spec from traffic", "OpenAPI from HAR", "k6 Studio HAR to spec", "capture API in DevTools", "mitmproxy to OpenAPI", "infer schema from requests", "spec from observed HTTP", "generate spec from network tab", `fromHAR`. Do NOT use when the user already has an OpenAPI spec — see openapi-sdk or k6-loadtest instead.
 ---
 
 # OpenAPI from observed HTTP — `@ahmedrowaihi/openapi-recon`
@@ -90,27 +90,48 @@ export default {
 
 ### HAR file replay (offline analysis)
 
+Two equivalent paths — pick the one that fits.
+
+**CLI** (Node only, fastest for one-shot conversion):
+
+```bash
+# File → file
+openapi-recon ./traffic.har --out spec.json --title "Captured API"
+
+# File → stdout, pipe to yq for YAML
+openapi-recon ./traffic.har | yq -P > spec.yaml
+
+# Stdin (pipe from any HAR-emitting tool)
+cat traffic.har | openapi-recon -
+```
+
+Flags: `--out`, `--title`, `--version`, `--origin`, `--max-examples`, `--no-path-templating`, `--help`.
+
+**Programmatic** (runtime-agnostic — Node, browsers, Workers, Deno):
+
 ```ts
 import { readFile } from "node:fs/promises";
+import { fromHAR } from "@ahmedrowaihi/openapi-recon";
 
-const har = JSON.parse(await readFile("./traffic.har", "utf8"));
-const recon = createRecon({ title: "Captured" });
-
-for (const entry of har.log.entries) {
-  const req = new Request(entry.request.url, {
-    method: entry.request.method,
-    headers: Object.fromEntries(entry.request.headers.map((h) => [h.name, h.value])),
-    body: entry.request.postData?.text,
-  });
-  const res = new Response(entry.response.content.text, {
-    status: entry.response.status,
-    headers: Object.fromEntries(entry.response.headers.map((h) => [h.name, h.value])),
-  });
-  await recon.observe(req, res);
-}
+// HAR JSON content (any runtime). For Node, read the file yourself:
+const recon = await fromHAR(
+  await readFile("./traffic.har", "utf8"),
+  { title: "Captured" },
+);
 
 const document = recon.toOpenAPI();
 ```
+
+Pre-parsed `HarFile` objects also work — useful when traffic comes from a tool that already deserialized:
+
+```ts
+import { fromHAR, type HarFile } from "@ahmedrowaihi/openapi-recon";
+
+const har: HarFile = /* … from k6 Studio Recorder, browser DevTools, mitmproxy, etc. */;
+const recon = await fromHAR(har, { title: "Studio capture" });
+```
+
+Both paths handle HTTP/2 pseudo-headers (`:authority` etc.), body-on-GET edge cases, and malformed-URL entries by skipping silently. For custom HAR-entry filtering (drop hosts, redact tokens, date-range slicing), use the underlying `recon.observe(req, res)` and iterate the HAR yourself.
 
 ## Glean — the Chrome extension
 
@@ -129,6 +150,12 @@ No code required — useful when the workflow is "browse the app, dump a spec at
 - **Auth detection is heuristic** — based on header presence + format. If the API uses a non-standard auth scheme, post-process `components.securitySchemes` manually.
 - **Numeric path segments** like `/items/v2/foo` won't break path templating — the `v2` stays literal because it's not pure-numeric.
 - **Sample count matters.** With `maxExamples: 1`, optional fields look required. Feed more traffic for accurate optionality.
+
+## HAR as the universal capture format
+
+Any tool that exports HAR feeds straight into `fromHAR`: **k6 Studio Recorder**, browser DevTools "Save all as HAR with content", **mitmproxy** (`mitmweb` → Export → HAR), Charles, Postman, Wireshark plugins. The HAR file is the integration seam — no per-tool integration needed.
+
+That's why this package doesn't ship "k6 Studio integration" or "DevTools plugin" — it consumes the standard format every recorder already emits.
 
 ## Workflow: capture → spec → SDK
 
@@ -153,6 +180,6 @@ This is the entire "spec discovery → typed client" pipeline for unknown APIs.
 
 1. If the user wants to capture interactively from a browser → suggest the **Glean extension** first.
 2. If the user wants programmatic capture (Node script, Worker, proxy) → show `createRecon` + the `observe(req, res)` loop.
-3. If the user has a HAR file → show the HAR-replay pattern.
+3. If the user has a HAR file (from k6 Studio, DevTools, mitmproxy, Charles, etc.) → show `fromHAR(harJsonContent, config?)` — it's the one-line replacement for the manual `observe` loop. Mention that HAR is the universal integration format, so we don't need per-tool plugins.
 4. If they want to pipe the output to an SDK generator → show the recon → `openapi-typescript` (or any `openapi-{lang}`) handoff.
 5. Remind them to `.clone()` request/response when also forwarding.

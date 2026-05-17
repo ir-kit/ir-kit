@@ -1,3 +1,12 @@
+export type {
+  HarEntry,
+  HarFile,
+  HarHeader,
+  HarRequest,
+  HarResponse,
+  HarSource,
+} from "./from-har.js";
+export { fromHAR } from "./from-har.js";
 export type { TemplatedPath } from "./infer/path.js";
 export { templatePaths, templateSinglePath } from "./infer/path.js";
 export { inferSchema, mergeSchema } from "./infer/schema.js";
