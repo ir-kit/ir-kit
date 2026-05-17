@@ -1,27 +1,27 @@
 ---
 name: k6-loadtest
-description: Load-test an HTTP API with the @ahmedrowaihi/k6 stack — generate a typed k6 client from an OpenAPI spec, scaffold a runnable loadtest.ts, then bundle and spawn k6 programmatically. Use when the user wants to write k6 load tests in TypeScript, perf-test an API from its OpenAPI spec, run smoke/load/stress/spike/soak/arrival-rate scenarios, scaffold a starter loadtest, or invoke `k6 run` from a script instead of shelling out. Triggers on "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", "arrival rate", "RPS test", `defineLoadTest`, `runK6`, `useAuth`, `arrivalRate`, `rampingArrivalRate`, `handleSummary`, "k6 scenarios", "k6 budgets", "k6 thresholds", "OpenAPI to k6". Do NOT use for unit tests, integration tests, non-HTTP workloads, or generic Go-based k6 scripting unrelated to the @ahmedrowaihi/k6 framework.
+description: Load-test an HTTP API with the @ahmedrowaihi/k6 v2 stack — generate a typed k6 client (sync + async parallel via http.asyncRequest) from an OpenAPI spec, scaffold a runnable loadtest.ts, then bundle and spawn k6 programmatically. Use when the user wants to write k6 load tests in TypeScript, perf-test an API from its OpenAPI spec, run smoke/load/stress/spike/soak/arrival-rate scenarios, do parallel fan-out from one VU, declare custom metrics, write group/check assertions, or invoke `k6 run` from a script instead of shelling out. Triggers on "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", "arrival rate", "RPS test", "parallel HTTP", `defineLoadTest`, `runK6`, `useAuth`, `arrivalRate`, `rampingArrivalRate`, `handleSummary`, `flow.batch`, `flow.group`, `flow.check`, "k6 scenarios", "k6 budgets", "k6 thresholds", "OpenAPI to k6". Do NOT use for unit tests, integration tests, non-HTTP workloads, or generic Go-based k6 scripting unrelated to the @ahmedrowaihi/k6 framework.
 ---
 
-# k6 load testing — `@ahmedrowaihi/k6-toolkit`
+# k6 load testing — `@ahmedrowaihi/k6` v2
 
-Generate a typed k6 client from an OpenAPI spec, scaffold a runnable loadtest, then bundle and spawn k6. All programmatic — no shelling out, no `Bun.spawn`, no `npx`.
+Generate a typed k6 client from an OpenAPI spec (sync + async variants), scaffold a runnable loadtest, then bundle and spawn k6. All programmatic — no shelling out, no `Bun.spawn`, no `npx`.
 
 ## When to reach for this
 
 - User has an OpenAPI spec and wants k6 load tests against the API.
 - User is writing a perf harness, CI perf gate, or local stress test.
-- User asks "how do I load-test endpoint X" / "I need a smoke test" / "spike scenario".
-- User mentions `defineLoadTest`, `flow().step()`, `useAuth`, named scenarios, budgets, or pace presets (smoke/load/stress/spike/soak).
+- User mentions `defineLoadTest`, `flow().step()`/`.batch()`/`.group()`/`.check()`, `useAuth`, named scenarios, budgets, pace presets, or k6 `Scenario` shape.
+- User wants parallel HTTP from one VU iteration (open model: `http.asyncRequest` + `Promise.all` or `flow().batch()`).
 
-Skip this skill for: framework-agnostic k6 scripting, JS-based unit tests, non-HTTP perf work.
+Skip this skill for: framework-agnostic k6 scripting, JS-based unit tests, non-HTTP perf work (WS/gRPC/browser/Redis — drop to raw k6 inside a step).
 
 ## The three packages
 
 | Package | Role |
 |---|---|
-| `@ahmedrowaihi/k6` | Runtime framework — `defineLoadTest`, `flow`, `useAuth`, pace presets. Imported by the user-written `loadtest.ts`. |
-| `@ahmedrowaihi/k6-gen` | Codegen — OpenAPI spec → typed client (`client.ts`, `types.ts`, `data.ts`). Usually consumed transitively. |
+| `@ahmedrowaihi/k6` | Runtime framework — `defineLoadTest`, `flow`, `useAuth`, pace presets, async `Ctx`. Imported by the user-written `loadtest.ts`. |
+| `@ahmedrowaihi/k6-gen` | Codegen — OpenAPI spec → typed client (`client.ts`, `types.ts`, `data.ts`). Emits sync + `async` namespace per op. |
 | `@ahmedrowaihi/k6-toolkit` | Programmatic API the user calls from scripts. Re-exports `generate` from k6-gen. |
 
 For a brand-new project, the cowpath is **`npm create @ahmedrowaihi/k6`** — interactive wizard that runs `init()`.
@@ -35,20 +35,15 @@ npm create @ahmedrowaihi/k6
 The wizard asks for:
 - Path or URL to the OpenAPI spec
 - Output dir for the typed client (default `./src/gen`)
-- Auth flavor — `none` / `bearer` / `basic` / `apiKey` / `session`
+- Auth flavor — `none` / `bearer` / `basic` / `apiKey` / `session` / `digest` / `ntlm`
 - Single test or named scenarios
 - Whether to emit one stub loadtest per spec operation
 
-Then it generates the client and writes a starter `loadtest.ts` parameterized on the answers. The first param-less GET op in the spec seeds the flow step so the file runs immediately.
-
 ## Programmatic equivalent (in a script)
-
-When the user already has a project and wants to drive everything from code:
 
 ```ts
 import { init, sync, runK6 } from "@ahmedrowaihi/k6-toolkit";
 
-// One-shot scaffold: generates client + writes loadtest.ts
 await init({
   input: "./openapi.yaml",      // path, URL, or pre-parsed spec object
   output: "./src/gen",
@@ -56,35 +51,23 @@ await init({
   bearerEnv: "API_TOKEN",
   pace: "smoke",
   duration: "30s",
-  cwd: __dirname,                // optional; resolves relative paths
 });
 
-// Subsequent regens after the spec changes
-await sync({
-  input: "./openapi.yaml",
-  output: "./src/gen",
-  reportRenames: true,           // returns diff: { renamed, added, removed }
-});
+await sync({ input: "./openapi.yaml", output: "./src/gen", reportRenames: true });
 
-// Bundle + spawn k6 against the loadtest entry
 const { exitCode, outfile } = await runK6({
   entry: "./loadtest.ts",
   baseUrl: "https://staging.example.com",
   vus: "50",
   duration: "1m",
-  out: ["json=results.json"],    // array, not comma-string
+  out: ["json=results.json"],
   summary: "./summary.json",
-  bundle: {                       // full tsdown UserConfig passthrough
-    external: ["https://jslib.k6.io/some-jslib/1.0.0/index.js"],
-  },
 });
 ```
 
-`runK6` resolves to `{ exitCode, outfile }`. Signal-killed processes (Ctrl-C, SIGKILL) resolve to `128 + signum` per POSIX so callers can fail-fast on interruption. Errors throw — no swallowed exit codes.
+`runK6` resolves to `{ exitCode, outfile }`. Signal-killed processes resolve to `128 + signum` per POSIX. Errors throw.
 
-## Writing the loadtest itself
-
-The user-written `loadtest.ts` (whether scaffolded by `init()` or hand-rolled) imports from `@ahmedrowaihi/k6` and the generated client:
+## Writing the loadtest
 
 ```ts
 import { defineLoadTest, flow, smoke, useAuth } from "@ahmedrowaihi/k6";
@@ -94,65 +77,161 @@ const auth = useAuth.bearer({ env: "API_TOKEN" });
 
 const lt = defineLoadTest({
   use: [auth],
-  pace: smoke({ duration: "30s" }),
+  scenario: smoke({ duration: "30s" }),          // ← v2: was `pace:`
   budgets: { p95: "500ms", errors: "1%" },
   flow: flow()
-    .step("list-pets", () => {
-      const pets = api.listPets();
-      return pets;                              // value flows to next step
-    })
+    .step("list-pets", () => api.listPets())
     .step("read-first", (pets) => {
-      if (!pets.length) return null;            // upstream returned no pets — bail safely
+      if (!pets.length) return null;
       return api.getPet(pets[0].id);
     })
     .expect((pet) => pet !== null && pet.id !== undefined),
 });
 
 export const options = lt.options;
-export default lt.default;
-// re-export when you use named scenarios or `handleSummary` — k6 dispatches by name.
-// export const { browse, write } = lt.scenarios;
+export default lt.default;                       // async; k6 awaits it per iteration
 // export const handleSummary = lt.handleSummary;
 ```
 
-`flow().step("name", (ctx) => ...)` chains operations and passes return values down the chain. `.expect(fn)` runs an assertion that fails the iteration if it returns falsy.
+`flow().step("name", (input, ctx) => ...)` chains operations and threads return values forward. **Steps may be sync or async** — the framework awaits Promise returns. `.expect(fn)` runs a hard-fail assertion.
 
-The framework is a scaffold *over* k6, not a replacement. Inside `flow().step()` bodies you can still reach for raw `k6` features — `k6.check`, `k6.group`, `k6/metrics` (`Counter`/`Gauge`/`Rate`/`Trend`), `k6/execution`, `SharedArray`, etc. Reach for `arrivalRate({ rps, ... })` when you need open-model (RPS-driven) load instead of VU-driven, or pass a raw `Scenario` literal to `pace:` for executors the presets don't cover (`shared-iterations`, `externally-controlled`, …). See [references/scenarios-pattern.md](references/scenarios-pattern.md).
+## Parallel HTTP — the `async` namespace + `flow.batch()`
 
-For multi-scenario loadtests:
+Every generated operation has a sync form (`api.getPet(1)`) and an async form (`api.async.getPet(1)`) that uses `http.asyncRequest()` for true Go-side parallelism. Two ways to use it:
+
+```ts
+// Inline Promise.all — for ad-hoc fan-out inside a step
+.step("page-load", async (id) => {
+  const [pet, comments, related] = await Promise.all([
+    api.async.getPet(id),
+    api.async.getComments(id),
+    api.async.getRelatedPets(id),
+  ]);
+  return { pet, comments, related };
+})
+
+// flow.batch() — labeled object form; per-branch step tagging
+.batch("page-load", (id) => ({
+  pet:      api.async.getPet(id),
+  comments: api.async.getComments(id),
+  related:  api.async.getRelatedPets(id),
+}))  // → { pet: Pet, comments: Comment[], related: Pet[] }
+```
+
+## v2 fluent ops
+
+| Op | Purpose | Maps to k6 |
+|---|---|---|
+| `.step("label", fn)` | Sequential step; sync or async return; result threads forward | (none — our DSL) |
+| `.batch("label", (in) => ({ k: ... }))` | Labeled parallel; awaits Promise values | `Promise.all` over `http.asyncRequest` |
+| `.group("name", (sub) => sub.step(...))` | Wraps sub-flow; metrics carry `group:` tag | `group(name, fn)` |
+| `.check("name", v => bool)` | Soft check; feeds `checks` rate metric; does NOT fail iteration | `check(value, sets)` |
+| `.expect(v => bool, msg?)` | Hard assertion; fails iteration on `false` | `throw` |
+| `.sleep("500ms" \| 1)` | Pause | `sleep(seconds)` |
+
+## `Ctx` — full `exec` surface
+
+Each step receives `(input, ctx)` where `ctx` exposes k6's [`exec` module](https://k6.io/docs/javascript-api/k6-execution/):
+
+```ts
+.step("introspect", (_, ctx) => {
+  ctx.vu.idInTest;                 // global VU number
+  ctx.vu.iterationInScenario;
+  ctx.vu.tags["custom"] = "value"; // mutable per-VU tag map
+  ctx.scenario.name;
+  ctx.scenario.progress;           // 0..1
+  ctx.instance.vusActive;
+  ctx.instance.currentTestRunDuration;
+  if (someCondition) ctx.test.abort("hit invalid state");
+  ctx.env("API_TOKEN");            // env var read with optional default
+  ctx.vuState;                     // per-VU state from `defineLoadTest({ perVU: () => ... })`
+})
+```
+
+## Custom metrics
+
+Declare once on the config; reference typed through `lt.metrics`:
+
+```ts
+const lt = defineLoadTest({
+  metrics: { cacheHits: "counter", payloadBytes: "trend" },
+  scenario: smoke(),
+  flow: flow().step("read", (_, _ctx) => {
+    const res = api.getPet(1);
+    lt.metrics.cacheHits.add(res.cached ? 1 : 0);
+    lt.metrics.payloadBytes.add(JSON.stringify(res).length);
+    return res;
+  }),
+});
+```
+
+Backed by `k6/metrics` Counter/Gauge/Rate/Trend.
+
+## Per-VU state (`perVU`)
+
+Runs once at the start of each VU's first iteration; result threads into `ctx.vuState`:
+
+```ts
+defineLoadTest<{ token: string }>({
+  perVU: () => ({ token: signInOnce() }),
+  scenario: smoke(),
+  flow: flow().step((_, ctx) => api.getMe({ headers: { Authorization: `Bearer ${ctx.vuState.token}` }})),
+});
+```
+
+## Multi-scenario
 
 ```ts
 const lt = defineLoadTest({
   use: [auth],
   scenarios: {
     browse: {
-      pace: smoke({ duration: "30s" }),
+      scenario: smoke({ duration: "30s" }),    // ← v2: was `pace:`
       flow: flow().step("list", () => api.listPets()),
     },
     write: {
-      pace: load({ duration: "1m", vus: 20 }),
+      scenario: load({ target: 20 }),
       flow: flow().step("create", () => api.addPet(data.Pet())),
-      baseUrl: "https://write-replica.example.com",   // per-scenario override
+      baseUrl: "https://write-replica.example.com",
     },
   },
 });
+
+export const options = lt.options;
+export default lt.default;
+export const browse = lt.scenarios.browse;
+export const write  = lt.scenarios.write;
 ```
 
-See [references/auth-recipes.md](references/auth-recipes.md) for the full auth surface (bearer / basic / apiKey / session / custom).
-See [references/scenarios-pattern.md](references/scenarios-pattern.md) for budgets, per-op overrides, and the flow/step shape.
+See [references/auth-recipes.md](references/auth-recipes.md) for the full auth surface (bearer / basic / apiKey / session / custom / **digest** / **ntlm**).
+See [references/scenarios-pattern.md](references/scenarios-pattern.md) for budgets, per-op overrides, raw-k6 escape hatches, and `handleSummary`.
+
+## v2 breaking changes (migrating from v1)
+
+| Before | After |
+|---|---|
+| `pace: smoke(...)` | `scenario: smoke(...)` |
+| `scenarios.x.pace:` | `scenarios.x.scenario:` |
+| `StepCtx` (vu/iter/env) | `Ctx` (vu/scenario/instance/test/vuState/env) |
+| `ctx.vu` (number) | `ctx.vu.idInTest` |
+| `ctx.iter` (number) | `ctx.vu.iterationInScenario` |
+| `flow().run(ctx)` returns `T` | `flow().run(ctx)` returns `Promise<T>` — default export is async |
+| Sync-only steps | Steps may be sync **or async** |
 
 ## Common pitfalls
 
-- **`out:` is an array, not a comma string.** Programmatic `runK6` takes `out: ["json=a.json", "csv=b.csv"]`, not `"json=a.json,csv=b.csv"`.
-- **`cwd` matters when running from a subdirectory.** Pass `cwd: __dirname` if the caller's script lives outside the project root — otherwise relative paths resolve against `process.cwd()`.
-- **The generated client uses `T.Pet`-style namespace imports** (`import type * as T from "./types.js"`). User code imports the same way from `./src/gen/index.js`.
-- **k6's VM only supports a subset of JS.** Externals (`k6`, `k6/*`) are auto-marked external by the bundler; jslib URLs must be added to `bundle.external` so the loader picks them up at runtime.
-- **Signal-killed runs return `128 + signum`.** When the script orchestrator sees a non-zero exitCode, check for signal interruption before treating it as a perf failure.
+- **`out:` is an array, not a comma string** — `out: ["json=a.json"]`, not `"json=a.json,csv=b.csv"`.
+- **`cwd` matters when running from a subdirectory** — pass `cwd: __dirname` if the caller's script lives outside the project root.
+- **k6's VM only supports a subset of JS.** Externals (`k6`, `k6/*`) are auto-marked external by the bundler; jslib URLs must be added to `bundle.external`.
+- **Signal-killed runs return `128 + signum`** — check for signal interruption before treating as a perf failure.
+- **The generated client installs framework bridges on first import** — make sure `loadtest.ts` imports `./src/gen/index.js` (or `client.js`) at module top level before defining the load test.
+- **`api.async.<op>` returns `Promise<T>`, `api.<op>` returns `T`** — match the call site to whether you're inside an async step or sync.
 
 ## How AI agents should use this
 
-1. If the user is starting fresh and just wants to try k6 → suggest `npm create @ahmedrowaihi/k6`.
-2. If the user is writing a perf-harness script / CI step → use the programmatic `init/sync/runK6` from `@ahmedrowaihi/k6-toolkit`.
-3. If the user is hand-editing their `loadtest.ts` → show the `defineLoadTest` + `flow()` shape, not raw k6 globals.
-4. If the user asks about a specific auth scheme → load `references/auth-recipes.md` for the right `useAuth.*` call.
-5. If the user asks about budgets, per-op thresholds, or named scenarios → load `references/scenarios-pattern.md`.
+1. If the user is starting fresh → suggest `npm create @ahmedrowaihi/k6`.
+2. If the user is writing a perf-harness script → use the programmatic `init/sync/runK6`.
+3. If the user is hand-editing `loadtest.ts` → show the `defineLoadTest` + `flow()` shape, with the v2 `scenario:` field name.
+4. If the user wants parallel HTTP / fan-out → show `flow().batch()` or `Promise.all([api.async.*])`.
+5. If the user asks about a specific auth scheme → load `references/auth-recipes.md`.
+6. If the user asks about budgets, per-op thresholds, named scenarios, `handleSummary`, or raw-k6 escape hatches → load `references/scenarios-pattern.md`.

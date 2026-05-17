@@ -1,0 +1,29 @@
+{
+  "v": 1,
+  "operations": {
+    "PUT /pet": "updatePet",
+    "POST /pet": "addPet",
+    "GET /pet/findByStatus": "findPetsByStatus",
+    "GET /pet/findByTags": "findPetsByTags",
+    "GET /pet/{petId}": "getPetById",
+    "POST /pet/{petId}": "updatePetWithForm",
+    "DELETE /pet/{petId}": "deletePet",
+    "POST /pet/{petId}/uploadImage": "uploadFile",
+    "POST /pet/{petId}/uploadDocument": "uploadPetDocument",
+    "GET /store/inventory": "getInventory",
+    "POST /store/order": "placeOrder",
+    "GET /store/order/{orderId}": "getOrderById",
+    "DELETE /store/order/{orderId}": "deleteOrder",
+    "POST /user": "createUser",
+    "POST /user/createWithList": "createUsersWithListInput",
+    "GET /user/login": "loginUser",
+    "GET /user/logout": "logoutUser",
+    "GET /user/{username}": "getUserByName",
+    "PUT /user/{username}": "updateUser",
+    "DELETE /user/{username}": "deleteUser",
+    "POST /tags": "submitTags",
+    "POST /profile": "updateProfile",
+    "POST /shapes": "createShape",
+    "POST /measurements": "submitMeasurement"
+  }
+}

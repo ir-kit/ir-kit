@@ -2,6 +2,13 @@ import ts from "typescript";
 
 const f = ts.factory;
 
+/** Modern factory accepts `SyntaxKind.TypeKeyword` as the phase modifier to express `import type`. */
+function phase(
+  typeOnly: boolean | undefined,
+): ts.SyntaxKind.TypeKeyword | undefined {
+  return typeOnly ? ts.SyntaxKind.TypeKeyword : undefined;
+}
+
 export interface NamedImportSpec {
   /** Name exported by the module. */
   name: string;
@@ -27,7 +34,7 @@ export function namedImport(
   return f.createImportDeclaration(
     undefined,
     f.createImportClause(
-      options.typeOnly ?? false,
+      phase(options.typeOnly),
       undefined,
       f.createNamedImports(elements),
     ),
@@ -44,10 +51,22 @@ export function namespaceImport(
   return f.createImportDeclaration(
     undefined,
     f.createImportClause(
-      options.typeOnly ?? false,
+      phase(options.typeOnly),
       undefined,
       f.createNamespaceImport(f.createIdentifier(name)),
     ),
+    f.createStringLiteral(moduleSpecifier),
+  );
+}
+
+/** `import name from "mod";` */
+export function defaultImport(
+  name: string,
+  moduleSpecifier: string,
+): ts.ImportDeclaration {
+  return f.createImportDeclaration(
+    undefined,
+    f.createImportClause(undefined, f.createIdentifier(name), undefined),
     f.createStringLiteral(moduleSpecifier),
   );
 }
