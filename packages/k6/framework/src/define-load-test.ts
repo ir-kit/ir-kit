@@ -1,6 +1,7 @@
+import type { Options, Scenario, Threshold } from "k6/options";
+
 import { type Budgets, compileBudgets } from "./budgets.js";
 import { FlowBuilder } from "./flow.js";
-import type { Scenario } from "./pace.js";
 import {
   type Middleware,
   makeStepCtx,
@@ -18,10 +19,13 @@ export interface ScenarioConfig {
   baseUrl?: string;
 }
 
+/** Loose shape of a k6 end-of-test summary — sufficient for `handleSummary` use. */
+export type SummaryHandler = (data: unknown) => Record<string, unknown>;
+
 export interface LoadTestConfig {
   /** Middleware applied to every scenario (auth, custom headers). */
   use?: ReadonlyArray<Middleware>;
-  /** Pass/fail gates. Compiled to k6 thresholds. */
+  /** Pass/fail gates. Compiled to k6 thresholds; merged with `options.thresholds`. */
   budgets?: Budgets;
   /** Shorthand: single scenario with this pace + `test`/`flow`. */
   pace?: Scenario;
@@ -35,15 +39,18 @@ export interface LoadTestConfig {
   setup?: () => unknown;
   /** k6 `teardown(data)` — runs once after all VUs. */
   teardown?: (data: unknown) => void;
-  /** Extra k6 options merged into the final options object. */
-  options?: Record<string, unknown>;
+  /**
+   * k6 `handleSummary(data)` — return `{ filename: content }` to control end-of-test output
+   * (JUnit, custom JSON, etc.). https://k6.io/docs/results-output/end-of-test/custom-summary/
+   */
+  handleSummary?: SummaryHandler;
+  /** Extra k6 options merged into the final options object. `thresholds` is union-merged with `budgets`. */
+  options?: Partial<Options>;
 }
 
-export interface CompiledOptions {
+export type CompiledOptions = Options & {
   scenarios: Record<string, Scenario>;
-  thresholds: Record<string, ReadonlyArray<string>>;
-  [extra: string]: unknown;
-}
+};
 
 export interface CompiledLoadTest {
   /** Assign to `export const options`. */
@@ -54,13 +61,20 @@ export interface CompiledLoadTest {
   scenarios: Record<string, () => void>;
   setup?: () => unknown;
   teardown?: (data: unknown) => void;
+  handleSummary?: SummaryHandler;
 }
 
 /** Compile a load-test config into the static exports k6 expects. */
 export function defineLoadTest(config: LoadTestConfig): CompiledLoadTest {
   setMiddleware(config.use ?? []);
 
-  const thresholds = compileBudgets(config.budgets);
+  const { thresholds: userThresholds, ...passthroughOptions } =
+    config.options ?? {};
+  const thresholds = mergeThresholds(
+    userThresholds,
+    compileBudgets(config.budgets),
+  );
+
   const scenarios: Record<string, Scenario> = {};
   const execs: Record<string, () => void> = {};
 
@@ -90,7 +104,7 @@ export function defineLoadTest(config: LoadTestConfig): CompiledLoadTest {
   }
 
   const options: CompiledOptions = {
-    ...(config.options ?? {}),
+    ...passthroughOptions,
     scenarios,
     thresholds,
   };
@@ -101,7 +115,26 @@ export function defineLoadTest(config: LoadTestConfig): CompiledLoadTest {
     scenarios: execs,
     setup: config.setup,
     teardown: config.teardown,
+    handleSummary: config.handleSummary,
   };
+}
+
+/**
+ * Union-merge two threshold maps per metric. If both define the same metric,
+ * specs are concatenated (user-first, derived-after) so neither side is silently dropped.
+ */
+function mergeThresholds(
+  user: Options["thresholds"] | undefined,
+  derived: Record<string, ReadonlyArray<string>>,
+): Record<string, Threshold[]> {
+  const out: Record<string, Threshold[]> = {};
+  for (const [k, v] of Object.entries(user ?? {})) {
+    out[k] = Array.isArray(v) ? [...v] : [v];
+  }
+  for (const [k, v] of Object.entries(derived)) {
+    out[k] = out[k] ? [...out[k], ...v] : [...v];
+  }
+  return out;
 }
 
 function buildExec(

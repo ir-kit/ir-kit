@@ -1,6 +1,6 @@
 ---
 name: k6-loadtest
-description: Load-test an HTTP API with the @ahmedrowaihi/k6 stack — generate a typed k6 client from an OpenAPI spec, scaffold a runnable loadtest.ts, then bundle and spawn k6 programmatically. Use when the user wants to write k6 load tests in TypeScript, perf-test an API from its OpenAPI spec, run smoke/load/stress/spike/soak scenarios, scaffold a starter loadtest, or invoke `k6 run` from a script instead of shelling out. Triggers on "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", `defineLoadTest`, `runK6`, `useAuth`, "k6 scenarios", "k6 budgets", "OpenAPI to k6". Do NOT use for unit tests, integration tests, non-HTTP workloads, or generic Go-based k6 scripting unrelated to the @ahmedrowaihi/k6 framework.
+description: Load-test an HTTP API with the @ahmedrowaihi/k6 stack — generate a typed k6 client from an OpenAPI spec, scaffold a runnable loadtest.ts, then bundle and spawn k6 programmatically. Use when the user wants to write k6 load tests in TypeScript, perf-test an API from its OpenAPI spec, run smoke/load/stress/spike/soak/arrival-rate scenarios, scaffold a starter loadtest, or invoke `k6 run` from a script instead of shelling out. Triggers on "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", "arrival rate", "RPS test", `defineLoadTest`, `runK6`, `useAuth`, `arrivalRate`, `rampingArrivalRate`, `handleSummary`, "k6 scenarios", "k6 budgets", "k6 thresholds", "OpenAPI to k6". Do NOT use for unit tests, integration tests, non-HTTP workloads, or generic Go-based k6 scripting unrelated to the @ahmedrowaihi/k6 framework.
 ---
 
 # k6 load testing — `@ahmedrowaihi/k6-toolkit`
@@ -110,9 +110,14 @@ const lt = defineLoadTest({
 
 export const options = lt.options;
 export default lt.default;
+// re-export when you use named scenarios or `handleSummary` — k6 dispatches by name.
+// export const { browse, write } = lt.scenarios;
+// export const handleSummary = lt.handleSummary;
 ```
 
 `flow().step("name", (ctx) => ...)` chains operations and passes return values down the chain. `.expect(fn)` runs an assertion that fails the iteration if it returns falsy.
+
+The framework is a scaffold *over* k6, not a replacement. Inside `flow().step()` bodies you can still reach for raw `k6` features — `k6.check`, `k6.group`, `k6/metrics` (`Counter`/`Gauge`/`Rate`/`Trend`), `k6/execution`, `SharedArray`, etc. Reach for `arrivalRate({ rps, ... })` when you need open-model (RPS-driven) load instead of VU-driven, or pass a raw `Scenario` literal to `pace:` for executors the presets don't cover (`shared-iterations`, `externally-controlled`, …). See [references/scenarios-pattern.md](references/scenarios-pattern.md).
 
 For multi-scenario loadtests:
 

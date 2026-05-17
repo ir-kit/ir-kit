@@ -6,20 +6,33 @@ export type {
   CompiledOptions,
   LoadTestConfig,
   ScenarioConfig,
+  SummaryHandler,
 } from "./define-load-test.js";
 export { defineLoadTest } from "./define-load-test.js";
 export type { ExpectFn, StepFn } from "./flow.js";
 export { FlowBuilder, FlowExpectError, flow } from "./flow.js";
 export type { Duration, Percent } from "./format.js";
 export type {
+  ArrivalRateOpts,
   LoadOpts,
+  RampingArrivalRateOpts,
   Scenario,
   SmokeOpts,
   SoakOpts,
   SpikeOpts,
+  Stage,
   StressOpts,
 } from "./pace.js";
-export { load, repro, smoke, soak, spike, stress } from "./pace.js";
+export {
+  arrivalRate,
+  load,
+  rampingArrivalRate,
+  repro,
+  smoke,
+  soak,
+  spike,
+  stress,
+} from "./pace.js";
 export type { HeaderMap, Middleware, StepCtx } from "./runtime.js";
 export { getBaseUrl, setBaseUrl } from "./runtime.js";
 export type {

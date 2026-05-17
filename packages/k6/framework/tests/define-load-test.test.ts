@@ -54,3 +54,48 @@ describe("middleware integration", () => {
     delete process.env.TEST_TOKEN;
   });
 });
+
+describe("threshold merge", () => {
+  it("union-merges user-supplied options.thresholds with budgets", () => {
+    const lt = defineLoadTest({
+      pace: smoke(),
+      test: () => {},
+      budgets: { p95: "500ms" },
+      options: {
+        thresholds: {
+          checks: ["rate>0.99"],
+          http_req_duration: ["p(99)<2000"],
+        },
+      },
+    });
+    expect(lt.options.thresholds).toEqual({
+      checks: ["rate>0.99"],
+      http_req_duration: ["p(99)<2000", "p(95)<500"],
+    });
+  });
+
+  it("preserves user thresholds when budgets are absent", () => {
+    const lt = defineLoadTest({
+      pace: smoke(),
+      test: () => {},
+      options: { thresholds: { iteration_duration: ["p(95)<1000"] } },
+    });
+    expect(lt.options.thresholds).toEqual({
+      iteration_duration: ["p(95)<1000"],
+    });
+  });
+});
+
+describe("handleSummary", () => {
+  it("passes through to compiled output", () => {
+    const handler = (data: unknown) => ({
+      "summary.json": JSON.stringify(data),
+    });
+    const lt = defineLoadTest({
+      pace: smoke(),
+      test: () => {},
+      handleSummary: handler,
+    });
+    expect(lt.handleSummary).toBe(handler);
+  });
+});
