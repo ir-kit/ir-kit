@@ -71,13 +71,26 @@ describe("@ahmedrowaihi/k6-gen", () => {
     );
   });
 
-  it("client.ts maps delete to k6's `del`", () => {
-    expect(files["client.ts"]).toMatch(/http\.del\(url/);
+  it("client.ts routes every method through the centralized call() helper", () => {
+    // Per-op wrappers funnel through `call<T>(method, url, opId, body, opts)`;
+    // method strings are upper-cased verbs (no `http.del` shorthand). The
+    // helper itself calls `http.request(spec.method, ...)` once.
+    expect(files["client.ts"]).toMatch(
+      /export function deletePet[\s\S]*call<[^>]*>\("DELETE"/,
+    );
+    expect(files["client.ts"]).toMatch(/http\.request\(spec\.method/);
   });
 
-  it("client.ts tags every request with `operation` for budget filtering", () => {
-    expect(files["client.ts"]).toMatch(/mergeTags\(['"]addPet['"]/);
-    expect(files["client.ts"]).toMatch(/mergeTags\(['"]getPetById['"]/);
+  it("client.ts threads operationId into the centralized call() helper", () => {
+    // mergeTags is invoked once inside buildSpec(); per-op call sites pass the
+    // opId as a string literal that buildSpec forwards to mergeTags.
+    expect(files["client.ts"]).toMatch(/mergeTags\(opId, opts\?\.tags\)/);
+    expect(files["client.ts"]).toMatch(
+      /export function addPet[\s\S]*call<[^>]*>\("POST",[\s\S]*"addPet"/,
+    );
+    expect(files["client.ts"]).toMatch(
+      /export function getPetById[\s\S]*call<[^>]*>\("GET",[\s\S]*"getPetById"/,
+    );
   });
 
   it("client.ts inlines DEFAULT_BASE_URL from spec servers", () => {
