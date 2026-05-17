@@ -7,6 +7,7 @@ import { resolve } from "node:path";
 
 import { bundle } from "./bundle.js";
 import { runScaffoldCommand } from "./scaffold/cli-handler.js";
+import { runSyncCommand } from "./sync-cli.js";
 
 const CACHE_DIR = ".k6-ts-cache";
 
@@ -40,6 +41,11 @@ async function main(): Promise<void> {
 
   if (args[0] === "scaffold") {
     await runScaffoldCommand(args.slice(1));
+    return;
+  }
+
+  if (args[0] === "sync") {
+    await runSyncCommand(args.slice(1));
     return;
   }
 
