@@ -36,6 +36,9 @@
     },
     "./package.json": "./package.json"
   },
+  "bin": {
+    "openapi-recon": "./dist/cli.js"
+  },
   "files": [
     "dist",
     "README.md",

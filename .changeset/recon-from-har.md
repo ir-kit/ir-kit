@@ -2,7 +2,9 @@
 "@ahmedrowaihi/openapi-recon": minor
 ---
 
-Add `fromHAR(source, config?)` — fold a HAR 1.2 file or string into a populated `Recon`. Replaces the hand-rolled 20-line observe-loop that every HAR consumer was copying out of the skill docs.
+Add `fromHAR()` + `openapi-recon` CLI — fold HAR files into OpenAPI 3.1 specs without hand-writing the observe-loop.
+
+**Programmatic** (`fromHAR(source, config?)`):
 
 ```ts
 import { readFile } from "node:fs/promises";
@@ -15,14 +17,29 @@ const recon = await fromHAR(
 const spec = recon.toOpenAPI();
 ```
 
-Handles the edge cases the manual loop typically missed:
+**CLI** (`openapi-recon` binary):
+
+```bash
+# File → file
+openapi-recon ./traffic.har --out spec.json --title "My API"
+
+# File → stdout (pipe to yq for YAML)
+openapi-recon ./traffic.har | yq -P > spec.yaml
+
+# stdin
+cat traffic.har | openapi-recon -
+```
+
+Flags: `--out`, `--title`, `--version`, `--origin`, `--max-examples`, `--no-path-templating`. Status messages go to stderr so stdout/`--out` stays clean for piping. Exit codes: 0 success, 1 internal error, 2 user error.
+
+Both APIs handle edge cases the hand-rolled loop typically missed:
 
 - HTTP/2 pseudo-headers (`:authority`, `:method`, etc.) — silently dropped (Fetch rejects them)
 - Empty `postData.text` on `GET`/`HEAD` — silently dropped (Fetch rejects bodies on those)
 - Malformed URLs and illegal header values — entry skipped, replay continues
 
-Accepts either pre-parsed `HarFile` objects or raw JSON strings — stays runtime-agnostic (browsers, Workers, Deno). For Node file-reading, pass `await readFile(path, "utf8")` yourself; the package adds no Node-specific imports.
+`fromHAR` accepts either pre-parsed `HarFile` objects or raw JSON strings — stays runtime-agnostic (browsers, Workers, Deno). The CLI is Node-only by definition.
 
 Exports the minimal HAR 1.2 shape (`HarFile` / `HarEntry` / `HarRequest` / `HarResponse` / `HarHeader` / `HarSource`) for consumers that want to type their HAR inputs.
 
-This makes HAR the universal capture seam — any tool that exports HAR (k6 Studio Recorder, browser DevTools, mitmproxy, Charles, Postman) feeds straight through `fromHAR()` into the rest of the contract-kit toolchain.
+This makes HAR the universal capture seam — any tool that exports HAR (k6 Studio Recorder, browser DevTools, mitmproxy, Charles, Postman) feeds straight through `fromHAR()` (or the CLI) into the rest of the contract-kit toolchain.

@@ -90,7 +90,24 @@ export default {
 
 ### HAR file replay (offline analysis)
 
-Use the built-in `fromHAR` helper — handles HTTP/2 pseudo-headers, body-on-GET edge cases, malformed-URL entries, and stays runtime-agnostic (works in Node, browsers, Workers, Deno).
+Two equivalent paths — pick the one that fits.
+
+**CLI** (Node only, fastest for one-shot conversion):
+
+```bash
+# File → file
+openapi-recon ./traffic.har --out spec.json --title "Captured API"
+
+# File → stdout, pipe to yq for YAML
+openapi-recon ./traffic.har | yq -P > spec.yaml
+
+# Stdin (pipe from any HAR-emitting tool)
+cat traffic.har | openapi-recon -
+```
+
+Flags: `--out`, `--title`, `--version`, `--origin`, `--max-examples`, `--no-path-templating`, `--help`.
+
+**Programmatic** (runtime-agnostic — Node, browsers, Workers, Deno):
 
 ```ts
 import { readFile } from "node:fs/promises";
@@ -114,7 +131,7 @@ const har: HarFile = /* … from k6 Studio Recorder, browser DevTools, mitmproxy
 const recon = await fromHAR(har, { title: "Studio capture" });
 ```
 
-For custom HAR-entry filtering (drop hosts, redact tokens, only keep a date range), the underlying `recon.observe(req, res)` is still available — just iterate the HAR yourself.
+Both paths handle HTTP/2 pseudo-headers (`:authority` etc.), body-on-GET edge cases, and malformed-URL entries by skipping silently. For custom HAR-entry filtering (drop hosts, redact tokens, date-range slicing), use the underlying `recon.observe(req, res)` and iterate the HAR yourself.
 
 ## Glean — the Chrome extension
 
