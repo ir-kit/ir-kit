@@ -4,6 +4,8 @@ export type Duration =
   | `${number}m`
   | `${number}h`;
 export type Percent = `${number}%`;
+/** Rate expression: `"<value>/<unit>"` where unit is `s` / `m` / `h`. e.g. `"100/m"`. */
+export type Rate = `${number}/${"s" | "m" | "h"}`;
 
 const DURATION_RE = /^(\d+(?:\.\d+)?)(ms|s|m|h)$/;
 
@@ -35,4 +37,26 @@ export function parsePercentRate(input: string): number {
   if (!m)
     throw new Error(`Invalid percent: "${input}" — expected e.g. "1%", "0.5%"`);
   return Number(m[1]) / 100;
+}
+
+const RATE_RE = /^(\d+(?:\.\d+)?)\/(s|m|h)$/;
+
+/** `"100/m"` → 1.6667 (k6 stores rate as per-second). */
+export function parseRatePerSecond(input: string): number {
+  const m = RATE_RE.exec(input.trim());
+  if (!m)
+    throw new Error(
+      `Invalid rate: "${input}" — expected e.g. "100/m", "5/s", "60/h"`,
+    );
+  const value = Number(m[1]);
+  switch (m[2]) {
+    case "s":
+      return value;
+    case "m":
+      return value / 60;
+    case "h":
+      return value / 3600;
+    default:
+      throw new Error(`Unreachable rate unit: ${m[2]}`);
+  }
 }

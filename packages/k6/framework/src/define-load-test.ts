@@ -170,7 +170,7 @@ export function defineLoadTest<
  */
 function mergeThresholds(
   user: Options["thresholds"] | undefined,
-  derived: Record<string, ReadonlyArray<string>>,
+  derived: Record<string, ReadonlyArray<Threshold>>,
 ): Record<string, Threshold[]> {
   const out: Record<string, Threshold[]> = {};
   for (const [k, v] of Object.entries(user ?? {})) {
