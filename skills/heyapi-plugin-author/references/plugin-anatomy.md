@@ -13,6 +13,11 @@ import type { Casing, DefinePlugin, NamingRule, Plugin } from "@hey-api/shared";
 export type UserConfig = Plugin.Hooks &      // hey-api hooks (transform, etc)
   Plugin.UserExports & {                      // hey-api's standard export controls
     name: "@ahmedrowaihi/paths";              // plugin identifier — MUST be a string literal
+    //                                        // (this can differ from the npm package name —
+    //                                        //  npm: `@ahmedrowaihi/openapi-ts-paths`,
+    //                                        //  plugin: `@ahmedrowaihi/paths`. The literal here
+    //                                        //  must match the module-augmentation key + any
+    //                                        //  `dependencies: ["@ahmedrowaihi/paths"]` strings.)
     /** Filename (no extension). @default "paths" */
     output?: string;
     /** Route const naming. */

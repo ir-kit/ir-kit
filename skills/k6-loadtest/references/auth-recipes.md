@@ -11,11 +11,14 @@ import { useAuth } from "@ahmedrowaihi/k6";
 Token from a static value or env var. Read once per request, never logged.
 
 ```ts
-const auth = useAuth.bearer({ env: "API_TOKEN" });        // from env
-const auth = useAuth.bearer({ token: "secret-literal" }); // hardcoded (don't)
+// From env
+const authFromEnv = useAuth.bearer({ env: "API_TOKEN" });
+
+// Hardcoded token (don't ship this — example only)
+const authLiteral = useAuth.bearer({ token: "secret-literal" });
 
 // Custom header / scheme:
-const auth = useAuth.bearer({
+const authCustom = useAuth.bearer({
   env: "API_TOKEN",
   header: "X-Auth",   // default "Authorization"
   scheme: "Token",    // default "Bearer"

@@ -67,7 +67,14 @@ const lt = defineLoadTest({
 });
 ```
 
-`pnpm run` (or `k6 run` on the bundle) executes all scenarios concurrently because every entry lands in `options.scenarios`. To run one in isolation, use `--exec browse` at the k6 CLI level (passed as an `extraArgs` entry to `runK6`).
+Running the bundle directly (`k6 run dist/loadtest.js`) — or via `runK6` programmatically — executes all scenarios concurrently because every entry lands in `options.scenarios`. To run one in isolation, pass `--exec browse` to k6:
+
+```ts
+await runK6({
+  entry: "./loadtest.ts",
+  extraArgs: ["--exec", "browse"],
+});
+```
 
 ## Flow chains
 

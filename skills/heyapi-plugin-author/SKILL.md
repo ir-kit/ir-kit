@@ -19,7 +19,7 @@ Skip this skill for: consuming hey-api (the user just wants `generate({ input, o
 
 Every hey-api plugin is **four files**:
 
-```
+```text
 my-plugin/
 ├── src/
 │   ├── index.ts        # exports defineConfig + types (the public surface)

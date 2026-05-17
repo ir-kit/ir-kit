@@ -101,8 +101,11 @@ const lt = defineLoadTest({
       const pets = api.listPets();
       return pets;                              // value flows to next step
     })
-    .step("read-first", (pets) => api.getPet(pets[0].id))
-    .expect((pet) => pet.id !== undefined),
+    .step("read-first", (pets) => {
+      if (!pets.length) return null;            // upstream returned no pets — bail safely
+      return api.getPet(pets[0].id);
+    })
+    .expect((pet) => pet !== null && pet.id !== undefined),
 });
 
 export const options = lt.options;

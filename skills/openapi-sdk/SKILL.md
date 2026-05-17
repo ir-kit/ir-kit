@@ -5,7 +5,7 @@ description: Generate idiomatic native SDK clients (Go, Kotlin, Swift, or TypeSc
 
 # Native SDK codegen — `@ahmedrowaihi/openapi-{go,kotlin,swift,typescript}`
 
-One programmatic interface across four target languages. All four expose `generate({ input, output })` with the same input-handling: file path, URL, or pre-parsed object — and a shared safe-normalize preset so OpenAPI 2.0 / 3.0 / 3.1 all produce consistent output.
+One programmatic interface across four target languages. All four expose `generate({ input, output })` with the same input-handling: file path, URL, or pre-parsed object. The three native generators (Go / Kotlin / Swift) default to `normalize: true` and route the spec through a shared safe-normalize preset so OpenAPI 2.0 / 3.0 / 3.1 all produce consistent output. The TypeScript generator is the exception — it forwards to `@hey-api/openapi-ts` which owns its own normalization, so `normalize` defaults to `false` there (pass `normalize: true` to opt into the same pre-pass before hey-api's pipeline).
 
 ## Picking the right package
 
