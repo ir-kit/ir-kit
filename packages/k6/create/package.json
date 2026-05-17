@@ -1,6 +1,6 @@
 {
   "name": "@ahmedrowaihi/create-k6",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Wizard scaffolder for the @ahmedrowaihi/k6 stack. Run `npm create @ahmedrowaihi/k6` to generate a typed client from your OpenAPI spec and a starter loadtest.ts in one shot.",
   "keywords": [
     "k6",
