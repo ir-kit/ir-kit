@@ -80,6 +80,28 @@ const auth = useAuth.custom({
 });
 ```
 
+## Digest
+
+HTTP Digest auth — handled by k6's `auth: "digest"` param. k6 negotiates the 401-challenge handshake. Credentials must be embedded in the request URL (k6 convention) — pass them via `baseUrl` or per-request URL.
+
+```ts
+const auth = useAuth.digest({
+  user: { env: "API_USER" },
+  pass: { env: "API_PASS" },
+});
+```
+
+## NTLM
+
+NTLM auth — handled by k6's `auth: "ntlm"` param. Same conventions as digest: URL-embedded credentials, k6 drives the handshake.
+
+```ts
+const auth = useAuth.ntlm({
+  user: { env: "API_USER" },
+  pass: { env: "API_PASS" },
+});
+```
+
 ## Composing multiple auths
 
 `defineLoadTest({ use: [...] })` accepts an array — middleware applies in order, later headers override earlier ones.

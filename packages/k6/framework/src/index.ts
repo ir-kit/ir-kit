@@ -5,11 +5,19 @@ export type {
   CompiledLoadTest,
   CompiledOptions,
   LoadTestConfig,
-  ScenarioConfig,
+  MetricsHandle,
+  MetricsSpec,
+  ScenarioBinding,
   SummaryHandler,
 } from "./define-load-test.js";
 export { defineLoadTest } from "./define-load-test.js";
-export type { ExpectFn, StepFn } from "./flow.js";
+export type {
+  Awaitable,
+  BatchResult,
+  BatchSpec,
+  ExpectFn,
+  StepFn,
+} from "./flow.js";
 export { FlowBuilder, FlowExpectError, flow } from "./flow.js";
 export type { Duration, Percent } from "./format.js";
 export type {
@@ -33,13 +41,32 @@ export {
   spike,
   stress,
 } from "./pace.js";
-export type { HeaderMap, Middleware, StepCtx } from "./runtime.js";
-export { getBaseUrl, setBaseUrl } from "./runtime.js";
+export type {
+  Ctx,
+  HeaderMap,
+  InstanceCtx,
+  K6Bridge,
+  MetricInstance,
+  MetricKind,
+  MetricsFactory,
+  Middleware,
+  ScenarioCtx,
+  TestCtx,
+  VuCtx,
+} from "./runtime.js";
+export {
+  getBaseUrl,
+  installK6Bridge,
+  installMetricsFactory,
+  setBaseUrl,
+} from "./runtime.js";
 export type {
   ApiKeyOpts,
   BasicOpts,
   BearerOpts,
   CustomOpts,
+  DigestOpts,
+  NtlmOpts,
   SessionOpts,
 } from "./use-auth.js";
 export { useAuth } from "./use-auth.js";

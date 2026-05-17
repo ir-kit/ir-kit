@@ -105,5 +105,48 @@ function session(opts: SessionOpts): Middleware {
   };
 }
 
-/** Auth recipes. Pass via `defineLoadTest({ use: [auth] })` to inject headers into every request. */
-export const useAuth = { bearer, basic, apiKey, custom, session } as const;
+export interface DigestOpts {
+  user: string | { env: string };
+  pass: string | { env: string };
+}
+
+/**
+ * HTTP Digest auth — handled by k6's `auth: "digest"` param, so credentials must
+ * be embedded in the request URL (k6 convention). This middleware sets the k6
+ * request `auth` param so k6's built-in 401-challenge retry kicks in.
+ */
+function digest(_opts: DigestOpts): Middleware {
+  return {
+    params() {
+      return { auth: "digest" };
+    },
+  };
+}
+
+export interface NtlmOpts {
+  user: string | { env: string };
+  pass: string | { env: string };
+}
+
+/**
+ * NTLM auth — handled by k6's `auth: "ntlm"` param. Like digest, k6 negotiates
+ * the handshake; credentials must be embedded in the request URL.
+ */
+function ntlm(_opts: NtlmOpts): Middleware {
+  return {
+    params() {
+      return { auth: "ntlm" };
+    },
+  };
+}
+
+/** Auth recipes. Pass via `defineLoadTest({ use: [auth] })` to inject headers/params into every request. */
+export const useAuth = {
+  bearer,
+  basic,
+  apiKey,
+  custom,
+  session,
+  digest,
+  ntlm,
+} as const;
