@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { load, smoke, spike, stress } from "../src/pace.ts";
+import {
+  arrivalRate,
+  load,
+  rampingArrivalRate,
+  smoke,
+  spike,
+  stress,
+} from "../src/pace.ts";
 
 describe("smoke", () => {
   it("defaults to 1 VU × 30s constant-vus", () => {
@@ -43,5 +50,59 @@ describe("spike", () => {
     });
     expect(out.stages?.[0].target).toBe(100);
     expect(out.stages?.[out.stages.length - 1].target).toBe(0);
+  });
+});
+
+describe("arrivalRate", () => {
+  it("emits constant-arrival-rate with sane defaults", () => {
+    expect(
+      arrivalRate({ rps: 100, duration: "30s", preAllocatedVUs: 50 }),
+    ).toEqual({
+      executor: "constant-arrival-rate",
+      rate: 100,
+      timeUnit: "1s",
+      duration: "30s",
+      preAllocatedVUs: 50,
+      maxVUs: 100,
+    });
+  });
+
+  it("respects custom timeUnit and maxVUs", () => {
+    expect(
+      arrivalRate({
+        rps: 60,
+        duration: "1m",
+        preAllocatedVUs: 20,
+        maxVUs: 40,
+        timeUnit: "1m",
+      }),
+    ).toMatchObject({
+      timeUnit: "1m",
+      maxVUs: 40,
+      rate: 60,
+    });
+  });
+});
+
+describe("rampingArrivalRate", () => {
+  it("emits ramping-arrival-rate carrying the supplied stages", () => {
+    const out = rampingArrivalRate({
+      preAllocatedVUs: 10,
+      stages: [
+        { duration: "10s", target: 50 },
+        { duration: "30s", target: 200 },
+      ],
+    });
+    expect(out).toMatchObject({
+      executor: "ramping-arrival-rate",
+      startRate: 0,
+      timeUnit: "1s",
+      preAllocatedVUs: 10,
+      maxVUs: 20,
+      stages: [
+        { duration: "10s", target: 50 },
+        { duration: "30s", target: 200 },
+      ],
+    });
   });
 });
