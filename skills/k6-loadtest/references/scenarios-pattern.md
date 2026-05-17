@@ -338,8 +338,9 @@ When you want full response access (status, headers, timings) on a *typed* op wi
 ```ts
 import http from "k6/http";
 import { check } from "k6";
-import * as api from "./src/gen/index.js";
+import { flow } from "@ahmedrowaihi/k6";
 import { parseJson } from "@ahmedrowaihi/k6/runtime";
+import * as api from "./src/gen/index.js";
 
 flow().step("manual control", () => {
   // Same args as api.getPetById(...) — types match.

@@ -7,6 +7,11 @@ Two changes in one — `.spec()` per op + centralized request wiring in the prea
 **`.spec(args)` per op.** Each generated operation now exposes a `.spec(args)` sibling returning `{ method, url, body, params }` — ready to feed into k6's `http.request()` or `http.batch()`. Lets users drop to raw k6 for response metadata, axios-style throwing, or http.batch parallelism without rebuilding URL templating, op tagging, header injection, or middleware-params wiring by hand.
 
 ```ts
+import http from "k6/http";
+import { check } from "k6";
+import { parseJson } from "@ahmedrowaihi/k6/runtime";
+import * as api from "./src/gen/index.js";
+
 const { method, url, body, params } = api.getPetById.spec(1);
 const res = http.request(method, url, body, params);
 check(res, { "200": (r) => r.status === 200 });
