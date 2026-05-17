@@ -55,12 +55,15 @@
     "@ahmedrowaihi/openapi-tools": "workspace:*",
     "@ahmedrowaihi/openapi-ts-faker": "workspace:*",
     "@hey-api/openapi-ts": "catalog:",
-    "@hey-api/shared": "catalog:",
-    "typescript": "catalog:"
+    "@hey-api/shared": "catalog:"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
   },
   "devDependencies": {
     "@ahmedrowaihi/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {

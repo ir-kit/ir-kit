@@ -35,6 +35,9 @@
     },
     "./package.json": "./package.json"
   },
+  "bin": {
+    "k6-ts": "./dist/cli.js"
+  },
   "files": [
     "dist",
     "README.md",
