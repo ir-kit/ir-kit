@@ -19,7 +19,6 @@
     "@ir-kit/example-k6-petstore",
     "@ir-kit/example-orpc-basic",
     "@ir-kit/example-petstore-sdk",
-    "@ir-kit/example-petstore-typescript",
     "@ir-kit/glean",
     "@ir-kit/tsconfig"
   ]
