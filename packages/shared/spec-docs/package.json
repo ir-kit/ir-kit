@@ -1,16 +1,18 @@
 {
-  "name": "@ir-kit/cli",
+  "name": "@ir-kit/spec-docs",
   "version": "0.1.0",
-  "description": "Unified `ir` CLI — single entry point for spec loading, conversion, codegen, and reverse-engineering across every supported API standard. Commands are JSON-Schema-defined; runtime auto-derives flags, prompts, help, and validation from the schema.",
+  "description": "Render any API spec as standalone HTML documentation via Scalar API Reference. Programmatic + CLI.",
   "keywords": [
-    "cli",
     "openapi",
     "asyncapi",
     "typespec",
-    "codegen",
+    "protobuf",
+    "postman",
+    "docs",
+    "scalar",
     "ir-kit"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/cli",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/shared/spec-docs",
   "bugs": {
     "url": "https://github.com/ir-kit/ir-kit/issues"
   },
@@ -22,7 +24,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ir-kit/ir-kit.git",
-    "directory": "packages/cli"
+    "directory": "packages/shared/spec-docs"
   },
   "type": "module",
   "sideEffects": false,
@@ -34,9 +36,6 @@
       "import": "./dist/index.js"
     },
     "./package.json": "./package.json"
-  },
-  "bin": {
-    "ir": "./dist/bin.js"
   },
   "files": [
     "dist",
@@ -54,23 +53,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@clack/prompts": "catalog:",
-    "@ir-kit/fn-schema-core": "workspace:*",
-    "@ir-kit/fn-schema-typescript": "workspace:*",
-    "@ir-kit/k6-gen": "workspace:*",
-    "@ir-kit/k6-toolkit": "workspace:*",
-    "@ir-kit/openapi-go": "workspace:*",
-    "@ir-kit/openapi-kotlin": "workspace:*",
-    "@ir-kit/openapi-recon": "workspace:*",
-    "@ir-kit/openapi-swift": "workspace:*",
-    "@ir-kit/openapi-typescript": "workspace:*",
-    "@ir-kit/schema": "workspace:*",
     "@ir-kit/spec-convert": "workspace:*",
-    "@ir-kit/spec-docs": "workspace:*",
-    "@ir-kit/spec-loader": "workspace:*",
-    "chokidar": "catalog:",
-    "citty": "catalog:",
-    "consola": "catalog:"
+    "@scalar/core": "^0.5.9"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

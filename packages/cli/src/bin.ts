@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { docsCommand } from "./commands/docs.js";
 import { fnSchemaDiffCommand } from "./commands/fn-schema-diff.js";
 import { fnSchemaExtractCommand } from "./commands/fn-schema-extract.js";
 import { fnSchemaInspectCommand } from "./commands/fn-schema-inspect.js";
@@ -23,6 +24,7 @@ await runCli({
     "Universal API toolkit — load, convert, generate across every spec standard.",
   commands: [
     specConvertCommand,
+    docsCommand,
     sdkGoCommand,
     sdkKotlinCommand,
     sdkSwiftCommand,
