@@ -1,14 +1,8 @@
-# @ir-kit/openapi-typescript
+# @ir-kit/openapi-loader
 
 ## 0.2.0
 
 ### Minor Changes
-
-- ed1a86c: `ir sdk <target>` commands — SDK generation for every target through one binary.
-  - `ir sdk go|kotlin|swift|typescript|k6` — schema-driven flags, each wraps the matching `@ir-kit/openapi-*` `generate()`.
-  - `ir sdk all --targets go,kotlin,...` — multi-target dispatch; one input, parallel outputs under `<output>/<target>/`.
-  - All `sdk` commands route input through `@ir-kit/spec-loader`, so `.tsp` files compile-on-the-fly via `@ir-kit/typespec-loader`. URL / file path / pre-parsed object all accepted.
-  - `@ir-kit/openapi-typescript`: widened `input` type to accept pre-parsed objects (matches the other emitters' shape).
 
 - 61c113a: Extract spec loading into format-specific packages and add TypeSpec input support across all OpenAPI generators.
   - New `@ir-kit/typespec-loader`: compiles a `.tsp` entry point (file path or in-memory source) to an OpenAPI 3 document via `@typespec/compiler` + `@typespec/openapi3`. Programmatic API primary; CLI bin `typespec-to-openapi` wraps it.
@@ -17,25 +11,3 @@
   - New `@ir-kit/spec-loader`: universal entry point — detects format by extension + content sniff, dispatches to the matching format-loader, returns a discriminated `{ kind, document }`.
   - `@ir-kit/openapi-tools` drops the `loadSpec` re-export (pre-1.0 clean break); consumers import from `@ir-kit/openapi-loader` directly.
   - All 5 OpenAPI generators (`-go`, `-kotlin`, `-swift`, `-typescript`, `@ir-kit/k6-gen`) and `@ir-kit/asyncapi-typescript` updated to use the new loaders.
-
-### Patch Changes
-
-- Updated dependencies [61c113a]
-  - @ir-kit/openapi-loader@0.2.0
-  - @ir-kit/openapi-tools@0.3.0
-
-## 0.1.2
-
-### Patch Changes
-
-- Updated dependencies [64034d0]
-  - @ir-kit/openapi@0.3.0
-  - @ir-kit/openapi-tools@0.2.0
-
-## 0.1.1
-
-### Patch Changes
-
-- Updated dependencies [3bf4075]
-  - @ir-kit/openapi@0.2.0
-  - @ir-kit/openapi-tools@0.1.1

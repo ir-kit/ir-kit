@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/spec-diff",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cross-family API spec diff. Converts any supported spec to OpenAPI 3, then runs `api-smart-diff` — breaking / non-breaking / annotation classification.",
   "keywords": [
     "openapi",

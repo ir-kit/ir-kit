@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/asyncapi-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `@ir-kit/asyncapi-core`'s `parseSpec` for unified input dispatch.",
   "keywords": [
     "asyncapi",

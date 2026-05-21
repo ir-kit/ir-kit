@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/typespec-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Compile a TypeSpec file to an OpenAPI 3.x document in memory. Thin wrapper over @typespec/compiler + @typespec/openapi3 — plugs into any @ir-kit OpenAPI generator at the spec-loading boundary.",
   "keywords": [
     "typespec",

@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization.",
   "keywords": [
     "openapi",

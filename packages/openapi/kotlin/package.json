@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-kotlin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Generate idiomatic Kotlin (OkHttp + kotlinx-serialization + suspend) client SDKs from an OpenAPI 3.x spec.",
   "keywords": [
     "openapi",
@@ -55,7 +55,7 @@
   "peerDependencies": {
     "@hey-api/shared": ">=0.3.0",
     "@hey-api/spec-types": ">=0.2.0",
-    "@ir-kit/openapi-tools": ">=0.2.0"
+    "@ir-kit/openapi-tools": ">=0.3.0"
   },
   "dependencies": {
     "@ir-kit/codegen-core": "workspace:*",

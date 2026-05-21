@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Unified `ir` CLI — single entry point for spec loading, conversion, codegen, and reverse-engineering across every supported API standard. Commands are JSON-Schema-defined; runtime auto-derives flags, prompts, help, and validation from the schema.",
   "keywords": [
     "cli",
