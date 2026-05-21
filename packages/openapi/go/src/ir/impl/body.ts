@@ -1,10 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { isOpaqueJsonBody } from "@ir-kit/openapi";
-import {
-  FORM_URLENCODED_MEDIA,
-  JSON_MEDIA_RE,
-  MULTIPART_FORM_MEDIA,
-} from "@ir-kit/openapi-core";
+import { classifyBody } from "@ir-kit/openapi";
 import {
   type GoStmt,
   goAssign,
@@ -51,28 +46,25 @@ export function buildBodyStmts(
   body: IR.BodyObject,
   errCheck: ErrCheckFn,
 ): BodyResult {
-  const mt = (body.mediaType ?? "").toLowerCase();
+  const shape = classifyBody(body);
   const schema = body.schema;
-  const isObject = schema.type === "object" && Boolean(schema.properties);
-
-  if (mt && JSON_MEDIA_RE.test(mt)) {
-    if (isOpaqueJsonBody(schema)) {
+  switch (shape.kind) {
+    case "json-opaque":
       return { stmts: rawBytesBody("application/json"), needsMultipart: false };
-    }
-    return { stmts: jsonBody(errCheck), needsMultipart: false };
+    case "json-typed":
+      return { stmts: jsonBody(errCheck), needsMultipart: false };
+    case "multipart-object":
+      return { stmts: multipartBody(schema), needsMultipart: true };
+    case "form-urlencoded-object":
+      return { stmts: formUrlEncodedBody(schema), needsMultipart: false };
+    case "opaque":
+      return {
+        stmts: rawBytesBody(
+          (body.mediaType ?? "").toLowerCase() || "application/octet-stream",
+        ),
+        needsMultipart: false,
+      };
   }
-
-  if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObject) {
-    return { stmts: multipartBody(schema), needsMultipart: true };
-  }
-  if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObject) {
-    return { stmts: formUrlEncodedBody(schema), needsMultipart: false };
-  }
-
-  return {
-    stmts: rawBytesBody(mt || "application/octet-stream"),
-    needsMultipart: false,
-  };
 }
 
 function setBodyAndContentType(payloadIdent: string, mt: string): GoStmt[] {

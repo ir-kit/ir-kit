@@ -1,11 +1,6 @@
 import type { IR } from "@hey-api/shared";
-import { isOpaqueJsonBody } from "@ir-kit/openapi";
-import {
-  FORM_URLENCODED_MEDIA,
-  type HttpMethod,
-  JSON_MEDIA_RE,
-  MULTIPART_FORM_MEDIA,
-} from "@ir-kit/openapi-core";
+import { classifyBody } from "@ir-kit/openapi";
+import type { HttpMethod } from "@ir-kit/openapi-core";
 import type { KtType } from "../../kt-dsl/index.js";
 import {
   type KtExpr,
@@ -56,35 +51,34 @@ export function buildBodyStmts(
   method: HttpMethod,
   bodyType: KtType,
 ): BodyResult {
-  const mt = (body.mediaType ?? "").toLowerCase();
+  const shape = classifyBody(body);
   const schema = body.schema;
-  const isObject = schema.type === "object" && Boolean(schema.properties);
-
-  if (mt && JSON_MEDIA_RE.test(mt)) {
-    if (isOpaqueJsonBody(schema)) {
+  switch (shape.kind) {
+    case "json-opaque":
       return {
         stmts: [emitMethodWithRawBody(method, "application/json")],
         needsMultipart: false,
       };
-    }
-    return { stmts: emitJsonBody(method, bodyType), needsMultipart: false };
+    case "json-typed":
+      return { stmts: emitJsonBody(method, bodyType), needsMultipart: false };
+    case "multipart-object":
+      return { stmts: emitMultipartBody(schema, method), needsMultipart: true };
+    case "form-urlencoded-object":
+      return {
+        stmts: emitFormUrlEncodedBody(schema, method),
+        needsMultipart: false,
+      };
+    case "opaque":
+      return {
+        stmts: [
+          emitMethodWithRawBody(
+            method,
+            (body.mediaType ?? "").toLowerCase() || "application/octet-stream",
+          ),
+        ],
+        needsMultipart: false,
+      };
   }
-
-  if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObject) {
-    return { stmts: emitMultipartBody(schema, method), needsMultipart: true };
-  }
-
-  if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObject) {
-    return {
-      stmts: emitFormUrlEncodedBody(schema, method),
-      needsMultipart: false,
-    };
-  }
-
-  return {
-    stmts: [emitMethodWithRawBody(method, mt || "application/octet-stream")],
-    needsMultipart: false,
-  };
 }
 
 const TO_REQUEST_BODY = "toRequestBody";

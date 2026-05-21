@@ -1,10 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { isOpaqueJsonBody } from "@ir-kit/openapi";
-import {
-  FORM_URLENCODED_MEDIA,
-  JSON_MEDIA_RE,
-  MULTIPART_FORM_MEDIA,
-} from "@ir-kit/openapi-core";
+import { classifyBody } from "@ir-kit/openapi";
 import type { SwExpr, SwStmt } from "../../sw-dsl/index.js";
 import {
   swArg,
@@ -57,46 +52,47 @@ export interface BodyResult {
  *  - octet-stream / image / etc. → `request.httpBody = body` (raw `Data`).
  */
 export function buildBodyStmts(body: IR.BodyObject): BodyResult {
-  const mt = (body.mediaType ?? "").toLowerCase();
+  const shape = classifyBody(body);
   const schema = body.schema;
-  const isObjectSchema = schema.type === "object" && Boolean(schema.properties);
-
-  if (mt && JSON_MEDIA_RE.test(mt)) {
-    const stmts = isOpaqueJsonBody(schema)
-      ? rawBinaryBody("application/json")
-      : jsonBody();
-    return {
-      stmts,
-      terminates: false,
-      needsErrorEnum: false,
-      needsMultipart: false,
-    };
+  switch (shape.kind) {
+    case "json-opaque":
+      return {
+        stmts: rawBinaryBody("application/json"),
+        terminates: false,
+        needsErrorEnum: false,
+        needsMultipart: false,
+      };
+    case "json-typed":
+      return {
+        stmts: jsonBody(),
+        terminates: false,
+        needsErrorEnum: false,
+        needsMultipart: false,
+      };
+    case "multipart-object":
+      return {
+        stmts: multipartBody(schema),
+        terminates: false,
+        needsErrorEnum: false,
+        needsMultipart: true,
+      };
+    case "form-urlencoded-object":
+      return {
+        stmts: formUrlEncodedBody(schema),
+        terminates: false,
+        needsErrorEnum: false,
+        needsMultipart: false,
+      };
+    case "opaque":
+      return {
+        stmts: rawBinaryBody(
+          (body.mediaType ?? "").toLowerCase() || "application/octet-stream",
+        ),
+        terminates: false,
+        needsErrorEnum: false,
+        needsMultipart: false,
+      };
   }
-
-  if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObjectSchema) {
-    return {
-      stmts: multipartBody(schema),
-      terminates: false,
-      needsErrorEnum: false,
-      needsMultipart: true,
-    };
-  }
-
-  if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObjectSchema) {
-    return {
-      stmts: formUrlEncodedBody(schema),
-      terminates: false,
-      needsErrorEnum: false,
-      needsMultipart: false,
-    };
-  }
-
-  return {
-    stmts: rawBinaryBody(mt || "application/octet-stream"),
-    terminates: false,
-    needsErrorEnum: false,
-    needsMultipart: false,
-  };
 }
 
 function setContentType(value: string | SwStmt): SwStmt {
