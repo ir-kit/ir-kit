@@ -35,3 +35,46 @@ export function classifyEnumLiterals(
   }
   return allIntegers ? "integer" : "string";
 }
+
+export interface EnumEntryIdent<T extends string | number> {
+  /** The identifier emitted into the target source (Go `StatusAvailable`,
+   *  Kotlin `available`, Swift `available`). */
+  identifier: string;
+  /** The raw enum value the identifier was derived from. */
+  raw: T;
+}
+
+/**
+ * Detect emitter-side identifier collisions across enum entries and
+ * throw a descriptive error. Each emitter normalises raw enum values
+ * to its own identifier convention (Go `enumEntrySuffix`, Kotlin
+ * `enumEntryIdent`, Swift `safeCaseName`); when two raw values
+ * normalise to the same identifier the emitted source won't compile,
+ * so we throw early with the offending name and the colliding raws.
+ *
+ * `noun` is the label used in the error message — kept per-emitter to
+ * preserve historical wording (Go / Kotlin say `entry name`, Swift
+ * says `case name`); tests pin the exact phrase.
+ */
+export function assertNoEnumCollisions<T extends string | number>(
+  schemaName: string,
+  entries: Iterable<EnumEntryIdent<T>>,
+  noun: "entry name" | "case name" = "entry name",
+): void {
+  const collisions = new Map<string, T[]>();
+  for (const { identifier, raw } of entries) {
+    const list = collisions.get(identifier) ?? [];
+    list.push(raw);
+    collisions.set(identifier, list);
+  }
+  for (const [identifier, raws] of collisions) {
+    if (raws.length > 1) {
+      const formatted = raws
+        .map((r) => (typeof r === "string" ? `"${r}"` : String(r)))
+        .join(", ");
+      throw new Error(
+        `Enum ${schemaName}: ${noun} "${identifier}" collides for raw values [${formatted}]`,
+      );
+    }
+  }
+}

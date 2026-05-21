@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { safeCaseName } from "@ir-kit/codegen-core";
-import { classifyEnumLiterals } from "@ir-kit/openapi";
+import { assertNoEnumCollisions, classifyEnumLiterals } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
 import type { SwType } from "../../sw-dsl/index.js";
@@ -33,10 +33,19 @@ export function buildEnumFromIR(
   const kind = classifyEnumLiterals(rawValues, name);
   const isInteger = kind === "integer";
 
-  const cases = isInteger
-    ? (rawValues as number[]).map((v) => swEnumCase(intCaseName(v), v))
-    : (rawValues as string[]).map((v) => swEnumCase(safeCaseName(v), v));
-  assertNoCollisions(name, cases);
+  const idents: Array<{ identifier: string; raw: string | number }> = isInteger
+    ? (rawValues as number[]).map((raw) => ({
+        identifier: intCaseName(raw),
+        raw,
+      }))
+    : (rawValues as string[]).map((raw) => ({
+        identifier: safeCaseName(raw),
+        raw,
+      }));
+  assertNoEnumCollisions(name, idents, "case name");
+  const cases = idents.map(({ identifier, raw }) =>
+    swEnumCase(identifier, raw),
+  );
 
   emit(
     swEnum({
@@ -51,25 +60,4 @@ export function buildEnumFromIR(
 
 function intCaseName(n: number): string {
   return n < 0 ? `_neg${Math.abs(n)}` : `_${n}`;
-}
-
-function assertNoCollisions(
-  name: string,
-  cases: ReadonlyArray<{ name: string; rawValue?: string | number }>,
-): void {
-  const collisions = new Map<string, Array<string | number>>();
-  for (const c of cases) {
-    const list = collisions.get(c.name) ?? [];
-    list.push(c.rawValue ?? "");
-    collisions.set(c.name, list);
-  }
-  for (const [caseName, raws] of collisions) {
-    if (raws.length > 1) {
-      throw new Error(
-        `Enum ${name}: case name "${caseName}" collides for raw values [${raws
-          .map((r) => (typeof r === "string" ? `"${r}"` : String(r)))
-          .join(", ")}]`,
-      );
-    }
-  }
 }

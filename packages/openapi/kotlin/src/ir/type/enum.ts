@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyEnumLiterals } from "@ir-kit/openapi";
+import { assertNoEnumCollisions, classifyEnumLiterals } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 import {
   type KtType,
@@ -44,23 +44,17 @@ export function buildEnumFromIR(
     return ktRef(name);
   }
 
-  const collisions = new Map<string, string[]>();
-  const entries = (rawValues as string[]).map((raw) => {
-    const ident = enumEntryIdent(raw);
-    const list = collisions.get(ident) ?? [];
-    list.push(raw);
-    collisions.set(ident, list);
-    return ktEnumEntry(ident, JSON.stringify(raw), [
+  const stringRaws = rawValues as string[];
+  const idents = stringRaws.map((raw) => ({
+    identifier: enumEntryIdent(raw),
+    raw,
+  }));
+  assertNoEnumCollisions(name, idents);
+  const entries = idents.map(({ identifier, raw }) =>
+    ktEnumEntry(identifier, JSON.stringify(raw), [
       ktAnnotation("SerialName", JSON.stringify(raw)),
-    ]);
-  });
-  for (const [entryName, raws] of collisions) {
-    if (raws.length > 1) {
-      throw new Error(
-        `Enum ${name}: entry name "${entryName}" collides for raw values [${raws.map((r) => `"${r}"`).join(", ")}]`,
-      );
-    }
-  }
+    ]),
+  );
   emit(
     ktEnum({
       name,

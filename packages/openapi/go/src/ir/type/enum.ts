@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyEnumLiterals } from "@ir-kit/openapi";
+import { assertNoEnumCollisions, classifyEnumLiterals } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 import {
   type GoType,
@@ -50,17 +50,21 @@ function emitStringEnum(
   rawValues: ReadonlyArray<string>,
   emit: TypeCtx["emit"],
 ): GoType {
-  const collisions = new Map<string, string[]>();
-  const entries = rawValues.map((raw) => {
-    const entryName = `${name}${enumEntrySuffix(raw)}`;
-    const list = collisions.get(entryName) ?? [];
-    list.push(raw);
-    collisions.set(entryName, list);
-    return goConstEntry(entryName, goStr(raw));
-  });
-  assertNoCollisions(name, collisions, (r) => `"${r}"`);
+  const entries = rawValues.map((raw) => ({
+    identifier: `${name}${enumEntrySuffix(raw)}`,
+    raw,
+  }));
+  assertNoEnumCollisions(name, entries);
   emit(goTypeAlias({ name, type: goString }));
-  emit(goConstBlock({ type: goRef(name), entries, name }));
+  emit(
+    goConstBlock({
+      type: goRef(name),
+      entries: entries.map(({ identifier, raw }) =>
+        goConstEntry(identifier, goStr(raw)),
+      ),
+      name,
+    }),
+  );
   return goRef(name);
 }
 
@@ -69,36 +73,24 @@ function emitIntegerEnum(
   rawValues: ReadonlyArray<number>,
   emit: TypeCtx["emit"],
 ): GoType {
-  const collisions = new Map<string, number[]>();
-  const entries = rawValues.map((raw) => {
-    const entryName = `${name}${integerEntrySuffix(raw)}`;
-    const list = collisions.get(entryName) ?? [];
-    list.push(raw);
-    collisions.set(entryName, list);
-    return goConstEntry(entryName, goIntLit(raw));
-  });
-  assertNoCollisions(name, collisions, (r) => String(r));
+  const entries = rawValues.map((raw) => ({
+    identifier: `${name}${integerEntrySuffix(raw)}`,
+    raw,
+  }));
+  assertNoEnumCollisions(name, entries);
   emit(goTypeAlias({ name, type: goInt }));
-  emit(goConstBlock({ type: goRef(name), entries, name }));
+  emit(
+    goConstBlock({
+      type: goRef(name),
+      entries: entries.map(({ identifier, raw }) =>
+        goConstEntry(identifier, goIntLit(raw)),
+      ),
+      name,
+    }),
+  );
   return goRef(name);
 }
 
 function integerEntrySuffix(n: number): string {
   return n < 0 ? `Neg${Math.abs(n)}` : String(n);
-}
-
-function assertNoCollisions<T>(
-  name: string,
-  collisions: ReadonlyMap<string, ReadonlyArray<T>>,
-  show: (raw: T) => string,
-): void {
-  for (const [entryName, raws] of collisions) {
-    if (raws.length > 1) {
-      throw new Error(
-        `Enum ${name}: entry name "${entryName}" collides for raw values [${raws
-          .map(show)
-          .join(", ")}]`,
-      );
-    }
-  }
 }
