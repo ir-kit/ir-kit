@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
+import { safeIdent } from "@ir-kit/codegen-core";
 import { iterOperations } from "@ir-kit/openapi";
-
 import {
   type GoDecl,
   type GoFuncResult,
@@ -13,7 +13,6 @@ import {
   goPtr,
   goRef,
 } from "../go-dsl/index.js";
-import { exportedIdent } from "./identifiers.js";
 import { buildClientStruct } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -55,7 +54,7 @@ export function operationsToDecls(
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
   const interfaceName =
-    opts.interfaceName ?? ((tag: string) => `${exportedIdent(tag)}API`);
+    opts.interfaceName ?? ((tag: string) => `${safeIdent(tag)}API`);
   const clientStructName =
     opts.clientStructName ?? ((p: string) => `NetHTTP${p}`);
 

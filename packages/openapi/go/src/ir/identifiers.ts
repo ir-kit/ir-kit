@@ -6,23 +6,12 @@ import { camel, pascal } from "@ir-kit/codegen-core";
  * and are used directly by Go-targeted code. The exports here cover
  * what's actually unique to Go:
  *
- *  - `exportedIdent` enforces Go's visibility rule (uppercase first
- *    letter = exported).
  *  - `paramIdent` escapes reserved keywords with a trailing underscore
  *    (Go has no backtick-escape form, unlike Swift / Kotlin).
  *  - `synthName` joins with no separator since `go vet` lints
  *    underscored type names.
  *  - `enumEntrySuffix` normalizes a raw enum value into the second
  *    half of a typed-const name (`StatusAvailable`).
- */
-
-/** Returns a PascalCase identifier safe for an exported name (starts with
- *  an uppercase letter, leading underscore prepended if it would start
- *  with a digit). */
-export function exportedIdent(s: string): string {
-  const p = pascal(s);
-  return /^[0-9]/.test(p) ? `_${p}` : p;
-}
 
 /** Returns a Go-safe identifier — escapes reserved keywords with a
  *  trailing underscore (Go has no backtick form). */

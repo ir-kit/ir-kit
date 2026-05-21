@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import { safeIdent } from "@ir-kit/codegen-core";
 import {
   deriveBaseName,
   type ResponseCase as IRResponseCase,
@@ -13,7 +14,6 @@ import {
   goFuncParam,
   goRef,
 } from "../../go-dsl/index.js";
-import { exportedIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { buildBodyParams } from "./body.js";
 import { buildNonBodyParams } from "./params.js";
@@ -64,7 +64,7 @@ export function operationSignature(
   schemeNames: ReadonlyArray<string> = [],
 ): OperationSignature {
   const baseName = deriveBaseName(op, method, pathStr);
-  const exportedName = exportedIdent(baseName);
+  const exportedName = safeIdent(baseName);
   const ctx: TypeCtx = { emit, ownerName: exportedName, propPath: [] };
 
   const { params: nonBody, located } = buildNonBodyParams(op, ctx);

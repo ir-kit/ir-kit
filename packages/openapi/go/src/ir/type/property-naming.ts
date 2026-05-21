@@ -1,4 +1,4 @@
-import { exportedIdent } from "../identifiers.js";
+import { safeIdent } from "@ir-kit/codegen-core";
 
 export interface PropertyName {
   /** The original key as it appears in the OpenAPI schema / JSON wire form. */
@@ -18,5 +18,5 @@ export interface PropertyName {
  *   id         → Id
  */
 export function propertyName(jsonKey: string): PropertyName {
-  return { jsonKey, goName: exportedIdent(jsonKey) };
+  return { jsonKey, goName: safeIdent(jsonKey) };
 }
