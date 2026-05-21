@@ -1,4 +1,6 @@
 import type { IR } from "@hey-api/shared";
+import { classifyUnion } from "@ir-kit/openapi";
+
 import { type KtType, ktAny, ktNullable } from "../../kt-dsl/index.js";
 import type { TypeCtx } from "./context.js";
 import { schemaToType } from "./index.js";
@@ -9,18 +11,21 @@ import { inlineObjectType } from "./object.js";
  * branch (`{ items: [{type:'string'}, {type:'null'}], logicalOperator: 'or' }`).
  * `allOf` folds become `logicalOperator: 'and'`. We collapse single-branch
  * unions to the lone branch and unwrap nullable detection; unhandled
- * multi-branch unions fall back to `Any` for now.
+ * multi-branch unions fall back to `Any?` (preserving the nullable bit
+ * since `Any` is non-null by default).
  */
 export function unionToType(schema: IR.SchemaObject, ctx: TypeCtx): KtType {
-  if (schema.logicalOperator === "and") {
-    return schema.properties ? inlineObjectType(schema, ctx) : ktAny;
+  const shape = classifyUnion(schema);
+  switch (shape.kind) {
+    case "intersection-with-properties":
+      return inlineObjectType(schema, ctx);
+    case "intersection-empty":
+      return ktAny;
+    case "single": {
+      const inner = schemaToType(shape.inner, ctx);
+      return shape.nullable ? ktNullable(inner) : inner;
+    }
+    case "multi":
+      return shape.nullable ? ktNullable(ktAny) : ktAny;
   }
-  const items = schema.items ?? [];
-  const nonNull = items.filter((i) => i.type !== "null");
-  const nullable = nonNull.length < items.length;
-  if (nonNull.length === 1) {
-    const inner = schemaToType(nonNull[0]!, ctx);
-    return nullable ? ktNullable(inner) : inner;
-  }
-  return nullable ? ktNullable(ktAny) : ktAny;
 }

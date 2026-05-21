@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { LocatedParam } from "@ir-kit/openapi";
 import {
   type KtStmt,
   ktArg,
@@ -13,7 +14,6 @@ import {
   ktStr,
 } from "../../kt-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import type { LocatedParam } from "../operation/params.js";
 
 /**
  * `builder.header("<name>", "$<value>")` for each header param. Optional

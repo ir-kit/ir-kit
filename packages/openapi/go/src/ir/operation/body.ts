@@ -1,12 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import {
-  FORM_URLENCODED_MEDIA,
-  JSON_MEDIA_RE,
-  MULTIPART_FORM_MEDIA,
-} from "@ir-kit/openapi-core";
+import { classifyBody } from "@ir-kit/openapi";
 
 import {
   type GoFuncParam,
+  type GoType,
   goByte,
   goFuncParam,
   goPtr,
@@ -37,41 +34,29 @@ export function buildBodyParams(
   body: IR.BodyObject,
   ctx: TypeCtx,
 ): ReadonlyArray<GoFuncParam> {
-  const mt = (body.mediaType ?? "").toLowerCase();
+  const shape = classifyBody(body);
   const schema = body.schema;
-  const isObject = schema.type === "object" && Boolean(schema.properties);
 
-  if (mt && JSON_MEDIA_RE.test(mt)) {
-    if (isOpaqueJsonBody(schema)) {
+  switch (shape.kind) {
+    case "json-opaque":
       return [goFuncParam("body", goBytes())];
+    case "json-typed": {
+      const t = schemaToType(schema, { ...ctx, propPath: ["body"] });
+      // JSON body params are always pointer types — the standard Go
+      // shape for "may be nil / required to construct on the heap".
+      const finalType = t.kind === "ptr" ? t : goPtr(t);
+      return [goFuncParam("body", finalType)];
     }
-    const t = schemaToType(schema, { ...ctx, propPath: ["body"] });
-    // JSON body params are always pointer types — the standard Go
-    // shape for "may be nil / required to construct on the heap".
-    const finalType = t.kind === "ptr" ? t : goPtr(t);
-    return [goFuncParam("body", finalType)];
+    case "multipart-object":
+      return objectBodyToFlatParams(schema, ctx, /* binaryAsBytes */ true);
+    case "form-urlencoded-object":
+      return objectBodyToFlatParams(schema, ctx, /* binaryAsBytes */ false);
+    case "opaque":
+      return [goFuncParam("body", goBytes())];
   }
-
-  if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObject) {
-    return objectBodyToFlatParams(schema, ctx, /* binaryAsBytes */ true);
-  }
-  if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObject) {
-    return objectBodyToFlatParams(schema, ctx, /* binaryAsBytes */ false);
-  }
-  return [goFuncParam("body", goBytes())];
 }
 
-/**
- * True when the body schema would resolve to `any` — currently
- * `oneOf`/`anyOf` with no shared type. Caller swaps to raw `[]byte`
- * since `any` doesn't round-trip through `encoding/json`'s
- * `Marshal(nil)` cleanly.
- */
-export function isOpaqueJsonBody(schema: IR.SchemaObject): boolean {
-  return !schema.type && Array.isArray(schema.items) && schema.items.length > 0;
-}
-
-const isPointerable = (t: import("../../go-dsl/index.js").GoType): boolean =>
+const isPointerable = (t: GoType): boolean =>
   t.kind !== "ptr" &&
   t.kind !== "slice" &&
   t.kind !== "map" &&

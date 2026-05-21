@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { LocatedParam } from "@ir-kit/openapi";
 import type { SwExpr, SwStmt } from "../../sw-dsl/index.js";
 import {
   swArg,
@@ -11,7 +12,6 @@ import {
   swStr,
 } from "../../sw-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import type { LocatedParam } from "../operation/params.js";
 
 /**
  * `request.setValue("\(<name>)", forHTTPHeaderField: "<name>")` for each

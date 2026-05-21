@@ -1,32 +1,11 @@
 import type { IR } from "@hey-api/shared";
+import { collectLocatedParams, type LocatedParam } from "@ir-kit/openapi";
+
 import type { SwFunParam } from "../../sw-dsl/index.js";
 import { swFunParam, swOptional } from "../../sw-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
-
-export type ParamLocation = "path" | "query" | "header" | "cookie";
-export const PARAM_LOCATIONS: ReadonlyArray<ParamLocation> = [
-  "path",
-  "query",
-  "header",
-  "cookie",
-];
-
-export interface LocatedParam {
-  param: IR.ParameterObject;
-  loc: ParamLocation;
-}
-
-export function collectLocatedParams(op: IR.OperationObject): LocatedParam[] {
-  const out: LocatedParam[] = [];
-  for (const loc of PARAM_LOCATIONS) {
-    const bucket = op.parameters?.[loc];
-    if (!bucket) continue;
-    for (const param of Object.values(bucket)) out.push({ param, loc });
-  }
-  return out;
-}
 
 /**
  * Produce the function parameters for path/query/header parameters in

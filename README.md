@@ -153,6 +153,12 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 | [`@ir-kit/openapi-core`](./packages/openapi/core) | Shared building blocks for native-client SDK generators on top of OpenAPI 3.x — identifier transforms, security-scheme walkers, ref helpers, filesystem safety. Used by @ir-kit/openapi-go, @ir-kit/openapi-kotlin, @ir-kit/openapi-swift. |
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 
+### Other
+
+| Package | Description |
+| --- | --- |
+| [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
+
 <!-- @packages-end -->
 
 > The package list above is auto-generated from each `package.json`'s `description` field, with categories driven by [`scripts/sync-readme.mjs`](./scripts/sync-readme.mjs). The lefthook pre-commit hook keeps it current; run `pnpm sync:readme` manually if needed.

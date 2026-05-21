@@ -1,11 +1,11 @@
 import type { IR } from "@hey-api/shared";
+import { isOpaqueJsonBody } from "@ir-kit/openapi";
 import {
   FORM_URLENCODED_MEDIA,
   type HttpMethod,
   JSON_MEDIA_RE,
   MULTIPART_FORM_MEDIA,
 } from "@ir-kit/openapi-core";
-
 import type { KtType } from "../../kt-dsl/index.js";
 import {
   type KtExpr,
@@ -23,7 +23,6 @@ import {
   ktVal,
 } from "../../kt-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import { isOpaqueJsonBody } from "../operation/body.js";
 import { setMethodWithBody } from "./request.js";
 import { serializerFor } from "./serializer.js";
 

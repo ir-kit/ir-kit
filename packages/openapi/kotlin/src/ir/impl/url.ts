@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { LocatedParam } from "@ir-kit/openapi";
 import {
   type KtCallArg,
   type KtExpr,
@@ -15,7 +16,6 @@ import {
   ktVar,
 } from "../../kt-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import type { LocatedParam } from "../operation/params.js";
 
 /**
  * Statements that build an `HttpUrl` from `baseUrl`, the path template,

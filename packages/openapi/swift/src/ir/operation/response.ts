@@ -1,5 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { synthName } from "@ir-kit/codegen-core";
+import { successResponses } from "@ir-kit/openapi";
 import { isMeaningless } from "@ir-kit/openapi-core";
 
 import type { SwType } from "../../sw-dsl/index.js";
@@ -39,9 +40,7 @@ export function returnTypeFor(
   op: IR.OperationObject,
   ctx: TypeCtx,
 ): ResolvedReturn {
-  const success = Object.entries(op.responses ?? {})
-    .filter(([k]) => /^2\d\d$/.test(k))
-    .sort(([a], [b]) => a.localeCompare(b));
+  const success = successResponses(op);
 
   if (success.length === 0) return { type: swVoid, cases: [] };
 

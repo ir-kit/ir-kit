@@ -1,10 +1,10 @@
 import type { IR } from "@hey-api/shared";
+import { isOpaqueJsonBody } from "@ir-kit/openapi";
 import {
   FORM_URLENCODED_MEDIA,
   JSON_MEDIA_RE,
   MULTIPART_FORM_MEDIA,
 } from "@ir-kit/openapi-core";
-
 import {
   type GoStmt,
   goAssign,
@@ -20,7 +20,6 @@ import {
   goStr,
 } from "../../go-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import { isOpaqueJsonBody } from "../operation/body.js";
 import type { ErrCheckFn } from "./errors.js";
 
 export interface BodyResult {

@@ -1,4 +1,6 @@
 import type { IR } from "@hey-api/shared";
+import { classifyUnion } from "@ir-kit/openapi";
+
 import { type GoType, goAny, goPtr } from "../../go-dsl/index.js";
 import type { TypeCtx } from "./context.js";
 import { schemaToType } from "./index.js";
@@ -15,18 +17,21 @@ const isPointerable = (t: GoType): boolean =>
  * branch (`{ items: [{type:'string'}, {type:'null'}], logicalOperator: 'or' }`).
  * `allOf` folds become `logicalOperator: 'and'`. We collapse single-branch
  * unions to the lone branch and unwrap nullable detection; unhandled
- * multi-branch unions fall back to `any`.
+ * multi-branch unions fall back to `any` (Go drops the nullable bit —
+ * `interface{}` already holds nil).
  */
 export function unionToType(schema: IR.SchemaObject, ctx: TypeCtx): GoType {
-  if (schema.logicalOperator === "and") {
-    return schema.properties ? inlineObjectType(schema, ctx) : goAny;
+  const shape = classifyUnion(schema);
+  switch (shape.kind) {
+    case "intersection-with-properties":
+      return inlineObjectType(schema, ctx);
+    case "intersection-empty":
+      return goAny;
+    case "single": {
+      const inner = schemaToType(shape.inner, ctx);
+      return shape.nullable && isPointerable(inner) ? goPtr(inner) : inner;
+    }
+    case "multi":
+      return goAny;
   }
-  const items = schema.items ?? [];
-  const nonNull = items.filter((i) => i.type !== "null");
-  const nullable = nonNull.length < items.length;
-  if (nonNull.length === 1) {
-    const inner = schemaToType(nonNull[0]!, ctx);
-    return nullable && isPointerable(inner) ? goPtr(inner) : inner;
-  }
-  return goAny;
 }

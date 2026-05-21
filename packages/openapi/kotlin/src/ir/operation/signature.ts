@@ -1,7 +1,7 @@
 import type { IR } from "@hey-api/shared";
 import { camel, pascal } from "@ir-kit/codegen-core";
+import { type LocatedParam } from "@ir-kit/openapi";
 import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi-core";
-
 import {
   type KtFunParam,
   type KtType,
@@ -10,7 +10,7 @@ import {
 } from "../../kt-dsl/index.js";
 import type { TypeCtx } from "../type/index.js";
 import { buildBodyParams } from "./body.js";
-import { buildNonBodyParams, type LocatedParam } from "./params.js";
+import { buildNonBodyParams } from "./params.js";
 import { returnTypeFor } from "./response.js";
 
 export interface OperationSignature {

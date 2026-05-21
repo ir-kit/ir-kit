@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { LocatedParam } from "@ir-kit/openapi";
 import {
   type GoExpr,
   type GoStmt,
@@ -12,7 +13,6 @@ import {
   goStr,
 } from "../../go-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import type { LocatedParam } from "../operation/params.js";
 
 /**
  * `req.Header.Set("<name>", fmt.Sprint(<value>))` for each header

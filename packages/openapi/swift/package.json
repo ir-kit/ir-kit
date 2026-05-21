@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "@ir-kit/codegen-core": "workspace:*",
+    "@ir-kit/openapi": "workspace:*",
     "@ir-kit/openapi-core": "workspace:*"
   },
   "devDependencies": {

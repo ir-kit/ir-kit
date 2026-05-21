@@ -1,9 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import {
-  FORM_URLENCODED_MEDIA,
-  JSON_MEDIA_RE,
-  MULTIPART_FORM_MEDIA,
-} from "@ir-kit/openapi-core";
+import { classifyBody } from "@ir-kit/openapi";
 
 import {
   type KtFunParam,
@@ -32,40 +28,26 @@ export function buildBodyParams(
   body: IR.BodyObject,
   ctx: TypeCtx,
 ): ReadonlyArray<KtFunParam> {
-  const mt = (body.mediaType ?? "").toLowerCase();
+  const shape = classifyBody(body);
   const schema = body.schema;
-  const isObject = schema.type === "object" && Boolean(schema.properties);
 
-  if (mt && JSON_MEDIA_RE.test(mt)) {
-    if (isOpaqueJsonBody(schema)) {
+  switch (shape.kind) {
+    case "json-opaque":
       return [ktFunParam({ name: "body", type: ktByteArray })];
-    }
-    return [
-      ktFunParam({
-        name: "body",
-        type: schemaToType(schema, { ...ctx, propPath: ["body"] }),
-      }),
-    ];
+    case "json-typed":
+      return [
+        ktFunParam({
+          name: "body",
+          type: schemaToType(schema, { ...ctx, propPath: ["body"] }),
+        }),
+      ];
+    case "multipart-object":
+      return objectBodyToFlatParams(schema, ctx, /* binaryAsByteArray */ true);
+    case "form-urlencoded-object":
+      return objectBodyToFlatParams(schema, ctx, /* binaryAsByteArray */ false);
+    case "opaque":
+      return [ktFunParam({ name: "body", type: ktByteArray })];
   }
-
-  if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObject) {
-    return objectBodyToFlatParams(schema, ctx, /* binaryAsByteArray */ true);
-  }
-  if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObject) {
-    return objectBodyToFlatParams(schema, ctx, /* binaryAsByteArray */ false);
-  }
-  return [ktFunParam({ name: "body", type: ktByteArray })];
-}
-
-/**
- * True when the body schema would resolve to `Any` — currently
- * `oneOf`/`anyOf` with no shared type. We can't generate a working
- * `Json.encode` call against `Any`, so the call site swaps to raw
- * `ByteArray` and the wire encoder writes `request.body = body.toRequestBody(...)`
- * verbatim.
- */
-export function isOpaqueJsonBody(schema: IR.SchemaObject): boolean {
-  return !schema.type && Array.isArray(schema.items) && schema.items.length > 0;
 }
 
 function objectBodyToFlatParams(

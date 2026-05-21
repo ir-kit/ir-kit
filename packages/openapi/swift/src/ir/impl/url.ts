@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { LocatedParam } from "@ir-kit/openapi";
 import type { SwCallArg, SwExpr, SwStmt } from "../../sw-dsl/index.js";
 import {
   swArg,
@@ -20,7 +21,6 @@ import {
   swVar,
 } from "../../sw-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
-import type { LocatedParam } from "../operation/params.js";
 
 /**
  * Statements that build a `URLRequest`-ready URL from `baseURL`, the
