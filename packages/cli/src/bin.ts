@@ -15,6 +15,7 @@ import { sdkKotlinCommand } from "./commands/sdk-kotlin.js";
 import { sdkSwiftCommand } from "./commands/sdk-swift.js";
 import { sdkTypescriptCommand } from "./commands/sdk-typescript.js";
 import { specConvertCommand } from "./commands/spec-convert.js";
+import { specDiffCommand } from "./commands/spec-diff.js";
 import { runCli } from "./runtime.js";
 
 await runCli({
@@ -24,6 +25,7 @@ await runCli({
     "Universal API toolkit — load, convert, generate across every spec standard.",
   commands: [
     specConvertCommand,
+    specDiffCommand,
     docsCommand,
     sdkGoCommand,
     sdkKotlinCommand,
