@@ -156,6 +156,9 @@ importers:
         specifier: ^0.10.4
         version: 0.10.9
     devDependencies:
+      '@ir-kit/asyncapi-typescript':
+        specifier: workspace:*
+        version: link:../../packages/asyncapi/typescript
       '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig

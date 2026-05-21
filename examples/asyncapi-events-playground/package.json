@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Hand-written stand-in for what asyncapi-typescript would emit from fixtures/user-events.yaml. Used to evaluate the surface (Events.X.publish/subscribe) end-to-end against a real RabbitMQ before wiring up the generator.",
+  "description": "End-to-end AsyncAPI playground: `pnpm gen` emits the SDK from fixtures/user-events.yaml via @ir-kit/asyncapi-typescript; producer/consumer demos drive it against a local RabbitMQ broker.",
   "scripts": {
+    "gen": "jiti gen.ts",
     "broker:up": "docker compose up -d",
     "broker:down": "docker compose down",
     "producer": "jiti src/producer.ts",
@@ -14,6 +15,7 @@
     "amqplib": "^0.10.4"
   },
   "devDependencies": {
+    "@ir-kit/asyncapi-typescript": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/amqplib": "^0.10.5",
     "@types/node": "catalog:",
