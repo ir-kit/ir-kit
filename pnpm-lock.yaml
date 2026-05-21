@@ -660,6 +660,9 @@ importers:
       '@ir-kit/k6-gen':
         specifier: workspace:*
         version: link:../codegen
+      '@ir-kit/openapi-loader':
+        specifier: workspace:*
+        version: link:../../openapi/loader
       '@ir-kit/openapi-tools':
         specifier: workspace:*
         version: link:../../openapi/tools
