@@ -27,15 +27,46 @@ export function camel(s: string): string {
 /** PascalCase, prepended with `_` if it would otherwise start with a
  *  digit. Used wherever a type-name slot can't begin with a number. */
 export function safeIdent(s: string): string {
-  const p = pascal(s);
-  return /^[0-9]/.test(p) ? `_${p}` : p;
+  return avoidLeadingDigit(pascal(s));
 }
 
 /** camelCase, prepended with `_` if it would otherwise start with a
  *  digit. Used for enum case names where the source is numeric. */
 export function safeCaseName(s: string): string {
-  const c = camel(s);
-  return /^[0-9]/.test(c) ? `_${c}` : c;
+  return avoidLeadingDigit(camel(s));
+}
+
+/**
+ * Camel-like transform that PRESERVES the first character's casing —
+ * collapses non-alnum word boundaries and uppercases the following
+ * character. Diverges from `camel()` in that it does NOT lowercase
+ * the leading letter, so `softCamel("FirstName")` stays `"FirstName"`
+ * while `camel("FirstName")` returns `"firstName"`. Used by emitters
+ * that want to respect user-given casing on parameter identifiers
+ * while still normalising word boundaries (snake_case → camelCase but
+ * already-cased inputs pass through).
+ */
+export function softCamel(s: string): string {
+  return s.replace(/[^a-zA-Z0-9]+(.)/g, (_, c: string) => c.toUpperCase());
+}
+
+/** Prepend `_` when the string would otherwise start with a digit;
+ *  pass through unchanged otherwise. Most identifier-safe transforms
+ *  end with this guard. */
+export function avoidLeadingDigit(s: string): string {
+  return /^[0-9]/.test(s) ? `_${s}` : s;
+}
+
+/** Wrap a name through a target-specific escape iff it collides with
+ *  the target's reserved-keyword set. Centralises the
+ *  `RESERVED.has(name) ? escape(name) : name` pattern each emitter's
+ *  `paramIdent` open-coded. */
+export function escapeIfReserved(
+  name: string,
+  reserved: ReadonlySet<string>,
+  escape: (name: string) => string,
+): string {
+  return reserved.has(name) ? escape(name) : name;
 }
 
 /**

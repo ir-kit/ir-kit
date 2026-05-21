@@ -1,16 +1,22 @@
+import {
+  avoidLeadingDigit,
+  escapeIfReserved,
+  softCamel,
+} from "@ir-kit/codegen-core";
+
 /**
  * Swift-specific identifier transforms. Generic case helpers
- * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`) live
- * in `@ir-kit/openapi-core`. The export here covers what's unique
- * to Swift: backtick-escaping for the reserved-keyword set.
+ * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`,
+ * `softCamel`, `escapeIfReserved`, `avoidLeadingDigit`) live in
+ * `@ir-kit/codegen-core`. The export here covers what's unique to
+ * Swift: backtick-escaping for the reserved-keyword set.
  */
-
 export function paramIdent(name: string): string {
-  const camelLike = name.replace(/[^a-zA-Z0-9]+(.)/g, (_, c: string) =>
-    c.toUpperCase(),
+  return escapeIfReserved(
+    avoidLeadingDigit(softCamel(name)),
+    SWIFT_RESERVED_KEYWORDS,
+    (s) => `\`${s}\``,
   );
-  const safe = /^[0-9]/.test(camelLike) ? `_${camelLike}` : camelLike;
-  return SWIFT_RESERVED_KEYWORDS.has(safe) ? `\`${safe}\`` : safe;
 }
 
 /**

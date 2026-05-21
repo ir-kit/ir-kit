@@ -1,22 +1,31 @@
+import {
+  avoidLeadingDigit,
+  escapeIfReserved,
+  softCamel,
+} from "@ir-kit/codegen-core";
+
 /**
  * Kotlin-specific identifier transforms. Generic case helpers
- * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`) live
- * in `@ir-kit/openapi-core`. The exports here cover what's unique
- * to Kotlin: reserved-keyword backtick-escaping and SCREAMING_SNAKE
+ * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`,
+ * `softCamel`, `escapeIfReserved`, `avoidLeadingDigit`) live in
+ * `@ir-kit/codegen-core`. The exports here cover what's unique to
+ * Kotlin: reserved-keyword backtick-escaping and SCREAMING_SNAKE
  * enum entry names.
  */
 
 /**
  * Translate an arbitrary string to a Kotlin identifier safe to use as
  * a parameter / property name. Reserved keywords are escaped with
- * backticks (Kotlin's syntax for arbitrary identifiers).
+ * backticks (Kotlin's syntax for arbitrary identifiers). Uses
+ * `softCamel` (preserves first-letter casing) so PascalCase inputs
+ * pass through unchanged.
  */
 export function paramIdent(name: string): string {
-  const camelLike = name.replace(/[^a-zA-Z0-9]+(.)/g, (_, c: string) =>
-    c.toUpperCase(),
+  return escapeIfReserved(
+    avoidLeadingDigit(softCamel(name)),
+    KOTLIN_RESERVED_KEYWORDS,
+    (s) => `\`${s}\``,
   );
-  const safe = /^[0-9]/.test(camelLike) ? `_${camelLike}` : camelLike;
-  return KOTLIN_RESERVED_KEYWORDS.has(safe) ? `\`${safe}\`` : safe;
 }
 
 /**

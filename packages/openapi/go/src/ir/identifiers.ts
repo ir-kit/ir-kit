@@ -1,4 +1,9 @@
-import { camel, pascal } from "@ir-kit/codegen-core";
+import {
+  avoidLeadingDigit,
+  camel,
+  escapeIfReserved,
+  pascal,
+} from "@ir-kit/codegen-core";
 
 /**
  * Go-specific identifier transforms. Generic case helpers (`pascal`,
@@ -16,9 +21,11 @@ import { camel, pascal } from "@ir-kit/codegen-core";
 /** Returns a Go-safe identifier — escapes reserved keywords with a
  *  trailing underscore (Go has no backtick form). */
 export function paramIdent(name: string): string {
-  const camelLike = camel(name);
-  const safe = /^[0-9]/.test(camelLike) ? `_${camelLike}` : camelLike;
-  return GO_RESERVED_KEYWORDS.has(safe) ? `${safe}_` : safe;
+  return escapeIfReserved(
+    avoidLeadingDigit(camel(name)),
+    GO_RESERVED_KEYWORDS,
+    (s) => `${s}_`,
+  );
 }
 
 /**
