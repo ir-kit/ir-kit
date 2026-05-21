@@ -38,7 +38,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Create release PR or publish
-        id: changesets
         uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1
         with:
           version: pnpm version-packages
@@ -50,35 +49,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # Backfill GitHub Releases for every package published in this run.
-      # `changesets/action` only creates a release for packages explicitly
-      # listed in a consumed changeset's frontmatter — transitive patch
-      # bumps (via `updateInternalDependencies: patch`) get a tag pushed
-      # but no GH release. This step iterates `publishedPackages` (which
-      # IS complete) and creates a release per package using its
-      # CHANGELOG.md entry as the body. `gh release create` is a no-op
-      # when the release already exists.
-      - name: Backfill GH releases for transitive bumps
-        if: steps.changesets.outputs.published == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISHED: ${{ steps.changesets.outputs.publishedPackages }}
-        run: |
-          set -e
-          echo "$PUBLISHED" | jq -r '.[] | "\(.name) \(.version)"' | while read -r name version; do
-            tag="${name}@${version}"
-            if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-              echo "::notice::release exists, skipping: $tag"
-              continue
-            fi
-            # Find the package dir + CHANGELOG.md
-            dir=$(find packages -name "package.json" -not -path "*/node_modules/*" -exec sh -c 'n=$(jq -r .name "$1") && [ "$n" = "'"$name"'" ] && dirname "$1"' _ {} \; 2>/dev/null | head -1)
-            notes="Auto-published at ${version}."
-            if [ -n "$dir" ] && [ -f "$dir/CHANGELOG.md" ]; then
-              slice=$(awk -v v="$version" '/^## / { if (found) exit; if ($2 == v) { found=1; next } } found { print }' "$dir/CHANGELOG.md")
-              [ -n "$slice" ] && notes="$slice"
-            fi
-            echo "::notice::creating release: $tag"
-            gh release create "$tag" --repo "$GITHUB_REPOSITORY" --title "$tag" --notes "$notes"
-          done
