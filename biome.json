@@ -16,7 +16,9 @@
       "!!**/.swiftpm/**",
       "!!**/.gradle/**",
       "!!**/build/**",
-      "!!**/Package.resolved"
+      "!!**/Package.resolved",
+      "!!examples/**/sdk/**",
+      "!!examples/**/generated/**"
     ]
   },
   "formatter": {

@@ -2,5 +2,4 @@
 import { createRegistry, type RegistryOptions } from "./dispatch.gen";
 import type { EventMap } from "./event-map.gen";
 import { Events } from "./events.gen";
-export const handlers = (opts?: RegistryOptions) =>
-  createRegistry<EventMap>(Events, opts);
+export const handlers = (opts?: RegistryOptions) => createRegistry<EventMap>(Events, opts);
