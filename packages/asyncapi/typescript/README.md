@@ -46,7 +46,7 @@ await generate({
 });
 ```
 
-For a full RabbitMQ run (producer + consumer end-to-end), see `examples/asyncapi-events-playground/` in the ir-kit monorepo.
+For a full RabbitMQ run (producer + consumer end-to-end), see `examples/asyncapi-events/` in the ir-kit monorepo.
 
 ## Built-in plugins
 

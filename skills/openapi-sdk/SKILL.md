@@ -88,7 +88,7 @@ await Promise.all([
 ]);
 ```
 
-This is what `examples/petstore-sdk/` in ir-kit does.
+This is what `examples/openapi-sdk-petstore/` in ir-kit does.
 
 ## Language-specific bundling
 

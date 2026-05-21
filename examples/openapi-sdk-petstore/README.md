@@ -1,4 +1,4 @@
-# petstore-sdk — multi-target SDK generation demo
+# openapi-sdk-petstore — multi-target SDK generation demo
 
 End-to-end demo: **one OpenAPI spec → multiple platform SDKs**, with each language's example wired up as a real consumer project that depends on the generated SDK like an adopter would.
 
@@ -24,12 +24,12 @@ pnpm --filter @ir-kit/openapi-kotlin build
 pnpm --filter @ir-kit/openapi-swift build
 pnpm --filter @ir-kit/openapi-go build
 pnpm --filter @ir-kit/openapi-typescript build
-pnpm --filter @ir-kit/example-petstore-sdk gen        # all targets
+pnpm --filter @ir-kit/example-openapi-sdk-petstore gen        # all targets
 # or one at a time:
-pnpm --filter @ir-kit/example-petstore-sdk gen:kotlin
-pnpm --filter @ir-kit/example-petstore-sdk gen:swift
-pnpm --filter @ir-kit/example-petstore-sdk gen:go
-pnpm --filter @ir-kit/example-petstore-sdk gen:typescript
+pnpm --filter @ir-kit/example-openapi-sdk-petstore gen:kotlin
+pnpm --filter @ir-kit/example-openapi-sdk-petstore gen:swift
+pnpm --filter @ir-kit/example-openapi-sdk-petstore gen:go
+pnpm --filter @ir-kit/example-openapi-sdk-petstore gen:typescript
 ```
 
 Build / run each example consumer:
@@ -55,7 +55,7 @@ Each `<lang>/sdk/` directory is committed so PRs can review codegen diffs whenev
 Each language target follows the same shape: a generated `sdk/` source tree plus a sibling `example/` consumer that depends on it through whatever the language's package manager calls a path-based dependency.
 
 ```
-examples/petstore-sdk/
+examples/openapi-sdk-petstore/
 ├── kotlin/
 │   ├── settings.gradle.kts                ← include(":sdk", ":example")
 │   ├── build.gradle.kts                   ← root: shared repositories

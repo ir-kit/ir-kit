@@ -4,7 +4,7 @@ Generate idiomatic iOS Swift client SDKs from an OpenAPI 3.x spec — `Codable` 
 
 Built on the [`@hey-api`](https://github.com/hey-api/openapi-ts) toolchain (`@hey-api/json-schema-ref-parser` for spec loading, `@hey-api/shared` IR for normalization). 2.0 / 3.0 / 3.1 inputs all produce the same output.
 
-Sibling package to [`@ir-kit/openapi-kotlin`](../openapi-kotlin). Part of [ir-kit](https://github.com/ir-kit/ir-kit). Companion to the [`petstore-sdk` example](../../examples/petstore-sdk).
+Sibling package to [`@ir-kit/openapi-kotlin`](../openapi-kotlin). Part of [ir-kit](https://github.com/ir-kit/ir-kit). Companion to the [`openapi-sdk-petstore` example](../../examples/openapi-sdk-petstore).
 
 ## Install
 

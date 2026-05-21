@@ -1,17 +1,20 @@
-# asyncapi-events-playground
+# asyncapi-events
 
-Hand-written stand-in for what `asyncapi-typescript` would emit from `fixtures/user-events.yaml`.
+End-to-end demo for `@ir-kit/asyncapi-typescript`: `pnpm gen` emits the SDK from `fixtures/user-events.yaml`; producer/consumer demos drive it against a local RabbitMQ broker.
 
-The generator emits **building blocks only** — types, topology consts, an event map. **No runtime, no `Client`, no `publish` / `subscribe` functions.** The caller wires amqplib (or NestJS / Effect / anything) themselves.
+The generator emits **building blocks only** — types, topology consts, an event map, dispatch helpers, AMQP bindings. **No runtime, no `Client`, no `publish` / `subscribe` functions.** The caller wires amqplib (or NestJS / Effect / anything) themselves.
 
 ## Layout
 
 ```
-generated/         ← what the generator would emit (hand-written here)
+generated/         ← emitted by `pnpm gen` (committed; CI diffs against this)
   types.gen.ts     per-message TS interfaces (mirroring the spec's payload schemas)
   events.gen.ts    Events const — topology metadata only (exchange, routingKey, type, ...)
   event-map.ts     EventMap + isMessageOfType discriminator helper
-  index.ts         barrel
+  dispatch.gen.ts  typed dispatcher
+  handlers.gen.ts  registry helper
+  amqp.gen.ts      AMQP plumbing
+  index.gen.ts     barrel
 src/
   producer.ts      caller-written; raw channel.publish using Events.X topology
   consumer.ts      caller-written; raw assertQueue + bindQueue + consume

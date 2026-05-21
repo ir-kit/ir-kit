@@ -186,10 +186,10 @@ Three `@hey-api/openapi-ts` plugins ship in lockstep via Changesets' `fixed` con
 
 | Example | Shows |
 | --- | --- |
-| [`petstore-sdk`](./examples/petstore-sdk) | Generate Go / Kotlin / Swift / TypeScript SDKs from the petstore spec. Each language has a buildable consumer app under `<lang>/example/` exercising CRUD, auth, multipart, per-call options, response headers, validators, transformers. |
+| [`openapi-sdk-petstore`](./examples/openapi-sdk-petstore) | Generate Go / Kotlin / Swift / TypeScript SDKs from the petstore spec. Each language has a buildable consumer app under `<lang>/example/` exercising CRUD, auth, multipart, per-call options, response headers, validators, transformers. |
 | [`k6-petstore`](./examples/k6-petstore) | End-to-end k6 track: `pnpm sync` (driving `@ir-kit/k6-toolkit`'s `sync()`) generates a typed client from `petstore.yaml`, then `loadtest.ts` composes 4 scenarios (browse / write / stress / spike) with flat budgets, per-op overrides, step chaining, and `data.<Type>()` faker payloads. `pnpm run:smoke` runs against the public petstore demo. |
 | [`orpc-basic`](./examples/orpc-basic) | Minimal `@ir-kit/openapi-ts-orpc` setup — wire the plugin into `openapi-ts.config.ts` and consume the generated oRPC clients/servers. |
-| [`asyncapi-events-playground`](./examples/asyncapi-events-playground) | `@ir-kit/asyncapi-typescript` against an AsyncAPI 3.0 spec — emits typed event constants, dispatch helpers, AMQP bindings, framework adapters. |
+| [`asyncapi-events`](./examples/asyncapi-events) | `@ir-kit/asyncapi-typescript` against an AsyncAPI 3.0 spec — emits typed event constants, dispatch helpers, AMQP bindings, framework adapters. Real RabbitMQ producer/consumer demos drive the generated SDK. |
 | [`fn-schema-basic`](./examples/fn-schema-basic) | `ir fn-schema extract` (powered by `@ir-kit/fn-schema-core`) extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |
 
 ## Contributing

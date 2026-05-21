@@ -119,7 +119,7 @@ When you spot duplication in `@ir-kit/openapi-{go,kotlin,swift}`:
 
 1. Identify the **pre-work** (what does the IR walk produce that's target-neutral?) vs the **render** (what's the target-specific shape it gets wrapped in?).
 2. Add the pre-work helper to this package — pure function, generator, or classifier.
-3. Update each emitter to consume it. Verify the petstore SDK regen is byte-identical (the repo's `examples/petstore-sdk/` is the canonical fixture).
+3. Update each emitter to consume it. Verify the petstore SDK regen is byte-identical (the repo's `examples/openapi-sdk-petstore/` is the canonical fixture).
 4. Land in one commit per emitter pass for clean git history.
 
 If the duplication is in render — different code paths producing structurally-different target code — it stays per-emitter. Push back on consolidating principled language differences just because they look similar.

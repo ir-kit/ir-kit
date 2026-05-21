@@ -126,7 +126,7 @@ Run the project's typecheck / build / test scripts. If anything fails, the most 
 
 - **CI workflow secrets / OIDC trust** — if the project uses `@ir-kit/*` packages from CI that publishes its own SDKs (e.g. via the `sdk-regen` GitHub Action), `--generator-version` defaults to `latest` which now means `@ir-kit/openapi-<target>@latest` (0.1.x at first publish). No action needed unless the consumer pins a version.
 
-- **Vendored generated code** (e.g. `examples/petstore-sdk/`) — for the `0.1.0` release of `@ir-kit/openapi-{go,kotlin,swift}`, regenerated output is byte-identical to what `@ahmedrowaihi/openapi-{go,kotlin,swift}@latest` produced. Vendored output does not need regeneration unless the consumer is on an older `@ahmedrowaihi/*` major.
+- **Vendored generated code** (e.g. `examples/openapi-sdk-petstore/`) — for the `0.1.0` release of `@ir-kit/openapi-{go,kotlin,swift}`, regenerated output is byte-identical to what `@ahmedrowaihi/openapi-{go,kotlin,swift}@latest` produced. Vendored output does not need regeneration unless the consumer is on an older `@ahmedrowaihi/*` major.
 
 ## When NOT to use this skill
 

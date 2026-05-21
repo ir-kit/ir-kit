@@ -132,4 +132,4 @@ The `PluginInstance` surface:
 2. For RabbitMQ: show the full plugin set including `amqplib()`.
 3. For other brokers: show `typescript()` + `events()` + `eventMap()` + `dispatch()` and tell the user they can either author a broker-specific plugin (see "Authoring custom plugins" above) or wire their own publish/consume layer using `Events` + `EventMap`.
 4. For type-only use: `typescript()` + `events()` + `eventMap()` is enough.
-5. Point at `examples/asyncapi-events-playground/` in the ir-kit monorepo for an end-to-end RabbitMQ runner.
+5. Point at `examples/asyncapi-events/` in the ir-kit monorepo for an end-to-end RabbitMQ runner.

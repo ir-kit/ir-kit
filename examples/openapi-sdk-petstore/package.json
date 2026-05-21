@@ -1,5 +1,5 @@
 {
-  "name": "@ir-kit/example-petstore-sdk",
+  "name": "@ir-kit/example-openapi-sdk-petstore",
   "version": "0.0.0",
   "private": true,
   "type": "module",
