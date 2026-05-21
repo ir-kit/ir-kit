@@ -36,7 +36,8 @@ describe("fromHeyApi", () => {
     };
     const out = fromHeyApi(s);
     expect(out.type).toBe("array");
-    expect(out.items?.type).toBe("string");
+    const items = out.items;
+    expect(items && typeof items === "object" && items.type).toBe("string");
   });
 
   it("preserves properties and required", () => {
@@ -46,7 +47,8 @@ describe("fromHeyApi", () => {
       required: ["name"],
     };
     const out = fromHeyApi(s);
-    expect(out.properties?.name?.type).toBe("string");
+    const name = out.properties?.name;
+    expect(name && typeof name === "object" && name.type).toBe("string");
     expect(out.required).toEqual(["name"]);
   });
 
@@ -75,7 +77,8 @@ describe("fromJsonSchema", () => {
       { type: "array", items: [{ type: "string" }, { type: "integer" }] },
       { dialect: "draft-07" },
     );
-    expect(out.prefixItems?.length).toBe(2);
+    const prefix = out.prefixItems;
+    expect(Array.isArray(prefix) ? prefix.length : 0).toBe(2);
     expect(out.items).toBeUndefined();
   });
 
@@ -87,7 +90,8 @@ describe("fromJsonSchema", () => {
       },
       { dialect: "draft-07" },
     );
-    expect(out.$defs?.User?.type).toBe("object");
+    const user = out.$defs?.User;
+    expect(user && typeof user === "object" && user.type).toBe("object");
   });
 
   it("passes through 2020-12 input unchanged in shape", () => {
