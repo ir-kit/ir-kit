@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { pascal, synthName } from "@ir-kit/codegen-core";
-import { iterateObjectProperties } from "@ir-kit/openapi";
+import { classifyObjectShape, iterateObjectProperties } from "@ir-kit/openapi";
 
 import {
   type KtDataClass,
@@ -71,15 +71,16 @@ export function inlineObjectType(
   schema: IR.SchemaObject,
   ctx: TypeCtx,
 ): KtType {
-  const hasNamedProperties = Object.keys(schema.properties ?? {}).length > 0;
-  if (hasNamedProperties) {
-    const name = synthName(ctx.ownerName, ctx.propPath);
-    ctx.emit(buildStruct(name, schema, ctx));
-    return ktRef(name);
+  const shape = classifyObjectShape(schema);
+  switch (shape.kind) {
+    case "named-struct": {
+      const name = synthName(ctx.ownerName, ctx.propPath);
+      ctx.emit(buildStruct(name, schema, ctx));
+      return ktRef(name);
+    }
+    case "map":
+      return ktMap(ktString, schemaToType(shape.valueSchema, ctx));
+    case "open-map":
+      return ktMap(ktString, ktAny);
   }
-  const ap = schema.additionalProperties;
-  if (ap && typeof ap === "object") {
-    return ktMap(ktString, schemaToType(ap, ctx));
-  }
-  return ktMap(ktString, ktAny);
 }

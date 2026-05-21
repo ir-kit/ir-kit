@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { pascal, synthName } from "@ir-kit/codegen-core";
-import { iterateObjectProperties } from "@ir-kit/openapi";
+import { classifyObjectShape, iterateObjectProperties } from "@ir-kit/openapi";
 
 import type {
   SwCodingKeysEntry,
@@ -89,15 +89,16 @@ export function inlineObjectType(
   schema: IR.SchemaObject,
   ctx: TypeCtx,
 ): SwType {
-  const hasNamedProperties = Object.keys(schema.properties ?? {}).length > 0;
-  if (hasNamedProperties) {
-    const name = synthName(ctx.ownerName, ctx.propPath);
-    ctx.emit(buildStruct(name, schema, ctx));
-    return swRef(name);
+  const shape = classifyObjectShape(schema);
+  switch (shape.kind) {
+    case "named-struct": {
+      const name = synthName(ctx.ownerName, ctx.propPath);
+      ctx.emit(buildStruct(name, schema, ctx));
+      return swRef(name);
+    }
+    case "map":
+      return swDict(swString, schemaToType(shape.valueSchema, ctx));
+    case "open-map":
+      return swDict(swString, swAny);
   }
-  const ap = schema.additionalProperties;
-  if (ap && typeof ap === "object") {
-    return swDict(swString, schemaToType(ap, ctx));
-  }
-  return swDict(swString, swAny);
 }

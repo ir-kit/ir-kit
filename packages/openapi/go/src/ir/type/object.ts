@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { pascal } from "@ir-kit/codegen-core";
-import { iterateObjectProperties } from "@ir-kit/openapi";
+import { classifyObjectShape, iterateObjectProperties } from "@ir-kit/openapi";
 
 import {
   type GoStruct,
@@ -70,15 +70,16 @@ export function inlineObjectType(
   schema: IR.SchemaObject,
   ctx: TypeCtx,
 ): GoType {
-  const hasNamedProperties = Object.keys(schema.properties ?? {}).length > 0;
-  if (hasNamedProperties) {
-    const name = synthName(ctx.ownerName, ctx.propPath);
-    ctx.emit(buildStruct(name, schema, ctx));
-    return goRef(name);
+  const shape = classifyObjectShape(schema);
+  switch (shape.kind) {
+    case "named-struct": {
+      const name = synthName(ctx.ownerName, ctx.propPath);
+      ctx.emit(buildStruct(name, schema, ctx));
+      return goRef(name);
+    }
+    case "map":
+      return goMap(goString, schemaToType(shape.valueSchema, ctx));
+    case "open-map":
+      return goMap(goString, goAny);
   }
-  const ap = schema.additionalProperties;
-  if (ap && typeof ap === "object") {
-    return goMap(goString, schemaToType(ap, ctx));
-  }
-  return goMap(goString, goAny);
 }

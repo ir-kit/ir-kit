@@ -13,7 +13,10 @@ export {
   assertNoEnumCollisions,
   classifyEnumLiterals,
 } from "./type/enum.js";
-export type { ObjectProperty } from "./type/object.js";
-export { iterateObjectProperties } from "./type/object.js";
+export type { ObjectProperty, ObjectShape } from "./type/object.js";
+export {
+  classifyObjectShape,
+  iterateObjectProperties,
+} from "./type/object.js";
 export type { UnionShape } from "./type/union.js";
 export { classifyUnion } from "./type/union.js";

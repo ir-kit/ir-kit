@@ -1,5 +1,35 @@
 import type { IR } from "@hey-api/shared";
 
+/**
+ * High-level dispatch for inline object schemas. Each emitter then
+ * picks its target rendering:
+ *
+ *  - `named-struct`  → synth a name, emit a struct/data-class/struct,
+ *                      return a ref to it
+ *  - `map`           → render as `map[string]V` / `Map<String, V>` /
+ *                      `[String: V]` over the inner value schema
+ *  - `open-map`      → same map, but value is `any` / `Any` / `Any`
+ *                      since `additionalProperties` was missing or
+ *                      `true`/empty
+ */
+export type ObjectShape =
+  | { kind: "named-struct" }
+  | { kind: "map"; valueSchema: IR.SchemaObject }
+  | { kind: "open-map" };
+
+/**
+ * Classify an object-shaped schema by its property layout. Used by
+ * each emitter's `inlineObjectType` to drive the same three-way
+ * dispatch identically.
+ */
+export function classifyObjectShape(schema: IR.SchemaObject): ObjectShape {
+  const hasNamedProperties = Object.keys(schema.properties ?? {}).length > 0;
+  if (hasNamedProperties) return { kind: "named-struct" };
+  const ap = schema.additionalProperties;
+  if (ap && typeof ap === "object") return { kind: "map", valueSchema: ap };
+  return { kind: "open-map" };
+}
+
 export interface ObjectProperty {
   jsonKey: string;
   schema: IR.SchemaObject;
