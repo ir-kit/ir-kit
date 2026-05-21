@@ -20,11 +20,11 @@ const DEFAULT_PLUGINS: ReadonlyArray<string> = [
 
 export interface GenerateOptions {
   /**
-   * Path or URL to the OpenAPI 3.x spec. Forwarded to hey-api which
-   * delegates to `@hey-api/json-schema-ref-parser` and accepts both
-   * shapes.
+   * Path, URL, or pre-parsed OpenAPI 3.x spec. Forwarded to hey-api
+   * which delegates to `@hey-api/json-schema-ref-parser` for strings
+   * and accepts objects directly.
    */
-  input: string;
+  input: string | Record<string, unknown>;
   /** Directory the SDK is written to (created if missing). */
   output: string;
   /**
