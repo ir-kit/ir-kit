@@ -1,5 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
+import {
+  type LocatedParam,
+  paramsAt,
+  splitPathSegments,
+} from "@ir-kit/openapi";
 import type { SwCallArg, SwExpr, SwStmt } from "../../sw-dsl/index.js";
 import {
   swArg,
@@ -122,8 +126,7 @@ function buildPathChain(
   pathStr: string,
   pathParams: ReadonlyArray<IR.ParameterObject>,
 ): SwExpr {
-  const stripped = pathStr.startsWith("/") ? pathStr.slice(1) : pathStr;
-  const segments = stripped.split("/").filter((s) => s.length > 0);
+  const segments = splitPathSegments(pathStr);
   return segments.reduce<SwExpr>(
     (acc, seg) =>
       swCall(swMember(acc, "appendingPathComponent"), [

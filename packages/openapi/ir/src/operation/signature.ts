@@ -34,3 +34,14 @@ export function deriveBaseName(
 export function operationDocLine(method: HttpMethod, pathStr: string): string {
   return `${HTTP_METHOD_LITERAL[method]} ${pathStr}`;
 }
+
+/**
+ * Split a templated OpenAPI path (`/pets/{id}/photos`) into its
+ * non-empty segments (`["pets", "{id}", "photos"]`), trimming a
+ * leading `/`. Each emitter's URL builder iterates these to append
+ * to the target's URL/baseURL value.
+ */
+export function splitPathSegments(pathStr: string): string[] {
+  const stripped = pathStr.startsWith("/") ? pathStr.slice(1) : pathStr;
+  return stripped.split("/").filter((s) => s.length > 0);
+}

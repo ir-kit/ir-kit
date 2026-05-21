@@ -10,7 +10,11 @@ export {
 } from "./operation/params.js";
 export type { ResponseCase } from "./operation/responses.js";
 export { isSuccessStatus, successResponses } from "./operation/responses.js";
-export { deriveBaseName, operationDocLine } from "./operation/signature.js";
+export {
+  deriveBaseName,
+  operationDocLine,
+  splitPathSegments,
+} from "./operation/signature.js";
 export type { TypeCtx } from "./type/context.js";
 export type { EnumEntryIdent, EnumKind, EnumLiteral } from "./type/enum.js";
 export {

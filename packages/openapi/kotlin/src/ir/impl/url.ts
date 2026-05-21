@@ -1,5 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
+import {
+  type LocatedParam,
+  paramsAt,
+  splitPathSegments,
+} from "@ir-kit/openapi";
 import {
   type KtCallArg,
   type KtExpr,
@@ -39,7 +43,7 @@ export function buildUrlStmts(
   const stmts: KtStmt[] = [
     ktVar("urlBuilder", ktCall(ktMember(ktIdent("baseUrl"), "newBuilder"), [])),
   ];
-  for (const seg of splitSegments(pathStr)) {
+  for (const seg of splitPathSegments(pathStr)) {
     stmts.push(
       ktExprStmt(
         ktCall(ktMember(ktIdent("urlBuilder"), "addPathSegment"), [
@@ -55,11 +59,6 @@ export function buildUrlStmts(
     ktVal("url", ktCall(ktMember(ktIdent("urlBuilder"), "build"), [])),
   );
   return stmts;
-}
-
-function splitSegments(pathStr: string): string[] {
-  const stripped = pathStr.startsWith("/") ? pathStr.slice(1) : pathStr;
-  return stripped.split("/").filter((s) => s.length > 0);
 }
 
 interface ParamPart {

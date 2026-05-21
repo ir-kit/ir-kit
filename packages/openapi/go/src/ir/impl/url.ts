@@ -1,5 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
+import {
+  type LocatedParam,
+  paramsAt,
+  splitPathSegments,
+} from "@ir-kit/openapi";
 import {
   type GoExpr,
   type GoStmt,
@@ -46,7 +50,7 @@ export function buildUrlStmts(
       [
         goCall(goSelector(goIdent("path"), "Join"), [
           { expr: goSelector(goIdent("u"), "Path") },
-          ...splitSegments(pathStr).map((seg) => ({
+          ...splitPathSegments(pathStr).map((seg) => ({
             expr: segmentExpr(seg, pathParams),
           })),
         ]),
@@ -66,11 +70,6 @@ export function buildUrlStmts(
   }
 
   return stmts;
-}
-
-function splitSegments(pathStr: string): string[] {
-  const stripped = pathStr.startsWith("/") ? pathStr.slice(1) : pathStr;
-  return stripped.split("/").filter((s) => s.length > 0);
 }
 
 function segmentExpr(
