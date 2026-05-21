@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/create-k6",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Wizard scaffolder for the @ir-kit/k6 stack. Run `npm create @ir-kit/k6` to generate a typed client from your OpenAPI spec and a starter loadtest.ts in one shot.",
   "keywords": [
     "k6",

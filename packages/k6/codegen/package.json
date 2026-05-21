@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/k6-gen",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required.",
   "keywords": [
     "k6",

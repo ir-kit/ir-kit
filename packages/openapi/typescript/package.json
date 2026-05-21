@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-typescript",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline.",
   "keywords": [
     "openapi",
