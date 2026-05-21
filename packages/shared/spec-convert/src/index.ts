@@ -4,6 +4,7 @@ import { loadSpec } from "@ir-kit/spec-loader";
 
 import "./converters/openapi3-to-json-schema.js";
 import "./converters/openapi3-to-typespec.js";
+import "./converters/proto-to-openapi3.js";
 import "./converters/typespec-to-json-schema.js";
 import "./converters/typespec-to-openapi3.js";
 import "./converters/typespec-to-proto.js";
@@ -86,9 +87,9 @@ async function materializeInput(
   from: SpecFormat,
   cwd: string | undefined,
 ): Promise<SpecDocument> {
-  if (from === "typespec") {
+  if (from === "typespec" || from === "proto") {
     if (typeof input !== "string") {
-      throw new Error("typespec input must be a file path");
+      throw new Error(`${from} input must be a file path`);
     }
     return { __path: resolve(cwd ?? process.cwd(), input) };
   }

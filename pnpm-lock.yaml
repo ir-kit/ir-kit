@@ -1122,6 +1122,9 @@ importers:
       '@ir-kit/typespec-loader':
         specifier: workspace:*
         version: link:../../openapi/typespec-loader
+      protobufjs:
+        specifier: ^7.4.0
+        version: 7.5.6
     devDependencies:
       '@ir-kit/tsconfig':
         specifier: workspace:*

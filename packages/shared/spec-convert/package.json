@@ -54,7 +54,8 @@
   },
   "dependencies": {
     "@ir-kit/spec-loader": "workspace:*",
-    "@ir-kit/typespec-loader": "workspace:*"
+    "@ir-kit/typespec-loader": "workspace:*",
+    "protobufjs": "^7.4.0"
   },
   "peerDependencies": {
     "@typespec/json-schema": ">=1.0.0",
