@@ -46,13 +46,17 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build first-party packages
-        run: pnpm turbo run build --filter='@ir-kit/codegen-core' --filter='@ir-kit/asyncapi-core' --filter='@ir-kit/asyncapi-typescript'
+        run: pnpm turbo run build --filter='@ir-kit/codegen-core' --filter='@ir-kit/asyncapi-core' --filter='@ir-kit/asyncapi-loader' --filter='@ir-kit/asyncapi-typescript'
 
       - name: Pack tarballs
         run: |
           set -e
           mkdir -p tarballs
-          for pkg in packages/shared/codegen-core packages/asyncapi/core packages/asyncapi/typescript; do
+          for pkg in \
+            packages/shared/codegen-core \
+            packages/asyncapi/core \
+            packages/asyncapi/loader \
+            packages/asyncapi/typescript; do
             (cd "$pkg" && pnpm pack --pack-destination "$GITHUB_WORKSPACE/tarballs")
           done
           ls -la tarballs
