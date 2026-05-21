@@ -39,12 +39,18 @@ catalogs:
     '@typespec/http':
       specifier: ^1.12.0
       version: 1.12.0
+    '@typespec/json-schema':
+      specifier: ^1.12.0
+      version: 1.12.0
     '@typespec/openapi':
       specifier: ^1.12.0
       version: 1.12.0
     '@typespec/openapi3':
       specifier: ^1.12.0
       version: 1.12.0
+    '@typespec/protobuf':
+      specifier: ^0.82.0
+      version: 0.82.0
     '@typespec/rest':
       specifier: ^0.74.0
       version: 0.74.0
@@ -1074,12 +1080,18 @@ importers:
       '@typespec/http':
         specifier: 'catalog:'
         version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
+      '@typespec/json-schema':
+        specifier: 'catalog:'
+        version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
       '@typespec/openapi':
         specifier: 'catalog:'
         version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))
       '@typespec/openapi3':
         specifier: 'catalog:'
-        version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))))
+        version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/json-schema@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))))
+      '@typespec/protobuf':
+        specifier: 'catalog:'
+        version: 0.82.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
       '@typespec/rest':
         specifier: 'catalog:'
         version: 0.74.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))
@@ -1136,9 +1148,15 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
+      '@typespec/json-schema':
+        specifier: 'catalog:'
+        version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
       '@typespec/openapi3':
         specifier: 'catalog:'
-        version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))))
+        version: 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/json-schema@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))))
+      '@typespec/protobuf':
+        specifier: 'catalog:'
+        version: 0.82.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
       vitest:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
@@ -3209,6 +3227,12 @@ packages:
       '@typespec/streams':
         optional: true
 
+  '@typespec/json-schema@1.12.0':
+    resolution: {integrity: sha512-e/hxD6q0ThpCmIXOt4wseC30dv1lWnmQJaDhsn6MJySNVpcfTw9xVgj40Oeygc3TC1nO5X0cICtkOqDV/FMFAw==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@typespec/compiler': ^1.12.0
+
   '@typespec/openapi3@1.12.0':
     resolution: {integrity: sha512-r2CechzwGyr+BtLo7ApoaaTsrYybaE0gsGCLVWbkfH9Fs2KTu0ilpMKGxXjhKRS6cWHMkGGuB3hM0OJjFyFydw==}
     engines: {node: '>=22.0.0'}
@@ -3243,6 +3267,11 @@ packages:
     peerDependencies:
       '@typespec/compiler': ^1.12.0
       '@typespec/http': ^1.12.0
+
+  '@typespec/protobuf@0.82.0':
+    resolution: {integrity: sha512-t8iZx0cgH/VhXpFk9vwLhYVDPjX6Basp8xJHSuIppotKKn4UxZtPHW2P/xyEsS9CJJhI6Y4wpuPlyWA8QjrycA==}
+    peerDependencies:
+      '@typespec/compiler': ^1.12.0
 
   '@typespec/rest@0.74.0':
     resolution: {integrity: sha512-dE+Xmv01AQ7m8jUvEbGsUQLSVo3sLzMpnHRbQEOnJX42oDqtIsz/2GEOXKQpNm1AKBISK66E2FFB5boz999Ziw==}
@@ -10532,7 +10561,13 @@ snapshots:
     dependencies:
       '@typespec/compiler': 1.12.0(@types/node@22.19.17)
 
-  '@typespec/openapi3@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))))':
+  '@typespec/json-schema@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))':
+    dependencies:
+      '@typespec/asset-emitter': 0.79.1(@typespec/compiler@1.12.0(@types/node@22.19.17))
+      '@typespec/compiler': 1.12.0(@types/node@22.19.17)
+      yaml: 2.8.3
+
+  '@typespec/openapi3@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/json-schema@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))(@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))))':
     dependencies:
       '@scalar/json-magic': 0.12.9
       '@scalar/openapi-parser': 0.25.12
@@ -10542,11 +10577,17 @@ snapshots:
       '@typespec/http': 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
       '@typespec/openapi': 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))
       yaml: 2.8.3
+    optionalDependencies:
+      '@typespec/json-schema': 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
 
   '@typespec/openapi@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))':
     dependencies:
       '@typespec/compiler': 1.12.0(@types/node@22.19.17)
       '@typespec/http': 1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17))
+
+  '@typespec/protobuf@0.82.0(@typespec/compiler@1.12.0(@types/node@22.19.17))':
+    dependencies:
+      '@typespec/compiler': 1.12.0(@types/node@22.19.17)
 
   '@typespec/rest@0.74.0(@typespec/compiler@1.12.0(@types/node@22.19.17))(@typespec/http@1.12.0(@typespec/compiler@1.12.0(@types/node@22.19.17)))':
     dependencies:

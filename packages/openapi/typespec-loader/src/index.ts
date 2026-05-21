@@ -22,6 +22,12 @@ export type CompileTypespecResult = {
   document: OpenAPIDocument;
 };
 
+export {
+  type CompileCaptureOptions,
+  type CompileCaptureResult,
+  compileTypespecCapture,
+} from "./compile-capture.js";
+
 /**
  * Compile a TypeSpec entry point to an OpenAPI 3 document in memory.
  * Accepts either a file path or an inline source string. No disk

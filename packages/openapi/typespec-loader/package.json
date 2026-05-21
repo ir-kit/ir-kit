@@ -51,15 +51,27 @@
   },
   "peerDependencies": {
     "@typespec/compiler": ">=1.0.0",
-    "@typespec/openapi3": ">=1.0.0"
+    "@typespec/json-schema": ">=1.0.0",
+    "@typespec/openapi3": ">=1.0.0",
+    "@typespec/protobuf": ">=0.80.0"
+  },
+  "peerDependenciesMeta": {
+    "@typespec/json-schema": {
+      "optional": true
+    },
+    "@typespec/protobuf": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@typespec/compiler": "catalog:",
     "@typespec/http": "catalog:",
+    "@typespec/json-schema": "catalog:",
     "@typespec/openapi": "catalog:",
     "@typespec/openapi3": "catalog:",
+    "@typespec/protobuf": "catalog:",
     "@typespec/rest": "catalog:",
     "vitest": "catalog:"
   },

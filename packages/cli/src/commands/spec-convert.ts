@@ -1,4 +1,5 @@
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
 
 import type { Schema } from "@ir-kit/schema";
 import { convertSpec, listConverters } from "@ir-kit/spec-convert";
@@ -30,11 +31,15 @@ const args: Schema = {
       description: "Source format (auto-detected if omitted)",
       enum: sourceFormats,
     },
-    out: { type: "string", description: "Write to file (default: stdout)" },
+    out: {
+      type: "string",
+      description:
+        "Output path. File for single-doc/source targets; directory for multi-file targets (json-schema, proto).",
+    },
     format: {
       type: "string",
       description:
-        "JSON document output format (ignored for source targets like typespec)",
+        "JSON document output format (ignored for source/files targets)",
       enum: ["json", "yaml"],
       default: "json",
     },
@@ -54,6 +59,24 @@ export const specConvertCommand: CommandSpec<Input, void> = {
       from: input.from as Parameters<typeof convertSpec>[0]["from"] | undefined,
     });
 
+    if (result.output.kind === "files") {
+      if (!input.out) {
+        throw new Error(
+          `Target '${input.to}' produces multiple files; pass --out <directory>.`,
+        );
+      }
+      const dir = resolve(input.out);
+      for (const [rel, content] of Object.entries(result.output.files)) {
+        const dest = join(dir, rel);
+        await mkdir(dirname(dest), { recursive: true });
+        await writeFile(dest, content);
+      }
+      process.stdout.write(
+        `Wrote ${Object.keys(result.output.files).length} file(s) to ${dir}\n`,
+      );
+      return;
+    }
+
     const text =
       result.output.kind === "source"
         ? result.output.source
@@ -70,7 +93,7 @@ export const specConvertCommand: CommandSpec<Input, void> = {
 function serialize(doc: unknown, format: string): string {
   if (format === "yaml") {
     throw new Error(
-      "YAML output not yet wired — pass through `yq` for now:\n  ir spec convert input.tsp --to openapi3 | yq -P",
+      "YAML output not yet wired — pipe through `yq` for now:\n  ir spec convert input.tsp --to openapi3 | yq -P",
     );
   }
   return JSON.stringify(doc, null, 2);

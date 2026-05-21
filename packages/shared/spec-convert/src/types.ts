@@ -9,7 +9,8 @@ export type SpecDocument = Record<string, unknown>;
 
 export type ConvertOutput =
   | { kind: "document"; document: SpecDocument }
-  | { kind: "source"; source: string; ext: string };
+  | { kind: "source"; source: string; ext: string }
+  | { kind: "files"; files: Record<string, string> };
 
 export type ConvertHandler = (
   document: SpecDocument,

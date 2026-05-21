@@ -4,7 +4,9 @@ import { loadSpec } from "@ir-kit/spec-loader";
 
 import "./converters/openapi3-to-json-schema.js";
 import "./converters/openapi3-to-typespec.js";
+import "./converters/typespec-to-json-schema.js";
 import "./converters/typespec-to-openapi3.js";
+import "./converters/typespec-to-proto.js";
 
 import { findConverter, listConverters } from "./registry.js";
 import type {

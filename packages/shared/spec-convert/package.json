@@ -57,12 +57,24 @@
     "@ir-kit/typespec-loader": "workspace:*"
   },
   "peerDependencies": {
-    "@typespec/openapi3": ">=1.0.0"
+    "@typespec/json-schema": ">=1.0.0",
+    "@typespec/openapi3": ">=1.0.0",
+    "@typespec/protobuf": ">=0.80.0"
+  },
+  "peerDependenciesMeta": {
+    "@typespec/json-schema": {
+      "optional": true
+    },
+    "@typespec/protobuf": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@typespec/json-schema": "catalog:",
     "@typespec/openapi3": "catalog:",
+    "@typespec/protobuf": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {
