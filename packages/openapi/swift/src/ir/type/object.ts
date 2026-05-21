@@ -1,5 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { pascal, synthName } from "@ir-kit/codegen-core";
+import { iterateObjectProperties } from "@ir-kit/openapi";
 
 import type {
   SwCodingKeysEntry,
@@ -33,9 +34,8 @@ export function buildStruct(
   schema: IR.SchemaObject,
   ctx: { emit: TypeCtx["emit"] },
 ): SwStruct {
-  const required = new Set(schema.required ?? []);
-  const entries = Object.entries(schema.properties ?? {}).map(
-    ([jsonKey, propSchema]) => {
+  const entries = Array.from(iterateObjectProperties(schema)).map(
+    ({ jsonKey, schema: propSchema, required }) => {
       const naming = propertyName(jsonKey);
       const t = schemaToType(propSchema, {
         emit: ctx.emit,
@@ -44,7 +44,7 @@ export function buildStruct(
         // change the synthesized name of an inline-object type.
         propPath: [pascal(jsonKey)],
       });
-      const optional = !required.has(jsonKey);
+      const optional = !required;
       const finalType = optional && t.kind !== "optional" ? swOptional(t) : t;
       return { naming, type: finalType, optional };
     },

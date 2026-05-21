@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyBody } from "@ir-kit/openapi";
+import { classifyBody, iterateObjectProperties } from "@ir-kit/openapi";
 
 import {
   type KtFunParam,
@@ -55,20 +55,16 @@ function objectBodyToFlatParams(
   ctx: TypeCtx,
   binaryAsByteArray: boolean,
 ): ReadonlyArray<KtFunParam> {
-  const required = new Set(schema.required ?? []);
-  return Object.entries(schema.properties ?? {}).map(
-    ([propName, propSchema]) => {
-      const isBinary =
-        propSchema.type === "string" && propSchema.format === "binary";
+  return Array.from(iterateObjectProperties(schema)).map(
+    ({ jsonKey: propName, schema: propSchema, required, isBinary }) => {
       const t =
         binaryAsByteArray && isBinary
           ? ktByteArray
           : schemaToType(propSchema, { ...ctx, propPath: ["body", propName] });
-      const isRequired = required.has(propName);
       return ktFunParam({
         name: paramIdent(propName),
-        type: isRequired ? t : ktNullable(t),
-        default: isRequired ? undefined : "null",
+        type: required ? t : ktNullable(t),
+        default: required ? undefined : "null",
       });
     },
   );

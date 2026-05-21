@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyBody } from "@ir-kit/openapi";
+import { classifyBody, iterateObjectProperties } from "@ir-kit/openapi";
 
 import type { SwFunParam } from "../../sw-dsl/index.js";
 import { swData, swFunParam, swOptional } from "../../sw-dsl/index.js";
@@ -51,20 +51,16 @@ function objectBodyToFlatParams(
   ctx: TypeCtx,
   binaryAsData: boolean,
 ): ReadonlyArray<SwFunParam> {
-  const required = new Set(schema.required ?? []);
-  return Object.entries(schema.properties ?? {}).map(
-    ([propName, propSchema]) => {
-      const isBinary =
-        propSchema.type === "string" && propSchema.format === "binary";
+  return Array.from(iterateObjectProperties(schema)).map(
+    ({ jsonKey: propName, schema: propSchema, required, isBinary }) => {
       const t =
         binaryAsData && isBinary
           ? swData
           : schemaToType(propSchema, { ...ctx, propPath: ["body", propName] });
-      const isRequired = required.has(propName);
       return swFunParam({
         name: paramIdent(propName),
-        type: isRequired ? t : swOptional(t),
-        default: isRequired ? undefined : "nil",
+        type: required ? t : swOptional(t),
+        default: required ? undefined : "nil",
       });
     },
   );

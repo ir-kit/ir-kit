@@ -10,5 +10,7 @@ export { deriveBaseName, operationDocLine } from "./operation/signature.js";
 export type { TypeCtx } from "./type/context.js";
 export type { EnumKind, EnumLiteral } from "./type/enum.js";
 export { classifyEnumLiterals } from "./type/enum.js";
+export type { ObjectProperty } from "./type/object.js";
+export { iterateObjectProperties } from "./type/object.js";
 export type { UnionShape } from "./type/union.js";
 export { classifyUnion } from "./type/union.js";

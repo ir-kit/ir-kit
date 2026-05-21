@@ -1,5 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { pascal } from "@ir-kit/codegen-core";
+import { iterateObjectProperties } from "@ir-kit/openapi";
 
 import {
   type GoStruct,
@@ -34,26 +35,28 @@ export function buildStruct(
   schema: IR.SchemaObject,
   ctx: { emit: TypeCtx["emit"] },
 ): GoStruct {
-  const required = new Set(schema.required ?? []);
-  const fields = Object.entries(schema.properties ?? {}).map(
-    ([jsonKey, propSchema]) => {
-      const naming = propertyName(jsonKey);
-      const t = schemaToType(propSchema, {
-        emit: ctx.emit,
-        ownerName: name,
-        propPath: [pascal(jsonKey)],
-      });
-      const optional = !required.has(jsonKey);
-      // Slices and maps are nilable in Go and serialize naturally with
-      // `omitempty`; only wrap value-types in `*T` for optional fields.
-      const finalType =
-        optional && t.kind !== "ptr" && !isMapOrSlice(t) ? goPtr(t) : t;
-      const tag = optional
-        ? `\`json:"${naming.jsonKey},omitempty"\``
-        : `\`json:"${naming.jsonKey}"\``;
-      return goField(naming.goName, finalType, tag);
-    },
-  );
+  const fields: ReturnType<typeof goField>[] = [];
+  for (const {
+    jsonKey,
+    schema: propSchema,
+    required,
+  } of iterateObjectProperties(schema)) {
+    const naming = propertyName(jsonKey);
+    const t = schemaToType(propSchema, {
+      emit: ctx.emit,
+      ownerName: name,
+      propPath: [pascal(jsonKey)],
+    });
+    const optional = !required;
+    // Slices and maps are nilable in Go and serialize naturally with
+    // `omitempty`; only wrap value-types in `*T` for optional fields.
+    const finalType =
+      optional && t.kind !== "ptr" && !isMapOrSlice(t) ? goPtr(t) : t;
+    const tag = optional
+      ? `\`json:"${naming.jsonKey},omitempty"\``
+      : `\`json:"${naming.jsonKey}"\``;
+    fields.push(goField(naming.goName, finalType, tag));
+  }
   return goStruct({ name, fields });
 }
 
