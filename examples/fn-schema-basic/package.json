@@ -8,7 +8,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "generate": "node scripts/generate.mjs",
-    "extract": "fn-schema extract \"src/**/*.ts\" --out generated/cli --pretty --naming file-function"
+    "extract": "ir fn-schema extract --patterns \"src/**/*.ts\" --out generated/cli --pretty --naming file-function"
   },
   "dependencies": {
     "@ir-kit/fn-schema-core": "workspace:*",
@@ -16,7 +16,7 @@
     "@ir-kit/fn-schema-typescript": "workspace:*"
   },
   "devDependencies": {
-    "@ir-kit/fn-schema-cli": "workspace:*",
+    "@ir-kit/cli": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "5.9.3",

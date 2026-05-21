@@ -69,7 +69,6 @@ const CATEGORY_BY_NAME = {
   // fn-schema family — TypeScript function signatures → JSON Schema.
   "@ir-kit/fn-schema-core": "TypeScript function schemas",
   "@ir-kit/fn-schema-typescript": "TypeScript function schemas",
-  "@ir-kit/fn-schema-cli": "TypeScript function schemas",
   "@ir-kit/fn-schema-loader": "TypeScript function schemas",
   "@ir-kit/fn-schema-unplugin": "TypeScript function schemas",
   "@ir-kit/fn-schema-transformer": "TypeScript function schemas",

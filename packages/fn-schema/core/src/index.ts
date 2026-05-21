@@ -8,6 +8,12 @@ export {
   loadFnSchemaConfig,
 } from "./orchestrators/config.js";
 export {
+  type DiffChange,
+  type DiffDefinitionChange,
+  type RunDiffResult,
+  runDiff,
+} from "./orchestrators/diff.js";
+export {
   type Dialect,
   type Naming,
   type Params,
@@ -23,6 +29,16 @@ export {
   mergeInclude,
   resolveCwd,
 } from "./orchestrators/helpers.js";
+export {
+  type RunInspectOptions,
+  type RunInspectResult,
+  runInspect,
+} from "./orchestrators/inspect.js";
+export {
+  type RunScanOptions,
+  type RunScanResult,
+  runScan,
+} from "./orchestrators/scan.js";
 export { createProject } from "./project.js";
 export { type ParsedTarget, parseTarget } from "./targets.js";
 export type {
