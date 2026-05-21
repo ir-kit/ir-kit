@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import type { LocatedParam } from "@ir-kit/openapi";
+import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
 import {
   type KtStmt,
   ktArg,
@@ -22,7 +22,7 @@ import { paramIdent } from "../identifiers.js";
 export function buildHeaderStmts(
   located: ReadonlyArray<LocatedParam>,
 ): ReadonlyArray<KtStmt> {
-  const headers = located.filter((l) => l.loc === "header").map((l) => l.param);
+  const headers = paramsAt(located, "header");
   return headers.flatMap(buildHeaderStmt);
 }
 

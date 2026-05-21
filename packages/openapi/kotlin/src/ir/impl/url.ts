@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import type { LocatedParam } from "@ir-kit/openapi";
+import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
 import {
   type KtCallArg,
   type KtExpr,
@@ -33,12 +33,8 @@ export function buildUrlStmts(
   pathStr: string,
   located: ReadonlyArray<LocatedParam>,
 ): ReadonlyArray<KtStmt> {
-  const pathParams = located
-    .filter((l) => l.loc === "path")
-    .map((l) => l.param);
-  const queryParams = located
-    .filter((l) => l.loc === "query")
-    .map((l) => l.param);
+  const pathParams = paramsAt(located, "path");
+  const queryParams = paramsAt(located, "query");
 
   const stmts: KtStmt[] = [
     ktVar("urlBuilder", ktCall(ktMember(ktIdent("baseUrl"), "newBuilder"), [])),

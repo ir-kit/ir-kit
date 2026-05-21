@@ -32,3 +32,18 @@ export function collectLocatedParams(op: IR.OperationObject): LocatedParam[] {
   }
   return out;
 }
+
+/**
+ * Extract just the `IR.ParameterObject`s at a given location from a
+ * pre-collected `LocatedParam[]` (typically the `located` from
+ * `operationSignature`'s return value). The pattern
+ * `located.filter((l) => l.loc === "<loc>").map((l) => l.param)`
+ * appeared in every emitter's `impl/url.ts` (path + query) and
+ * `impl/headers.ts` (header) — 9 callsites total.
+ */
+export function paramsAt(
+  located: ReadonlyArray<LocatedParam>,
+  loc: ParamLocation,
+): IR.ParameterObject[] {
+  return located.filter((l) => l.loc === loc).map((l) => l.param);
+}

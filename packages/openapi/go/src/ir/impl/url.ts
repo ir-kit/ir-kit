@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import type { LocatedParam } from "@ir-kit/openapi";
+import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
 import {
   type GoExpr,
   type GoStmt,
@@ -35,12 +35,8 @@ export function buildUrlStmts(
   located: ReadonlyArray<LocatedParam>,
   errCheck: ErrCheckFn,
 ): ReadonlyArray<GoStmt> {
-  const pathParams = located
-    .filter((l) => l.loc === "path")
-    .map((l) => l.param);
-  const queryParams = located
-    .filter((l) => l.loc === "query")
-    .map((l) => l.param);
+  const pathParams = paramsAt(located, "path");
+  const queryParams = paramsAt(located, "query");
 
   const stmts: GoStmt[] = [
     goShort(["u", "err"], [goCall(URL_PARSE, [{ expr: goIdent("baseURL") }])]),

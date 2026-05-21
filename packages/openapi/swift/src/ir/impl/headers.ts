@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import type { LocatedParam } from "@ir-kit/openapi";
+import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
 import type { SwExpr, SwStmt } from "../../sw-dsl/index.js";
 import {
   swArg,
@@ -20,7 +20,7 @@ import { paramIdent } from "../identifiers.js";
 export function buildHeaderStmts(
   located: ReadonlyArray<LocatedParam>,
 ): ReadonlyArray<SwStmt> {
-  const headers = located.filter((l) => l.loc === "header").map((l) => l.param);
+  const headers = paramsAt(located, "header");
   return headers.flatMap(buildHeaderStmt);
 }
 
