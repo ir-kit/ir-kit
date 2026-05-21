@@ -31,5 +31,8 @@ catalog:
   typescript: 5.9.3
   vitest: ^4.0.0
 
+onlyBuiltDependencies:
+  - lefthook
+
 patchedDependencies:
   '@ryoppippi/unplugin-typia': patches/@ryoppippi__unplugin-typia.patch
