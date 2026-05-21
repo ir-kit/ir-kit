@@ -11,7 +11,8 @@ The `@ahmedrowaihi/*` npm scope is being deprecated. All packages have moved to 
 
 | Old | New |
 |---|---|
-| `@ahmedrowaihi/openapi-{core,go,kotlin,swift,typescript,tools,recon}` | `@ir-kit/openapi-{core,go,kotlin,swift,typescript,tools,recon}` |
+| `@ahmedrowaihi/openapi-core` | `@ir-kit/openapi` *(absorbed; see below)* |
+| `@ahmedrowaihi/openapi-{go,kotlin,swift,typescript,tools,recon}` | `@ir-kit/openapi-{go,kotlin,swift,typescript,tools,recon}` |
 | `@ahmedrowaihi/openapi-ts-{orpc,faker,typia,paths,k6}` | `@ir-kit/openapi-ts-{orpc,faker,typia,paths,k6}` |
 | `@ahmedrowaihi/asyncapi-{core,typescript}` | `@ir-kit/asyncapi-{core,typescript}` |
 | `@ahmedrowaihi/fn-schema-{core,typescript,cli,transformer,unplugin,loader}` | `@ir-kit/fn-schema-{core,typescript,cli,transformer,unplugin,loader}` |
@@ -20,7 +21,7 @@ The `@ahmedrowaihi/*` npm scope is being deprecated. All packages have moved to 
 | `@ahmedrowaihi/create-k6` | `@ir-kit/create-k6` |
 | `@ahmedrowaihi/codegen-core` | `@ir-kit/codegen-core` |
 
-The rename is pure scope substitution — every `@ahmedrowaihi/<X>` becomes `@ir-kit/<X>`. No package was renamed within its scope.
+Almost every entry is a pure scope substitution. The one exception is `openapi-core`: its content was absorbed into `@ir-kit/openapi` in 0.2.0 of that package, and `@ir-kit/openapi-core` is now deprecated. Handle this name change BEFORE the bulk scope swap (step 2 below).
 
 ## What the skill does
 
@@ -38,7 +39,19 @@ Report the count and (optionally) list the files. If the count is zero, stop —
 
 ### 2. Rewrite source files
 
-For every matched non-lockfile, swap `@ahmedrowaihi/` → `@ir-kit/`. The fastest path is `ast-grep` (handles import / require / dynamic import nodes correctly across TS / JS), but a plain `sed` works for pure scope substitution since the substring never appears in a context that should NOT be rewritten.
+Two passes — the special-case rename first, then the bulk scope swap.
+
+**Pass 2a — handle the `openapi-core` → `openapi` rename.** Every `@ahmedrowaihi/openapi-core` and `@ir-kit/openapi-core` reference becomes `@ir-kit/openapi`. Must run BEFORE the bulk swap or step 2b would turn the old name into the deprecated `@ir-kit/openapi-core`.
+
+```bash
+rg -l "@(ahmedrowaihi|ir-kit)/openapi-core" --hidden \
+  -g '!node_modules' -g '!.git' -g '!pnpm-lock.yaml' -g '!package-lock.json' -g '!yarn.lock' \
+  | xargs sed -i '' -E 's|@(ahmedrowaihi\|ir-kit)/openapi-core|@ir-kit/openapi|g'
+```
+
+On Linux, drop the `''` argument after `-i`.
+
+**Pass 2b — bulk scope swap.** For every remaining `@ahmedrowaihi/<X>` reference, swap to `@ir-kit/<X>`. The fastest path is `ast-grep` (handles import / require / dynamic import nodes correctly across TS / JS); a plain `sed` works for pure scope substitution since the substring never appears in a context that should NOT be rewritten.
 
 **Preferred — `ast-grep`** (if installed):
 
@@ -56,8 +69,6 @@ rg -l "@ahmedrowaihi/" --hidden \
   | xargs sed -i '' 's|@ahmedrowaihi/|@ir-kit/|g'
 ```
 
-On Linux, drop the `''` argument after `-i`.
-
 ### 3. Update `package.json` dependencies
 
 Every entry whose key starts with `@ahmedrowaihi/` becomes `@ir-kit/<same-suffix>`. The version values should be **wiped and set to `^0.1.0`** because the new scope started fresh at `0.1.0` (the old major-version progression doesn't transfer across the scope rename).
@@ -67,10 +78,15 @@ Loop over every `package.json` in the project (except `node_modules`):
 ```bash
 for f in $(find . -name "package.json" -not -path "./node_modules/*" -not -path "*/node_modules/*"); do
   jq '
+    def renamed: if . == "@ahmedrowaihi/openapi-core" or . == "@ir-kit/openapi-core"
+                 then "@ir-kit/openapi"
+                 elif startswith("@ahmedrowaihi/")
+                 then "@ir-kit/" + (sub("@ahmedrowaihi/"; ""))
+                 else . end;
     (.dependencies, .devDependencies, .peerDependencies, .optionalDependencies)? |=
     with_entries(
-      if .key | startswith("@ahmedrowaihi/")
-      then { key: ("@ir-kit/" + (.key | sub("@ahmedrowaihi/"; ""))), value: "^0.1.0" }
+      if (.key | renamed) != .key
+      then { key: (.key | renamed), value: "^0.1.0" }
       else .
       end
     )
@@ -78,7 +94,7 @@ for f in $(find . -name "package.json" -not -path "./node_modules/*" -not -path 
 done
 ```
 
-If the consumer pins exact versions for a reason (lockfile-only workflow, vendored binaries), surface that decision rather than blanket-applying `^0.1.0`.
+If the consumer pins exact versions for a reason (lockfile-only workflow, vendored binaries), surface that decision rather than blanket-applying `^0.1.0`. For `@ir-kit/openapi`, pin `^0.2.0` (the version that absorbed `openapi-core`) rather than `^0.1.0`.
 
 ### 4. Wipe the lockfile + reinstall
 
