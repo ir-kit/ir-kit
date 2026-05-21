@@ -88,7 +88,7 @@ importers:
 
   apps/glean:
     dependencies:
-      '@ahmedrowaihi/openapi-recon':
+      '@ir-kit/openapi-recon':
         specifier: workspace:*
         version: link:../../packages/openapi/recon
       '@scalar/api-reference-react':
@@ -132,7 +132,7 @@ importers:
         specifier: ^0.10.4
         version: 0.10.9
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/amqplib':
@@ -147,20 +147,20 @@ importers:
 
   examples/fn-schema-basic:
     dependencies:
-      '@ahmedrowaihi/fn-schema-core':
+      '@ir-kit/fn-schema-core':
         specifier: workspace:*
         version: link:../../packages/fn-schema/core
-      '@ahmedrowaihi/fn-schema-loader':
+      '@ir-kit/fn-schema-loader':
         specifier: workspace:*
         version: link:../../packages/fn-schema/loader
-      '@ahmedrowaihi/fn-schema-typescript':
+      '@ir-kit/fn-schema-typescript':
         specifier: workspace:*
         version: link:../../packages/fn-schema/typescript
     devDependencies:
-      '@ahmedrowaihi/fn-schema-cli':
+      '@ir-kit/fn-schema-cli':
         specifier: workspace:*
         version: link:../../packages/fn-schema/cli
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/node':
@@ -175,17 +175,17 @@ importers:
 
   examples/k6-petstore:
     dependencies:
-      '@ahmedrowaihi/k6':
-        specifier: workspace:*
-        version: link:../../packages/k6/framework
       '@faker-js/faker':
         specifier: ^10.4.0
         version: 10.4.0
+      '@ir-kit/k6':
+        specifier: workspace:*
+        version: link:../../packages/k6/framework
     devDependencies:
-      '@ahmedrowaihi/k6-toolkit':
+      '@ir-kit/k6-toolkit':
         specifier: workspace:*
         version: link:../../packages/k6/toolkit
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/k6':
@@ -243,21 +243,21 @@ importers:
         specifier: 12.0.2
         version: 12.0.2(@types/node@24.10.10)(typescript@5.9.3)
     devDependencies:
-      '@ahmedrowaihi/openapi-tools':
-        specifier: workspace:*
-        version: link:../../packages/openapi/tools
-      '@ahmedrowaihi/openapi-ts-orpc':
-        specifier: workspace:*
-        version: link:../../packages/openapi/plugins/orpc
-      '@ahmedrowaihi/openapi-ts-paths':
-        specifier: workspace:*
-        version: link:../../packages/openapi/plugins/paths
-      '@ahmedrowaihi/openapi-ts-typia':
-        specifier: workspace:*
-        version: link:../../packages/openapi/plugins/typia
       '@hey-api/openapi-ts':
         specifier: ^0.96.1
         version: 0.96.1(magicast@0.5.2)(typescript@5.9.3)
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../../packages/openapi/tools
+      '@ir-kit/openapi-ts-orpc':
+        specifier: workspace:*
+        version: link:../../packages/openapi/plugins/orpc
+      '@ir-kit/openapi-ts-paths':
+        specifier: workspace:*
+        version: link:../../packages/openapi/plugins/paths
+      '@ir-kit/openapi-ts-typia':
+        specifier: workspace:*
+        version: link:../../packages/openapi/plugins/typia
       '@ryoppippi/unplugin-typia':
         specifier: ^2.6.5
         version: 2.6.5(patch_hash=ce5cb0c0f7a9f33ba9053a8a8a397f6732be617308edb27971485fb95f55cddd)(typescript@5.9.3)(typia@12.0.2(@types/node@24.10.10)(typescript@5.9.3))(vite@8.0.10(@types/node@24.10.10)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
@@ -294,19 +294,19 @@ importers:
 
   examples/petstore-sdk:
     devDependencies:
-      '@ahmedrowaihi/openapi-go':
+      '@ir-kit/openapi-go':
         specifier: workspace:*
         version: link:../../packages/openapi/go
-      '@ahmedrowaihi/openapi-kotlin':
+      '@ir-kit/openapi-kotlin':
         specifier: workspace:*
         version: link:../../packages/openapi/kotlin
-      '@ahmedrowaihi/openapi-swift':
+      '@ir-kit/openapi-swift':
         specifier: workspace:*
         version: link:../../packages/openapi/swift
-      '@ahmedrowaihi/openapi-typescript':
+      '@ir-kit/openapi-typescript':
         specifier: workspace:*
         version: link:../../packages/openapi/typescript
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/node':
@@ -322,7 +322,7 @@ importers:
         specifier: 'catalog:'
         version: 3.6.0
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -334,15 +334,6 @@ importers:
 
   packages/asyncapi/typescript:
     devDependencies:
-      '@ahmedrowaihi/asyncapi-core':
-        specifier: workspace:*
-        version: link:../core
-      '@ahmedrowaihi/codegen-core':
-        specifier: workspace:*
-        version: link:../../shared/codegen-core
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@asyncapi/modelina':
         specifier: 'catalog:'
         version: 5.10.1
@@ -352,6 +343,15 @@ importers:
       '@hey-api/codegen-core':
         specifier: 'catalog:'
         version: 0.8.1(magicast@0.5.2)
+      '@ir-kit/asyncapi-core':
+        specifier: workspace:*
+        version: link:../core
+      '@ir-kit/codegen-core':
+        specifier: workspace:*
+        version: link:../../shared/codegen-core
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@testcontainers/rabbitmq':
         specifier: ^11.14.0
         version: 11.14.0
@@ -376,15 +376,15 @@ importers:
 
   packages/fn-schema/cli:
     dependencies:
-      '@ahmedrowaihi/fn-schema-core':
-        specifier: workspace:*
-        version: link:../core
-      '@ahmedrowaihi/fn-schema-typescript':
-        specifier: workspace:*
-        version: link:../typescript
       '@clack/prompts':
         specifier: ^1.3.0
         version: 1.3.0
+      '@ir-kit/fn-schema-core':
+        specifier: workspace:*
+        version: link:../core
+      '@ir-kit/fn-schema-typescript':
+        specifier: workspace:*
+        version: link:../typescript
       c12:
         specifier: 'catalog:'
         version: 3.3.4(magicast@0.5.2)
@@ -401,7 +401,7 @@ importers:
         specifier: 'catalog:'
         version: 0.2.16
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -417,7 +417,7 @@ importers:
         specifier: ^7.0.15
         version: 7.0.15
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -429,11 +429,11 @@ importers:
 
   packages/fn-schema/loader:
     dependencies:
-      '@ahmedrowaihi/fn-schema-core':
+      '@ir-kit/fn-schema-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -445,14 +445,14 @@ importers:
 
   packages/fn-schema/transformer:
     dependencies:
-      '@ahmedrowaihi/fn-schema-core':
+      '@ir-kit/fn-schema-core':
         specifier: workspace:*
         version: link:../core
-      '@ahmedrowaihi/fn-schema-typescript':
+      '@ir-kit/fn-schema-typescript':
         specifier: workspace:*
         version: link:../typescript
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -467,7 +467,7 @@ importers:
 
   packages/fn-schema/typescript:
     dependencies:
-      '@ahmedrowaihi/fn-schema-core':
+      '@ir-kit/fn-schema-core':
         specifier: workspace:*
         version: link:../core
       ts-json-schema-generator:
@@ -477,7 +477,7 @@ importers:
         specifier: ^28.0.0
         version: 28.0.0
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -492,10 +492,10 @@ importers:
 
   packages/fn-schema/unplugin:
     dependencies:
-      '@ahmedrowaihi/fn-schema-core':
+      '@ir-kit/fn-schema-core':
         specifier: workspace:*
         version: link:../core
-      '@ahmedrowaihi/fn-schema-typescript':
+      '@ir-kit/fn-schema-typescript':
         specifier: workspace:*
         version: link:../typescript
       chokidar:
@@ -508,7 +508,7 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -520,26 +520,26 @@ importers:
 
   packages/k6/codegen:
     dependencies:
-      '@ahmedrowaihi/codegen-core':
-        specifier: workspace:*
-        version: link:../../shared/codegen-core
-      '@ahmedrowaihi/openapi-core':
-        specifier: workspace:*
-        version: link:../../openapi/core
-      '@ahmedrowaihi/openapi-tools':
-        specifier: workspace:*
-        version: link:../../openapi/tools
-      '@ahmedrowaihi/openapi-ts-faker':
-        specifier: workspace:*
-        version: link:../../openapi/plugins/faker
       '@hey-api/openapi-ts':
         specifier: 'catalog:'
         version: 0.97.0(magicast@0.5.2)(typescript@5.9.3)
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/codegen-core':
+        specifier: workspace:*
+        version: link:../../shared/codegen-core
+      '@ir-kit/openapi-core':
+        specifier: workspace:*
+        version: link:../../openapi/core
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../../openapi/tools
+      '@ir-kit/openapi-ts-faker':
+        specifier: workspace:*
+        version: link:../../openapi/plugins/faker
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -554,14 +554,14 @@ importers:
 
   packages/k6/create:
     dependencies:
-      '@ahmedrowaihi/k6-toolkit':
-        specifier: workspace:*
-        version: link:../toolkit
       '@clack/prompts':
         specifier: 'catalog:'
         version: 1.3.0
+      '@ir-kit/k6-toolkit':
+        specifier: workspace:*
+        version: link:../toolkit
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -573,7 +573,7 @@ importers:
 
   packages/k6/framework:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/k6':
@@ -588,19 +588,19 @@ importers:
 
   packages/k6/hey-api:
     dependencies:
-      '@ahmedrowaihi/k6-gen':
+      '@ir-kit/k6-gen':
         specifier: workspace:*
         version: link:../codegen
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/openapi-ts':
         specifier: 'catalog:'
         version: 0.97.0(magicast@0.5.2)(typescript@5.9.3)
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -610,15 +610,15 @@ importers:
 
   packages/k6/toolkit:
     dependencies:
-      '@ahmedrowaihi/k6-gen':
-        specifier: workspace:*
-        version: link:../codegen
-      '@ahmedrowaihi/openapi-tools':
-        specifier: workspace:*
-        version: link:../../openapi/tools
       '@clack/prompts':
         specifier: 'catalog:'
         version: 1.3.0
+      '@ir-kit/k6-gen':
+        specifier: workspace:*
+        version: link:../codegen
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../../openapi/tools
       tinyglobby:
         specifier: 'catalog:'
         version: 0.2.16
@@ -626,7 +626,7 @@ importers:
         specifier: 'catalog:'
         version: 0.22.0(tsx@4.21.0)(typescript@5.9.3)
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -638,12 +638,12 @@ importers:
 
   packages/openapi/core:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -653,25 +653,25 @@ importers:
 
   packages/openapi/go:
     dependencies:
-      '@ahmedrowaihi/codegen-core':
+      '@ir-kit/codegen-core':
         specifier: workspace:*
         version: link:../../shared/codegen-core
-      '@ahmedrowaihi/openapi-core':
+      '@ir-kit/openapi-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
-      '@ahmedrowaihi/openapi-tools':
-        specifier: workspace:*
-        version: link:../tools
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
       '@hey-api/spec-types':
         specifier: 'catalog:'
         version: 0.2.0
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../tools
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -681,25 +681,25 @@ importers:
 
   packages/openapi/kotlin:
     dependencies:
-      '@ahmedrowaihi/codegen-core':
+      '@ir-kit/codegen-core':
         specifier: workspace:*
         version: link:../../shared/codegen-core
-      '@ahmedrowaihi/openapi-core':
+      '@ir-kit/openapi-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
-      '@ahmedrowaihi/openapi-tools':
-        specifier: workspace:*
-        version: link:../tools
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
       '@hey-api/spec-types':
         specifier: 'catalog:'
         version: 0.2.0
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../tools
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -709,9 +709,6 @@ importers:
 
   packages/openapi/plugins/faker:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../../tooling/tsconfig
       '@faker-js/faker':
         specifier: ^10.4.0
         version: 10.4.0
@@ -724,6 +721,9 @@ importers:
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -733,12 +733,6 @@ importers:
 
   packages/openapi/plugins/orpc:
     devDependencies:
-      '@ahmedrowaihi/openapi-ts-faker':
-        specifier: workspace:*
-        version: link:../faker
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../../tooling/tsconfig
       '@faker-js/faker':
         specifier: ^10.4.0
         version: 10.4.0
@@ -751,6 +745,12 @@ importers:
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/openapi-ts-faker':
+        specifier: workspace:*
+        version: link:../faker
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../../tooling/tsconfig
       '@orpc/client':
         specifier: ^1.14.0
         version: 1.14.0(@opentelemetry/api@1.9.0)
@@ -784,9 +784,6 @@ importers:
 
   packages/openapi/plugins/paths:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../../tooling/tsconfig
       '@hey-api/codegen-core':
         specifier: 'catalog:'
         version: 0.8.1(magicast@0.5.2)
@@ -796,15 +793,15 @@ importers:
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
 
   packages/openapi/plugins/typia:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../../tooling/tsconfig
       '@hey-api/codegen-core':
         specifier: 'catalog:'
         version: 0.8.1(magicast@0.5.2)
@@ -814,6 +811,9 @@ importers:
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../../tooling/tsconfig
       '@orpc/contract':
         specifier: ^1.13.14
         version: 1.14.0(@opentelemetry/api@1.9.0)
@@ -835,12 +835,12 @@ importers:
 
   packages/openapi/recon:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/spec-types':
         specifier: ^0.2.0
         version: 0.2.0
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -850,25 +850,25 @@ importers:
 
   packages/openapi/swift:
     dependencies:
-      '@ahmedrowaihi/codegen-core':
+      '@ir-kit/codegen-core':
         specifier: workspace:*
         version: link:../../shared/codegen-core
-      '@ahmedrowaihi/openapi-core':
+      '@ir-kit/openapi-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
-      '@ahmedrowaihi/openapi-tools':
-        specifier: workspace:*
-        version: link:../tools
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/shared':
         specifier: 'catalog:'
         version: 0.4.2(magicast@0.5.2)
       '@hey-api/spec-types':
         specifier: 'catalog:'
         version: 0.2.0
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../tools
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -878,19 +878,16 @@ importers:
 
   packages/openapi/tools:
     dependencies:
-      '@ahmedrowaihi/openapi-core':
-        specifier: workspace:*
-        version: link:../core
       '@hey-api/json-schema-ref-parser':
         specifier: 'catalog:'
         version: 1.4.1
+      '@ir-kit/openapi-core':
+        specifier: workspace:*
+        version: link:../core
       urlpattern-polyfill:
         specifier: ^10.1.0
         version: 10.1.0
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/codegen-core':
         specifier: 'catalog:'
         version: 0.8.1(magicast@0.5.2)
@@ -900,6 +897,9 @@ importers:
       '@hey-api/spec-types':
         specifier: 'catalog:'
         version: 0.2.0
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -909,19 +909,19 @@ importers:
 
   packages/openapi/typescript:
     dependencies:
-      '@ahmedrowaihi/openapi-core':
+      '@ir-kit/openapi-core':
         specifier: workspace:*
         version: link:../core
-      '@ahmedrowaihi/openapi-tools':
+      '@ir-kit/openapi-tools':
         specifier: workspace:*
         version: link:../tools
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
-        specifier: workspace:*
-        version: link:../../../tooling/tsconfig
       '@hey-api/openapi-ts':
         specifier: 'catalog:'
         version: 0.97.0(magicast@0.5.2)(typescript@5.9.3)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../tooling/tsconfig
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
@@ -931,7 +931,7 @@ importers:
 
   packages/shared/codegen-core:
     devDependencies:
-      '@ahmedrowaihi/tsconfig':
+      '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig
       '@types/node':
@@ -2821,6 +2821,7 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@unhead/vue@2.1.13':
     resolution: {integrity: sha512-HYy0shaHRnLNW9r85gppO8IiGz0ONWVV3zGdlT8CQ0tbTwixznJCIiyqV4BSV1aIF1jJIye0pd1p/k6Eab8Z/A==}

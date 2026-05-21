@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/openapi-ts-orpc",
-  "version": "4.0.3",
+  "name": "@ir-kit/openapi-ts-orpc",
+  "version": "0.1.0",
   "description": "oRPC plugin for @hey-api/openapi-ts - Generate type-safe RPC clients and servers from OpenAPI specs",
   "keywords": [
     "openapi",
@@ -12,9 +12,9 @@
     "type-safe",
     "plugin"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/orpc",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/orpc",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/plugins/orpc"
   },
   "type": "module",
@@ -53,7 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@ahmedrowaihi/openapi-ts-faker": "^4.0.3",
+    "@ir-kit/openapi-ts-faker": "^4.0.3",
     "@faker-js/faker": "^10.0.0 || ^9.0.0 || ^8.0.0",
     "@hey-api/codegen-core": ">=0.7.0",
     "@hey-api/openapi-ts": ">=0.95.0",
@@ -67,7 +67,7 @@
     "@orpc/zod": "^1.13"
   },
   "peerDependenciesMeta": {
-    "@ahmedrowaihi/openapi-ts-faker": {
+    "@ir-kit/openapi-ts-faker": {
       "optional": true
     },
     "@faker-js/faker": {
@@ -78,8 +78,8 @@
     }
   },
   "devDependencies": {
-    "@ahmedrowaihi/openapi-ts-faker": "workspace:*",
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/openapi-ts-faker": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@faker-js/faker": "^10.4.0",
     "@hey-api/codegen-core": "catalog:",
     "@hey-api/openapi-ts": "catalog:",

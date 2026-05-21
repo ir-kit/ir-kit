@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/k6-gen",
-  "version": "1.1.0",
+  "name": "@ir-kit/k6-gen",
+  "version": "0.1.0",
   "description": "Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required.",
   "keywords": [
     "k6",
@@ -9,9 +9,9 @@
     "load-testing",
     "typescript"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/codegen",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/k6/codegen",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/k6/codegen"
   },
   "type": "module",
@@ -50,10 +50,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ahmedrowaihi/codegen-core": "workspace:*",
-    "@ahmedrowaihi/openapi-core": "workspace:*",
-    "@ahmedrowaihi/openapi-tools": "workspace:*",
-    "@ahmedrowaihi/openapi-ts-faker": "workspace:*",
+    "@ir-kit/codegen-core": "workspace:*",
+    "@ir-kit/openapi-core": "workspace:*",
+    "@ir-kit/openapi-tools": "workspace:*",
+    "@ir-kit/openapi-ts-faker": "workspace:*",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:"
   },
@@ -61,7 +61,7 @@
     "typescript": ">=5.0.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

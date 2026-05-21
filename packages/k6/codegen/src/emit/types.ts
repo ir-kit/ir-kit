@@ -1,6 +1,6 @@
-import { safeIdent } from "@ahmedrowaihi/codegen-core";
 import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
+import { safeIdent } from "@ir-kit/codegen-core";
 
 import { schemaToTypeNode } from "../ir/index.js";
 import { GENERATED_HEADER, printDslNodes } from "../print.js";

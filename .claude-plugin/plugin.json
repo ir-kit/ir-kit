@@ -1,6 +1,6 @@
 {
-  "name": "contract-kit",
-  "description": "Skills for the @ahmedrowaihi/contract-kit toolchain — load testing with k6, native SDK codegen (Go/Kotlin/Swift/TS), AsyncAPI types, fn-schema extraction, OpenAPI reverse-engineering from traffic, and hey-api plugin authoring.",
+  "name": "ir-kit",
+  "description": "Skills for the @ir-kit/ir-kit toolchain — load testing with k6, native SDK codegen (Go/Kotlin/Swift/TS), AsyncAPI types, fn-schema extraction, OpenAPI reverse-engineering from traffic, and hey-api plugin authoring.",
   "version": "0.1.0",
   "author": {
     "name": "Ahmed Rowaihi",

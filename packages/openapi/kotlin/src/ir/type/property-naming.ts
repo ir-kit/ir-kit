@@ -1,4 +1,4 @@
-import { camel } from "@ahmedrowaihi/codegen-core";
+import { camel } from "@ir-kit/codegen-core";
 
 import { paramIdent } from "../identifiers.js";
 

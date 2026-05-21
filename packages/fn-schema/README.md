@@ -19,8 +19,8 @@ Two ways to drive everything:
 
 ```ts
 // programmatic — works from any Node script
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
+import { extract } from "@ir-kit/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
 
 const result = await extract({ files: ["src/**/*.ts"] });
 const bundleJson = emit.toBundle(result, { pretty: true });
@@ -50,9 +50,9 @@ The CLI is a thin wrapper over `extract()`. Every flag maps to an `ExtractOption
 
 ```ts
 import { writeFile } from "node:fs/promises";
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
-import { createReader } from "@ahmedrowaihi/fn-schema-loader";
+import { extract } from "@ir-kit/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
+import { createReader } from "@ir-kit/fn-schema-loader";
 
 const result = await extract({
   files: ["src/api/handlers.ts"],
@@ -77,12 +77,12 @@ reader.findByIdentity("User");
 ### CLI
 
 ```bash
-pnpm add -D @ahmedrowaihi/fn-schema-cli
+pnpm add -D @ir-kit/fn-schema-cli
 npx fn-schema extract 'src/**/*.ts' --bundle generated/schemas.json --bundle-types --pretty
 ```
 
 ```ts
-import { createReader } from "@ahmedrowaihi/fn-schema-loader";
+import { createReader } from "@ir-kit/fn-schema-loader";
 import schemas from "./generated/schemas";
 
 const reader = createReader(schemas);

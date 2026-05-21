@@ -57,7 +57,7 @@ export function buildValidatorInput(
   // calls with the full request shape baked into the TS type argument. Body
   // kind-specific patching (e.g. replacing a body property with `z.file()`)
   // doesn't apply — the TS type already models File/Blob where appropriate.
-  if (validatorName === "@ahmedrowaihi/openapi-ts-typia") {
+  if (validatorName === "@ir-kit/openapi-ts-typia") {
     return requestSchema
       ? { expr: requestSchema, useDetailedMode: true }
       : null;
@@ -90,9 +90,7 @@ export function buildValidatorOutput(
   // Typia plugin emits a flattened `role: 'response'` symbol per operation.
   // Zod/valibot/arktype emit the unflattened `role: 'responses'`.
   const role =
-    validatorName === "@ahmedrowaihi/openapi-ts-typia"
-      ? "response"
-      : "responses";
+    validatorName === "@ir-kit/openapi-ts-typia" ? "response" : "responses";
   return plugin.referenceSymbol({
     category: "schema",
     resource: "operation",
@@ -109,7 +107,7 @@ export function buildValidatorErrorMap(
   const validatorName = plugin.config.validator.input;
   if (!validatorName) return null;
 
-  return validatorName === "@ahmedrowaihi/openapi-ts-typia"
+  return validatorName === "@ir-kit/openapi-ts-typia"
     ? buildTypiaErrorMap(plugin, operation)
     : buildComponentErrorMap(plugin, validatorName, operation);
 }
@@ -139,7 +137,7 @@ function buildTypiaErrorMap(
       resource: "operation",
       resourceId: operation.id,
       role: `error-${status}`,
-      tool: "@ahmedrowaihi/openapi-ts-typia",
+      tool: "@ir-kit/openapi-ts-typia",
     });
     if (!errorSymbol) continue;
 

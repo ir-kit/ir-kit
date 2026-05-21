@@ -64,7 +64,7 @@ export function scaffoldLoadtest(opts: ScaffoldLoadtestOpts): string {
 
 /**
  * Compose the `import { defineLoadTest, flow, smoke, useAuth, batch?, ... }
- * from "@ahmedrowaihi/k6"` line. Shared across both `scaffoldLoadtest` and
+ * from "@ir-kit/k6"` line. Shared across both `scaffoldLoadtest` and
  * `scaffoldScenario`. The caller chooses which framework symbols to add.
  */
 export function k6FrameworkImport(
@@ -72,7 +72,7 @@ export function k6FrameworkImport(
 ): ts.ImportDeclaration {
   return namedImport(
     Array.from(new Set(symbols)).map((name) => ({ name })),
-    "@ahmedrowaihi/k6",
+    "@ir-kit/k6",
   );
 }
 

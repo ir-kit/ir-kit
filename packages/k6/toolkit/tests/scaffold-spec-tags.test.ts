@@ -1,4 +1,4 @@
-import type { IR } from "@ahmedrowaihi/openapi-tools";
+import type { IR } from "@ir-kit/openapi-tools";
 import { describe, expect, it } from "vitest";
 
 import { readSpecOperations, UNTAGGED } from "../src/scaffold/spec-tags.ts";

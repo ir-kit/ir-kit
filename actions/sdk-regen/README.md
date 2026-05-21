@@ -2,7 +2,7 @@
 
 Regenerate a Go / Kotlin / Swift / TypeScript client SDK from an OpenAPI 3.x spec on every push or PR — and either commit the result back or open a PR with the diff. Drops in next to a committed SDK to keep it in sync with its source spec without manual `pnpm gen` invocations.
 
-Powered by [`@ahmedrowaihi/openapi-go`](https://www.npmjs.com/package/@ahmedrowaihi/openapi-go) / [`-kotlin`](https://www.npmjs.com/package/@ahmedrowaihi/openapi-kotlin) / [`-swift`](https://www.npmjs.com/package/@ahmedrowaihi/openapi-swift) for native targets, and [`-typescript`](https://www.npmjs.com/package/@ahmedrowaihi/openapi-typescript) (a thin wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) for the TS target. Part of [contract-kit](https://github.com/ahmedrowaihi/contract-kit).
+Powered by [`@ir-kit/openapi-go`](https://www.npmjs.com/package/@ir-kit/openapi-go) / [`-kotlin`](https://www.npmjs.com/package/@ir-kit/openapi-kotlin) / [`-swift`](https://www.npmjs.com/package/@ir-kit/openapi-swift) for native targets, and [`-typescript`](https://www.npmjs.com/package/@ir-kit/openapi-typescript) (a thin wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) for the TS target. Part of [ir-kit](https://github.com/ir-kit/ir-kit).
 
 ## Usage
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ahmedrowaihi/contract-kit/actions/sdk-regen@sdk-regen-v1
+      - uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
         with:
           target: go
           input: openapi.yaml
@@ -50,7 +50,7 @@ jobs:
         target: [go, kotlin, swift]
     steps:
       - uses: actions/checkout@v4
-      - uses: ahmedrowaihi/contract-kit/actions/sdk-regen@sdk-regen-v1
+      - uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
         with:
           target: ${{ matrix.target }}
           input: openapi.yaml
@@ -63,7 +63,7 @@ jobs:
 Skips the PR step. The default `GITHUB_TOKEN` cannot trigger downstream workflows on the push it creates — pass a PAT or App token via `token:` if you need that.
 
 ```yaml
-- uses: ahmedrowaihi/contract-kit/actions/sdk-regen@sdk-regen-v1
+- uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
   with:
     target: go
     input: openapi.yaml
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ahmedrowaihi/contract-kit/actions/sdk-regen@sdk-regen-v1
+      - uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
         with:
           target: go
           input: https://www.mux.com/full-combined-spec.json
@@ -104,7 +104,7 @@ jobs:
 `commit-strategy: none` runs the generator and exits. Useful if you want to bundle the regen into a larger PR your own workflow opens, or to fail CI when the committed SDK is stale:
 
 ```yaml
-- uses: ahmedrowaihi/contract-kit/actions/sdk-regen@sdk-regen-v1
+- uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
   id: regen
   with:
     target: go
@@ -127,7 +127,7 @@ jobs:
 | `output` | yes | — | Directory the SDK is written to |
 | `package-name` | no | `''` | Override the generated package / module name (Go `package`, Kotlin package path; ignored for Swift / TypeScript — TypeScript output structure is owned by hey-api's plugins) |
 | `manifest` | no | `''` | Emit a build manifest alongside the SDK. Per target: Go expects the module path (e.g. `github.com/foo/bar/sdk`) and emits `go.mod`; Kotlin treats any non-empty value as truthy and emits `build.gradle.kts` + `settings.gradle.kts`; Swift expects the package name and emits `Package.swift`. Ignored for TypeScript (hey-api owns the output structure). Empty (default) skips manifest emission so the output is a flat drop-in source tree. |
-| `generator-version` | no | `latest` | Pinned semver of `@ahmedrowaihi/openapi-<target>` |
+| `generator-version` | no | `latest` | Pinned semver of `@ir-kit/openapi-<target>` |
 | `commit-strategy` | no | `pull-request` | `pull-request` \| `commit-back` \| `none` |
 | `commit-message` | no | `chore: regenerate ${target} SDK` | Commit message (`${target}` is substituted in `commit-back`) |
 | `pr-title` | no | `chore: regenerate ${target} SDK` | PR title (only `pull-request`) |
@@ -153,7 +153,7 @@ In addition, **the repo's "Allow GitHub Actions to create and approve pull reque
 The action is a [composite step](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action):
 
 1. Sets up Node 20.
-2. Installs `@ahmedrowaihi/openapi-<target>` into a temp directory under `$RUNNER_TEMP` so it doesn't pollute the consumer's `node_modules`.
+2. Installs `@ir-kit/openapi-<target>` into a temp directory under `$RUNNER_TEMP` so it doesn't pollute the consumer's `node_modules`.
 3. Imports the package's `generate()` and runs it against the spec.
 4. Diffs the output directory via `git status --porcelain`.
 5. Either commits back, opens a PR via [`peter-evans/create-pull-request@v7`](https://github.com/peter-evans/create-pull-request), or exits with the diff in place.

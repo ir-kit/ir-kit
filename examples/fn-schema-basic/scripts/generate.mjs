@@ -6,8 +6,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
+import { extract } from "@ir-kit/fn-schema-typescript";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");

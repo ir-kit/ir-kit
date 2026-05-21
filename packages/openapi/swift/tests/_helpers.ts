@@ -1,6 +1,6 @@
-import { securityKey } from "@ahmedrowaihi/openapi-core";
-import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
 import type { IR } from "@hey-api/shared";
+import { securityKey } from "@ir-kit/openapi-core";
+import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 type Fragment = {
   components?: Record<string, unknown>;

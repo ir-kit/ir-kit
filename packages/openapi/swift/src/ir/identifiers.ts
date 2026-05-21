@@ -1,7 +1,7 @@
 /**
  * Swift-specific identifier transforms. Generic case helpers
  * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`) live
- * in `@ahmedrowaihi/openapi-core`. The export here covers what's unique
+ * in `@ir-kit/openapi-core`. The export here covers what's unique
  * to Swift: backtick-escaping for the reserved-keyword set.
  */
 

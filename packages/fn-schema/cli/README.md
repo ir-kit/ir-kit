@@ -1,15 +1,15 @@
-# @ahmedrowaihi/fn-schema-cli
+# @ir-kit/fn-schema-cli
 
 Command-line wrapper around the fn-schema extractor.
 
-The CLI is a thin frontend over [`@ahmedrowaihi/fn-schema-typescript`](../typescript/README.md)'s `extract()` and [`@ahmedrowaihi/fn-schema-core`](../core/README.md)'s emitters. Every flag maps 1:1 to a programmatic option. Use whichever fits your build chain — the CLI for ad-hoc / package.json scripts, the programmatic API when you want to integrate with another tool.
+The CLI is a thin frontend over [`@ir-kit/fn-schema-typescript`](../typescript/README.md)'s `extract()` and [`@ir-kit/fn-schema-core`](../core/README.md)'s emitters. Every flag maps 1:1 to a programmatic option. Use whichever fits your build chain — the CLI for ad-hoc / package.json scripts, the programmatic API when you want to integrate with another tool.
 
 ## Install
 
 ```bash
-pnpm add -D @ahmedrowaihi/fn-schema-cli
-# or: npm i -D @ahmedrowaihi/fn-schema-cli
-# or: yarn add -D @ahmedrowaihi/fn-schema-cli
+pnpm add -D @ir-kit/fn-schema-cli
+# or: npm i -D @ir-kit/fn-schema-cli
+# or: yarn add -D @ir-kit/fn-schema-cli
 ```
 
 The bin is `fn-schema`. Run via `npx fn-schema ...`, or wire a `package.json` script:
@@ -109,7 +109,7 @@ Optional `fn-schema.config.{ts,js,json,mjs,cjs}` at the project root, loaded via
 
 ```ts
 // fn-schema.config.ts
-import type { FnSchemaConfig } from "@ahmedrowaihi/fn-schema-cli";
+import type { FnSchemaConfig } from "@ir-kit/fn-schema-cli";
 
 export default {
   files: "src/api/**/*.ts",
@@ -130,8 +130,8 @@ Anything the CLI does, you can do from a Node script:
 
 ```ts
 import { writeFile } from "node:fs/promises";
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
+import { extract } from "@ir-kit/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
 
 const result = await extract({
   files: ["src/api/**/*.ts"],

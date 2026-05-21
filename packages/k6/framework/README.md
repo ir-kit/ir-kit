@@ -1,4 +1,4 @@
-# @ahmedrowaihi/k6
+# @ir-kit/k6
 
 Framework for authoring [k6](https://k6.io) load tests in TypeScript. The single package you import from your `loadtest.ts` — compiles down to standard k6 (`export const options` + `export default function`).
 
@@ -14,7 +14,7 @@ import {
   flow,
   smoke, load, stress, spike, repro, soak,
   useAuth,
-} from "@ahmedrowaihi/k6";
+} from "@ir-kit/k6";
 ```
 
 ### `defineLoadTest(config)`
@@ -86,6 +86,6 @@ Per-op budgets resolve because the generated client tags every request with `{ o
 
 ## See also
 
-- [@ahmedrowaihi/k6-gen](../gen) — typed client generator
-- [@ahmedrowaihi/k6-tools](../tools) — CLI
+- [@ir-kit/k6-gen](../gen) — typed client generator
+- [@ir-kit/k6-tools](../tools) — CLI
 - [examples/k6-petstore](../../../examples/k6-petstore/) — end-to-end demo

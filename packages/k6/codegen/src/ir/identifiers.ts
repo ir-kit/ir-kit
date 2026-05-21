@@ -1,4 +1,4 @@
-import { safeIdent } from "@ahmedrowaihi/codegen-core";
+import { safeIdent } from "@ir-kit/codegen-core";
 
 /** Legal JS identifier preserving original casing — for fn/param slots. */
 export function toIdent(input: string): string {

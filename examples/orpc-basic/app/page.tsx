@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { createOpenApiClient } from "@/generated/@ahmedrowaihi/orpc/client.gen";
-import { createOrpcUtils } from "@/generated/@ahmedrowaihi/orpc/tanstack.gen";
+import { createOpenApiClient } from "@/generated/@ir-kit/orpc/client.gen";
+import { createOrpcUtils } from "@/generated/@ir-kit/orpc/tanstack.gen";
 
 import { Providers } from "./providers";
 

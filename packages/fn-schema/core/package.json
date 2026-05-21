@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/fn-schema-core",
-  "version": "0.3.0",
+  "name": "@ir-kit/fn-schema-core",
+  "version": "0.1.0",
   "description": "Language-agnostic core for fn-schema: extract function input/output JSON Schemas from source code. Defines the Extractor contract and ships emitters (files, bundle, OpenAPI) that operate on the shared FunctionInfo IR.",
   "keywords": [
     "json-schema",
@@ -9,9 +9,9 @@
     "ir",
     "extractor"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/fn-schema/core",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/fn-schema/core",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/fn-schema/core"
   },
   "type": "module",
@@ -56,7 +56,7 @@
     "@types/json-schema": "^7.0.15"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

@@ -1,4 +1,4 @@
-# @ahmedrowaihi/fn-schema-unplugin
+# @ir-kit/fn-schema-unplugin
 
 Bundler plugin for fn-schema. Resolves a virtual module to the extracted bundle, with HMR on source change in Vite. Built on [unplugin](https://github.com/unjs/unplugin) — same package powers Vite, webpack, Rollup, esbuild, Rspack, Rolldown, and Farm.
 
@@ -9,7 +9,7 @@ You have a Vite/Next/webpack app and want fn-schema results available via a regu
 ## Install
 
 ```bash
-pnpm add -D @ahmedrowaihi/fn-schema-unplugin
+pnpm add -D @ir-kit/fn-schema-unplugin
 ```
 
 ## Vite
@@ -17,7 +17,7 @@ pnpm add -D @ahmedrowaihi/fn-schema-unplugin
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite"
-import fnSchema from "@ahmedrowaihi/fn-schema-unplugin/vite"
+import fnSchema from "@ir-kit/fn-schema-unplugin/vite"
 
 export default defineConfig({
   plugins: [
@@ -32,7 +32,7 @@ export default defineConfig({
 ```ts
 // app code
 import schemas from "virtual:fn-schema/bundle"
-import { createReader } from "@ahmedrowaihi/fn-schema-loader"
+import { createReader } from "@ir-kit/fn-schema-loader"
 
 const reader = createReader(schemas)
 ```
@@ -41,13 +41,13 @@ const reader = createReader(schemas)
 
 ```ts
 // webpack
-const fnSchema = require("@ahmedrowaihi/fn-schema-unplugin/webpack").default
+const fnSchema = require("@ir-kit/fn-schema-unplugin/webpack").default
 
 // rollup
-import fnSchema from "@ahmedrowaihi/fn-schema-unplugin/rollup"
+import fnSchema from "@ir-kit/fn-schema-unplugin/rollup"
 
 // esbuild
-import fnSchema from "@ahmedrowaihi/fn-schema-unplugin/esbuild"
+import fnSchema from "@ir-kit/fn-schema-unplugin/esbuild"
 ```
 
 Subpath exports also exist for `/rspack`, `/rolldown`, `/farm`.

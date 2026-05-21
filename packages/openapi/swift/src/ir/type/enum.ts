@@ -1,6 +1,6 @@
-import { safeCaseName } from "@ahmedrowaihi/codegen-core";
-import { getEnumLiterals } from "@ahmedrowaihi/openapi-tools";
 import type { IR } from "@hey-api/shared";
+import { safeCaseName } from "@ir-kit/codegen-core";
+import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
 import type { SwType } from "../../sw-dsl/index.js";
 import {

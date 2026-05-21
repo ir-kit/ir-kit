@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 /// <reference types="chrome" />
-import { createRecon, type Recon } from "@ahmedrowaihi/openapi-recon";
+import { createRecon, type Recon } from "@ir-kit/openapi-recon";
 import {
   type Adapter,
   defineProxy,

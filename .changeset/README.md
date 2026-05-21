@@ -16,7 +16,7 @@ These three plugins share enough internal contract (faker hints feed the orpc ge
 **Not in the lockstep group:**
 
 - `openapi-ts-paths` — independent, just emits route consts.
-- `openapi-ts-k6` — independent, thin wrapper around the standalone `@ahmedrowaihi/k6-gen` package.
+- `openapi-ts-k6` — independent, thin wrapper around the standalone `@ir-kit/k6-gen` package.
 
 Add a plugin to the lockstep group only when it gains a hard contract dependency on the others. Otherwise leave it independent.
 

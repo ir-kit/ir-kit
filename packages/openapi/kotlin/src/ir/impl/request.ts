@@ -1,7 +1,4 @@
-import {
-  HTTP_METHOD_LITERAL,
-  type HttpMethod,
-} from "@ahmedrowaihi/openapi-core";
+import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi-core";
 
 import {
   type KtStmt,

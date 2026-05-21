@@ -1,4 +1,3 @@
-import { type AuthFlavor, init } from "@ahmedrowaihi/k6-toolkit";
 import {
   cancel,
   confirm,
@@ -8,6 +7,7 @@ import {
   select,
   text,
 } from "@clack/prompts";
+import { type AuthFlavor, init } from "@ir-kit/k6-toolkit";
 
 interface Answers {
   cwd: string;
@@ -41,7 +41,7 @@ export async function runWizard(cwd: string = process.cwd()): Promise<void> {
     `Wrote ${result.generated.files.length} files to ${answers.output}.`,
     `Loadtest entry: ${answers.cwd}/loadtest.ts`,
     stubCount > 0 ? `Per-op stubs: ${stubCount}` : null,
-    "Next: edit loadtest.ts, then run it via @ahmedrowaihi/k6-toolkit `runK6()`.",
+    "Next: edit loadtest.ts, then run it via @ir-kit/k6-toolkit `runK6()`.",
   ].filter(Boolean);
   outro(summary.join("\n"));
 }

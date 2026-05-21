@@ -2,7 +2,7 @@
 
 Chrome / Firefox DevTools extension that reverse-engineers an OpenAPI 3.1 spec from the network traffic of whatever site you're inspecting. Open DevTools → Glean panel → browse around → copy out a spec.
 
-Built on [`@ahmedrowaihi/openapi-recon`](../../packages/openapi/recon) for the inference engine, [`@scalar/api-reference-react`](https://github.com/scalar/scalar) for the rendered spec view, and [WXT](https://wxt.dev) for the cross-browser extension shell.
+Built on [`@ir-kit/openapi-recon`](../../packages/openapi/recon) for the inference engine, [`@scalar/api-reference-react`](https://github.com/scalar/scalar) for the rendered spec view, and [WXT](https://wxt.dev) for the cross-browser extension shell.
 
 Not published to npm — install from source or grab the packaged `.zip` from the GitHub releases when one's posted.
 
@@ -20,8 +20,8 @@ The current limit is one panel state per inspected page — multi-tab capture is
 
 ```bash
 pnpm install
-pnpm --filter @ahmedrowaihi/glean dev          # Chrome dev build
-pnpm --filter @ahmedrowaihi/glean dev:firefox  # Firefox dev build
+pnpm --filter @ir-kit/glean dev          # Chrome dev build
+pnpm --filter @ir-kit/glean dev:firefox  # Firefox dev build
 ```
 
 WXT prints the unpacked extension dir; load it as an unpacked extension in `chrome://extensions` (or `about:debugging` in Firefox).
@@ -29,9 +29,9 @@ WXT prints the unpacked extension dir; load it as an unpacked extension in `chro
 ## Build a release
 
 ```bash
-pnpm --filter @ahmedrowaihi/glean build         # Chrome
-pnpm --filter @ahmedrowaihi/glean build:firefox # Firefox
-pnpm --filter @ahmedrowaihi/glean zip           # zipped artifact
+pnpm --filter @ir-kit/glean build         # Chrome
+pnpm --filter @ir-kit/glean build:firefox # Firefox
+pnpm --filter @ir-kit/glean zip           # zipped artifact
 ```
 
 ## Permissions

@@ -1,5 +1,5 @@
 {
-  "extends": "@ahmedrowaihi/tsconfig/base.json",
+  "extends": "@ir-kit/tsconfig/base.json",
   "compilerOptions": {
     "types": ["node", "k6"],
     "noEmit": true,

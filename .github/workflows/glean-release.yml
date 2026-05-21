@@ -30,10 +30,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build workspace deps of glean
-        run: pnpm turbo run build --filter "@ahmedrowaihi/glean^..."
+        run: pnpm turbo run build --filter "@ir-kit/glean^..."
 
       - name: Zip extension
-        run: pnpm --filter @ahmedrowaihi/glean zip
+        run: pnpm --filter @ir-kit/glean zip
 
       - name: Locate artifacts
         id: artifacts

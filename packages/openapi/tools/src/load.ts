@@ -1,11 +1,10 @@
 import { isAbsolute, resolve } from "node:path";
-
+import { $RefParser } from "@hey-api/json-schema-ref-parser";
 import {
   type NormalizeOptions,
   normalizeSpec,
   SAFE_NORMALIZE,
-} from "@ahmedrowaihi/openapi-core";
-import { $RefParser } from "@hey-api/json-schema-ref-parser";
+} from "@ir-kit/openapi-core";
 
 export type SpecInput = string | Record<string, unknown>;
 

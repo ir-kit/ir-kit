@@ -1,5 +1,5 @@
 {
-  "name": "@ahmedrowaihi/example-k6-petstore",
+  "name": "@ir-kit/example-k6-petstore",
   "version": "0.0.5",
   "private": true,
   "type": "module",
@@ -12,12 +12,12 @@
     "run:spike": "K6_STAGES=30s:10,30s:200,1m:10 node scripts/run.mjs"
   },
   "dependencies": {
-    "@ahmedrowaihi/k6": "workspace:*",
+    "@ir-kit/k6": "workspace:*",
     "@faker-js/faker": "^10.4.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/k6-toolkit": "workspace:*",
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/k6-toolkit": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/k6": "^1.7.0",
     "@types/node": "catalog:",
     "typescript": "catalog:"

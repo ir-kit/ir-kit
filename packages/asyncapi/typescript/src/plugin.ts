@@ -1,5 +1,5 @@
 /**
- * Plugin contract for `@ahmedrowaihi/asyncapi-typescript`.
+ * Plugin contract for `@ir-kit/asyncapi-typescript`.
  *
  * Shape mirrors `@hey-api/openapi-ts`'s `definePluginConfig` / plugin
  * instance pattern, adapted to AsyncAPI primitives. Plugins are

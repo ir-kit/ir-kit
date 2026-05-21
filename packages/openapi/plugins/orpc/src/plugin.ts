@@ -81,9 +81,9 @@ export const handler: ORPCPlugin["Handler"] = ({ plugin }) => {
       const serverGenAbsolute = join(outputDir, plugin.name, "server.gen");
       const { importAlias } = handlersConfig;
       const serverGenImport = importAlias
-        ? // e.g. "#/generated/@ahmedrowaihi/openapi-ts-orpc/server.gen"
+        ? // e.g. "#/generated/@ir-kit/openapi-ts-orpc/server.gen"
           `${importAlias}${relative(dirname(outputDir), serverGenAbsolute).replace(/\\/g, "/")}`
-        : // e.g. "../generated/@ahmedrowaihi/openapi-ts-orpc/server.gen"
+        : // e.g. "../generated/@ir-kit/openapi-ts-orpc/server.gen"
           relative(handlersDir, serverGenAbsolute).replace(/\\/g, "/");
 
       let fakerFactoryNames: Map<string, string> | undefined;

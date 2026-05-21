@@ -1,5 +1,5 @@
-import { type WalkedOperation, walkOperations } from "@ahmedrowaihi/k6-gen";
-import type { IR } from "@ahmedrowaihi/openapi-tools";
+import { type WalkedOperation, walkOperations } from "@ir-kit/k6-gen";
+import type { IR } from "@ir-kit/openapi-tools";
 
 /** Tag-bucketed view of a spec's operations — `"_untagged"` collects ops with no tag. */
 export interface SpecOperations {

@@ -1,4 +1,3 @@
-import type { WalkedOperation } from "@ahmedrowaihi/k6-gen";
 import {
   cancel,
   confirm,
@@ -7,6 +6,7 @@ import {
   select,
   text,
 } from "@clack/prompts";
+import type { WalkedOperation } from "@ir-kit/k6-gen";
 
 import type { AuthFlavor, AuthScaffoldOpts } from "../loadtest-scaffold.js";
 import type { ChainMode } from "./chains.js";

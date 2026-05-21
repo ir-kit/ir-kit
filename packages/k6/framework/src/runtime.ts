@@ -136,7 +136,7 @@ export function installK6Bridge(bridge: K6Bridge): void {
 export function k6Bridge(): K6Bridge {
   if (!__k6) {
     throw new Error(
-      "@ahmedrowaihi/k6: K6 runtime not installed. Ensure your loadtest imports the generated client (which installs the bridge on first import).",
+      "@ir-kit/k6: K6 runtime not installed. Ensure your loadtest imports the generated client (which installs the bridge on first import).",
     );
   }
   return __k6;

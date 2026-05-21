@@ -1,16 +1,16 @@
 {
-  "name": "@ahmedrowaihi/fn-schema-cli",
-  "version": "0.3.0",
-  "description": "CLI wrapper for fn-schema. Thin orchestrator over @ahmedrowaihi/fn-schema-core with the TypeScript extractor pre-registered. Loads optional fn-schema.config.{ts,js,json} via c12.",
+  "name": "@ir-kit/fn-schema-cli",
+  "version": "0.1.0",
+  "description": "CLI wrapper for fn-schema. Thin orchestrator over @ir-kit/fn-schema-core with the TypeScript extractor pre-registered. Loads optional fn-schema.config.{ts,js,json} via c12.",
   "keywords": [
     "json-schema",
     "function-signature",
     "cli",
     "codegen"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/fn-schema/cli",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/fn-schema/cli",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/fn-schema/cli"
   },
   "type": "module",
@@ -51,8 +51,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ahmedrowaihi/fn-schema-core": "workspace:*",
-    "@ahmedrowaihi/fn-schema-typescript": "workspace:*",
+    "@ir-kit/fn-schema-core": "workspace:*",
+    "@ir-kit/fn-schema-typescript": "workspace:*",
     "@clack/prompts": "^1.3.0",
     "c12": "catalog:",
     "chokidar": "catalog:",
@@ -61,7 +61,7 @@
     "tinyglobby": "catalog:"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

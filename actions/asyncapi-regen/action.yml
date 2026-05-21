@@ -1,5 +1,5 @@
 name: 'Regenerate AsyncAPI TypeScript SDK'
-description: 'Regenerate a TypeScript event SDK from an AsyncAPI 3.0 spec — drop-in for keeping a committed SDK in sync with its source. Powered by @ahmedrowaihi/asyncapi-typescript.'
+description: 'Regenerate a TypeScript event SDK from an AsyncAPI 3.0 spec — drop-in for keeping a committed SDK in sync with its source. Powered by @ir-kit/asyncapi-typescript.'
 author: 'Ahmed Rowaihi'
 branding:
   icon: 'code'
@@ -17,7 +17,7 @@ inputs:
     required: false
     default: 'typescript,events,event-map,dispatch,amqplib,index'
   generator-version:
-    description: 'Pinned semver of `@ahmedrowaihi/asyncapi-typescript` to install. Defaults to `latest`.'
+    description: 'Pinned semver of `@ir-kit/asyncapi-typescript` to install. Defaults to `latest`.'
     required: false
     default: 'latest'
   tarball-dir:
@@ -95,9 +95,9 @@ runs:
             "typescript"
         else
           npm install --silent --no-audit --no-fund \
-            "@ahmedrowaihi/asyncapi-typescript@${VERSION}" \
-            "@ahmedrowaihi/asyncapi-core" \
-            "@ahmedrowaihi/codegen-core" \
+            "@ir-kit/asyncapi-typescript@${VERSION}" \
+            "@ir-kit/asyncapi-core" \
+            "@ir-kit/codegen-core" \
             "@asyncapi/modelina" \
             "@asyncapi/parser" \
             "@hey-api/codegen-core" \
@@ -168,7 +168,7 @@ runs:
         branch: ${{ steps.vars.outputs.pr-branch }}
         delete-branch: true
         body: |
-          Auto-regenerated AsyncAPI TypeScript SDK from `${{ inputs.input }}` via [`ahmedrowaihi/contract-kit/actions/asyncapi-regen`](https://github.com/ahmedrowaihi/contract-kit/tree/main/actions/asyncapi-regen).
+          Auto-regenerated AsyncAPI TypeScript SDK from `${{ inputs.input }}` via [`ir-kit/ir-kit/actions/asyncapi-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/asyncapi-regen).
 
           Plugins enabled: `${{ inputs.plugins }}`
           ${{ steps.diff.outputs.files-changed }} file(s) changed under `${{ inputs.output }}`.

@@ -9,7 +9,7 @@
     "start": "tsx src/main.ts"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/client-fetch": "*",
     "@types/node": "catalog:",
     "tsx": "^4.19.2",

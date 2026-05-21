@@ -1,11 +1,11 @@
-import { safeIdent } from "@ahmedrowaihi/codegen-core";
+import { $, type TsDsl } from "@hey-api/openapi-ts";
+import type { IR } from "@hey-api/shared";
+import { safeIdent } from "@ir-kit/codegen-core";
 import {
   getEnumLiterals,
   isEnumSchema,
   isUnionSchema,
-} from "@ahmedrowaihi/openapi-tools";
-import { $, type TsDsl } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
+} from "@ir-kit/openapi-tools";
 import ts from "typescript";
 
 import { refToTypeName } from "./identifiers.js";

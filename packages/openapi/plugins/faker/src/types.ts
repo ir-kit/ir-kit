@@ -12,7 +12,7 @@ export type SchemaFilter = (schema: IR.SchemaObject) => boolean;
 
 export type UserConfig = Plugin.Hooks &
   Plugin.UserExports & {
-    name: "@ahmedrowaihi/openapi-ts-faker";
+    name: "@ir-kit/openapi-ts-faker";
     /**
      * Output file name for generated factories
      * @default 'factories.gen'
@@ -56,7 +56,7 @@ export type UserConfig = Plugin.Hooks &
 
 export type Config = Plugin.Hooks &
   Plugin.Exports & {
-    name: "@ahmedrowaihi/openapi-ts-faker";
+    name: "@ir-kit/openapi-ts-faker";
     output: string;
     fieldNameHints: FieldNameHints;
     formatMapping: FormatMapping;
@@ -72,6 +72,6 @@ export type FakerPlugin = DefinePlugin<UserConfig, Config>;
 
 declare module "@hey-api/openapi-ts" {
   export interface PluginConfigMap {
-    "@ahmedrowaihi/openapi-ts-faker": FakerPlugin["Types"];
+    "@ir-kit/openapi-ts-faker": FakerPlugin["Types"];
   }
 }

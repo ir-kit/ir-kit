@@ -1,7 +1,7 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { generate } from "@ahmedrowaihi/openapi-swift";
+import { generate } from "@ir-kit/openapi-swift";
 
 const here = dirname(fileURLToPath(import.meta.url));
 

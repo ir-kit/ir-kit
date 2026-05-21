@@ -20,7 +20,7 @@ export function renderLoadtestStub(input: LoadtestStubInput): string {
     [
       namedImport(
         [{ name: "defineLoadTest" }, { name: "flow" }, { name: "smoke" }],
-        "@ahmedrowaihi/k6",
+        "@ir-kit/k6",
       ),
       namespaceImport("api", input.clientImport),
       namedImport([{ name: "data" }], input.dataImport),

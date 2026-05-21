@@ -4,13 +4,13 @@ Instead of Zod, you can use [Typia](https://typia.io/) for runtime validation.
 Typia generates validators at compile-time from TypeScript types — no schema
 duplication.
 
-Integration is via the [`@ahmedrowaihi/openapi-ts-typia`](https://github.com/ahmedrowaihi/openapi-ts)
+Integration is via the [`@ir-kit/openapi-ts-typia`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/typia)
 companion plugin. This oRPC plugin consumes it through the standard
 validator API, the same way it consumes `zod`, `valibot`, or `arktype`.
 
 ## How it works
 
-With `validator: '@ahmedrowaihi/openapi-ts-typia'`, the typia plugin emits
+With `validator: '@ir-kit/openapi-ts-typia'`, the typia plugin emits
 one `typia.createValidate<T>()` per operation plus a bulk
 `typia.json.schemas<[...]>()` call whose result is indexed by
 operation. The oRPC plugin references those symbols directly on each
@@ -19,7 +19,7 @@ contract's `.input()` / `.output()` / `.errors()`.
 ## Installation
 
 ```bash
-bun add -d @ahmedrowaihi/openapi-ts-typia
+bun add -d @ir-kit/openapi-ts-typia
 bun add typia @standard-schema/spec
 bun add -d @ryoppippi/unplugin-typia
 ```
@@ -61,11 +61,11 @@ export default { plugins: [UnpluginTypia()] }
 
 ```typescript
 import { defineConfig } from '@hey-api/openapi-ts';
-import { defineConfig as defineORPCConfig } from '@ahmedrowaihi/openapi-ts-orpc';
+import { defineConfig as defineORPCConfig } from '@ir-kit/openapi-ts-orpc';
 import {
   defineConfig as defineTypiaConfig,
   typiaTypeTransformer,
-} from '@ahmedrowaihi/openapi-ts-typia';
+} from '@ir-kit/openapi-ts-typia';
 
 export default defineConfig({
   input: 'openapi.json',
@@ -78,7 +78,7 @@ export default defineConfig({
     },
     defineTypiaConfig(),
     defineORPCConfig({
-      validator: '@ahmedrowaihi/openapi-ts-typia',
+      validator: '@ir-kit/openapi-ts-typia',
       // ... rest of your config
     }),
   ],

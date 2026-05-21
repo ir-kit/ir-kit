@@ -5,8 +5,8 @@ import {
   type ExtractOptions,
   type ExtractResult,
   emit,
-} from "@ahmedrowaihi/fn-schema-core";
-import { typescript } from "@ahmedrowaihi/fn-schema-typescript";
+} from "@ir-kit/fn-schema-core";
+import { typescript } from "@ir-kit/fn-schema-typescript";
 import chokidar from "chokidar";
 import { defineCommand } from "citty";
 import consola from "consola";

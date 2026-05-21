@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/fn-schema-unplugin",
-  "version": "0.2.1",
+  "name": "@ir-kit/fn-schema-unplugin",
+  "version": "0.1.0",
   "description": "Bundler plugin for fn-schema. Exposes a virtual module that resolves to the extracted bundle, with HMR on source change in dev. Built on unplugin so the same package powers Vite, webpack, Rollup, esbuild, Rspack, Rolldown, and Farm.",
   "keywords": [
     "json-schema",
@@ -12,9 +12,9 @@
     "unplugin",
     "hmr"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/fn-schema/unplugin",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/fn-schema/unplugin",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/fn-schema/unplugin"
   },
   "type": "module",
@@ -80,14 +80,14 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ahmedrowaihi/fn-schema-core": "workspace:*",
-    "@ahmedrowaihi/fn-schema-typescript": "workspace:*",
+    "@ir-kit/fn-schema-core": "workspace:*",
+    "@ir-kit/fn-schema-typescript": "workspace:*",
     "chokidar": "catalog:",
     "tinyglobby": "catalog:",
     "unplugin": "^3.0.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

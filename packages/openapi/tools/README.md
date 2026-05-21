@@ -1,13 +1,13 @@
-# @ahmedrowaihi/openapi-tools
+# @ir-kit/openapi-tools
 
 OpenAPI utilities built on top of [`@hey-api/codegen-core`](https://github.com/hey-api/openapi-ts) and `@hey-api/shared`. Spec diffing, parsing, and helpers — usable on their own without `@hey-api/openapi-ts` plugins.
 
-Part of [contract-kit](https://github.com/ahmedrowaihi/contract-kit).
+Part of [ir-kit](https://github.com/ir-kit/ir-kit).
 
 ## Install
 
 ```bash
-pnpm add @ahmedrowaihi/openapi-tools @hey-api/codegen-core @hey-api/shared
+pnpm add @ir-kit/openapi-tools @hey-api/codegen-core @hey-api/shared
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ pnpm add @ahmedrowaihi/openapi-tools @hey-api/codegen-core @hey-api/shared
 ### Diff two OpenAPI specs
 
 ```ts
-import { diffSpecs, parseSpec } from "@ahmedrowaihi/openapi-tools";
+import { diffSpecs, parseSpec } from "@ir-kit/openapi-tools";
 
 const before = parseSpec(beforeJson);
 const after = parseSpec(afterJson);
@@ -29,7 +29,7 @@ const report = diffSpecs(before, after, {
 ### Parse a spec into hey-api's IR
 
 ```ts
-import { parseSpec } from "@ahmedrowaihi/openapi-tools";
+import { parseSpec } from "@ir-kit/openapi-tools";
 
 const ir = parseSpec(openApiSpecJson);
 ```
@@ -45,4 +45,4 @@ const ir = parseSpec(openApiSpecJson);
 
 ## Origin
 
-Previously shipped as `@ahmedrowaihi/openapi-ts-orpc/tools` subpath. Extracted into its own package since the utilities are spec-host-agnostic — they don't depend on oRPC.
+Previously shipped as `@ir-kit/openapi-ts-orpc/tools` subpath. Extracted into its own package since the utilities are spec-host-agnostic — they don't depend on oRPC.

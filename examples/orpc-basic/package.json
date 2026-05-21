@@ -1,5 +1,5 @@
 {
-  "name": "@ahmedrowaihi/example-orpc-basic",
+  "name": "@ir-kit/example-orpc-basic",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -27,10 +27,10 @@
     "typia": "12.0.2"
   },
   "devDependencies": {
-    "@ahmedrowaihi/openapi-tools": "workspace:*",
-    "@ahmedrowaihi/openapi-ts-orpc": "workspace:*",
-    "@ahmedrowaihi/openapi-ts-paths": "workspace:*",
-    "@ahmedrowaihi/openapi-ts-typia": "workspace:*",
+    "@ir-kit/openapi-tools": "workspace:*",
+    "@ir-kit/openapi-ts-orpc": "workspace:*",
+    "@ir-kit/openapi-ts-paths": "workspace:*",
+    "@ir-kit/openapi-ts-typia": "workspace:*",
     "@hey-api/openapi-ts": "^0.96.1",
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@types/node": "24.10.10",

@@ -4,8 +4,8 @@ import {
   type GenerateOptions,
   type GenerateResult,
   generate,
-} from "@ahmedrowaihi/k6-gen";
-import { resolveSpecInput } from "@ahmedrowaihi/openapi-tools";
+} from "@ir-kit/k6-gen";
+import { resolveSpecInput } from "@ir-kit/openapi-tools";
 
 import { extractOperationMap } from "./operation-map.js";
 import { diffOperationIds, type OperationDiff } from "./rename-report.js";

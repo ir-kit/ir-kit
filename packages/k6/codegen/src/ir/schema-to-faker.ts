@@ -1,14 +1,14 @@
-import { safeIdent } from "@ahmedrowaihi/codegen-core";
-import { getEnumLiterals } from "@ahmedrowaihi/openapi-tools";
+import { $, type TsDsl } from "@hey-api/openapi-ts";
+import type { IR } from "@hey-api/shared";
+import { safeIdent } from "@ir-kit/codegen-core";
+import { getEnumLiterals } from "@ir-kit/openapi-tools";
 import {
   DATE_METHODS,
   DEFAULT_FORMAT_MAPPING,
   type FakerCallSpec,
   type PropertyInfo,
   resolveFakerCall,
-} from "@ahmedrowaihi/openapi-ts-faker/core";
-import { $, type TsDsl } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
+} from "@ir-kit/openapi-ts-faker/core";
 import type ts from "typescript";
 
 import { refToTypeName } from "./identifiers.js";
@@ -19,7 +19,7 @@ type Expr = TsDsl<ts.Expression>;
  * Build a faker-backed expression that, when called, returns a value
  * matching the schema. Refs resolve to `data.<Type>()` so cycles stay
  * lazy. Format / field-name heuristics come from
- * `@ahmedrowaihi/openapi-ts-faker/core` so the source-of-truth stays
+ * `@ir-kit/openapi-ts-faker/core` so the source-of-truth stays
  * shared with the faker plugin.
  */
 export function schemaToFakerExpr(

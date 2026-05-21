@@ -3,7 +3,7 @@ import type {
   ExcludeFilter,
   ExtractOptions,
   IncludeFilter,
-} from "@ahmedrowaihi/fn-schema-core";
+} from "@ir-kit/fn-schema-core";
 import { glob } from "tinyglobby";
 import type { FnSchemaConfig } from "../config.js";
 

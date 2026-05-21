@@ -1,4 +1,4 @@
-import { camel } from "@ahmedrowaihi/codegen-core";
+import { camel } from "@ir-kit/codegen-core";
 
 export interface PropertyName {
   /** The original key as it appears in the OpenAPI schema / JSON wire format. */

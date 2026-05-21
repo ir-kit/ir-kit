@@ -1,7 +1,7 @@
 {
-  "name": "@ahmedrowaihi/openapi-ts-k6",
-  "version": "0.2.3",
-  "description": "Thin @hey-api/openapi-ts plugin that delegates to @ahmedrowaihi/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise reach for @ahmedrowaihi/k6-toolkit.",
+  "name": "@ir-kit/openapi-ts-k6",
+  "version": "0.1.0",
+  "description": "Thin @hey-api/openapi-ts plugin that delegates to @ir-kit/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise reach for @ir-kit/k6-toolkit.",
   "keywords": [
     "openapi",
     "openapi-ts",
@@ -9,9 +9,9 @@
     "load-testing",
     "plugin"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/hey-api",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/k6/hey-api",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/k6/hey-api"
   },
   "type": "module",
@@ -50,14 +50,14 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ahmedrowaihi/k6-gen": "workspace:*"
+    "@ir-kit/k6-gen": "workspace:*"
   },
   "peerDependencies": {
     "@hey-api/openapi-ts": ">=0.95.0",
     "@hey-api/shared": ">=0.2.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",
     "@types/node": "catalog:",

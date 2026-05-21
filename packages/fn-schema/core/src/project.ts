@@ -29,7 +29,7 @@ interface ExtractorEntry {
 export function createProject(opts: ProjectOptions): Project {
   if (opts.extractors.length === 0) {
     throw new Error(
-      "createProject: at least one extractor is required (e.g. @ahmedrowaihi/fn-schema-typescript)",
+      "createProject: at least one extractor is required (e.g. @ir-kit/fn-schema-typescript)",
     );
   }
   const cwd = opts.cwd ?? process.cwd();

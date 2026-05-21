@@ -47,9 +47,9 @@ jobs:
 
             Install this version:
             ```bash
-            npm install @ahmedrowaihi/openapi-ts-orpc@${{ github.ref_name }}
+            npm install @ir-kit/openapi-ts-orpc@${{ github.ref_name }}
             ```
 
-            [View on npm](https://www.npmjs.com/package/@ahmedrowaihi/openapi-ts-orpc/v/${{ github.ref_name }})
+            [View on npm](https://www.npmjs.com/package/@ir-kit/openapi-ts-orpc/v/${{ github.ref_name }})
 
             ---

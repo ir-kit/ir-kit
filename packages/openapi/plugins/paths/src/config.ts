@@ -13,7 +13,7 @@ export const defaultConfig: PathsPlugin["Config"] = {
   },
   dependencies: ["@hey-api/typescript"],
   handler,
-  name: "@ahmedrowaihi/paths",
+  name: "@ir-kit/paths",
   tags: ["transformer"],
 };
 

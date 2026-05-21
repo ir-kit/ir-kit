@@ -1,5 +1,5 @@
 {
-  "name": "@ahmedrowaihi/example-asyncapi-events-playground",
+  "name": "@ir-kit/example-asyncapi-events-playground",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "amqplib": "^0.10.4"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/amqplib": "^0.10.5",
     "@types/node": "catalog:",
     "jiti": "^2.6.1"

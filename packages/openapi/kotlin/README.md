@@ -1,21 +1,21 @@
-# @ahmedrowaihi/openapi-kotlin
+# @ir-kit/openapi-kotlin
 
 Generate idiomatic Android / JVM Kotlin client SDKs from an OpenAPI 3.x spec — `@Serializable` data classes, `String`-raw enums, per-tag interfaces with `suspend` functions, and an OkHttp + kotlinx-serialization impl class. Per-call `RequestOptions`, composable interceptors, typed `APIError`, multipart + form-urlencoded wire encoding, multi-2xx sum-type returns, and per-op security auto-wiring all included.
 
 Built on the [`@hey-api`](https://github.com/hey-api/openapi-ts) toolchain (`@hey-api/json-schema-ref-parser` for spec loading, `@hey-api/shared` IR for normalization). 2.0 / 3.0 / 3.1 inputs all produce the same output.
 
-Sibling package to [`@ahmedrowaihi/openapi-swift`](../openapi-swift). Part of [contract-kit](https://github.com/ahmedrowaihi/contract-kit). Companion to the [`petstore-sdk` example](../../examples/petstore-sdk).
+Sibling package to [`@ir-kit/openapi-swift`](../openapi-swift). Part of [ir-kit](https://github.com/ir-kit/ir-kit). Companion to the [`petstore-sdk` example](../../examples/petstore-sdk).
 
 ## Install
 
 ```bash
-pnpm add @ahmedrowaihi/openapi-kotlin @ahmedrowaihi/openapi-tools @hey-api/shared @hey-api/spec-types
+pnpm add @ir-kit/openapi-kotlin @ir-kit/openapi-tools @hey-api/shared @hey-api/spec-types
 ```
 
 ## Usage
 
 ```ts
-import { generate } from "@ahmedrowaihi/openapi-kotlin";
+import { generate } from "@ir-kit/openapi-kotlin";
 
 await generate({
   input: "https://api.example.com/openapi.json",

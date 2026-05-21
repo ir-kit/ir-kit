@@ -2,10 +2,10 @@ import {
   createProject,
   type ExtractOptions,
   type ExtractResult,
-} from "@ahmedrowaihi/fn-schema-core";
+} from "@ir-kit/fn-schema-core";
 import { type TypescriptExtractorOptions, typescript } from "./extractor.js";
 
-export { emit } from "@ahmedrowaihi/fn-schema-core";
+export { emit } from "@ir-kit/fn-schema-core";
 export { type TypescriptExtractorOptions, typescript } from "./extractor.js";
 
 /**

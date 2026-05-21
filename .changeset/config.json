@@ -4,14 +4,14 @@
   "commit": false,
   "fixed": [
     [
-      "@ahmedrowaihi/openapi-ts-orpc",
-      "@ahmedrowaihi/openapi-ts-faker",
-      "@ahmedrowaihi/openapi-ts-typia"
+      "@ir-kit/openapi-ts-orpc",
+      "@ir-kit/openapi-ts-faker",
+      "@ir-kit/openapi-ts-typia"
     ]
   ],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@ahmedrowaihi/example-orpc-basic", "@ahmedrowaihi/glean"]
+  "ignore": ["@ir-kit/example-orpc-basic", "@ir-kit/glean"]
 }

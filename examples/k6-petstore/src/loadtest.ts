@@ -1,11 +1,4 @@
-import {
-  defineLoadTest,
-  flow,
-  load,
-  smoke,
-  spike,
-  stress,
-} from "@ahmedrowaihi/k6";
+import { defineLoadTest, flow, load, smoke, spike, stress } from "@ir-kit/k6";
 
 import * as api from "./gen/client.js";
 import { data } from "./gen/data.js";

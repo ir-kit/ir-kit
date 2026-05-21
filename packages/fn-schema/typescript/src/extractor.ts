@@ -7,7 +7,7 @@ import type {
   ResolvedSchemaOptions,
   ResolvedSignatureOptions,
   SignaturePair,
-} from "@ahmedrowaihi/fn-schema-core";
+} from "@ir-kit/fn-schema-core";
 import { Project as TsMorphProject } from "ts-morph";
 import { type DiscoveredFunction, discoverFunctions } from "./discover.js";
 import { buildSchemas, SignatureSkipped, virtualDirFor } from "./schema.js";

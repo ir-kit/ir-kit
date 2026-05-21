@@ -3,19 +3,19 @@
 Four packages that together give you typed, spec-driven [k6](https://k6.io) load tests with zero hand-rolled boilerplate.
 
 ```
-@ahmedrowaihi/k6           Framework — defineLoadTest, flow().step() chaining,
+@ir-kit/k6           Framework — defineLoadTest, flow().step() chaining,
                            pace presets, budgets, useAuth middleware.
                            This is the only package you import from your loadtest.ts.
 
-@ahmedrowaihi/k6-gen       Standalone generator — spec in, typed client + data
+@ir-kit/k6-gen       Standalone generator — spec in, typed client + data
                            builders out. Mirrors openapi/swift, openapi/go, openapi/kotlin.
                            Has no hey-api dependency at the call site.
 
-@ahmedrowaihi/k6-tools     CLI: k6-tools init, sync, run. Wraps the generator,
+@ir-kit/k6-tools     CLI: k6-tools init, sync, run. Wraps the generator,
                            bundles loadtest.ts via esbuild, shells out to the real
                            k6 binary.
 
-@ahmedrowaihi/openapi-ts-k6  Optional thin @hey-api/openapi-ts plugin wrapping the
+@ir-kit/openapi-ts-k6  Optional thin @hey-api/openapi-ts plugin wrapping the
                              generator. Use only if you already drive codegen
                              through openapi-ts.config.ts.
 ```
@@ -23,7 +23,7 @@ Four packages that together give you typed, spec-driven [k6](https://k6.io) load
 ## What it gives you
 
 ```ts
-import { defineLoadTest, flow, smoke, load, useAuth } from "@ahmedrowaihi/k6";
+import { defineLoadTest, flow, smoke, load, useAuth } from "@ir-kit/k6";
 import { addPet, getPetById, deletePet } from "./gen/client.js";
 import { data } from "./gen/data.js";
 
@@ -63,8 +63,8 @@ export const { browse, write } = lt.scenarios;
 ## Getting started
 
 ```bash
-pnpm add -D @ahmedrowaihi/k6-tools
-pnpm add @ahmedrowaihi/k6
+pnpm add -D @ir-kit/k6-tools
+pnpm add @ir-kit/k6
 
 # scaffold
 pnpm k6-tools init --spec ./openapi.yaml

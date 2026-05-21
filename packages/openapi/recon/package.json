@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/openapi-recon",
-  "version": "1.3.0",
+  "name": "@ir-kit/openapi-recon",
+  "version": "0.1.0",
   "description": "Reverse-engineer an OpenAPI 3.1 spec from observed HTTP traffic — runtime-agnostic, accepts standard Request/Response, works in browsers, Node, edge runtimes",
   "keywords": [
     "openapi",
@@ -11,9 +11,9 @@
     "json-schema",
     "typescript"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/recon",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/recon",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/recon"
   },
   "type": "module",
@@ -58,7 +58,7 @@
     "@hey-api/spec-types": ">=0.2.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/spec-types": "^0.2.0",
     "@types/node": "catalog:",
     "vitest": "catalog:"

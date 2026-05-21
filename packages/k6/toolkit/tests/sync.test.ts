@@ -2,7 +2,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import type { IR } from "@ahmedrowaihi/openapi-tools";
+import type { IR } from "@ir-kit/openapi-tools";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { extractOperationMap } from "../src/operation-map.ts";

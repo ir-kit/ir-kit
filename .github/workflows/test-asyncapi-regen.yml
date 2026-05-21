@@ -46,7 +46,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build first-party packages
-        run: pnpm turbo run build --filter='@ahmedrowaihi/codegen-core' --filter='@ahmedrowaihi/asyncapi-core' --filter='@ahmedrowaihi/asyncapi-typescript'
+        run: pnpm turbo run build --filter='@ir-kit/codegen-core' --filter='@ir-kit/asyncapi-core' --filter='@ir-kit/asyncapi-typescript'
 
       - name: Pack tarballs
         run: |

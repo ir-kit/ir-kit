@@ -2,7 +2,7 @@
 
 Regenerate a TypeScript event SDK from an AsyncAPI 3.0 spec on every push or PR — and either commit the result back or open a PR with the diff. Drops in next to a committed SDK to keep it in sync with its source spec without manual `pnpm gen` invocations.
 
-Powered by [`@ahmedrowaihi/asyncapi-typescript`](https://www.npmjs.com/package/@ahmedrowaihi/asyncapi-typescript). Plugin-compose: pick which plugins emit (types, events const, event-map, dispatcher runtime, amqplib helpers, barrel).
+Powered by [`@ir-kit/asyncapi-typescript`](https://www.npmjs.com/package/@ir-kit/asyncapi-typescript). Plugin-compose: pick which plugins emit (types, events const, event-map, dispatcher runtime, amqplib helpers, barrel).
 
 Sister to [`actions/sdk-regen`](../sdk-regen) (the OpenAPI version) — same overall shape, different generator.
 
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ahmedrowaihi/contract-kit/actions/asyncapi-regen@asyncapi-regen-v1
+      - uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
         with:
           input: asyncapi.yaml
           output: generated/events
@@ -37,7 +37,7 @@ jobs:
 Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`). To emit just types + events const (no dispatcher, no amqplib helpers):
 
 ```yaml
-- uses: ahmedrowaihi/contract-kit/actions/asyncapi-regen@asyncapi-regen-v1
+- uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
   with:
     input: asyncapi.yaml
     output: generated/events
@@ -47,7 +47,7 @@ Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`
 ### Commit directly back
 
 ```yaml
-- uses: ahmedrowaihi/contract-kit/actions/asyncapi-regen@asyncapi-regen-v1
+- uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
   with:
     input: asyncapi.yaml
     output: generated/events
@@ -57,7 +57,7 @@ Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`
 ### Just regen, leave the diff for following steps
 
 ```yaml
-- uses: ahmedrowaihi/contract-kit/actions/asyncapi-regen@asyncapi-regen-v1
+- uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
   id: regen
   with:
     input: asyncapi.yaml
@@ -77,7 +77,7 @@ Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`
 | `input` | yes | — | Path or URL to the AsyncAPI 3.0 spec |
 | `output` | yes | — | Directory the generated SDK is written to |
 | `plugins` | no | all | Comma-separated plugin list. `typescript`, `events`, `event-map`, `dispatch`, `amqplib`, `index` |
-| `generator-version` | no | `latest` | Pinned semver of `@ahmedrowaihi/asyncapi-typescript` |
+| `generator-version` | no | `latest` | Pinned semver of `@ir-kit/asyncapi-typescript` |
 | `commit-strategy` | no | `pull-request` | `pull-request` \| `commit-back` \| `none` |
 | `commit-message` | no | `chore: regenerate AsyncAPI SDK` | |
 | `pr-title` | no | `chore: regenerate AsyncAPI SDK` | only `pull-request` |

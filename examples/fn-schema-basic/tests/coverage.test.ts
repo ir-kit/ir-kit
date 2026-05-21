@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
+import { extract } from "@ir-kit/fn-schema-typescript";
 import { describe, expect, it } from "vitest";
 
 const here = path.dirname(fileURLToPath(import.meta.url));

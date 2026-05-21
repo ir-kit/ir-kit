@@ -1,7 +1,7 @@
 /**
  * Kotlin-specific identifier transforms. Generic case helpers
  * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`) live
- * in `@ahmedrowaihi/openapi-core`. The exports here cover what's unique
+ * in `@ir-kit/openapi-core`. The exports here cover what's unique
  * to Kotlin: reserved-keyword backtick-escaping and SCREAMING_SNAKE
  * enum entry names.
  */

@@ -2,7 +2,7 @@
 
 Each native generator extends a shared `GenerateOptions` (input/output/clean/normalize) with a language-specific bundling flag.
 
-## Go — `@ahmedrowaihi/openapi-go`
+## Go — `@ir-kit/openapi-go`
 
 ```ts
 await generate({
@@ -28,7 +28,7 @@ await generate({
 
 **Output shape**: idiomatic Go — operations return `(T, *http.Response, error)`. Auth and base URL flow through `Client`. No external deps (stdlib only). Drop into existing module by omitting `gomod`.
 
-## Kotlin — `@ahmedrowaihi/openapi-kotlin`
+## Kotlin — `@ir-kit/openapi-kotlin`
 
 ```ts
 await generate({
@@ -53,7 +53,7 @@ await generate({
 
 **Output shape**: `suspend` functions on a sealed `Client` interface. kotlinx-serialization for JSON, OkHttp for transport. Enums become `@Serializable enum class` with `@SerialName` for wire form.
 
-## Swift — `@ahmedrowaihi/openapi-swift`
+## Swift — `@ir-kit/openapi-swift`
 
 ```ts
 await generate({
@@ -79,7 +79,7 @@ await generate({
 
 **Output shape**: `async throws` functions on a `Client` struct. `Codable` types for request/response, `URLSession` for transport. Enums are raw-typed (`enum Status: String, Codable`).
 
-## TypeScript — `@ahmedrowaihi/openapi-typescript`
+## TypeScript — `@ir-kit/openapi-typescript`
 
 ```ts
 await generate({
@@ -107,7 +107,7 @@ await generate({
 });
 ```
 
-**Plugin ecosystem**: drop in any hey-api first-party plugin (`@tanstack/react-query`, `@hey-api/sdk-axios`, `@hey-api/transformers`, validators) or contract-kit's own (`@ahmedrowaihi/openapi-ts-faker`, `@ahmedrowaihi/openapi-ts-orpc`, `@ahmedrowaihi/openapi-ts-paths`, `@ahmedrowaihi/openapi-ts-typia`, `@ahmedrowaihi/openapi-ts-k6`).
+**Plugin ecosystem**: drop in any hey-api first-party plugin (`@tanstack/react-query`, `@hey-api/sdk-axios`, `@hey-api/transformers`, validators) or ir-kit's own (`@ir-kit/openapi-ts-faker`, `@ir-kit/openapi-ts-orpc`, `@ir-kit/openapi-ts-paths`, `@ir-kit/openapi-ts-typia`, `@ir-kit/openapi-ts-k6`).
 
 **Plugin order matters**: client plugin first, then types, then SDK. Validators / mock factories come after.
 
@@ -115,7 +115,7 @@ await generate({
 
 All four:
 - Accept the same input shape (path / URL / object).
-- Share the `loadSpec` loader from `@ahmedrowaihi/openapi-tools` (URL detection, `$RefParser.bundle`, optional `normalizeSpec`).
+- Share the `loadSpec` loader from `@ir-kit/openapi-tools` (URL detection, `$RefParser.bundle`, optional `normalizeSpec`).
 - Resolve `output` against the caller's CWD by default; pass `cwd:` to override.
 - Default to `clean: true` (wipe output before writing). Pass `clean: false` to merge with existing files.
 - Return `{ files: BuiltFile[], output: string }`.

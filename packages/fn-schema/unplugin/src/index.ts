@@ -4,8 +4,8 @@ import {
   type ExtractOptions,
   type ExtractResult,
   type Project,
-} from "@ahmedrowaihi/fn-schema-core";
-import { typescript } from "@ahmedrowaihi/fn-schema-typescript";
+} from "@ir-kit/fn-schema-core";
+import { typescript } from "@ir-kit/fn-schema-typescript";
 import chokidar from "chokidar";
 import { glob } from "tinyglobby";
 import { createUnplugin, type UnpluginInstance } from "unplugin";
@@ -81,7 +81,7 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
     };
 
     return {
-      name: "@ahmedrowaihi/fn-schema-unplugin",
+      name: "@ir-kit/fn-schema-unplugin",
       enforce: "pre",
       resolveId(id) {
         if (id === virtualId) return resolvedId;

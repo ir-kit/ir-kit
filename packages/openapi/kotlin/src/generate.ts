@@ -1,16 +1,13 @@
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
-import {
-  assertSafeOutputDir,
-  defaultProjectName,
-} from "@ahmedrowaihi/codegen-core";
+import { assertSafeOutputDir, defaultProjectName } from "@ir-kit/codegen-core";
 import {
   extractSecuritySchemeNames,
   type NormalizeOptions,
-} from "@ahmedrowaihi/openapi-core";
-import { loadSpec } from "@ahmedrowaihi/openapi-tools";
-import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
+} from "@ir-kit/openapi-core";
+import { loadSpec } from "@ir-kit/openapi-tools";
+import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 import {
   type OperationsOptions,

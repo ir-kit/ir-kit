@@ -6,7 +6,7 @@ export {
   createRpcLinkClient,
   type OpenApiLinkClientConfig,
   type RpcLinkClientConfig,
-} from "./@ahmedrowaihi/orpc/client.gen";
+} from "./@ir-kit/orpc/client.gen";
 export {
   AddPetContract,
   DeletePetContract,
@@ -18,7 +18,7 @@ export {
   UpdatePetWithFormContract,
   UploadFileContract,
   UploadPetDocumentContract,
-} from "./@ahmedrowaihi/orpc/pet/contract.gen";
+} from "./@ir-kit/orpc/pet/contract.gen";
 export {
   mockAddPet,
   mockDeletePet,
@@ -30,9 +30,9 @@ export {
   mockUpdatePetWithForm,
   mockUploadFile,
   mockUploadPetDocument,
-} from "./@ahmedrowaihi/orpc/pet/faker.gen";
-export { router } from "./@ahmedrowaihi/orpc/router.gen";
-export { os } from "./@ahmedrowaihi/orpc/server.gen";
+} from "./@ir-kit/orpc/pet/faker.gen";
+export { router } from "./@ir-kit/orpc/router.gen";
+export { os } from "./@ir-kit/orpc/server.gen";
 export {
   CreateShapeContract,
   DeleteOrderContract,
@@ -40,7 +40,7 @@ export {
   GetOrderByIdContract,
   PlaceOrderContract,
   SubmitMeasurementContract,
-} from "./@ahmedrowaihi/orpc/store/contract.gen";
+} from "./@ir-kit/orpc/store/contract.gen";
 export {
   mockCreateShape,
   mockDeleteOrder,
@@ -48,8 +48,8 @@ export {
   mockGetOrderById,
   mockPlaceOrder,
   mockSubmitMeasurement,
-} from "./@ahmedrowaihi/orpc/store/faker.gen";
-export { createOrpcUtils } from "./@ahmedrowaihi/orpc/tanstack.gen";
+} from "./@ir-kit/orpc/store/faker.gen";
+export { createOrpcUtils } from "./@ir-kit/orpc/tanstack.gen";
 export {
   CreateUserContract,
   CreateUsersWithListInputContract,
@@ -59,7 +59,7 @@ export {
   LogoutUserContract,
   UpdateProfileContract,
   UpdateUserContract,
-} from "./@ahmedrowaihi/orpc/user/contract.gen";
+} from "./@ir-kit/orpc/user/contract.gen";
 export {
   mockCreateUser,
   mockCreateUsersWithListInput,
@@ -69,7 +69,7 @@ export {
   mockLogoutUser,
   mockUpdateProfile,
   mockUpdateUser,
-} from "./@ahmedrowaihi/orpc/user/faker.gen";
+} from "./@ir-kit/orpc/user/faker.gen";
 export type {
   AddPetData,
   AddPetErrors,

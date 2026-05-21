@@ -1,4 +1,4 @@
-import type { WalkedOperation } from "@ahmedrowaihi/k6-gen";
+import type { WalkedOperation } from "@ir-kit/k6-gen";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -35,7 +35,7 @@ describe("scaffoldScenario", () => {
   it("emits the no-auth shape — no useAuth import, no `use:` field", () => {
     const out = scaffoldScenario(baseOpts());
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke \} from "@ahmedrowaihi\/k6"/,
+      /import \{ defineLoadTest, flow, smoke \} from "@ir-kit\/k6"/,
     );
     expect(out).not.toMatch(/useAuth/);
     expect(out).not.toMatch(/^\s*use:/m);
@@ -71,7 +71,7 @@ describe("scaffoldScenario", () => {
       }),
     );
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke, batch \} from "@ahmedrowaihi\/k6"/,
+      /import \{ defineLoadTest, flow, smoke, batch \} from "@ir-kit\/k6"/,
     );
     expect(out).toMatch(/\.batch\("fan-out",\s*\(\)\s*=>/);
     expect(out).toMatch(/first:\s*api\.async\.first\(/);
@@ -110,7 +110,7 @@ describe("scaffoldScenario", () => {
       baseOpts({ auth: { auth: "bearer", bearerEnv: "API_TOKEN" } }),
     );
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke, useAuth \} from "@ahmedrowaihi\/k6"/,
+      /import \{ defineLoadTest, flow, smoke, useAuth \} from "@ir-kit\/k6"/,
     );
     expect(out).toMatch(
       /const auth = useAuth\.bearer\(\{ env: "API_TOKEN" \}\);/,

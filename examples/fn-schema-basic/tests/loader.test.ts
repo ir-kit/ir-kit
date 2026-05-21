@@ -1,8 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
-import { createReader } from "@ahmedrowaihi/fn-schema-loader";
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
+import { createReader } from "@ir-kit/fn-schema-loader";
+import { extract } from "@ir-kit/fn-schema-typescript";
 import { describe, expect, it } from "vitest";
 
 const here = path.dirname(fileURLToPath(import.meta.url));

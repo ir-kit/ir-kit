@@ -1,8 +1,8 @@
-import { camel, pascal } from "@ahmedrowaihi/codegen-core";
+import { camel, pascal } from "@ir-kit/codegen-core";
 
 /**
  * Go-specific identifier transforms. Generic case helpers (`pascal`,
- * `camel`, `safeIdent`, `safeCaseName`) live in `@ahmedrowaihi/codegen-core`
+ * `camel`, `safeIdent`, `safeCaseName`) live in `@ir-kit/codegen-core`
  * and are used directly by Go-targeted code. The exports here cover
  * what's actually unique to Go:
  *

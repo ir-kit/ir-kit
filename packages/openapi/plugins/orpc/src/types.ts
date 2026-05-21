@@ -29,12 +29,12 @@ export type FakerHandlerConfig = {
    * Values must be valid faker methods callable with zero arguments.
    * @example { email: "internet.email", firstName: "person.firstName" }
    */
-  fieldNameHints?: import("@ahmedrowaihi/openapi-ts-faker/core").FieldNameHints;
+  fieldNameHints?: import("@ir-kit/openapi-ts-faker/core").FieldNameHints;
   /**
    * Map OpenAPI `format` strings to faker method paths. Merged with the
    * shipped defaults (`uuid`, `email`, `date-time`, `uri`, ...).
    */
-  formatMapping?: import("@ahmedrowaihi/openapi-ts-faker/core").FormatMapping;
+  formatMapping?: import("@ir-kit/openapi-ts-faker/core").FormatMapping;
 };
 
 /**
@@ -156,7 +156,7 @@ export type ClientType = keyof ClientConfig;
 
 export type UserConfig = Plugin.Hooks &
   Plugin.UserExports & {
-    name: "@ahmedrowaihi/orpc";
+    name: "@ir-kit/orpc";
     /**
      * Server-side generation options.
      * Controls what backend files are produced.
@@ -221,7 +221,7 @@ export type UserConfig = Plugin.Hooks &
 
 export type Config = Plugin.Hooks &
   Plugin.Exports & {
-    name: "@ahmedrowaihi/orpc";
+    name: "@ir-kit/orpc";
     server: Required<Omit<ServerConfig, "handlers">> & {
       handlers:
         | false
@@ -254,6 +254,6 @@ export type ORPCPlugin = DefinePlugin<UserConfig, Config>;
 // Module augmentation to register the orpc plugin in the PluginConfigMap
 declare module "@hey-api/openapi-ts" {
   export interface PluginConfigMap {
-    "@ahmedrowaihi/orpc": ORPCPlugin["Types"];
+    "@ir-kit/orpc": ORPCPlugin["Types"];
   }
 }

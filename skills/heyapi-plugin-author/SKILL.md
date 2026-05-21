@@ -1,6 +1,6 @@
 ---
 name: heyapi-plugin-author
-description: Write a `@hey-api/openapi-ts` plugin that emits custom codegen on top of hey-api's IR. Use when the user wants to add a TypeScript code generator that hooks into hey-api's spec → IR pipeline — custom validators, mock factories, RPC clients, route maps, framework adapters, anything hey-api doesn't ship. The contract-kit repo already has five reference plugins (`openapi-ts-faker`, `openapi-ts-orpc`, `openapi-ts-paths`, `openapi-ts-typia`, `openapi-ts-k6`) that serve as templates. Triggers on "hey-api plugin", "openapi-ts plugin", "custom codegen plugin", "extend hey-api", `definePluginConfig`, `definePlugin`, "openapi-ts hooks", "openapi-ts plugin author". Do NOT use for hey-api consumption (use openapi-sdk → `@ahmedrowaihi/openapi-typescript`) or for non-hey-api codegen (see openapi-sdk for go/kotlin/swift, asyncapi-typescript for AsyncAPI).
+description: Write a `@hey-api/openapi-ts` plugin that emits custom codegen on top of hey-api's IR. Use when the user wants to add a TypeScript code generator that hooks into hey-api's spec → IR pipeline — custom validators, mock factories, RPC clients, route maps, framework adapters, anything hey-api doesn't ship. The ir-kit repo already has five reference plugins (`openapi-ts-faker`, `openapi-ts-orpc`, `openapi-ts-paths`, `openapi-ts-typia`, `openapi-ts-k6`) that serve as templates. Triggers on "hey-api plugin", "openapi-ts plugin", "custom codegen plugin", "extend hey-api", `definePluginConfig`, `definePlugin`, "openapi-ts hooks", "openapi-ts plugin author". Do NOT use for hey-api consumption (use openapi-sdk → `@ir-kit/openapi-typescript`) or for non-hey-api codegen (see openapi-sdk for go/kotlin/swift, asyncapi-typescript for AsyncAPI).
 ---
 
 # Authoring a `@hey-api/openapi-ts` plugin
@@ -29,7 +29,7 @@ my-plugin/
 └── package.json
 ```
 
-See [references/plugin-anatomy.md](references/plugin-anatomy.md) for the full walkthrough of each file using `@ahmedrowaihi/openapi-ts-paths` (the simplest reference plugin — 4 files, ~150 lines total).
+See [references/plugin-anatomy.md](references/plugin-anatomy.md) for the full walkthrough of each file using `@ir-kit/openapi-ts-paths` (the simplest reference plugin — 4 files, ~150 lines total).
 
 ## Minimal plugin
 
@@ -114,15 +114,15 @@ export type { MyPlugin } from "./types.js";
 
 ## Reference plugins — copy these
 
-The contract-kit monorepo ships five plugins. Each demonstrates a different pattern:
+The ir-kit monorepo ships five plugins. Each demonstrates a different pattern:
 
 | Plugin | Pattern | LoC |
 |---|---|---|
-| [`@ahmedrowaihi/openapi-ts-paths`](https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/paths) | Simplest — per-operation route consts. Best starting point. | ~150 |
-| [`@ahmedrowaihi/openapi-ts-faker`](https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/faker) | Schema-driven — emits faker factories per top-level schema. Shows schema iteration. | ~600 |
-| [`@ahmedrowaihi/openapi-ts-typia`](https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/typia) | Validator emission — types → typia validators. Shows IR walking + format hints. | ~400 |
-| [`@ahmedrowaihi/openapi-ts-orpc`](https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/orpc) | Multi-file emission — oRPC clients + contract + server. Largest of the set. | ~800 |
-| [`@ahmedrowaihi/openapi-ts-k6`](https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/k6/hey-api) | Thin delegator — defers all real work to `@ahmedrowaihi/k6-gen`. Shows "plugin as adapter". | ~30 |
+| [`@ir-kit/openapi-ts-paths`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/paths) | Simplest — per-operation route consts. Best starting point. | ~150 |
+| [`@ir-kit/openapi-ts-faker`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/faker) | Schema-driven — emits faker factories per top-level schema. Shows schema iteration. | ~600 |
+| [`@ir-kit/openapi-ts-typia`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/typia) | Validator emission — types → typia validators. Shows IR walking + format hints. | ~400 |
+| [`@ir-kit/openapi-ts-orpc`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/orpc) | Multi-file emission — oRPC clients + contract + server. Largest of the set. | ~800 |
+| [`@ir-kit/openapi-ts-k6`](https://github.com/ir-kit/ir-kit/tree/main/packages/k6/hey-api) | Thin delegator — defers all real work to `@ir-kit/k6-gen`. Shows "plugin as adapter". | ~30 |
 
 **Start with `openapi-ts-paths`** if you're new — smallest surface, complete shape.
 
@@ -155,11 +155,11 @@ Your plugin doesn't write to disk directly — it registers nodes via the DSL or
 hey-api's IR is documented in `@hey-api/shared`'s exported types. The shapes you'll touch most:
 
 - `IR.OperationObject` — `id`, `method`, `path`, `parameters: { path?, query?, header?, cookie? }`, `body?`, `responses`
-- `IR.SchemaObject` — type-tagged union (`string`, `number`, `enum`, `object`, `array`, `tuple`, plus composed shapes with `items`). The contract-kit repo has `@ahmedrowaihi/openapi-tools` with helpers — `getEnumLiterals`, `isEnumSchema`, `isUnionSchema` — that handle the common dispatch traps.
+- `IR.SchemaObject` — type-tagged union (`string`, `number`, `enum`, `object`, `array`, `tuple`, plus composed shapes with `items`). The ir-kit repo has `@ir-kit/openapi-tools` with helpers — `getEnumLiterals`, `isEnumSchema`, `isUnionSchema` — that handle the common dispatch traps.
 
 ## Code generation: use `$` DSL or `ts.factory`
 
-Convention across contract-kit: **no template strings for spec-driven generation**. Use hey-api's `$` DSL (`import { $ } from "@hey-api/openapi-ts"`) or `ts.factory` directly. The DSL has gaps (no `$.import`, no `$.interface`, no statement-level `$.raw`), so import declarations and interface declarations drop to `ts.factory` directly via small helpers.
+Convention across ir-kit: **no template strings for spec-driven generation**. Use hey-api's `$` DSL (`import { $ } from "@hey-api/openapi-ts"`) or `ts.factory` directly. The DSL has gaps (no `$.import`, no `$.interface`, no statement-level `$.raw`), so import declarations and interface declarations drop to `ts.factory` directly via small helpers.
 
 See `packages/k6/codegen/src/emit/ast-imports.ts` in the repo for a reusable `namedImport` / `namespaceImport` helper pair.
 
@@ -177,4 +177,4 @@ See `packages/k6/codegen/src/emit/ast-imports.ts` in the repo for a reusable `na
 2. Match to the closest reference plugin and tell the user to copy that as a template.
 3. Load [references/plugin-anatomy.md](references/plugin-anatomy.md) when they need the four-file shape explained line-by-line.
 4. For DSL questions ("how do I emit an interface", "how do I emit an import"), point at `packages/k6/codegen/src/emit/ast-imports.ts` in the repo for the AST helper pattern.
-5. For IR walking, point at `@ahmedrowaihi/openapi-tools` (specifically `getEnumLiterals` / `isEnumSchema` / `isUnionSchema`) — the schema-dispatch helpers shared across all contract-kit generators.
+5. For IR walking, point at `@ir-kit/openapi-tools` (specifically `getEnumLiterals` / `isEnumSchema` / `isUnionSchema`) — the schema-dispatch helpers shared across all ir-kit generators.

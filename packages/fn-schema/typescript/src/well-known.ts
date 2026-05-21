@@ -1,4 +1,4 @@
-import type { JSONSchema } from "@ahmedrowaihi/fn-schema-core";
+import type { JSONSchema } from "@ir-kit/fn-schema-core";
 
 export const SENTINEL_KEY = "__fn_schema_marker";
 

@@ -26,7 +26,7 @@ export const defaultConfig: TypiaPlugin["Config"] = {
   },
   dependencies: ["@hey-api/transformers", "@hey-api/typescript"],
   handler,
-  name: "@ahmedrowaihi/openapi-ts-typia",
+  name: "@ir-kit/openapi-ts-typia",
   resolveConfig: (plugin, context) => {
     plugin.config.requests = context.valueToObject({
       defaultValue: {

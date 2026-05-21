@@ -13,7 +13,7 @@ import {
   soak,
   spike,
   stress,
-} from "@ahmedrowaihi/k6";
+} from "@ir-kit/k6";
 
 smoke({ vus: 1, duration: "30s" });
 // constant-vus baseline — 1 VU × 30s.
@@ -59,7 +59,7 @@ import {
   flow,
   useAuth,
   type Scenario,
-} from "@ahmedrowaihi/k6";
+} from "@ir-kit/k6";
 import * as api from "./gen/index.js";
 
 // Hand-rolled — k6's `shared-iterations` executor (no preset for it).
@@ -338,8 +338,8 @@ When you want full response access (status, headers, timings) on a *typed* op wi
 ```ts
 import http from "k6/http";
 import { check } from "k6";
-import { flow } from "@ahmedrowaihi/k6";
-import { parseJson } from "@ahmedrowaihi/k6/runtime";
+import { flow } from "@ir-kit/k6";
+import { parseJson } from "@ir-kit/k6/runtime";
 import * as api from "./src/gen/index.js";
 
 flow().step("manual control", () => {

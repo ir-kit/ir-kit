@@ -42,7 +42,7 @@ interface Bundle {
  *   "compilerOptions": {
  *     "plugins": [
  *       {
- *         "transform": "@ahmedrowaihi/fn-schema-transformer",
+ *         "transform": "@ir-kit/fn-schema-transformer",
  *         "bundlePath": "./generated/schemas.json"
  *       }
  *     ]

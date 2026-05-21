@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/openapi-ts-faker",
-  "version": "4.0.3",
+  "name": "@ir-kit/openapi-ts-faker",
+  "version": "0.1.0",
   "description": "Faker.js plugin for @hey-api/openapi-ts - Generate realistic mock data factories from OpenAPI specs",
   "keywords": [
     "openapi",
@@ -15,9 +15,9 @@
     "type-safe",
     "plugin"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/faker",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/faker",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/plugins/faker"
   },
   "type": "module",
@@ -70,7 +70,7 @@
     }
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@faker-js/faker": "^10.4.0",
     "@hey-api/codegen-core": "catalog:",
     "@hey-api/openapi-ts": "catalog:",

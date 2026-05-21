@@ -1,7 +1,7 @@
 {
-  "name": "@ahmedrowaihi/openapi-typescript",
-  "version": "0.2.2",
-  "description": "Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ahmedrowaihi/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline.",
+  "name": "@ir-kit/openapi-typescript",
+  "version": "0.1.0",
+  "description": "Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline.",
   "keywords": [
     "openapi",
     "typescript",
@@ -10,9 +10,9 @@
     "client",
     "hey-api"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/typescript",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/typescript",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/typescript"
   },
   "type": "module",
@@ -54,11 +54,11 @@
     "@hey-api/openapi-ts": ">=0.97.0"
   },
   "dependencies": {
-    "@ahmedrowaihi/openapi-core": "workspace:*",
-    "@ahmedrowaihi/openapi-tools": "workspace:*"
+    "@ir-kit/openapi-core": "workspace:*",
+    "@ir-kit/openapi-tools": "workspace:*"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/openapi-ts": "catalog:",
     "@types/node": "catalog:",
     "vitest": "catalog:"

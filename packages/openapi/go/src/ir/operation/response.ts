@@ -1,5 +1,5 @@
-import { isMeaningless } from "@ahmedrowaihi/openapi-core";
 import type { IR } from "@hey-api/shared";
+import { isMeaningless } from "@ir-kit/openapi-core";
 
 import {
   type GoType,

@@ -1,10 +1,10 @@
+import { $ } from "@hey-api/openapi-ts";
 import {
   type BuildFakerOptions,
   buildFakerExpression,
   type FieldNameHints,
   type ResponseSchemaInfo,
-} from "@ahmedrowaihi/openapi-ts-faker/core";
-import { $ } from "@hey-api/openapi-ts";
+} from "@ir-kit/openapi-ts-faker/core";
 
 import type { RouterNode } from "../router-organizer";
 import type { FakerHandlerConfig } from "../types";

@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/asyncapi-typescript",
-  "version": "1.1.0",
+  "name": "@ir-kit/asyncapi-typescript",
+  "version": "0.1.0",
   "description": "AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture: a small core orchestrates parser → IR → registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema → TS via @asyncapi/modelina, file orchestration via @hey-api/codegen-core.",
   "keywords": [
     "asyncapi",
@@ -10,9 +10,9 @@
     "amqp",
     "rabbitmq"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/asyncapi/typescript",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/asyncapi/typescript",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/asyncapi/typescript"
   },
   "type": "module",
@@ -50,8 +50,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@ahmedrowaihi/asyncapi-core": ">=1.0.0",
-    "@ahmedrowaihi/codegen-core": ">=0.2.1",
+    "@ir-kit/asyncapi-core": ">=1.0.0",
+    "@ir-kit/codegen-core": ">=0.2.1",
     "@asyncapi/modelina": ">=5.0.0",
     "@asyncapi/parser": ">=3.0.0",
     "@hey-api/codegen-core": ">=0.8.0",
@@ -64,9 +64,9 @@
     }
   },
   "devDependencies": {
-    "@ahmedrowaihi/asyncapi-core": "workspace:*",
-    "@ahmedrowaihi/codegen-core": "workspace:*",
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/asyncapi-core": "workspace:*",
+    "@ir-kit/codegen-core": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@asyncapi/modelina": "catalog:",
     "@asyncapi/parser": "catalog:",
     "@hey-api/codegen-core": "catalog:",

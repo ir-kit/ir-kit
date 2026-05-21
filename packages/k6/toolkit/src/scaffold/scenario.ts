@@ -1,4 +1,4 @@
-import type { WalkedOperation } from "@ahmedrowaihi/k6-gen";
+import type { WalkedOperation } from "@ir-kit/k6-gen";
 import ts from "typescript";
 
 import { namespaceImport } from "../ast-imports.js";

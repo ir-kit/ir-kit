@@ -47,12 +47,12 @@ The TypeScript codegen layer in this repo (everything that emits `.ts` files) is
 | Need | Use |
 | --- | --- |
 | Bundle external `$ref`s in an OpenAPI spec | `$RefParser` from `@hey-api/json-schema-ref-parser` |
-| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseSpec` from `@ahmedrowaihi/openapi-tools/parse` (wraps hey-api's parser) |
-| Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `@ahmedrowaihi/openapi-core` |
-| Safe-write a generated output directory | `assertSafeOutputDir` from `@ahmedrowaihi/codegen-core` |
+| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseSpec` from `@ir-kit/openapi-tools/parse` (wraps hey-api's parser) |
+| Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `@ir-kit/openapi-core` |
+| Safe-write a generated output directory | `assertSafeOutputDir` from `@ir-kit/codegen-core` |
 | Build TypeScript ASTs (when emitting `.ts`) | `$` DSL from `@hey-api/openapi-ts` — `$.const`, `$.func`, `$.type.*`, `$.literal`, `$().attr().call()`. Compiles to `ts.factory` underneath, so `.toAst()` returns plain TS AST when you need to print standalone. |
-| Faker heuristics (format → faker method, field-name hints) | `resolveFakerCall`, `DEFAULT_FORMAT_MAPPING`, `DATE_METHODS` from `@ahmedrowaihi/openapi-ts-faker/core` |
-| Spec server / security walking | helpers in `@ahmedrowaihi/openapi-core` |
+| Faker heuristics (format → faker method, field-name hints) | `resolveFakerCall`, `DEFAULT_FORMAT_MAPPING`, `DATE_METHODS` from `@ir-kit/openapi-ts-faker/core` |
+| Spec server / security walking | helpers in `@ir-kit/openapi-core` |
 
 For **non-TypeScript codegen** (Swift / Go / Kotlin native generators), keep your own DSL — hey-api's `$` DSL is TypeScript-targeting. See `openapi-swift/src/sw-dsl/` for the established shape: per-language IR + DSL + compiler + project layers.
 

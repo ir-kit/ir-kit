@@ -33,7 +33,7 @@ export function registerTypiaSymbol({
     buildSymbolIn({
       meta: {
         category: "schema",
-        tool: "@ahmedrowaihi/openapi-ts-typia",
+        tool: "@ir-kit/openapi-ts-typia",
         ...meta,
       },
       name: namingAnchor,
@@ -104,7 +104,7 @@ export function emitBulkJsonSchemas({
         resource: "definition",
         resourceId: BULK_SCHEMAS_NAME,
         role: "bulk-json",
-        tool: "@ahmedrowaihi/openapi-ts-typia",
+        tool: "@ir-kit/openapi-ts-typia",
       },
       name: BULK_SCHEMAS_NAME,
       naming: { case: "camelCase", name: BULK_SCHEMAS_NAME },
@@ -164,7 +164,7 @@ export function emitJsonComponents({
         resource: "definition",
         resourceId: name,
         role: "components",
-        tool: "@ahmedrowaihi/openapi-ts-typia",
+        tool: "@ir-kit/openapi-ts-typia",
       },
       name,
       naming: { case: "camelCase", name },

@@ -3,7 +3,7 @@ export {
   type GenerateResult,
   generate,
   type ScaffoldOptions,
-} from "@ahmedrowaihi/k6-gen";
+} from "@ir-kit/k6-gen";
 
 export { type BundleOpts, type BundleResult, bundle } from "./bundle.js";
 export {

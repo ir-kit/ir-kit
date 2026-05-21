@@ -1,6 +1,6 @@
 import path from "node:path";
-import { createProject } from "@ahmedrowaihi/fn-schema-core";
-import { typescript } from "@ahmedrowaihi/fn-schema-typescript";
+import { createProject } from "@ir-kit/fn-schema-core";
+import { typescript } from "@ir-kit/fn-schema-typescript";
 import { defineCommand } from "citty";
 import consola from "consola";
 import { loadFnSchemaConfig } from "../config.js";

@@ -66,7 +66,7 @@ export function toBundleTypesModule(
     .map((name) => `    readonly ${quoteKey(name)}: JSONSchema;`)
     .join("\n");
   return [
-    `import type { JSONSchema } from "@ahmedrowaihi/fn-schema-core";`,
+    `import type { JSONSchema } from "@ir-kit/fn-schema-core";`,
     `import raw from "${jsonImport}" with { type: "json" };`,
     ``,
     `export interface Schemas {`,

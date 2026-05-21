@@ -1,5 +1,5 @@
-import { HTTP_METHODS, type HttpMethod } from "@ahmedrowaihi/openapi-core";
 import type { IR } from "@hey-api/shared";
+import { HTTP_METHODS, type HttpMethod } from "@ir-kit/openapi-core";
 
 export interface WalkedOperation {
   id: string;

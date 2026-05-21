@@ -1,5 +1,5 @@
-import { refName } from "@ahmedrowaihi/openapi-core";
 import type { IR } from "@hey-api/shared";
+import { refName } from "@ir-kit/openapi-core";
 
 import { swTypeAlias } from "../sw-dsl/decl/typeAlias.js";
 import type { SwDecl } from "../sw-dsl/decl/types.js";

@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
+import { extract } from "@ir-kit/fn-schema-typescript";
 import { describe, expect, it } from "vitest";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -101,7 +101,7 @@ describe("fn-schema-typescript: extract", () => {
   });
 
   it("emits a JSON bundle to disk via emit.toBundle", async () => {
-    const { emit } = await import("@ahmedrowaihi/fn-schema-core");
+    const { emit } = await import("@ir-kit/fn-schema-core");
     const result = await extract({
       files: [handlersFile],
       tsConfigPath: path.resolve(here, "../tsconfig.json"),

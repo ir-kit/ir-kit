@@ -1,6 +1,6 @@
-# @ahmedrowaihi/openapi-core
+# @ir-kit/openapi-core
 
-Foundational helpers shared by the native-client SDK generators in [contract-kit](https://github.com/ahmedrowaihi/contract-kit) — used by [`@ahmedrowaihi/openapi-go`](../openapi-go), [`@ahmedrowaihi/openapi-kotlin`](../openapi-kotlin), and [`@ahmedrowaihi/openapi-swift`](../openapi-swift).
+Foundational helpers shared by the native-client SDK generators in [ir-kit](https://github.com/ir-kit/ir-kit) — used by [`@ir-kit/openapi-go`](../openapi-go), [`@ir-kit/openapi-kotlin`](../openapi-kotlin), and [`@ir-kit/openapi-swift`](../openapi-swift).
 
 Not intended for direct consumption — the API surface here is whatever the three SDK generators happen to need in common, and may shift as new generators land.
 
@@ -20,7 +20,7 @@ Not intended for direct consumption — the API surface here is whatever the thr
 ## Install
 
 ```bash
-pnpm add @ahmedrowaihi/openapi-core @hey-api/shared
+pnpm add @ir-kit/openapi-core @hey-api/shared
 ```
 
 `@hey-api/shared` is a peer dep so the IR types stay aligned with the generator's own version.

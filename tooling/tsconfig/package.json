@@ -1,5 +1,5 @@
 {
-  "name": "@ahmedrowaihi/tsconfig",
+  "name": "@ir-kit/tsconfig",
   "version": "0.0.0",
   "private": true,
   "exports": {

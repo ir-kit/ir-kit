@@ -1,9 +1,8 @@
 import { readdir, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
-
-import type { NormalizeOptions } from "@ahmedrowaihi/openapi-core";
-import { loadSpec } from "@ahmedrowaihi/openapi-tools";
 import { createClient, type UserConfig } from "@hey-api/openapi-ts";
+import type { NormalizeOptions } from "@ir-kit/openapi-core";
+import { loadSpec } from "@ir-kit/openapi-tools";
 
 /**
  * Default plugin set — emits a runnable client SDK ready to drop into a
@@ -65,7 +64,7 @@ export interface GenerateResult {
 /**
  * Run hey-api's TypeScript codegen against `input`, writing the result
  * to `output`. Thin wrapper around `createClient` that matches the
- * `generate()` shape of `@ahmedrowaihi/openapi-{go,kotlin,swift}` so
+ * `generate()` shape of `@ir-kit/openapi-{go,kotlin,swift}` so
  * the same `sdk-regen` workflow drives all four targets uniformly.
  */
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {

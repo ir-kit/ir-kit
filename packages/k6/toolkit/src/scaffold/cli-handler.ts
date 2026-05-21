@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
-import { loadSpec } from "@ahmedrowaihi/openapi-tools";
-import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
 import { intro, log, outro } from "@clack/prompts";
+import { loadSpec } from "@ir-kit/openapi-tools";
+import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 import type { AuthScaffoldOpts } from "../loadtest-scaffold.js";
 import type { ChainMode } from "./chains.js";

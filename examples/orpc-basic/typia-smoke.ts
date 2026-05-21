@@ -13,7 +13,7 @@ import {
   tUpdateProfileData,
   tUploadFileData,
   tUploadPetDocumentData,
-} from "./src/generated/@ahmedrowaihi/openapi-ts-typia.gen";
+} from "./src/generated/@ir-kit/openapi-ts-typia.gen";
 
 function assert(condition: boolean, label: string): void {
   if (!condition) {

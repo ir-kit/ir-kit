@@ -1,10 +1,10 @@
 {
-  "name": "contract-kit",
+  "name": "ir-kit",
   "private": true,
   "description": "Toolkit for OpenAPI / AsyncAPI / SDK contract codegen",
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit",
+  "homepage": "https://github.com/ir-kit/ir-kit",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git"
+    "url": "git+https://github.com/ir-kit/ir-kit.git"
   },
   "type": "module",
   "scripts": {

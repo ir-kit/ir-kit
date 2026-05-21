@@ -9,7 +9,7 @@ import type { IApi } from "./api";
 
 export type UserConfig = Plugin.Hooks &
   Plugin.UserExports & {
-    name: "@ahmedrowaihi/openapi-ts-typia";
+    name: "@ir-kit/openapi-ts-typia";
     /**
      * Casing convention for generated names.
      *
@@ -113,7 +113,7 @@ export type UserConfig = Plugin.Hooks &
 
 export type Config = Plugin.Hooks &
   Plugin.Exports & {
-    name: "@ahmedrowaihi/openapi-ts-typia";
+    name: "@ir-kit/openapi-ts-typia";
     case: Casing;
     comments: boolean;
     jsonSchema: boolean;
@@ -136,6 +136,6 @@ export type TypiaPlugin = DefinePlugin<UserConfig, Config, IApi>;
 // Register plugin name in hey-api's PluginConfigMap.
 declare module "@hey-api/openapi-ts" {
   export interface PluginConfigMap {
-    "@ahmedrowaihi/openapi-ts-typia": TypiaPlugin["Types"];
+    "@ir-kit/openapi-ts-typia": TypiaPlugin["Types"];
   }
 }

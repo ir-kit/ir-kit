@@ -1,6 +1,6 @@
 # Plugin anatomy — annotated walkthrough
 
-Using `@ahmedrowaihi/openapi-ts-paths` as the reference (simplest plugin in contract-kit, ~150 LoC total). Copy this layout for any new plugin.
+Using `@ir-kit/openapi-ts-paths` as the reference (simplest plugin in ir-kit, ~150 LoC total). Copy this layout for any new plugin.
 
 ## File 1: `types.ts` — the contract
 
@@ -12,12 +12,12 @@ import type { Casing, DefinePlugin, NamingRule, Plugin } from "@hey-api/shared";
 // What the user passes in their openapi-ts.config.ts
 export type UserConfig = Plugin.Hooks &      // hey-api hooks (transform, etc)
   Plugin.UserExports & {                      // hey-api's standard export controls
-    name: "@ahmedrowaihi/paths";              // plugin identifier — MUST be a string literal
+    name: "@ir-kit/paths";              // plugin identifier — MUST be a string literal
     //                                        // (this can differ from the npm package name —
-    //                                        //  npm: `@ahmedrowaihi/openapi-ts-paths`,
-    //                                        //  plugin: `@ahmedrowaihi/paths`. The literal here
+    //                                        //  npm: `@ir-kit/openapi-ts-paths`,
+    //                                        //  plugin: `@ir-kit/paths`. The literal here
     //                                        //  must match the module-augmentation key + any
-    //                                        //  `dependencies: ["@ahmedrowaihi/paths"]` strings.)
+    //                                        //  `dependencies: ["@ir-kit/paths"]` strings.)
     /** Filename (no extension). @default "paths" */
     output?: string;
     /** Route const naming. */
@@ -32,7 +32,7 @@ export type UserConfig = Plugin.Hooks &      // hey-api hooks (transform, etc)
 // What your handler sees after defaults merge
 export type Config = Plugin.Hooks &
   Plugin.Exports & {
-    name: "@ahmedrowaihi/paths";
+    name: "@ir-kit/paths";
     output: string;                            // no `?` — defaults applied
     naming: {
       casing: Casing;
@@ -44,11 +44,11 @@ export type Config = Plugin.Hooks &
 export type PathsPlugin = DefinePlugin<UserConfig, Config>;
 
 // CRITICAL: module augmentation registers your plugin in hey-api's map.
-// Without this, hey-api can't resolve `dependencies: ["@ahmedrowaihi/paths"]`
+// Without this, hey-api can't resolve `dependencies: ["@ir-kit/paths"]`
 // elsewhere, and module-augmented import sites won't typecheck.
 declare module "@hey-api/openapi-ts" {
   export interface PluginConfigMap {
-    "@ahmedrowaihi/paths": PathsPlugin;
+    "@ir-kit/paths": PathsPlugin;
   }
 }
 ```
@@ -72,7 +72,7 @@ export const defaultConfig: PathsPlugin["Config"] = {
   },
   dependencies: ["@hey-api/typescript"],       // ← run after @hey-api/typescript
   handler,
-  name: "@ahmedrowaihi/paths",                 // ← must match the literal in types.ts
+  name: "@ir-kit/paths",                 // ← must match the literal in types.ts
   tags: ["transformer"],                       // ← hey-api categorizes plugins by tag
 };
 
@@ -82,7 +82,7 @@ export const defineConfig = definePluginConfig(defaultConfig);
 `definePluginConfig` wraps your defaults and returns a factory the user calls in their `openapi-ts.config.ts`:
 
 ```ts
-import { defineConfig as paths } from "@ahmedrowaihi/openapi-ts-paths";
+import { defineConfig as paths } from "@ir-kit/openapi-ts-paths";
 
 await createClient({
   // ...
@@ -186,7 +186,7 @@ Peer-deps `@hey-api/openapi-ts` + `@hey-api/shared` — both must be available a
 
 ## Build pipeline
 
-Per contract-kit convention:
+Per ir-kit convention:
 
 ```jsonc
 "scripts": {
@@ -198,8 +198,8 @@ Per contract-kit convention:
 
 Two tsconfigs: `tsconfig.json` for IDE/typecheck (`noEmit`, includes `tests/`), `tsconfig.build.json` for emit (excludes `tests/`, sets `outDir: dist`).
 
-## When to add a plugin to the contract-kit repo
+## When to add a plugin to the ir-kit repo
 
-If your plugin is useful to other contract-kit consumers and tracks the workspace's quality bar (manypkg-aligned versions, biome formatting, vitest coverage), open a PR adding it under `packages/openapi/plugins/<name>/`. Maintainer will route it.
+If your plugin is useful to other ir-kit consumers and tracks the workspace's quality bar (manypkg-aligned versions, biome formatting, vitest coverage), open a PR adding it under `packages/openapi/plugins/<name>/`. Maintainer will route it.
 
-If it's domain-specific to your team, ship it from your own repo with the four-file shape above. It composes with contract-kit plugins without modification.
+If it's domain-specific to your team, ship it from your own repo with the four-file shape above. It composes with ir-kit plugins without modification.

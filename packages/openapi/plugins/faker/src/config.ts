@@ -30,7 +30,7 @@ export const defaultConfig: FakerPlugin["Config"] = {
   },
   dependencies: ["@hey-api/typescript"],
   handler,
-  name: "@ahmedrowaihi/openapi-ts-faker",
+  name: "@ir-kit/openapi-ts-faker",
   resolveConfig: (plugin) => {
     plugin.config.fieldNameHints = normalizeFieldNameHints(
       plugin.config.fieldNameHints,

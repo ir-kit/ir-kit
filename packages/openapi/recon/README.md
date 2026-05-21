@@ -1,21 +1,21 @@
-# @ahmedrowaihi/openapi-recon
+# @ir-kit/openapi-recon
 
 Reverse-engineer an OpenAPI 3.1 document from observed HTTP traffic. Feed it standard Web Fetch `Request` / `Response` pairs and it folds them into a JSON Schema 2020-12 document with templated paths, per-status response schemas, detected auth schemes, and per-origin grouping.
 
 Runtime-agnostic: works in browsers, Node, Deno, Bun, Cloudflare Workers — anywhere `Request` / `Response` exist. Pure functions, no global state, tree-shakable.
 
-Powers [`@ahmedrowaihi/glean`](../../apps/glean), the Chrome DevTools extension that emits live specs from browsing.
+Powers [`@ir-kit/glean`](../../apps/glean), the Chrome DevTools extension that emits live specs from browsing.
 
 ## Install
 
 ```bash
-pnpm add @ahmedrowaihi/openapi-recon
+pnpm add @ir-kit/openapi-recon
 ```
 
 ## Use
 
 ```ts
-import { createRecon } from "@ahmedrowaihi/openapi-recon";
+import { createRecon } from "@ir-kit/openapi-recon";
 
 const recon = createRecon({
   title: "Petstore",
@@ -70,8 +70,8 @@ createRecon({
 
 ## Pairing
 
-- **[`@ahmedrowaihi/glean`](../../apps/glean)** — Chrome DevTools panel that wires this up to the network panel and emits a live, click-to-copy spec.
-- **[`@ahmedrowaihi/openapi-tools/diff`](../openapi-tools)** — diff a freshly recon'd spec against a committed one to spot drift between docs and reality.
+- **[`@ir-kit/glean`](../../apps/glean)** — Chrome DevTools panel that wires this up to the network panel and emits a live, click-to-copy spec.
+- **[`@ir-kit/openapi-tools/diff`](../openapi-tools)** — diff a freshly recon'd spec against a committed one to spot drift between docs and reality.
 
 ## License
 

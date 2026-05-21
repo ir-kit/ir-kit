@@ -1,13 +1,13 @@
-# @ahmedrowaihi/openapi-typescript
+# @ir-kit/openapi-typescript
 
-Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ahmedrowaihi/openapi-{go,kotlin,swift}`](https://github.com/ahmedrowaihi/contract-kit). Lets the [`sdk-regen`](https://github.com/ahmedrowaihi/contract-kit/tree/main/actions/sdk-regen) GitHub Action drive a TypeScript SDK alongside the native ones — same workflow, same inputs, four targets.
+Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ir-kit/openapi-{go,kotlin,swift}`](https://github.com/ir-kit/ir-kit). Lets the [`sdk-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/sdk-regen) GitHub Action drive a TypeScript SDK alongside the native ones — same workflow, same inputs, four targets.
 
-Part of [contract-kit](https://github.com/ahmedrowaihi/contract-kit). **No new codegen** — the entire TypeScript pipeline (types, sdk, schemas, transformers, validators, query hooks, ...) is hey-api's; this package only normalises the calling convention and the result shape.
+Part of [ir-kit](https://github.com/ir-kit/ir-kit). **No new codegen** — the entire TypeScript pipeline (types, sdk, schemas, transformers, validators, query hooks, ...) is hey-api's; this package only normalises the calling convention and the result shape.
 
 ## Install
 
 ```bash
-pnpm add -D @ahmedrowaihi/openapi-typescript @hey-api/openapi-ts
+pnpm add -D @ir-kit/openapi-typescript @hey-api/openapi-ts
 ```
 
 `@hey-api/openapi-ts` is a peer dep so you can pin its version (and the plugins it ships) without depending on what we happen to bundle.
@@ -15,7 +15,7 @@ pnpm add -D @ahmedrowaihi/openapi-typescript @hey-api/openapi-ts
 ## Usage
 
 ```ts
-import { generate } from "@ahmedrowaihi/openapi-typescript";
+import { generate } from "@ir-kit/openapi-typescript";
 
 await generate({
   input: "openapi.yaml",
@@ -63,7 +63,7 @@ interface GenerateResult {
 }
 ```
 
-Matches the result shape of `@ahmedrowaihi/openapi-go` / `-kotlin` / `-swift`, so downstream tooling (the [`sdk-regen`](https://github.com/ahmedrowaihi/contract-kit/tree/main/actions/sdk-regen) action, your own CI scripts) can iterate the four packages uniformly.
+Matches the result shape of `@ir-kit/openapi-go` / `-kotlin` / `-swift`, so downstream tooling (the [`sdk-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/sdk-regen) action, your own CI scripts) can iterate the four packages uniformly.
 
 ## Why a wrapper
 

@@ -3,7 +3,7 @@
 The framework ships five built-in auth flavors. All return a `Middleware` object that the runtime composes into every request's headers.
 
 ```ts
-import { useAuth } from "@ahmedrowaihi/k6";
+import { useAuth } from "@ir-kit/k6";
 ```
 
 ## Bearer

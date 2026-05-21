@@ -49,7 +49,7 @@ const pkgJson = readFileSync(pkgJsonPath, "utf8")
   .replaceAll("__DESCRIPTION__", "");
 writeFileSync(pkgJsonPath, pkgJson);
 
-console.log(`✓ scaffolded @ahmedrowaihi/${pkgName} at ${pkgPath}`);
+console.log(`✓ scaffolded @ir-kit/${pkgName} at ${pkgPath}`);
 console.log("  next:");
 console.log("    1. set description + keywords in package.json");
 console.log("    2. pnpm install");

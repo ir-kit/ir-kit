@@ -1,7 +1,7 @@
 {
-  "name": "@ahmedrowaihi/asyncapi-core",
-  "version": "1.0.0",
-  "description": "Shared AsyncAPI 3.0 primitives for codegen — uniform parseSpec entry point on top of @asyncapi/parser, plus AMQP binding extractors and routing-key matching. Mirror of @ahmedrowaihi/openapi-core for the AsyncAPI track.",
+  "name": "@ir-kit/asyncapi-core",
+  "version": "0.1.0",
+  "description": "Shared AsyncAPI 3.0 primitives for codegen — uniform parseSpec entry point on top of @asyncapi/parser, plus AMQP binding extractors and routing-key matching. Mirror of @ir-kit/openapi-core for the AsyncAPI track.",
   "keywords": [
     "asyncapi",
     "amqp",
@@ -11,9 +11,9 @@
     "codegen",
     "shared"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/asyncapi/core",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/asyncapi/core",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/asyncapi/core"
   },
   "type": "module",
@@ -66,7 +66,7 @@
     "@asyncapi/parser": "catalog:"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

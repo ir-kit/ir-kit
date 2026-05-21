@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/openapi-tools",
-  "version": "1.4.0",
+  "name": "@ir-kit/openapi-tools",
+  "version": "0.1.0",
   "description": "OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend",
   "keywords": [
     "openapi",
@@ -12,9 +12,9 @@
     "tooling",
     "typescript"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/tools",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/tools",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/tools"
   },
   "type": "module",
@@ -86,12 +86,12 @@
     "@hey-api/spec-types": ">=0.2.0"
   },
   "dependencies": {
-    "@ahmedrowaihi/openapi-core": "workspace:*",
+    "@ir-kit/openapi-core": "workspace:*",
     "@hey-api/json-schema-ref-parser": "catalog:",
     "urlpattern-polyfill": "^10.1.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/codegen-core": "catalog:",
     "@hey-api/shared": "catalog:",
     "@hey-api/spec-types": "catalog:",

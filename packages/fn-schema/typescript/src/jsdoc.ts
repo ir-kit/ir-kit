@@ -1,4 +1,4 @@
-import type { JSDocInfo } from "@ahmedrowaihi/fn-schema-core";
+import type { JSDocInfo } from "@ir-kit/fn-schema-core";
 import type { JSDoc } from "ts-morph";
 
 export function parseJsDoc(docs: JSDoc[]): JSDocInfo | undefined {

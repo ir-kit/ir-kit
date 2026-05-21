@@ -1,4 +1,4 @@
-# @ahmedrowaihi/fn-schema-transformer
+# @ir-kit/fn-schema-transformer
 
 TypeScript compiler-API transformer that **inlines fn-schema results into emitted JS at compile time**. Replaces every `schemaOf(fn)` call with a literal JSON Schema object pulled from a pre-extracted bundle.
 
@@ -18,7 +18,7 @@ For 95% of users the [`loader`](../loader/README.md) is the right answer — sim
 ## Install
 
 ```bash
-pnpm add -D @ahmedrowaihi/fn-schema-transformer ts-patch
+pnpm add -D @ir-kit/fn-schema-transformer ts-patch
 ```
 
 ## Setup
@@ -30,8 +30,8 @@ Either path works — the transformer just needs a `schemas.json` on disk before
 **Programmatic** (in a build script):
 
 ```ts
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
+import { extract } from "@ir-kit/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
 import { writeFile, mkdir } from "node:fs/promises";
 
 const result = await extract({ files: ["src/api/**/*.ts"] });
@@ -53,7 +53,7 @@ npx fn-schema extract 'src/api/**/*.ts' --bundle generated/schemas.json --pretty
   "compilerOptions": {
     "plugins": [
       {
-        "transform": "@ahmedrowaihi/fn-schema-transformer",
+        "transform": "@ir-kit/fn-schema-transformer",
         "bundlePath": "./generated/schemas.json",
       },
     ],
@@ -81,7 +81,7 @@ import {
   schemaOf,
   inputSchemaOf,
   outputSchemaOf,
-} from "@ahmedrowaihi/fn-schema-transformer/runtime";
+} from "@ir-kit/fn-schema-transformer/runtime";
 import { createUser } from "./api/handlers";
 
 const meta = schemaOf(createUser);

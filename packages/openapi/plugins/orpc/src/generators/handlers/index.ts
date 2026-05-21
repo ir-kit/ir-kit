@@ -36,7 +36,7 @@ export interface HandlersGeneratorInput {
   fakerFactoryNames?: Map<string, string>;
   /**
    * Faker mode: base import path for faker.gen files.
-   * e.g. "#/generated/@ahmedrowaihi/orpc" — tag is appended: `${base}/${tag}/faker.gen`
+   * e.g. "#/generated/@ir-kit/orpc" — tag is appended: `${base}/${tag}/faker.gen`
    */
   fakerGenImportBase?: string;
 }

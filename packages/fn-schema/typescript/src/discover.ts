@@ -2,7 +2,7 @@ import type {
   FunctionInfo,
   FunctionKind,
   ParameterInfo,
-} from "@ahmedrowaihi/fn-schema-core";
+} from "@ir-kit/fn-schema-core";
 import {
   type ArrowFunction,
   type ExportAssignment,

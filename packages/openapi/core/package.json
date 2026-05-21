@@ -1,16 +1,16 @@
 {
-  "name": "@ahmedrowaihi/openapi-core",
-  "version": "2.0.0",
-  "description": "Shared building blocks for native-client SDK generators on top of OpenAPI 3.x — identifier transforms, security-scheme walkers, ref helpers, filesystem safety. Used by @ahmedrowaihi/openapi-go, @ahmedrowaihi/openapi-kotlin, @ahmedrowaihi/openapi-swift.",
+  "name": "@ir-kit/openapi-core",
+  "version": "0.1.0",
+  "description": "Shared building blocks for native-client SDK generators on top of OpenAPI 3.x — identifier transforms, security-scheme walkers, ref helpers, filesystem safety. Used by @ir-kit/openapi-go, @ir-kit/openapi-kotlin, @ir-kit/openapi-swift.",
   "keywords": [
     "openapi",
     "codegen",
     "sdk",
     "shared"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/core",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/core",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/core"
   },
   "type": "module",
@@ -52,7 +52,7 @@
     "@hey-api/shared": ">=0.3.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/shared": "catalog:",
     "@types/node": "catalog:",
     "vitest": "catalog:"

@@ -4,11 +4,11 @@
  * nested object/array schemas into a flat PropertyInfo tree.
  */
 
+import type { IR } from "@hey-api/shared";
 import type {
   PropertyInfo,
   ResponseSchemaInfo,
-} from "@ahmedrowaihi/openapi-ts-faker/core";
-import type { IR } from "@hey-api/shared";
+} from "@ir-kit/openapi-ts-faker/core";
 import type { ORPCPlugin } from "../types";
 
 type PluginCtx = ORPCPlugin["Instance"];

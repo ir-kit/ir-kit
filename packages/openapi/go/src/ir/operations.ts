@@ -1,9 +1,9 @@
+import type { IR } from "@hey-api/shared";
 import {
   HTTP_METHODS,
   type HttpMethod,
   securityKey,
-} from "@ahmedrowaihi/openapi-core";
-import type { IR } from "@hey-api/shared";
+} from "@ir-kit/openapi-core";
 
 import {
   type GoDecl,

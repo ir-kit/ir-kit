@@ -11,7 +11,7 @@ const SPEC = resolve(
   "../../../../fixtures/petstore.yaml",
 );
 
-describe("@ahmedrowaihi/k6-gen", () => {
+describe("@ir-kit/k6-gen", () => {
   let outDir: string;
   let files: Record<string, string>;
 
@@ -42,13 +42,13 @@ describe("@ahmedrowaihi/k6-gen", () => {
   it("client.ts imports framework runtime + k6/http", () => {
     expect(files["client.ts"]).toMatch(/from "k6\/http"/);
     expect(files["client.ts"]).toMatch(
-      /import \{[^}]*applyMiddlewareHeaders[^}]*\} from "@ahmedrowaihi\/k6\/runtime"/s,
+      /import \{[^}]*applyMiddlewareHeaders[^}]*\} from "@ir-kit\/k6\/runtime"/s,
     );
   });
 
   it("client.ts pulls buildQuery/parseJson/mergeTags from runtime — no inline helpers", () => {
     expect(files["client.ts"]).toMatch(
-      /import \{[^}]*\bbuildQuery\b[^}]*\bmergeTags\b[^}]*\bparseJson\b[^}]*\} from "@ahmedrowaihi\/k6\/runtime"/s,
+      /import \{[^}]*\bbuildQuery\b[^}]*\bmergeTags\b[^}]*\bparseJson\b[^}]*\} from "@ir-kit\/k6\/runtime"/s,
     );
     expect(files["client.ts"]).not.toMatch(/function __buildQuery/);
     expect(files["client.ts"]).not.toMatch(/function __parseJson/);
@@ -102,7 +102,7 @@ describe("@ahmedrowaihi/k6-gen", () => {
   it("client.ts calls getBaseUrl(DEFAULT_BASE_URL) — enables defineLoadTest({ baseUrl })", () => {
     expect(files["client.ts"]).toMatch(/getBaseUrl\(DEFAULT_BASE_URL\)/);
     expect(files["client.ts"]).toMatch(
-      /import \{[^}]*\bgetBaseUrl\b[^}]*\} from "@ahmedrowaihi\/k6\/runtime"/s,
+      /import \{[^}]*\bgetBaseUrl\b[^}]*\} from "@ir-kit\/k6\/runtime"/s,
     );
   });
 
@@ -129,7 +129,7 @@ describe("@ahmedrowaihi/k6-gen", () => {
   });
 });
 
-describe("@ahmedrowaihi/k6-gen — identifier sanitization", () => {
+describe("@ir-kit/k6-gen — identifier sanitization", () => {
   it("sanitizes schema names that start with a digit", async () => {
     const { generate } = await import("../src/index.ts");
     const spec = {
@@ -153,7 +153,7 @@ describe("@ahmedrowaihi/k6-gen — identifier sanitization", () => {
   });
 });
 
-describe("@ahmedrowaihi/k6-gen — empty schemas", () => {
+describe("@ir-kit/k6-gen — empty schemas", () => {
   async function generateEmpty() {
     const { generate } = await import("../src/index.ts");
     return generate({

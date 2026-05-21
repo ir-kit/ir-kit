@@ -1,10 +1,10 @@
-import { defineConfig as defineORPCConfig } from "@ahmedrowaihi/openapi-ts-orpc";
-import { defineConfig as definePathsConfig } from "@ahmedrowaihi/openapi-ts-paths";
+import { defineConfig } from "@hey-api/openapi-ts";
+import { defineConfig as defineORPCConfig } from "@ir-kit/openapi-ts-orpc";
+import { defineConfig as definePathsConfig } from "@ir-kit/openapi-ts-paths";
 import {
   defineConfig as defineTypiaConfig,
   typiaTypeTransformer,
-} from "@ahmedrowaihi/openapi-ts-typia";
-import { defineConfig } from "@hey-api/openapi-ts";
+} from "@ir-kit/openapi-ts-typia";
 
 export default defineConfig({
   input: "../../fixtures/petstore.yaml",
@@ -39,7 +39,7 @@ export default defineConfig({
     defineORPCConfig({
       group: "tags",
       comments: true,
-      validator: "@ahmedrowaihi/openapi-ts-typia",
+      validator: "@ir-kit/openapi-ts-typia",
       server: {
         implementation: true,
         handlers: {

@@ -1,7 +1,5 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { createProject, emit } from "@ahmedrowaihi/fn-schema-core";
-import { typescript } from "@ahmedrowaihi/fn-schema-typescript";
 import {
   cancel,
   intro,
@@ -13,6 +11,8 @@ import {
   spinner,
   text,
 } from "@clack/prompts";
+import { createProject, emit } from "@ir-kit/fn-schema-core";
+import { typescript } from "@ir-kit/fn-schema-typescript";
 import { defineCommand } from "citty";
 import consola from "consola";
 import { loadFnSchemaConfig } from "../config.js";

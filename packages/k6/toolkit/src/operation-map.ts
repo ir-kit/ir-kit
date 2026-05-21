@@ -1,4 +1,4 @@
-import type { IR } from "@ahmedrowaihi/openapi-tools";
+import type { IR } from "@ir-kit/openapi-tools";
 
 const HTTP_METHODS = [
   "get",

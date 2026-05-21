@@ -1,5 +1,5 @@
-import { parseSpec } from "@ahmedrowaihi/asyncapi-core";
 import type { AsyncAPIDocumentInterface } from "@asyncapi/parser";
+import { parseSpec } from "@ir-kit/asyncapi-core";
 
 /**
  * Resolve a `GenerateOptions['input']` to a parsed AsyncAPI document.

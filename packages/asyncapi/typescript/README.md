@@ -1,4 +1,4 @@
-# @ahmedrowaihi/asyncapi-typescript
+# @ir-kit/asyncapi-typescript
 
 AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture.
 
@@ -7,7 +7,7 @@ Each plugin emits one slice of generated code (types, Events const, dispatch hel
 ## Install
 
 ```sh
-pnpm add -D @ahmedrowaihi/asyncapi-typescript
+pnpm add -D @ir-kit/asyncapi-typescript
 ```
 
 Peer deps (most are dev-only at consumer side):
@@ -15,7 +15,7 @@ Peer deps (most are dev-only at consumer side):
 - `@asyncapi/parser` `>=3.0.0`
 - `@asyncapi/modelina` `>=5.0.0`
 - `@hey-api/codegen-core` `>=0.8.0`
-- `@ahmedrowaihi/asyncapi-core`, `@ahmedrowaihi/asyncapi-core`, `@ahmedrowaihi/codegen-core`
+- `@ir-kit/asyncapi-core`, `@ir-kit/asyncapi-core`, `@ir-kit/codegen-core`
 - `typescript` `>=5.0.0`
 - `amqplib` `>=0.10.0` *(optional — only if you enable the `amqplib` plugin)*
 
@@ -30,7 +30,7 @@ import {
   generate,
   indexBarrel,
   typescript,
-} from "@ahmedrowaihi/asyncapi-typescript";
+} from "@ir-kit/asyncapi-typescript";
 
 await generate({
   input: "./asyncapi.yaml",
@@ -46,7 +46,7 @@ await generate({
 });
 ```
 
-For a full RabbitMQ run (producer + consumer end-to-end), see `examples/asyncapi-events-playground/` in the contract-kit monorepo.
+For a full RabbitMQ run (producer + consumer end-to-end), see `examples/asyncapi-events-playground/` in the ir-kit monorepo.
 
 ## Built-in plugins
 
@@ -64,7 +64,7 @@ Plugins compose freely. Each plugin's `dependsOn` ensures correct ordering even 
 ## Authoring custom plugins
 
 ```ts
-import { definePluginConfig } from "@ahmedrowaihi/asyncapi-typescript";
+import { definePluginConfig } from "@ir-kit/asyncapi-typescript";
 
 export const myPlugin = definePluginConfig<
   "my-plugin",
@@ -120,5 +120,5 @@ asyncapi.yaml
 ## Related
 
 - [`actions/asyncapi-regen`](../../actions/asyncapi-regen) — GitHub Action wrapping this generator
-- [`@ahmedrowaihi/openapi-typescript`](../openapi-typescript) — sister generator for OpenAPI 3.x specs
+- [`@ir-kit/openapi-typescript`](../openapi-typescript) — sister generator for OpenAPI 3.x specs
 - [`fixtures/user-events.yaml`](../../fixtures/user-events.yaml) — minimal AsyncAPI 3.0 spec used by tests

@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/fn-schema-typescript",
-  "version": "0.2.1",
+  "name": "@ir-kit/fn-schema-typescript",
+  "version": "0.1.0",
   "description": "TypeScript extractor for fn-schema. Walks source via ts-morph, synthesizes virtual type aliases for each function's parameters and return, then converts them to JSON Schema via ts-json-schema-generator. Re-exports a pre-wired `extract` for single-language use.",
   "keywords": [
     "json-schema",
@@ -9,9 +9,9 @@
     "ts-morph",
     "codegen"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/fn-schema/typescript",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/fn-schema/typescript",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/fn-schema/typescript"
   },
   "type": "module",
@@ -49,7 +49,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ahmedrowaihi/fn-schema-core": "workspace:*",
+    "@ir-kit/fn-schema-core": "workspace:*",
     "ts-json-schema-generator": "^2.9.0",
     "ts-morph": "^28.0.0"
   },
@@ -57,7 +57,7 @@
     "typescript": ">=5.0.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

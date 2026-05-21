@@ -1,5 +1,5 @@
-import type { ExtractOptions } from "@ahmedrowaihi/fn-schema-core";
-import type { TypescriptExtractorOptions } from "@ahmedrowaihi/fn-schema-typescript";
+import type { ExtractOptions } from "@ir-kit/fn-schema-core";
+import type { TypescriptExtractorOptions } from "@ir-kit/fn-schema-typescript";
 import { loadConfig } from "c12";
 
 export interface FnSchemaConfig

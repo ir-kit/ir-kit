@@ -2,8 +2,8 @@ import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 
-import type { GenerateOptions, GenerateResult } from "@ahmedrowaihi/k6-gen";
-import type { IR } from "@ahmedrowaihi/openapi-tools";
+import type { GenerateOptions, GenerateResult } from "@ir-kit/k6-gen";
+import type { IR } from "@ir-kit/openapi-tools";
 
 import {
   type AuthFlavor,

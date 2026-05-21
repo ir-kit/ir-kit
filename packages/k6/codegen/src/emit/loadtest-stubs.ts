@@ -1,4 +1,4 @@
-import { safeIdent } from "@ahmedrowaihi/codegen-core";
+import { safeIdent } from "@ir-kit/codegen-core";
 import ts from "typescript";
 
 import type { BuiltFile } from "../generate.js";

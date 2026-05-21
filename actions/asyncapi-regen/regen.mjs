@@ -13,7 +13,7 @@ if (!WORKDIR || !SPEC || !OUTPUT) {
 const entry = resolve(
   WORKDIR,
   "node_modules",
-  "@ahmedrowaihi/asyncapi-typescript",
+  "@ir-kit/asyncapi-typescript",
   "dist",
   "index.js",
 );

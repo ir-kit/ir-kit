@@ -1,7 +1,5 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
-
-import { assertSafeOutputDir } from "@ahmedrowaihi/codegen-core";
 import type { AsyncAPIDocumentInterface } from "@asyncapi/parser";
 import {
   defaultExtensions,
@@ -10,6 +8,7 @@ import {
   Project,
   simpleNameConflictResolver,
 } from "@hey-api/codegen-core";
+import { assertSafeOutputDir } from "@ir-kit/codegen-core";
 
 import { RawTextRenderer, TsStatementRenderer } from "./ast/ts-renderer.js";
 import { type AnyRegisteredPlugin, type GeneratedFile } from "./plugin.js";

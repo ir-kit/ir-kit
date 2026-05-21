@@ -1,6 +1,6 @@
-import { synthName } from "@ahmedrowaihi/codegen-core";
-import { isMeaningless } from "@ahmedrowaihi/openapi-core";
 import type { IR } from "@hey-api/shared";
+import { synthName } from "@ir-kit/codegen-core";
+import { isMeaningless } from "@ir-kit/openapi-core";
 
 import type { SwType } from "../../sw-dsl/index.js";
 import {

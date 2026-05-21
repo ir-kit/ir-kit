@@ -12,7 +12,7 @@ if (!TARGET || !WORKDIR || !SPEC || !OUTPUT) {
   );
 }
 
-const pkg = `@ahmedrowaihi/openapi-${TARGET}`;
+const pkg = `@ir-kit/openapi-${TARGET}`;
 const entry = resolve(WORKDIR, "node_modules", pkg, "dist", "index.js");
 const { generate } = await import(entry);
 

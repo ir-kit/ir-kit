@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { JSONSchema } from "@ahmedrowaihi/fn-schema-core";
+import type { JSONSchema } from "@ir-kit/fn-schema-core";
 import {
   type ImportDeclaration,
   Node,

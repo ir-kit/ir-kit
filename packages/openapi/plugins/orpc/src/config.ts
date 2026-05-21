@@ -103,7 +103,7 @@ export const defaultConfig: ORPCPlugin["Config"] = {
   },
   dependencies: ["@hey-api/typescript"],
   handler,
-  name: "@ahmedrowaihi/orpc",
+  name: "@ir-kit/orpc",
   resolveConfig: (plugin) => {
     plugin.config.server ??= { implementation: false, handlers: false };
     plugin.config.server.handlers = resolveHandlers(plugin.config.server);

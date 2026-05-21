@@ -8,10 +8,10 @@ The shared spec lives at [`../../fixtures/petstore.yaml`](../../fixtures/petstor
 
 | Target | Status | Generator | Stack |
 |---|---|---|---|
-| Kotlin (Android / JVM) | ✓ | [`@ahmedrowaihi/openapi-kotlin`](../../packages/openapi/kotlin) | OkHttp + kotlinx-serialization + suspend |
-| Swift (iOS / macOS) | ✓ | [`@ahmedrowaihi/openapi-swift`](../../packages/openapi/swift) | URLSession + `Codable` + async throws |
-| Go | ✓ | [`@ahmedrowaihi/openapi-go`](../../packages/openapi/go) | net/http + encoding/json + context.Context |
-| TypeScript | ✓ | [`@ahmedrowaihi/openapi-typescript`](../../packages/openapi/typescript) (wraps [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) | fetch + `@hey-api/client-fetch` + per-op functions |
+| Kotlin (Android / JVM) | ✓ | [`@ir-kit/openapi-kotlin`](../../packages/openapi/kotlin) | OkHttp + kotlinx-serialization + suspend |
+| Swift (iOS / macOS) | ✓ | [`@ir-kit/openapi-swift`](../../packages/openapi/swift) | URLSession + `Codable` + async throws |
+| Go | ✓ | [`@ir-kit/openapi-go`](../../packages/openapi/go) | net/http + encoding/json + context.Context |
+| TypeScript | ✓ | [`@ir-kit/openapi-typescript`](../../packages/openapi/typescript) (wraps [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) | fetch + `@hey-api/client-fetch` + per-op functions |
 
 ## Run
 
@@ -20,16 +20,16 @@ Generate the SDKs:
 ```bash
 # from repo root
 pnpm install
-pnpm --filter @ahmedrowaihi/openapi-kotlin build
-pnpm --filter @ahmedrowaihi/openapi-swift build
-pnpm --filter @ahmedrowaihi/openapi-go build
-pnpm --filter @ahmedrowaihi/openapi-typescript build
-pnpm --filter @ahmedrowaihi/example-petstore-sdk gen        # all targets
+pnpm --filter @ir-kit/openapi-kotlin build
+pnpm --filter @ir-kit/openapi-swift build
+pnpm --filter @ir-kit/openapi-go build
+pnpm --filter @ir-kit/openapi-typescript build
+pnpm --filter @ir-kit/example-petstore-sdk gen        # all targets
 # or one at a time:
-pnpm --filter @ahmedrowaihi/example-petstore-sdk gen:kotlin
-pnpm --filter @ahmedrowaihi/example-petstore-sdk gen:swift
-pnpm --filter @ahmedrowaihi/example-petstore-sdk gen:go
-pnpm --filter @ahmedrowaihi/example-petstore-sdk gen:typescript
+pnpm --filter @ir-kit/example-petstore-sdk gen:kotlin
+pnpm --filter @ir-kit/example-petstore-sdk gen:swift
+pnpm --filter @ir-kit/example-petstore-sdk gen:go
+pnpm --filter @ir-kit/example-petstore-sdk gen:typescript
 ```
 
 Build / run each example consumer:
@@ -111,6 +111,6 @@ See:
 
 Each `<lang>/gen.ts` is a thin wrapper over the generator's `generate(...)`. See the per-package READMEs for the full options table:
 
-- [`@ahmedrowaihi/openapi-kotlin`](../../packages/openapi/kotlin/README.md)
-- [`@ahmedrowaihi/openapi-swift`](../../packages/openapi/swift/README.md)
-- [`@ahmedrowaihi/openapi-go`](../../packages/openapi/go/README.md)
+- [`@ir-kit/openapi-kotlin`](../../packages/openapi/kotlin/README.md)
+- [`@ir-kit/openapi-swift`](../../packages/openapi/swift/README.md)
+- [`@ir-kit/openapi-go`](../../packages/openapi/go/README.md)

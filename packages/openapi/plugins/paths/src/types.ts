@@ -2,7 +2,7 @@ import type { Casing, DefinePlugin, NamingRule, Plugin } from "@hey-api/shared";
 
 export type UserConfig = Plugin.Hooks &
   Plugin.UserExports & {
-    name: "@ahmedrowaihi/paths";
+    name: "@ir-kit/paths";
     /** Filename (no extension). @default "paths" */
     output?: string;
     /** Route const naming: `applyNaming(operationId, casing) + suffix` (e.g. `getPetByIdRoute`). */
@@ -16,7 +16,7 @@ export type UserConfig = Plugin.Hooks &
 
 export type Config = Plugin.Hooks &
   Plugin.Exports & {
-    name: "@ahmedrowaihi/paths";
+    name: "@ir-kit/paths";
     output: string;
     naming: {
       casing: Casing;
@@ -28,6 +28,6 @@ export type PathsPlugin = DefinePlugin<UserConfig, Config>;
 
 declare module "@hey-api/openapi-ts" {
   export interface PluginConfigMap {
-    "@ahmedrowaihi/paths": PathsPlugin["Types"];
+    "@ir-kit/paths": PathsPlugin["Types"];
   }
 }

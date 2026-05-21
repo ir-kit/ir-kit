@@ -1,10 +1,10 @@
+import type { IR } from "@hey-api/shared";
 import {
   FORM_URLENCODED_MEDIA,
   type HttpMethod,
   JSON_MEDIA_RE,
   MULTIPART_FORM_MEDIA,
-} from "@ahmedrowaihi/openapi-core";
-import type { IR } from "@hey-api/shared";
+} from "@ir-kit/openapi-core";
 
 import type { KtType } from "../../kt-dsl/index.js";
 import {

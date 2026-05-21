@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/fn-schema-loader",
-  "version": "0.2.1",
+  "name": "@ir-kit/fn-schema-loader",
+  "version": "0.1.0",
   "description": "Type-safe reader for fn-schema bundles. Resolves $ref pointers, indexes signatures by id and named types by identity keyword. Zero runtime dependencies — works in any JS runtime that can read JSON.",
   "keywords": [
     "json-schema",
@@ -8,9 +8,9 @@
     "reader",
     "loader"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/fn-schema/loader",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/fn-schema/loader",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/fn-schema/loader"
   },
   "type": "module",
@@ -48,10 +48,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ahmedrowaihi/fn-schema-core": "workspace:*"
+    "@ir-kit/fn-schema-core": "workspace:*"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

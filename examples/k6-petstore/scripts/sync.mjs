@@ -1,7 +1,7 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { sync } from "@ahmedrowaihi/k6-toolkit";
+import { sync } from "@ir-kit/k6-toolkit";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");

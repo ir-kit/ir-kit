@@ -1,5 +1,5 @@
-import { pascal } from "@ahmedrowaihi/codegen-core";
 import type { IR } from "@hey-api/shared";
+import { pascal } from "@ir-kit/codegen-core";
 
 import {
   type GoStruct,

@@ -42,7 +42,7 @@ export function clientPreambleStatements(
         { name: "parseJson" },
         { name: "setExecModule" },
       ],
-      "@ahmedrowaihi/k6/runtime",
+      "@ir-kit/k6/runtime",
     ),
   ];
 

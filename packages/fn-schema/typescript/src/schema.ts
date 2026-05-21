@@ -6,7 +6,7 @@ import type {
   ResolvedSchemaOptions,
   ResolvedSignatureOptions,
   SignaturePair,
-} from "@ahmedrowaihi/fn-schema-core";
+} from "@ir-kit/fn-schema-core";
 import {
   type CompletedConfig,
   createFormatter,

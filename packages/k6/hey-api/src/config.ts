@@ -9,7 +9,7 @@ export const defaultConfig: K6HeyApiPlugin["Config"] = {
   },
   dependencies: [],
   handler,
-  name: "@ahmedrowaihi/openapi-ts-k6",
+  name: "@ir-kit/openapi-ts-k6",
   tags: ["client"],
 };
 

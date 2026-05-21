@@ -1,5 +1,5 @@
-import { pascal, synthName } from "@ahmedrowaihi/codegen-core";
 import type { IR } from "@hey-api/shared";
+import { pascal, synthName } from "@ir-kit/codegen-core";
 
 import {
   type KtDataClass,

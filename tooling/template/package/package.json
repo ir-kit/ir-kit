@@ -1,11 +1,11 @@
 {
-  "name": "@ahmedrowaihi/__PKG_NAME__",
+  "name": "@ir-kit/__PKG_NAME__",
   "version": "0.0.0",
   "description": "__DESCRIPTION__",
   "keywords": [],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/__PKG_PATH__",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/__PKG_PATH__",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "__PKG_PATH__"
   },
   "type": "module",
@@ -44,7 +44,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

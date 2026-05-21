@@ -41,44 +41,44 @@ const CATEGORIES = [
 const CATEGORY_BY_NAME = {
   // Native generators emit idiomatic code for their target language —
   // no TypeScript runtime in the loop.
-  "@ahmedrowaihi/openapi-go": "Native client SDK generators",
-  "@ahmedrowaihi/openapi-kotlin": "Native client SDK generators",
-  "@ahmedrowaihi/openapi-swift": "Native client SDK generators",
-  "@ahmedrowaihi/openapi-typescript": "Native client SDK generators",
+  "@ir-kit/openapi-go": "Native client SDK generators",
+  "@ir-kit/openapi-kotlin": "Native client SDK generators",
+  "@ir-kit/openapi-swift": "Native client SDK generators",
+  "@ir-kit/openapi-typescript": "Native client SDK generators",
 
   // Load-testing track.
-  "@ahmedrowaihi/k6": "Load testing (k6)",
-  "@ahmedrowaihi/k6-gen": "Load testing (k6)",
-  "@ahmedrowaihi/k6-toolkit": "Load testing (k6)",
-  "@ahmedrowaihi/create-k6": "Load testing (k6)",
+  "@ir-kit/k6": "Load testing (k6)",
+  "@ir-kit/k6-gen": "Load testing (k6)",
+  "@ir-kit/k6-toolkit": "Load testing (k6)",
+  "@ir-kit/create-k6": "Load testing (k6)",
 
   // AsyncAPI track.
-  "@ahmedrowaihi/asyncapi-typescript": "Spec → AsyncAPI targets",
+  "@ir-kit/asyncapi-typescript": "Spec → AsyncAPI targets",
 
   // Drop into an existing `openapi-ts.config.ts`.
-  "@ahmedrowaihi/openapi-ts-faker": "`@hey-api/openapi-ts` plugins",
-  "@ahmedrowaihi/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
-  "@ahmedrowaihi/openapi-ts-orpc": "`@hey-api/openapi-ts` plugins",
-  "@ahmedrowaihi/openapi-ts-paths": "`@hey-api/openapi-ts` plugins",
-  "@ahmedrowaihi/openapi-ts-typia": "`@hey-api/openapi-ts` plugins",
+  "@ir-kit/openapi-ts-faker": "`@hey-api/openapi-ts` plugins",
+  "@ir-kit/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
+  "@ir-kit/openapi-ts-orpc": "`@hey-api/openapi-ts` plugins",
+  "@ir-kit/openapi-ts-paths": "`@hey-api/openapi-ts` plugins",
+  "@ir-kit/openapi-ts-typia": "`@hey-api/openapi-ts` plugins",
 
   // Reverse direction: traffic → spec.
-  "@ahmedrowaihi/openapi-recon": "Spec discovery from traffic",
-  "@ahmedrowaihi/glean": "Spec discovery from traffic",
+  "@ir-kit/openapi-recon": "Spec discovery from traffic",
+  "@ir-kit/glean": "Spec discovery from traffic",
 
   // fn-schema family — TypeScript function signatures → JSON Schema.
-  "@ahmedrowaihi/fn-schema-core": "TypeScript function schemas",
-  "@ahmedrowaihi/fn-schema-typescript": "TypeScript function schemas",
-  "@ahmedrowaihi/fn-schema-cli": "TypeScript function schemas",
-  "@ahmedrowaihi/fn-schema-loader": "TypeScript function schemas",
-  "@ahmedrowaihi/fn-schema-unplugin": "TypeScript function schemas",
-  "@ahmedrowaihi/fn-schema-transformer": "TypeScript function schemas",
+  "@ir-kit/fn-schema-core": "TypeScript function schemas",
+  "@ir-kit/fn-schema-typescript": "TypeScript function schemas",
+  "@ir-kit/fn-schema-cli": "TypeScript function schemas",
+  "@ir-kit/fn-schema-loader": "TypeScript function schemas",
+  "@ir-kit/fn-schema-unplugin": "TypeScript function schemas",
+  "@ir-kit/fn-schema-transformer": "TypeScript function schemas",
 
   // Internal building blocks consumed by other packages above.
-  "@ahmedrowaihi/codegen-core": "Shared primitives",
-  "@ahmedrowaihi/openapi-core": "Shared primitives",
-  "@ahmedrowaihi/openapi-tools": "Shared primitives",
-  "@ahmedrowaihi/asyncapi-core": "Shared primitives",
+  "@ir-kit/codegen-core": "Shared primitives",
+  "@ir-kit/openapi-core": "Shared primitives",
+  "@ir-kit/openapi-tools": "Shared primitives",
+  "@ir-kit/asyncapi-core": "Shared primitives",
 };
 
 /**

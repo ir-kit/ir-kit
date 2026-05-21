@@ -1,4 +1,4 @@
-# @ahmedrowaihi/fn-schema-loader
+# @ir-kit/fn-schema-loader
 
 Type-safe reader over a fn-schema bundle. Generic over the bundle type so signature ids and definition names land as literal-typed unions.
 
@@ -17,7 +17,7 @@ If you're loading the JSON in one place and reading it once, the helper is overk
 ## Install
 
 ```bash
-pnpm add @ahmedrowaihi/fn-schema-loader
+pnpm add @ir-kit/fn-schema-loader
 ```
 
 ## Producing a bundle
@@ -27,8 +27,8 @@ Pick whichever fits your build chain — both produce the same JSON:
 ### Programmatically
 
 ```ts
-import { extract } from "@ahmedrowaihi/fn-schema-typescript";
-import { emit } from "@ahmedrowaihi/fn-schema-core";
+import { extract } from "@ir-kit/fn-schema-typescript";
+import { emit } from "@ir-kit/fn-schema-core";
 import { writeFile } from "node:fs/promises";
 
 const result = await extract({
@@ -56,7 +56,7 @@ The `.ts` wrapper next to `schemas.json` is what unlocks literal-typed lookups i
 ## Reading
 
 ```ts
-import { createReader } from "@ahmedrowaihi/fn-schema-loader";
+import { createReader } from "@ir-kit/fn-schema-loader";
 import schemas from "./generated/schemas"; // the typed wrapper
 
 const reader = createReader(schemas);
@@ -101,7 +101,7 @@ Works on any plain object too — you just lose autocomplete:
 
 ```ts
 import { readFileSync } from "node:fs";
-import { createReader, type Bundle } from "@ahmedrowaihi/fn-schema-loader";
+import { createReader, type Bundle } from "@ir-kit/fn-schema-loader";
 
 const raw = JSON.parse(readFileSync("./schemas.json", "utf-8")) as Bundle;
 const reader = createReader(raw);

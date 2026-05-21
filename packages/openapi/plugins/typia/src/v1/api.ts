@@ -13,7 +13,7 @@ export function createRequestSchemaV1(
     resource: "operation",
     resourceId: ctx.operation.id,
     role: "data",
-    tool: "@ahmedrowaihi/openapi-ts-typia",
+    tool: "@ir-kit/openapi-ts-typia",
   });
 }
 
@@ -34,7 +34,7 @@ export function createResponseValidatorV1({
     resource: "operation",
     resourceId: operation.id,
     role: "response",
-    tool: "@ahmedrowaihi/openapi-ts-typia",
+    tool: "@ir-kit/openapi-ts-typia",
   });
   if (!symbol) return;
   return standardValidatorFunc(symbol);
@@ -50,7 +50,7 @@ export function getJsonSchemaSymbolV1(
     resource: "operation",
     resourceId: operation.id,
     role: `${role}-json-schema`,
-    tool: "@ahmedrowaihi/openapi-ts-typia",
+    tool: "@ir-kit/openapi-ts-typia",
   });
 }
 

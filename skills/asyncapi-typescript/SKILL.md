@@ -1,9 +1,9 @@
 ---
 name: asyncapi-typescript
-description: Generate TypeScript types, dispatch helpers, AMQP bindings, and framework adapters from an AsyncAPI 3.0 spec via `@ahmedrowaihi/asyncapi-typescript`. Use when the user has an event-driven API, message broker schemas, pub/sub workflows, or wants typed publish/consume code for RabbitMQ / Kafka / NATS. The package uses a plugin-compose architecture — each plugin emits one slice (types, Events const, dispatch helpers, AMQP helpers, barrel) and the orchestrator topologically sorts by `dependsOn`. Triggers on "AsyncAPI", "event types from spec", "AMQP from spec", "RabbitMQ types", "message types", "pub/sub types", "publish/subscribe TypeScript", "event-driven typing". Do NOT use for OpenAPI / HTTP APIs (see openapi-sdk) or k6 load testing.
+description: Generate TypeScript types, dispatch helpers, AMQP bindings, and framework adapters from an AsyncAPI 3.0 spec via `@ir-kit/asyncapi-typescript`. Use when the user has an event-driven API, message broker schemas, pub/sub workflows, or wants typed publish/consume code for RabbitMQ / Kafka / NATS. The package uses a plugin-compose architecture — each plugin emits one slice (types, Events const, dispatch helpers, AMQP helpers, barrel) and the orchestrator topologically sorts by `dependsOn`. Triggers on "AsyncAPI", "event types from spec", "AMQP from spec", "RabbitMQ types", "message types", "pub/sub types", "publish/subscribe TypeScript", "event-driven typing". Do NOT use for OpenAPI / HTTP APIs (see openapi-sdk) or k6 load testing.
 ---
 
-# AsyncAPI 3.0 → TypeScript — `@ahmedrowaihi/asyncapi-typescript`
+# AsyncAPI 3.0 → TypeScript — `@ir-kit/asyncapi-typescript`
 
 Plugin-compose codegen for AsyncAPI specs. Each plugin emits one slice of generated code; the caller picks which to enable; the orchestrator handles ordering via `dependsOn`.
 
@@ -25,7 +25,7 @@ import {
   dispatch,
   amqplib,
   indexBarrel,
-} from "@ahmedrowaihi/asyncapi-typescript";
+} from "@ir-kit/asyncapi-typescript";
 
 await generate({
   input: "./asyncapi.yaml",       // path, URL, or parsed AsyncAPIDocumentInterface
@@ -83,10 +83,10 @@ await bindAndConsume(ch, registry.bindings, registry.toCallback());
 
 ## Authoring custom plugins
 
-The plugin shape lets contract-kit consumers extend the generator. Common cases: emitting a NATS adapter, a Kafka adapter, framework-specific bindings (Nest.js, Effect-ts), schema validators.
+The plugin shape lets ir-kit consumers extend the generator. Common cases: emitting a NATS adapter, a Kafka adapter, framework-specific bindings (Nest.js, Effect-ts), schema validators.
 
 ```ts
-import { definePluginConfig } from "@ahmedrowaihi/asyncapi-typescript";
+import { definePluginConfig } from "@ir-kit/asyncapi-typescript";
 
 export const myPlugin = definePluginConfig<
   "my-plugin",                       // plugin name (literal type)
@@ -132,4 +132,4 @@ The `PluginInstance` surface:
 2. For RabbitMQ: show the full plugin set including `amqplib()`.
 3. For other brokers: show `typescript()` + `events()` + `eventMap()` + `dispatch()` and tell the user they can either author a broker-specific plugin (see "Authoring custom plugins" above) or wire their own publish/consume layer using `Events` + `EventMap`.
 4. For type-only use: `typescript()` + `events()` + `eventMap()` is enough.
-5. Point at `examples/asyncapi-events-playground/` in the contract-kit monorepo for an end-to-end RabbitMQ runner.
+5. Point at `examples/asyncapi-events-playground/` in the ir-kit monorepo for an end-to-end RabbitMQ runner.

@@ -1,5 +1,5 @@
 {
-  "extends": "@ahmedrowaihi/tsconfig/lib.json",
+  "extends": "@ir-kit/tsconfig/lib.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"

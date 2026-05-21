@@ -1,10 +1,10 @@
-import { pascal } from "@ahmedrowaihi/codegen-core";
+import type { IR } from "@hey-api/shared";
+import { pascal } from "@ir-kit/codegen-core";
 import {
   HTTP_METHODS,
   type HttpMethod,
   securityKey,
-} from "@ahmedrowaihi/openapi-core";
-import type { IR } from "@hey-api/shared";
+} from "@ir-kit/openapi-core";
 
 import {
   type SwDecl,

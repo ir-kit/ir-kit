@@ -10,7 +10,7 @@ describe("scaffoldLoadtest", () => {
     });
 
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke \} from "@ahmedrowaihi\/k6"/,
+      /import \{ defineLoadTest, flow, smoke \} from "@ir-kit\/k6"/,
     );
     expect(out).toContain('import * as api from "./src/gen/index.js"');
     expect(out).not.toMatch(/useAuth/);
@@ -25,7 +25,7 @@ describe("scaffoldLoadtest", () => {
     });
 
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke, useAuth \} from "@ahmedrowaihi\/k6"/,
+      /import \{ defineLoadTest, flow, smoke, useAuth \} from "@ir-kit\/k6"/,
     );
     expect(out).toMatch(
       /const auth = useAuth\.bearer\(\{ env: "PETSTORE_TOKEN" \}\);/,
@@ -51,7 +51,7 @@ describe("scaffoldLoadtest", () => {
       duration: "1m",
     });
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, stress \} from "@ahmedrowaihi\/k6"/,
+      /import \{ defineLoadTest, flow, stress \} from "@ir-kit\/k6"/,
     );
     expect(out).toMatch(/scenario:\s*stress\(/);
   });

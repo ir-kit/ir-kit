@@ -1,5 +1,5 @@
 name: 'Regenerate native OpenAPI SDK'
-description: 'Regenerate a Go / Kotlin / Swift client SDK from an OpenAPI 3.x spec — drop-in for keeping a committed SDK in sync with its source spec. Powered by @ahmedrowaihi/openapi-{go,kotlin,swift}.'
+description: 'Regenerate a Go / Kotlin / Swift client SDK from an OpenAPI 3.x spec — drop-in for keeping a committed SDK in sync with its source spec. Powered by @ir-kit/openapi-{go,kotlin,swift}.'
 author: 'Ahmed Rowaihi'
 branding:
   icon: 'code'
@@ -24,7 +24,7 @@ inputs:
     required: false
     default: ''
   generator-version:
-    description: 'Pinned semver of `@ahmedrowaihi/openapi-<target>` to install. Defaults to `latest`.'
+    description: 'Pinned semver of `@ir-kit/openapi-<target>` to install. Defaults to `latest`.'
     required: false
     default: 'latest'
   normalize:
@@ -100,12 +100,12 @@ runs:
           # which is its only peer. No oas-core / openapi-tools / spec-types
           # since the wrapper doesn't walk the IR itself.
           npm install --silent --no-audit --no-fund \
-            "@ahmedrowaihi/openapi-typescript@${VERSION}" \
+            "@ir-kit/openapi-typescript@${VERSION}" \
             "@hey-api/openapi-ts"
         else
           npm install --silent --no-audit --no-fund \
-            "@ahmedrowaihi/openapi-${TARGET}@${VERSION}" \
-            "@ahmedrowaihi/openapi-tools" \
+            "@ir-kit/openapi-${TARGET}@${VERSION}" \
+            "@ir-kit/openapi-tools" \
             "@hey-api/shared" \
             "@hey-api/spec-types"
         fi
@@ -181,6 +181,6 @@ runs:
         branch: ${{ steps.vars.outputs.pr-branch }}
         delete-branch: true
         body: |
-          Auto-regenerated `${{ inputs.target }}` SDK from `${{ inputs.input }}` via [`ahmedrowaihi/contract-kit/actions/sdk-regen`](https://github.com/ahmedrowaihi/contract-kit/tree/main/actions/sdk-regen).
+          Auto-regenerated `${{ inputs.target }}` SDK from `${{ inputs.input }}` via [`ir-kit/ir-kit/actions/sdk-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/sdk-regen).
 
           ${{ steps.diff.outputs.files-changed }} file(s) changed under `${{ inputs.output }}`.

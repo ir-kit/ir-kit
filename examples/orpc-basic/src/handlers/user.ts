@@ -1,5 +1,5 @@
 import { ORPCError } from "@orpc/server";
-import { os } from "../generated/@ahmedrowaihi/orpc/server.gen";
+import { os } from "../generated/@ir-kit/orpc/server.gen";
 
 const user = {
   createUser: os.user.createUser.handler(async () => {

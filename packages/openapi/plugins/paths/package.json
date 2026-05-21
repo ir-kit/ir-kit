@@ -1,6 +1,6 @@
 {
-  "name": "@ahmedrowaihi/openapi-ts-paths",
-  "version": "1.0.1",
+  "name": "@ir-kit/openapi-ts-paths",
+  "version": "0.1.0",
   "description": "Plugin for @hey-api/openapi-ts — emit per-operation route consts (spec template, URLPattern, method, operationId) for tree-shakable runtime routing and matching",
   "keywords": [
     "openapi",
@@ -14,9 +14,9 @@
     "type-safe",
     "plugin"
   ],
-  "homepage": "https://github.com/ahmedrowaihi/contract-kit/tree/main/packages/openapi/plugins/paths",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/paths",
   "bugs": {
-    "url": "https://github.com/ahmedrowaihi/contract-kit/issues"
+    "url": "https://github.com/ir-kit/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahmedrowaihi/contract-kit.git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
     "directory": "packages/openapi/plugins/paths"
   },
   "type": "module",
@@ -59,7 +59,7 @@
     "@hey-api/shared": ">=0.3.0"
   },
   "devDependencies": {
-    "@ahmedrowaihi/tsconfig": "workspace:*",
+    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/codegen-core": "catalog:",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",

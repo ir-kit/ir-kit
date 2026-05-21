@@ -1,5 +1,5 @@
-import { getEnumLiterals } from "@ahmedrowaihi/openapi-tools";
 import type { IR } from "@hey-api/shared";
+import { getEnumLiterals } from "@ir-kit/openapi-tools";
 import {
   type KtType,
   ktAnnotation,

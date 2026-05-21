@@ -13,7 +13,7 @@
   "include": [
     "typia-smoke.ts",
     "src/generated/types.gen.ts",
-    "src/generated/@ahmedrowaihi/openapi-ts-typia.gen.ts"
+    "src/generated/@ir-kit/openapi-ts-typia.gen.ts"
   ],
   "exclude": ["node_modules"]
 }

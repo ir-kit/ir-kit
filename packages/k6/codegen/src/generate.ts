@@ -1,12 +1,11 @@
 import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-
-import { assertSafeOutputDir } from "@ahmedrowaihi/codegen-core";
-import type { NormalizeOptions } from "@ahmedrowaihi/openapi-core";
-import { loadSpec } from "@ahmedrowaihi/openapi-tools";
-import { parseSpec } from "@ahmedrowaihi/openapi-tools/parse";
 import type { IR } from "@hey-api/shared";
+import { assertSafeOutputDir } from "@ir-kit/codegen-core";
+import type { NormalizeOptions } from "@ir-kit/openapi-core";
+import { loadSpec } from "@ir-kit/openapi-tools";
+import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 import {
   emitClientFile,
