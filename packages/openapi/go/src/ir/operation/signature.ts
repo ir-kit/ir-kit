@@ -1,6 +1,7 @@
 import type { IR } from "@hey-api/shared";
 import {
   deriveBaseName,
+  type ResponseCase as IRResponseCase,
   type LocatedParam,
   operationDocLine,
 } from "@ir-kit/openapi";
@@ -40,15 +41,10 @@ export interface OperationSignature {
  * One arm of a multi-2xx interface return. Populated by `returnTypeFor`
  * when an op declares more than one 2xx response code; the impl
  * dispatches on `resp.StatusCode` to construct the matching concrete
- * type.
+ * type. `caseName` is the Go struct name implementing the response
+ * interface; `payloadType` is `undefined` for empty bodies (e.g. 204).
  */
-export interface ResponseCase {
-  statusCode: string;
-  /** The Go struct name implementing the response interface. */
-  caseName: string;
-  /** Decoded payload type. `undefined` for empty bodies (e.g. 204). */
-  payloadType?: GoType;
-}
+export type ResponseCase = IRResponseCase<GoType>;
 
 /**
  * One source of truth for `params + returnType + doc` so the interface

@@ -2,6 +2,7 @@ import type { IR } from "@hey-api/shared";
 import { camel, pascal } from "@ir-kit/codegen-core";
 import {
   deriveBaseName,
+  type ResponseCase as IRResponseCase,
   type LocatedParam,
   operationDocLine,
 } from "@ir-kit/openapi";
@@ -35,14 +36,10 @@ export interface OperationSignature {
  * One arm of a multi-2xx sum-type return. Populated by `returnTypeFor`
  * when an op declares more than one 2xx response code; the impl
  * dispatches on `response.code` to decode the matching payload type
- * into the matching sealed-subclass.
+ * into the matching sealed-subclass. `payloadType` is `undefined` for
+ * empty bodies (e.g. 204).
  */
-export interface ResponseCase {
-  statusCode: string;
-  caseName: string;
-  /** Decoded payload type. `undefined` for empty bodies (e.g. 204). */
-  payloadType?: KtType;
-}
+export type ResponseCase = IRResponseCase<KtType>;
 
 /**
  * One source of truth for `params + returnType + doc` so the interface

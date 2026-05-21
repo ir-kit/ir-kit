@@ -23,3 +23,14 @@ export function successResponses(
     readonly [string, IR.ResponseObject]
   >;
 }
+
+/**
+ * One arm of a multi-2xx sum-type return. Each emitter parameterises
+ * `T` with its own target type (`GoType`, `KtType`, `SwType`) for the
+ * decoded payload. `payloadType` is omitted for empty bodies (e.g. 204).
+ */
+export interface ResponseCase<T> {
+  statusCode: string;
+  caseName: string;
+  payloadType?: T;
+}

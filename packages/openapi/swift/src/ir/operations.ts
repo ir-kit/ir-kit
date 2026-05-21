@@ -1,10 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { pascal } from "@ir-kit/codegen-core";
-import {
-  HTTP_METHODS,
-  type HttpMethod,
-  securityKey,
-} from "@ir-kit/openapi-core";
+import { iterOperations } from "@ir-kit/openapi";
 
 import {
   type SwDecl,
@@ -82,25 +78,15 @@ export function operationsToDecls(
   const emit = (d: SwDecl) => decls.push(d);
   const byTag = new Map<string, OperationSignature[]>();
 
-  for (const [pathStr, pathItem] of Object.entries(paths ?? {})) {
-    if (!pathItem) continue;
-    for (const method of HTTP_METHODS) {
-      const op = pathItem[method] as IR.OperationObject | undefined;
-      if (!op) continue;
-      const schemeNames =
-        opts.securitySchemeNames?.get(securityKey(pathStr, method)) ?? [];
-      const sig = operationSignature(
-        op,
-        method as HttpMethod,
-        pathStr,
-        emit,
-        schemeNames,
-      );
-      const tag = op.tags?.[0] ?? defaultTag;
-      const list = byTag.get(tag);
-      if (list) list.push(sig);
-      else byTag.set(tag, [sig]);
-    }
+  for (const { pathStr, method, op, schemeNames } of iterOperations(
+    paths,
+    opts.securitySchemeNames,
+  )) {
+    const sig = operationSignature(op, method, pathStr, emit, schemeNames);
+    const tag = op.tags?.[0] ?? defaultTag;
+    const list = byTag.get(tag);
+    if (list) list.push(sig);
+    else byTag.set(tag, [sig]);
   }
 
   let needsUnimplementedEnum = false;

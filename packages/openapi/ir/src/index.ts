@@ -1,7 +1,10 @@
 export type { BodyShape } from "./operation/body.js";
 export { classifyBody, isOpaqueJsonBody } from "./operation/body.js";
+export type { IteratedOperation } from "./operation/iter.js";
+export { iterOperations } from "./operation/iter.js";
 export type { LocatedParam, ParamLocation } from "./operation/params.js";
 export { collectLocatedParams, PARAM_LOCATIONS } from "./operation/params.js";
+export type { ResponseCase } from "./operation/responses.js";
 export { isSuccessStatus, successResponses } from "./operation/responses.js";
 export { deriveBaseName, operationDocLine } from "./operation/signature.js";
 export type { TypeCtx } from "./type/context.js";
