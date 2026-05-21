@@ -22,6 +22,8 @@ export {
 export type { TemplatePart } from "./operation/template.js";
 export { parseTemplatedSegment } from "./operation/template.js";
 export type { TypeCtx } from "./type/context.js";
+export type { SchemaToTypeOps } from "./type/dispatch.js";
+export { schemaToType } from "./type/dispatch.js";
 export type { EnumEntryIdent, EnumKind, EnumLiteral } from "./type/enum.js";
 export {
   assertNoEnumCollisions,

@@ -1,62 +1,62 @@
 import type { IR } from "@hey-api/shared";
-import { synthName } from "@ir-kit/codegen-core";
-import { refName } from "@ir-kit/openapi-core";
-
-import type { SwType } from "../../sw-dsl/index.js";
 import {
-  swAny,
-  swArray,
-  swOptional,
-  swRef,
-  swVoid,
-} from "../../sw-dsl/index.js";
+  classifyEnumLiterals,
+  iterateObjectProperties,
+  schemaToType as sharedSchemaToType,
+} from "@ir-kit/openapi";
+import { getEnumLiterals } from "@ir-kit/openapi-tools";
+
+import type { SwDecl, SwType } from "../../sw-dsl/index.js";
+import { swOps } from "../type-ops.js";
 import type { TypeCtx } from "./context.js";
-import { buildEnumFromIR } from "./enum.js";
-import { inlineObjectType } from "./object.js";
-import { typeForPrimitive } from "./primitive.js";
-import { unionToType } from "./union.js";
 
 export type { TypeCtx } from "./context.js";
-export { buildEnumFromIR } from "./enum.js";
-export { buildStruct } from "./object.js";
 
 /**
  * Top-level dispatch from `IR.SchemaObject` to a `SwType`. Side-effects:
  * inline objects/enums get promoted to top-level decls via `ctx.emit`.
+ * Thin wrapper over the shared `@ir-kit/openapi.schemaToType` with the
+ * Swift ops record bound.
  */
 export function schemaToType(schema: IR.SchemaObject, ctx: TypeCtx): SwType {
-  if (schema.$ref) return swRef(refName(schema.$ref));
+  return sharedSchemaToType(schema, ctx, swOps);
+}
 
-  // Untyped item-bearing schema → union (oneOf/anyOf, possibly nullable).
-  if (schema.items && schema.items.length > 0 && !schema.type) {
-    return unionToType(schema, ctx);
-  }
+/**
+ * Build a top-level Swift `Codable` struct from an object-shaped IR
+ * schema — used by `schemasToDecls` for `components.schemas` entries
+ * where the name is given. Returns the decl; caller decides whether
+ * to emit.
+ */
+export function buildStruct(
+  name: string,
+  schema: IR.SchemaObject,
+  ctx: { emit: (d: SwDecl) => void },
+): SwDecl {
+  const properties = Array.from(iterateObjectProperties(schema));
+  const dispatch = (s: IR.SchemaObject, c: TypeCtx): SwType =>
+    sharedSchemaToType(s, c, swOps);
+  return swOps.buildStructDecl(
+    name,
+    properties,
+    { emit: ctx.emit, ownerName: name, propPath: [] },
+    dispatch,
+  );
+}
 
-  const primitive = typeForPrimitive(schema);
-  if (primitive) return primitive;
-
-  switch (schema.type) {
-    case "array": {
-      const elem = schema.items?.[0];
-      return swArray(elem ? schemaToType(elem, ctx) : swAny);
-    }
-    case "tuple":
-      return swArray(swAny);
-    case "enum":
-      return buildEnumFromIR(
-        synthName(ctx.ownerName, ctx.propPath),
-        schema,
-        ctx.emit,
-      );
-    case "object":
-      return inlineObjectType(schema, ctx);
-    case "null":
-      return swOptional(swAny);
-    case "never":
-    case "void":
-    case "undefined":
-      return swVoid;
-    default:
-      return swAny;
-  }
+/**
+ * Build a top-level Swift raw-typed enum (`: String, Codable` or
+ * `: Int, Codable`) from an enum-typed IR schema. Decl is pushed via
+ * `emit`; a ref to the named type is returned.
+ */
+export function buildEnumFromIR(
+  name: string,
+  schema: IR.SchemaObject,
+  emit: (d: SwDecl) => void,
+): SwType {
+  const rawValues = getEnumLiterals(schema);
+  const kind = classifyEnumLiterals(rawValues, name);
+  if (kind === "integer")
+    return swOps.emitIntegerEnum(name, rawValues as number[], emit);
+  return swOps.emitStringEnum(name, rawValues as string[], emit);
 }
