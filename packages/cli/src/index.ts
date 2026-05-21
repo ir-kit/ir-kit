@@ -3,6 +3,7 @@ export type {
   CommandSpec,
   OutputFormat,
 } from "./command-spec.js";
+export { reconCommand } from "./commands/recon.js";
 export { sdkAllCommand } from "./commands/sdk-all.js";
 export { sdkGoCommand } from "./commands/sdk-go.js";
 export { sdkK6Command } from "./commands/sdk-k6.js";

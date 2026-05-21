@@ -34,9 +34,6 @@
     },
     "./package.json": "./package.json"
   },
-  "bin": {
-    "typespec-to-openapi": "./dist/cli.js"
-  },
   "files": [
     "dist",
     "README.md",

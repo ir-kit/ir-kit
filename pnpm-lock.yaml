@@ -429,6 +429,9 @@ importers:
       '@ir-kit/openapi-kotlin':
         specifier: workspace:*
         version: link:../openapi/kotlin
+      '@ir-kit/openapi-recon':
+        specifier: workspace:*
+        version: link:../openapi/recon
       '@ir-kit/openapi-swift':
         specifier: workspace:*
         version: link:../openapi/swift

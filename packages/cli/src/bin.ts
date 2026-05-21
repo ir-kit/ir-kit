@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { reconCommand } from "./commands/recon.js";
 import { sdkAllCommand } from "./commands/sdk-all.js";
 import { sdkGoCommand } from "./commands/sdk-go.js";
 import { sdkK6Command } from "./commands/sdk-k6.js";
@@ -22,5 +23,6 @@ await runCli({
     sdkTypescriptCommand,
     sdkK6Command,
     sdkAllCommand,
+    reconCommand,
   ],
 });
