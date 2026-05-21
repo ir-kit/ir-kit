@@ -1,7 +1,10 @@
 import type { IR } from "@hey-api/shared";
-import { pascal } from "@ir-kit/codegen-core";
-import { type LocatedParam } from "@ir-kit/openapi";
-import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi-core";
+import {
+  deriveBaseName,
+  type LocatedParam,
+  operationDocLine,
+} from "@ir-kit/openapi";
+import type { HttpMethod } from "@ir-kit/openapi-core";
 import {
   type GoFuncParam,
   type GoType,
@@ -64,7 +67,7 @@ export function operationSignature(
   emit: TypeCtx["emit"],
   schemeNames: ReadonlyArray<string> = [],
 ): OperationSignature {
-  const baseName = pickFnName(op, method, pathStr);
+  const baseName = deriveBaseName(op, method, pathStr);
   const exportedName = exportedIdent(baseName);
   const ctx: TypeCtx = { emit, ownerName: exportedName, propPath: [] };
 
@@ -86,7 +89,7 @@ export function operationSignature(
     ownerName: exportedName,
     params,
     returnType,
-    doc: `${HTTP_METHOD_LITERAL[method]} ${pathStr}`,
+    doc: operationDocLine(method, pathStr),
     locatedParams: located,
     op,
     method,
@@ -94,17 +97,4 @@ export function operationSignature(
     securitySchemeNames: schemeNames,
     responseCases,
   };
-}
-
-function pickFnName(
-  op: IR.OperationObject,
-  method: HttpMethod,
-  path: string,
-): string {
-  if (op.operationId) return op.operationId;
-  const segments = path
-    .split("/")
-    .filter(Boolean)
-    .map((s) => s.replace(/[{}]/g, ""));
-  return [method, ...segments].map(pascal).join("") || method;
 }

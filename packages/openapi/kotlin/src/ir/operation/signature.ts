@@ -1,7 +1,11 @@
 import type { IR } from "@hey-api/shared";
 import { camel, pascal } from "@ir-kit/codegen-core";
-import { type LocatedParam } from "@ir-kit/openapi";
-import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi-core";
+import {
+  deriveBaseName,
+  type LocatedParam,
+  operationDocLine,
+} from "@ir-kit/openapi";
+import type { HttpMethod } from "@ir-kit/openapi-core";
 import {
   type KtFunParam,
   type KtType,
@@ -51,7 +55,7 @@ export function operationSignature(
   emit: TypeCtx["emit"],
   schemeNames: ReadonlyArray<string> = [],
 ): OperationSignature {
-  const name = pickFnName(op, method, pathStr);
+  const name = deriveBaseName(op, method, pathStr);
   const ownerName = pascal(name);
   const ctx: TypeCtx = { emit, ownerName, propPath: [] };
 
@@ -68,7 +72,7 @@ export function operationSignature(
     ownerName,
     params,
     returnType,
-    doc: `${HTTP_METHOD_LITERAL[method]} ${pathStr}`,
+    doc: operationDocLine(method, pathStr),
     locatedParams: located,
     op,
     method,
@@ -94,17 +98,4 @@ function optionsParam(): KtFunParam {
     name: "options",
     type: ktRef("RequestOptions"),
   });
-}
-
-function pickFnName(
-  op: IR.OperationObject,
-  method: HttpMethod,
-  path: string,
-): string {
-  if (op.operationId) return op.operationId;
-  const segments = path
-    .split("/")
-    .filter(Boolean)
-    .map((s) => s.replace(/[{}]/g, ""));
-  return [method, ...segments].join("_") || method;
 }
