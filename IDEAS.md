@@ -85,7 +85,6 @@ ir-kit's thesis: **every API standard talks to every other**. One canonical hub 
 
 - **Cross-format converter test matrix** — verify every (from, to) reachable pair end-to-end on each PR. Catches regressions in graph routing or upstream converter library updates.
 - **Real-world spec sweep** — Stripe, GitHub, OpenAI, Slack against all SDK generators in CI. Mux alone surfaced 2 bugs; wider sweep catches the long tail.
-- **CI guard for `examples/petstore-sdk/`** — run `pnpm gen:go|kotlin|swift` and `git diff --exit-code` on every PR. Fails when a generator change forgets to regen the example.
 
 ### Docs polish
 

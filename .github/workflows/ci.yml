@@ -44,3 +44,12 @@ jobs:
         run: pnpm test
         env:
           INTEGRATION_TEST: "true"
+
+      - name: Example drift check
+        run: |
+          pnpm --filter @ir-kit/example-petstore-sdk gen
+          pnpm --filter @ir-kit/example-asyncapi-events-playground gen
+          if ! git diff --exit-code -- examples/petstore-sdk examples/asyncapi-events-playground/generated; then
+            echo "::error::Example outputs drifted from committed copy. Run \`pnpm --filter @ir-kit/example-petstore-sdk gen && pnpm --filter @ir-kit/example-asyncapi-events-playground gen\` and commit the result."
+            exit 1
+          fi
