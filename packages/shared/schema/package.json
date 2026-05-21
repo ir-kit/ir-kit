@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/schema",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas.",
   "keywords": [
     "json-schema",
