@@ -61,6 +61,7 @@
     "node": ">=20.19.0"
   },
   "dependencies": {
+    "@ir-kit/codegen-core": "workspace:*",
     "@ir-kit/openapi-core": "workspace:*"
   }
 }

@@ -1,5 +1,4 @@
 import type { IR } from "@hey-api/shared";
-import { pascal } from "@ir-kit/codegen-core";
 import { classifyObjectShape, iterateObjectProperties } from "@ir-kit/openapi";
 
 import {
@@ -40,12 +39,13 @@ export function buildStruct(
     jsonKey,
     schema: propSchema,
     required,
+    propPathSegment,
   } of iterateObjectProperties(schema)) {
     const naming = propertyName(jsonKey);
     const t = schemaToType(propSchema, {
       emit: ctx.emit,
       ownerName: name,
-      propPath: [pascal(jsonKey)],
+      propPath: [propPathSegment],
     });
     const optional = !required;
     // Slices and maps are nilable in Go and serialize naturally with

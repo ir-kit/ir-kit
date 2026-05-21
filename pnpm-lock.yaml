@@ -684,6 +684,9 @@ importers:
 
   packages/openapi/ir:
     dependencies:
+      '@ir-kit/codegen-core':
+        specifier: workspace:*
+        version: link:../../shared/codegen-core
       '@ir-kit/openapi-core':
         specifier: workspace:*
         version: link:../core

@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import { pascal } from "@ir-kit/codegen-core";
 
 /**
  * High-level dispatch for inline object schemas. Each emitter then
@@ -39,14 +40,21 @@ export interface ObjectProperty {
    *  enough across emitters (multipart-binary handling) to surface
    *  alongside the basic iteration. */
   isBinary: boolean;
+  /** The propPath segment for this property, ready to plug into a
+   *  recursive `schemaToType(propSchema, { ...ctx, propPath: [segment] })`
+   *  call. Pre-computed as `pascal(jsonKey)` since both `synthName`
+   *  variants (codegen-core's `_`-joined and Go's `""`-joined) expect
+   *  PascalCase parts. */
+  propPathSegment: string;
 }
 
 /**
  * Walk `schema.properties` in declaration order and yield one
- * `ObjectProperty` per entry, with the `required` membership and
- * binary-format detection pre-computed. Used by every emitter's
- * `type/object.ts` (struct/data-class/struct field generation) and
- * `operation/body.ts` (multipart / urlencoded flat-param expansion).
+ * `ObjectProperty` per entry, with the `required` membership,
+ * binary-format detection, and pre-computed propPath segment
+ * surfaced. Used by every emitter's `type/object.ts`
+ * (struct/data-class/struct field generation) and `operation/body.ts`
+ * (multipart / urlencoded flat-param expansion).
  */
 export function* iterateObjectProperties(
   schema: IR.SchemaObject,
@@ -58,6 +66,7 @@ export function* iterateObjectProperties(
       schema: propSchema,
       required: required.has(jsonKey),
       isBinary: propSchema.type === "string" && propSchema.format === "binary",
+      propPathSegment: pascal(jsonKey),
     };
   }
 }

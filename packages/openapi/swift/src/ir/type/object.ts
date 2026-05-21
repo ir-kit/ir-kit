@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { pascal, synthName } from "@ir-kit/codegen-core";
+import { synthName } from "@ir-kit/codegen-core";
 import { classifyObjectShape, iterateObjectProperties } from "@ir-kit/openapi";
 
 import type {
@@ -35,14 +35,12 @@ export function buildStruct(
   ctx: { emit: TypeCtx["emit"] },
 ): SwStruct {
   const entries = Array.from(iterateObjectProperties(schema)).map(
-    ({ jsonKey, schema: propSchema, required }) => {
+    ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
       const naming = propertyName(jsonKey);
       const t = schemaToType(propSchema, {
         emit: ctx.emit,
         ownerName: name,
-        // Synth path uses pascal(jsonKey) so renaming the property doesn't
-        // change the synthesized name of an inline-object type.
-        propPath: [pascal(jsonKey)],
+        propPath: [propPathSegment],
       });
       const optional = !required;
       const finalType = optional && t.kind !== "optional" ? swOptional(t) : t;

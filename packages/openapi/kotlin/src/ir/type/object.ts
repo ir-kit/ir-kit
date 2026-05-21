@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { pascal, synthName } from "@ir-kit/codegen-core";
+import { synthName } from "@ir-kit/codegen-core";
 import { classifyObjectShape, iterateObjectProperties } from "@ir-kit/openapi";
 
 import {
@@ -33,12 +33,12 @@ export function buildStruct(
   ctx: { emit: TypeCtx["emit"] },
 ): KtDataClass {
   const props = Array.from(iterateObjectProperties(schema)).map(
-    ({ jsonKey, schema: propSchema, required }) => {
+    ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
       const naming = propertyName(jsonKey);
       const t = schemaToType(propSchema, {
         emit: ctx.emit,
         ownerName: name,
-        propPath: [pascal(jsonKey)],
+        propPath: [propPathSegment],
       });
       const optional = !required;
       const finalType = optional && t.kind !== "nullable" ? ktNullable(t) : t;
