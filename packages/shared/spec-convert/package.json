@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/spec-convert",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Convert between API specification formats — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, JSON Schema. Pair-handler registry; programmatic API; thin wrappers around upstream conversion tools where available.",
   "keywords": [
     "openapi",

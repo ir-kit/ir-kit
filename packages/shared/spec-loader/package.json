@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/spec-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Universal spec loader for OpenAPI, AsyncAPI, and TypeSpec. Detects format by extension + content sniff and dispatches to the per-format loader, returning a discriminated `{ kind, document }` result.",
   "keywords": [
     "openapi",
