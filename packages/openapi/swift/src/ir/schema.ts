@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { refName } from "@ir-kit/openapi";
+import { fromHeyApi, refName, type Schema } from "@ir-kit/openapi";
 
 import { swTypeAlias } from "../sw-dsl/decl/typeAlias.js";
 import type { SwDecl } from "../sw-dsl/decl/types.js";
@@ -7,11 +7,16 @@ import { swAny, swDict, swRef, swString } from "../sw-dsl/type/index.js";
 import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
 
 /**
- * Translate `IR.Model.components.schemas` into Swift decls. Object schemas
- * with properties become `Codable` structs; `enum` schemas become
- * `String`-raw `Codable` enums; primitives/arrays/unions become
- * typealiases. Inline nested objects/enums are promoted to top-level
- * synthetic decls (`Owner_PropertyName`).
+ * Translate `IR.Model.components.schemas` into Swift decls.
+ *
+ *  - object schemas with properties → `Codable` struct
+ *  - enum schemas → `String`/`Int`-raw `Codable` enum
+ *  - object schemas with only `additionalProperties` → typealias to
+ *    `[String: V]`
+ *  - everything else → typealias to the dispatcher's resolved type
+ *
+ * Schemas come in as hey-api's `IR.SchemaObject` and are folded to
+ * canonical {@link Schema} at the boundary.
  */
 export function schemasToDecls(
   schemas: Record<string, IR.SchemaObject>,
@@ -19,12 +24,15 @@ export function schemasToDecls(
   const decls: SwDecl[] = [];
   const emit = (d: SwDecl) => decls.push(d);
 
-  for (const [name, schema] of Object.entries(schemas)) {
+  for (const [name, heySchema] of Object.entries(schemas)) {
+    const schema = fromHeyApi(heySchema);
+
     if (schema.$ref) {
       decls.push(swTypeAlias({ name, type: swRef(refName(schema.$ref)) }));
       continue;
     }
-    if (schema.type === "enum") {
+    const isEnum = Array.isArray(schema.enum) && schema.enum.length > 0;
+    if (isEnum) {
       buildEnumFromIR(name, schema, emit);
       continue;
     }
@@ -34,12 +42,7 @@ export function schemasToDecls(
     }
     if (schema.type === "object") {
       const ap = schema.additionalProperties;
-      const sealed =
-        ap === false ||
-        (typeof ap === "object" &&
-          (ap.type === "void" ||
-            ap.type === "never" ||
-            ap.type === "undefined"));
+      const sealed = ap === false;
       if (sealed) {
         decls.push(buildStruct(name, schema, { emit }));
         continue;

@@ -1,5 +1,9 @@
 import { synthName } from "@ir-kit/codegen-core";
-import { assertNoEnumCollisions, type SchemaToTypeOps } from "@ir-kit/openapi";
+import {
+  assertNoEnumCollisions,
+  type Schema,
+  type SchemaToTypeOps,
+} from "@ir-kit/openapi";
 
 import type { KtDecl } from "../kt-dsl/decl/types.js";
 import {
@@ -50,7 +54,7 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
     const props = properties.map(
       ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
         const naming = propertyName(jsonKey);
-        const t = dispatch(propSchema, {
+        const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
           ownerName: name,
           propPath: [propPathSegment],

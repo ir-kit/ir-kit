@@ -1,7 +1,10 @@
 import { $, type TsDsl } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
-import { safeIdent } from "@ir-kit/codegen-core";
-import { getEnumLiterals } from "@ir-kit/openapi-tools";
+import {
+  extractEnumValues,
+  isSchemaObject,
+  refName,
+  type Schema,
+} from "@ir-kit/openapi";
 import {
   DATE_METHODS,
   DEFAULT_FORMAT_MAPPING,
@@ -11,44 +14,46 @@ import {
 } from "@ir-kit/openapi-ts-faker/core";
 import type ts from "typescript";
 
-import { refToTypeName } from "./identifiers.js";
-
 type Expr = TsDsl<ts.Expression>;
 
 /**
- * Build a faker-backed expression that, when called, returns a value
+ * Build a faker-backed expression that, when called, produces a value
  * matching the schema. Refs resolve to `data.<Type>()` so cycles stay
- * lazy. Format / field-name heuristics come from
- * `@ir-kit/openapi-ts-faker/core` so the source-of-truth stays
- * shared with the faker plugin.
+ * lazy. Format / field-name heuristics route through
+ * `@ir-kit/openapi-ts-faker/core` so the source-of-truth stays shared
+ * with the faker plugin.
  */
-export function schemaToFakerExpr(
-  schema: IR.SchemaObject,
-  propName?: string,
-): Expr {
-  if (schema.$ref) return dataCall(refToTypeName(schema.$ref));
-  if (schema.symbolRef) return dataCall(safeIdent(schema.symbolRef.name));
+export function schemaToFakerExpr(schema: Schema, propName?: string): Expr {
+  if (schema.$ref) return dataCall(refName(schema.$ref));
 
   if (schema.const !== undefined) return literalExpr(schema.const);
 
-  if (schema.items && schema.items.length) {
-    if (schema.type === "array") {
-      return $.array(schemaToFakerExpr(schema.items[0], propName));
-    }
-    if (schema.type === "tuple") {
-      return $.array(
-        ...schema.items.map((item, i) =>
-          schemaToFakerExpr(item, `${propName ?? ""}_${i}`),
+  if (schema.type === "array") {
+    return schema.items && isSchemaObject(schema.items)
+      ? $.array(schemaToFakerExpr(schema.items as Schema, propName))
+      : $.array();
+  }
+  if (Array.isArray(schema.prefixItems) && schema.prefixItems.length > 0) {
+    return $.array(
+      ...schema.prefixItems
+        .filter(isSchemaObject)
+        .map((item, i) =>
+          schemaToFakerExpr(item as Schema, `${propName ?? ""}_${i}`),
         ),
-      );
-    }
-    return schemaToFakerExpr(schema.items[0], propName);
+    );
   }
 
-  if (schema.type === "enum") return enumFaker(schema);
+  const enumValues = extractEnumValues(schema);
+  if (enumValues && enumValues.length > 0) return enumFaker(enumValues);
+
   if (schema.type === "object") return objectFaker(schema);
   if (schema.type === "null") return $.literal(null);
-  if (schema.type === "array") return $.array();
+
+  const firstBranch = (schema.oneOf ?? schema.anyOf ?? schema.allOf)?.find(
+    (b) => isSchemaObject(b) && b.type !== "null",
+  );
+  if (firstBranch && isSchemaObject(firstBranch))
+    return schemaToFakerExpr(firstBranch as Schema, propName);
 
   const spec = resolveFakerCall(schemaToPropertyInfo(schema, propName), {
     formatHints: DEFAULT_FORMAT_MAPPING,
@@ -89,16 +94,15 @@ function fakerCallSpecToExpr(spec: FakerCallSpec): Expr {
     .attr(mod!)
     .attr(fn!)
     .call(...args);
-  // Date faker methods return Date objects; we want ISO strings.
   return DATE_METHODS.has(spec.method) ? call.attr("toISOString").call() : call;
 }
 
-function schemaToPropertyInfo(
-  schema: IR.SchemaObject,
-  propName?: string,
-): PropertyInfo {
+function schemaToPropertyInfo(schema: Schema, propName?: string): PropertyInfo {
+  const t = Array.isArray(schema.type)
+    ? schema.type.find((x: string) => x !== "null")
+    : schema.type;
   return {
-    type: schema.type ?? "string",
+    type: t ?? "string",
     format: typeof schema.format === "string" ? schema.format : undefined,
     name: propName ?? "",
     minimum: schema.minimum,
@@ -110,19 +114,19 @@ function schemaToPropertyInfo(
   };
 }
 
-function enumFaker(schema: IR.SchemaObject): Expr {
-  const literals = getEnumLiterals(schema);
-  if (!literals.length) return $.literal("");
+function enumFaker(values: ReadonlyArray<unknown>): Expr {
+  if (!values.length) return $.literal("");
   return $("faker")
     .attr("helpers")
     .attr("arrayElement")
-    .call($.array(...literals.map((v) => literalExpr(v))));
+    .call($.array(...values.map((v) => literalExpr(v))));
 }
 
-function objectFaker(schema: IR.SchemaObject): Expr {
+function objectFaker(schema: Schema): Expr {
   let obj = $.object();
   for (const [name, propSchema] of Object.entries(schema.properties ?? {})) {
-    obj = obj.prop(name, schemaToFakerExpr(propSchema, name));
+    if (!isSchemaObject(propSchema)) continue;
+    obj = obj.prop(name, schemaToFakerExpr(propSchema as Schema, name));
   }
   return obj;
 }

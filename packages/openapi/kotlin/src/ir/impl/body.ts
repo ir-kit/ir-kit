@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
-import type { HttpMethod } from "@ir-kit/openapi";
-import { classifyBody } from "@ir-kit/openapi";
+import type { HttpMethod, Schema } from "@ir-kit/openapi";
+import { classifyBody, isSchemaObject } from "@ir-kit/openapi";
 import type { KtType } from "../../kt-dsl/index.js";
 import {
   type KtExpr,
@@ -32,16 +32,14 @@ export interface BodyResult {
  * Build the request body and re-set the HTTP method on `builder` to
  * carry it. Dispatches on media type:
  *
- *  - `application/json` (and `+json`) → `client.json.encodeToString(<ser>, body)`
- *    becomes a `RequestBody` via `.toRequestBody("application/json".toMediaType())`.
- *    For opaque bodies (oneOf/anyOf), the impl receives `body: ByteArray`
- *    and ships it raw.
- *  - `multipart/form-data` (object schema) → assemble a
- *    `MultipartFormBody`, append text/file fields per property, take
- *    `multipart.build()` as the RequestBody.
- *  - `application/x-www-form-urlencoded` (object schema) → build a
- *    `FormBody.Builder()`, `add(name, value)` per property, take
- *    `formBody.build()` as the RequestBody.
+ *  - `application/json` (and `+json`) →
+ *    `client.json.encodeToString(<ser>, body)` then
+ *    `.toRequestBody("application/json".toMediaType())`. Opaque
+ *    schemas: impl receives `body: ByteArray` and ships it raw.
+ *  - `multipart/form-data` + object → assemble a `MultipartFormBody`,
+ *    `appendText` / `appendFile` per property, take `.build()`.
+ *  - `application/x-www-form-urlencoded` + object → `FormBody.Builder()`
+ *    + `add(name, value)` per property + `.build()`.
  *  - octet-stream / image / etc. → `body.toRequestBody("<mt>".toMediaType())`.
  *
  * Optional fields are wrapped in `if (<id> != null)`.
@@ -51,8 +49,7 @@ export function buildBodyStmts(
   method: HttpMethod,
   bodyType: KtType,
 ): BodyResult {
-  const shape = classifyBody(body);
-  const schema = body.schema;
+  const { shape, schema } = classifyBody(body);
   switch (shape.kind) {
     case "json-opaque":
       return {
@@ -88,8 +85,6 @@ function toMediaTypeCall(mt: string): KtExpr {
 }
 
 function emitJsonBody(method: HttpMethod, bodyType: KtType): KtStmt[] {
-  // val payload = client.json.encodeToString(<serializer>, body)
-  // builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
   return [
     ktVal(
       "payload",
@@ -116,10 +111,7 @@ function emitMethodWithRawBody(method: HttpMethod, mt: string): KtStmt {
   );
 }
 
-function emitMultipartBody(
-  schema: IR.SchemaObject,
-  method: HttpMethod,
-): KtStmt[] {
+function emitMultipartBody(schema: Schema, method: HttpMethod): KtStmt[] {
   const required = new Set(schema.required ?? []);
   const stmts: KtStmt[] = [
     ktVal("multipart", ktCall(ktIdent("MultipartFormBody"), [])),
@@ -127,6 +119,7 @@ function emitMultipartBody(
   for (const [propName, propSchema] of Object.entries(
     schema.properties ?? {},
   )) {
+    if (!isSchemaObject(propSchema)) continue;
     const id = paramIdent(propName);
     const isBinary =
       propSchema.type === "string" && propSchema.format === "binary";
@@ -159,10 +152,7 @@ function emitMultipartBody(
   return stmts;
 }
 
-function emitFormUrlEncodedBody(
-  schema: IR.SchemaObject,
-  method: HttpMethod,
-): KtStmt[] {
+function emitFormUrlEncodedBody(schema: Schema, method: HttpMethod): KtStmt[] {
   const required = new Set(schema.required ?? []);
   const stmts: KtStmt[] = [
     ktVal("formBuilder", ktCall(ktIdent("FormBody.Builder"), [])),

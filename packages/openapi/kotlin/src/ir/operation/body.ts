@@ -1,5 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import { classifyBody, iterateObjectProperties } from "@ir-kit/openapi";
+import {
+  classifyBody,
+  iterateObjectProperties,
+  type Schema,
+} from "@ir-kit/openapi";
 
 import {
   type KtFunParam,
@@ -12,24 +16,21 @@ import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
 /**
- * Resolve an `IR.BodyObject` into the function parameters that show up
- * in both the interface signature and the impl method:
+ * Resolve an `IR.BodyObject` into function parameters for both the
+ * interface signature and the impl method:
  *
- * - `application/json` (and `+json`) → single `body: T`. When the
- *   schema collapses to `Any` (e.g. a `oneOf` with no discriminated
- *   union codegen), the param falls back to `ByteArray` so the caller
- *   pre-encodes JSON — `Any` isn't `@Serializable`, so emitting it
- *   would produce code that fails to compile.
- * - `multipart/form-data` + object schema → one param per property; binary fields become `ByteArray`
- * - `application/x-www-form-urlencoded` + object schema → one param per property
- * - empty / octet-stream / image/* / unknown → `body: ByteArray` (caller pre-encodes)
+ *  - `application/json` (and `+json`) → single `body: T`. Opaque
+ *    schemas fall back to `ByteArray` since `Any` isn't `@Serializable`.
+ *  - `multipart/form-data` + object → one param per property; binary
+ *    fields become `ByteArray`.
+ *  - `application/x-www-form-urlencoded` + object → one param per property.
+ *  - empty / octet-stream / image / unknown → `body: ByteArray`.
  */
 export function buildBodyParams(
   body: IR.BodyObject,
   ctx: TypeCtx,
 ): ReadonlyArray<KtFunParam> {
-  const shape = classifyBody(body);
-  const schema = body.schema;
+  const { shape, schema } = classifyBody(body);
 
   switch (shape.kind) {
     case "json-opaque":
@@ -51,7 +52,7 @@ export function buildBodyParams(
 }
 
 function objectBodyToFlatParams(
-  schema: IR.SchemaObject,
+  schema: Schema,
   ctx: TypeCtx,
   binaryAsByteArray: boolean,
 ): ReadonlyArray<KtFunParam> {

@@ -1,5 +1,9 @@
 import { safeCaseName, synthName } from "@ir-kit/codegen-core";
-import { assertNoEnumCollisions, type SchemaToTypeOps } from "@ir-kit/openapi";
+import {
+  assertNoEnumCollisions,
+  type Schema,
+  type SchemaToTypeOps,
+} from "@ir-kit/openapi";
 
 import type { SwCodingKeysEntry, SwDecl, SwType } from "../sw-dsl/index.js";
 import {
@@ -49,7 +53,7 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
     const entries = properties.map(
       ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
         const naming = propertyName(jsonKey);
-        const t = dispatch(propSchema, {
+        const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
           ownerName: name,
           propPath: [propPathSegment],

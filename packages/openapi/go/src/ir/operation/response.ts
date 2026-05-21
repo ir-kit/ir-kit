@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyReturnShape, isMeaningless } from "@ir-kit/openapi";
+import { classifyReturnShape } from "@ir-kit/openapi";
 
 import {
   type GoType,
@@ -18,15 +18,14 @@ import { schemaToType } from "../type/index.js";
 import type { ResponseCase } from "./signature.js";
 
 export interface ResolvedReturn {
-  /** The Go type to put in the function's `results` list. `undefined`
-   *  means "no return value" (the function results are just `error`). */
+  /** Go type for the function's results list. `undefined` means "no
+   *  return value" (results are just `error`). */
   type: GoType | undefined;
   /**
    * Per-status-code cases when the op has more than one 2xx response.
    * Empty for single-2xx ops — the impl decodes straight into `type`.
    * Non-empty means `type` is a `goRef` to an emitted interface and
-   * the impl dispatches on `resp.StatusCode` to construct the matching
-   * concrete type.
+   * the impl dispatches on `resp.StatusCode`.
    */
   cases: ReadonlyArray<ResponseCase>;
 }
@@ -64,57 +63,47 @@ export function returnTypeFor(
       return { type: undefined, cases: [] };
     case "single": {
       const t = schemaToType(shape.schema, ctx);
-      // Always return pointer for struct payloads — Go idiom for
-      // "decoded into heap-allocated value".
       const finalType = t.kind === "ref" || t.kind === "ptr" ? maybePtr(t) : t;
       return { type: finalType, cases: [] };
     }
-    case "multi":
-      return emitMultiResponseInterface(shape.cases, ctx);
+    case "multi": {
+      const ifaceName = synthName(ctx.ownerName, ["Response"]);
+      const markerMethod = `is${ifaceName}`;
+      const cases: ResponseCase[] = shape.cases.map(
+        ({ statusCode, schema }) => {
+          const caseName = `${ifaceName}Status${statusCode}`;
+          if (!schema) return { statusCode, caseName };
+          const payloadType = schemaToType(schema, {
+            ...ctx,
+            propPath: ["response", statusCode],
+          });
+          return { statusCode, caseName, payloadType };
+        },
+      );
+      ctx.emit(
+        goInterface({
+          name: ifaceName,
+          methods: [goMethodSig(markerMethod, [], [])],
+        }),
+      );
+      for (const c of cases) {
+        const fields = c.payloadType
+          ? [goField("Value", c.payloadType, '`json:"-"`')]
+          : [];
+        ctx.emit(goStruct({ name: c.caseName, fields }));
+        ctx.emit(
+          goFuncDecl({
+            name: markerMethod,
+            receiver: goReceiver("", goRef(c.caseName)),
+            body: [],
+          }),
+        );
+      }
+      return { type: goRef(ifaceName), cases };
+    }
   }
 }
 
 function maybePtr(t: GoType): GoType {
   return t.kind === "ptr" ? t : goPtr(t);
-}
-
-function emitMultiResponseInterface(
-  responses: ReadonlyArray<readonly [string, IR.ResponseObject | undefined]>,
-  ctx: TypeCtx,
-): ResolvedReturn {
-  const ifaceName = synthName(ctx.ownerName, ["Response"]);
-  const markerMethod = `is${ifaceName}`;
-  const cases: ResponseCase[] = responses.map(([code, resp]) => {
-    const schema = resp?.schema;
-    const isEmpty = !schema || isMeaningless(schema);
-    const caseName = `${ifaceName}Status${code}`;
-    if (isEmpty) return { statusCode: code, caseName };
-    const payloadType = schemaToType(schema, {
-      ...ctx,
-      propPath: ["response", code],
-    });
-    return { statusCode: code, caseName, payloadType };
-  });
-  // Marker interface
-  ctx.emit(
-    goInterface({
-      name: ifaceName,
-      methods: [goMethodSig(markerMethod, [], [])],
-    }),
-  );
-  // Per-case structs + marker-method impl
-  for (const c of cases) {
-    const fields = c.payloadType
-      ? [goField("Value", c.payloadType, '`json:"-"`')]
-      : [];
-    ctx.emit(goStruct({ name: c.caseName, fields }));
-    ctx.emit(
-      goFuncDecl({
-        name: markerMethod,
-        receiver: goReceiver("", goRef(c.caseName)),
-        body: [],
-      }),
-    );
-  }
-  return { type: goRef(ifaceName), cases };
 }

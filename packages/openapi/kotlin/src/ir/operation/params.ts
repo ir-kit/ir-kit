@@ -1,5 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import { collectLocatedParams, type LocatedParam } from "@ir-kit/openapi";
+import {
+  collectLocatedParams,
+  fromHeyApi,
+  type LocatedParam,
+} from "@ir-kit/openapi";
 
 import { type KtFunParam, ktFunParam, ktNullable } from "../../kt-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
@@ -21,7 +25,7 @@ export function buildNonBodyParams(
   located.sort((a, b) => Number(!a.param.required) - Number(!b.param.required));
 
   const params = located.map(({ param: p }) => {
-    const t = schemaToType(p.schema, {
+    const t = schemaToType(fromHeyApi(p.schema), {
       ...ctx,
       propPath: ["param", p.name],
     });

@@ -1,4 +1,7 @@
 import type { IR } from "@hey-api/shared";
+import { type Schema } from "@ir-kit/schema";
+import { fromHeyApi } from "@ir-kit/schema/adapters/heyapi";
+
 import {
   FORM_URLENCODED_MEDIA,
   JSON_MEDIA_RE,
@@ -6,55 +9,55 @@ import {
 } from "../spec/constants.js";
 
 /**
- * `true` when a JSON-typed body has no concrete `type` but carries an
- * `items[]` (typical of bare `oneOf`/`anyOf` schemas) — there's no
- * cleanly-typed structure to bind to, so each emitter falls back to a
- * raw byte buffer (`[]byte` / `ByteArray` / `Data`).
+ * `true` when a JSON-typed body has no concrete `type` but carries
+ * `oneOf`/`anyOf` branches — there's no cleanly-typed structure to
+ * bind to, so each emitter falls back to a raw byte buffer (`[]byte` /
+ * `ByteArray` / `Data`).
  */
-export function isOpaqueJsonBody(schema: IR.SchemaObject): boolean {
-  return !schema.type && Array.isArray(schema.items) && schema.items.length > 0;
+export function isOpaqueJsonBody(schema: Schema): boolean {
+  if (schema.type) return false;
+  return Boolean(schema.oneOf?.length || schema.anyOf?.length);
 }
 
 /**
- * Outcome of inspecting `IR.BodyObject`'s media type + schema shape.
- * Each emitter switches on `kind` to pick its body-param strategy.
+ * Outcome of inspecting a body's media type + schema shape. Each
+ * emitter switches on `kind` to pick its body-param strategy.
  */
 export type BodyShape =
-  /** `application/json` with a meaningful schema. */
   | { kind: "json-typed" }
-  /** `application/json` whose schema collapses to opaque (oneOf/anyOf
-   *  without a single shared shape). Each emitter falls back to bytes. */
   | { kind: "json-opaque" }
-  /** `multipart/form-data` whose schema is an object — flatten props
-   *  into one func param each. */
   | { kind: "multipart-object" }
-  /** `application/x-www-form-urlencoded` whose schema is an object —
-   *  flatten props into one func param each. */
   | { kind: "form-urlencoded-object" }
-  /** Empty / octet-stream / image/* / unknown — caller pre-encodes a
-   *  single bytes param. */
   | { kind: "opaque" };
 
+export interface ClassifiedBody {
+  shape: BodyShape;
+  /** The body's schema in canonical form, ready to feed `schemaToType`
+   *  or `iterateObjectProperties`. */
+  schema: Schema;
+}
+
 /**
- * Classify a body by its media type + schema shape so emitters can
- * dispatch identically on `kind`. The media-type matching rules use
- * the shared constants in `../spec/constants` — single source of truth.
+ * Classify a body by media type + schema shape and return the schema
+ * pre-converted to canonical form so each emitter can dispatch on
+ * `shape.kind` without re-converting.
  */
-export function classifyBody(body: IR.BodyObject): BodyShape {
+export function classifyBody(body: IR.BodyObject): ClassifiedBody {
   const mt = (body.mediaType ?? "").toLowerCase();
-  const schema = body.schema;
+  const schema = fromHeyApi(body.schema);
   const isObject = schema.type === "object" && Boolean(schema.properties);
 
+  let shape: BodyShape;
   if (mt && JSON_MEDIA_RE.test(mt)) {
-    return isOpaqueJsonBody(schema)
+    shape = isOpaqueJsonBody(schema)
       ? { kind: "json-opaque" }
       : { kind: "json-typed" };
+  } else if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObject) {
+    shape = { kind: "multipart-object" };
+  } else if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObject) {
+    shape = { kind: "form-urlencoded-object" };
+  } else {
+    shape = { kind: "opaque" };
   }
-  if (mt.startsWith(MULTIPART_FORM_MEDIA) && isObject) {
-    return { kind: "multipart-object" };
-  }
-  if (mt.startsWith(FORM_URLENCODED_MEDIA) && isObject) {
-    return { kind: "form-urlencoded-object" };
-  }
-  return { kind: "opaque" };
+  return { shape, schema };
 }

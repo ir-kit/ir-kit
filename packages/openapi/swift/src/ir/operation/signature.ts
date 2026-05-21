@@ -3,7 +3,6 @@ import { camel, pascal } from "@ir-kit/codegen-core";
 import type { HttpMethod } from "@ir-kit/openapi";
 import {
   deriveBaseName,
-  type ResponseCase as IRResponseCase,
   type LocatedParam,
   operationDocLine,
 } from "@ir-kit/openapi";
@@ -35,7 +34,11 @@ export interface OperationSignature {
  * payload type into the matching enum case. `payloadType` is
  * `undefined` for empty bodies (e.g. 204).
  */
-export type ResponseCase = IRResponseCase<SwType>;
+export interface ResponseCase {
+  statusCode: string;
+  caseName: string;
+  payloadType?: SwType;
+}
 
 /**
  * One source of truth for `params + returnType + doc` so the protocol

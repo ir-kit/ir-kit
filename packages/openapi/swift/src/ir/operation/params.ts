@@ -1,5 +1,9 @@
 import type { IR } from "@hey-api/shared";
-import { collectLocatedParams, type LocatedParam } from "@ir-kit/openapi";
+import {
+  collectLocatedParams,
+  fromHeyApi,
+  type LocatedParam,
+} from "@ir-kit/openapi";
 
 import type { SwFunParam } from "../../sw-dsl/index.js";
 import { swFunParam, swOptional } from "../../sw-dsl/index.js";
@@ -8,10 +12,9 @@ import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
 /**
- * Produce the function parameters for path/query/header parameters in
- * required-first order (so trailing optional defaults stay tail-only).
- * Cookie params are skipped — Swift / URLSession has no analog and they
- * are rare enough not to warrant codegen support.
+ * Path/query/header parameters as function params, required-first.
+ * Cookie params are skipped — URLSession has no analog and they're
+ * rare enough not to warrant codegen support.
  */
 export function buildNonBodyParams(
   op: IR.OperationObject,
@@ -21,7 +24,7 @@ export function buildNonBodyParams(
   located.sort((a, b) => Number(!a.param.required) - Number(!b.param.required));
 
   const params = located.map(({ param: p }) => {
-    const t = schemaToType(p.schema, {
+    const t = schemaToType(fromHeyApi(p.schema), {
       ...ctx,
       propPath: ["param", p.name],
     });

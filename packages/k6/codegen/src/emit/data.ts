@@ -1,6 +1,7 @@
 import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { safeIdent } from "@ir-kit/codegen-core";
+import { fromHeyApi } from "@ir-kit/openapi";
 
 import { schemaToFakerExpr } from "../ir/index.js";
 import { GENERATED_HEADER, printDslNodes } from "../print.js";
@@ -23,7 +24,8 @@ import type * as ${TYPE_NAMESPACE} from "./types.js";
 `;
 
   let dataObj = $.object();
-  for (const [rawName, schema] of entries) {
+  for (const [rawName, heySchema] of entries) {
+    const schema = fromHeyApi(heySchema);
     const name = safeIdent(rawName);
     const typeRef = $.type(`${TYPE_NAMESPACE}.${name}`);
     const isObject = schema.type === "object" || !!schema.properties;

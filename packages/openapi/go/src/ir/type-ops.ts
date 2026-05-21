@@ -1,4 +1,8 @@
-import { assertNoEnumCollisions, type SchemaToTypeOps } from "@ir-kit/openapi";
+import {
+  assertNoEnumCollisions,
+  type Schema,
+  type SchemaToTypeOps,
+} from "@ir-kit/openapi";
 
 import type { GoDecl } from "../go-dsl/decl/types.js";
 import {
@@ -37,9 +41,9 @@ function integerEntrySuffix(n: number): string {
 
 /**
  * Go's plug into the shared `schemaToType` dispatcher. Every per-target
- * rendering choice lives in this one record — pointer-wrap for optional
- * fields, no-separator `synthName` (per `go vet`), JSON struct tags
- * with `omitempty`, typed-const enum blocks, etc.
+ * rendering choice lives here — pointer-wrap for optional fields,
+ * no-separator `synthName` (per `go vet`), JSON struct tags with
+ * `omitempty`, typed-const enum blocks.
  */
 export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
   refType: goRef,
@@ -57,7 +61,7 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
     const fields = properties.map(
       ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
         const naming = propertyName(jsonKey);
-        const t = dispatch(propSchema, {
+        const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
           ownerName: name,
           propPath: [propPathSegment],

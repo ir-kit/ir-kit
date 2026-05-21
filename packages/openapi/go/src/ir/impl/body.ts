@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyBody } from "@ir-kit/openapi";
+import { classifyBody, isSchemaObject, type Schema } from "@ir-kit/openapi";
 import {
   type GoStmt,
   goAssign,
@@ -46,8 +46,7 @@ export function buildBodyStmts(
   body: IR.BodyObject,
   errCheck: ErrCheckFn,
 ): BodyResult {
-  const shape = classifyBody(body);
-  const schema = body.schema;
+  const { shape, schema } = classifyBody(body);
   switch (shape.kind) {
     case "json-opaque":
       return { stmts: rawBytesBody("application/json"), needsMultipart: false };
@@ -117,7 +116,7 @@ function rawBytesBody(mt: string): GoStmt[] {
   return setBodyAndContentType("body", mt);
 }
 
-function multipartBody(schema: IR.SchemaObject): GoStmt[] {
+function multipartBody(schema: Schema): GoStmt[] {
   const required = new Set(schema.required ?? []);
   const stmts: GoStmt[] = [
     goShort(["multipart"], [goCall(goIdent("NewMultipartFormBody"), [])]),
@@ -125,6 +124,7 @@ function multipartBody(schema: IR.SchemaObject): GoStmt[] {
   for (const [propName, propSchema] of Object.entries(
     schema.properties ?? {},
   )) {
+    if (!isSchemaObject(propSchema)) continue;
     const id = paramIdent(propName);
     const isBinary =
       propSchema.type === "string" && propSchema.format === "binary";
@@ -187,7 +187,7 @@ function multipartBody(schema: IR.SchemaObject): GoStmt[] {
   return stmts;
 }
 
-function formUrlEncodedBody(schema: IR.SchemaObject): GoStmt[] {
+function formUrlEncodedBody(schema: Schema): GoStmt[] {
   const required = new Set(schema.required ?? []);
   const stmts: GoStmt[] = [
     goShort(["form"], [goCall(goIdent("url.Values"), [])]),

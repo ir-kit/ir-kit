@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyBody } from "@ir-kit/openapi";
+import { classifyBody, isSchemaObject, type Schema } from "@ir-kit/openapi";
 import type { SwExpr, SwStmt } from "../../sw-dsl/index.js";
 import {
   swArg,
@@ -52,8 +52,7 @@ export interface BodyResult {
  *  - octet-stream / image / etc. → `request.httpBody = body` (raw `Data`).
  */
 export function buildBodyStmts(body: IR.BodyObject): BodyResult {
-  const shape = classifyBody(body);
-  const schema = body.schema;
+  const { shape, schema } = classifyBody(body);
   switch (shape.kind) {
     case "json-opaque":
       return {
@@ -134,7 +133,7 @@ function rawBinaryBody(mt: string): ReadonlyArray<SwStmt> {
  * Optional fields are wrapped in `if let`, since the impl-method param
  * is Optional too.
  */
-function multipartBody(schema: IR.SchemaObject): ReadonlyArray<SwStmt> {
+function multipartBody(schema: Schema): ReadonlyArray<SwStmt> {
   const required = new Set(schema.required ?? []);
   const stmts: SwStmt[] = [
     swLet("multipart", swCall(swIdent("MultipartFormBody"), [])),
@@ -142,6 +141,7 @@ function multipartBody(schema: IR.SchemaObject): ReadonlyArray<SwStmt> {
   for (const [propName, propSchema] of Object.entries(
     schema.properties ?? {},
   )) {
+    if (!isSchemaObject(propSchema)) continue;
     const id = paramIdent(propName);
     const isBinary =
       propSchema.type === "string" && propSchema.format === "binary";
@@ -187,7 +187,7 @@ function multipartBody(schema: IR.SchemaObject): ReadonlyArray<SwStmt> {
  * string interpolation would mishandle `&`, `=`, `+`, and other reserved
  * characters in a payload value.
  */
-function formUrlEncodedBody(schema: IR.SchemaObject): ReadonlyArray<SwStmt> {
+function formUrlEncodedBody(schema: Schema): ReadonlyArray<SwStmt> {
   const required = new Set(schema.required ?? []);
   const stmts: SwStmt[] = [
     swVar("formComponents", swCall(swIdent("URLComponents"), [])),

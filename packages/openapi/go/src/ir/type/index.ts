@@ -1,7 +1,7 @@
-import type { IR } from "@hey-api/shared";
 import {
   classifyEnumLiterals,
   iterateObjectProperties,
+  type Schema,
   schemaToType as sharedSchemaToType,
 } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
@@ -14,29 +14,26 @@ import type { TypeCtx } from "./context.js";
 export type { TypeCtx } from "./context.js";
 
 /**
- * Top-level dispatch from `IR.SchemaObject` to a `GoType`. Side-effects:
- * inline objects/enums get promoted to top-level decls via `ctx.emit`.
- * Thin wrapper over the shared `@ir-kit/openapi.schemaToType` with the
- * Go ops record bound.
+ * Top-level dispatch from a canonical {@link Schema} to a `GoType`.
+ * Side-effects: inline objects / enums get promoted to top-level decls
+ * via `ctx.emit`.
  */
-export function schemaToType(schema: IR.SchemaObject, ctx: TypeCtx): GoType {
+export function schemaToType(schema: Schema, ctx: TypeCtx): GoType {
   return sharedSchemaToType(schema, ctx, goOps);
 }
 
 /**
- * Build a top-level Go struct decl from an object-shaped IR schema —
- * used by `schemasToDecls` for entries in `components.schemas` where
- * the name is given (not synthed from owner+propPath). Mirrors what
- * the dispatcher does in its `named-struct` branch but with the
- * supplied name and without emitting (caller chooses).
+ * Build a top-level Go struct from an object-shaped canonical schema
+ * with a caller-supplied name. Mirrors the dispatcher's `named-struct`
+ * branch but skips the synth-name step and doesn't emit (caller chooses).
  */
 export function buildStruct(
   name: string,
-  schema: IR.SchemaObject,
+  schema: Schema,
   ctx: { emit: (d: GoDecl) => void },
 ): GoDecl {
   const properties = Array.from(iterateObjectProperties(schema));
-  const dispatch = (s: IR.SchemaObject, c: TypeCtx): GoType =>
+  const dispatch = (s: Schema, c: TypeCtx): GoType =>
     sharedSchemaToType(s, c, goOps);
   return goOps.buildStructDecl(
     name,
@@ -47,14 +44,13 @@ export function buildStruct(
 }
 
 /**
- * Build a top-level Go enum (typed `string` alias + const block) from
- * an enum-typed IR schema. Used by `schemasToDecls` for entries in
- * `components.schemas`. Both decls are pushed via `emit` and a ref
- * to the named type is returned.
+ * Build a top-level Go enum (typed alias + const block) from an
+ * enum-shaped canonical schema. Both decls are pushed via `emit` and a
+ * ref to the named type is returned.
  */
 export function buildEnumFromIR(
   name: string,
-  schema: IR.SchemaObject,
+  schema: Schema,
   emit: (d: GoDecl) => void,
 ): GoType {
   const rawValues = getEnumLiterals(schema);

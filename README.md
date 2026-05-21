@@ -153,6 +153,12 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 | [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 
+### Other
+
+| Package | Description |
+| --- | --- |
+| [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
+
 <!-- @packages-end -->
 
 > The package list above is auto-generated from each `package.json`'s `description` field, with categories driven by [`scripts/sync-readme.mjs`](./scripts/sync-readme.mjs). The lefthook pre-commit hook keeps it current; run `pnpm sync:readme` manually if needed.

@@ -1,5 +1,6 @@
 import type { TsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
+import { fromHeyApi } from "@ir-kit/openapi";
 import ts from "typescript";
 
 import {
@@ -20,7 +21,9 @@ const f = ts.factory;
 const TYPE_NAMESPACE = "T";
 
 function typed(schema: IR.SchemaObject): TypeExpr {
-  return schemaToTypeNode(schema, { typeNamespace: TYPE_NAMESPACE });
+  return schemaToTypeNode(fromHeyApi(schema), {
+    typeNamespace: TYPE_NAMESPACE,
+  });
 }
 
 function typeNodeFor(op: WalkedOperation): ts.TypeNode {

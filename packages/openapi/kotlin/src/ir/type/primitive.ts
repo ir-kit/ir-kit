@@ -1,4 +1,5 @@
-import type { IR } from "@hey-api/shared";
+import type { Schema } from "@ir-kit/openapi";
+
 import {
   type KtType,
   ktBoolean,
@@ -15,7 +16,7 @@ import {
  * OpenAPI string `format` → Kotlin / kotlinx-datetime / `String` type.
  * Unknown formats fall back to `String`.
  *
- *  - `date-time`        → `Instant` (kotlinx-datetime; built-in
+ *  - `date-time`        → `Instant` (kotlinx-datetime, built-in
  *                        `@Serializable` serializer).
  *  - `date`             → `LocalDate` (kotlinx-datetime, same).
  *  - `uuid` / `uri` / `url` → `String`. kotlinx-serialization has no
@@ -39,13 +40,11 @@ function typeForStringFormat(format: string | undefined): KtType {
   }
 }
 
-/**
- * Map a primitive `IR.SchemaObject.type` (with optional `format`) to the
- * matching Kotlin type. Returns `undefined` for non-primitive types so
- * the dispatcher can fall through.
- */
-export function typeForPrimitive(s: IR.SchemaObject): KtType | undefined {
-  switch (s.type) {
+export function typeForPrimitive(s: Schema): KtType | undefined {
+  const t = Array.isArray(s.type)
+    ? s.type.find((x: string) => x !== "null")
+    : s.type;
+  switch (t) {
     case "string":
       return typeForStringFormat(s.format);
     case "integer":

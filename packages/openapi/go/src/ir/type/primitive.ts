@@ -1,4 +1,5 @@
-import type { IR } from "@hey-api/shared";
+import type { Schema } from "@ir-kit/openapi";
+
 import {
   type GoType,
   goBool,
@@ -12,12 +13,6 @@ import {
   goString,
 } from "../../go-dsl/index.js";
 
-/**
- * OpenAPI string `format` → Go type. Unknown formats fall back to
- * `string`. `date-time` maps to `time.Time` (RFC 3339); `date` stays
- * on `string` since date-only values are outside RFC 3339 and
- * `time.Time` can't unmarshal them.
- */
 function typeForStringFormat(format: string | undefined): GoType {
   switch (format) {
     case "date-time":
@@ -31,12 +26,16 @@ function typeForStringFormat(format: string | undefined): GoType {
 }
 
 /**
- * Map a primitive `IR.SchemaObject.type` (with optional `format`) to
- * the matching Go type. Returns `undefined` for non-primitive types so
- * the dispatcher can fall through.
+ * Map a primitive canonical {@link Schema} to the matching Go type.
+ * Returns `undefined` for non-primitive schemas so the dispatcher can
+ * fall through. Date-only (`format: "date"`) stays on `string` since
+ * `time.Time` can't unmarshal it.
  */
-export function typeForPrimitive(s: IR.SchemaObject): GoType | undefined {
-  switch (s.type) {
+export function typeForPrimitive(s: Schema): GoType | undefined {
+  const t = Array.isArray(s.type)
+    ? s.type.find((x: string) => x !== "null")
+    : s.type;
+  switch (t) {
     case "string":
       return typeForStringFormat(s.format);
     case "integer":

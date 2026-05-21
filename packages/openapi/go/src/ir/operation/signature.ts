@@ -3,7 +3,6 @@ import { safeIdent } from "@ir-kit/codegen-core";
 import type { HttpMethod } from "@ir-kit/openapi";
 import {
   deriveBaseName,
-  type ResponseCase as IRResponseCase,
   type LocatedParam,
   operationDocLine,
 } from "@ir-kit/openapi";
@@ -44,7 +43,11 @@ export interface OperationSignature {
  * type. `caseName` is the Go struct name implementing the response
  * interface; `payloadType` is `undefined` for empty bodies (e.g. 204).
  */
-export type ResponseCase = IRResponseCase<GoType>;
+export interface ResponseCase {
+  statusCode: string;
+  caseName: string;
+  payloadType?: GoType;
+}
 
 /**
  * One source of truth for `params + returnType + doc` so the interface

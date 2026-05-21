@@ -1,4 +1,33 @@
-export type { BodyShape } from "./operation/body.js";
+export type {
+  EnumEntryIdent,
+  EnumKind,
+  EnumLiteral,
+  ObjectProperty,
+  ObjectShape,
+  Schema,
+  SchemaDiscriminator,
+  SchemaOrBool,
+  SchemaPrimitiveType,
+  UnionShape,
+} from "@ir-kit/schema";
+export {
+  assertNoEnumCollisions,
+  classifyEnumLiterals,
+  classifyObject,
+  classifyUnion,
+  extractEnumValues,
+  isNullable,
+  isPrimitive,
+  isRefOnly,
+  isSchemaObject,
+  isUnionShape,
+  iterateObjectProperties,
+  primitiveTag,
+  refName,
+  typeList,
+} from "@ir-kit/schema";
+export { fromHeyApi } from "@ir-kit/schema/adapters/heyapi";
+export type { BodyShape, ClassifiedBody } from "./operation/body.js";
 export { classifyBody, isOpaqueJsonBody } from "./operation/body.js";
 export type { IteratedOperation } from "./operation/iter.js";
 export { iterOperations } from "./operation/iter.js";
@@ -38,21 +67,8 @@ export type {
   ObjectPassOptions,
 } from "./spec/normalize/index.js";
 export { normalizeSpec, SAFE_NORMALIZE } from "./spec/normalize/index.js";
-export { isMeaningless, refName } from "./spec/ref.js";
+export { isMeaningless } from "./spec/ref.js";
 export { extractSecuritySchemeNames, securityKey } from "./spec/security.js";
-
 export type { TypeCtx } from "./type/context.js";
 export type { SchemaToTypeOps } from "./type/dispatch.js";
 export { schemaToType } from "./type/dispatch.js";
-export type { EnumEntryIdent, EnumKind, EnumLiteral } from "./type/enum.js";
-export {
-  assertNoEnumCollisions,
-  classifyEnumLiterals,
-} from "./type/enum.js";
-export type { ObjectProperty, ObjectShape } from "./type/object.js";
-export {
-  classifyObjectShape,
-  iterateObjectProperties,
-} from "./type/object.js";
-export type { UnionShape } from "./type/union.js";
-export { classifyUnion } from "./type/union.js";
