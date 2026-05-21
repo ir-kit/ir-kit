@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend",
   "keywords": [
     "openapi",

@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering.",
   "keywords": [
     "openapi",
