@@ -1,0 +1,67 @@
+{
+  "name": "@ir-kit/spec-convert",
+  "version": "0.1.0",
+  "description": "Convert between API specification formats — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, JSON Schema. Pair-handler registry; programmatic API; thin wrappers around upstream conversion tools where available.",
+  "keywords": [
+    "openapi",
+    "asyncapi",
+    "typespec",
+    "protobuf",
+    "json-schema",
+    "convert",
+    "spec",
+    "ir-kit"
+  ],
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/shared/spec-convert",
+  "bugs": {
+    "url": "https://github.com/ir-kit/ir-kit/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Ahmed Rowaihi",
+    "email": "ahmedrowaihi@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "directory": "packages/shared/spec-convert"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ir-kit/spec-loader": "workspace:*",
+    "@ir-kit/typespec-loader": "workspace:*"
+  },
+  "devDependencies": {
+    "@ir-kit/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
