@@ -2,25 +2,33 @@
 
 [![pkg.pr.new](https://pkg.pr.new/badge/ir-kit/ir-kit)](https://pkg.pr.new)
 
-A toolchain for everything you actually do with an OpenAPI / AsyncAPI spec besides shipping one TypeScript fetch client:
+A federation toolchain for API specifications — every standard talks to every other, and every downstream tool (SDK gen, docs, diff, load test, mock data) reads the same canonical input regardless of source format.
 
+- **Spec interop** — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, Postman, JSON Schema. A graph-routed dispatcher chains converters automatically: register one edge into OpenAPI 3 and every other format unlocks combinatorially.
+- **Standalone HTML docs** for any input — `ir docs api.proto --out docs.html` (renders via [Scalar](https://github.com/scalar/scalar)).
+- **Cross-family diff** — `ir spec diff before.proto --after after.postman_collection.json` produces breaking / non-breaking classification via [`api-smart-diff`](https://github.com/udamir/api-smart-diff).
 - **Native client SDKs** in Go, Kotlin, Swift, TypeScript — idiomatic per language, not transpiled from a TS base.
 - **Spec-driven load testing** — typed [k6](https://k6.io) scripts with `defineLoadTest`/`flow().step()` chaining, no string-templating.
 - **Spec discovery from traffic** — reverse-engineer an OpenAPI 3.1 spec from observed HTTP, either as a library or a Chrome extension.
 - **Drop-in plugins for `@hey-api/openapi-ts`** — faker factories, oRPC clients, route maps, typia validators, and the k6 generator.
 
-All targets share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`@ir-kit/openapi-{go,kotlin,swift,typescript}`, `@ir-kit/k6-gen`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site.
+All OpenAPI consumers share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`@ir-kit/openapi-{go,kotlin,swift,typescript}`, `@ir-kit/k6-gen`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/cli) CLI or directly as a programmatic API per package.
 
 ## Pick a tool
 
 | You want to… | Reach for | Surface |
 | --- | --- | --- |
+| Convert between any pair of spec formats (OpenAPI / AsyncAPI / TypeSpec / Protobuf / Postman / JSON Schema) | [`@ir-kit/spec-convert`](./packages/shared/spec-convert) | `convertSpec({ input, to })` or `ir spec convert` |
+| Render any spec as standalone HTML docs | [`@ir-kit/spec-docs`](./packages/shared/spec-docs) | `renderDocs({ input })` or `ir docs` |
+| Diff two specs (cross-family) with breaking-change classification | [`@ir-kit/spec-diff`](./packages/shared/spec-diff) | `diffSpecs({ before, after })` or `ir spec diff` |
+| Load any spec uniformly (auto-detect OpenAPI / AsyncAPI / TypeSpec) | [`@ir-kit/spec-loader`](./packages/shared/spec-loader) | `loadSpec({ input }) → { kind, document }` |
 | Generate a Go / Kotlin / Swift / TypeScript SDK | [`@ir-kit/openapi-<lang>`](#native-client-sdk-generators) | `generate({ spec, output })` or hey-api plugin |
 | Load-test an OpenAPI API | [`@ir-kit/k6-toolkit`](./packages/k6/toolkit) on top of [`@ir-kit/k6`](./packages/k6/framework) | `sync()`, `runK6()`, `bundle()` |
 | Reverse-engineer a spec from real traffic | [`@ir-kit/glean`](./apps/glean) (browser) or [`@ir-kit/openapi-recon`](./packages/openapi/recon) (lib) | DevTools extension / programmatic |
 | Add faker mocks, oRPC clients, route maps, typia validators | hey-api [plugins](#hey-apiopenapi-ts-plugins) | `openapi-ts.config.ts` |
 | Emit AsyncAPI 3.0 → TypeScript | [`@ir-kit/asyncapi-typescript`](./packages/asyncapi/typescript) | `generate({ spec, output })` |
-| Extract JSON Schema from TS function signatures | [`@ir-kit/fn-schema-cli`](./packages/fn-schema/cli) | `fn-schema scan / extract / inspect` |
+| Extract JSON Schema from TS function signatures | [`@ir-kit/fn-schema-core`](./packages/fn-schema/core) | `runExtract()` or `ir fn-schema extract` |
+| Do any of the above from one terminal entry point | [`@ir-kit/cli`](./packages/cli) | `ir <command>` |
 
 ## Use with AI coding agents
 
@@ -69,28 +77,43 @@ This repo is also a **Claude Code plugin** — `.claude-plugin/plugin.json` + `m
 
 ```mermaid
 flowchart LR
-  ospec["OpenAPI spec"]
-  aspec["AsyncAPI spec"]
-  traffic["HTTP traffic"]
-  ts["TS source"]
+  postman["Postman"] --> hub
+  proto["Protobuf"] --> hub
+  tsp["TypeSpec"] --> hub
+  aspec["AsyncAPI"] --> hub
+  ts["TS source"] --> fn["fn-schema"] -.-> hub
+  traffic["HTTP traffic"] --> recon["openapi-recon · glean"] -.-> hub
 
-  ospec --> native["openapi-{go,kotlin,swift,typescript}"]
-  ospec --> hey["@hey-api/openapi-ts<br/>+ faker · orpc · paths · typia · k6"]
-  ospec --> k6tk["k6-toolkit"] --> k6gen["k6-gen"] --> k6fw["@ir-kit/k6"]
+  hub["OpenAPI 3<br/>(federation hub)"]
 
-  aspec --> async["asyncapi-typescript"]
+  hub --> docs["spec-docs<br/>(Scalar HTML)"]
+  hub --> diff["spec-diff<br/>(api-smart-diff)"]
+  hub --> conv["spec-convert<br/>→ postman / proto / typespec / json-schema"]
+  hub --> native["openapi-{go,kotlin,swift,typescript}"]
+  hub --> heyplugins["@hey-api plugins<br/>(faker · orpc · paths · typia · k6)"]
+  hub --> k6tk["k6-toolkit"] --> k6gen["k6-gen"] --> k6fw["@ir-kit/k6"]
 
-  traffic --> recon["openapi-recon (lib)"] -.-> ospec
-  traffic --> glean["glean (Chrome)"] -.-> ospec
-
-  ts --> fn["fn-schema-cli"]
+  aspec --> asyncts["asyncapi-typescript"]
 ```
 
-Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyncapi-core`) are listed under **Shared primitives** below — you usually consume one of the higher-level packages instead.
+`@ir-kit/spec-convert` graph-routes between every supported format — register a single `(X → openapi3)` and `(openapi3 → X)` edge and every other pair becomes reachable automatically. Internal building blocks (`codegen-core`, `openapi`, `openapi-tools`, `asyncapi-core`, `schema`) are listed under **Shared primitives** below — you usually consume one of the higher-level packages instead.
 
 ## Packages
 
 <!-- @packages-start -->
+
+### Federation core
+
+| Package | Description |
+| --- | --- |
+| [`@ir-kit/asyncapi-loader`](./packages/asyncapi/loader) | Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `@ir-kit/asyncapi-core`'s `parseSpec` for unified input dispatch. |
+| [`@ir-kit/cli`](./packages/cli) | Unified `ir` CLI — single entry point for spec loading, conversion, codegen, and reverse-engineering across every supported API standard. Commands are JSON-Schema-defined; runtime auto-derives flags, prompts, help, and validation from the schema. |
+| [`@ir-kit/openapi-loader`](./packages/openapi/loader) | Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization. |
+| [`@ir-kit/spec-convert`](./packages/shared/spec-convert) | Convert between API specification formats — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, JSON Schema. Pair-handler registry; programmatic API; thin wrappers around upstream conversion tools where available. |
+| [`@ir-kit/spec-diff`](./packages/shared/spec-diff) | Cross-family API spec diff. Converts any supported spec to OpenAPI 3, then runs `api-smart-diff` — breaking / non-breaking / annotation classification. |
+| [`@ir-kit/spec-docs`](./packages/shared/spec-docs) | Render any API spec as standalone HTML documentation via Scalar API Reference. Programmatic + CLI. |
+| [`@ir-kit/spec-loader`](./packages/shared/spec-loader) | Universal spec loader for OpenAPI, AsyncAPI, and TypeSpec. Detects format by extension + content sniff and dispatches to the per-format loader, returning a discriminated `{ kind, document }` result. |
+| [`@ir-kit/typespec-loader`](./packages/openapi/typespec-loader) | Compile a TypeSpec file to an OpenAPI 3.x document in memory. Thin wrapper over @typespec/compiler + @typespec/openapi3 — plugs into any @ir-kit OpenAPI generator at the spec-loading boundary. |
 
 ### Native client SDK generators
 
@@ -151,20 +174,7 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 | [`@ir-kit/codegen-core`](./packages/shared/codegen-core) | Spec-agnostic codegen primitives shared by OpenAPI and AsyncAPI generator families — identifier transforms (pascal/camel/safeIdent), filesystem safety, project-name derivation. Pure functions, no spec dependencies. |
 | [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
-
-### Other
-
-| Package | Description |
-| --- | --- |
-| [`@ir-kit/asyncapi-loader`](./packages/asyncapi/loader) | Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `@ir-kit/asyncapi-core`'s `parseSpec` for unified input dispatch. |
-| [`@ir-kit/cli`](./packages/cli) | Unified `ir` CLI — single entry point for spec loading, conversion, codegen, and reverse-engineering across every supported API standard. Commands are JSON-Schema-defined; runtime auto-derives flags, prompts, help, and validation from the schema. |
-| [`@ir-kit/openapi-loader`](./packages/openapi/loader) | Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization. |
 | [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
-| [`@ir-kit/spec-convert`](./packages/shared/spec-convert) | Convert between API specification formats — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, JSON Schema. Pair-handler registry; programmatic API; thin wrappers around upstream conversion tools where available. |
-| [`@ir-kit/spec-diff`](./packages/shared/spec-diff) | Cross-family API spec diff. Converts any supported spec to OpenAPI 3, then runs `api-smart-diff` — breaking / non-breaking / annotation classification. |
-| [`@ir-kit/spec-docs`](./packages/shared/spec-docs) | Render any API spec as standalone HTML documentation via Scalar API Reference. Programmatic + CLI. |
-| [`@ir-kit/spec-loader`](./packages/shared/spec-loader) | Universal spec loader for OpenAPI, AsyncAPI, and TypeSpec. Detects format by extension + content sniff and dispatches to the per-format loader, returning a discriminated `{ kind, document }` result. |
-| [`@ir-kit/typespec-loader`](./packages/openapi/typespec-loader) | Compile a TypeSpec file to an OpenAPI 3.x document in memory. Thin wrapper over @typespec/compiler + @typespec/openapi3 — plugs into any @ir-kit OpenAPI generator at the spec-loading boundary. |
 
 <!-- @packages-end -->
 
@@ -180,7 +190,7 @@ Three `@hey-api/openapi-ts` plugins ship in lockstep via Changesets' `fixed` con
 | [`k6-petstore`](./examples/k6-petstore) | End-to-end k6 track: `pnpm sync` (driving `@ir-kit/k6-toolkit`'s `sync()`) generates a typed client from `petstore.yaml`, then `loadtest.ts` composes 4 scenarios (browse / write / stress / spike) with flat budgets, per-op overrides, step chaining, and `data.<Type>()` faker payloads. `pnpm run:smoke` runs against the public petstore demo. |
 | [`orpc-basic`](./examples/orpc-basic) | Minimal `@ir-kit/openapi-ts-orpc` setup — wire the plugin into `openapi-ts.config.ts` and consume the generated oRPC clients/servers. |
 | [`asyncapi-events-playground`](./examples/asyncapi-events-playground) | `@ir-kit/asyncapi-typescript` against an AsyncAPI 3.0 spec — emits typed event constants, dispatch helpers, AMQP bindings, framework adapters. |
-| [`fn-schema-basic`](./examples/fn-schema-basic) | `fn-schema-cli` extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |
+| [`fn-schema-basic`](./examples/fn-schema-basic) | `ir fn-schema extract` (powered by `@ir-kit/fn-schema-core`) extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |
 
 ## Contributing
 

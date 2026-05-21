@@ -27,6 +27,7 @@ const END = "<!-- @packages-end -->";
  * get categorized explicitly.
  */
 const CATEGORIES = [
+  "Federation core",
   "Native client SDK generators",
   "Load testing (k6)",
   "Spec → AsyncAPI targets",
@@ -39,45 +40,40 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_BY_NAME = {
-  // Native generators emit idiomatic code for their target language —
-  // no TypeScript runtime in the loop.
+  "@ir-kit/cli": "Federation core",
+  "@ir-kit/spec-loader": "Federation core",
+  "@ir-kit/spec-convert": "Federation core",
+  "@ir-kit/spec-docs": "Federation core",
+  "@ir-kit/spec-diff": "Federation core",
+  "@ir-kit/openapi-loader": "Federation core",
+  "@ir-kit/asyncapi-loader": "Federation core",
+  "@ir-kit/typespec-loader": "Federation core",
   "@ir-kit/openapi-go": "Native client SDK generators",
   "@ir-kit/openapi-kotlin": "Native client SDK generators",
   "@ir-kit/openapi-swift": "Native client SDK generators",
   "@ir-kit/openapi-typescript": "Native client SDK generators",
-
-  // Load-testing track.
   "@ir-kit/k6": "Load testing (k6)",
   "@ir-kit/k6-gen": "Load testing (k6)",
   "@ir-kit/k6-toolkit": "Load testing (k6)",
   "@ir-kit/create-k6": "Load testing (k6)",
-
-  // AsyncAPI track.
   "@ir-kit/asyncapi-typescript": "Spec → AsyncAPI targets",
-
-  // Drop into an existing `openapi-ts.config.ts`.
   "@ir-kit/openapi-ts-faker": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-orpc": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-paths": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-typia": "`@hey-api/openapi-ts` plugins",
-
-  // Reverse direction: traffic → spec.
   "@ir-kit/openapi-recon": "Spec discovery from traffic",
   "@ir-kit/glean": "Spec discovery from traffic",
-
-  // fn-schema family — TypeScript function signatures → JSON Schema.
   "@ir-kit/fn-schema-core": "TypeScript function schemas",
   "@ir-kit/fn-schema-typescript": "TypeScript function schemas",
   "@ir-kit/fn-schema-loader": "TypeScript function schemas",
   "@ir-kit/fn-schema-unplugin": "TypeScript function schemas",
   "@ir-kit/fn-schema-transformer": "TypeScript function schemas",
-
-  // Internal building blocks consumed by other packages above.
   "@ir-kit/codegen-core": "Shared primitives",
   "@ir-kit/openapi": "Shared primitives",
   "@ir-kit/openapi-tools": "Shared primitives",
   "@ir-kit/asyncapi-core": "Shared primitives",
+  "@ir-kit/schema": "Shared primitives",
 };
 
 /**

@@ -35,4 +35,36 @@ jobs:
         run: pnpm build
 
       - name: Publish preview to pkg.pr.new
-        run: pnpm dlx pkg-pr-new publish './packages/openapi/plugins/*' './packages/openapi/tools' --pnpm
+        run: |
+          pnpm dlx pkg-pr-new publish \
+            './packages/cli' \
+            './packages/openapi/plugins/*' \
+            './packages/openapi/tools' \
+            './packages/openapi/ir' \
+            './packages/openapi/loader' \
+            './packages/openapi/typespec-loader' \
+            './packages/openapi/go' \
+            './packages/openapi/kotlin' \
+            './packages/openapi/swift' \
+            './packages/openapi/typescript' \
+            './packages/openapi/recon' \
+            './packages/asyncapi/core' \
+            './packages/asyncapi/loader' \
+            './packages/asyncapi/typescript' \
+            './packages/shared/codegen-core' \
+            './packages/shared/schema' \
+            './packages/shared/spec-convert' \
+            './packages/shared/spec-diff' \
+            './packages/shared/spec-docs' \
+            './packages/shared/spec-loader' \
+            './packages/fn-schema/core' \
+            './packages/fn-schema/loader' \
+            './packages/fn-schema/transformer' \
+            './packages/fn-schema/typescript' \
+            './packages/fn-schema/unplugin' \
+            './packages/k6/codegen' \
+            './packages/k6/create' \
+            './packages/k6/framework' \
+            './packages/k6/hey-api' \
+            './packages/k6/toolkit' \
+            --pnpm
