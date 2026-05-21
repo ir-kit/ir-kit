@@ -55,6 +55,7 @@
   "dependencies": {
     "@ir-kit/spec-loader": "workspace:*",
     "@ir-kit/typespec-loader": "workspace:*",
+    "@readme/postman-to-openapi": "^4.1.0",
     "protobufjs": "^7.4.0"
   },
   "peerDependencies": {

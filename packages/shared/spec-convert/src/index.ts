@@ -4,6 +4,7 @@ import { loadSpec } from "@ir-kit/spec-loader";
 
 import "./converters/openapi3-to-json-schema.js";
 import "./converters/openapi3-to-typespec.js";
+import "./converters/postman-to-openapi3.js";
 import "./converters/proto-to-openapi3.js";
 import "./converters/typespec-to-json-schema.js";
 import "./converters/typespec-to-openapi3.js";
@@ -73,13 +74,31 @@ async function detectFormat(
   if (typeof input === "object") {
     if ((input as { asyncapi?: unknown }).asyncapi !== undefined)
       return "asyncapi3";
+    if (isPostmanCollection(input)) return "postman";
     return "openapi3";
   }
   const ext = extname(input).toLowerCase();
   if (ext === ".tsp") return "typespec";
   if (ext === ".proto") return "proto";
+  if (input.toLowerCase().endsWith(".postman_collection.json"))
+    return "postman";
   const result = await loadSpec({ input, cwd });
-  return result.kind === "asyncapi" ? "asyncapi3" : "openapi3";
+  if (result.kind === "asyncapi") return "asyncapi3";
+  if (
+    result.kind === "openapi" &&
+    isPostmanCollection(result.document as Record<string, unknown>)
+  ) {
+    return "postman";
+  }
+  return "openapi3";
+}
+
+function isPostmanCollection(doc: Record<string, unknown>): boolean {
+  const info = doc.info as { schema?: unknown } | undefined;
+  return (
+    typeof info?.schema === "string" &&
+    info.schema.includes("schema.getpostman.com")
+  );
 }
 
 async function materializeInput(
@@ -87,7 +106,7 @@ async function materializeInput(
   from: SpecFormat,
   cwd: string | undefined,
 ): Promise<SpecDocument> {
-  if (from === "typespec" || from === "proto") {
+  if (from === "typespec" || from === "proto" || from === "postman") {
     if (typeof input !== "string") {
       throw new Error(`${from} input must be a file path`);
     }

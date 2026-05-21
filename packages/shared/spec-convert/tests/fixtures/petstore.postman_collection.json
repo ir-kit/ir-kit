@@ -1,0 +1,57 @@
+{
+  "info": {
+    "_postman_id": "petstore-fixture",
+    "name": "Petstore",
+    "description": "Petstore API fixture for spec-convert smoke tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List pets",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.example.com/pets",
+          "protocol": "https",
+          "host": ["api", "example", "com"],
+          "path": ["pets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get pet by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.example.com/pets/:id",
+          "protocol": "https",
+          "host": ["api", "example", "com"],
+          "path": ["pets", ":id"],
+          "variable": [{ "key": "id", "value": "1" }]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create pet",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"fluffy\",\n  \"tag\": \"cat\"\n}"
+        },
+        "url": {
+          "raw": "https://api.example.com/pets",
+          "protocol": "https",
+          "host": ["api", "example", "com"],
+          "path": ["pets"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

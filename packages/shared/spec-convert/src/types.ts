@@ -3,6 +3,7 @@ export type SpecFormat =
   | "asyncapi3"
   | "typespec"
   | "proto"
+  | "postman"
   | "json-schema";
 
 export type SpecDocument = Record<string, unknown>;
