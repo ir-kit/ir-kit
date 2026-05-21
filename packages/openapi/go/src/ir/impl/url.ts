@@ -2,6 +2,7 @@ import type { IR } from "@hey-api/shared";
 import {
   type LocatedParam,
   paramsAt,
+  parseTemplatedSegment,
   splitPathSegments,
 } from "@ir-kit/openapi";
 import {
@@ -76,20 +77,14 @@ function segmentExpr(
   seg: string,
   pathParams: ReadonlyArray<IR.ParameterObject>,
 ): GoExpr {
-  const re = /\{([^}]+)\}/g;
-  const parts: Array<string | { id: string; isString: boolean }> = [];
-  let lastEnd = 0;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(seg)) !== null) {
-    if (m.index > lastEnd) parts.push(seg.slice(lastEnd, m.index));
-    const matched = pathParams.find((p) => p.name === m![1]);
-    parts.push({
-      id: paramIdent(matched ? matched.name : m[1]!),
-      isString: matched?.schema.type === "string",
-    });
-    lastEnd = m.index + m[0].length;
-  }
-  if (lastEnd < seg.length) parts.push(seg.slice(lastEnd));
+  const parts = parseTemplatedSegment(seg, pathParams).map((p) =>
+    p.kind === "literal"
+      ? p.text
+      : {
+          id: paramIdent(p.param ? p.param.name : p.name),
+          isString: p.param?.schema.type === "string",
+        },
+  );
 
   if (parts.length === 0) return goStr("");
   if (parts.length === 1 && typeof parts[0] === "string")

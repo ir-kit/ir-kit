@@ -15,6 +15,8 @@ export {
   operationDocLine,
   splitPathSegments,
 } from "./operation/signature.js";
+export type { TemplatePart } from "./operation/template.js";
+export { parseTemplatedSegment } from "./operation/template.js";
 export type { TypeCtx } from "./type/context.js";
 export type { EnumEntryIdent, EnumKind, EnumLiteral } from "./type/enum.js";
 export {

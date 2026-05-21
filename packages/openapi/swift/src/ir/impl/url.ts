@@ -2,6 +2,7 @@ import type { IR } from "@hey-api/shared";
 import {
   type LocatedParam,
   paramsAt,
+  parseTemplatedSegment,
   splitPathSegments,
 } from "@ir-kit/openapi";
 import type { SwCallArg, SwExpr, SwStmt } from "../../sw-dsl/index.js";
@@ -140,17 +141,14 @@ function segmentExpr(
   seg: string,
   pathParams: ReadonlyArray<IR.ParameterObject>,
 ): SwExpr {
-  const parts: Array<string | SwExpr> = [];
-  const re = /\{([^}]+)\}/g;
-  let lastEnd = 0;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(seg)) !== null) {
-    if (m.index > lastEnd) parts.push(seg.slice(lastEnd, m.index));
-    const matched = pathParams.find((p) => p.name === m![1]);
-    parts.push(swIdent(paramIdent(matched ? matched.name : m[1]!)));
-    lastEnd = m.index + m[0].length;
-  }
-  if (lastEnd < seg.length) parts.push(seg.slice(lastEnd));
+  const parts: Array<string | SwExpr> = parseTemplatedSegment(
+    seg,
+    pathParams,
+  ).map((p) =>
+    p.kind === "literal"
+      ? p.text
+      : swIdent(paramIdent(p.param ? p.param.name : p.name)),
+  );
   if (parts.length === 0) return swStr("");
   if (parts.length === 1 && typeof parts[0] === "string")
     return swStr(parts[0]);
