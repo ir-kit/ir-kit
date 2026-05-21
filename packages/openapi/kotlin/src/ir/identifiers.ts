@@ -41,7 +41,7 @@ export function enumEntryIdent(s: string): string {
     .split(/_+/)
     .filter(Boolean);
   const upper = parts.join("_").toUpperCase();
-  return /^[0-9]/.test(upper) ? `_${upper}` : upper || "EMPTY";
+  return avoidLeadingDigit(upper) || "EMPTY";
 }
 
 /**

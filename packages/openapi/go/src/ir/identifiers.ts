@@ -3,6 +3,7 @@ import {
   camel,
   escapeIfReserved,
   pascal,
+  safeIdent,
 } from "@ir-kit/codegen-core";
 
 /**
@@ -45,14 +46,13 @@ export function synthName(owner: string, path: ReadonlyArray<string>): string {
  * `<TypeName><PascalCasedRaw>` — e.g. `Status` enum value
  * `"available"` → `StatusAvailable`. The caller passes the type name
  * separately; this helper just normalizes the raw value.
+ *
+ * Functionally `safeIdent(rawValue) || "Empty"` — `safeIdent` already
+ * does pascal + leading-digit guard. The `|| "Empty"` fallback handles
+ * raws that pascal away to nothing (e.g. `"---"`).
  */
 export function enumEntrySuffix(rawValue: string): string {
-  const cleaned = rawValue
-    .replace(/^[^a-zA-Z0-9]+/, "")
-    .replace(/[^a-zA-Z0-9]+$/, "")
-    .replace(/[^a-zA-Z0-9]+(.)/g, (_, c: string) => c.toUpperCase());
-  const cap = cleaned.replace(/^./, (c) => c.toUpperCase());
-  return /^[0-9]/.test(cap) ? `_${cap}` : cap || "Empty";
+  return safeIdent(rawValue) || "Empty";
 }
 
 /**
