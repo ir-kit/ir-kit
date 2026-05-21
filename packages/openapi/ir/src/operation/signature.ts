@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi-core";
+import { HTTP_METHOD_LITERAL, type HttpMethod } from "../spec/constants.js";
 
 /**
  * Derive the canonical *base* name for an operation — the unstyled

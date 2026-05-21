@@ -21,6 +21,26 @@ export {
 } from "./operation/signature.js";
 export type { TemplatePart } from "./operation/template.js";
 export { parseTemplatedSegment } from "./operation/template.js";
+export {
+  FORM_URLENCODED_MEDIA,
+  HTTP_METHOD_LITERAL,
+  HTTP_METHODS,
+  type HttpMethod,
+  JSON_MEDIA_RE,
+  MULTIPART_FORM_MEDIA,
+} from "./spec/constants.js";
+export type {
+  Casing,
+  EnumPassOptions,
+  NamingConfig,
+  NamingRule,
+  NormalizeOptions,
+  ObjectPassOptions,
+} from "./spec/normalize/index.js";
+export { normalizeSpec, SAFE_NORMALIZE } from "./spec/normalize/index.js";
+export { isMeaningless, refName } from "./spec/ref.js";
+export { extractSecuritySchemeNames, securityKey } from "./spec/security.js";
+
 export type { TypeCtx } from "./type/context.js";
 export type { SchemaToTypeOps } from "./type/dispatch.js";
 export { schemaToType } from "./type/dispatch.js";

@@ -1,9 +1,6 @@
 import type { IR } from "@hey-api/shared";
-import {
-  HTTP_METHODS,
-  type HttpMethod,
-  securityKey,
-} from "@ir-kit/openapi-core";
+import { HTTP_METHODS, type HttpMethod } from "../spec/constants.js";
+import { securityKey } from "../spec/security.js";
 
 export interface IteratedOperation {
   pathStr: string;

@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { isMeaningless } from "@ir-kit/openapi-core";
+import { isMeaningless } from "../spec/ref.js";
 
 /**
  * Match a 3-digit HTTP status code in the 2xx range. Treats string

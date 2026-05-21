@@ -3,7 +3,7 @@ import {
   FORM_URLENCODED_MEDIA,
   JSON_MEDIA_RE,
   MULTIPART_FORM_MEDIA,
-} from "@ir-kit/openapi-core";
+} from "../spec/constants.js";
 
 /**
  * `true` when a JSON-typed body has no concrete `type` but carries an

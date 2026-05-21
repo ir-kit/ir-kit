@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { refName } from "@ir-kit/openapi-core";
+import { refName } from "../spec/ref.js";
 
 import type { TypeCtx } from "./context.js";
 import {
