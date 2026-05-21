@@ -1,5 +1,5 @@
 {
-  "name": "fn-schema-basic",
+  "name": "@ir-kit/example-fn-schema-basic",
   "version": "0.0.2",
   "private": true,
   "type": "module",

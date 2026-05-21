@@ -1,5 +1,5 @@
 {
-  "name": "petstore-typescript-example",
+  "name": "@ir-kit/example-petstore-typescript",
   "version": "0.0.0",
   "private": true,
   "type": "module",

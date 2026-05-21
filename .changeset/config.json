@@ -13,5 +13,14 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@ir-kit/example-orpc-basic", "@ir-kit/glean"]
+  "ignore": [
+    "@ir-kit/example-asyncapi-events-playground",
+    "@ir-kit/example-fn-schema-basic",
+    "@ir-kit/example-k6-petstore",
+    "@ir-kit/example-orpc-basic",
+    "@ir-kit/example-petstore-sdk",
+    "@ir-kit/example-petstore-typescript",
+    "@ir-kit/glean",
+    "@ir-kit/tsconfig"
+  ]
 }

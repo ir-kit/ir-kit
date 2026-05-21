@@ -45,7 +45,7 @@ cd swift/example && swift run PetstoreApp
 cd kotlin && gradle :example:run
 
 # TypeScript — Node app importing the generated SDK directly via relative paths
-pnpm --filter petstore-typescript-example start
+pnpm --filter @ir-kit/example-petstore-typescript start
 ```
 
 Each `<lang>/sdk/` directory is committed so PRs can review codegen diffs whenever a generator changes.

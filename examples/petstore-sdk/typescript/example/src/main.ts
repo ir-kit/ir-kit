@@ -11,7 +11,7 @@
  *   - typed-error handling for a 404
  *
  * Imports straight from the generated SDK at `../../sdk/`. Run with
- * `pnpm --filter petstore-typescript-example start`.
+ * `pnpm --filter @ir-kit/example-petstore-typescript start`.
  */
 
 import { client as defaultClient } from "../../sdk/client.gen";
