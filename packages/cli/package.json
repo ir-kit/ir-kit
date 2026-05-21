@@ -58,6 +58,7 @@
     "@ir-kit/fn-schema-core": "workspace:*",
     "@ir-kit/fn-schema-typescript": "workspace:*",
     "@ir-kit/k6-gen": "workspace:*",
+    "@ir-kit/k6-toolkit": "workspace:*",
     "@ir-kit/openapi-go": "workspace:*",
     "@ir-kit/openapi-kotlin": "workspace:*",
     "@ir-kit/openapi-recon": "workspace:*",
