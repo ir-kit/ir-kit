@@ -3,6 +3,26 @@ export { DiagnosticSink, FailFastError } from "./diagnostics.js";
 export * as emit from "./emit/index.js";
 export { applyFilter, resolveFilter } from "./filter.js";
 export { resolveNaming } from "./naming.js";
+export {
+  type FnSchemaConfig,
+  loadFnSchemaConfig,
+} from "./orchestrators/config.js";
+export {
+  type Dialect,
+  type Naming,
+  type Params,
+  type RunExtractOptions,
+  type RunExtractResult,
+  runExtract,
+} from "./orchestrators/extract.js";
+export {
+  baseExtractOpts,
+  collectPatterns,
+  makeListFiles,
+  mergeExclude,
+  mergeInclude,
+  resolveCwd,
+} from "./orchestrators/helpers.js";
 export { createProject } from "./project.js";
 export { type ParsedTarget, parseTarget } from "./targets.js";
 export type {

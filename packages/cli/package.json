@@ -55,6 +55,8 @@
   },
   "dependencies": {
     "@clack/prompts": "catalog:",
+    "@ir-kit/fn-schema-core": "workspace:*",
+    "@ir-kit/fn-schema-typescript": "workspace:*",
     "@ir-kit/k6-gen": "workspace:*",
     "@ir-kit/openapi-go": "workspace:*",
     "@ir-kit/openapi-kotlin": "workspace:*",
@@ -64,7 +66,9 @@
     "@ir-kit/schema": "workspace:*",
     "@ir-kit/spec-convert": "workspace:*",
     "@ir-kit/spec-loader": "workspace:*",
-    "citty": "catalog:"
+    "chokidar": "catalog:",
+    "citty": "catalog:",
+    "consola": "catalog:"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

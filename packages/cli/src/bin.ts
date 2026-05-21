@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { fnSchemaExtractCommand } from "./commands/fn-schema-extract.js";
 import { reconCommand } from "./commands/recon.js";
 import { sdkAllCommand } from "./commands/sdk-all.js";
 import { sdkGoCommand } from "./commands/sdk-go.js";
@@ -24,5 +25,6 @@ await runCli({
     sdkK6Command,
     sdkAllCommand,
     reconCommand,
+    fnSchemaExtractCommand,
   ],
 });

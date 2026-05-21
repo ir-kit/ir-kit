@@ -53,7 +53,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@types/json-schema": "^7.0.15"
+    "@types/json-schema": "^7.0.15",
+    "c12": "catalog:",
+    "tinyglobby": "catalog:"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
