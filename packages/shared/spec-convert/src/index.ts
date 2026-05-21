@@ -3,16 +3,18 @@ import { extname, resolve } from "node:path";
 import { loadSpec } from "@ir-kit/spec-loader";
 
 import "./converters/openapi3-to-json-schema.js";
+import "./converters/openapi3-to-typespec.js";
 import "./converters/typespec-to-openapi3.js";
 
 import { findConverter, listConverters } from "./registry.js";
 import type {
   ConvertHandlerOptions,
+  ConvertOutput,
   SpecDocument,
   SpecFormat,
 } from "./types.js";
 
-export type { ConvertHandlerOptions, SpecDocument, SpecFormat };
+export type { ConvertHandlerOptions, ConvertOutput, SpecDocument, SpecFormat };
 export { listConverters };
 
 export type ConvertSpecInput = string | SpecDocument;
@@ -22,27 +24,27 @@ export interface ConvertSpecOptions {
   to: SpecFormat;
   from?: SpecFormat;
   cwd?: string;
-  /** Per-target options forwarded to the upstream converter. */
   upstream?: Record<string, unknown>;
 }
 
 export interface ConvertSpecResult {
   from: SpecFormat;
   to: SpecFormat;
-  document: SpecDocument;
+  output: ConvertOutput;
 }
 
 /**
  * Convert between API spec formats. Detects the input format via
  * `@ir-kit/spec-loader` (override with `from`); dispatches to a
- * registered `(from → to)` converter; returns the emitted document.
+ * registered `(from → to)` converter; returns either a parsed document
+ * or a source string depending on the target format.
  */
 export async function convertSpec(
   opts: ConvertSpecOptions,
 ): Promise<ConvertSpecResult> {
   const from = opts.from ?? (await detectFormat(opts.input, opts.cwd));
-  const handler = findConverter(from, opts.to);
-  if (!handler) {
+  const pair = findConverter(from, opts.to);
+  if (!pair) {
     throw new Error(
       `No converter registered for ${from} → ${opts.to}. ` +
         `Available pairs: ${
@@ -54,11 +56,11 @@ export async function convertSpec(
   }
 
   const document = await materializeInput(opts.input, from, opts.cwd);
-  const out = await handler.handler(document, {
+  const output = await pair.handler(document, {
     cwd: opts.cwd,
     upstream: opts.upstream,
   });
-  return { from, to: opts.to, document: out };
+  return { from, to: opts.to, output };
 }
 
 async function detectFormat(

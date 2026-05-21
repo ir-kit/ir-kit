@@ -7,14 +7,17 @@ export type SpecFormat =
 
 export type SpecDocument = Record<string, unknown>;
 
+export type ConvertOutput =
+  | { kind: "document"; document: SpecDocument }
+  | { kind: "source"; source: string; ext: string };
+
 export type ConvertHandler = (
   document: SpecDocument,
   options: ConvertHandlerOptions,
-) => Promise<SpecDocument>;
+) => Promise<ConvertOutput>;
 
 export interface ConvertHandlerOptions {
   cwd?: string;
-  /** Raw flags forwarded to the upstream conversion tool, if any. */
   upstream?: Record<string, unknown>;
 }
 

@@ -56,9 +56,13 @@
     "@ir-kit/spec-loader": "workspace:*",
     "@ir-kit/typespec-loader": "workspace:*"
   },
+  "peerDependencies": {
+    "@typespec/openapi3": ">=1.0.0"
+  },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@typespec/openapi3": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {
