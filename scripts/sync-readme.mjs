@@ -76,7 +76,7 @@ const CATEGORY_BY_NAME = {
 
   // Internal building blocks consumed by other packages above.
   "@ir-kit/codegen-core": "Shared primitives",
-  "@ir-kit/openapi-core": "Shared primitives",
+  "@ir-kit/openapi": "Shared primitives",
   "@ir-kit/openapi-tools": "Shared primitives",
   "@ir-kit/asyncapi-core": "Shared primitives",
 };

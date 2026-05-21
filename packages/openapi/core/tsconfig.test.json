@@ -1,9 +1,0 @@
-{
-  "extends": "@ir-kit/tsconfig/lib.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "rootDir": "."
-  },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
-}

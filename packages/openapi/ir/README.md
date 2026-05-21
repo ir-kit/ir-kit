@@ -111,7 +111,7 @@ If you're picking up this package for the first time:
 
 - **Walks are generators, not arrays.** `iterOperations`, `iterateObjectProperties`. Lets callers short-circuit or filter without paying for a full list build. Callers that need an array do `Array.from(...)`.
 
-- **No target imports.** This package depends on `@hey-api/shared` (for IR types), `@ir-kit/openapi-core` (for ref / security / constants), and `@ir-kit/codegen-core` (for `pascal`, `synthName`). It does NOT depend on any go-dsl / kt-dsl / sw-dsl module.
+- **No target imports.** This package depends on `@hey-api/shared` (for IR types) and `@ir-kit/codegen-core` (for `pascal`, `synthName`). Spec-level primitives (ref / security / constants / normalize) live under `src/spec/` and are re-exported. The package does NOT depend on any go-dsl / kt-dsl / sw-dsl module.
 
 ## Adding a new shared walk
 

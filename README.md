@@ -148,16 +148,10 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 
 | Package | Description |
 | --- | --- |
-| [`@ir-kit/asyncapi-core`](./packages/asyncapi/core) | Shared AsyncAPI 3.0 primitives for codegen — uniform parseSpec entry point on top of @asyncapi/parser, plus AMQP binding extractors and routing-key matching. Mirror of @ir-kit/openapi-core for the AsyncAPI track. |
+| [`@ir-kit/asyncapi-core`](./packages/asyncapi/core) | Shared AsyncAPI 3.0 primitives for codegen — uniform parseSpec entry point on top of @asyncapi/parser, plus AMQP binding extractors and routing-key matching. Mirror of @ir-kit/openapi for the AsyncAPI track. |
 | [`@ir-kit/codegen-core`](./packages/shared/codegen-core) | Spec-agnostic codegen primitives shared by OpenAPI and AsyncAPI generator families — identifier transforms (pascal/camel/safeIdent), filesystem safety, project-name derivation. Pure functions, no spec dependencies. |
-| [`@ir-kit/openapi-core`](./packages/openapi/core) | Shared building blocks for native-client SDK generators on top of OpenAPI 3.x — identifier transforms, security-scheme walkers, ref helpers, filesystem safety. Used by @ir-kit/openapi-go, @ir-kit/openapi-kotlin, @ir-kit/openapi-swift. |
-| [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
-
-### Other
-
-| Package | Description |
-| --- | --- |
 | [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
+| [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 
 <!-- @packages-end -->
 

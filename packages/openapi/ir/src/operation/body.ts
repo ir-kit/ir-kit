@@ -37,9 +37,8 @@ export type BodyShape =
 
 /**
  * Classify a body by its media type + schema shape so emitters can
- * dispatch identically on `kind`. The media-type matching rules are
- * the same ones the generators agreed on (`@ir-kit/openapi-core`
- * constants) — single source of truth.
+ * dispatch identically on `kind`. The media-type matching rules use
+ * the shared constants in `../spec/constants` — single source of truth.
  */
 export function classifyBody(body: IR.BodyObject): BodyShape {
   const mt = (body.mediaType ?? "").toLowerCase();

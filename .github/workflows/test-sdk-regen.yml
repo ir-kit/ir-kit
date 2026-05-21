@@ -7,7 +7,6 @@ on:
       - 'actions/sdk-regen/**'
       - '.github/workflows/test-sdk-regen.yml'
       - 'packages/openapi/ir/**'
-      - 'packages/openapi/core/**'
       - 'packages/openapi/tools/**'
       - 'packages/openapi/go/**'
       - 'packages/openapi/kotlin/**'
@@ -20,7 +19,6 @@ on:
       - 'actions/sdk-regen/**'
       - '.github/workflows/test-sdk-regen.yml'
       - 'packages/openapi/ir/**'
-      - 'packages/openapi/core/**'
       - 'packages/openapi/tools/**'
       - 'packages/openapi/go/**'
       - 'packages/openapi/kotlin/**'
@@ -59,7 +57,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build first-party packages
-        run: pnpm turbo run build --filter='@ir-kit/codegen-core' --filter='@ir-kit/openapi' --filter='@ir-kit/openapi-core' --filter='@ir-kit/openapi-tools' --filter='@ir-kit/openapi-go' --filter='@ir-kit/openapi-kotlin' --filter='@ir-kit/openapi-swift' --filter='@ir-kit/openapi-typescript'
+        run: pnpm turbo run build --filter='@ir-kit/codegen-core' --filter='@ir-kit/openapi' --filter='@ir-kit/openapi-tools' --filter='@ir-kit/openapi-go' --filter='@ir-kit/openapi-kotlin' --filter='@ir-kit/openapi-swift' --filter='@ir-kit/openapi-typescript'
 
       - name: Pack tarballs
         run: |
@@ -68,7 +66,6 @@ jobs:
           for pkg in \
             packages/shared/codegen-core \
             packages/openapi/ir \
-            packages/openapi/core \
             packages/openapi/tools \
             packages/openapi/go \
             packages/openapi/kotlin \
