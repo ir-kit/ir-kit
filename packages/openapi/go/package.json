@@ -58,8 +58,7 @@
   },
   "dependencies": {
     "@ir-kit/codegen-core": "workspace:*",
-    "@ir-kit/openapi": "workspace:*",
-    "@ir-kit/openapi-core": "workspace:*"
+    "@ir-kit/openapi": "workspace:*"
   },
   "devDependencies": {
     "@hey-api/shared": "catalog:",

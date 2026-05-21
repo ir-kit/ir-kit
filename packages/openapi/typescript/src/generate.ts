@@ -1,7 +1,7 @@
 import { readdir, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import { createClient, type UserConfig } from "@hey-api/openapi-ts";
-import type { NormalizeOptions } from "@ir-kit/openapi-core";
+import type { NormalizeOptions } from "@ir-kit/openapi";
 import { loadSpec } from "@ir-kit/openapi-tools";
 
 /**

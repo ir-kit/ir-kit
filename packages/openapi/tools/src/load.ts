@@ -4,7 +4,7 @@ import {
   type NormalizeOptions,
   normalizeSpec,
   SAFE_NORMALIZE,
-} from "@ir-kit/openapi-core";
+} from "@ir-kit/openapi";
 
 export type SpecInput = string | Record<string, unknown>;
 

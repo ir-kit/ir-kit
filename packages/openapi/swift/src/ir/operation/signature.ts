@@ -1,12 +1,12 @@
 import type { IR } from "@hey-api/shared";
 import { camel, pascal } from "@ir-kit/codegen-core";
+import type { HttpMethod } from "@ir-kit/openapi";
 import {
   deriveBaseName,
   type ResponseCase as IRResponseCase,
   type LocatedParam,
   operationDocLine,
 } from "@ir-kit/openapi";
-import type { HttpMethod } from "@ir-kit/openapi-core";
 import type { SwFunParam, SwType } from "../../sw-dsl/index.js";
 import { swFunParam, swRef } from "../../sw-dsl/index.js";
 import type { TypeCtx } from "../type/index.js";

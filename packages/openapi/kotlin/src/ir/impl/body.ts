@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
+import type { HttpMethod } from "@ir-kit/openapi";
 import { classifyBody } from "@ir-kit/openapi";
-import type { HttpMethod } from "@ir-kit/openapi-core";
 import type { KtType } from "../../kt-dsl/index.js";
 import {
   type KtExpr,

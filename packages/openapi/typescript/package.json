@@ -54,7 +54,7 @@
     "@hey-api/openapi-ts": ">=0.97.0"
   },
   "dependencies": {
-    "@ir-kit/openapi-core": "workspace:*",
+    "@ir-kit/openapi": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*"
   },
   "devDependencies": {

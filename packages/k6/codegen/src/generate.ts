@@ -3,7 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import type { IR } from "@hey-api/shared";
 import { assertSafeOutputDir } from "@ir-kit/codegen-core";
-import type { NormalizeOptions } from "@ir-kit/openapi-core";
+import type { NormalizeOptions } from "@ir-kit/openapi";
 import { loadSpec } from "@ir-kit/openapi-tools";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 

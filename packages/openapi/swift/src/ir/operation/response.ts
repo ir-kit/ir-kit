@@ -1,7 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { synthName } from "@ir-kit/codegen-core";
-import { classifyReturnShape } from "@ir-kit/openapi";
-import { isMeaningless } from "@ir-kit/openapi-core";
+import { classifyReturnShape, isMeaningless } from "@ir-kit/openapi";
 
 import type { SwType } from "../../sw-dsl/index.js";
 import {

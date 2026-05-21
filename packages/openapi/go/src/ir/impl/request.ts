@@ -1,4 +1,4 @@
-import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi-core";
+import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi";
 
 import {
   type GoStmt,

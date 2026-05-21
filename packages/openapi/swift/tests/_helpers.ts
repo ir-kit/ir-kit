@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { securityKey } from "@ir-kit/openapi-core";
+import { securityKey } from "@ir-kit/openapi";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 type Fragment = {

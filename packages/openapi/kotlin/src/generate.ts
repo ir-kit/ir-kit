@@ -5,7 +5,7 @@ import { assertSafeOutputDir, defaultProjectName } from "@ir-kit/codegen-core";
 import {
   extractSecuritySchemeNames,
   type NormalizeOptions,
-} from "@ir-kit/openapi-core";
+} from "@ir-kit/openapi";
 import { loadSpec } from "@ir-kit/openapi-tools";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 

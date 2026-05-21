@@ -1,6 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyReturnShape } from "@ir-kit/openapi";
-import { isMeaningless } from "@ir-kit/openapi-core";
+import { classifyReturnShape, isMeaningless } from "@ir-kit/openapi";
 
 import {
   type GoType,
