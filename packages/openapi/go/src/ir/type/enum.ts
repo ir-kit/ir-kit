@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import { classifyEnumLiterals } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 import {
   type GoType,
@@ -38,17 +39,9 @@ export function buildEnumFromIR(
   emit: TypeCtx["emit"],
 ): GoType {
   const rawValues = getEnumLiterals(schema);
-  const allStrings = rawValues.every((v) => typeof v === "string");
-  const allIntegers = rawValues.every(
-    (v) => typeof v === "number" && Number.isInteger(v),
-  );
-  if (!allStrings && !allIntegers) {
-    throw new Error(
-      `Enum ${name}: members must all be strings or all integers; got ${JSON.stringify(rawValues)}`,
-    );
-  }
-
-  if (allIntegers) return emitIntegerEnum(name, rawValues as number[], emit);
+  const kind = classifyEnumLiterals(rawValues, name);
+  if (kind === "integer")
+    return emitIntegerEnum(name, rawValues as number[], emit);
   return emitStringEnum(name, rawValues as string[], emit);
 }
 

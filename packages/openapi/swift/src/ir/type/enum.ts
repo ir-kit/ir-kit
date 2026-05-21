@@ -1,5 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { safeCaseName } from "@ir-kit/codegen-core";
+import { classifyEnumLiterals } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
 import type { SwType } from "../../sw-dsl/index.js";
@@ -29,17 +30,10 @@ export function buildEnumFromIR(
   emit: TypeCtx["emit"],
 ): SwType {
   const rawValues = getEnumLiterals(schema);
-  const allStrings = rawValues.every((v) => typeof v === "string");
-  const allIntegers = rawValues.every(
-    (v) => typeof v === "number" && Number.isInteger(v),
-  );
-  if (!allStrings && !allIntegers) {
-    throw new Error(
-      `Enum ${name}: members must all be strings or all integers; got ${JSON.stringify(rawValues)}`,
-    );
-  }
+  const kind = classifyEnumLiterals(rawValues, name);
+  const isInteger = kind === "integer";
 
-  const cases = allIntegers
+  const cases = isInteger
     ? (rawValues as number[]).map((v) => swEnumCase(intCaseName(v), v))
     : (rawValues as string[]).map((v) => swEnumCase(safeCaseName(v), v));
   assertNoCollisions(name, cases);
@@ -48,7 +42,7 @@ export function buildEnumFromIR(
     swEnum({
       name,
       cases,
-      rawType: allIntegers ? swInt : swString,
+      rawType: isInteger ? swInt : swString,
       conforms: ["Codable"],
     }),
   );

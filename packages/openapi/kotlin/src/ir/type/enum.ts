@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import { classifyEnumLiterals } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 import {
   type KtType,
@@ -37,17 +38,8 @@ export function buildEnumFromIR(
   emit: TypeCtx["emit"],
 ): KtType {
   const rawValues = getEnumLiterals(schema);
-  const allStrings = rawValues.every((v) => typeof v === "string");
-  const allIntegers = rawValues.every(
-    (v) => typeof v === "number" && Number.isInteger(v),
-  );
-  if (!allStrings && !allIntegers) {
-    throw new Error(
-      `Enum ${name}: members must all be strings or all integers; got ${JSON.stringify(rawValues)}`,
-    );
-  }
-
-  if (allIntegers) {
+  const kind = classifyEnumLiterals(rawValues, name);
+  if (kind === "integer") {
     emit(ktTypeAlias({ name, type: ktInt }));
     return ktRef(name);
   }
