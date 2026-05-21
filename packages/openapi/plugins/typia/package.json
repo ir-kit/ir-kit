@@ -75,10 +75,10 @@
     }
   },
   "devDependencies": {
-    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/codegen-core": "catalog:",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",
+    "@ir-kit/tsconfig": "workspace:*",
     "@orpc/contract": "^1.13.14",
     "@orpc/openapi": "^1.13.14",
     "@standard-schema/spec": "^1.1.0",

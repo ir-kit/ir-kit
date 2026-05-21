@@ -58,8 +58,8 @@
     "@ir-kit/openapi-tools": "workspace:*"
   },
   "devDependencies": {
-    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/openapi-ts": "catalog:",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

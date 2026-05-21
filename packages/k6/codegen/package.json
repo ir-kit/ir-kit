@@ -50,12 +50,12 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@hey-api/openapi-ts": "catalog:",
+    "@hey-api/shared": "catalog:",
     "@ir-kit/codegen-core": "workspace:*",
     "@ir-kit/openapi-core": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*",
-    "@ir-kit/openapi-ts-faker": "workspace:*",
-    "@hey-api/openapi-ts": "catalog:",
-    "@hey-api/shared": "catalog:"
+    "@ir-kit/openapi-ts-faker": "workspace:*"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"

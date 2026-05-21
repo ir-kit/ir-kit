@@ -52,8 +52,8 @@
     "@hey-api/shared": ">=0.3.0"
   },
   "devDependencies": {
-    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/shared": "catalog:",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

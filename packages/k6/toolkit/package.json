@@ -54,9 +54,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@clack/prompts": "catalog:",
     "@ir-kit/k6-gen": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*",
-    "@clack/prompts": "catalog:",
     "tinyglobby": "catalog:",
     "tsdown": "catalog:"
   },

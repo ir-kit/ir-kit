@@ -58,8 +58,8 @@
     "@hey-api/spec-types": ">=0.2.0"
   },
   "devDependencies": {
-    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/spec-types": "^0.2.0",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },

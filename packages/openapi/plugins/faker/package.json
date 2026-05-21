@@ -70,11 +70,11 @@
     }
   },
   "devDependencies": {
-    "@ir-kit/tsconfig": "workspace:*",
     "@faker-js/faker": "^10.4.0",
     "@hey-api/codegen-core": "catalog:",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:"
   },

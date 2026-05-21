@@ -12,8 +12,8 @@
     "run:spike": "K6_STAGES=30s:10,30s:200,1m:10 node scripts/run.mjs"
   },
   "dependencies": {
-    "@ir-kit/k6": "workspace:*",
-    "@faker-js/faker": "^10.4.0"
+    "@faker-js/faker": "^10.4.0",
+    "@ir-kit/k6": "workspace:*"
   },
   "devDependencies": {
     "@ir-kit/k6-toolkit": "workspace:*",

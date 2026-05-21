@@ -53,8 +53,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ir-kit/k6-toolkit": "workspace:*",
-    "@clack/prompts": "catalog:"
+    "@clack/prompts": "catalog:",
+    "@ir-kit/k6-toolkit": "workspace:*"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

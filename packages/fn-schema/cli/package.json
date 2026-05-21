@@ -51,9 +51,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@clack/prompts": "^1.3.0",
     "@ir-kit/fn-schema-core": "workspace:*",
     "@ir-kit/fn-schema-typescript": "workspace:*",
-    "@clack/prompts": "^1.3.0",
     "c12": "catalog:",
     "chokidar": "catalog:",
     "citty": "catalog:",

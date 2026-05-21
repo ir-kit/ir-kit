@@ -57,9 +57,9 @@
     "@hey-api/shared": ">=0.2.0"
   },
   "devDependencies": {
-    "@ir-kit/tsconfig": "workspace:*",
     "@hey-api/openapi-ts": "catalog:",
     "@hey-api/shared": "catalog:",
+    "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },
