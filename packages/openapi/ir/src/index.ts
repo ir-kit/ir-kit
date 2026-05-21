@@ -8,8 +8,12 @@ export {
   PARAM_LOCATIONS,
   paramsAt,
 } from "./operation/params.js";
-export type { ResponseCase } from "./operation/responses.js";
-export { isSuccessStatus, successResponses } from "./operation/responses.js";
+export type { ResponseCase, ReturnShape } from "./operation/responses.js";
+export {
+  classifyReturnShape,
+  isSuccessStatus,
+  successResponses,
+} from "./operation/responses.js";
 export {
   deriveBaseName,
   operationDocLine,

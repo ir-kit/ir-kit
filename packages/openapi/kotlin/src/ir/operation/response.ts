@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { synthName } from "@ir-kit/codegen-core";
-import { successResponses } from "@ir-kit/openapi";
+import { classifyReturnShape } from "@ir-kit/openapi";
 import { isMeaningless } from "@ir-kit/openapi-core";
 
 import {
@@ -40,19 +40,15 @@ export function returnTypeFor(
   op: IR.OperationObject,
   ctx: TypeCtx,
 ): ResolvedReturn {
-  const success = successResponses(op);
-
-  if (success.length === 0) return { type: ktUnit, cases: [] };
-
-  if (success.length === 1) {
-    const [, resp] = success[0]!;
-    if (!resp?.schema || isMeaningless(resp.schema)) {
+  const shape = classifyReturnShape(op);
+  switch (shape.kind) {
+    case "void":
       return { type: ktUnit, cases: [] };
-    }
-    return { type: schemaToType(resp.schema, ctx), cases: [] };
+    case "single":
+      return { type: schemaToType(shape.schema, ctx), cases: [] };
+    case "multi":
+      return emitMultiResponseSealed(shape.cases, ctx);
   }
-
-  return emitMultiResponseSealed(success, ctx);
 }
 
 function emitMultiResponseSealed(

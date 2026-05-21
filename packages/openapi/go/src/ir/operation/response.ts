@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { successResponses } from "@ir-kit/openapi";
+import { classifyReturnShape } from "@ir-kit/openapi";
 import { isMeaningless } from "@ir-kit/openapi-core";
 
 import {
@@ -59,23 +59,20 @@ export function returnTypeFor(
   op: IR.OperationObject,
   ctx: TypeCtx,
 ): ResolvedReturn {
-  const success = successResponses(op);
-
-  if (success.length === 0) return { type: undefined, cases: [] };
-
-  if (success.length === 1) {
-    const [, resp] = success[0]!;
-    if (!resp?.schema || isMeaningless(resp.schema)) {
+  const shape = classifyReturnShape(op);
+  switch (shape.kind) {
+    case "void":
       return { type: undefined, cases: [] };
+    case "single": {
+      const t = schemaToType(shape.schema, ctx);
+      // Always return pointer for struct payloads — Go idiom for
+      // "decoded into heap-allocated value".
+      const finalType = t.kind === "ref" || t.kind === "ptr" ? maybePtr(t) : t;
+      return { type: finalType, cases: [] };
     }
-    const t = schemaToType(resp.schema, ctx);
-    // Always return pointer for struct payloads — Go idiom for
-    // "decoded into heap-allocated value".
-    const finalType = t.kind === "ref" || t.kind === "ptr" ? maybePtr(t) : t;
-    return { type: finalType, cases: [] };
+    case "multi":
+      return emitMultiResponseInterface(shape.cases, ctx);
   }
-
-  return emitMultiResponseInterface(success, ctx);
 }
 
 function maybePtr(t: GoType): GoType {
