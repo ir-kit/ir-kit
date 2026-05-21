@@ -56,6 +56,7 @@
   "dependencies": {
     "@clack/prompts": "catalog:",
     "@ir-kit/k6-gen": "workspace:*",
+    "@ir-kit/openapi-loader": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*",
     "tinyglobby": "catalog:",
     "tsdown": "catalog:"

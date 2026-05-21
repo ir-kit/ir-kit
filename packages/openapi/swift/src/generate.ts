@@ -6,7 +6,7 @@ import {
   extractSecuritySchemeNames,
   type NormalizeOptions,
 } from "@ir-kit/openapi";
-import { loadSpec } from "@ir-kit/openapi-tools";
+import { loadOpenAPI } from "@ir-kit/openapi-loader";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 import {
@@ -66,7 +66,7 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const bundled = await loadSpec({
+  const bundled = await loadOpenAPI({
     input: opts.input,
     normalize: opts.normalize,
   });

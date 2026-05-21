@@ -1,16 +1,15 @@
 {
-  "name": "@ir-kit/openapi-typescript",
-  "version": "0.1.2",
-  "description": "Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline.",
+  "name": "@ir-kit/openapi-loader",
+  "version": "0.1.0",
+  "description": "Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization.",
   "keywords": [
     "openapi",
-    "typescript",
-    "codegen",
-    "sdk",
-    "client",
-    "hey-api"
+    "loader",
+    "ref-parser",
+    "spec",
+    "ir-kit"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/typescript",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/loader",
   "bugs": {
     "url": "https://github.com/ir-kit/ir-kit/issues"
   },
@@ -22,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ir-kit/ir-kit.git",
-    "directory": "packages/openapi/typescript"
+    "directory": "packages/openapi/loader"
   },
   "type": "module",
   "sideEffects": false,
@@ -50,16 +49,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
-  "peerDependencies": {
-    "@hey-api/openapi-ts": ">=0.97.0"
-  },
   "dependencies": {
-    "@ir-kit/openapi": "workspace:*",
-    "@ir-kit/openapi-loader": "workspace:*",
-    "@ir-kit/openapi-tools": "workspace:*"
+    "@hey-api/json-schema-ref-parser": "catalog:",
+    "@ir-kit/openapi": "workspace:*"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "catalog:",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"

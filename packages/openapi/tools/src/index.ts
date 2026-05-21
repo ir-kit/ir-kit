@@ -9,12 +9,6 @@ export {
 } from "./diff.js";
 export { routesFromIR } from "./ir.js";
 export {
-  type LoadSpecOptions,
-  loadSpec,
-  resolveSpecInput,
-  type SpecInput,
-} from "./load.js";
-export {
   type ExtractParams,
   isInSpec,
   type MatchResult,

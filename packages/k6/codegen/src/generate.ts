@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import type { IR } from "@hey-api/shared";
 import { assertSafeOutputDir } from "@ir-kit/codegen-core";
 import type { NormalizeOptions } from "@ir-kit/openapi";
-import { loadSpec } from "@ir-kit/openapi-tools";
+import { loadOpenAPI } from "@ir-kit/openapi-loader";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 import {
@@ -57,7 +57,7 @@ export interface GenerateResult {
 
 /** Generate the typed k6 client + types + faker-backed data builders. */
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const bundled = await loadSpec({
+  const bundled = await loadOpenAPI({
     input: opts.input,
     normalize: opts.normalize,
   });

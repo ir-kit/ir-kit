@@ -1,16 +1,15 @@
 {
-  "name": "@ir-kit/openapi-typescript",
-  "version": "0.1.2",
-  "description": "Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline.",
+  "name": "@ir-kit/typespec-loader",
+  "version": "0.1.0",
+  "description": "Compile a TypeSpec file to an OpenAPI 3.x document in memory. Thin wrapper over @typespec/compiler + @typespec/openapi3 — plugs into any @ir-kit OpenAPI generator at the spec-loading boundary.",
   "keywords": [
+    "typespec",
     "openapi",
-    "typescript",
+    "loader",
     "codegen",
-    "sdk",
-    "client",
-    "hey-api"
+    "ir-kit"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/typescript",
+  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/typespec-loader",
   "bugs": {
     "url": "https://github.com/ir-kit/ir-kit/issues"
   },
@@ -22,7 +21,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ir-kit/ir-kit.git",
-    "directory": "packages/openapi/typescript"
+    "directory": "packages/openapi/typespec-loader"
   },
   "type": "module",
   "sideEffects": false,
@@ -34,6 +33,9 @@
       "import": "./dist/index.js"
     },
     "./package.json": "./package.json"
+  },
+  "bin": {
+    "typespec-to-openapi": "./dist/cli.js"
   },
   "files": [
     "dist",
@@ -51,17 +53,17 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@hey-api/openapi-ts": ">=0.97.0"
-  },
-  "dependencies": {
-    "@ir-kit/openapi": "workspace:*",
-    "@ir-kit/openapi-loader": "workspace:*",
-    "@ir-kit/openapi-tools": "workspace:*"
+    "@typespec/compiler": ">=1.0.0",
+    "@typespec/openapi3": ">=1.0.0"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "catalog:",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@typespec/compiler": "catalog:",
+    "@typespec/http": "catalog:",
+    "@typespec/openapi": "catalog:",
+    "@typespec/openapi3": "catalog:",
+    "@typespec/rest": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {

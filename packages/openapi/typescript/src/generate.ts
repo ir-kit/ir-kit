@@ -2,7 +2,7 @@ import { readdir, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import { createClient, type UserConfig } from "@hey-api/openapi-ts";
 import type { NormalizeOptions } from "@ir-kit/openapi";
-import { loadSpec } from "@ir-kit/openapi-tools";
+import { loadOpenAPI } from "@ir-kit/openapi-loader";
 
 /**
  * Default plugin set — emits a runnable client SDK ready to drop into a
@@ -70,7 +70,7 @@ export interface GenerateResult {
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   const out = resolve(process.cwd(), opts.output);
   const input = opts.normalize
-    ? await loadSpec({ input: opts.input, normalize: opts.normalize })
+    ? await loadOpenAPI({ input: opts.input, normalize: opts.normalize })
     : opts.input;
   const config: UserConfig = {
     input,

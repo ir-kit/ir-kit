@@ -8,11 +8,11 @@ import {
   Project,
   simpleNameConflictResolver,
 } from "@hey-api/codegen-core";
+import { loadAsyncAPI } from "@ir-kit/asyncapi-loader";
 import { assertSafeOutputDir } from "@ir-kit/codegen-core";
 
 import { RawTextRenderer, TsStatementRenderer } from "./ast/ts-renderer.js";
 import { type AnyRegisteredPlugin, type GeneratedFile } from "./plugin.js";
-import { loadDocument } from "./runtime/load-document.js";
 import { orderPlugins } from "./runtime/order-plugins.js";
 import { createPluginInstance } from "./runtime/plugin-instance.js";
 
@@ -28,7 +28,7 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const document = await loadDocument(opts.input);
+  const document = await loadAsyncAPI({ input: opts.input });
   const outputDir = resolve(opts.output);
   assertSafeOutputDir(outputDir);
 

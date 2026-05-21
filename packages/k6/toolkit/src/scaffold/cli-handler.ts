@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { intro, log, outro } from "@clack/prompts";
-import { loadSpec } from "@ir-kit/openapi-tools";
+import { loadOpenAPI } from "@ir-kit/openapi-loader";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 
 import type { AuthScaffoldOpts } from "../loadtest-scaffold.js";
@@ -141,7 +141,7 @@ export async function runScaffoldCommand(
 }
 
 async function loadAndIndexSpec(specPath: string): Promise<SpecOperations> {
-  const bundled = await loadSpec({ input: specPath, normalize: true });
+  const bundled = await loadOpenAPI({ input: specPath, normalize: true });
   const ir = parseSpec(bundled);
   return readSpecOperations(ir.paths);
 }

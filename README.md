@@ -157,7 +157,11 @@ Internal building blocks (`codegen-core`, `openapi-core`, `openapi-tools`, `asyn
 
 | Package | Description |
 | --- | --- |
+| [`@ir-kit/asyncapi-loader`](./packages/asyncapi/loader) | Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `@ir-kit/asyncapi-core`'s `parseSpec` for unified input dispatch. |
+| [`@ir-kit/openapi-loader`](./packages/openapi/loader) | Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization. |
 | [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
+| [`@ir-kit/spec-loader`](./packages/shared/spec-loader) | Universal spec loader for OpenAPI, AsyncAPI, and TypeSpec. Detects format by extension + content sniff and dispatches to the per-format loader, returning a discriminated `{ kind, document }` result. |
+| [`@ir-kit/typespec-loader`](./packages/openapi/typespec-loader) | Compile a TypeSpec file to an OpenAPI 3.x document in memory. Thin wrapper over @typespec/compiler + @typespec/openapi3 — plugs into any @ir-kit OpenAPI generator at the spec-loading boundary. |
 
 <!-- @packages-end -->
 

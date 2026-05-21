@@ -80,5 +80,8 @@
   },
   "engines": {
     "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "@ir-kit/asyncapi-loader": "workspace:*"
   }
 }

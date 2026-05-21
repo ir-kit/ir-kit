@@ -54,6 +54,7 @@
     "@hey-api/shared": "catalog:",
     "@ir-kit/codegen-core": "workspace:*",
     "@ir-kit/openapi": "workspace:*",
+    "@ir-kit/openapi-loader": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*",
     "@ir-kit/openapi-ts-faker": "workspace:*"
   },

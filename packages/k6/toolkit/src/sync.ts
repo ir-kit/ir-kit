@@ -5,7 +5,7 @@ import {
   type GenerateResult,
   generate,
 } from "@ir-kit/k6-gen";
-import { resolveSpecInput } from "@ir-kit/openapi-tools";
+import { resolveOpenAPIInput } from "@ir-kit/openapi-loader";
 
 import { extractOperationMap } from "./operation-map.js";
 import { diffOperationIds, type OperationDiff } from "./rename-report.js";
@@ -43,7 +43,7 @@ export interface SyncResult extends GenerateResult {
 export async function sync(opts: SyncOptions): Promise<SyncResult> {
   const cwd = opts.cwd ?? process.cwd();
   const output = resolve(cwd, opts.output);
-  const input = resolveSpecInput(opts.input, cwd);
+  const input = resolveOpenAPIInput(opts.input, cwd);
   const snapshotPath = join(output, SNAPSHOT_FILENAME);
 
   const prevOps = opts.reportRenames
