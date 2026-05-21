@@ -27,6 +27,10 @@ inputs:
     description: 'Pinned semver of `@ir-kit/openapi-<target>` to install. Defaults to `latest`.'
     required: false
     default: 'latest'
+  tarball-dir:
+    description: 'Internal: directory containing pre-packed `.tgz` tarballs of openapi-<target> and its first-party deps (openapi-core, codegen-core, openapi-tools). When set, the action installs from those tarballs instead of npm — used by the in-repo self-test workflow to validate proposed changes against their own packed output. End users should leave this unset.'
+    required: false
+    default: ''
   normalize:
     description: 'Run the spec normalization pipeline (allOf collapse + enum dedup + scoped prune) before codegen. Cuts duplicate inline-extracted types in Swift / Kotlin output. Default: `false`.'
     required: false
@@ -85,6 +89,7 @@ runs:
       env:
         TARGET: ${{ inputs.target }}
         VERSION: ${{ inputs.generator-version }}
+        TARBALL_DIR: ${{ inputs.tarball-dir }}
       run: |
         set -e
         WORKDIR="${RUNNER_TEMP}/sdk-regen"
@@ -92,22 +97,54 @@ runs:
         cd "$WORKDIR"
         # Bare package.json so npm doesn't walk up looking for the consumer's lockfile.
         echo '{"private":true,"type":"module"}' > package.json
-        # Per-target peer dep set — generators declare them peer so
-        # consumers can pin, but npm doesn't auto-install peers at the
-        # top level, so we name them explicitly here.
-        if [ "$TARGET" = "typescript" ]; then
-          # The TypeScript wrapper delegates everything to @hey-api/openapi-ts,
-          # which is its only peer. No oas-core / openapi-tools / spec-types
-          # since the wrapper doesn't walk the IR itself.
-          npm install --silent --no-audit --no-fund \
-            "@ir-kit/openapi-typescript@${VERSION}" \
-            "@hey-api/openapi-ts"
+        if [ -n "$TARBALL_DIR" ]; then
+          # Resolve relative to GITHUB_WORKSPACE so callers can pass a repo-relative path.
+          if [ -d "$GITHUB_WORKSPACE/$TARBALL_DIR" ]; then
+            ABS_TARBALL_DIR="$GITHUB_WORKSPACE/$TARBALL_DIR"
+          else
+            ABS_TARBALL_DIR="$TARBALL_DIR"
+          fi
+          tarballs=("$ABS_TARBALL_DIR"/*.tgz)
+          if [ ! -e "${tarballs[0]}" ]; then
+            echo "::error::tarball-dir is set but no .tgz found under $ABS_TARBALL_DIR"
+            exit 1
+          fi
+          echo "::notice::sdk-regen — installing from local tarballs in $ABS_TARBALL_DIR"
+          # Install every tarball at once so npm resolves inter-package
+          # workspace deps (e.g. openapi-go → openapi-core) locally instead
+          # of trying to fetch them from npm (where they may not exist yet).
+          # External peer deps still come from npm.
+          if [ "$TARGET" = "typescript" ]; then
+            npm install --silent --no-audit --no-fund \
+              "${tarballs[@]}" \
+              "@hey-api/openapi-ts" \
+              "typescript"
+          else
+            npm install --silent --no-audit --no-fund \
+              "${tarballs[@]}" \
+              "@hey-api/shared" \
+              "@hey-api/spec-types"
+          fi
         else
-          npm install --silent --no-audit --no-fund \
-            "@ir-kit/openapi-${TARGET}@${VERSION}" \
-            "@ir-kit/openapi-tools" \
-            "@hey-api/shared" \
-            "@hey-api/spec-types"
+          # Per-target peer dep set — generators declare them peer so
+          # consumers can pin, but npm doesn't auto-install peers at the
+          # top level, so we name them explicitly here.
+          if [ "$TARGET" = "typescript" ]; then
+            # The TypeScript wrapper delegates everything to @hey-api/openapi-ts,
+            # which uses the `typescript` compiler at codegen time. No
+            # oas-core / openapi-tools / spec-types since the wrapper
+            # doesn't walk the IR itself.
+            npm install --silent --no-audit --no-fund \
+              "@ir-kit/openapi-typescript@${VERSION}" \
+              "@hey-api/openapi-ts" \
+              "typescript"
+          else
+            npm install --silent --no-audit --no-fund \
+              "@ir-kit/openapi-${TARGET}@${VERSION}" \
+              "@ir-kit/openapi-tools" \
+              "@hey-api/shared" \
+              "@hey-api/spec-types"
+          fi
         fi
         echo "workdir=$WORKDIR" >> "$GITHUB_OUTPUT"
 
