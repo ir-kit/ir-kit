@@ -21,6 +21,28 @@ describe('literal', () => {
     await assertPrintedMatchesSnapshot(file, 'string.go');
   });
 
+  it('string with escapes', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration(
+          'message',
+          go.factory.createLiteral('say "hi"\tand\\or\nbye'),
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('message')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'string-with-escapes.go');
+  });
+
   it('number', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
