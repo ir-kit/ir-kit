@@ -9,6 +9,7 @@ import type { GoKeyValueExpression } from './expressions/key-value';
 import type { GoLiteral } from './expressions/literal';
 import type { GoMapType } from './expressions/map-type';
 import type { GoMemberExpression } from './expressions/member';
+import type { GoPointerType } from './expressions/pointer-type';
 import type { GoSliceExpression } from './expressions/slice';
 import type { GoStructType } from './expressions/struct';
 import type { GoUnaryExpression } from './expressions/unary';
@@ -27,4 +28,5 @@ export type GoExpression =
   | GoSliceExpression
   | GoStructType
   | GoKeyValueExpression
-  | GoInterfaceType;
+  | GoInterfaceType
+  | GoPointerType;

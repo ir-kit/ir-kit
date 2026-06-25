@@ -80,6 +80,11 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.PointerType: {
+        parts.push(`*${printNode(node.elementType, { inline: true })}`);
+        break;
+      }
+
       case GoNodeKind.CompositeLiteral: {
         const typeText = node.type ? printNode(node.type) : '';
         const elementsText = node.elements.map((el) => printNode(el, { inline: true })).join(', ');
