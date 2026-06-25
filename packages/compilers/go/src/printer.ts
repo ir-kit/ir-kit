@@ -220,6 +220,22 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.FunctionType: {
+        const parameters = node.parameters
+          .map((parameter) => printNode(parameter, { inline: true }))
+          .join(', ');
+        const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
+        const useReturnTypBrackets =
+          node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
+        const finalReturnType = useReturnTypBrackets
+          ? ` (${returnType})`
+          : returnType
+            ? ` ${returnType}`
+            : '';
+        parts.push(`func(${parameters})${finalReturnType}`);
+        break;
+      }
+
       case GoNodeKind.Receiver: {
         parts.push(`(${node.name} ${printNode(node.type, { inline: true })})`);
         break;

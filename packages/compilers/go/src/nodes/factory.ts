@@ -10,6 +10,7 @@ import { createArrayType } from './expressions/array-type';
 import { createBinaryExpression } from './expressions/binary';
 import { createCallExpression } from './expressions/call';
 import { createCompositeLiteral } from './expressions/composite-literal';
+import { createFunctionType } from './expressions/function-type';
 import { createIdentifier } from './expressions/identifier';
 import { createInterfaceType } from './expressions/interface';
 import { createKeyValueExpression } from './expressions/key-value';
@@ -64,6 +65,7 @@ export const factory = {
   createFunctionDeclaration,
   createFunctionParameter,
   createFunctionReturn,
+  createFunctionType,
   createGoStatement,
   createIdentifier,
   createIfStatement,
