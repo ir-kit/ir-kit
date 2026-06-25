@@ -19,7 +19,7 @@ describe('break and continue statements', () => {
                     go.factory.createIdentifier('Printf'),
                   ),
                   [
-                    go.factory.createLiteral('Iteration number: %v\\n'),
+                    go.factory.createLiteral('Iteration number: %v\n'),
                     go.factory.createIdentifier('i'),
                   ],
                 ),
@@ -70,7 +70,7 @@ describe('break and continue statements', () => {
                     go.factory.createIdentifier('Printf'),
                   ),
                   [
-                    go.factory.createLiteral('Iteration number: %v\\n'),
+                    go.factory.createLiteral('Iteration number: %v\n'),
                     go.factory.createIdentifier('i'),
                   ],
                 ),

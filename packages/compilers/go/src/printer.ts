@@ -36,6 +36,20 @@ const OPERATOR_PRECEDENCE: Record<string, number> = {
 };
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+const GO_STRING_ESCAPES: Record<string, string> = {
+  '\\': '\\\\',
+  '"': '\\"',
+  '\n': '\\n',
+  '\r': '\\r',
+  '\t': '\\t',
+};
+/* eslint-enable sort-keys-fix/sort-keys-fix */
+
+function escapeString(value: string): string {
+  return value.replace(/[\\"\n\r\t]/g, (char) => GO_STRING_ESCAPES[char] ?? char);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function createPrinter(options?: GoPrinterOptions) {
   let indentLevel = 0;
@@ -332,7 +346,7 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
 
       case GoNodeKind.Literal:
         if (typeof node.value === 'string') {
-          parts.push(`"${node.value}"`);
+          parts.push(`"${escapeString(node.value)}"`);
         } else if (typeof node.value === 'number') {
           parts.push(String(node.value));
         } else if (typeof node.value === 'boolean') {
