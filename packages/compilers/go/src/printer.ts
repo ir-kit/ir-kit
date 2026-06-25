@@ -74,27 +74,6 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
-      case GoNodeKind.MapType: {
-        const text = `map[${printNode(node.keyType, { inline: true })}]${printNode(node.valueType, { inline: true })}`;
-        parts.push(text);
-        break;
-      }
-
-      case GoNodeKind.CompositeLiteral: {
-        const typeText = node.type ? printNode(node.type) : '';
-        const elementsText = node.elements.map((el) => printNode(el, { inline: true })).join(', ');
-        const text = `${typeText}{${elementsText}}`;
-        parts.push(text);
-        break;
-      }
-
-      case GoNodeKind.KeyValueExpression: {
-        parts.push(
-          `${printNode(node.key, { inline: true })}: ${printNode(node.value, { inline: true })}`,
-        );
-        break;
-      }
-
       case GoNodeKind.Assignment: {
         const assignmentText = `${printNode(node.target)} = ${printNode(node.value, {
           inline: true,
@@ -134,13 +113,11 @@ export function createPrinter(options?: GoPrinterOptions) {
           indentLevel -= 1;
           parts.push(printLine('}'));
         }
-
         break;
 
-      case GoNodeKind.BreakStatement: {
+      case GoNodeKind.BreakStatement:
         parts.push(printLine('break'));
         break;
-      }
 
       case GoNodeKind.CallExpression: {
         const args = node.args.map((arg: GoNode, index: number) => {
@@ -155,8 +132,15 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
-      case GoNodeKind.Comment: {
+      case GoNodeKind.Comment:
         parts.push(printLine(`// ${node.text}`));
+        break;
+
+      case GoNodeKind.CompositeLiteral: {
+        const typeText = node.type ? printNode(node.type) : '';
+        const elementsText = node.elements.map((el) => printNode(el, { inline: true })).join(', ');
+        const text = `${typeText}{${elementsText}}`;
+        parts.push(text);
         break;
       }
 
@@ -173,8 +157,37 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
-      case GoNodeKind.ContinueStatement: {
+      case GoNodeKind.ContinueStatement:
         parts.push(printLine('continue'));
+        break;
+
+      case GoNodeKind.DeferStatement: {
+        const text = `defer ${printNode(node.call, { inline: true })}`;
+        parts.push(printLine(text));
+        break;
+      }
+
+      case GoNodeKind.EmptyStatement:
+        parts.push('');
+        break;
+
+      case GoNodeKind.ExpressionStatement: {
+        const text = `${printNode(node.expression, { inline: true })}`;
+        parts.push(printLine(text));
+        break;
+      }
+
+      case GoNodeKind.FallthroughStatement:
+        parts.push(printLine('fallthrough'));
+        break;
+
+      case GoNodeKind.ForRangeStatement: {
+        const names = node.targets?.join(', ');
+        const assignOp = node.useShortVar ? ':=' : '=';
+        const iterText = `range ${printNode(node.iterable, { inline: true })}`;
+        const header = names ? `for ${names} ${assignOp} ${iterText}` : `for ${iterText}`;
+        const body = printNode(node.body, { inline: true });
+        parts.push(printLine(`${header} ${body}`));
         break;
       }
 
@@ -214,31 +227,15 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
-      case GoNodeKind.FunctionReturn: {
-        const name = node.name ? `${node.name} ` : '';
-        parts.push(`${name}${printNode(node.type, { inline: true })}`);
-        break;
-      }
-
-      case GoNodeKind.Receiver: {
-        parts.push(`(${node.name} ${printNode(node.type, { inline: true })})`);
-        break;
-      }
-
       case GoNodeKind.FunctionParameter: {
         const variadic = node.isVariadic ? '...' : '';
         parts.push(`${node.name} ${variadic}${printNode(node.type, { inline: true })}`);
         break;
       }
 
-      case GoNodeKind.DeferStatement: {
-        const text = `defer ${printNode(node.call, { inline: true })}`;
-        parts.push(printLine(text));
-        break;
-      }
-
-      case GoNodeKind.EmptyStatement: {
-        parts.push('');
+      case GoNodeKind.FunctionReturn: {
+        const name = node.name ? `${node.name} ` : '';
+        parts.push(`${name}${printNode(node.type, { inline: true })}`);
         break;
       }
 
@@ -251,6 +248,21 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.Identifier:
         parts.push(node.name);
         break;
+
+      case GoNodeKind.IfStatement: {
+        const initStatement = node.initStatement
+          ? `${printNode(node.initStatement, { inline: true })}; `
+          : '';
+        const ifLine = `if ${initStatement}${printNode(node.condition, { inline: true })}`;
+        const thenBlock = printNode(node.thenBlock, { inline: true });
+        let elseBlock = '';
+        if (node.elseBlock) {
+          elseBlock = ` else ${printNode(node.elseBlock, { inline: true })}`;
+        }
+        const text = `${ifLine} ${thenBlock}${elseBlock}`;
+        parts.push(context.inline ? text : printLine(text));
+        break;
+      }
 
       case GoNodeKind.ImportStatement: {
         const imports = node.paths.map((imp) => {
@@ -274,87 +286,49 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
         break;
       }
 
-      case GoNodeKind.IfStatement: {
-        const initStatement = node.initStatement
-          ? `${printNode(node.initStatement, { inline: true })}; `
-          : '';
-        const ifLine = `if ${initStatement}${printNode(node.condition, { inline: true })}`;
-        const thenBlock = printNode(node.thenBlock, { inline: true });
-        let elseBlock = '';
-        if (node.elseBlock) {
-          elseBlock = ` else ${printNode(node.elseBlock, { inline: true })}`;
-        }
-        const text = `${ifLine} ${thenBlock}${elseBlock}`;
-        parts.push(context.inline ? text : printLine(text));
-        break;
-      }
-
-      case GoNodeKind.SwitchStatement: {
-        const init = node.initStatement
-          ? `${printNode(node.initStatement, { inline: true })}; `
-          : '';
-
-        let content = '';
-        if (node.typeGuard) {
-          const left = node.typeGuard.assignTo ? `${node.typeGuard.assignTo} := ` : '';
-          content = `${init}${left}${printNode(node.typeGuard.subject, {
-            inline: true,
-          })}.(type)`;
-        } else if (node.tag) {
-          content = `${init}${printNode(node.tag, { inline: true })}`;
-        } else {
-          content = `${init}`.trimEnd();
-        }
-
-        const header = content ? `switch ${content}` : 'switch';
-        parts.push(printLine(`${header} {`));
-        for (const switchCase of node.cases) {
-          const clause =
-            switchCase.expressions && switchCase.expressions.length
-              ? `case ${switchCase.expressions.map((e) => printNode(e, { inline: true })).join(', ')}`
-              : 'default';
-          parts.push(printLine(`${clause}:`));
-          if (switchCase.body.statements.length) {
-            indentLevel += 1;
-            parts.push(...switchCase.body.statements.map((stmt) => printNode(stmt)));
-            indentLevel -= 1;
-          }
-        }
-        parts.push(printLine('}'));
-        break;
-      }
-
       case GoNodeKind.IncDecStatement: {
         const incDecText = `${printNode(node.target)}${node.operator}`;
         parts.push(context.inline ? incDecText : printLine(incDecText));
         break;
       }
 
-      case GoNodeKind.ExpressionStatement: {
-        const text = `${printNode(node.expression, { inline: true })}`;
-        parts.push(printLine(text));
-        break;
-      }
-
-      case GoNodeKind.IndexExpression: {
+      case GoNodeKind.IndexExpression:
         // Ensure the object and index are printed inline to avoid accidental indentation
         parts.push(
           `${printNode(node.object, { inline: true })}[${printNode(node.index, { inline: true })}]`,
         );
         break;
-      }
 
-      case GoNodeKind.SliceExpression: {
-        const low = node.low ? printNode(node.low, { inline: true }) : '';
-        const high = node.high ? printNode(node.high, { inline: true }) : '';
-        if (node.max) {
-          const max = printNode(node.max, { inline: true });
-          parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}:${max}]`);
-        } else {
-          parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}]`);
+      case GoNodeKind.InterfaceType: {
+        if (!node.fields.length) {
+          parts.push('interface{}');
+          break;
         }
+
+        parts.push('interface {');
+        indentLevel += 1;
+        for (const field of node.fields) {
+          const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
+          const returnType = field.returnType.map((ret) => printNode(ret)).join(', ');
+          const useReturnTypBrackets =
+            field.returnType.length > 1 || field.returnType.some((rt) => rt.name);
+          const finalReturnType = useReturnTypBrackets
+            ? ` (${returnType})`
+            : returnType
+              ? ` ${returnType}`
+              : '';
+          parts.push(printLine(`${field.name}(${parameters})${finalReturnType}`));
+        }
+        indentLevel -= 1;
+        parts.push(printLine('}'));
         break;
       }
+
+      case GoNodeKind.KeyValueExpression:
+        parts.push(
+          `${printNode(node.key, { inline: true })}: ${printNode(node.value, { inline: true })}`,
+        );
+        break;
 
       case GoNodeKind.Literal:
         if (typeof node.value === 'string') {
@@ -368,26 +342,35 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
         }
         break;
 
+      case GoNodeKind.MapType: {
+        const text = `map[${printNode(node.keyType, { inline: true })}]${printNode(node.valueType, { inline: true })}`;
+        parts.push(text);
+        break;
+      }
+
       case GoNodeKind.MemberExpression:
         parts.push(
           `${printNode(node.object, { inline: true })}.${printNode(node.member, { inline: true })}`,
         );
         break;
 
-      case GoNodeKind.FallthroughStatement: {
-        parts.push(printLine('fallthrough'));
+      case GoNodeKind.PackageDeclaration:
+        parts.push(printLine(`package ${node.name}`));
+        break;
+
+      case GoNodeKind.PointerType:
+        parts.push(`*${printNode(node.elementType, { inline: true })}`);
+        break;
+
+      case GoNodeKind.Receiver:
+        parts.push(`(${node.name} ${printNode(node.type, { inline: true })})`);
+        break;
+
+      case GoNodeKind.ReturnStatement: {
+        const values = node.expressions.map((expr) => printNode(expr, { inline: true })).join(', ');
+        parts.push(printLine(`return${values ? ` ${values}` : ''}`));
         break;
       }
-
-      case GoNodeKind.ReturnStatement:
-        {
-          const values = node.expressions
-            .map((expr) => printNode(expr, { inline: true }))
-            .join(', ');
-          parts.push(printLine(`return${values ? ` ${values}` : ''}`));
-        }
-
-        break;
 
       case GoNodeKind.ShortVarDeclaration: {
         const names = node.names.join(', ');
@@ -411,6 +394,18 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
             if (!grouped) parts.push('');
           }
           parts.push(printNode(stmts[i]!));
+        }
+        break;
+      }
+
+      case GoNodeKind.SliceExpression: {
+        const low = node.low ? printNode(node.low, { inline: true }) : '';
+        const high = node.high ? printNode(node.high, { inline: true }) : '';
+        if (node.max) {
+          const max = printNode(node.max, { inline: true });
+          parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}:${max}]`);
+        } else {
+          parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}]`);
         }
         break;
       }
@@ -456,27 +451,37 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
         break;
       }
 
-      case GoNodeKind.InterfaceType: {
-        if (!node.fields.length) {
-          parts.push('interface{}');
-          break;
+      case GoNodeKind.SwitchStatement: {
+        const init = node.initStatement
+          ? `${printNode(node.initStatement, { inline: true })}; `
+          : '';
+
+        let content = '';
+        if (node.typeGuard) {
+          const left = node.typeGuard.assignTo ? `${node.typeGuard.assignTo} := ` : '';
+          content = `${init}${left}${printNode(node.typeGuard.subject, {
+            inline: true,
+          })}.(type)`;
+        } else if (node.tag) {
+          content = `${init}${printNode(node.tag, { inline: true })}`;
+        } else {
+          content = `${init}`.trimEnd();
         }
 
-        parts.push('interface {');
-        indentLevel += 1;
-        for (const field of node.fields) {
-          const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
-          const returnType = field.returnType.map((ret) => printNode(ret)).join(', ');
-          const useReturnTypBrackets =
-            field.returnType.length > 1 || field.returnType.some((rt) => rt.name);
-          const finalReturnType = useReturnTypBrackets
-            ? ` (${returnType})`
-            : returnType
-              ? ` ${returnType}`
-              : '';
-          parts.push(printLine(`${field.name}(${parameters})${finalReturnType}`));
+        const header = content ? `switch ${content}` : 'switch';
+        parts.push(printLine(`${header} {`));
+        for (const switchCase of node.cases) {
+          const clause =
+            switchCase.expressions && switchCase.expressions.length
+              ? `case ${switchCase.expressions.map((e) => printNode(e, { inline: true })).join(', ')}`
+              : 'default';
+          parts.push(printLine(`${clause}:`));
+          if (switchCase.body.statements.length) {
+            indentLevel += 1;
+            parts.push(...switchCase.body.statements.map((stmt) => printNode(stmt)));
+            indentLevel -= 1;
+          }
         }
-        indentLevel -= 1;
         parts.push(printLine('}'));
         break;
       }
@@ -489,31 +494,15 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
         break;
       }
 
-      case GoNodeKind.UnaryExpression: {
+      case GoNodeKind.UnaryExpression:
         parts.push(`${node.operator}${printNode(node.operand, { inline: true })}`);
         break;
-      }
 
       case GoNodeKind.VarDeclaration: {
         const type = node.type ? ' ' + `${printNode(node.type, { inline: true })}` : '';
         const value = node.value ? ` = ${printNode(node.value, { inline: true })}` : '';
 
         parts.push(printLine(`var ${node.name}${type}${value}`));
-        break;
-      }
-
-      case GoNodeKind.ForRangeStatement: {
-        const names = node.targets?.join(', ');
-        const assignOp = node.useShortVar ? ':=' : '=';
-        const iterText = `range ${printNode(node.iterable, { inline: true })}`;
-        const header = names ? `for ${names} ${assignOp} ${iterText}` : `for ${iterText}`;
-        const body = printNode(node.body, { inline: true });
-        parts.push(printLine(`${header} ${body}`));
-        break;
-      }
-
-      case GoNodeKind.PackageDeclaration: {
-        parts.push(printLine(`package ${node.name}`));
         break;
       }
 

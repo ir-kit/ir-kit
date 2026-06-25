@@ -16,6 +16,7 @@ import { createKeyValueExpression } from './expressions/key-value';
 import { createLiteral } from './expressions/literal';
 import { createMapType } from './expressions/map-type';
 import { createMemberExpression } from './expressions/member';
+import { createPointerType } from './expressions/pointer-type';
 import { createSliceExpression } from './expressions/slice';
 import { createStructType } from './expressions/struct';
 import { createUnaryExpression } from './expressions/unary';
@@ -75,6 +76,7 @@ export const factory = {
   createLiteral,
   createMapType,
   createMemberExpression,
+  createPointerType,
   createReceiver,
   createReturnStatement,
   createShortVarDeclaration,
