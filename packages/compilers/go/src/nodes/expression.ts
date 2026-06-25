@@ -3,6 +3,7 @@ import type { GoArrayType } from './expressions/array-type';
 import type { GoBinaryExpression } from './expressions/binary';
 import type { GoCallExpression } from './expressions/call';
 import type { GoCompositeLiteral } from './expressions/composite-literal';
+import type { GoFunctionType } from './expressions/function-type';
 import type { GoIdentifier } from './expressions/identifier';
 import type { GoInterfaceType } from './expressions/interface';
 import type { GoKeyValueExpression } from './expressions/key-value';
@@ -19,6 +20,7 @@ export type GoExpression =
   | GoBinaryExpression
   | GoCallExpression
   | GoCompositeLiteral
+  | GoFunctionType
   | GoIdentifier
   | GoIndexExpression
   | GoInterfaceType

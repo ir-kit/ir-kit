@@ -253,6 +253,22 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.FunctionType: {
+        const parameters = node.parameters
+          .map((parameter) => printNode(parameter, { inline: true }))
+          .join(', ');
+        const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
+        const useReturnTypBrackets =
+          node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
+        const finalReturnType = useReturnTypBrackets
+          ? ` (${returnType})`
+          : returnType
+            ? ` ${returnType}`
+            : '';
+        parts.push(`func(${parameters})${finalReturnType}`);
+        break;
+      }
+
       case GoNodeKind.GoStatement: {
         const text = `go ${printNode(node.expression, { inline: true })}`;
         parts.push(printLine(text));
