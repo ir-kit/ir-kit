@@ -15,18 +15,18 @@ import type { GoStructType } from './expressions/struct';
 import type { GoUnaryExpression } from './expressions/unary';
 
 export type GoExpression =
+  | GoArrayType
   | GoBinaryExpression
   | GoCallExpression
-  | GoIdentifier
-  | GoLiteral
-  | GoArrayType
   | GoCompositeLiteral
+  | GoIdentifier
+  | GoIndexExpression
+  | GoInterfaceType
+  | GoKeyValueExpression
+  | GoLiteral
   | GoMapType
   | GoMemberExpression
-  | GoUnaryExpression
-  | GoIndexExpression
+  | GoPointerType
   | GoSliceExpression
   | GoStructType
-  | GoKeyValueExpression
-  | GoInterfaceType
-  | GoPointerType;
+  | GoUnaryExpression;
