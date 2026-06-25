@@ -295,24 +295,20 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.ImportStatement: {
-        const imports = node.paths.map((imp) => {
-          if (imp.alias) {
-            return `${imp.alias} "${imp.path}"`;
-          }
-          return `"${imp.path}"`;
-        });
+        const specs = node.paths.map((imp) =>
+          imp.alias ? `${imp.alias} "${imp.path}"` : `"${imp.path}"`,
+        );
 
-        let importText = '';
-        if (imports.length > 1) {
-          indentLevel += 1;
-          importText = `import (
-${imports.map((imp) => printLine(imp)).join('\n')}
-)`;
-          indentLevel -= 1;
-        } else if (imports.length === 1) {
-          importText = `import ${imports[0]}`;
+        if (specs.length === 1) {
+          parts.push(printLine(`import ${specs[0]}`));
+          break;
         }
-        parts.push(printLine(importText));
+
+        parts.push(printLine('import ('));
+        indentLevel += 1;
+        parts.push(...specs.map((spec) => printLine(spec)));
+        indentLevel -= 1;
+        parts.push(printLine(')'));
         break;
       }
 
