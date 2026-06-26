@@ -122,4 +122,74 @@ describe('literal', () => {
     ]);
     await assertPrintedMatchesSnapshot(file, 'null.go');
   });
+
+  it('integer formats preserved', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration('hex', go.factory.createLiteral('0xFF', 'int')),
+        go.factory.createShortVarDeclaration(
+          'grouped',
+          go.factory.createLiteral('1_000_000', 'int'),
+        ),
+        go.factory.createShortVarDeclaration('exp', go.factory.createLiteral('1e9', 'float')),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [
+              go.factory.createIdentifier('hex'),
+              go.factory.createIdentifier('grouped'),
+              go.factory.createIdentifier('exp'),
+            ],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'integer-formats.go');
+  });
+
+  it('large integer keeps precision', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration(
+          'big',
+          go.factory.createLiteral('9007199254740993', 'int'),
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('big')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'large-integer.go');
+  });
+
+  it('rune and imaginary', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration('letter', go.factory.createLiteral('a', 'rune')),
+        go.factory.createShortVarDeclaration('z', go.factory.createLiteral('3i', 'imaginary')),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('letter'), go.factory.createIdentifier('z')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'rune-imaginary.go');
+  });
 });

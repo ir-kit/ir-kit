@@ -375,14 +375,14 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.Literal:
-        if (typeof node.value === 'string') {
-          parts.push(`"${escapeString(node.value)}"`);
-        } else if (typeof node.value === 'number') {
-          parts.push(String(node.value));
-        } else if (typeof node.value === 'boolean') {
-          parts.push(node.value ? 'true' : 'false');
-        } else if (node.value === null) {
+        if (node.literalKind === 'nil') {
           parts.push('nil');
+        } else if (node.literalKind === 'rune') {
+          parts.push(`'${node.value}'`);
+        } else if (node.literalKind === 'string') {
+          parts.push(`"${escapeString(node.value)}"`);
+        } else {
+          parts.push(node.value);
         }
         break;
 
