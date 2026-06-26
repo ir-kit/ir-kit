@@ -22,6 +22,7 @@ export enum GoNodeKind {
   FunctionParameter = 'FunctionParameter',
   FunctionReturn = 'FunctionReturn',
   FunctionType = 'FunctionType',
+  GenericType = 'GenericType',
   GoStatement = 'GoStatement',
   Identifier = 'Identifier',
   IfStatement = 'IfStatement',
