@@ -1,17 +1,17 @@
 import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 
 export interface GoTypeDeclaration extends GoNodeBase {
   isAlias?: boolean;
   kind: GoNodeKind.TypeDeclaration;
   name: string;
-  type: GoExpression;
+  type: GoType;
 }
 
 export function createTypeDeclaration(
   name: string,
-  type: GoExpression,
+  type: GoType,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
   isAlias?: boolean,

@@ -17,6 +17,7 @@ export enum GoNodeKind {
   ForRangeStatement = 'ForRangeStatement',
   ForStatement = 'ForStatement',
   FunctionDeclaration = 'FunctionDeclaration',
+  FunctionLiteral = 'FunctionLiteral',
   FunctionParameter = 'FunctionParameter',
   FunctionReturn = 'FunctionReturn',
   FunctionType = 'FunctionType',

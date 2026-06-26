@@ -3,25 +3,30 @@ import { GoNodeKind } from '../kinds';
 import type { GoStatement } from '../statement';
 import type { GoBlock } from '../statements/block';
 import { createBlock } from '../statements/block';
-import type { GoFunctionParameter } from './function-parameter';
-import { type GoFunctionReturn } from './function-return';
-import type { GoReceiver } from './receiver';
+import type { GoType } from '../type';
+import type { GoFunctionParameter } from '../types/function-parameter';
+import { type GoFunctionReturn } from '../types/function-return';
+
+export type GoReceiverField = {
+  name: string;
+  type: GoType;
+};
 
 export interface GoFunctionDeclaration extends GoNodeBase {
   body: GoBlock;
   kind: GoNodeKind.FunctionDeclaration;
-  name: string | undefined;
+  name: string;
   parameters: ReadonlyArray<GoFunctionParameter>;
-  receiver?: GoReceiver;
+  receiver?: GoReceiverField;
   returnType: ReadonlyArray<GoFunctionReturn>;
 }
 
 export function createFunctionDeclaration(
-  name: string | undefined,
+  name: string,
   parameters: ReadonlyArray<GoFunctionParameter> | undefined,
   returnType: ReadonlyArray<GoFunctionReturn> | undefined,
   body: ReadonlyArray<GoStatement> | undefined,
-  receiver?: GoReceiver,
+  receiver?: GoReceiverField,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoFunctionDeclaration {

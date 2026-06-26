@@ -1,7 +1,7 @@
 import type { GoNodeBase } from '../base';
-import type { GoFunctionParameter } from '../declarations/function-parameter';
-import type { GoFunctionReturn } from '../declarations/function-return';
 import { GoNodeKind } from '../kinds';
+import type { GoFunctionParameter } from './function-parameter';
+import type { GoFunctionReturn } from './function-return';
 
 export type GoInterfaceField = {
   name: string;

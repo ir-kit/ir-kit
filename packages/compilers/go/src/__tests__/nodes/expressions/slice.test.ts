@@ -244,7 +244,10 @@ describe('slice expression', () => {
             ),
           ),
         ],
-        go.factory.createReceiver('t', go.factory.createIdentifier('T')),
+        {
+          name: 't',
+          type: go.factory.createIdentifier('T'),
+        },
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         // a := []T{T{}, T{}}

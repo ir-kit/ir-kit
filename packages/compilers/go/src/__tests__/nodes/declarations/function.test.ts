@@ -167,7 +167,10 @@ describe('function declaration', () => {
         [go.factory.createFunctionParameter('nums', go.factory.createIdentifier('int'), true)],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [go.factory.createReturnStatement(go.factory.createLiteral(0))],
-        go.factory.createReceiver('s', go.factory.createIdentifier('Some')),
+        {
+          name: 's',
+          type: go.factory.createIdentifier('Some'),
+        },
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -230,8 +233,7 @@ describe('function declaration', () => {
   });
 
   it('assigns anonymous function to short var', async () => {
-    const anonFunc = go.factory.createFunctionDeclaration(
-      undefined,
+    const anonFunc = go.factory.createFunctionLiteral(
       [go.factory.createFunctionParameter('x', go.factory.createIdentifier('int'))],
       [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
       [
