@@ -536,24 +536,26 @@ export function createPrinter(options?: GoPrinterOptions) {
           type: printNode(field.type),
         }));
 
-        const flat = rows.filter((row) => !row.type.includes('\n'));
         const nameWidth = Math.max(0, ...rows.map((row) => row.name.length));
-        const typeWidth = Math.max(
-          0,
-          ...flat.filter((row) => row.tag).map((row) => row.type.length),
+        const alignedFlat = alignCells(
+          rows
+            .filter((row) => !row.type.includes('\n'))
+            .map((row) => (row.tag ? [row.type, row.tag] : [row.type])),
         );
 
+        let flatIndex = 0;
         for (const row of rows) {
           const prefix = row.name ? row.name.padEnd(nameWidth + 1) : '';
 
           if (!row.type.includes('\n')) {
-            const type = row.tag ? row.type.padEnd(typeWidth + 1) : row.type;
-            parts.push(printLine(`${prefix}${type}${row.tag}`));
+            parts.push(printLine(`${prefix}${alignedFlat[flatIndex] ?? ''}`));
+            flatIndex += 1;
           } else {
             const lines = row.type.split('\n');
-            parts.push(printLine(`${prefix}${lines[0]}`));
+            parts.push(printLine(`${prefix}${lines[0] ?? ''}`));
             parts.push(...lines.slice(1, -1));
-            parts.push(row.tag ? `${lines.at(-1)} ${row.tag}` : lines.at(-1)!);
+            const last = lines.at(-1) ?? '';
+            parts.push(row.tag ? `${last} ${row.tag}` : last);
           }
         }
 
