@@ -181,6 +181,13 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.ChannelType: {
+        const lead = node.direction === 'receive' ? '<-' : '';
+        const trail = node.direction === 'send' ? '<-' : '';
+        parts.push(`${lead}chan${trail} ${printNode(node.elementType, { inline: true })}`);
+        break;
+      }
+
       case GoNodeKind.Comment:
         parts.push(printLine(`// ${node.text}`));
         break;
@@ -439,6 +446,14 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.ReturnStatement: {
         const values = node.expressions.map((expr) => printNode(expr, { inline: true })).join(', ');
         parts.push(printLine(`return${values ? ` ${values}` : ''}`));
+        break;
+      }
+
+      case GoNodeKind.SendStatement: {
+        const text = `${printNode(node.channel, { inline: true })} <- ${printNode(node.value, {
+          inline: true,
+        })}`;
+        parts.push(context.inline ? text : printLine(text));
         break;
       }
 
