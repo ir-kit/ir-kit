@@ -192,4 +192,26 @@ describe('literal', () => {
     ]);
     await assertPrintedMatchesSnapshot(file, 'rune-imaginary.go');
   });
+
+  it('raw string keeps content verbatim', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration(
+          'pattern',
+          go.factory.createLiteral('\\d+\\s*"quoted"', 'rawString'),
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('pattern')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'raw-string.go');
+  });
 });

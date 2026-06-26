@@ -1,7 +1,15 @@
 import type { GoNodeBase } from '../base';
 import { GoNodeKind } from '../kinds';
 
-export type GoLiteralKind = 'bool' | 'float' | 'imaginary' | 'int' | 'nil' | 'rune' | 'string';
+export type GoLiteralKind =
+  | 'bool'
+  | 'float'
+  | 'imaginary'
+  | 'int'
+  | 'nil'
+  | 'rawString'
+  | 'rune'
+  | 'string';
 
 export interface GoLiteral extends GoNodeBase {
   kind: GoNodeKind.Literal;

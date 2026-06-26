@@ -440,6 +440,8 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.Literal:
         if (node.literalKind === 'nil') {
           parts.push('nil');
+        } else if (node.literalKind === 'rawString') {
+          parts.push(`\`${node.value}\``);
         } else if (node.literalKind === 'rune') {
           parts.push(`'${node.value}'`);
         } else if (node.literalKind === 'string') {
