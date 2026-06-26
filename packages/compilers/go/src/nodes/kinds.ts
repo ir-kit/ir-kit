@@ -44,6 +44,7 @@ export enum GoNodeKind {
   SourceFile = 'SourceFile',
   StructType = 'StructType',
   SwitchStatement = 'SwitchStatement',
+  TypeAssertExpression = 'TypeAssertExpression',
   TypeDeclaration = 'TypeDeclaration',
   UnaryExpression = 'UnaryExpression',
   VarDeclaration = 'VarDeclaration',

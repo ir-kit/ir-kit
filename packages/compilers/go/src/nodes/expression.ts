@@ -8,6 +8,7 @@ import type { GoKeyValueExpression } from './expressions/key-value';
 import type { GoLiteral } from './expressions/literal';
 import type { GoMemberExpression } from './expressions/member';
 import type { GoSliceExpression } from './expressions/slice';
+import type { GoTypeAssertExpression } from './expressions/type-assert';
 import type { GoUnaryExpression } from './expressions/unary';
 
 export type GoExpression =
@@ -21,4 +22,5 @@ export type GoExpression =
   | GoLiteral
   | GoMemberExpression
   | GoSliceExpression
+  | GoTypeAssertExpression
   | GoUnaryExpression;
