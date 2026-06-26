@@ -389,9 +389,13 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push('interface {');
         indentLevel += 1;
         for (const field of node.fields) {
-          const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
-          const finalReturnType = printReturnType(field.returnType);
-          parts.push(printLine(`${field.name}(${parameters})${finalReturnType}`));
+          if ('embed' in field) {
+            parts.push(printLine(printNode(field.embed, { inline: true })));
+          } else {
+            const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
+            const finalReturnType = printReturnType(field.returnType);
+            parts.push(printLine(`${field.name}(${parameters})${finalReturnType}`));
+          }
         }
         indentLevel -= 1;
         parts.push(printLine('}'));

@@ -280,4 +280,35 @@ describe('interface type via type declaration', () => {
     ]);
     await assertPrintedMatchesSnapshot(file, 'multiple-methods.go');
   });
+
+  it('embedded interface', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('io'),
+      go.factory.createTypeDeclaration(
+        'ReadWriter',
+        go.factory.createInterfaceType([
+          {
+            embed: go.factory.createMemberExpression(
+              go.factory.createIdentifier('io'),
+              go.factory.createIdentifier('Reader'),
+            ),
+          },
+          {
+            name: 'Write',
+            parameters: [
+              go.factory.createFunctionParameter(
+                ['p'],
+                go.factory.createArrayType(go.factory.createIdentifier('byte')),
+              ),
+            ],
+            returnType: [
+              go.factory.createFunctionReturn(go.factory.createIdentifier('int'), 'n'),
+              go.factory.createFunctionReturn(go.factory.createIdentifier('error'), 'err'),
+            ],
+          },
+        ]),
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'embedded.go');
+  });
 });
