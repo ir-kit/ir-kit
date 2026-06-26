@@ -311,4 +311,39 @@ describe('interface type via type declaration', () => {
     ]);
     await assertPrintedMatchesSnapshot(file, 'embedded.go');
   });
+
+  it('type-set constraint with approximation and union', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createTypeDeclaration(
+        'Number',
+        go.factory.createInterfaceType([
+          {
+            embed: go.factory.createBinaryExpression(
+              go.factory.createUnaryExpression('~', go.factory.createIdentifier('int')),
+              '|',
+              go.factory.createUnaryExpression('~', go.factory.createIdentifier('float64')),
+            ),
+          },
+        ]),
+      ),
+      go.factory.createFunctionDeclaration(
+        'double',
+        [go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('T'))],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier('T'))],
+        [
+          go.factory.createReturnStatement(
+            go.factory.createBinaryExpression(
+              go.factory.createIdentifier('x'),
+              '+',
+              go.factory.createIdentifier('x'),
+            ),
+          ),
+        ],
+        undefined,
+        [{ constraint: go.factory.createIdentifier('Number'), names: ['T'] }],
+      ),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, []),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'type-set-constraint.go');
+  });
 });
