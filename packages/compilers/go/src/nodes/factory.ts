@@ -30,6 +30,7 @@ import { createIfStatement } from './statements/if';
 import { createImportStatement } from './statements/import';
 import { createIncDecStatement } from './statements/inc-dec';
 import { createReturnStatement } from './statements/return';
+import { createSendStatement } from './statements/send';
 import {
   createFallthroughStatement,
   createSwitchCase,
@@ -38,9 +39,11 @@ import {
 import { createComment } from './structure/comment';
 import { createSourceFile } from './structure/source-file';
 import { createArrayType } from './types/array-type';
+import { createChannelType } from './types/channel-type';
 import { createFunctionParameter } from './types/function-parameter';
 import { createFunctionReturn } from './types/function-return';
 import { createFunctionType } from './types/function-type';
+import { createGenericType } from './types/generic-type';
 import { createInterfaceType } from './types/interface-type';
 import { createMapType } from './types/map-type';
 import { createPointerType } from './types/pointer-type';
@@ -54,6 +57,7 @@ export const factory = {
   createBlock,
   createBreakStatement,
   createCallExpression,
+  createChannelType,
   createComment,
   createCompositeLiteral,
   createConstDeclaration,
@@ -69,6 +73,7 @@ export const factory = {
   createFunctionParameter,
   createFunctionReturn,
   createFunctionType,
+  createGenericType,
   createGoStatement,
   createIdentifier,
   createIfStatement,
@@ -82,6 +87,7 @@ export const factory = {
   createMemberExpression,
   createPointerType,
   createReturnStatement,
+  createSendStatement,
   createShortVarDeclaration,
   createSliceExpression,
   createSourceFile,

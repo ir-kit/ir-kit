@@ -10,6 +10,7 @@ describe('comment', () => {
         undefined,
         [go.factory.createComment('This is a comment')],
         undefined,
+        undefined,
         ['This is a leading comment'],
         ['This is a trailing comment'],
       ),

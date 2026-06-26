@@ -6,6 +6,7 @@ import { createBlock } from '../statements/block';
 import type { GoType } from '../type';
 import type { GoFunctionParameter } from '../types/function-parameter';
 import { type GoFunctionReturn } from '../types/function-return';
+import type { GoTypeParameter } from './type-parameter';
 
 export type GoReceiverField = {
   name: string;
@@ -19,6 +20,7 @@ export interface GoFunctionDeclaration extends GoNodeBase {
   parameters: ReadonlyArray<GoFunctionParameter>;
   receiver?: GoReceiverField;
   returnType: ReadonlyArray<GoFunctionReturn>;
+  typeParameters?: ReadonlyArray<GoTypeParameter>;
 }
 
 export function createFunctionDeclaration(
@@ -27,6 +29,7 @@ export function createFunctionDeclaration(
   returnType: ReadonlyArray<GoFunctionReturn> | undefined,
   body: ReadonlyArray<GoStatement> | undefined,
   receiver?: GoReceiverField,
+  typeParameters?: ReadonlyArray<GoTypeParameter>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoFunctionDeclaration {
@@ -39,5 +42,6 @@ export function createFunctionDeclaration(
     receiver,
     returnType: returnType ?? [],
     trailingComments,
+    typeParameters,
   };
 }

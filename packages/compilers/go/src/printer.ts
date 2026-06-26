@@ -1,4 +1,5 @@
 import type { GoNode } from './nodes/base';
+import type { GoTypeParameter } from './nodes/declarations/type-parameter';
 import { GoNodeKind } from './nodes/kinds';
 import type { GoFunctionReturn } from './nodes/types/function-return';
 
@@ -103,6 +104,14 @@ export function createPrinter(options?: GoPrinterOptions) {
     return useBrackets ? ` (${rendered})` : ` ${rendered}`;
   }
 
+  function printTypeParameters(typeParameters: ReadonlyArray<GoTypeParameter> | undefined): string {
+    if (!typeParameters?.length) return '';
+    const list = typeParameters
+      .map((tp) => `${tp.names.join(', ')} ${printNode(tp.constraint, { inline: true })}`)
+      .join(', ');
+    return `[${list}]`;
+  }
+
   function printNode(node: GoNode, context: PrintContext = {}): string {
     const parts: Array<string> = [];
 
@@ -178,6 +187,13 @@ export function createPrinter(options?: GoPrinterOptions) {
         });
         const text = `${printNode(node.callee)}(${args.join(', ')})`;
         parts.push(context.inline ? text : printLine(text));
+        break;
+      }
+
+      case GoNodeKind.ChannelType: {
+        const lead = node.direction === 'receive' ? '<-' : '';
+        const trail = node.direction === 'send' ? '<-' : '';
+        parts.push(`${lead}chan${trail} ${printNode(node.elementType, { inline: true })}`);
         break;
       }
 
@@ -273,7 +289,8 @@ export function createPrinter(options?: GoPrinterOptions) {
         const receiver = node.receiver
           ? `(${node.receiver.name} ${printNode(node.receiver.type, { inline: true })})`
           : '';
-        const signature = `func${receiver ? ` ${receiver}` : ''} ${node.name}(${parameters})${finalReturnType}`;
+        const typeParams = printTypeParameters(node.typeParameters);
+        const signature = `func${receiver ? ` ${receiver}` : ''} ${node.name}${typeParams}(${parameters})${finalReturnType}`;
         const blockOutput = printNode(node.body, { inline: true });
         parts.push(
           context.inline
@@ -321,6 +338,14 @@ export function createPrinter(options?: GoPrinterOptions) {
           .join(', ');
         const finalReturnType = printReturnType(node.returnType);
         parts.push(`func(${parameters})${finalReturnType}`);
+        break;
+      }
+
+      case GoNodeKind.GenericType: {
+        const typeArguments = node.typeArguments
+          .map((typeArgument) => printNode(typeArgument, { inline: true }))
+          .join(', ');
+        parts.push(`${printNode(node.type, { inline: true })}[${typeArguments}]`);
         break;
       }
 
@@ -439,6 +464,14 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.ReturnStatement: {
         const values = node.expressions.map((expr) => printNode(expr, { inline: true })).join(', ');
         parts.push(printLine(`return${values ? ` ${values}` : ''}`));
+        break;
+      }
+
+      case GoNodeKind.SendStatement: {
+        const text = `${printNode(node.channel, { inline: true })} <- ${printNode(node.value, {
+          inline: true,
+        })}`;
+        parts.push(context.inline ? text : printLine(text));
         break;
       }
 
@@ -565,7 +598,11 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.TypeDeclaration: {
         const typeBody = printNode(node.type, { inline: true });
         const op = node.isAlias ? '=' : '';
-        const pieces = ['type', node.name, op].filter(Boolean);
+        const pieces = [
+          'type',
+          `${node.name}${printTypeParameters(node.typeParameters)}`,
+          op,
+        ].filter(Boolean);
         parts.push(printLine([...pieces, typeBody].join(' ')));
         break;
       }
