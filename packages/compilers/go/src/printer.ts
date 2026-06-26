@@ -1,6 +1,6 @@
 import type { GoNode } from './nodes/base';
-import type { GoFunctionReturn } from './nodes/declarations/function-return';
 import { GoNodeKind } from './nodes/kinds';
+import type { GoFunctionReturn } from './nodes/types/function-return';
 
 export interface GoPrinterOptions {
   /**
