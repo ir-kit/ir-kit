@@ -12,6 +12,7 @@ import { createIdentifier } from './expressions/identifier';
 import { createKeyValueExpression } from './expressions/key-value';
 import { createLiteral } from './expressions/literal';
 import { createMemberExpression } from './expressions/member';
+import { createParenthesizedExpression } from './expressions/parenthesized';
 import { createSliceExpression } from './expressions/slice';
 import { createTypeAssertExpression } from './expressions/type-assert';
 import { createUnaryExpression } from './expressions/unary';
@@ -85,6 +86,7 @@ export const factory = {
   createLiteral,
   createMapType,
   createMemberExpression,
+  createParenthesizedExpression,
   createPointerType,
   createReturnStatement,
   createSendStatement,
