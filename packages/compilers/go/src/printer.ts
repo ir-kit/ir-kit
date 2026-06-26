@@ -104,6 +104,11 @@ export function createPrinter(options?: GoPrinterOptions) {
     return useBrackets ? ` (${rendered})` : ` ${rendered}`;
   }
 
+  function printTypeAssert(operand: GoNode, type?: GoNode): string {
+    const target = type ? printNode(type, { inline: true }) : 'type';
+    return `${printNode(operand, { inline: true })}.(${target})`;
+  }
+
   function printTypeParameters(typeParameters: ReadonlyArray<GoTypeParameter> | undefined): string {
     if (!typeParameters?.length) return '';
     const list = typeParameters
@@ -562,9 +567,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         let content = '';
         if (node.typeGuard) {
           const left = node.typeGuard.assignTo ? `${node.typeGuard.assignTo} := ` : '';
-          content = `${init}${left}${printNode(node.typeGuard.subject, {
-            inline: true,
-          })}.(type)`;
+          content = `${init}${left}${printTypeAssert(node.typeGuard.subject)}`;
         } else if (node.tag) {
           content = `${init}${printNode(node.tag, { inline: true })}`;
         } else {
@@ -590,9 +593,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.TypeAssertExpression:
-        parts.push(
-          `${printNode(node.operand, { inline: true })}.(${printNode(node.type, { inline: true })})`,
-        );
+        parts.push(printTypeAssert(node.operand, node.type));
         break;
 
       case GoNodeKind.TypeDeclaration: {

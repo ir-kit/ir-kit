@@ -1,16 +1,17 @@
 import type { GoNodeBase } from '../base';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 
 export interface GoTypeAssertExpression extends GoNodeBase {
   kind: GoNodeKind.TypeAssertExpression;
   operand: GoExpression;
-  type: GoExpression;
+  type: GoType;
 }
 
 export function createTypeAssertExpression(
   operand: GoExpression,
-  type: GoExpression,
+  type: GoType,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoTypeAssertExpression {
