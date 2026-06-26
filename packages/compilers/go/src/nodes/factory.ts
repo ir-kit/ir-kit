@@ -40,6 +40,7 @@ import { createArrayType } from './types/array-type';
 import { createFunctionParameter } from './types/function-parameter';
 import { createFunctionReturn } from './types/function-return';
 import { createFunctionType } from './types/function-type';
+import { createGenericType } from './types/generic-type';
 import { createInterfaceType } from './types/interface-type';
 import { createMapType } from './types/map-type';
 import { createPointerType } from './types/pointer-type';
@@ -68,6 +69,7 @@ export const factory = {
   createFunctionParameter,
   createFunctionReturn,
   createFunctionType,
+  createGenericType,
   createGoStatement,
   createIdentifier,
   createIfStatement,
