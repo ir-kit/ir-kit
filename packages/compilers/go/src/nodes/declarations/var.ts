@@ -1,19 +1,19 @@
 import type { GoNodeBase } from '../base';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
-import type { GoFunctionDeclaration } from './function';
+import type { GoType } from '../type';
 
 export interface GoVarDeclaration extends GoNodeBase {
   kind: GoNodeKind.VarDeclaration;
   name: string;
-  type?: GoExpression;
-  value?: GoExpression | GoFunctionDeclaration;
+  type?: GoType;
+  value?: GoExpression;
 }
 
 export function createVarDeclaration(
   name: string,
-  type?: GoExpression,
-  value?: GoExpression | GoFunctionDeclaration,
+  type?: GoType,
+  value?: GoExpression,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoVarDeclaration {

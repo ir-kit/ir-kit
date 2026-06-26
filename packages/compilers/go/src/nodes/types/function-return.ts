@@ -1,15 +1,15 @@
 import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 
 export interface GoFunctionReturn extends GoNodeBase {
   kind: GoNodeKind.FunctionReturn;
   name?: string;
-  type: GoExpression;
+  type: GoType;
 }
 
 export function createFunctionReturn(
-  type: GoExpression,
+  type: GoType,
   name?: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,

@@ -101,7 +101,10 @@ describe('index expression', () => {
         [],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [go.factory.createReturnStatement(go.factory.createLiteral(42))],
-        go.factory.createReceiver('t', go.factory.createIdentifier('T')),
+        {
+          name: 't',
+          type: go.factory.createIdentifier('T'),
+        },
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         // obj := []T{{}, {}}

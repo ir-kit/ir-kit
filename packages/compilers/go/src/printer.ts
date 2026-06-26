@@ -218,26 +218,44 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.FunctionDeclaration: {
         const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
-
         const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
-        const useReturnTypBrackets =
+        const useReturnTypeBrackets =
           node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
-
-        const finalReturnType = useReturnTypBrackets
+        const finalReturnType = useReturnTypeBrackets
           ? ` (${returnType})`
           : returnType
             ? ` ${returnType}`
             : '';
-        const receiver = node.receiver ? printNode(node.receiver) : '';
-
-        const signature = `func${receiver ? ` ${receiver}` : ''}${node.name ? ` ${node.name}` : ''}(${parameters})${finalReturnType}`;
+        const receiver = node.receiver
+          ? `(${node.receiver.name} ${printNode(node.receiver.type, { inline: true })})`
+          : '';
+        const signature = `func${receiver ? ` ${receiver}` : ''} ${node.name}(${parameters})${finalReturnType}`;
         const blockOutput = printNode(node.body, { inline: true });
         parts.push(
           context.inline
             ? [signature, blockOutput].join(' ')
             : printLine([signature, blockOutput].join(' ')),
         );
+        break;
+      }
 
+      case GoNodeKind.FunctionLiteral: {
+        const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
+        const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
+        const useReturnTypeBrackets =
+          node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
+        const finalReturnType = useReturnTypeBrackets
+          ? ` (${returnType})`
+          : returnType
+            ? ` ${returnType}`
+            : '';
+        const signature = `func(${parameters})${finalReturnType}`;
+        const blockOutput = printNode(node.body, { inline: true });
+        parts.push(
+          context.inline
+            ? [signature, blockOutput].join(' ')
+            : printLine([signature, blockOutput].join(' ')),
+        );
         break;
       }
 
@@ -258,9 +276,9 @@ export function createPrinter(options?: GoPrinterOptions) {
           .map((parameter) => printNode(parameter, { inline: true }))
           .join(', ');
         const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
-        const useReturnTypBrackets =
+        const useReturnTypeBrackets =
           node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
-        const finalReturnType = useReturnTypBrackets
+        const finalReturnType = useReturnTypeBrackets
           ? ` (${returnType})`
           : returnType
             ? ` ${returnType}`
@@ -336,9 +354,9 @@ export function createPrinter(options?: GoPrinterOptions) {
         for (const field of node.fields) {
           const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
           const returnType = field.returnType.map((ret) => printNode(ret)).join(', ');
-          const useReturnTypBrackets =
+          const useReturnTypeBrackets =
             field.returnType.length > 1 || field.returnType.some((rt) => rt.name);
-          const finalReturnType = useReturnTypBrackets
+          const finalReturnType = useReturnTypeBrackets
             ? ` (${returnType})`
             : returnType
               ? ` ${returnType}`
@@ -386,10 +404,6 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.PointerType:
         parts.push(`*${printNode(node.elementType, { inline: true })}`);
-        break;
-
-      case GoNodeKind.Receiver:
-        parts.push(`(${node.name} ${printNode(node.type, { inline: true })})`);
         break;
 
       case GoNodeKind.ReturnStatement: {

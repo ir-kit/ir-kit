@@ -67,7 +67,10 @@ describe('interface type via type declaration', () => {
             go.factory.createLiteral(null),
           ]),
         ],
-        go.factory.createReceiver('m', go.factory.createIdentifier('MemReader')),
+        {
+          name: 'm',
+          type: go.factory.createIdentifier('MemReader'),
+        },
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -163,7 +166,10 @@ describe('interface type via type declaration', () => {
             ),
           ),
         ],
-        go.factory.createReceiver('r', go.factory.createIdentifier('Rectangle')),
+        {
+          name: 'r',
+          type: go.factory.createIdentifier('Rectangle'),
+        },
       ),
       go.factory.createFunctionDeclaration(
         'Scale',
@@ -187,7 +193,10 @@ describe('interface type via type declaration', () => {
             go.factory.createIdentifier('factor'),
           ),
         ],
-        go.factory.createReceiver('r', go.factory.createIdentifier('Rectangle')),
+        {
+          name: 'r',
+          type: go.factory.createIdentifier('Rectangle'),
+        },
       ),
       go.factory.createFunctionDeclaration(
         'Move',
@@ -211,7 +220,10 @@ describe('interface type via type declaration', () => {
             ),
           ),
         ],
-        go.factory.createReceiver('r', go.factory.createIdentifier('Rectangle')),
+        {
+          name: 'r',
+          type: go.factory.createIdentifier('Rectangle'),
+        },
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(

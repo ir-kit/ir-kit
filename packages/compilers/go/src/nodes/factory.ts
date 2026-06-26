@@ -1,25 +1,18 @@
 import { createConstDeclaration } from './declarations/const';
 import { createFunctionDeclaration } from './declarations/function';
-import { createFunctionParameter } from './declarations/function-parameter';
-import { createFunctionReturn } from './declarations/function-return';
-import { createReceiver } from './declarations/receiver';
+import { createShortVarDeclaration } from './declarations/short-var';
 import { createTypeDeclaration } from './declarations/type';
 import { createVarDeclaration } from './declarations/var';
 import { createIndexExpression } from './expressions';
-import { createArrayType } from './expressions/array-type';
 import { createBinaryExpression } from './expressions/binary';
 import { createCallExpression } from './expressions/call';
 import { createCompositeLiteral } from './expressions/composite-literal';
-import { createFunctionType } from './expressions/function-type';
+import { createFunctionLiteral } from './expressions/function-literal';
 import { createIdentifier } from './expressions/identifier';
-import { createInterfaceType } from './expressions/interface';
 import { createKeyValueExpression } from './expressions/key-value';
 import { createLiteral } from './expressions/literal';
-import { createMapType } from './expressions/map-type';
 import { createMemberExpression } from './expressions/member';
-import { createPointerType } from './expressions/pointer-type';
 import { createSliceExpression } from './expressions/slice';
-import { createStructType } from './expressions/struct';
 import { createUnaryExpression } from './expressions/unary';
 import { createAssignment } from './statements/assignment';
 import { createAugmentAssignment } from './statements/augment-assignment';
@@ -36,7 +29,6 @@ import { createIfStatement } from './statements/if';
 import { createImportStatement } from './statements/import';
 import { createIncDecStatement } from './statements/inc-dec';
 import { createReturnStatement } from './statements/return';
-import { createShortVarDeclaration } from './statements/short-var';
 import {
   createFallthroughStatement,
   createSwitchCase,
@@ -44,6 +36,14 @@ import {
 } from './statements/switch';
 import { createComment } from './structure/comment';
 import { createSourceFile } from './structure/source-file';
+import { createArrayType } from './types/array-type';
+import { createFunctionParameter } from './types/function-parameter';
+import { createFunctionReturn } from './types/function-return';
+import { createFunctionType } from './types/function-type';
+import { createInterfaceType } from './types/interface-type';
+import { createMapType } from './types/map-type';
+import { createPointerType } from './types/pointer-type';
+import { createStructType } from './types/struct-type';
 
 export const factory = {
   createArrayType,
@@ -64,6 +64,7 @@ export const factory = {
   createForRangeStatement,
   createForStatement,
   createFunctionDeclaration,
+  createFunctionLiteral,
   createFunctionParameter,
   createFunctionReturn,
   createFunctionType,
@@ -79,7 +80,6 @@ export const factory = {
   createMapType,
   createMemberExpression,
   createPointerType,
-  createReceiver,
   createReturnStatement,
   createShortVarDeclaration,
   createSliceExpression,

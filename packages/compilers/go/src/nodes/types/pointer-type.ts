@@ -1,14 +1,14 @@
 import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 
 export interface GoPointerType extends GoNodeBase {
-  elementType: GoExpression;
+  elementType: GoType;
   kind: GoNodeKind.PointerType;
 }
 
 export function createPointerType(
-  elementType: GoExpression,
+  elementType: GoType,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoPointerType {

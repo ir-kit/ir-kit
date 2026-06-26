@@ -1,8 +1,6 @@
 import type { GoConstDeclaration } from './declarations/const';
 import type { GoFunctionDeclaration } from './declarations/function';
-import type { GoFunctionParameter } from './declarations/function-parameter';
-import type { GoFunctionReturn } from './declarations/function-return';
-import type { GoReceiver } from './declarations/receiver';
+import type { GoShortVarDeclaration } from './declarations/short-var';
 import type { GoTypeDeclaration } from './declarations/type';
 import type { GoVarDeclaration } from './declarations/var';
 import type { GoAssignment } from './statements/assignment';
@@ -19,33 +17,33 @@ import type { GoIfStatement } from './statements/if';
 import type { GoImportStatement } from './statements/import';
 import type { GoIncDecStatement } from './statements/inc-dec';
 import type { GoReturnStatement } from './statements/return';
-import type { GoShortVarDeclaration } from './statements/short-var';
 import type { GoFallthroughStatement, GoSwitchStatement } from './statements/switch';
 import type { GoComment } from './structure/comment';
+import type { GoFunctionParameter } from './types/function-parameter';
+import type { GoFunctionReturn } from './types/function-return';
 
 export type GoStatement =
   | GoAssignment
-  | GoReturnStatement
-  | GoShortVarDeclaration
-  | GoConstDeclaration
-  | GoFunctionDeclaration
-  | GoVarDeclaration
-  | GoIfStatement
-  | GoForStatement
-  | GoIncDecStatement
-  | GoExpressionStatement
-  | GoForRangeStatement
-  | GoContinueStatement
-  | GoBreakStatement
-  | GoImportStatement
   | GoAugmentAssignment
-  | GoTypeDeclaration
-  | GoFunctionParameter
-  | GoReceiver
-  | GoFunctionReturn
-  | GoSwitchStatement
-  | GoFallthroughStatement
-  | GoGoStatement
+  | GoBreakStatement
+  | GoComment
+  | GoConstDeclaration
+  | GoContinueStatement
   | GoDeferStatement
   | GoEmptyStatement
-  | GoComment;
+  | GoExpressionStatement
+  | GoFallthroughStatement
+  | GoForRangeStatement
+  | GoForStatement
+  | GoFunctionDeclaration
+  | GoFunctionParameter
+  | GoFunctionReturn
+  | GoGoStatement
+  | GoIfStatement
+  | GoImportStatement
+  | GoIncDecStatement
+  | GoReturnStatement
+  | GoShortVarDeclaration
+  | GoSwitchStatement
+  | GoTypeDeclaration
+  | GoVarDeclaration;

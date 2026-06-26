@@ -1,11 +1,11 @@
 import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 
 export type GoStructField = {
   name?: string;
   tag?: string;
-  type: GoExpression;
+  type: GoType;
 };
 
 export interface GoStructType extends GoNodeBase {
