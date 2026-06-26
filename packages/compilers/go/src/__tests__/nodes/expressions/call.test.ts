@@ -172,4 +172,38 @@ describe('call expression', () => {
 
     await assertPrintedMatchesSnapshot(file, 'call-spread.go');
   });
+
+  it('builtin make with type arguments', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration(
+          'nums',
+          go.factory.createCallExpression(go.factory.createIdentifier('make'), [
+            go.factory.createArrayType(go.factory.createIdentifier('int')),
+            go.factory.createLiteral(0),
+          ]),
+        ),
+        go.factory.createShortVarDeclaration(
+          'lookup',
+          go.factory.createCallExpression(go.factory.createIdentifier('make'), [
+            go.factory.createMapType(
+              go.factory.createIdentifier('string'),
+              go.factory.createIdentifier('int'),
+            ),
+          ]),
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('nums'), go.factory.createIdentifier('lookup')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'make-type-arguments.go');
+  });
 });
