@@ -51,6 +51,33 @@ function escapeString(value: string): string {
   return value.replace(/[\\"\n\r\t]/g, (char) => GO_STRING_ESCAPES[char] ?? char);
 }
 
+function alignCells(rows: ReadonlyArray<ReadonlyArray<string>>): Array<string> {
+  const columnCount = Math.max(0, ...rows.map((row) => row.length));
+  const padded = rows.map((row) => [...row]);
+
+  for (let col = 0; col < columnCount; col++) {
+    let start = 0;
+    while (start < padded.length) {
+      const startRow = padded[start];
+      if (!startRow || startRow.length <= col + 1) {
+        start += 1;
+        continue;
+      }
+      let end = start;
+      while (end < padded.length && (padded[end]?.length ?? 0) > col + 1) end += 1;
+      const width = Math.max(...padded.slice(start, end).map((row) => row[col]?.length ?? 0));
+      for (let i = start; i < end; i++) {
+        const row = padded[i];
+        const cell = row?.[col];
+        if (row && cell !== undefined) row[col] = cell.padEnd(width);
+      }
+      start = end;
+    }
+  }
+
+  return padded.map((row) => row.join(' '));
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function createPrinter(options?: GoPrinterOptions) {
   let indentLevel = 0;
@@ -167,15 +194,31 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.ConstDeclaration: {
-        const type = node.type ? ' ' + `${printNode(node.type)}` : '';
+        if (!node.specs.length) {
+          parts.push(printLine('const ()'));
+          break;
+        }
 
-        parts.push(
-          printLine(
-            `const ${node.name}${type} = ${printNode(node.value, {
-              inline: true,
-            })}`,
-          ),
-        );
+        const [firstSpec] = node.specs;
+        if (node.specs.length === 1 && firstSpec) {
+          const type = firstSpec.type ? ' ' + `${printNode(firstSpec.type)}` : '';
+          const value = firstSpec.value ? ` = ${printNode(firstSpec.value, { inline: true })}` : '';
+          parts.push(printLine(`const ${firstSpec.name}${type}${value}`));
+          break;
+        }
+
+        const rows = node.specs.map((spec) => {
+          const cells = [spec.name];
+          if (spec.type) cells.push(printNode(spec.type, { inline: true }));
+          if (spec.value) cells.push(`= ${printNode(spec.value, { inline: true })}`);
+          return cells;
+        });
+
+        parts.push(printLine('const ('));
+        indentLevel += 1;
+        parts.push(...alignCells(rows).map((line) => printLine(line)));
+        indentLevel -= 1;
+        parts.push(printLine(')'));
         break;
       }
 
