@@ -556,6 +556,12 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.TypeAssertExpression:
+        parts.push(
+          `${printNode(node.operand, { inline: true })}.(${printNode(node.type, { inline: true })})`,
+        );
+        break;
+
       case GoNodeKind.TypeDeclaration: {
         const typeBody = printNode(node.type, { inline: true });
         const op = node.isAlias ? '=' : '';

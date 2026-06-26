@@ -13,6 +13,7 @@ import { createKeyValueExpression } from './expressions/key-value';
 import { createLiteral } from './expressions/literal';
 import { createMemberExpression } from './expressions/member';
 import { createSliceExpression } from './expressions/slice';
+import { createTypeAssertExpression } from './expressions/type-assert';
 import { createUnaryExpression } from './expressions/unary';
 import { createAssignment } from './statements/assignment';
 import { createAugmentAssignment } from './statements/augment-assignment';
@@ -87,6 +88,7 @@ export const factory = {
   createStructType,
   createSwitchCase,
   createSwitchStatement,
+  createTypeAssertExpression,
   createTypeDeclaration,
   createUnaryExpression,
   createVarDeclaration,
