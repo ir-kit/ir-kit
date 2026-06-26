@@ -5,12 +5,12 @@ import type { GoType } from '../type';
 export interface GoFunctionParameter extends GoNodeBase {
   isVariadic?: boolean;
   kind: GoNodeKind.FunctionParameter;
-  name: string;
+  names: ReadonlyArray<string>;
   type: GoType;
 }
 
 export function createFunctionParameter(
-  name: string,
+  names: ReadonlyArray<string>,
   type: GoType,
   isVariadic?: boolean,
   leadingComments?: ReadonlyArray<string>,
@@ -20,7 +20,7 @@ export function createFunctionParameter(
     isVariadic,
     kind: GoNodeKind.FunctionParameter,
     leadingComments,
-    name,
+    names,
     trailingComments,
     type,
   };

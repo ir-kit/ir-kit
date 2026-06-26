@@ -7,7 +7,9 @@ describe('member expression', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration(
         'Obj',
-        go.factory.createStructType([{ name: 'field', type: go.factory.createIdentifier('int') }]),
+        go.factory.createStructType([
+          { names: ['field'], type: go.factory.createIdentifier('int') },
+        ]),
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -48,11 +50,11 @@ describe('member expression', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration(
         'B',
-        go.factory.createStructType([{ name: 'c', type: go.factory.createIdentifier('int') }]),
+        go.factory.createStructType([{ names: ['c'], type: go.factory.createIdentifier('int') }]),
       ),
       go.factory.createTypeDeclaration(
         'A',
-        go.factory.createStructType([{ name: 'b', type: go.factory.createIdentifier('B') }]),
+        go.factory.createStructType([{ names: ['b'], type: go.factory.createIdentifier('B') }]),
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -104,7 +106,9 @@ describe('member expression', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration(
         'R',
-        go.factory.createStructType([{ name: 'Field', type: go.factory.createIdentifier('int') }]),
+        go.factory.createStructType([
+          { names: ['Field'], type: go.factory.createIdentifier('int') },
+        ]),
       ),
       go.factory.createFunctionDeclaration(
         'get',

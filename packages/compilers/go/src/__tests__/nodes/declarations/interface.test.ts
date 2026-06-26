@@ -33,7 +33,7 @@ describe('interface type via type declaration', () => {
         name: 'Read',
         parameters: [
           go.factory.createFunctionParameter(
-            'p',
+            ['p'],
             go.factory.createArrayType(go.factory.createIdentifier('byte')),
           ),
         ],
@@ -53,7 +53,7 @@ describe('interface type via type declaration', () => {
         'Read',
         [
           go.factory.createFunctionParameter(
-            'p',
+            ['p'],
             go.factory.createArrayType(go.factory.createIdentifier('byte')),
           ),
         ],
@@ -119,15 +119,15 @@ describe('interface type via type declaration', () => {
       {
         name: 'Scale',
         parameters: [
-          go.factory.createFunctionParameter('factor', go.factory.createIdentifier('float64')),
+          go.factory.createFunctionParameter(['factor'], go.factory.createIdentifier('float64')),
         ],
         returnType: [],
       },
       {
         name: 'Move',
         parameters: [
-          go.factory.createFunctionParameter('x', go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter('y', go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['y'], go.factory.createIdentifier('int')),
         ],
         returnType: [],
       },
@@ -139,8 +139,8 @@ describe('interface type via type declaration', () => {
       go.factory.createTypeDeclaration(
         'Rectangle',
         go.factory.createStructType([
-          { name: 'W', type: go.factory.createIdentifier('float64') },
-          { name: 'H', type: go.factory.createIdentifier('float64') },
+          { names: ['W'], type: go.factory.createIdentifier('float64') },
+          { names: ['H'], type: go.factory.createIdentifier('float64') },
         ]),
       ),
       go.factory.createFunctionDeclaration(
@@ -173,7 +173,7 @@ describe('interface type via type declaration', () => {
       ),
       go.factory.createFunctionDeclaration(
         'Scale',
-        [go.factory.createFunctionParameter('factor', go.factory.createIdentifier('float64'))],
+        [go.factory.createFunctionParameter(['factor'], go.factory.createIdentifier('float64'))],
         [],
         [
           go.factory.createAugmentAssignment(
@@ -201,8 +201,8 @@ describe('interface type via type declaration', () => {
       go.factory.createFunctionDeclaration(
         'Move',
         [
-          go.factory.createFunctionParameter('x', go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter('y', go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['y'], go.factory.createIdentifier('int')),
         ],
         undefined,
         [

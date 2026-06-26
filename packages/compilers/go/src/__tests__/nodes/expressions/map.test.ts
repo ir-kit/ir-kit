@@ -68,8 +68,8 @@ describe('maps', () => {
 
   it('map with struct value and keyed elements', async () => {
     const personType = go.factory.createStructType([
-      { name: 'Name', type: go.factory.createIdentifier('string') },
-      { name: 'Age', type: go.factory.createIdentifier('int') },
+      { names: ['Name'], type: go.factory.createIdentifier('string') },
+      { names: ['Age'], type: go.factory.createIdentifier('int') },
     ]);
     const mapType = go.factory.createMapType(go.factory.createIdentifier('string'), personType);
     const alice = go.factory.createCompositeLiteral([
