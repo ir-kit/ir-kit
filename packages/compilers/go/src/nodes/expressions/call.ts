@@ -5,13 +5,13 @@ import type { GoType } from '../type';
 
 export interface GoCallExpression extends GoNodeBase {
   args: ReadonlyArray<GoExpression | GoType>;
-  callee: GoExpression;
+  callee: GoExpression | GoType;
   kind: GoNodeKind.CallExpression;
   spreadLastArg?: boolean;
 }
 
 export function createCallExpression(
-  callee: GoExpression,
+  callee: GoExpression | GoType,
   args?: ReadonlyArray<GoExpression | GoType>,
   spreadLastArg?: boolean,
   leadingComments?: ReadonlyArray<string>,

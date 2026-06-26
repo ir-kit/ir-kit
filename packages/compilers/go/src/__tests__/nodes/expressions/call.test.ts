@@ -206,4 +206,34 @@ describe('call expression', () => {
     ]);
     await assertPrintedMatchesSnapshot(file, 'make-type-arguments.go');
   });
+
+  it('composite-type conversion', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration('s', go.factory.createLiteral('hello')),
+        go.factory.createShortVarDeclaration(
+          'b',
+          go.factory.createCallExpression(
+            go.factory.createArrayType(go.factory.createIdentifier('byte')),
+            [go.factory.createIdentifier('s')],
+          ),
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [
+              go.factory.createCallExpression(go.factory.createIdentifier('len'), [
+                go.factory.createIdentifier('b'),
+              ]),
+            ],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'composite-conversion.go');
+  });
 });
