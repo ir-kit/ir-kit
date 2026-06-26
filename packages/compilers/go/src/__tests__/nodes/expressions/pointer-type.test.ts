@@ -9,12 +9,12 @@ describe('pointer type', () => {
         'User',
         go.factory.createStructType([
           {
-            name: 'Name',
+            names: ['Name'],
             tag: 'json:"name,omitempty"',
             type: go.factory.createPointerType(go.factory.createIdentifier('string')),
           },
           {
-            name: 'Owner',
+            names: ['Owner'],
             tag: 'json:"owner,omitempty"',
             type: go.factory.createPointerType(go.factory.createIdentifier('User')),
           },
@@ -55,7 +55,7 @@ describe('pointer type', () => {
         'find',
         [
           go.factory.createFunctionParameter(
-            'id',
+            ['id'],
             go.factory.createPointerType(go.factory.createIdentifier('int')),
           ),
         ],

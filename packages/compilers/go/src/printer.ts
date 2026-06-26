@@ -262,7 +262,7 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.FunctionParameter: {
         const variadic = node.isVariadic ? '...' : '';
-        parts.push(`${node.name} ${variadic}${printNode(node.type, { inline: true })}`);
+        parts.push(`${node.names.join(', ')} ${variadic}${printNode(node.type, { inline: true })}`);
         break;
       }
 
@@ -447,7 +447,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         indentLevel += 1;
 
         const rows = node.fields.map((field) => ({
-          name: field.name ?? '',
+          name: field.names?.join(', ') ?? '',
           tag: field.tag ? `\`${field.tag}\`` : '',
           type: printNode(field.type),
         }));

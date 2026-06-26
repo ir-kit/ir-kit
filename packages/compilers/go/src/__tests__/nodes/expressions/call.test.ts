@@ -31,7 +31,7 @@ describe('call expression', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
         'process',
-        [go.factory.createFunctionParameter('input', go.factory.createIdentifier('int'))],
+        [go.factory.createFunctionParameter(['input'], go.factory.createIdentifier('int'))],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [go.factory.createReturnStatement(go.factory.createIdentifier('input'))],
       ),
@@ -60,9 +60,9 @@ describe('call expression', () => {
       go.factory.createFunctionDeclaration(
         'add',
         [
-          go.factory.createFunctionParameter('a', go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter('b', go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter('c', go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['a'], go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['b'], go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['c'], go.factory.createIdentifier('int')),
         ],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [
@@ -105,13 +105,13 @@ describe('call expression', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
         'inner',
-        [go.factory.createFunctionParameter('s', go.factory.createIdentifier('string'))],
+        [go.factory.createFunctionParameter(['s'], go.factory.createIdentifier('string'))],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
         [go.factory.createReturnStatement(go.factory.createIdentifier('s'))],
       ),
       go.factory.createFunctionDeclaration(
         'outer',
-        [go.factory.createFunctionParameter('s', go.factory.createIdentifier('string'))],
+        [go.factory.createFunctionParameter(['s'], go.factory.createIdentifier('string'))],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
         [
           go.factory.createReturnStatement(

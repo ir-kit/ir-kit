@@ -3,7 +3,7 @@ import { GoNodeKind } from '../kinds';
 import type { GoType } from '../type';
 
 export type GoStructField = {
-  name?: string;
+  names?: ReadonlyArray<string>;
   tag?: string;
   type: GoType;
 };

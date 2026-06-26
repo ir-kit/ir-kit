@@ -80,8 +80,8 @@ describe('function declaration', () => {
       go.factory.createFunctionDeclaration(
         'add',
         [
-          go.factory.createFunctionParameter('a', go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter('b', go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['a'], go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['b'], go.factory.createIdentifier('int')),
         ],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [
@@ -120,8 +120,8 @@ describe('function declaration', () => {
       go.factory.createFunctionDeclaration(
         'greet',
         [
-          go.factory.createFunctionParameter('name', go.factory.createIdentifier('string')),
-          go.factory.createFunctionParameter('times', go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['name'], go.factory.createIdentifier('string')),
+          go.factory.createFunctionParameter(['times'], go.factory.createIdentifier('int')),
         ],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
         [go.factory.createReturnStatement(go.factory.createLiteral('greeting'))],
@@ -164,7 +164,7 @@ describe('function declaration', () => {
       go.factory.createTypeDeclaration('Some', go.factory.createStructType([])),
       go.factory.createFunctionDeclaration(
         'Sum',
-        [go.factory.createFunctionParameter('nums', go.factory.createIdentifier('int'), true)],
+        [go.factory.createFunctionParameter(['nums'], go.factory.createIdentifier('int'), true)],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [go.factory.createReturnStatement(go.factory.createLiteral(0))],
         {
@@ -234,7 +234,7 @@ describe('function declaration', () => {
 
   it('assigns anonymous function to short var', async () => {
     const anonFunc = go.factory.createFunctionLiteral(
-      [go.factory.createFunctionParameter('x', go.factory.createIdentifier('int'))],
+      [go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('int'))],
       [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
       [
         go.factory.createReturnStatement(
@@ -268,5 +268,25 @@ describe('function declaration', () => {
     ]);
 
     await assertPrintedMatchesSnapshot(file, 'shortvar-anon-func.go');
+  });
+
+  it('grouped parameter names', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createFunctionDeclaration(
+        'add',
+        [go.factory.createFunctionParameter(['a', 'b'], go.factory.createIdentifier('int'))],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
+        [
+          go.factory.createReturnStatement(
+            go.factory.createBinaryExpression(
+              go.factory.createIdentifier('a'),
+              '+',
+              go.factory.createIdentifier('b'),
+            ),
+          ),
+        ],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'grouped-parameter-names.go');
   });
 });

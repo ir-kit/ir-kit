@@ -61,7 +61,7 @@ describe('function type', () => {
         'Client',
         go.factory.createStructType([
           {
-            name: 'Editor',
+            names: ['Editor'],
             type: go.factory.createFunctionType(
               [go.factory.createIdentifier('int')],
               [go.factory.createFunctionReturn(go.factory.createIdentifier('error'))],

@@ -27,8 +27,8 @@ describe('struct type via type declaration', () => {
 
   it('with fields', async () => {
     const userStruct = go.factory.createStructType([
-      { name: 'ID', type: go.factory.createIdentifier('int') },
-      { name: 'Name', type: go.factory.createIdentifier('string') },
+      { names: ['ID'], type: go.factory.createIdentifier('int') },
+      { names: ['Name'], type: go.factory.createIdentifier('string') },
     ]);
 
     const file = go.factory.createSourceFile('main', [
@@ -77,12 +77,12 @@ describe('struct type via type declaration', () => {
   it('with tags', async () => {
     const userStructWithTags = go.factory.createStructType([
       {
-        name: 'ID',
+        names: ['ID'],
         tag: 'json:"id"',
         type: go.factory.createIdentifier('int'),
       },
       {
-        name: 'Name',
+        names: ['Name'],
         tag: 'json:"name,omitempty"',
         type: go.factory.createIdentifier('string'),
       },
@@ -125,7 +125,7 @@ describe('struct type via type declaration', () => {
   it('nested struct', async () => {
     const address = go.factory.createStructType([
       {
-        name: 'City',
+        names: ['City'],
         tag: 'json:"city"',
         type: go.factory.createIdentifier('string'),
       },
@@ -133,12 +133,12 @@ describe('struct type via type declaration', () => {
 
     const nested = go.factory.createStructType([
       {
-        name: 'Name',
+        names: ['Name'],
         tag: 'json:"name"',
         type: go.factory.createIdentifier('string'),
       },
       {
-        name: 'Address',
+        names: ['Address'],
         tag: 'json:"address"',
         type: address,
       },
@@ -201,13 +201,13 @@ describe('struct type via type declaration', () => {
 
   it('embedded anonymous field', async () => {
     const person = go.factory.createStructType([
-      { name: 'Name', type: go.factory.createIdentifier('string') },
-      { name: 'Age', type: go.factory.createIdentifier('int') },
+      { names: ['Name'], type: go.factory.createIdentifier('string') },
+      { names: ['Age'], type: go.factory.createIdentifier('int') },
     ]);
 
     const employee = go.factory.createStructType([
       { type: go.factory.createIdentifier('Person') },
-      { name: 'Salary', type: go.factory.createIdentifier('float64') },
+      { names: ['Salary'], type: go.factory.createIdentifier('float64') },
     ]);
 
     const file = go.factory.createSourceFile('main', [
@@ -265,5 +265,16 @@ describe('struct type via type declaration', () => {
     ]);
 
     await assertPrintedMatchesSnapshot(file, 'embedded.go');
+  });
+
+  it('grouped field names', async () => {
+    const point = go.factory.createStructType([
+      { names: ['X', 'Y'], type: go.factory.createIdentifier('int') },
+      { names: ['Label'], tag: 'json:"label"', type: go.factory.createIdentifier('string') },
+    ]);
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createTypeDeclaration('Point', point),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'grouped-field-names.go');
   });
 });

@@ -89,8 +89,8 @@ describe('short variable declaration', () => {
       go.factory.createFunctionDeclaration(
         'calculate',
         [
-          go.factory.createFunctionParameter('a', go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter('b', go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['a'], go.factory.createIdentifier('int')),
+          go.factory.createFunctionParameter(['b'], go.factory.createIdentifier('int')),
         ],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [

@@ -4,8 +4,8 @@ import { assertPrintedMatchesSnapshot } from '../utils';
 describe('struct composite literals', () => {
   it('anonymous struct literal', async () => {
     const structType = go.factory.createStructType([
-      { name: 'A', type: go.factory.createIdentifier('int') },
-      { name: 'B', type: go.factory.createIdentifier('string') },
+      { names: ['A'], type: go.factory.createIdentifier('int') },
+      { names: ['B'], type: go.factory.createIdentifier('string') },
     ]);
 
     const literal = go.factory.createCompositeLiteral(
@@ -34,8 +34,8 @@ describe('struct composite literals', () => {
 
   it('anonymous struct literal with keyed elements', async () => {
     const structType = go.factory.createStructType([
-      { name: 'A', type: go.factory.createIdentifier('int') },
-      { name: 'B', type: go.factory.createIdentifier('string') },
+      { names: ['A'], type: go.factory.createIdentifier('int') },
+      { names: ['B'], type: go.factory.createIdentifier('string') },
     ]);
 
     const literal = go.factory.createCompositeLiteral(
