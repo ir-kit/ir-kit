@@ -179,7 +179,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.BreakStatement:
-        parts.push(printLine('break'));
+        parts.push(printLine(`break${node.label ? ` ${node.label}` : ''}`));
         break;
 
       case GoNodeKind.CallExpression: {
@@ -244,7 +244,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.ContinueStatement:
-        parts.push(printLine('continue'));
+        parts.push(printLine(`continue${node.label ? ` ${node.label}` : ''}`));
         break;
 
       case GoNodeKind.DeferStatement: {
@@ -360,6 +360,10 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.GotoStatement:
+        parts.push(printLine(`goto ${node.label}`));
+        break;
+
       case GoNodeKind.Identifier:
         parts.push(node.name);
         break;
@@ -436,6 +440,13 @@ export function createPrinter(options?: GoPrinterOptions) {
           `${printNode(node.key, { inline: true })}: ${printNode(node.value, { inline: true })}`,
         );
         break;
+
+      case GoNodeKind.LabeledStatement: {
+        const labelIndent = '\t'.repeat(Math.max(0, indentLevel - 1));
+        parts.push(`${labelIndent}${node.label}:`);
+        parts.push(printNode(node.statement));
+        break;
+      }
 
       case GoNodeKind.Literal:
         if (node.literalKind === 'nil') {

@@ -13,9 +13,11 @@ import type { GoExpressionStatement } from './statements/expression';
 import type { GoForStatement } from './statements/for';
 import type { GoForRangeStatement } from './statements/for-range';
 import type { GoGoStatement } from './statements/go';
+import type { GoGotoStatement } from './statements/goto';
 import type { GoIfStatement } from './statements/if';
 import type { GoImportStatement } from './statements/import';
 import type { GoIncDecStatement } from './statements/inc-dec';
+import type { GoLabeledStatement } from './statements/labeled';
 import type { GoReturnStatement } from './statements/return';
 import type { GoSelectStatement } from './statements/select';
 import type { GoSendStatement } from './statements/send';
@@ -41,9 +43,11 @@ export type GoStatement =
   | GoFunctionParameter
   | GoFunctionReturn
   | GoGoStatement
+  | GoGotoStatement
   | GoIfStatement
   | GoImportStatement
   | GoIncDecStatement
+  | GoLabeledStatement
   | GoReturnStatement
   | GoSelectStatement
   | GoSendStatement

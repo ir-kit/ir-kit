@@ -27,9 +27,11 @@ import { createExpressionStatement } from './statements/expression';
 import { createForStatement } from './statements/for';
 import { createForRangeStatement } from './statements/for-range';
 import { createGoStatement } from './statements/go';
+import { createGotoStatement } from './statements/goto';
 import { createIfStatement } from './statements/if';
 import { createImportStatement } from './statements/import';
 import { createIncDecStatement } from './statements/inc-dec';
+import { createLabeledStatement } from './statements/labeled';
 import { createReturnStatement } from './statements/return';
 import { createSelectCase, createSelectStatement } from './statements/select';
 import { createSendStatement } from './statements/send';
@@ -77,6 +79,7 @@ export const factory = {
   createFunctionType,
   createGenericType,
   createGoStatement,
+  createGotoStatement,
   createIdentifier,
   createIfStatement,
   createImportStatement,
@@ -84,6 +87,7 @@ export const factory = {
   createIndexExpression,
   createInterfaceType,
   createKeyValueExpression,
+  createLabeledStatement,
   createLiteral,
   createMapType,
   createMemberExpression,
