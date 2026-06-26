@@ -31,6 +31,7 @@ import { createIfStatement } from './statements/if';
 import { createImportStatement } from './statements/import';
 import { createIncDecStatement } from './statements/inc-dec';
 import { createReturnStatement } from './statements/return';
+import { createSelectCase, createSelectStatement } from './statements/select';
 import { createSendStatement } from './statements/send';
 import {
   createFallthroughStatement,
@@ -89,6 +90,8 @@ export const factory = {
   createParenthesizedExpression,
   createPointerType,
   createReturnStatement,
+  createSelectCase,
+  createSelectStatement,
   createSendStatement,
   createShortVarDeclaration,
   createSliceExpression,

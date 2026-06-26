@@ -39,6 +39,7 @@ export enum GoNodeKind {
   PointerType = 'PointerType',
   Receiver = 'Receiver',
   ReturnStatement = 'ReturnStatement',
+  SelectStatement = 'SelectStatement',
   SendStatement = 'SendStatement',
   ShortVarDeclaration = 'ShortVarDeclaration',
   SliceExpression = 'SliceExpression',

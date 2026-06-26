@@ -17,6 +17,7 @@ import type { GoIfStatement } from './statements/if';
 import type { GoImportStatement } from './statements/import';
 import type { GoIncDecStatement } from './statements/inc-dec';
 import type { GoReturnStatement } from './statements/return';
+import type { GoSelectStatement } from './statements/select';
 import type { GoSendStatement } from './statements/send';
 import type { GoFallthroughStatement, GoSwitchStatement } from './statements/switch';
 import type { GoComment } from './structure/comment';
@@ -44,6 +45,7 @@ export type GoStatement =
   | GoImportStatement
   | GoIncDecStatement
   | GoReturnStatement
+  | GoSelectStatement
   | GoSendStatement
   | GoShortVarDeclaration
   | GoSwitchStatement

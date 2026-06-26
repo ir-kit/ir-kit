@@ -481,6 +481,23 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
+      case GoNodeKind.SelectStatement: {
+        parts.push(printLine('select {'));
+        for (const selectCase of node.cases) {
+          const clause = selectCase.comm
+            ? `case ${printNode(selectCase.comm, { inline: true })}`
+            : 'default';
+          parts.push(printLine(`${clause}:`));
+          if (selectCase.body.statements.length) {
+            indentLevel += 1;
+            parts.push(...selectCase.body.statements.map((stmt) => printNode(stmt)));
+            indentLevel -= 1;
+          }
+        }
+        parts.push(printLine('}'));
+        break;
+      }
+
       case GoNodeKind.SendStatement: {
         const text = `${printNode(node.channel, { inline: true })} <- ${printNode(node.value, {
           inline: true,
