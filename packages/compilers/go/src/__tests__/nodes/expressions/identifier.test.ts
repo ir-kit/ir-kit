@@ -6,7 +6,7 @@ describe('identifier', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createConstDeclaration('value', go.factory.createLiteral(10)),
+        go.factory.createConstDeclaration([{ name: 'value', value: go.factory.createLiteral(10) }]),
         go.factory.createShortVarDeclaration('result', go.factory.createIdentifier('value')),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
