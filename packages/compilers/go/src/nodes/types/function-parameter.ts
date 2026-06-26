@@ -1,17 +1,17 @@
 import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 
 export interface GoFunctionParameter extends GoNodeBase {
   isVariadic?: boolean;
   kind: GoNodeKind.FunctionParameter;
   name: string;
-  type: GoExpression;
+  type: GoType;
 }
 
 export function createFunctionParameter(
   name: string,
-  type: GoExpression,
+  type: GoType,
   isVariadic?: boolean,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,

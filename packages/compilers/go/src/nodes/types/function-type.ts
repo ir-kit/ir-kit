@@ -1,7 +1,7 @@
 import type { GoNodeBase } from '../base';
-import type { GoFunctionReturn } from '../declarations/function-return';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoFunctionReturn } from './function-return';
 
 export interface GoFunctionType extends GoNodeBase {
   kind: GoNodeKind.FunctionType;

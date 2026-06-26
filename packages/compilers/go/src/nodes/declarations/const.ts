@@ -1,19 +1,20 @@
 import type { GoNodeBase } from '../base';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 import type { GoFunctionDeclaration } from './function';
 
 export interface GoConstDeclaration extends GoNodeBase {
   kind: GoNodeKind.ConstDeclaration;
   name: string;
-  type?: GoExpression;
+  type?: GoType;
   value: GoExpression | GoFunctionDeclaration;
 }
 
 export function createConstDeclaration(
   name: string,
   value: GoExpression | GoFunctionDeclaration,
-  type?: GoExpression,
+  type?: GoType,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoConstDeclaration {

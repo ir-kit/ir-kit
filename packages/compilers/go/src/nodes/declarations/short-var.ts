@@ -1,17 +1,16 @@
 import type { GoNodeBase } from '../base';
-import type { GoFunctionDeclaration } from '../declarations/function';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
 
 export interface GoShortVarDeclaration extends GoNodeBase {
   kind: GoNodeKind.ShortVarDeclaration;
   names: ReadonlyArray<string>;
-  values: ReadonlyArray<GoExpression | GoFunctionDeclaration>;
+  values: ReadonlyArray<GoExpression>;
 }
 
 export function createShortVarDeclaration(
   nameOrNames: string | ReadonlyArray<string>,
-  valueOrValues: GoExpression | GoFunctionDeclaration | ReadonlyArray<GoExpression>,
+  valueOrValues: GoExpression | ReadonlyArray<GoExpression>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoShortVarDeclaration {

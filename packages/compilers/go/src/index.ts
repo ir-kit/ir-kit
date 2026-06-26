@@ -5,6 +5,7 @@ import { GoNodeKind } from './nodes/kinds';
 import type { GoStatement as _GoStatement } from './nodes/statement';
 import type { GoComment as _GoComment } from './nodes/structure/comment';
 import type { GoSourceFile as _GoSourceFile } from './nodes/structure/source-file';
+import type { GoType as _GoType } from './nodes/type';
 import type { GoPrinterOptions as _GoPrinterOptions } from './printer';
 import { createPrinter, printAst } from './printer';
 
@@ -16,6 +17,7 @@ export namespace go {
   export type NodeKind = GoNodeKind;
   export type Expression = _GoExpression;
   export type Statement = _GoStatement;
+  export type Type = _GoType;
 
   // Structure
   export type SourceFile = _GoSourceFile;

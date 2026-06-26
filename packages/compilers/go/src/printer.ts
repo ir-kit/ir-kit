@@ -227,16 +227,36 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.FunctionDeclaration: {
         const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
         const finalReturnType = printReturnType(node.returnType);
-        const receiver = node.receiver ? printNode(node.receiver) : '';
-
-        const signature = `func${receiver ? ` ${receiver}` : ''}${node.name ? ` ${node.name}` : ''}(${parameters})${finalReturnType}`;
+        const receiver = node.receiver
+          ? `(${node.receiver.name} ${printNode(node.receiver.type, { inline: true })})`
+          : '';
+        const signature = `func${receiver ? ` ${receiver}` : ''} ${node.name}(${parameters})${finalReturnType}`;
         const blockOutput = printNode(node.body, { inline: true });
         parts.push(
           context.inline
             ? [signature, blockOutput].join(' ')
             : printLine([signature, blockOutput].join(' ')),
         );
+        break;
+      }
 
+      case GoNodeKind.FunctionLiteral: {
+        const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
+        const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
+        const useReturnTypeBrackets =
+          node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
+        const finalReturnType = useReturnTypeBrackets
+          ? ` (${returnType})`
+          : returnType
+            ? ` ${returnType}`
+            : '';
+        const signature = `func(${parameters})${finalReturnType}`;
+        const blockOutput = printNode(node.body, { inline: true });
+        parts.push(
+          context.inline
+            ? [signature, blockOutput].join(' ')
+            : printLine([signature, blockOutput].join(' ')),
+        );
         break;
       }
 
@@ -287,24 +307,20 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.ImportStatement: {
-        const imports = node.paths.map((imp) => {
-          if (imp.alias) {
-            return `${imp.alias} "${imp.path}"`;
-          }
-          return `"${imp.path}"`;
-        });
+        const specs = node.paths.map((imp) =>
+          imp.alias ? `${imp.alias} "${imp.path}"` : `"${imp.path}"`,
+        );
 
-        let importText = '';
-        if (imports.length > 1) {
-          indentLevel += 1;
-          importText = `import (
-${imports.map((imp) => printLine(imp)).join('\n')}
-)`;
-          indentLevel -= 1;
-        } else if (imports.length === 1) {
-          importText = `import ${imports[0]}`;
+        if (specs.length === 1) {
+          parts.push(printLine(`import ${specs[0]}`));
+          break;
         }
-        parts.push(printLine(importText));
+
+        parts.push(printLine('import ('));
+        indentLevel += 1;
+        parts.push(...specs.map((spec) => printLine(spec)));
+        indentLevel -= 1;
+        parts.push(printLine(')'));
         break;
       }
 
@@ -346,14 +362,14 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
         break;
 
       case GoNodeKind.Literal:
-        if (typeof node.value === 'string') {
-          parts.push(`"${escapeString(node.value)}"`);
-        } else if (typeof node.value === 'number') {
-          parts.push(String(node.value));
-        } else if (typeof node.value === 'boolean') {
-          parts.push(node.value ? 'true' : 'false');
-        } else if (node.value === null) {
+        if (node.literalKind === 'nil') {
           parts.push('nil');
+        } else if (node.literalKind === 'rune') {
+          parts.push(`'${node.value}'`);
+        } else if (node.literalKind === 'string') {
+          parts.push(`"${escapeString(node.value)}"`);
+        } else {
+          parts.push(node.value);
         }
         break;
 
@@ -375,10 +391,6 @@ ${imports.map((imp) => printLine(imp)).join('\n')}
 
       case GoNodeKind.PointerType:
         parts.push(`*${printNode(node.elementType, { inline: true })}`);
-        break;
-
-      case GoNodeKind.Receiver:
-        parts.push(`(${node.name} ${printNode(node.type, { inline: true })})`);
         break;
 
       case GoNodeKind.ReturnStatement: {
