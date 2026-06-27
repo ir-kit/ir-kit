@@ -31,8 +31,8 @@ describe('block statement', () => {
         [
           go.factory.createShortVarDeclaration('x', go.factory.createLiteral(0)),
           go.factory.createAssignment(
-            go.factory.createIdentifier('x'),
-            go.factory.createLiteral(1),
+            [go.factory.createIdentifier('x')],
+            [go.factory.createLiteral(1)],
           ),
           go.factory.createReturnStatement(go.factory.createIdentifier('x')),
         ],
@@ -64,12 +64,14 @@ describe('block statement', () => {
           go.factory.createShortVarDeclaration('y', go.factory.createLiteral(10)),
           go.factory.createShortVarDeclaration('result', go.factory.createLiteral(0)),
           go.factory.createAssignment(
-            go.factory.createIdentifier('result'),
-            go.factory.createBinaryExpression(
-              go.factory.createIdentifier('x'),
-              '+',
-              go.factory.createIdentifier('y'),
-            ),
+            [go.factory.createIdentifier('result')],
+            [
+              go.factory.createBinaryExpression(
+                go.factory.createIdentifier('x'),
+                '+',
+                go.factory.createIdentifier('y'),
+              ),
+            ],
           ),
           go.factory.createReturnStatement(go.factory.createIdentifier('result')),
         ],

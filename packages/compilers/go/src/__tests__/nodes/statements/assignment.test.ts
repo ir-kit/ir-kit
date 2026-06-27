@@ -7,7 +7,10 @@ describe('assignment statement', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(0)),
-        go.factory.createAssignment(go.factory.createIdentifier('x'), go.factory.createLiteral(10)),
+        go.factory.createAssignment(
+          [go.factory.createIdentifier('x')],
+          [go.factory.createLiteral(10)],
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -30,12 +33,14 @@ describe('assignment statement', () => {
         go.factory.createShortVarDeclaration('b', go.factory.createLiteral(7)),
         go.factory.createShortVarDeclaration('result', go.factory.createLiteral(0)),
         go.factory.createAssignment(
-          go.factory.createIdentifier('result'),
-          go.factory.createBinaryExpression(
-            go.factory.createIdentifier('a'),
-            '*',
-            go.factory.createIdentifier('b'),
-          ),
+          [go.factory.createIdentifier('result')],
+          [
+            go.factory.createBinaryExpression(
+              go.factory.createIdentifier('a'),
+              '*',
+              go.factory.createIdentifier('b'),
+            ),
+          ],
         ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -63,8 +68,8 @@ describe('assignment statement', () => {
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration('value', go.factory.createLiteral(0)),
         go.factory.createAssignment(
-          go.factory.createIdentifier('value'),
-          go.factory.createCallExpression(go.factory.createIdentifier('getValue')),
+          [go.factory.createIdentifier('value')],
+          [go.factory.createCallExpression(go.factory.createIdentifier('getValue'))],
         ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -78,5 +83,29 @@ describe('assignment statement', () => {
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'with-function-call.go');
+  });
+
+  it('multi-value assignment', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+        go.factory.createShortVarDeclaration('a', go.factory.createLiteral(1)),
+        go.factory.createShortVarDeclaration('b', go.factory.createLiteral(2)),
+        go.factory.createAssignment(
+          [go.factory.createIdentifier('a'), go.factory.createIdentifier('b')],
+          [go.factory.createIdentifier('b'), go.factory.createIdentifier('a')],
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('a'), go.factory.createIdentifier('b')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'multi-value.go');
   });
 });

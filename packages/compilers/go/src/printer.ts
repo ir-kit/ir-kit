@@ -138,9 +138,11 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.Assignment: {
-        const assignmentText = `${printNode(node.target)} = ${printNode(node.value, {
-          inline: true,
-        })}`;
+        const targets = node.targets
+          .map((target) => printNode(target, { inline: true }))
+          .join(', ');
+        const values = node.values.map((value) => printNode(value, { inline: true })).join(', ');
+        const assignmentText = `${targets} = ${values}`;
         parts.push(context.inline ? assignmentText : printLine(assignmentText));
         break;
       }
