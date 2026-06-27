@@ -542,24 +542,6 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
-      case GoNodeKind.SourceFile: {
-        parts.push(printNode(node.packageDeclaration));
-        parts.push('');
-
-        const stmts = node.statements;
-
-        for (let i = 0; i < stmts.length; i++) {
-          if (i > 0) {
-            const prev = stmts[i - 1]!;
-            const curr = stmts[i]!;
-            const grouped = prev.kind === curr.kind && GROUPABLE_KINDS.has(curr.kind);
-            if (!grouped) parts.push('');
-          }
-          parts.push(printNode(stmts[i]!));
-        }
-        break;
-      }
-
       case GoNodeKind.SliceExpression: {
         const low = node.low ? printNode(node.low, { inline: true }) : '';
         const high = node.high ? printNode(node.high, { inline: true }) : '';
@@ -569,6 +551,20 @@ export function createPrinter(options?: GoPrinterOptions) {
         } else {
           parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}]`);
         }
+        break;
+      }
+
+      case GoNodeKind.SourceFile: {
+        parts.push(printNode(node.packageDeclaration));
+        parts.push('');
+
+        node.statements.forEach((curr, i) => {
+          const prev = node.statements[i - 1];
+          const grouped =
+            prev !== undefined && prev.kind === curr.kind && GROUPABLE_KINDS.has(curr.kind);
+          if (i > 0 && !grouped) parts.push('');
+          parts.push(printNode(curr));
+        });
         break;
       }
 
