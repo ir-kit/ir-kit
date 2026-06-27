@@ -5,22 +5,24 @@ describe('pointer type', () => {
   it('struct fields', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'User',
-        go.factory.createStructType([
-          {
-            names: ['Name'],
-            tag: 'json:"name,omitempty"',
-            type: go.factory.createPointerType(go.factory.createIdentifier('string')),
-          },
-          {
-            names: ['Owner'],
-            tag: 'json:"owner,omitempty"',
-            type: go.factory.createPointerType(go.factory.createIdentifier('User')),
-          },
-        ]),
-      ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'User',
+          go.factory.createStructType([
+            {
+              names: ['Name'],
+              tag: 'json:"name,omitempty"',
+              type: go.factory.createPointerType(go.factory.createIdentifier('string')),
+            },
+            {
+              names: ['Owner'],
+              tag: 'json:"owner,omitempty"',
+              type: go.factory.createPointerType(go.factory.createIdentifier('User')),
+            },
+          ]),
+        ),
+      ]),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('name', go.factory.createLiteral('Bob')),
         go.factory.createShortVarDeclaration(
           'u',
@@ -52,7 +54,9 @@ describe('pointer type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'find',
+        undefined,
         [
           go.factory.createFunctionParameter(
             ['id'],
@@ -66,7 +70,7 @@ describe('pointer type', () => {
         ],
         [go.factory.createReturnStatement([go.factory.createLiteral(null)])],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('id', go.factory.createLiteral(1)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -89,11 +93,19 @@ describe('pointer type', () => {
   it('pointer to pointer', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'pp',
-          go.factory.createPointerType(
-            go.factory.createPointerType(go.factory.createIdentifier('int')),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'pp',
+                go.factory.createPointerType(
+                  go.factory.createPointerType(go.factory.createIdentifier('int')),
+                ),
+              ),
+            ],
+            go.NodeFlags.Var,
           ),
         ),
         go.factory.createExpressionStatement(

@@ -5,7 +5,7 @@ describe('augment assignment statement', () => {
   it('arithmetic operators', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(0)),
         go.factory.createShortVarDeclaration('y', go.factory.createLiteral(0)),
         go.factory.createShortVarDeclaration('z', go.factory.createLiteral(0)),
@@ -59,7 +59,7 @@ describe('augment assignment statement', () => {
   it('bitwise and shift operators', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(1)),
         go.factory.createShortVarDeclaration('y', go.factory.createLiteral(1)),
         go.factory.createShortVarDeclaration('z', go.factory.createLiteral(1)),

@@ -5,7 +5,7 @@ describe('short var declaration', () => {
   it('single name/value', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(1)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -24,7 +24,7 @@ describe('short var declaration', () => {
   it('multiple names/values', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           ['i', 'j'],
           [go.factory.createLiteral(1), go.factory.createLiteral(2)],
@@ -48,7 +48,7 @@ describe('short variable declaration', () => {
   it('with literal', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(42)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -67,7 +67,7 @@ describe('short variable declaration', () => {
   it('with string', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('message', go.factory.createLiteral('Hello, Go!')),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -87,7 +87,9 @@ describe('short variable declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'calculate',
+        undefined,
         [
           go.factory.createFunctionParameter(['a'], go.factory.createIdentifier('int')),
           go.factory.createFunctionParameter(['b'], go.factory.createIdentifier('int')),
@@ -103,7 +105,7 @@ describe('short variable declaration', () => {
           ),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'result',
           go.factory.createCallExpression(go.factory.createIdentifier('calculate'), [
@@ -128,7 +130,7 @@ describe('short variable declaration', () => {
   it('with expression', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('a', go.factory.createLiteral(2)),
         go.factory.createShortVarDeclaration('b', go.factory.createLiteral(3)),
         go.factory.createShortVarDeclaration(

@@ -4,21 +4,21 @@ import { GoNodeKind } from '../kinds';
 
 export interface GoAssignment extends GoNodeBase {
   kind: GoNodeKind.Assignment;
-  target: GoExpression;
-  value: GoExpression;
+  targets: ReadonlyArray<GoExpression>;
+  values: ReadonlyArray<GoExpression>;
 }
 
 export function createAssignment(
-  target: GoExpression,
-  value: GoExpression,
+  targets: ReadonlyArray<GoExpression>,
+  values: ReadonlyArray<GoExpression>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoAssignment {
   return {
     kind: GoNodeKind.Assignment,
     leadingComments,
-    target,
+    targets,
     trailingComments,
-    value,
+    values,
   };
 }

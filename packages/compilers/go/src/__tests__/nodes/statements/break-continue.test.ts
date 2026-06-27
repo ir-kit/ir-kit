@@ -6,11 +6,20 @@ describe('break and continue statements', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'print',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
         [
           go.factory.createForStatement(
+            go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
+            go.factory.createBinaryExpression(
+              go.factory.createIdentifier('i'),
+              '<',
+              go.factory.createLiteral(5),
+            ),
+            go.factory.createIncDecStatement(go.factory.createIdentifier('i'), '++'),
             [
               go.factory.createExpressionStatement(
                 go.factory.createCallExpression(
@@ -27,18 +36,11 @@ describe('break and continue statements', () => {
               go.factory.createBreakStatement(),
               go.factory.createReturnStatement(go.factory.createLiteral('this is not returned')),
             ],
-            go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
-            go.factory.createBinaryExpression(
-              go.factory.createIdentifier('i'),
-              '<',
-              go.factory.createLiteral(5),
-            ),
-            go.factory.createIncDecStatement(go.factory.createIdentifier('i'), '++'),
           ),
           go.factory.createReturnStatement(go.factory.createLiteral('this is returned')),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -57,11 +59,20 @@ describe('break and continue statements', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'print',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
         [
           go.factory.createForStatement(
+            go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
+            go.factory.createBinaryExpression(
+              go.factory.createIdentifier('i'),
+              '<',
+              go.factory.createLiteral(5),
+            ),
+            go.factory.createIncDecStatement(go.factory.createIdentifier('i'), '++'),
             [
               go.factory.createExpressionStatement(
                 go.factory.createCallExpression(
@@ -78,18 +89,11 @@ describe('break and continue statements', () => {
               go.factory.createContinueStatement(),
               go.factory.createReturnStatement(go.factory.createLiteral('this is not returned')),
             ],
-            go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
-            go.factory.createBinaryExpression(
-              go.factory.createIdentifier('i'),
-              '<',
-              go.factory.createLiteral(5),
-            ),
-            go.factory.createIncDecStatement(go.factory.createIdentifier('i'), '++'),
           ),
           go.factory.createReturnStatement(go.factory.createLiteral('this is returned')),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

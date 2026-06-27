@@ -5,7 +5,7 @@ describe('literal', () => {
   it('string', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('message', go.factory.createLiteral('Hello, World!')),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -24,7 +24,7 @@ describe('literal', () => {
   it('string with escapes', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'message',
           go.factory.createLiteral('say "hi"\tand\\or\nbye'),
@@ -46,7 +46,7 @@ describe('literal', () => {
   it('number', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('count', go.factory.createLiteral(42)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -65,7 +65,7 @@ describe('literal', () => {
   it('boolean true', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('isActive', go.factory.createLiteral(true)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -84,7 +84,7 @@ describe('literal', () => {
   it('boolean false', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('isActive', go.factory.createLiteral(false)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -103,11 +103,19 @@ describe('literal', () => {
   it('null', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'value',
-          go.factory.createInterfaceType(undefined),
-          go.factory.createLiteral(null),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'value',
+                go.factory.createInterfaceType(undefined),
+                go.factory.createLiteral(null),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
         ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -126,7 +134,7 @@ describe('literal', () => {
   it('integer formats preserved', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('hex', go.factory.createLiteral('0xFF', 'int')),
         go.factory.createShortVarDeclaration(
           'grouped',
@@ -154,7 +162,7 @@ describe('literal', () => {
   it('large integer keeps precision', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'big',
           go.factory.createLiteral('9007199254740993', 'int'),
@@ -176,7 +184,7 @@ describe('literal', () => {
   it('rune and imaginary', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('letter', go.factory.createLiteral('a', 'rune')),
         go.factory.createShortVarDeclaration('z', go.factory.createLiteral('3i', 'imaginary')),
         go.factory.createExpressionStatement(
@@ -191,5 +199,27 @@ describe('literal', () => {
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'rune-imaginary.go');
+  });
+
+  it('raw string keeps content verbatim', async () => {
+    const file = go.factory.createSourceFile('main', [
+      go.factory.createImportStatement('fmt'),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
+        go.factory.createShortVarDeclaration(
+          'pattern',
+          go.factory.createLiteral('\\d+\\s*"quoted"', 'rawString'),
+        ),
+        go.factory.createExpressionStatement(
+          go.factory.createCallExpression(
+            go.factory.createMemberExpression(
+              go.factory.createIdentifier('fmt'),
+              go.factory.createIdentifier('Println'),
+            ),
+            [go.factory.createIdentifier('pattern')],
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'raw-string.go');
   });
 });

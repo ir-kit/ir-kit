@@ -1,6 +1,7 @@
 import type { GoNodeBase } from '../base';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
+import type { GoType } from '../type';
 import type { GoFunctionParameter } from './function-parameter';
 import type { GoFunctionReturn } from './function-return';
 
@@ -11,7 +12,7 @@ export type GoInterfaceMethod = {
 };
 
 export type GoInterfaceEmbed = {
-  embed: GoExpression;
+  embed: GoExpression | GoType;
 };
 
 export type GoInterfaceField = GoInterfaceEmbed | GoInterfaceMethod;

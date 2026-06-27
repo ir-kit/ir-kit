@@ -10,7 +10,7 @@ describe('for range statement', () => {
     );
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createForRangeStatement(xs, [
           go.factory.createExpressionStatement(
             go.factory.createCallExpression(
@@ -35,7 +35,7 @@ describe('for range statement', () => {
     );
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createForRangeStatement(
           xs,
           [
@@ -64,7 +64,7 @@ describe('for range statement', () => {
     );
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createForRangeStatement(
           xs,
           [

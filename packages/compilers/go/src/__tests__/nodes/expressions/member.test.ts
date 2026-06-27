@@ -5,13 +5,15 @@ describe('member expression', () => {
   it('simple member', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Obj',
-        go.factory.createStructType([
-          { names: ['field'], type: go.factory.createIdentifier('int') },
-        ]),
-      ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'Obj',
+          go.factory.createStructType([
+            { names: ['field'], type: go.factory.createIdentifier('int') },
+          ]),
+        ),
+      ]),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'obj',
           go.factory.createCompositeLiteral(
@@ -48,15 +50,19 @@ describe('member expression', () => {
   it('nested chain', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'B',
-        go.factory.createStructType([{ names: ['c'], type: go.factory.createIdentifier('int') }]),
-      ),
-      go.factory.createTypeDeclaration(
-        'A',
-        go.factory.createStructType([{ names: ['b'], type: go.factory.createIdentifier('B') }]),
-      ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'B',
+          go.factory.createStructType([{ names: ['c'], type: go.factory.createIdentifier('int') }]),
+        ),
+      ]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'A',
+          go.factory.createStructType([{ names: ['b'], type: go.factory.createIdentifier('B') }]),
+        ),
+      ]),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -104,14 +110,18 @@ describe('member expression', () => {
   it('call then member', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'R',
-        go.factory.createStructType([
-          { names: ['Field'], type: go.factory.createIdentifier('int') },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'R',
+          go.factory.createStructType([
+            { names: ['Field'], type: go.factory.createIdentifier('int') },
+          ]),
+        ),
+      ]),
       go.factory.createFunctionDeclaration(
+        undefined,
         'get',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('R'))],
         [
@@ -128,7 +138,7 @@ describe('member expression', () => {
           ),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'result',
           go.factory.createMemberExpression(

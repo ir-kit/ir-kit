@@ -5,11 +5,19 @@ describe('type assertion', () => {
   it('asserts a concrete type', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'i',
-          go.factory.createIdentifier('any'),
-          go.factory.createLiteral('hello'),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'i',
+                go.factory.createIdentifier('any'),
+                go.factory.createLiteral('hello'),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
         ),
         go.factory.createShortVarDeclaration(
           's',

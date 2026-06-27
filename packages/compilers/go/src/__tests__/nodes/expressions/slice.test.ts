@@ -5,7 +5,7 @@ describe('slice expression', () => {
   it('a[i:j]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         // a := [4]int{10,20,30,40}
         go.factory.createShortVarDeclaration(
           'a',
@@ -50,7 +50,7 @@ describe('slice expression', () => {
   it('a[i:]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -93,7 +93,7 @@ describe('slice expression', () => {
   it('a[:j]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -136,7 +136,7 @@ describe('slice expression', () => {
   it('a[:]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -174,7 +174,7 @@ describe('slice expression', () => {
   it('a[i:j:k]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -221,10 +221,17 @@ describe('slice expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       // type T struct{}
-      go.factory.createTypeDeclaration('T', go.factory.createStructType([])),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('T', go.factory.createStructType([])),
+      ]),
       // func (t T) Foo() []int { return []int{1,2,3,4} }
       go.factory.createFunctionDeclaration(
+        {
+          name: 't',
+          type: go.factory.createIdentifier('T'),
+        },
         'Foo',
+        undefined,
         [],
         [
           go.factory.createFunctionReturn(
@@ -244,12 +251,8 @@ describe('slice expression', () => {
             ),
           ),
         ],
-        {
-          name: 't',
-          type: go.factory.createIdentifier('T'),
-        },
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         // a := []T{T{}, T{}}
         go.factory.createShortVarDeclaration(
           'a',

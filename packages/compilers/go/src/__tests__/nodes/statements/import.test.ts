@@ -5,7 +5,7 @@ describe('import statement', () => {
   it('single import', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -23,7 +23,7 @@ describe('import statement', () => {
   it('single import with alias', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement({ alias: 'f', path: 'fmt' }),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -41,7 +41,7 @@ describe('import statement', () => {
   it('multiple imports', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement(['fmt', 'math']),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -67,7 +67,7 @@ describe('import statement', () => {
         { alias: 'f', path: 'fmt' },
         { alias: 'm', path: 'math' },
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -90,7 +90,7 @@ describe('import statement', () => {
   it('single import with parentheses', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -108,7 +108,7 @@ describe('import statement', () => {
   it('single import with "_" alias', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement({ alias: '_', path: 'fmt' }),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, []),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, []),
     ]);
     await assertPrintedMatchesSnapshot(file, 'single-import-with-underscore.go');
   });
@@ -116,7 +116,7 @@ describe('import statement', () => {
   it('single import with "." alias', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement({ alias: '.', path: 'fmt' }),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(go.factory.createIdentifier('Println'), [
             go.factory.createLiteral('ok'),

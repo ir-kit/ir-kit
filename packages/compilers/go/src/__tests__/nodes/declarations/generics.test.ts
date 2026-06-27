@@ -5,12 +5,14 @@ describe('generics (type parameters)', () => {
   it('generic type with instantiation', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Stack',
-        go.factory.createArrayType(go.factory.createIdentifier('T')),
-        [{ constraint: go.factory.createIdentifier('any'), names: ['T'] }],
-      ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'Stack',
+          go.factory.createArrayType(go.factory.createIdentifier('T')),
+          [{ constraint: go.factory.createIdentifier('any'), names: ['T'] }],
+        ),
+      ]),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           's',
           go.factory.createCompositeLiteral(
@@ -37,7 +39,12 @@ describe('generics (type parameters)', () => {
   it('generic function with constraints', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
+        undefined,
         'lookup',
+        [
+          { constraint: go.factory.createIdentifier('comparable'), names: ['K'] },
+          { constraint: go.factory.createIdentifier('any'), names: ['V'] },
+        ],
         [
           go.factory.createFunctionParameter(
             ['m'],
@@ -57,11 +64,6 @@ describe('generics (type parameters)', () => {
             ),
           ),
         ],
-        undefined,
-        [
-          { constraint: go.factory.createIdentifier('comparable'), names: ['K'] },
-          { constraint: go.factory.createIdentifier('any'), names: ['V'] },
-        ],
       ),
     ]);
     await assertPrintedMatchesSnapshot(file, 'generic-function.go');
@@ -70,21 +72,31 @@ describe('generics (type parameters)', () => {
   it('grouped type parameter names with multi-argument instantiation', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Pair',
-        go.factory.createStructType([
-          { names: ['First'], type: go.factory.createIdentifier('T') },
-          { names: ['Second'], type: go.factory.createIdentifier('U') },
-        ]),
-        [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
-      ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'p',
-          go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
-            go.factory.createIdentifier('string'),
-            go.factory.createIdentifier('int'),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          'Pair',
+          go.factory.createStructType([
+            { names: ['First'], type: go.factory.createIdentifier('T') },
+            { names: ['Second'], type: go.factory.createIdentifier('U') },
           ]),
+          [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
+        ),
+      ]),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'p',
+                go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
+                  go.factory.createIdentifier('string'),
+                  go.factory.createIdentifier('int'),
+                ]),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
         ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(

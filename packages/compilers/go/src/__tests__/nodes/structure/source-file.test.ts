@@ -5,7 +5,7 @@ describe('source file', () => {
   it('simple', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('a', go.factory.createLiteral(1)),
         go.factory.createShortVarDeclaration('b', go.factory.createLiteral(2)),
         go.factory.createExpressionStatement(
@@ -31,14 +31,20 @@ describe('source file', () => {
   it('with custom package name', async () => {
     const file = go.factory.createSourceFile('mypackage', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        {
-          name: 'greeting',
-          type: go.factory.createIdentifier('string'),
-          value: go.factory.createLiteral('Hello, World!'),
-        },
-      ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'greeting',
+              go.factory.createIdentifier('string'),
+              go.factory.createLiteral('Hello, World!'),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

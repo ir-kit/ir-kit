@@ -5,7 +5,7 @@ describe('unary expression', () => {
   it('plus', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('a', go.factory.createLiteral(5)),
         go.factory.createShortVarDeclaration(
           'x',
@@ -28,7 +28,7 @@ describe('unary expression', () => {
   it('minus', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('a', go.factory.createLiteral(5)),
         go.factory.createShortVarDeclaration(
           'x',
@@ -51,7 +51,7 @@ describe('unary expression', () => {
   it('logical not', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('flag', go.factory.createLiteral(true)),
         go.factory.createShortVarDeclaration(
           'b',
@@ -74,7 +74,7 @@ describe('unary expression', () => {
   it('bitwise not', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('mask', go.factory.createLiteral(5)),
         go.factory.createShortVarDeclaration(
           'y',
@@ -97,7 +97,7 @@ describe('unary expression', () => {
   it('address-of', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(42)),
         go.factory.createShortVarDeclaration(
           'p',
@@ -120,7 +120,7 @@ describe('unary expression', () => {
   it('deref', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(42)),
         go.factory.createShortVarDeclaration(
           'p',

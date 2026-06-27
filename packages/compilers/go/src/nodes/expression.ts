@@ -7,6 +7,7 @@ import type { GoIdentifier } from './expressions/identifier';
 import type { GoKeyValueExpression } from './expressions/key-value';
 import type { GoLiteral } from './expressions/literal';
 import type { GoMemberExpression } from './expressions/member';
+import type { GoParenthesizedExpression } from './expressions/parenthesized';
 import type { GoSliceExpression } from './expressions/slice';
 import type { GoTypeAssertExpression } from './expressions/type-assert';
 import type { GoUnaryExpression } from './expressions/unary';
@@ -21,6 +22,7 @@ export type GoExpression =
   | GoKeyValueExpression
   | GoLiteral
   | GoMemberExpression
+  | GoParenthesizedExpression
   | GoSliceExpression
   | GoTypeAssertExpression
   | GoUnaryExpression;

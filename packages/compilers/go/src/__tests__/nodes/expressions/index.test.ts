@@ -5,7 +5,7 @@ describe('index expression', () => {
   it('basic index a[i]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -43,7 +43,7 @@ describe('index expression', () => {
   it('nested index matrix[i][j]', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         // matrix := [][]int{{1,2},{3,4}}
         go.factory.createShortVarDeclaration(
           'matrix',
@@ -94,19 +94,22 @@ describe('index expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       // type T struct{}
-      go.factory.createTypeDeclaration('T', go.factory.createStructType([])),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('T', go.factory.createStructType([])),
+      ]),
       // func (t T) Do() int { return 42 }
       go.factory.createFunctionDeclaration(
-        'Do',
-        [],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
-        [go.factory.createReturnStatement(go.factory.createLiteral(42))],
         {
           name: 't',
           type: go.factory.createIdentifier('T'),
         },
+        'Do',
+        undefined,
+        [],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
+        [go.factory.createReturnStatement(go.factory.createLiteral(42))],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         // obj := []T{{}, {}}
         go.factory.createShortVarDeclaration(
           'obj',

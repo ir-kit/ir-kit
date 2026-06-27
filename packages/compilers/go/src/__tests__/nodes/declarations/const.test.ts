@@ -5,14 +5,20 @@ describe('const declaration', () => {
   it('with type and value', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        {
-          name: 'PI',
-          type: go.factory.createIdentifier('float64'),
-          value: go.factory.createLiteral(3.14159),
-        },
-      ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'PI',
+              go.factory.createIdentifier('float64'),
+              go.factory.createLiteral(3.14159),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -30,10 +36,20 @@ describe('const declaration', () => {
   it('with value only', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        { name: 'MaxRetries', value: go.factory.createLiteral(5) },
-      ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'MaxRetries',
+              undefined,
+              go.factory.createLiteral(5),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -51,14 +67,20 @@ describe('const declaration', () => {
   it('string constant', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        {
-          name: 'AppName',
-          type: go.factory.createIdentifier('string'),
-          value: go.factory.createLiteral('MyApp'),
-        },
-      ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'AppName',
+              go.factory.createIdentifier('string'),
+              go.factory.createLiteral('MyApp'),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -76,14 +98,20 @@ describe('const declaration', () => {
   it('boolean constant', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        {
-          name: 'Debug',
-          type: go.factory.createIdentifier('bool'),
-          value: go.factory.createLiteral(true),
-        },
-      ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'Debug',
+              go.factory.createIdentifier('bool'),
+              go.factory.createLiteral(true),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createIfStatement(
           go.factory.createIdentifier('Debug'),
           [
@@ -117,17 +145,25 @@ describe('const declaration', () => {
   it('grouped iota enum', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Status', go.factory.createIdentifier('int')),
-      go.factory.createConstDeclaration([
-        {
-          name: 'StatusActive',
-          type: go.factory.createIdentifier('Status'),
-          value: go.factory.createIdentifier('iota'),
-        },
-        { name: 'StatusInactive' },
-        { name: 'StatusPending' },
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('Status', go.factory.createIdentifier('int')),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'StatusActive',
+              go.factory.createIdentifier('Status'),
+              go.factory.createIdentifier('iota'),
+            ),
+            go.factory.createVariableDeclaration('StatusInactive'),
+            go.factory.createVariableDeclaration('StatusPending'),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -145,25 +181,33 @@ describe('const declaration', () => {
   it('grouped typed string enum', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Color', go.factory.createIdentifier('string')),
-      go.factory.createConstDeclaration([
-        {
-          name: 'ColorRed',
-          type: go.factory.createIdentifier('Color'),
-          value: go.factory.createLiteral('red'),
-        },
-        {
-          name: 'ColorGreen',
-          type: go.factory.createIdentifier('Color'),
-          value: go.factory.createLiteral('green'),
-        },
-        {
-          name: 'ColorBlue',
-          type: go.factory.createIdentifier('Color'),
-          value: go.factory.createLiteral('blue'),
-        },
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('Color', go.factory.createIdentifier('string')),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'ColorRed',
+              go.factory.createIdentifier('Color'),
+              go.factory.createLiteral('red'),
+            ),
+            go.factory.createVariableDeclaration(
+              'ColorGreen',
+              go.factory.createIdentifier('Color'),
+              go.factory.createLiteral('green'),
+            ),
+            go.factory.createVariableDeclaration(
+              'ColorBlue',
+              go.factory.createIdentifier('Color'),
+              go.factory.createLiteral('blue'),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -181,12 +225,18 @@ describe('const declaration', () => {
   it('grouped untyped values align', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        { name: 'X', value: go.factory.createLiteral(1) },
-        { name: 'YY', value: go.factory.createLiteral(22) },
-        { name: 'ZZZ', value: go.factory.createLiteral(333) },
-      ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration('X', undefined, go.factory.createLiteral(1)),
+            go.factory.createVariableDeclaration('YY', undefined, go.factory.createLiteral(22)),
+            go.factory.createVariableDeclaration('ZZZ', undefined, go.factory.createLiteral(333)),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

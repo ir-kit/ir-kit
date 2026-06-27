@@ -1,8 +1,10 @@
-import { createConstDeclaration } from './declarations/const';
 import { createFunctionDeclaration } from './declarations/function';
 import { createShortVarDeclaration } from './declarations/short-var';
 import { createTypeDeclaration } from './declarations/type';
-import { createVarDeclaration } from './declarations/var';
+import { createTypeSpec } from './declarations/type-spec';
+import { createVariableDeclaration } from './declarations/variable-declaration';
+import { createVariableDeclarationList } from './declarations/variable-declaration-list';
+import { createVariableStatement } from './declarations/variable-statement';
 import { createIndexExpression } from './expressions';
 import { createBinaryExpression } from './expressions/binary';
 import { createCallExpression } from './expressions/call';
@@ -12,6 +14,7 @@ import { createIdentifier } from './expressions/identifier';
 import { createKeyValueExpression } from './expressions/key-value';
 import { createLiteral } from './expressions/literal';
 import { createMemberExpression } from './expressions/member';
+import { createParenthesizedExpression } from './expressions/parenthesized';
 import { createSliceExpression } from './expressions/slice';
 import { createTypeAssertExpression } from './expressions/type-assert';
 import { createUnaryExpression } from './expressions/unary';
@@ -26,10 +29,13 @@ import { createExpressionStatement } from './statements/expression';
 import { createForStatement } from './statements/for';
 import { createForRangeStatement } from './statements/for-range';
 import { createGoStatement } from './statements/go';
+import { createGotoStatement } from './statements/goto';
 import { createIfStatement } from './statements/if';
 import { createImportStatement } from './statements/import';
 import { createIncDecStatement } from './statements/inc-dec';
+import { createLabeledStatement } from './statements/labeled';
 import { createReturnStatement } from './statements/return';
+import { createSelectCase, createSelectStatement } from './statements/select';
 import { createSendStatement } from './statements/send';
 import {
   createFallthroughStatement,
@@ -48,6 +54,7 @@ import { createInterfaceType } from './types/interface-type';
 import { createMapType } from './types/map-type';
 import { createPointerType } from './types/pointer-type';
 import { createStructType } from './types/struct-type';
+import { createTypeSet } from './types/type-set';
 
 export const factory = {
   createArrayType,
@@ -60,7 +67,6 @@ export const factory = {
   createChannelType,
   createComment,
   createCompositeLiteral,
-  createConstDeclaration,
   createContinueStatement,
   createDeferStatement,
   createEmptyStatement,
@@ -75,6 +81,7 @@ export const factory = {
   createFunctionType,
   createGenericType,
   createGoStatement,
+  createGotoStatement,
   createIdentifier,
   createIfStatement,
   createImportStatement,
@@ -82,11 +89,15 @@ export const factory = {
   createIndexExpression,
   createInterfaceType,
   createKeyValueExpression,
+  createLabeledStatement,
   createLiteral,
   createMapType,
   createMemberExpression,
+  createParenthesizedExpression,
   createPointerType,
   createReturnStatement,
+  createSelectCase,
+  createSelectStatement,
   createSendStatement,
   createShortVarDeclaration,
   createSliceExpression,
@@ -96,6 +107,10 @@ export const factory = {
   createSwitchStatement,
   createTypeAssertExpression,
   createTypeDeclaration,
+  createTypeSet,
+  createTypeSpec,
   createUnaryExpression,
-  createVarDeclaration,
+  createVariableDeclaration,
+  createVariableDeclarationList,
+  createVariableStatement,
 } as const;

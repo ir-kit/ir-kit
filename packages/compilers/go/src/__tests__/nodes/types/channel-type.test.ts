@@ -5,10 +5,18 @@ describe('channel type', () => {
   it('bidirectional', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'ch',
-          go.factory.createChannelType(go.factory.createIdentifier('int')),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'ch',
+                go.factory.createChannelType(go.factory.createIdentifier('int')),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
         ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -27,7 +35,9 @@ describe('channel type', () => {
   it('directional parameters', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
+        undefined,
         'worker',
+        undefined,
         [
           go.factory.createFunctionParameter(
             ['jobs'],

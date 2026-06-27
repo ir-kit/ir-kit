@@ -11,8 +11,14 @@ describe('maps', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration('x', undefined, lit),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [go.factory.createVariableDeclaration('x', undefined, lit)],
+          go.NodeFlags.Var,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -49,8 +55,14 @@ describe('maps', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration('x', undefined, lit),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [go.factory.createVariableDeclaration('x', undefined, lit)],
+          go.NodeFlags.Var,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -103,8 +115,14 @@ describe('maps', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration('x', undefined, lit),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [go.factory.createVariableDeclaration('x', undefined, lit)],
+          go.NodeFlags.Var,
+        ),
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

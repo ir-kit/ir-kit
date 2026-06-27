@@ -5,7 +5,7 @@ describe('function declaration', () => {
   it('simple function without parameters', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('sayHello', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'sayHello', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('message', go.factory.createLiteral('Hello!')),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -17,7 +17,7 @@ describe('function declaration', () => {
           ),
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(go.factory.createIdentifier('sayHello'), []),
         ),
@@ -30,12 +30,14 @@ describe('function declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'getNumber',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [go.factory.createReturnStatement(go.factory.createLiteral(42))],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -54,12 +56,14 @@ describe('function declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'getNumber',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'), 'result')],
         [go.factory.createReturnStatement(go.factory.createLiteral(42))],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -78,7 +82,9 @@ describe('function declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'add',
+        undefined,
         [
           go.factory.createFunctionParameter(['a'], go.factory.createIdentifier('int')),
           go.factory.createFunctionParameter(['b'], go.factory.createIdentifier('int')),
@@ -94,7 +100,7 @@ describe('function declaration', () => {
           ),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -118,7 +124,9 @@ describe('function declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'greet',
+        undefined,
         [
           go.factory.createFunctionParameter(['name'], go.factory.createIdentifier('string')),
           go.factory.createFunctionParameter(['times'], go.factory.createIdentifier('int')),
@@ -126,7 +134,7 @@ describe('function declaration', () => {
         [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
         [go.factory.createReturnStatement(go.factory.createLiteral('greeting'))],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -148,8 +156,15 @@ describe('function declaration', () => {
 
   it('empty function', async () => {
     const file = go.factory.createSourceFile('main', [
-      go.factory.createFunctionDeclaration('doNothing', undefined, undefined, undefined),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(
+        undefined,
+        'doNothing',
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(go.factory.createIdentifier('doNothing'), []),
         ),
@@ -161,18 +176,21 @@ describe('function declaration', () => {
   it('prints a method with receiver and variadic parameter', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Some', go.factory.createStructType([])),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('Some', go.factory.createStructType([])),
+      ]),
       go.factory.createFunctionDeclaration(
-        'Sum',
-        [go.factory.createFunctionParameter(['nums'], go.factory.createIdentifier('int'), true)],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
-        [go.factory.createReturnStatement(go.factory.createLiteral(0))],
         {
           name: 's',
           type: go.factory.createIdentifier('Some'),
         },
+        'Sum',
+        undefined,
+        [go.factory.createFunctionParameter(['nums'], go.factory.createIdentifier('int'), true)],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
+        [go.factory.createReturnStatement(go.factory.createLiteral(0))],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           's',
           go.factory.createCompositeLiteral([], go.factory.createIdentifier('Some')),
@@ -214,15 +232,22 @@ describe('function declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('run', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'run', undefined, undefined, undefined, [
         go.factory.createGoStatement(workCall),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(printf, [go.factory.createLiteral('running')]),
         ),
         go.factory.createReturnStatement(),
       ]),
-      go.factory.createFunctionDeclaration('work', undefined, undefined, undefined),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(
+        undefined,
+        'work',
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(go.factory.createIdentifier('run'), []),
         ),
@@ -249,7 +274,7 @@ describe('function declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('inc', anonFunc),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -273,7 +298,9 @@ describe('function declaration', () => {
   it('grouped parameter names', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
+        undefined,
         'add',
+        undefined,
         [go.factory.createFunctionParameter(['a', 'b'], go.factory.createIdentifier('int'))],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [
