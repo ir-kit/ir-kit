@@ -108,14 +108,14 @@ export function createPrinter(options?: GoPrinterOptions) {
   }
 
   function printTypeAssert(operand: GoNode, type?: GoNode): string {
-    const target = type ? printNode(type, { inline: true }) : 'type';
-    return `${printNode(operand, { inline: true })}.(${target})`;
+    const target = type ? printInline(type) : 'type';
+    return `${printInline(operand)}.(${target})`;
   }
 
   function printTypeParameters(typeParameters: ReadonlyArray<GoTypeParameter> | undefined): string {
     if (!typeParameters?.length) return '';
     const list = typeParameters
-      .map((tp) => `${tp.names.join(', ')} ${printNode(tp.constraint, { inline: true })}`)
+      .map((tp) => `${tp.names.join(', ')} ${printInline(tp.constraint)}`)
       .join(', ');
     return `[${list}]`;
   }
@@ -145,16 +145,20 @@ export function createPrinter(options?: GoPrinterOptions) {
     value?: GoExpression;
   }): Array<string> {
     const cells = [spec.name];
-    if (spec.type) cells.push(printNode(spec.type, { inline: true }));
-    if (spec.value) cells.push(`= ${printNode(spec.value, { inline: true })}`);
+    if (spec.type) cells.push(printInline(spec.type));
+    if (spec.value) cells.push(`= ${printInline(spec.value)}`);
     return cells;
   }
 
   function typeSpecCells(spec: GoTypeSpec): Array<string> {
     const cells = [`${spec.name}${printTypeParameters(spec.typeParameters)}`];
     if (spec.isAlias) cells.push('=');
-    cells.push(printNode(spec.type, { inline: true }));
+    cells.push(printInline(spec.type));
     return cells;
+  }
+
+  function printInline(node: GoNode, context: PrintContext = {}): string {
+    return printNode(node, { ...context, inline: true });
   }
 
   function printNode(node: GoNode, context: PrintContext = {}): string {
@@ -170,35 +174,31 @@ export function createPrinter(options?: GoPrinterOptions) {
         if (node.size === '...') {
           sizePrefix = '[...]';
         } else if (node.size !== undefined) {
-          sizePrefix = `[${printNode(node.size, { inline: true })}]`;
+          sizePrefix = `[${printInline(node.size)}]`;
         }
-        const text = `${sizePrefix}${printNode(node.elementType, { inline: true })}`;
+        const text = `${sizePrefix}${printInline(node.elementType)}`;
         parts.push(text);
         break;
       }
 
       case GoNodeKind.Assignment: {
-        const targets = node.targets
-          .map((target) => printNode(target, { inline: true }))
-          .join(', ');
-        const values = node.values.map((value) => printNode(value, { inline: true })).join(', ');
+        const targets = node.targets.map((target) => printInline(target)).join(', ');
+        const values = node.values.map((value) => printInline(value)).join(', ');
         const assignmentText = `${targets} = ${values}`;
         parts.push(context.inline ? assignmentText : printLine(assignmentText));
         break;
       }
 
       case GoNodeKind.AugmentAssignment: {
-        const assignmentText = `${printNode(node.target)} ${node.operator} ${printNode(node.value, {
-          inline: true,
-        })}`;
+        const assignmentText = `${printNode(node.target)} ${node.operator} ${printInline(node.value)}`;
         parts.push(context.inline ? assignmentText : printLine(assignmentText));
         break;
       }
 
       case GoNodeKind.BinaryExpression: {
         const precedence = OPERATOR_PRECEDENCE[node.operator] ?? 0;
-        const left = printNode(node.left, { inline: true, parentPrecedence: precedence });
-        const right = printNode(node.right, { inline: true, parentPrecedence: precedence });
+        const left = printInline(node.left, { parentPrecedence: precedence });
+        const right = printInline(node.right, { parentPrecedence: precedence });
         const tight =
           context.parentPrecedence !== undefined && precedence > context.parentPrecedence;
         const expr = tight
@@ -226,7 +226,7 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.CallExpression: {
         const args = node.args.map((arg: GoNode, index: number) => {
-          const base = printNode(arg, { inline: true });
+          const base = printInline(arg);
           if (node.spreadLastArg && index === node.args.length - 1) {
             return `${base}...`;
           }
@@ -240,7 +240,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.ChannelType: {
         const lead = node.direction === 'receive' ? '<-' : '';
         const trail = node.direction === 'send' ? '<-' : '';
-        parts.push(`${lead}chan${trail} ${printNode(node.elementType, { inline: true })}`);
+        parts.push(`${lead}chan${trail} ${printInline(node.elementType)}`);
         break;
       }
 
@@ -250,7 +250,7 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.CompositeLiteral: {
         const typeText = node.type ? printNode(node.type) : '';
-        const elementsText = node.elements.map((el) => printNode(el, { inline: true })).join(', ');
+        const elementsText = node.elements.map((el) => printInline(el)).join(', ');
         const text = `${typeText}{${elementsText}}`;
         parts.push(text);
         break;
@@ -265,7 +265,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.DeferStatement: {
-        const text = `defer ${printNode(node.call, { inline: true })}`;
+        const text = `defer ${printInline(node.call)}`;
         parts.push(printLine(text));
         break;
       }
@@ -275,7 +275,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.ExpressionStatement: {
-        const text = `${printNode(node.expression, { inline: true })}`;
+        const text = `${printInline(node.expression)}`;
         parts.push(printLine(text));
         break;
       }
@@ -287,18 +287,18 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.ForRangeStatement: {
         const names = node.targets?.join(', ');
         const assignOp = node.useShortVar ? ':=' : '=';
-        const iterText = `range ${printNode(node.iterable, { inline: true })}`;
+        const iterText = `range ${printInline(node.iterable)}`;
         const header = names ? `for ${names} ${assignOp} ${iterText}` : `for ${iterText}`;
-        const body = printNode(node.body, { inline: true });
+        const body = printInline(node.body);
         parts.push(printLine(`${header} ${body}`));
         break;
       }
 
       case GoNodeKind.ForStatement: {
-        const init = node.init ? `${printNode(node.init, { inline: true })}` : '';
-        const condition = node.condition ? `${printNode(node.condition, { inline: true })}` : '';
-        const post = node.post ? `${printNode(node.post, { inline: true })}` : '';
-        const body = printNode(node.body, { inline: true });
+        const init = node.init ? `${printInline(node.init)}` : '';
+        const condition = node.condition ? `${printInline(node.condition)}` : '';
+        const post = node.post ? `${printInline(node.post)}` : '';
+        const body = printInline(node.body);
         const joined = [init, condition, post].filter(Boolean).join('; ');
         const forLine = `for ${joined.length ? `${joined} ` : ''}`;
         parts.push(printLine(`${forLine}${body}`));
@@ -309,11 +309,11 @@ export function createPrinter(options?: GoPrinterOptions) {
         const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
         const finalReturnType = printReturnType(node.returnType);
         const receiver = node.receiver
-          ? `(${node.receiver.name} ${printNode(node.receiver.type, { inline: true })})`
+          ? `(${node.receiver.name} ${printInline(node.receiver.type)})`
           : '';
         const typeParams = printTypeParameters(node.typeParameters);
         const signature = `func${receiver ? ` ${receiver}` : ''} ${node.name}${typeParams}(${parameters})${finalReturnType}`;
-        const blockOutput = printNode(node.body, { inline: true });
+        const blockOutput = printInline(node.body);
         parts.push(
           context.inline
             ? [signature, blockOutput].join(' ')
@@ -333,7 +333,7 @@ export function createPrinter(options?: GoPrinterOptions) {
             ? ` ${returnType}`
             : '';
         const signature = `func(${parameters})${finalReturnType}`;
-        const blockOutput = printNode(node.body, { inline: true });
+        const blockOutput = printInline(node.body);
         parts.push(
           context.inline
             ? [signature, blockOutput].join(' ')
@@ -344,20 +344,18 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.FunctionParameter: {
         const variadic = node.isVariadic ? '...' : '';
-        parts.push(`${node.names.join(', ')} ${variadic}${printNode(node.type, { inline: true })}`);
+        parts.push(`${node.names.join(', ')} ${variadic}${printInline(node.type)}`);
         break;
       }
 
       case GoNodeKind.FunctionReturn: {
         const name = node.name ? `${node.name} ` : '';
-        parts.push(`${name}${printNode(node.type, { inline: true })}`);
+        parts.push(`${name}${printInline(node.type)}`);
         break;
       }
 
       case GoNodeKind.FunctionType: {
-        const parameters = node.parameters
-          .map((parameter) => printNode(parameter, { inline: true }))
-          .join(', ');
+        const parameters = node.parameters.map((parameter) => printInline(parameter)).join(', ');
         const finalReturnType = printReturnType(node.returnType);
         parts.push(`func(${parameters})${finalReturnType}`);
         break;
@@ -365,14 +363,14 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.GenericType: {
         const typeArguments = node.typeArguments
-          .map((typeArgument) => printNode(typeArgument, { inline: true }))
+          .map((typeArgument) => printInline(typeArgument))
           .join(', ');
-        parts.push(`${printNode(node.type, { inline: true })}[${typeArguments}]`);
+        parts.push(`${printInline(node.type)}[${typeArguments}]`);
         break;
       }
 
       case GoNodeKind.GoStatement: {
-        const text = `go ${printNode(node.expression, { inline: true })}`;
+        const text = `go ${printInline(node.expression)}`;
         parts.push(printLine(text));
         break;
       }
@@ -386,14 +384,12 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.IfStatement: {
-        const initStatement = node.initStatement
-          ? `${printNode(node.initStatement, { inline: true })}; `
-          : '';
-        const ifLine = `if ${initStatement}${printNode(node.condition, { inline: true })}`;
-        const thenBlock = printNode(node.thenBlock, { inline: true });
+        const initStatement = node.initStatement ? `${printInline(node.initStatement)}; ` : '';
+        const ifLine = `if ${initStatement}${printInline(node.condition)}`;
+        const thenBlock = printInline(node.thenBlock);
         let elseBlock = '';
         if (node.elseBlock) {
-          elseBlock = ` else ${printNode(node.elseBlock, { inline: true })}`;
+          elseBlock = ` else ${printInline(node.elseBlock)}`;
         }
         const text = `${ifLine} ${thenBlock}${elseBlock}`;
         parts.push(context.inline ? text : printLine(text));
@@ -425,9 +421,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.IndexExpression:
-        parts.push(
-          `${printNode(node.object, { inline: true })}[${printNode(node.index, { inline: true })}]`,
-        );
+        parts.push(`${printInline(node.object)}[${printInline(node.index)}]`);
         break;
 
       case GoNodeKind.InterfaceType: {
@@ -440,7 +434,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         indentLevel += 1;
         for (const field of node.fields) {
           if ('embed' in field) {
-            parts.push(printLine(printNode(field.embed, { inline: true })));
+            parts.push(printLine(printInline(field.embed)));
           } else {
             const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
             const finalReturnType = printReturnType(field.returnType);
@@ -453,9 +447,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.KeyValueExpression:
-        parts.push(
-          `${printNode(node.key, { inline: true })}: ${printNode(node.value, { inline: true })}`,
-        );
+        parts.push(`${printInline(node.key)}: ${printInline(node.value)}`);
         break;
 
       case GoNodeKind.LabeledStatement: {
@@ -480,15 +472,13 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.MapType: {
-        const text = `map[${printNode(node.keyType, { inline: true })}]${printNode(node.valueType, { inline: true })}`;
+        const text = `map[${printInline(node.keyType)}]${printInline(node.valueType)}`;
         parts.push(text);
         break;
       }
 
       case GoNodeKind.MemberExpression:
-        parts.push(
-          `${printNode(node.object, { inline: true })}.${printNode(node.member, { inline: true })}`,
-        );
+        parts.push(`${printInline(node.object)}.${printInline(node.member)}`);
         break;
 
       case GoNodeKind.PackageDeclaration:
@@ -496,15 +486,15 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.ParenthesizedExpression:
-        parts.push(`(${printNode(node.expression, { inline: true })})`);
+        parts.push(`(${printInline(node.expression)})`);
         break;
 
       case GoNodeKind.PointerType:
-        parts.push(`*${printNode(node.elementType, { inline: true })}`);
+        parts.push(`*${printInline(node.elementType)}`);
         break;
 
       case GoNodeKind.ReturnStatement: {
-        const values = node.expressions.map((expr) => printNode(expr, { inline: true })).join(', ');
+        const values = node.expressions.map((expr) => printInline(expr)).join(', ');
         parts.push(printLine(`return${values ? ` ${values}` : ''}`));
         break;
       }
@@ -512,9 +502,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.SelectStatement: {
         parts.push(printLine('select {'));
         for (const selectCase of node.cases) {
-          const clause = selectCase.comm
-            ? `case ${printNode(selectCase.comm, { inline: true })}`
-            : 'default';
+          const clause = selectCase.comm ? `case ${printInline(selectCase.comm)}` : 'default';
           parts.push(printLine(`${clause}:`));
           if (selectCase.body.statements.length) {
             indentLevel += 1;
@@ -527,29 +515,27 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.SendStatement: {
-        const text = `${printNode(node.channel, { inline: true })} <- ${printNode(node.value, {
-          inline: true,
-        })}`;
+        const text = `${printInline(node.channel)} <- ${printInline(node.value)}`;
         parts.push(context.inline ? text : printLine(text));
         break;
       }
 
       case GoNodeKind.ShortVarDeclaration: {
         const names = node.names.join(', ');
-        const values = node.values.map((value) => printNode(value, { inline: true })).join(', ');
+        const values = node.values.map((value) => printInline(value)).join(', ');
         const shortVarText = `${names} := ${values}`;
         parts.push(context.inline ? shortVarText : printLine(shortVarText));
         break;
       }
 
       case GoNodeKind.SliceExpression: {
-        const low = node.low ? printNode(node.low, { inline: true }) : '';
-        const high = node.high ? printNode(node.high, { inline: true }) : '';
+        const low = node.low ? printInline(node.low) : '';
+        const high = node.high ? printInline(node.high) : '';
         if (node.max) {
-          const max = printNode(node.max, { inline: true });
-          parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}:${max}]`);
+          const max = printInline(node.max);
+          parts.push(`${printInline(node.object)}[${low}:${high}:${max}]`);
         } else {
-          parts.push(`${printNode(node.object, { inline: true })}[${low}:${high}]`);
+          parts.push(`${printInline(node.object)}[${low}:${high}]`);
         }
         break;
       }
@@ -612,16 +598,14 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.SwitchStatement: {
-        const init = node.initStatement
-          ? `${printNode(node.initStatement, { inline: true })}; `
-          : '';
+        const init = node.initStatement ? `${printInline(node.initStatement)}; ` : '';
 
         let content = '';
         if (node.typeGuard) {
           const left = node.typeGuard.assignTo ? `${node.typeGuard.assignTo} := ` : '';
           content = `${init}${left}${printTypeAssert(node.typeGuard.subject)}`;
         } else if (node.tag) {
-          content = `${init}${printNode(node.tag, { inline: true })}`;
+          content = `${init}${printInline(node.tag)}`;
         } else {
           content = `${init}`.trimEnd();
         }
@@ -631,7 +615,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         for (const switchCase of node.cases) {
           const clause =
             switchCase.expressions && switchCase.expressions.length
-              ? `case ${switchCase.expressions.map((e) => printNode(e, { inline: true })).join(', ')}`
+              ? `case ${switchCase.expressions.map((e) => printInline(e)).join(', ')}`
               : 'default';
           parts.push(printLine(`${clause}:`));
           if (switchCase.body.statements.length) {
@@ -653,7 +637,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.UnaryExpression:
-        parts.push(`${node.operator}${printNode(node.operand, { inline: true })}`);
+        parts.push(`${node.operator}${printInline(node.operand)}`);
         break;
 
       case GoNodeKind.VarDeclaration:
