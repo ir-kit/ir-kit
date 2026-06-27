@@ -50,6 +50,7 @@ export enum GoNodeKind {
   SwitchStatement = 'SwitchStatement',
   TypeAssertExpression = 'TypeAssertExpression',
   TypeDeclaration = 'TypeDeclaration',
+  TypeSet = 'TypeSet',
   UnaryExpression = 'UnaryExpression',
   VarDeclaration = 'VarDeclaration',
 }

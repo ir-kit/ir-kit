@@ -327,11 +327,10 @@ describe('interface type via type declaration', () => {
           name: 'Number',
           type: go.factory.createInterfaceType([
             {
-              embed: go.factory.createBinaryExpression(
-                go.factory.createUnaryExpression('~', go.factory.createIdentifier('int')),
-                '|',
-                go.factory.createUnaryExpression('~', go.factory.createIdentifier('float64')),
-              ),
+              embed: go.factory.createTypeSet([
+                { approximate: true, type: go.factory.createIdentifier('int') },
+                { approximate: true, type: go.factory.createIdentifier('float64') },
+              ]),
             },
           ]),
         },

@@ -7,6 +7,7 @@ import type { GoInterfaceType } from './types/interface-type';
 import type { GoMapType } from './types/map-type';
 import type { GoPointerType } from './types/pointer-type';
 import type { GoStructType } from './types/struct-type';
+import type { GoTypeSet } from './types/type-set';
 
 export type GoType =
   | GoArrayType
@@ -17,4 +18,5 @@ export type GoType =
   | GoInterfaceType
   | GoMapType
   | GoPointerType
-  | GoStructType;
+  | GoStructType
+  | GoTypeSet;

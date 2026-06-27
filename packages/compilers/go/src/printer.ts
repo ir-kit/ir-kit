@@ -636,6 +636,14 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push(...printDeclarationGroup('type', node.specs.map(typeSpecCells)));
         break;
 
+      case GoNodeKind.TypeSet:
+        parts.push(
+          node.terms
+            .map((term) => `${term.approximate ? '~' : ''}${printInline(term.type)}`)
+            .join(' | '),
+        );
+        break;
+
       case GoNodeKind.UnaryExpression:
         parts.push(`${node.operator}${printInline(node.operand)}`);
         break;

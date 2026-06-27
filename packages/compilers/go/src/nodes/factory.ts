@@ -52,6 +52,7 @@ import { createInterfaceType } from './types/interface-type';
 import { createMapType } from './types/map-type';
 import { createPointerType } from './types/pointer-type';
 import { createStructType } from './types/struct-type';
+import { createTypeSet } from './types/type-set';
 
 export const factory = {
   createArrayType,
@@ -105,6 +106,7 @@ export const factory = {
   createSwitchStatement,
   createTypeAssertExpression,
   createTypeDeclaration,
+  createTypeSet,
   createUnaryExpression,
   createVarDeclaration,
 } as const;

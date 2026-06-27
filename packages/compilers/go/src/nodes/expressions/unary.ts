@@ -2,7 +2,7 @@ import type { GoNodeBase } from '../base';
 import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
 
-export type GoUnaryOperator = '+' | '-' | '!' | '^' | '&' | '*' | '<-' | '~';
+export type GoUnaryOperator = '+' | '-' | '!' | '^' | '&' | '*' | '<-';
 
 export interface GoUnaryExpression extends GoNodeBase {
   kind: GoNodeKind.UnaryExpression;
