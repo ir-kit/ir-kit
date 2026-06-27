@@ -117,7 +117,9 @@ describe('const declaration', () => {
   it('grouped iota enum', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Status', go.factory.createIdentifier('int')),
+      go.factory.createTypeDeclaration([
+        { name: 'Status', type: go.factory.createIdentifier('int') },
+      ]),
       go.factory.createConstDeclaration([
         {
           name: 'StatusActive',
@@ -145,7 +147,9 @@ describe('const declaration', () => {
   it('grouped typed string enum', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Color', go.factory.createIdentifier('string')),
+      go.factory.createTypeDeclaration([
+        { name: 'Color', type: go.factory.createIdentifier('string') },
+      ]),
       go.factory.createConstDeclaration([
         {
           name: 'ColorRed',

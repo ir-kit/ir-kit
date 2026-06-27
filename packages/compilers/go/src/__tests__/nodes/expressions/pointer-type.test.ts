@@ -5,21 +5,23 @@ describe('pointer type', () => {
   it('struct fields', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'User',
-        go.factory.createStructType([
-          {
-            names: ['Name'],
-            tag: 'json:"name,omitempty"',
-            type: go.factory.createPointerType(go.factory.createIdentifier('string')),
-          },
-          {
-            names: ['Owner'],
-            tag: 'json:"owner,omitempty"',
-            type: go.factory.createPointerType(go.factory.createIdentifier('User')),
-          },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'User',
+          type: go.factory.createStructType([
+            {
+              names: ['Name'],
+              tag: 'json:"name,omitempty"',
+              type: go.factory.createPointerType(go.factory.createIdentifier('string')),
+            },
+            {
+              names: ['Owner'],
+              tag: 'json:"owner,omitempty"',
+              type: go.factory.createPointerType(go.factory.createIdentifier('User')),
+            },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration('name', go.factory.createLiteral('Bob')),
         go.factory.createShortVarDeclaration(

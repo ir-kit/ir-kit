@@ -636,14 +636,36 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.TypeDeclaration: {
-        const typeBody = printNode(node.type, { inline: true });
-        const op = node.isAlias ? '=' : '';
-        const pieces = [
-          'type',
-          `${node.name}${printTypeParameters(node.typeParameters)}`,
-          op,
-        ].filter(Boolean);
-        parts.push(printLine([...pieces, typeBody].join(' ')));
+        if (!node.specs.length) {
+          parts.push(printLine('type ()'));
+          break;
+        }
+
+        const [firstSpec] = node.specs;
+        if (node.specs.length === 1 && firstSpec) {
+          const namePart = `${firstSpec.name}${printTypeParameters(firstSpec.typeParameters)}`;
+          const pieces = [
+            'type',
+            namePart,
+            firstSpec.isAlias ? '=' : '',
+            printNode(firstSpec.type, { inline: true }),
+          ].filter(Boolean);
+          parts.push(printLine(pieces.join(' ')));
+          break;
+        }
+
+        const rows = node.specs.map((spec) => {
+          const cells = [`${spec.name}${printTypeParameters(spec.typeParameters)}`];
+          if (spec.isAlias) cells.push('=');
+          cells.push(printNode(spec.type, { inline: true }));
+          return cells;
+        });
+
+        parts.push(printLine('type ('));
+        indentLevel += 1;
+        parts.push(...alignCells(rows).map((line) => printLine(line)));
+        indentLevel -= 1;
+        parts.push(printLine(')'));
         break;
       }
 

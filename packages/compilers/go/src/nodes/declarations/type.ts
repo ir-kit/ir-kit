@@ -3,29 +3,27 @@ import { GoNodeKind } from '../kinds';
 import type { GoType } from '../type';
 import type { GoTypeParameter } from './type-parameter';
 
-export interface GoTypeDeclaration extends GoNodeBase {
+export type GoTypeSpec = {
   isAlias?: boolean;
-  kind: GoNodeKind.TypeDeclaration;
   name: string;
   type: GoType;
   typeParameters?: ReadonlyArray<GoTypeParameter>;
+};
+
+export interface GoTypeDeclaration extends GoNodeBase {
+  kind: GoNodeKind.TypeDeclaration;
+  specs: ReadonlyArray<GoTypeSpec>;
 }
 
 export function createTypeDeclaration(
-  name: string,
-  type: GoType,
-  typeParameters?: ReadonlyArray<GoTypeParameter>,
+  specs: ReadonlyArray<GoTypeSpec>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
-  isAlias?: boolean,
 ): GoTypeDeclaration {
   return {
-    isAlias,
     kind: GoNodeKind.TypeDeclaration,
     leadingComments,
-    name,
+    specs,
     trailingComments,
-    type,
-    typeParameters,
   };
 }

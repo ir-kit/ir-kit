@@ -5,13 +5,15 @@ describe('function type', () => {
   it('type alias', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Option',
-        go.factory.createFunctionType(
-          [go.factory.createIdentifier('int')],
-          [go.factory.createFunctionReturn(go.factory.createIdentifier('error'))],
-        ),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'Option',
+          type: go.factory.createFunctionType(
+            [go.factory.createIdentifier('int')],
+            [go.factory.createFunctionReturn(go.factory.createIdentifier('error'))],
+          ),
+        },
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createVarDeclaration([
           { name: 'opt', type: go.factory.createIdentifier('Option') },
@@ -33,13 +35,15 @@ describe('function type', () => {
   it('multiple return values', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Handler',
-        go.factory.createFunctionType(undefined, [
-          go.factory.createFunctionReturn(go.factory.createIdentifier('int')),
-          go.factory.createFunctionReturn(go.factory.createIdentifier('error')),
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'Handler',
+          type: go.factory.createFunctionType(undefined, [
+            go.factory.createFunctionReturn(go.factory.createIdentifier('int')),
+            go.factory.createFunctionReturn(go.factory.createIdentifier('error')),
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createVarDeclaration([
           { name: 'h', type: go.factory.createIdentifier('Handler') },
@@ -61,18 +65,20 @@ describe('function type', () => {
   it('struct field', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Client',
-        go.factory.createStructType([
-          {
-            names: ['Editor'],
-            type: go.factory.createFunctionType(
-              [go.factory.createIdentifier('int')],
-              [go.factory.createFunctionReturn(go.factory.createIdentifier('error'))],
-            ),
-          },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'Client',
+          type: go.factory.createStructType([
+            {
+              names: ['Editor'],
+              type: go.factory.createFunctionType(
+                [go.factory.createIdentifier('int')],
+                [go.factory.createFunctionReturn(go.factory.createIdentifier('error'))],
+              ),
+            },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'c',

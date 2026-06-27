@@ -5,7 +5,7 @@ describe('struct type via type declaration', () => {
   it('empty struct', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Empty', go.factory.createStructType([])),
+      go.factory.createTypeDeclaration([{ name: 'Empty', type: go.factory.createStructType([]) }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'e',
@@ -33,7 +33,7 @@ describe('struct type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('User', userStruct),
+      go.factory.createTypeDeclaration([{ name: 'User', type: userStruct }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'u',
@@ -90,7 +90,7 @@ describe('struct type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('User', userStructWithTags),
+      go.factory.createTypeDeclaration([{ name: 'User', type: userStructWithTags }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'u',
@@ -146,8 +146,8 @@ describe('struct type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Address', address),
-      go.factory.createTypeDeclaration('User', nested),
+      go.factory.createTypeDeclaration([{ name: 'Address', type: address }]),
+      go.factory.createTypeDeclaration([{ name: 'User', type: nested }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'u',
@@ -212,8 +212,8 @@ describe('struct type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Person', person),
-      go.factory.createTypeDeclaration('Employee', employee),
+      go.factory.createTypeDeclaration([{ name: 'Person', type: person }]),
+      go.factory.createTypeDeclaration([{ name: 'Employee', type: employee }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'e',
@@ -273,7 +273,7 @@ describe('struct type via type declaration', () => {
       { names: ['Label'], tag: 'json:"label"', type: go.factory.createIdentifier('string') },
     ]);
     const file = go.factory.createSourceFile('main', [
-      go.factory.createTypeDeclaration('Point', point),
+      go.factory.createTypeDeclaration([{ name: 'Point', type: point }]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'grouped-field-names.go');
   });

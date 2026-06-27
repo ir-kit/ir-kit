@@ -5,7 +5,7 @@ describe('interface type via type declaration', () => {
   it('empty interface', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Any', go.factory.createInterfaceType([])),
+      go.factory.createTypeDeclaration([{ name: 'Any', type: go.factory.createInterfaceType([]) }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createVarDeclaration([
           {
@@ -48,9 +48,11 @@ describe('interface type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Reader', reader),
+      go.factory.createTypeDeclaration([{ name: 'Reader', type: reader }]),
       // concrete type implementing Reader
-      go.factory.createTypeDeclaration('MemReader', go.factory.createStructType([])),
+      go.factory.createTypeDeclaration([
+        { name: 'MemReader', type: go.factory.createStructType([]) },
+      ]),
       go.factory.createFunctionDeclaration(
         'Read',
         [
@@ -137,14 +139,16 @@ describe('interface type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration('Shape', shape),
-      go.factory.createTypeDeclaration(
-        'Rectangle',
-        go.factory.createStructType([
-          { names: ['W'], type: go.factory.createIdentifier('float64') },
-          { names: ['H'], type: go.factory.createIdentifier('float64') },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([{ name: 'Shape', type: shape }]),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'Rectangle',
+          type: go.factory.createStructType([
+            { names: ['W'], type: go.factory.createIdentifier('float64') },
+            { names: ['H'], type: go.factory.createIdentifier('float64') },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration(
         'Area',
         [],
@@ -286,48 +290,52 @@ describe('interface type via type declaration', () => {
   it('embedded interface', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('io'),
-      go.factory.createTypeDeclaration(
-        'ReadWriter',
-        go.factory.createInterfaceType([
-          {
-            embed: go.factory.createMemberExpression(
-              go.factory.createIdentifier('io'),
-              go.factory.createIdentifier('Reader'),
-            ),
-          },
-          {
-            name: 'Write',
-            parameters: [
-              go.factory.createFunctionParameter(
-                ['p'],
-                go.factory.createArrayType(go.factory.createIdentifier('byte')),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'ReadWriter',
+          type: go.factory.createInterfaceType([
+            {
+              embed: go.factory.createMemberExpression(
+                go.factory.createIdentifier('io'),
+                go.factory.createIdentifier('Reader'),
               ),
-            ],
-            returnType: [
-              go.factory.createFunctionReturn(go.factory.createIdentifier('int'), 'n'),
-              go.factory.createFunctionReturn(go.factory.createIdentifier('error'), 'err'),
-            ],
-          },
-        ]),
-      ),
+            },
+            {
+              name: 'Write',
+              parameters: [
+                go.factory.createFunctionParameter(
+                  ['p'],
+                  go.factory.createArrayType(go.factory.createIdentifier('byte')),
+                ),
+              ],
+              returnType: [
+                go.factory.createFunctionReturn(go.factory.createIdentifier('int'), 'n'),
+                go.factory.createFunctionReturn(go.factory.createIdentifier('error'), 'err'),
+              ],
+            },
+          ]),
+        },
+      ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'embedded.go');
   });
 
   it('type-set constraint with approximation and union', async () => {
     const file = go.factory.createSourceFile('main', [
-      go.factory.createTypeDeclaration(
-        'Number',
-        go.factory.createInterfaceType([
-          {
-            embed: go.factory.createBinaryExpression(
-              go.factory.createUnaryExpression('~', go.factory.createIdentifier('int')),
-              '|',
-              go.factory.createUnaryExpression('~', go.factory.createIdentifier('float64')),
-            ),
-          },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'Number',
+          type: go.factory.createInterfaceType([
+            {
+              embed: go.factory.createBinaryExpression(
+                go.factory.createUnaryExpression('~', go.factory.createIdentifier('int')),
+                '|',
+                go.factory.createUnaryExpression('~', go.factory.createIdentifier('float64')),
+              ),
+            },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration(
         'double',
         [go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('T'))],

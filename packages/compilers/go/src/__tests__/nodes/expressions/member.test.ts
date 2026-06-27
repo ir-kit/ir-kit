@@ -5,12 +5,14 @@ describe('member expression', () => {
   it('simple member', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'Obj',
-        go.factory.createStructType([
-          { names: ['field'], type: go.factory.createIdentifier('int') },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'Obj',
+          type: go.factory.createStructType([
+            { names: ['field'], type: go.factory.createIdentifier('int') },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'obj',
@@ -48,14 +50,22 @@ describe('member expression', () => {
   it('nested chain', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'B',
-        go.factory.createStructType([{ names: ['c'], type: go.factory.createIdentifier('int') }]),
-      ),
-      go.factory.createTypeDeclaration(
-        'A',
-        go.factory.createStructType([{ names: ['b'], type: go.factory.createIdentifier('B') }]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'B',
+          type: go.factory.createStructType([
+            { names: ['c'], type: go.factory.createIdentifier('int') },
+          ]),
+        },
+      ]),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'A',
+          type: go.factory.createStructType([
+            { names: ['b'], type: go.factory.createIdentifier('B') },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
@@ -104,12 +114,14 @@ describe('member expression', () => {
   it('call then member', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration(
-        'R',
-        go.factory.createStructType([
-          { names: ['Field'], type: go.factory.createIdentifier('int') },
-        ]),
-      ),
+      go.factory.createTypeDeclaration([
+        {
+          name: 'R',
+          type: go.factory.createStructType([
+            { names: ['Field'], type: go.factory.createIdentifier('int') },
+          ]),
+        },
+      ]),
       go.factory.createFunctionDeclaration(
         'get',
         undefined,
