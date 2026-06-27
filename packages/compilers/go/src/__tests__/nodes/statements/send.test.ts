@@ -5,7 +5,9 @@ describe('send statement', () => {
   it('send and receive', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
+        undefined,
         'relay',
+        undefined,
         [
           go.factory.createFunctionParameter(
             ['in'],

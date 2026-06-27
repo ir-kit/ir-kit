@@ -13,10 +13,10 @@ export interface GoForStatement extends GoNodeBase {
 }
 
 export function createForStatement(
+  init: GoStatement | undefined,
+  condition: GoExpression | undefined,
+  post: GoStatement | undefined,
   body: ReadonlyArray<GoStatement>,
-  init?: GoStatement,
-  condition?: GoExpression,
-  post?: GoStatement,
 ): GoForStatement {
   return {
     body: createBlock(body),

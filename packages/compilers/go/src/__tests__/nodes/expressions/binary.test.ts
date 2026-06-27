@@ -5,7 +5,7 @@ describe('binary expression', () => {
   it('addition', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'sum',
           go.factory.createBinaryExpression(
@@ -31,7 +31,7 @@ describe('binary expression', () => {
   it('subtraction', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'difference',
           go.factory.createBinaryExpression(
@@ -57,7 +57,7 @@ describe('binary expression', () => {
   it('multiplication', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'product',
           go.factory.createBinaryExpression(
@@ -83,7 +83,7 @@ describe('binary expression', () => {
   it('with variables', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           ['a', 'b'],
           [go.factory.createLiteral(1), go.factory.createLiteral(10)],
@@ -113,7 +113,7 @@ describe('binary expression', () => {
   it('nested expressions', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'complex',
           go.factory.createBinaryExpression(

@@ -5,7 +5,7 @@ describe('labeled statements', () => {
   it('labeled loop with break and continue to the label', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createLabeledStatement(
           'Outer',
           go.factory.createForRangeStatement(
@@ -54,7 +54,7 @@ describe('labeled statements', () => {
   it('goto to a label', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
         go.factory.createLabeledStatement(
           'Retry',

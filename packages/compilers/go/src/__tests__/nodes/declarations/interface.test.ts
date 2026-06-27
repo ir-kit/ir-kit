@@ -8,7 +8,7 @@ describe('interface type via type declaration', () => {
       go.factory.createTypeDeclaration([
         go.factory.createTypeSpec('Any', go.factory.createInterfaceType([])),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
@@ -62,7 +62,12 @@ describe('interface type via type declaration', () => {
         go.factory.createTypeSpec('MemReader', go.factory.createStructType([])),
       ]),
       go.factory.createFunctionDeclaration(
+        {
+          name: 'm',
+          type: go.factory.createIdentifier('MemReader'),
+        },
         'Read',
+        undefined,
         [
           go.factory.createFunctionParameter(
             ['p'],
@@ -79,12 +84,8 @@ describe('interface type via type declaration', () => {
             go.factory.createLiteral(null),
           ]),
         ],
-        {
-          name: 'm',
-          type: go.factory.createIdentifier('MemReader'),
-        },
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'buf',
           go.factory.createCompositeLiteral(
@@ -158,7 +159,12 @@ describe('interface type via type declaration', () => {
         ),
       ]),
       go.factory.createFunctionDeclaration(
+        {
+          name: 'r',
+          type: go.factory.createIdentifier('Rectangle'),
+        },
         'Area',
+        undefined,
         [],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('float64'))],
         [
@@ -180,13 +186,14 @@ describe('interface type via type declaration', () => {
             ),
           ),
         ],
+      ),
+      go.factory.createFunctionDeclaration(
         {
           name: 'r',
           type: go.factory.createIdentifier('Rectangle'),
         },
-      ),
-      go.factory.createFunctionDeclaration(
         'Scale',
+        undefined,
         [go.factory.createFunctionParameter(['factor'], go.factory.createIdentifier('float64'))],
         [],
         [
@@ -207,13 +214,14 @@ describe('interface type via type declaration', () => {
             go.factory.createIdentifier('factor'),
           ),
         ],
+      ),
+      go.factory.createFunctionDeclaration(
         {
           name: 'r',
           type: go.factory.createIdentifier('Rectangle'),
         },
-      ),
-      go.factory.createFunctionDeclaration(
         'Move',
+        undefined,
         [
           go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('int')),
           go.factory.createFunctionParameter(['y'], go.factory.createIdentifier('int')),
@@ -234,12 +242,8 @@ describe('interface type via type declaration', () => {
             ),
           ),
         ],
-        {
-          name: 'r',
-          type: go.factory.createIdentifier('Rectangle'),
-        },
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           's',
           go.factory.createCompositeLiteral(
@@ -344,7 +348,9 @@ describe('interface type via type declaration', () => {
         ),
       ]),
       go.factory.createFunctionDeclaration(
+        undefined,
         'double',
+        [{ constraint: go.factory.createIdentifier('Number'), names: ['T'] }],
         [go.factory.createFunctionParameter(['x'], go.factory.createIdentifier('T'))],
         [go.factory.createFunctionReturn(go.factory.createIdentifier('T'))],
         [
@@ -356,10 +362,8 @@ describe('interface type via type declaration', () => {
             ),
           ),
         ],
-        undefined,
-        [{ constraint: go.factory.createIdentifier('Number'), names: ['T'] }],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, []),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, []),
     ]);
     await assertPrintedMatchesSnapshot(file, 'type-set-constraint.go');
   });

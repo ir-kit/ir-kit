@@ -8,7 +8,7 @@ describe('struct type via type declaration', () => {
       go.factory.createTypeDeclaration([
         go.factory.createTypeSpec('Empty', go.factory.createStructType([])),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'e',
           go.factory.createCompositeLiteral([], go.factory.createIdentifier('Empty')),
@@ -36,7 +36,7 @@ describe('struct type via type declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([go.factory.createTypeSpec('User', userStruct)]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'u',
           go.factory.createCompositeLiteral(
@@ -93,7 +93,7 @@ describe('struct type via type declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([go.factory.createTypeSpec('User', userStructWithTags)]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'u',
           go.factory.createCompositeLiteral(
@@ -150,7 +150,7 @@ describe('struct type via type declaration', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([go.factory.createTypeSpec('Address', address)]),
       go.factory.createTypeDeclaration([go.factory.createTypeSpec('User', nested)]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'u',
           go.factory.createCompositeLiteral(
@@ -216,7 +216,7 @@ describe('struct type via type declaration', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([go.factory.createTypeSpec('Person', person)]),
       go.factory.createTypeDeclaration([go.factory.createTypeSpec('Employee', employee)]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'e',
           go.factory.createCompositeLiteral(

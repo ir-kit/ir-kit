@@ -14,7 +14,7 @@ describe('function type', () => {
           ),
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
@@ -48,7 +48,7 @@ describe('function type', () => {
           ]),
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
@@ -87,7 +87,7 @@ describe('function type', () => {
           ]),
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'c',
           go.factory.createCompositeLiteral([], go.factory.createIdentifier('Client')),

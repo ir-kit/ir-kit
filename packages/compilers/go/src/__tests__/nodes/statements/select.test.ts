@@ -6,7 +6,9 @@ describe('select statement', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'worker',
+        undefined,
         [
           go.factory.createFunctionParameter(
             ['ch'],
@@ -68,7 +70,7 @@ describe('select statement', () => {
           ]),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, []),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, []),
     ]);
     await assertPrintedMatchesSnapshot(file, 'select.go');
   });

@@ -5,7 +5,7 @@ describe('parenthesized expression', () => {
   it('groups a binary expression to force precedence', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('a', go.factory.createLiteral(1)),
         go.factory.createShortVarDeclaration('b', go.factory.createLiteral(2)),
         go.factory.createShortVarDeclaration('c', go.factory.createLiteral(3)),

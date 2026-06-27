@@ -6,7 +6,7 @@ describe('switch statement', () => {
     const x = go.factory.createIdentifier('x');
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(2)),
         go.factory.createSwitchStatement(
           [
@@ -60,7 +60,7 @@ describe('switch statement', () => {
   it('missing expression switch (switch true)', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createSwitchStatement([
           go.factory.createSwitchCase(
             [
@@ -86,7 +86,7 @@ describe('switch statement', () => {
     const x = go.factory.createIdentifier('x');
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(42)),
         go.factory.createSwitchStatement(
           [
@@ -132,7 +132,7 @@ describe('switch statement', () => {
     const subject = go.factory.createIdentifier('v');
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('v', go.factory.createLiteral(5)),
         go.factory.createSwitchStatement(
           [
@@ -191,7 +191,7 @@ describe('switch statement', () => {
   it('switch with init statement', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createSwitchStatement(
           [
             go.factory.createSwitchCase(

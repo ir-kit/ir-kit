@@ -5,7 +5,7 @@ describe('if statement', () => {
   it('simple', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createIfStatement(go.factory.createLiteral(true), [
           go.factory.createExpressionStatement(
             go.factory.createCallExpression(
@@ -26,7 +26,7 @@ describe('if statement', () => {
   it('with else', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(1)),
         go.factory.createIfStatement(
           go.factory.createBinaryExpression(
@@ -67,7 +67,7 @@ describe('if statement', () => {
   it('with else if', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('x', go.factory.createLiteral(0)),
         go.factory.createIfStatement(
           go.factory.createBinaryExpression(
@@ -127,7 +127,7 @@ describe('if statement', () => {
   it('with initialization', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createIfStatement(
           go.factory.createBinaryExpression(
             go.factory.createIdentifier('x'),

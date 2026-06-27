@@ -13,7 +13,7 @@ describe('arrays and slices', () => {
     );
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('arr', lit),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -37,7 +37,7 @@ describe('arrays and slices', () => {
     );
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('arr', lit),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -61,7 +61,7 @@ describe('arrays and slices', () => {
     );
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('arr', lit),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(

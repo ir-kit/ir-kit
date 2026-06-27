@@ -5,7 +5,7 @@ describe('identifier', () => {
   it('simple variable', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
@@ -37,7 +37,7 @@ describe('identifier', () => {
   it('camelCase variable', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('myVariable', go.factory.createLiteral(123)),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -56,7 +56,7 @@ describe('identifier', () => {
   it('exported variable', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('ExportedVar', go.factory.createLiteral('exported')),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(

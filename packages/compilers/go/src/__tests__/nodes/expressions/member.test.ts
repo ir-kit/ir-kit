@@ -13,7 +13,7 @@ describe('member expression', () => {
           ]),
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'obj',
           go.factory.createCompositeLiteral(
@@ -62,7 +62,7 @@ describe('member expression', () => {
           go.factory.createStructType([{ names: ['b'], type: go.factory.createIdentifier('B') }]),
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'a',
           go.factory.createCompositeLiteral(
@@ -119,7 +119,9 @@ describe('member expression', () => {
         ),
       ]),
       go.factory.createFunctionDeclaration(
+        undefined,
         'get',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('R'))],
         [
@@ -136,7 +138,7 @@ describe('member expression', () => {
           ),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           'result',
           go.factory.createMemberExpression(

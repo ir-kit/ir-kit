@@ -5,8 +5,15 @@ describe('block statement', () => {
   it('empty block', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('empty', undefined, undefined, undefined),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(
+        undefined,
+        'empty',
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ),
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -25,7 +32,9 @@ describe('block statement', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'single',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [
@@ -37,7 +46,7 @@ describe('block statement', () => {
           go.factory.createReturnStatement(go.factory.createIdentifier('x')),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -56,7 +65,9 @@ describe('block statement', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
+        undefined,
         'multiple',
+        undefined,
         undefined,
         [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
         [
@@ -76,7 +87,7 @@ describe('block statement', () => {
           go.factory.createReturnStatement(go.factory.createIdentifier('result')),
         ],
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

@@ -24,12 +24,12 @@ export interface GoFunctionDeclaration extends GoNodeBase {
 }
 
 export function createFunctionDeclaration(
+  receiver: GoReceiverField | undefined,
   name: string,
+  typeParameters: ReadonlyArray<GoTypeParameter> | undefined,
   parameters: ReadonlyArray<GoFunctionParameter> | undefined,
   returnType: ReadonlyArray<GoFunctionReturn> | undefined,
   body: ReadonlyArray<GoStatement> | undefined,
-  receiver?: GoReceiverField,
-  typeParameters?: ReadonlyArray<GoTypeParameter>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoFunctionDeclaration {

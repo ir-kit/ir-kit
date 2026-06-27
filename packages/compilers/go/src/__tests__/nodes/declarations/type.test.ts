@@ -8,7 +8,7 @@ describe('type declaration', () => {
       go.factory.createTypeDeclaration([
         go.factory.createTypeSpec('UserID', go.factory.createIdentifier('int')),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
@@ -44,7 +44,7 @@ describe('type declaration', () => {
         go.factory.createTypeSpec('Celsius', go.factory.createIdentifier('float64')),
         go.factory.createTypeSpec('Name', go.factory.createIdentifier('string')),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(

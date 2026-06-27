@@ -5,7 +5,7 @@ describe('channel type', () => {
   it('bidirectional', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
@@ -35,7 +35,9 @@ describe('channel type', () => {
   it('directional parameters', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
+        undefined,
         'worker',
+        undefined,
         [
           go.factory.createFunctionParameter(
             ['jobs'],

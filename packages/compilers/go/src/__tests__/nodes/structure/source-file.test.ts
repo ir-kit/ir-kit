@@ -5,7 +5,7 @@ describe('source file', () => {
   it('simple', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration('a', go.factory.createLiteral(1)),
         go.factory.createShortVarDeclaration('b', go.factory.createLiteral(2)),
         go.factory.createExpressionStatement(
@@ -44,7 +44,7 @@ describe('source file', () => {
           go.NodeFlags.Const,
         ),
       ),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

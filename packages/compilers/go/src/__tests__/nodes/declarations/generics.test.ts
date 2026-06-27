@@ -12,7 +12,7 @@ describe('generics (type parameters)', () => {
           [{ constraint: go.factory.createIdentifier('any'), names: ['T'] }],
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createShortVarDeclaration(
           's',
           go.factory.createCompositeLiteral(
@@ -39,7 +39,12 @@ describe('generics (type parameters)', () => {
   it('generic function with constraints', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
+        undefined,
         'lookup',
+        [
+          { constraint: go.factory.createIdentifier('comparable'), names: ['K'] },
+          { constraint: go.factory.createIdentifier('any'), names: ['V'] },
+        ],
         [
           go.factory.createFunctionParameter(
             ['m'],
@@ -59,11 +64,6 @@ describe('generics (type parameters)', () => {
             ),
           ),
         ],
-        undefined,
-        [
-          { constraint: go.factory.createIdentifier('comparable'), names: ['K'] },
-          { constraint: go.factory.createIdentifier('any'), names: ['V'] },
-        ],
       ),
     ]);
     await assertPrintedMatchesSnapshot(file, 'generic-function.go');
@@ -82,7 +82,7 @@ describe('generics (type parameters)', () => {
           [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
         ),
       ]),
-      go.factory.createFunctionDeclaration('main', undefined, undefined, [
+      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
         go.factory.createVariableStatement(
           undefined,
           go.factory.createVariableDeclarationList(
