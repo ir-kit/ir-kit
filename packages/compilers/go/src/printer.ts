@@ -1,6 +1,9 @@
 import type { GoNode } from './nodes/base';
+import type { GoTypeSpec } from './nodes/declarations/type';
 import type { GoTypeParameter } from './nodes/declarations/type-parameter';
+import type { GoExpression } from './nodes/expression';
 import { GoNodeKind } from './nodes/kinds';
+import type { GoType } from './nodes/type';
 import type { GoFunctionReturn } from './nodes/types/function-return';
 
 export interface GoPrinterOptions {
@@ -117,6 +120,43 @@ export function createPrinter(options?: GoPrinterOptions) {
     return `[${list}]`;
   }
 
+  function printDeclarationGroup(
+    keyword: string,
+    rows: ReadonlyArray<ReadonlyArray<string>>,
+  ): Array<string> {
+    if (!rows.length) return [printLine(`${keyword} ()`)];
+
+    const [firstRow] = rows;
+    if (rows.length === 1 && firstRow) {
+      return [printLine(`${keyword} ${firstRow.join(' ')}`)];
+    }
+
+    const lines = [printLine(`${keyword} (`)];
+    indentLevel += 1;
+    lines.push(...alignCells(rows).map((line) => printLine(line)));
+    indentLevel -= 1;
+    lines.push(printLine(')'));
+    return lines;
+  }
+
+  function valueSpecCells(spec: {
+    name: string;
+    type?: GoType;
+    value?: GoExpression;
+  }): Array<string> {
+    const cells = [spec.name];
+    if (spec.type) cells.push(printNode(spec.type, { inline: true }));
+    if (spec.value) cells.push(`= ${printNode(spec.value, { inline: true })}`);
+    return cells;
+  }
+
+  function typeSpecCells(spec: GoTypeSpec): Array<string> {
+    const cells = [`${spec.name}${printTypeParameters(spec.typeParameters)}`];
+    if (spec.isAlias) cells.push('=');
+    cells.push(printNode(spec.type, { inline: true }));
+    return cells;
+  }
+
   function printNode(node: GoNode, context: PrintContext = {}): string {
     const parts: Array<string> = [];
 
@@ -216,34 +256,9 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
       }
 
-      case GoNodeKind.ConstDeclaration: {
-        if (!node.specs.length) {
-          parts.push(printLine('const ()'));
-          break;
-        }
-
-        const [firstSpec] = node.specs;
-        if (node.specs.length === 1 && firstSpec) {
-          const type = firstSpec.type ? ` ${printNode(firstSpec.type)}` : '';
-          const value = firstSpec.value ? ` = ${printNode(firstSpec.value, { inline: true })}` : '';
-          parts.push(printLine(`const ${firstSpec.name}${type}${value}`));
-          break;
-        }
-
-        const rows = node.specs.map((spec) => {
-          const cells = [spec.name];
-          if (spec.type) cells.push(printNode(spec.type, { inline: true }));
-          if (spec.value) cells.push(`= ${printNode(spec.value, { inline: true })}`);
-          return cells;
-        });
-
-        parts.push(printLine('const ('));
-        indentLevel += 1;
-        parts.push(...alignCells(rows).map((line) => printLine(line)));
-        indentLevel -= 1;
-        parts.push(printLine(')'));
+      case GoNodeKind.ConstDeclaration:
+        parts.push(...printDeclarationGroup('const', node.specs.map(valueSpecCells)));
         break;
-      }
 
       case GoNodeKind.ContinueStatement:
         parts.push(printLine(`continue${node.label ? ` ${node.label}` : ''}`));
@@ -637,72 +652,17 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push(printTypeAssert(node.operand, node.type));
         break;
 
-      case GoNodeKind.TypeDeclaration: {
-        if (!node.specs.length) {
-          parts.push(printLine('type ()'));
-          break;
-        }
-
-        const [firstSpec] = node.specs;
-        if (node.specs.length === 1 && firstSpec) {
-          const namePart = `${firstSpec.name}${printTypeParameters(firstSpec.typeParameters)}`;
-          const pieces = [
-            'type',
-            namePart,
-            firstSpec.isAlias ? '=' : '',
-            printNode(firstSpec.type, { inline: true }),
-          ].filter(Boolean);
-          parts.push(printLine(pieces.join(' ')));
-          break;
-        }
-
-        const rows = node.specs.map((spec) => {
-          const cells = [`${spec.name}${printTypeParameters(spec.typeParameters)}`];
-          if (spec.isAlias) cells.push('=');
-          cells.push(printNode(spec.type, { inline: true }));
-          return cells;
-        });
-
-        parts.push(printLine('type ('));
-        indentLevel += 1;
-        parts.push(...alignCells(rows).map((line) => printLine(line)));
-        indentLevel -= 1;
-        parts.push(printLine(')'));
+      case GoNodeKind.TypeDeclaration:
+        parts.push(...printDeclarationGroup('type', node.specs.map(typeSpecCells)));
         break;
-      }
 
       case GoNodeKind.UnaryExpression:
         parts.push(`${node.operator}${printNode(node.operand, { inline: true })}`);
         break;
 
-      case GoNodeKind.VarDeclaration: {
-        if (!node.specs.length) {
-          parts.push(printLine('var ()'));
-          break;
-        }
-
-        const [firstSpec] = node.specs;
-        if (node.specs.length === 1 && firstSpec) {
-          const type = firstSpec.type ? ` ${printNode(firstSpec.type, { inline: true })}` : '';
-          const value = firstSpec.value ? ` = ${printNode(firstSpec.value, { inline: true })}` : '';
-          parts.push(printLine(`var ${firstSpec.name}${type}${value}`));
-          break;
-        }
-
-        const rows = node.specs.map((spec) => {
-          const cells = [spec.name];
-          if (spec.type) cells.push(printNode(spec.type, { inline: true }));
-          if (spec.value) cells.push(`= ${printNode(spec.value, { inline: true })}`);
-          return cells;
-        });
-
-        parts.push(printLine('var ('));
-        indentLevel += 1;
-        parts.push(...alignCells(rows).map((line) => printLine(line)));
-        indentLevel -= 1;
-        parts.push(printLine(')'));
+      case GoNodeKind.VarDeclaration:
+        parts.push(...printDeclarationGroup('var', node.specs.map(valueSpecCells)));
         break;
-      }
 
       default:
         // @ts-expect-error
