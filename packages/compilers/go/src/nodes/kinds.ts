@@ -9,7 +9,6 @@ export enum GoNodeKind {
   ChannelType = 'ChannelType',
   Comment = 'Comment',
   CompositeLiteral = 'CompositeLiteral',
-  ConstDeclaration = 'ConstDeclaration',
   ContinueStatement = 'ContinueStatement',
   DeferStatement = 'DeferStatement',
   EmptyStatement = 'EmptyStatement',
@@ -51,6 +50,9 @@ export enum GoNodeKind {
   TypeAssertExpression = 'TypeAssertExpression',
   TypeDeclaration = 'TypeDeclaration',
   TypeSet = 'TypeSet',
+  TypeSpec = 'TypeSpec',
   UnaryExpression = 'UnaryExpression',
-  VarDeclaration = 'VarDeclaration',
+  VariableDeclaration = 'VariableDeclaration',
+  VariableDeclarationList = 'VariableDeclarationList',
+  VariableStatement = 'VariableStatement',
 }

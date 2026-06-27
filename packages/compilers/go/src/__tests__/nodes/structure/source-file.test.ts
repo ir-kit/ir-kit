@@ -31,13 +31,19 @@ describe('source file', () => {
   it('with custom package name', async () => {
     const file = go.factory.createSourceFile('mypackage', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createConstDeclaration([
-        {
-          name: 'greeting',
-          type: go.factory.createIdentifier('string'),
-          value: go.factory.createLiteral('Hello, World!'),
-        },
-      ]),
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'greeting',
+              go.factory.createIdentifier('string'),
+              go.factory.createLiteral('Hello, World!'),
+            ),
+          ],
+          go.NodeFlags.Const,
+        ),
+      ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(

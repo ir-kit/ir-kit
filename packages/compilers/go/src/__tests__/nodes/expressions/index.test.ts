@@ -94,7 +94,9 @@ describe('index expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       // type T struct{}
-      go.factory.createTypeDeclaration([{ name: 'T', type: go.factory.createStructType([]) }]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('T', go.factory.createStructType([])),
+      ]),
       // func (t T) Do() int { return 42 }
       go.factory.createFunctionDeclaration(
         'Do',

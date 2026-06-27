@@ -6,9 +6,9 @@ describe('pointer type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'User',
-          type: go.factory.createStructType([
+        go.factory.createTypeSpec(
+          'User',
+          go.factory.createStructType([
             {
               names: ['Name'],
               tag: 'json:"name,omitempty"',
@@ -20,7 +20,7 @@ describe('pointer type', () => {
               type: go.factory.createPointerType(go.factory.createIdentifier('User')),
             },
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration('name', go.factory.createLiteral('Bob')),
@@ -92,14 +92,20 @@ describe('pointer type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          {
-            name: 'pp',
-            type: go.factory.createPointerType(
-              go.factory.createPointerType(go.factory.createIdentifier('int')),
-            ),
-          },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'pp',
+                go.factory.createPointerType(
+                  go.factory.createPointerType(go.factory.createIdentifier('int')),
+                ),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

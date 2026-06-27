@@ -2,6 +2,7 @@ import type { GoNode as _GoNode, GoNodeBase as _GoNodeBase } from './nodes/base'
 import type { GoExpression as _GoExpression } from './nodes/expression';
 import { factory } from './nodes/factory';
 import { GoNodeKind } from './nodes/kinds';
+import { GoNodeFlags } from './nodes/node-flags';
 import type { GoStatement as _GoStatement } from './nodes/statement';
 import type { GoComment as _GoComment } from './nodes/structure/comment';
 import type { GoSourceFile as _GoSourceFile } from './nodes/structure/source-file';
@@ -37,6 +38,7 @@ export namespace go {
 
 export const go = {
   GoNodeKind,
+  NodeFlags: GoNodeFlags,
   createPrinter,
   factory,
   printAst,

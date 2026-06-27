@@ -6,11 +6,11 @@ describe('generics (type parameters)', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Stack',
-          type: go.factory.createArrayType(go.factory.createIdentifier('T')),
-          typeParameters: [{ constraint: go.factory.createIdentifier('any'), names: ['T'] }],
-        },
+        go.factory.createTypeSpec(
+          'Stack',
+          go.factory.createArrayType(go.factory.createIdentifier('T')),
+          [{ constraint: go.factory.createIdentifier('any'), names: ['T'] }],
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -73,25 +73,31 @@ describe('generics (type parameters)', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Pair',
-          type: go.factory.createStructType([
+        go.factory.createTypeSpec(
+          'Pair',
+          go.factory.createStructType([
             { names: ['First'], type: go.factory.createIdentifier('T') },
             { names: ['Second'], type: go.factory.createIdentifier('U') },
           ]),
-          typeParameters: [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
-        },
+          [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          {
-            name: 'p',
-            type: go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
-              go.factory.createIdentifier('string'),
-              go.factory.createIdentifier('int'),
-            ]),
-          },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'p',
+                go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
+                  go.factory.createIdentifier('string'),
+                  go.factory.createIdentifier('int'),
+                ]),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

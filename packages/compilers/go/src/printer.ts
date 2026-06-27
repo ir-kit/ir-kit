@@ -1,6 +1,6 @@
 import type { GoNode } from './nodes/base';
-import type { GoTypeSpec } from './nodes/declarations/type';
 import type { GoTypeParameter } from './nodes/declarations/type-parameter';
+import type { GoTypeSpec } from './nodes/declarations/type-spec';
 import type { GoExpression } from './nodes/expression';
 import { GoNodeKind } from './nodes/kinds';
 import type { GoType } from './nodes/type';
@@ -22,11 +22,7 @@ interface PrintContext {
   parentPrecedence?: number;
 }
 
-const GROUPABLE_KINDS = new Set([
-  GoNodeKind.ConstDeclaration,
-  GoNodeKind.TypeDeclaration,
-  GoNodeKind.VarDeclaration,
-]);
+const GROUPABLE_KINDS = new Set([GoNodeKind.TypeDeclaration, GoNodeKind.VariableStatement]);
 
 const INDENT_SIZE = 1;
 
@@ -139,14 +135,14 @@ export function createPrinter(options?: GoPrinterOptions) {
     return lines;
   }
 
-  function valueSpecCells(spec: {
+  function variableDeclarationCells(declaration: {
+    initializer?: GoExpression;
     name: string;
     type?: GoType;
-    value?: GoExpression;
   }): Array<string> {
-    const cells = [spec.name];
-    if (spec.type) cells.push(printInline(spec.type));
-    if (spec.value) cells.push(`= ${printInline(spec.value)}`);
+    const cells = [declaration.name];
+    if (declaration.type) cells.push(printInline(declaration.type));
+    if (declaration.initializer) cells.push(`= ${printInline(declaration.initializer)}`);
     return cells;
   }
 
@@ -255,10 +251,6 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push(text);
         break;
       }
-
-      case GoNodeKind.ConstDeclaration:
-        parts.push(...printDeclarationGroup('const', node.specs.map(valueSpecCells)));
-        break;
 
       case GoNodeKind.ContinueStatement:
         parts.push(printLine(`continue${node.label ? ` ${node.label}` : ''}`));
@@ -644,12 +636,26 @@ export function createPrinter(options?: GoPrinterOptions) {
         );
         break;
 
+      case GoNodeKind.TypeSpec:
+        parts.push(typeSpecCells(node).join(' '));
+        break;
+
       case GoNodeKind.UnaryExpression:
         parts.push(`${node.operator}${printInline(node.operand)}`);
         break;
 
-      case GoNodeKind.VarDeclaration:
-        parts.push(...printDeclarationGroup('var', node.specs.map(valueSpecCells)));
+      case GoNodeKind.VariableDeclaration:
+        parts.push(variableDeclarationCells(node).join(' '));
+        break;
+
+      case GoNodeKind.VariableDeclarationList:
+        parts.push(
+          ...printDeclarationGroup(node.flags, node.declarations.map(variableDeclarationCells)),
+        );
+        break;
+
+      case GoNodeKind.VariableStatement:
+        parts.push(printNode(node.declarationList));
         break;
 
       default:

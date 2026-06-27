@@ -161,7 +161,9 @@ describe('function declaration', () => {
   it('prints a method with receiver and variadic parameter', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration([{ name: 'Some', type: go.factory.createStructType([]) }]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('Some', go.factory.createStructType([])),
+      ]),
       go.factory.createFunctionDeclaration(
         'Sum',
         [go.factory.createFunctionParameter(['nums'], go.factory.createIdentifier('int'), true)],

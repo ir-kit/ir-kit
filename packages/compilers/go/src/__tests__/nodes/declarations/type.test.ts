@@ -6,16 +6,22 @@ describe('type declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        { name: 'UserID', type: go.factory.createIdentifier('int') },
+        go.factory.createTypeSpec('UserID', go.factory.createIdentifier('int')),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          {
-            name: 'id',
-            type: go.factory.createIdentifier('UserID'),
-            value: go.factory.createLiteral(123),
-          },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'id',
+                go.factory.createIdentifier('UserID'),
+                go.factory.createLiteral(123),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -34,18 +40,24 @@ describe('type declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        { name: 'UserID', type: go.factory.createIdentifier('int') },
-        { name: 'Celsius', type: go.factory.createIdentifier('float64') },
-        { name: 'Name', type: go.factory.createIdentifier('string') },
+        go.factory.createTypeSpec('UserID', go.factory.createIdentifier('int')),
+        go.factory.createTypeSpec('Celsius', go.factory.createIdentifier('float64')),
+        go.factory.createTypeSpec('Name', go.factory.createIdentifier('string')),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          {
-            name: 'id',
-            type: go.factory.createIdentifier('UserID'),
-            value: go.factory.createLiteral(1),
-          },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'id',
+                go.factory.createIdentifier('UserID'),
+                go.factory.createLiteral(1),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

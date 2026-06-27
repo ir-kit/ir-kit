@@ -1,8 +1,10 @@
-import type { GoConstDeclaration } from './declarations/const';
 import type { GoFunctionDeclaration } from './declarations/function';
 import type { GoShortVarDeclaration } from './declarations/short-var';
 import type { GoTypeDeclaration } from './declarations/type';
-import type { GoVarDeclaration } from './declarations/var';
+import type { GoTypeSpec } from './declarations/type-spec';
+import type { GoVariableDeclaration } from './declarations/variable-declaration';
+import type { GoVariableDeclarationList } from './declarations/variable-declaration-list';
+import type { GoVariableStatement } from './declarations/variable-statement';
 import type { GoAssignment } from './statements/assignment';
 import type { GoAugmentAssignment } from './statements/augment-assignment';
 import type { GoBreakStatement } from './statements/break';
@@ -31,7 +33,6 @@ export type GoStatement =
   | GoAugmentAssignment
   | GoBreakStatement
   | GoComment
-  | GoConstDeclaration
   | GoContinueStatement
   | GoDeferStatement
   | GoEmptyStatement
@@ -54,4 +55,7 @@ export type GoStatement =
   | GoShortVarDeclaration
   | GoSwitchStatement
   | GoTypeDeclaration
-  | GoVarDeclaration;
+  | GoTypeSpec
+  | GoVariableDeclaration
+  | GoVariableDeclarationList
+  | GoVariableStatement;

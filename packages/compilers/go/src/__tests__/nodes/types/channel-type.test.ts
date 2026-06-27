@@ -6,9 +6,18 @@ describe('channel type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          { name: 'ch', type: go.factory.createChannelType(go.factory.createIdentifier('int')) },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'ch',
+                go.factory.createChannelType(go.factory.createIdentifier('int')),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

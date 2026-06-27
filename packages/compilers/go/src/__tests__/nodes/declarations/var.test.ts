@@ -5,13 +5,19 @@ describe('variable declaration', () => {
   it('with type and value', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration([
-        {
-          name: 'count',
-          type: go.factory.createIdentifier('int'),
-          value: go.factory.createLiteral(42),
-        },
-      ]),
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'count',
+              go.factory.createIdentifier('int'),
+              go.factory.createLiteral(42),
+            ),
+          ],
+          go.NodeFlags.Var,
+        ),
+      ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -30,9 +36,13 @@ describe('variable declaration', () => {
   it('with type only', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration([
-        { name: 'message', type: go.factory.createIdentifier('string') },
-      ]),
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [go.factory.createVariableDeclaration('message', go.factory.createIdentifier('string'))],
+          go.NodeFlags.Var,
+        ),
+      ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -51,7 +61,13 @@ describe('variable declaration', () => {
   it('with value only', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration([{ name: 'flag', value: go.factory.createLiteral(true) }]),
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [go.factory.createVariableDeclaration('flag', undefined, go.factory.createLiteral(true))],
+          go.NodeFlags.Var,
+        ),
+      ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -70,13 +86,19 @@ describe('variable declaration', () => {
   it('string variable', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration([
-        {
-          name: 'greeting',
-          type: go.factory.createIdentifier('string'),
-          value: go.factory.createLiteral('Hello, World!'),
-        },
-      ]),
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'greeting',
+              go.factory.createIdentifier('string'),
+              go.factory.createLiteral('Hello, World!'),
+            ),
+          ],
+          go.NodeFlags.Var,
+        ),
+      ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -95,11 +117,21 @@ describe('variable declaration', () => {
   it('grouped var block', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration([
-        { name: 'host', value: go.factory.createLiteral('localhost') },
-        { name: 'port', value: go.factory.createLiteral(8080) },
-        { name: 'enabled', type: go.factory.createIdentifier('bool') },
-      ]),
+      go.factory.createVariableStatement(
+        undefined,
+        go.factory.createVariableDeclarationList(
+          [
+            go.factory.createVariableDeclaration(
+              'host',
+              undefined,
+              go.factory.createLiteral('localhost'),
+            ),
+            go.factory.createVariableDeclaration('port', undefined, go.factory.createLiteral(8080)),
+            go.factory.createVariableDeclaration('enabled', go.factory.createIdentifier('bool')),
+          ],
+          go.NodeFlags.Var,
+        ),
+      ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(

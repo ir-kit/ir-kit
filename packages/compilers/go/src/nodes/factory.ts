@@ -1,8 +1,10 @@
-import { createConstDeclaration } from './declarations/const';
 import { createFunctionDeclaration } from './declarations/function';
 import { createShortVarDeclaration } from './declarations/short-var';
 import { createTypeDeclaration } from './declarations/type';
-import { createVarDeclaration } from './declarations/var';
+import { createTypeSpec } from './declarations/type-spec';
+import { createVariableDeclaration } from './declarations/variable-declaration';
+import { createVariableDeclarationList } from './declarations/variable-declaration-list';
+import { createVariableStatement } from './declarations/variable-statement';
 import { createIndexExpression } from './expressions';
 import { createBinaryExpression } from './expressions/binary';
 import { createCallExpression } from './expressions/call';
@@ -65,7 +67,6 @@ export const factory = {
   createChannelType,
   createComment,
   createCompositeLiteral,
-  createConstDeclaration,
   createContinueStatement,
   createDeferStatement,
   createEmptyStatement,
@@ -107,6 +108,9 @@ export const factory = {
   createTypeAssertExpression,
   createTypeDeclaration,
   createTypeSet,
+  createTypeSpec,
   createUnaryExpression,
-  createVarDeclaration,
+  createVariableDeclaration,
+  createVariableDeclarationList,
+  createVariableStatement,
 } as const;

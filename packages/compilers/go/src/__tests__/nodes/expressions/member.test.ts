@@ -6,12 +6,12 @@ describe('member expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Obj',
-          type: go.factory.createStructType([
+        go.factory.createTypeSpec(
+          'Obj',
+          go.factory.createStructType([
             { names: ['field'], type: go.factory.createIdentifier('int') },
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -51,20 +51,16 @@ describe('member expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'B',
-          type: go.factory.createStructType([
-            { names: ['c'], type: go.factory.createIdentifier('int') },
-          ]),
-        },
+        go.factory.createTypeSpec(
+          'B',
+          go.factory.createStructType([{ names: ['c'], type: go.factory.createIdentifier('int') }]),
+        ),
       ]),
       go.factory.createTypeDeclaration([
-        {
-          name: 'A',
-          type: go.factory.createStructType([
-            { names: ['b'], type: go.factory.createIdentifier('B') },
-          ]),
-        },
+        go.factory.createTypeSpec(
+          'A',
+          go.factory.createStructType([{ names: ['b'], type: go.factory.createIdentifier('B') }]),
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(
@@ -115,12 +111,12 @@ describe('member expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'R',
-          type: go.factory.createStructType([
+        go.factory.createTypeSpec(
+          'R',
+          go.factory.createStructType([
             { names: ['Field'], type: go.factory.createIdentifier('int') },
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration(
         'get',

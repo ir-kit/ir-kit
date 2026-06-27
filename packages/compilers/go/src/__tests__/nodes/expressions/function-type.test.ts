@@ -6,18 +6,22 @@ describe('function type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Option',
-          type: go.factory.createFunctionType(
+        go.factory.createTypeSpec(
+          'Option',
+          go.factory.createFunctionType(
             [go.factory.createIdentifier('int')],
             [go.factory.createFunctionReturn(go.factory.createIdentifier('error'))],
           ),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          { name: 'opt', type: go.factory.createIdentifier('Option') },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [go.factory.createVariableDeclaration('opt', go.factory.createIdentifier('Option'))],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -36,18 +40,22 @@ describe('function type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Handler',
-          type: go.factory.createFunctionType(undefined, [
+        go.factory.createTypeSpec(
+          'Handler',
+          go.factory.createFunctionType(undefined, [
             go.factory.createFunctionReturn(go.factory.createIdentifier('int')),
             go.factory.createFunctionReturn(go.factory.createIdentifier('error')),
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          { name: 'h', type: go.factory.createIdentifier('Handler') },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [go.factory.createVariableDeclaration('h', go.factory.createIdentifier('Handler'))],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -66,9 +74,9 @@ describe('function type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Client',
-          type: go.factory.createStructType([
+        go.factory.createTypeSpec(
+          'Client',
+          go.factory.createStructType([
             {
               names: ['Editor'],
               type: go.factory.createFunctionType(
@@ -77,7 +85,7 @@ describe('function type', () => {
               ),
             },
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createShortVarDeclaration(

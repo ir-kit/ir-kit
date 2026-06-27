@@ -5,15 +5,23 @@ describe('interface type via type declaration', () => {
   it('empty interface', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration([{ name: 'Any', type: go.factory.createInterfaceType([]) }]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('Any', go.factory.createInterfaceType([])),
+      ]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration([
-          {
-            name: 'x',
-            type: go.factory.createIdentifier('Any'),
-            value: go.factory.createLiteral(123),
-          },
-        ]),
+        go.factory.createVariableStatement(
+          undefined,
+          go.factory.createVariableDeclarationList(
+            [
+              go.factory.createVariableDeclaration(
+                'x',
+                go.factory.createIdentifier('Any'),
+                go.factory.createLiteral(123),
+              ),
+            ],
+            go.NodeFlags.Var,
+          ),
+        ),
         go.factory.createEmptyStatement(),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -48,10 +56,10 @@ describe('interface type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration([{ name: 'Reader', type: reader }]),
+      go.factory.createTypeDeclaration([go.factory.createTypeSpec('Reader', reader)]),
       // concrete type implementing Reader
       go.factory.createTypeDeclaration([
-        { name: 'MemReader', type: go.factory.createStructType([]) },
+        go.factory.createTypeSpec('MemReader', go.factory.createStructType([])),
       ]),
       go.factory.createFunctionDeclaration(
         'Read',
@@ -139,15 +147,15 @@ describe('interface type via type declaration', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createTypeDeclaration([{ name: 'Shape', type: shape }]),
+      go.factory.createTypeDeclaration([go.factory.createTypeSpec('Shape', shape)]),
       go.factory.createTypeDeclaration([
-        {
-          name: 'Rectangle',
-          type: go.factory.createStructType([
+        go.factory.createTypeSpec(
+          'Rectangle',
+          go.factory.createStructType([
             { names: ['W'], type: go.factory.createIdentifier('float64') },
             { names: ['H'], type: go.factory.createIdentifier('float64') },
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration(
         'Area',
@@ -291,9 +299,9 @@ describe('interface type via type declaration', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('io'),
       go.factory.createTypeDeclaration([
-        {
-          name: 'ReadWriter',
-          type: go.factory.createInterfaceType([
+        go.factory.createTypeSpec(
+          'ReadWriter',
+          go.factory.createInterfaceType([
             {
               embed: go.factory.createMemberExpression(
                 go.factory.createIdentifier('io'),
@@ -314,7 +322,7 @@ describe('interface type via type declaration', () => {
               ],
             },
           ]),
-        },
+        ),
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'embedded.go');
@@ -323,9 +331,9 @@ describe('interface type via type declaration', () => {
   it('type-set constraint with approximation and union', async () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createTypeDeclaration([
-        {
-          name: 'Number',
-          type: go.factory.createInterfaceType([
+        go.factory.createTypeSpec(
+          'Number',
+          go.factory.createInterfaceType([
             {
               embed: go.factory.createTypeSet([
                 { approximate: true, type: go.factory.createIdentifier('int') },
@@ -333,7 +341,7 @@ describe('interface type via type declaration', () => {
               ]),
             },
           ]),
-        },
+        ),
       ]),
       go.factory.createFunctionDeclaration(
         'double',

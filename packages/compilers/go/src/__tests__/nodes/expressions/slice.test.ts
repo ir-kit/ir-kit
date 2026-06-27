@@ -221,7 +221,9 @@ describe('slice expression', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       // type T struct{}
-      go.factory.createTypeDeclaration([{ name: 'T', type: go.factory.createStructType([]) }]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec('T', go.factory.createStructType([])),
+      ]),
       // func (t T) Foo() []int { return []int{1,2,3,4} }
       go.factory.createFunctionDeclaration(
         'Foo',
