@@ -6,11 +6,13 @@ describe('type assertion', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'i',
-          go.factory.createIdentifier('any'),
-          go.factory.createLiteral('hello'),
-        ),
+        go.factory.createVarDeclaration([
+          {
+            name: 'i',
+            type: go.factory.createIdentifier('any'),
+            value: go.factory.createLiteral('hello'),
+          },
+        ]),
         go.factory.createShortVarDeclaration(
           's',
           go.factory.createTypeAssertExpression(

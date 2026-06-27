@@ -13,7 +13,9 @@ describe('function type', () => {
         ),
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration('opt', go.factory.createIdentifier('Option')),
+        go.factory.createVarDeclaration([
+          { name: 'opt', type: go.factory.createIdentifier('Option') },
+        ]),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(
@@ -39,7 +41,9 @@ describe('function type', () => {
         ]),
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration('h', go.factory.createIdentifier('Handler')),
+        go.factory.createVarDeclaration([
+          { name: 'h', type: go.factory.createIdentifier('Handler') },
+        ]),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

@@ -104,11 +104,13 @@ describe('literal', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'value',
-          go.factory.createInterfaceType(undefined),
-          go.factory.createLiteral(null),
-        ),
+        go.factory.createVarDeclaration([
+          {
+            name: 'value',
+            type: go.factory.createInterfaceType(undefined),
+            value: go.factory.createLiteral(null),
+          },
+        ]),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

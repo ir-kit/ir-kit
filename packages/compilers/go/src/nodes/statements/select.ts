@@ -1,7 +1,7 @@
 import type { GoNodeBase } from '../base';
 import { GoNodeKind } from '../kinds';
 import type { GoStatement } from '../statement';
-import { createBlock,type GoBlock } from './block';
+import { createBlock, type GoBlock } from './block';
 
 export interface GoSelectCase {
   body: GoBlock;

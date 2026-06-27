@@ -79,13 +79,15 @@ describe('generics (type parameters)', () => {
         [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
       ),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'p',
-          go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
-            go.factory.createIdentifier('string'),
-            go.factory.createIdentifier('int'),
-          ]),
-        ),
+        go.factory.createVarDeclaration([
+          {
+            name: 'p',
+            type: go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
+              go.factory.createIdentifier('string'),
+              go.factory.createIdentifier('int'),
+            ]),
+          },
+        ]),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

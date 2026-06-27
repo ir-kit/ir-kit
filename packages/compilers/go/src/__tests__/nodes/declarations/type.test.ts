@@ -7,11 +7,13 @@ describe('type declaration', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration('UserID', go.factory.createIdentifier('int')),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'id',
-          go.factory.createIdentifier('UserID'),
-          go.factory.createLiteral(123),
-        ),
+        go.factory.createVarDeclaration([
+          {
+            name: 'id',
+            type: go.factory.createIdentifier('UserID'),
+            value: go.factory.createLiteral(123),
+          },
+        ]),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

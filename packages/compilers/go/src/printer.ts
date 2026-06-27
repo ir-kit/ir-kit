@@ -652,10 +652,31 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.VarDeclaration: {
-        const type = node.type ? ` ${printNode(node.type, { inline: true })}` : '';
-        const value = node.value ? ` = ${printNode(node.value, { inline: true })}` : '';
+        if (!node.specs.length) {
+          parts.push(printLine('var ()'));
+          break;
+        }
 
-        parts.push(printLine(`var ${node.name}${type}${value}`));
+        const [firstSpec] = node.specs;
+        if (node.specs.length === 1 && firstSpec) {
+          const type = firstSpec.type ? ` ${printNode(firstSpec.type, { inline: true })}` : '';
+          const value = firstSpec.value ? ` = ${printNode(firstSpec.value, { inline: true })}` : '';
+          parts.push(printLine(`var ${firstSpec.name}${type}${value}`));
+          break;
+        }
+
+        const rows = node.specs.map((spec) => {
+          const cells = [spec.name];
+          if (spec.type) cells.push(printNode(spec.type, { inline: true }));
+          if (spec.value) cells.push(`= ${printNode(spec.value, { inline: true })}`);
+          return cells;
+        });
+
+        parts.push(printLine('var ('));
+        indentLevel += 1;
+        parts.push(...alignCells(rows).map((line) => printLine(line)));
+        indentLevel -= 1;
+        parts.push(printLine(')'));
         break;
       }
 

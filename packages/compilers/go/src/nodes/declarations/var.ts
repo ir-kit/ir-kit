@@ -3,26 +3,26 @@ import type { GoExpression } from '../expression';
 import { GoNodeKind } from '../kinds';
 import type { GoType } from '../type';
 
-export interface GoVarDeclaration extends GoNodeBase {
-  kind: GoNodeKind.VarDeclaration;
+export type GoVarSpec = {
   name: string;
   type?: GoType;
   value?: GoExpression;
+};
+
+export interface GoVarDeclaration extends GoNodeBase {
+  kind: GoNodeKind.VarDeclaration;
+  specs: ReadonlyArray<GoVarSpec>;
 }
 
 export function createVarDeclaration(
-  name: string,
-  type?: GoType,
-  value?: GoExpression,
+  specs: ReadonlyArray<GoVarSpec>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): GoVarDeclaration {
   return {
     kind: GoNodeKind.VarDeclaration,
     leadingComments,
-    name,
+    specs,
     trailingComments,
-    type,
-    value,
   };
 }

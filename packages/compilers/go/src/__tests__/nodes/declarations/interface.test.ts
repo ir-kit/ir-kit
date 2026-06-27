@@ -7,11 +7,13 @@ describe('interface type via type declaration', () => {
       go.factory.createImportStatement('fmt'),
       go.factory.createTypeDeclaration('Any', go.factory.createInterfaceType([])),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'x',
-          go.factory.createIdentifier('Any'),
-          go.factory.createLiteral(123),
-        ),
+        go.factory.createVarDeclaration([
+          {
+            name: 'x',
+            type: go.factory.createIdentifier('Any'),
+            value: go.factory.createLiteral(123),
+          },
+        ]),
         go.factory.createEmptyStatement(),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(

@@ -90,12 +90,14 @@ describe('pointer type', () => {
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
-        go.factory.createVarDeclaration(
-          'pp',
-          go.factory.createPointerType(
-            go.factory.createPointerType(go.factory.createIdentifier('int')),
-          ),
-        ),
+        go.factory.createVarDeclaration([
+          {
+            name: 'pp',
+            type: go.factory.createPointerType(
+              go.factory.createPointerType(go.factory.createIdentifier('int')),
+            ),
+          },
+        ]),
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
             go.factory.createMemberExpression(

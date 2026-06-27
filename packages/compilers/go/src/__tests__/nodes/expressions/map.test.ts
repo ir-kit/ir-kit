@@ -11,7 +11,7 @@ describe('maps', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration('x', undefined, lit),
+      go.factory.createVarDeclaration([{ name: 'x', value: lit }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -49,7 +49,7 @@ describe('maps', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration('x', undefined, lit),
+      go.factory.createVarDeclaration([{ name: 'x', value: lit }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
@@ -103,7 +103,7 @@ describe('maps', () => {
 
     const file = go.factory.createSourceFile('main', [
       go.factory.createImportStatement('fmt'),
-      go.factory.createVarDeclaration('x', undefined, lit),
+      go.factory.createVarDeclaration([{ name: 'x', value: lit }]),
       go.factory.createFunctionDeclaration('main', undefined, undefined, [
         go.factory.createExpressionStatement(
           go.factory.createCallExpression(
