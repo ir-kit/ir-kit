@@ -494,7 +494,9 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.SelectStatement: {
         parts.push(printLine('select {'));
         for (const selectCase of node.cases) {
-          const clause = selectCase.comm ? `case ${printInline(selectCase.comm)}` : 'default';
+          const clause = selectCase.communication
+            ? `case ${printInline(selectCase.communication)}`
+            : 'default';
           parts.push(printLine(`${clause}:`));
           if (selectCase.body.statements.length) {
             indentLevel += 1;

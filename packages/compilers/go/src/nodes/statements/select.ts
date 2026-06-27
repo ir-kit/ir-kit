@@ -5,7 +5,7 @@ import { createBlock, type GoBlock } from './block';
 
 export interface GoSelectCase {
   body: GoBlock;
-  comm?: GoStatement;
+  communication?: GoStatement;
 }
 
 export interface GoSelectStatement extends GoNodeBase {
@@ -15,11 +15,11 @@ export interface GoSelectStatement extends GoNodeBase {
 
 export function createSelectCase(
   body: ReadonlyArray<GoStatement>,
-  comm?: GoStatement,
+  communication?: GoStatement,
 ): GoSelectCase {
   return {
     body: createBlock(body),
-    comm,
+    communication,
   };
 }
 
