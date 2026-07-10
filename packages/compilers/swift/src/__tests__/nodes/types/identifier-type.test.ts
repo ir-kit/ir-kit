@@ -6,8 +6,8 @@ describe('identifier type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createIdentifierType('Box', [
+          pattern: 'value',
+          typeAnnotation: swift.factory.createIdentifierType('Box', [
             swift.factory.createIdentifierType('Int'),
           ]),
         },
@@ -20,8 +20,8 @@ describe('identifier type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createIdentifierType('Pair', [
+          pattern: 'value',
+          typeAnnotation: swift.factory.createIdentifierType('Pair', [
             swift.factory.createIdentifierType('String'),
             swift.factory.createIdentifierType('Int'),
           ]),

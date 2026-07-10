@@ -6,10 +6,10 @@ describe('enum case declaration', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createEnumDeclaration('Result', [
         swift.factory.createEnumCaseDeclaration([
-          { associatedValues: [swift.factory.createIdentifierType('Int')], name: 'success' },
+          { name: 'success', parameterClause: [swift.factory.createIdentifierType('Int')] },
         ]),
         swift.factory.createEnumCaseDeclaration([
-          { associatedValues: [swift.factory.createIdentifierType('Error')], name: 'failure' },
+          { name: 'failure', parameterClause: [swift.factory.createIdentifierType('Error')] },
         ]),
       ]),
     ]);

@@ -4,19 +4,19 @@ import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftSubscriptExpression extends SwiftNodeBase {
   arguments: ReadonlyArray<SwiftExpression>;
-  base: SwiftExpression;
+  calledExpression: SwiftExpression;
   kind: SwiftNodeKind.SubscriptExpression;
 }
 
 export function createSubscriptExpression(
-  base: SwiftExpression,
+  calledExpression: SwiftExpression,
   args: ReadonlyArray<SwiftExpression>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftSubscriptExpression {
   return {
     arguments: args,
-    base,
+    calledExpression,
     kind: SwiftNodeKind.SubscriptExpression,
     leadingComments,
     trailingComments,

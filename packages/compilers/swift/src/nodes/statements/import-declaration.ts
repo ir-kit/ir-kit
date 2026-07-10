@@ -1,7 +1,7 @@
 import type { SwiftNodeBase } from '../base';
 import { SwiftNodeKind } from '../kinds';
 
-export type SwiftImportKind =
+export type SwiftImportKindSpecifier =
   | 'class'
   | 'enum'
   | 'func'
@@ -12,19 +12,19 @@ export type SwiftImportKind =
   | 'var';
 
 export interface SwiftImportDeclaration extends SwiftNodeBase {
-  importKind?: SwiftImportKind;
+  importKindSpecifier?: SwiftImportKindSpecifier;
   kind: SwiftNodeKind.ImportDeclaration;
   path: string;
 }
 
 export function createImportDeclaration(
   path: string,
-  importKind?: SwiftImportKind,
+  importKindSpecifier?: SwiftImportKindSpecifier,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftImportDeclaration {
   return {
-    importKind,
+    importKindSpecifier,
     kind: SwiftNodeKind.ImportDeclaration,
     leadingComments,
     path,

@@ -8,13 +8,13 @@ describe('declaration attributes', () => {
         'Widget',
         [
           swift.factory.createVariableDeclaration('let', [
-            { name: 'name', type: swift.factory.createIdentifierType('String') },
+            { pattern: 'name', typeAnnotation: swift.factory.createIdentifierType('String') },
           ]),
         ],
         undefined,
         undefined,
         undefined,
-        [{ arguments: 'macOS 13, *', name: 'available' }],
+        [{ arguments: 'macOS 13, *', attributeName: 'available' }],
       ),
     ]);
     await assertPrintedMatchesSnapshot(file, 'class-with-available-attribute.swift');
@@ -36,7 +36,7 @@ describe('declaration attributes', () => {
         undefined,
         undefined,
         undefined,
-        [{ name: 'objc' }],
+        [{ attributeName: 'objc' }],
       ),
     ]);
     await assertPrintedMatchesSnapshot(file, 'function-with-objc-attribute.swift');

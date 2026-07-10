@@ -5,7 +5,7 @@ describe('regex literal', () => {
   it('regex literal binding', async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
-        { name: 're', value: swift.factory.createRegexLiteral('[a-z]+') },
+        { initializer: swift.factory.createRegexLiteral('[a-z]+'), pattern: 're' },
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'regex-literal-binding.swift');

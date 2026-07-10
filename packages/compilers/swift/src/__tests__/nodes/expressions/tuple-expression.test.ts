@@ -6,11 +6,11 @@ describe('tuple expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createTupleExpression([
+          initializer: swift.factory.createTupleExpression([
             { expression: swift.factory.createIntegerLiteral('1'), label: 'x' },
             { expression: swift.factory.createIntegerLiteral('2'), label: 'y' },
           ]),
+          pattern: 'example',
         },
       ]),
     ]);

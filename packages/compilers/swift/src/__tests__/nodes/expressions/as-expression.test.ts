@@ -6,12 +6,12 @@ describe('as expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createAsExpression(
+          initializer: swift.factory.createAsExpression(
             swift.factory.createIdentifier('value'),
             swift.factory.createIdentifierType('String'),
-            'as?',
+            '?',
           ),
+          pattern: 'example',
         },
       ]),
     ]);

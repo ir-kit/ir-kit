@@ -5,22 +5,22 @@ import type { SwiftType } from '../type';
 export type SwiftSomeOrAnySpecifier = 'any' | 'some';
 
 export interface SwiftSomeOrAnyType extends SwiftNodeBase {
-  baseType: SwiftType;
+  constraint: SwiftType;
   kind: SwiftNodeKind.SomeOrAnyType;
-  specifier: SwiftSomeOrAnySpecifier;
+  someOrAnySpecifier: SwiftSomeOrAnySpecifier;
 }
 
 export function createSomeOrAnyType(
-  specifier: SwiftSomeOrAnySpecifier,
-  baseType: SwiftType,
+  someOrAnySpecifier: SwiftSomeOrAnySpecifier,
+  constraint: SwiftType,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftSomeOrAnyType {
   return {
-    baseType,
+    constraint,
     kind: SwiftNodeKind.SomeOrAnyType,
     leadingComments,
-    specifier,
+    someOrAnySpecifier,
     trailingComments,
   };
 }

@@ -6,11 +6,11 @@ describe('member access expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createMemberAccessExpression(
+          initializer: swift.factory.createMemberAccessExpression(
             swift.factory.createIdentifier('foo'),
             'bar',
           ),
+          pattern: 'example',
         },
       ]),
     ]);

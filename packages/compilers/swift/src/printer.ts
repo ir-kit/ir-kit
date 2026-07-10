@@ -1,4 +1,5 @@
 import type { SwiftNode } from './nodes/base';
+import type { SwiftAttribute, SwiftGenericParameter } from './nodes/declarations/shared';
 import { SwiftNodeKind } from './nodes/kinds';
 import type { SwiftCondition } from './nodes/statements/condition';
 
@@ -23,28 +24,26 @@ export function createPrinter(options?: SwiftPrinterOptions) {
     return INDENT.repeat(indentLevel) + line;
   }
 
-  function printAttributes(
-    attributes: ReadonlyArray<{ arguments?: string; name: string }> | undefined,
-  ): Array<string> {
+  function printAttributes(attributes: ReadonlyArray<SwiftAttribute> | undefined): Array<string> {
     if (!attributes?.length) return [];
     return attributes.map((attribute) =>
       printLine(
-        attribute.arguments ? `@${attribute.name}(${attribute.arguments})` : `@${attribute.name}`,
+        attribute.arguments
+          ? `@${attribute.attributeName}(${attribute.arguments})`
+          : `@${attribute.attributeName}`,
       ),
     );
   }
 
   function printGenericParameters(
-    genericParameters:
-      | ReadonlyArray<{ constraint?: SwiftNode; isPack?: boolean; name: string }>
-      | undefined,
+    genericParameters: ReadonlyArray<SwiftGenericParameter> | undefined,
   ): string {
     if (!genericParameters?.length) return '';
     const list = genericParameters
       .map((parameter) => {
         const each = parameter.isPack ? 'each ' : '';
-        return parameter.constraint
-          ? `${each}${parameter.name}: ${printNode(parameter.constraint)}`
+        return parameter.inheritedType
+          ? `${each}${parameter.name}: ${printNode(parameter.inheritedType)}`
           : `${each}${parameter.name}`;
       })
       .join(', ');
@@ -90,11 +89,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
   function printCondition(condition: SwiftCondition): string {
     if ('kind' in condition) return printNode(condition);
     if ('platforms' in condition) return `#available(${condition.platforms.join(', ')})`;
-    if ('pattern' in condition)
-      return `case ${printNode(condition.pattern)} = ${printNode(condition.value)}`;
-    return condition.value
-      ? `${condition.bindingSpecifier} ${condition.name} = ${printNode(condition.value)}`
-      : `${condition.bindingSpecifier} ${condition.name}`;
+    if ('bindingSpecifier' in condition)
+      return condition.initializer
+        ? `${condition.bindingSpecifier} ${condition.pattern} = ${printNode(condition.initializer)}`
+        : `${condition.bindingSpecifier} ${condition.pattern}`;
+    return `case ${printNode(condition.pattern)} = ${printNode(condition.initializer)}`;
   }
 
   function printBraceBlock(header: string, body: ReadonlyArray<SwiftNode>): string {
@@ -109,7 +108,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
     switch (node.kind) {
       case SwiftNodeKind.AccessorBlock: {
         const accessors = node.accessors.map((accessor) =>
-          printBraceBlock(accessor.kind, accessor.body),
+          printBraceBlock(accessor.accessorSpecifier, accessor.body),
         );
         return accessors.join('\n');
       }
@@ -129,7 +128,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return `[${printNode(node.element)}]`;
 
       case SwiftNodeKind.AsExpression:
-        return `${printNode(node.expression)} ${node.asKind} ${printNode(node.type)}`;
+        return `${printNode(node.expression)} as${node.questionOrExclamationMark ?? ''} ${printNode(node.type)}`;
 
       case SwiftNodeKind.AssignmentExpression:
         return `${printNode(node.target)} = ${printNode(node.value)}`;
@@ -144,7 +143,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return `await ${printNode(node.expression)}`;
 
       case SwiftNodeKind.BooleanLiteral:
-        return node.value ? 'true' : 'false';
+        return node.literal ? 'true' : 'false';
 
       case SwiftNodeKind.BreakStatement:
         return printLine(node.label ? `break ${node.label}` : 'break');
@@ -175,7 +174,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.CompositionType:
-        return node.types.map((type) => printNode(type)).join(' & ');
+        return node.elements.map((type) => printNode(type)).join(' & ');
 
       case SwiftNodeKind.ConditionalCompilation: {
         const lines = [printLine(`#if ${node.condition}`)];
@@ -204,8 +203,8 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         );
 
       case SwiftNodeKind.DictionaryLiteral: {
-        if (!node.elements.length) return '[:]';
-        const elements = node.elements
+        if (!node.content.length) return '[:]';
+        const elements = node.content
           .map((element) => `${printNode(element.key)}: ${printNode(element.value)}`)
           .join(', ');
         return `[${elements}]`;
@@ -226,7 +225,9 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         for (const catchClause of node.catchClauses) {
           lines.push(
             printLine(
-              catchClause.pattern ? `} catch ${printNode(catchClause.pattern)} {` : '} catch {',
+              catchClause.catchItems
+                ? `} catch ${printNode(catchClause.catchItems)} {`
+                : '} catch {',
             ),
           );
           indentLevel += 1;
@@ -239,8 +240,8 @@ export function createPrinter(options?: SwiftPrinterOptions) {
 
       case SwiftNodeKind.EnumCaseDeclaration: {
         const elements = node.elements.map((element) => {
-          const associatedValues = element.associatedValues?.length
-            ? `(${element.associatedValues.map((value) => printNode(value)).join(', ')})`
+          const associatedValues = element.parameterClause?.length
+            ? `(${element.parameterClause.map((value) => printNode(value)).join(', ')})`
             : '';
           const rawValue = element.rawValue ? ` = ${printNode(element.rawValue)}` : '';
           return `${element.name}${associatedValues}${rawValue}`;
@@ -251,8 +252,8 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.EnumCasePattern: {
-        const associatedValues = node.associatedValues
-          ? `(${node.associatedValues.map((value) => printNode(value)).join(', ')})`
+        const associatedValues = node.associatedTuple
+          ? `(${node.associatedTuple.map((value) => printNode(value)).join(', ')})`
           : '';
         return `.${node.caseName}${associatedValues}`;
       }
@@ -283,12 +284,12 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return printLine('fallthrough');
 
       case SwiftNodeKind.FloatLiteral:
-        return node.value;
+        return node.literal;
 
       case SwiftNodeKind.ForInStatement: {
         const iterator = node.casePattern
           ? `for case ${printNode(node.casePattern)}`
-          : `for ${node.binding}`;
+          : `for ${node.pattern}`;
         return printBraceBlock(`${iterator} in ${printNode(node.sequence)}`, node.body);
       }
 
@@ -300,7 +301,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
               : printNode(argument.expression),
           )
           .join(', ');
-        return `${printNode(node.callee)}(${args})`;
+        return `${printNode(node.calledExpression)}(${args})`;
       }
 
       case SwiftNodeKind.FunctionDeclaration: {
@@ -332,14 +333,14 @@ export function createPrinter(options?: SwiftPrinterOptions) {
 
       case SwiftNodeKind.GuardStatement: {
         const conditions = node.conditions.map((condition) => printCondition(condition)).join(', ');
-        return printBraceBlock(`guard ${conditions} else`, node.elseBody);
+        return printBraceBlock(`guard ${conditions} else`, node.body);
       }
 
       case SwiftNodeKind.Identifier:
-        return node.name;
+        return node.baseName;
 
       case SwiftNodeKind.IdentifierPattern:
-        return node.name;
+        return node.identifier;
 
       case SwiftNodeKind.IdentifierType:
         return node.genericArguments && node.genericArguments.length > 0
@@ -347,14 +348,12 @@ export function createPrinter(options?: SwiftPrinterOptions) {
           : node.name;
 
       case SwiftNodeKind.IfStatement: {
-        const conditions = (Array.isArray(node.condition) ? node.condition : [node.condition])
-          .map((condition) => printCondition(condition))
-          .join(', ');
+        const conditions = node.conditions.map((condition) => printCondition(condition)).join(', ');
         const header = printLine(`if ${conditions} {`);
         indentLevel += 1;
-        const thenBody = node.thenBody.map((statement) => printNode(statement));
+        const body = node.body.map((statement) => printNode(statement));
         indentLevel -= 1;
-        const lines = [header, ...thenBody];
+        const lines = [header, ...body];
         if (node.elseBody) {
           lines.push(printLine('} else {'));
           indentLevel += 1;
@@ -369,12 +368,12 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return `${printNode(node.wrappedType)}!`;
 
       case SwiftNodeKind.ImportDeclaration: {
-        const importKind = node.importKind ? `${node.importKind} ` : '';
+        const importKind = node.importKindSpecifier ? `${node.importKindSpecifier} ` : '';
         return printLine(`import ${importKind}${node.path}`);
       }
 
       case SwiftNodeKind.InfixOperatorExpression:
-        return `${printNode(node.left)} ${node.operator} ${printNode(node.right)}`;
+        return `${printNode(node.leftOperand)} ${node.operator} ${printNode(node.rightOperand)}`;
 
       case SwiftNodeKind.InitializerDeclaration: {
         const modifiers = node.modifiers?.length ? `${node.modifiers.join(' ')} ` : '';
@@ -387,14 +386,14 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.IntegerLiteral:
-        return node.value;
+        return node.literal;
 
       case SwiftNodeKind.InterpolatedStringLiteral: {
         const body = node.segments
           .map((segment) =>
             'expression' in segment
               ? `\\(${printNode(segment.expression)})`
-              : segment.text.replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
+              : segment.content.replace(/\\/g, '\\\\').replace(/"/g, '\\"'),
           )
           .join('');
         return `"${body}"`;
@@ -427,7 +426,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.MacroExpansionExpression: {
-        if (node.arguments === undefined) return `#${node.name}`;
+        if (node.arguments === undefined) return `#${node.macroName}`;
         const args = node.arguments
           .map((argument) =>
             argument.label
@@ -435,11 +434,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
               : printNode(argument.expression),
           )
           .join(', ');
-        return `#${node.name}(${args})`;
+        return `#${node.macroName}(${args})`;
       }
 
       case SwiftNodeKind.MemberAccessExpression:
-        return `${printNode(node.base)}.${node.name}`;
+        return `${printNode(node.base)}.${node.declName}`;
 
       case SwiftNodeKind.MemberType:
         return `${printNode(node.baseType)}.${node.name}`;
@@ -460,11 +459,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
 
       case SwiftNodeKind.OperatorDeclaration: {
         const precedenceGroup = node.precedenceGroup ? ` : ${node.precedenceGroup}` : '';
-        return printLine(`${node.fixity} operator ${node.name}${precedenceGroup}`);
+        return printLine(`${node.fixitySpecifier} operator ${node.name}${precedenceGroup}`);
       }
 
       case SwiftNodeKind.OptionalPattern:
-        return `${printNode(node.pattern)}?`;
+        return `${printNode(node.subPattern)}?`;
 
       case SwiftNodeKind.OptionalType:
         return `${printNode(node.wrappedType)}?`;
@@ -476,7 +475,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return `repeat ${printNode(node.repetitionPattern)}`;
 
       case SwiftNodeKind.PostfixOperatorExpression:
-        return `${printNode(node.operand)}${node.operator}`;
+        return `${printNode(node.expression)}${node.operator}`;
 
       case SwiftNodeKind.PrecedenceGroupDeclaration: {
         const header = printLine(`precedencegroup ${node.name} {`);
@@ -494,7 +493,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.PrefixOperatorExpression:
-        return `${node.operator}${printNode(node.operand)}`;
+        return `${node.operator}${printNode(node.expression)}`;
 
       case SwiftNodeKind.ProtocolDeclaration: {
         const modifiers = node.modifiers?.length ? `${node.modifiers.join(' ')} ` : '';
@@ -511,7 +510,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.RegexLiteral:
-        return `/${node.pattern}/`;
+        return `/${node.regex}/`;
 
       case SwiftNodeKind.RepeatWhileStatement: {
         const headerLine = printLine('repeat {');
@@ -531,7 +530,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return 'self';
 
       case SwiftNodeKind.SomeOrAnyType:
-        return `${node.specifier} ${printNode(node.baseType)}`;
+        return `${node.someOrAnySpecifier} ${printNode(node.constraint)}`;
 
       case SwiftNodeKind.SourceFile: {
         const parts: Array<string> = [];
@@ -549,7 +548,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.StringLiteral:
-        return `"${node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+        return `"${node.literal.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 
       case SwiftNodeKind.StructDeclaration: {
         const modifiers = node.modifiers?.length ? `${node.modifiers.join(' ')} ` : '';
@@ -563,7 +562,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length ? `${node.modifiers.join(' ')} ` : '';
         const parameters = node.parameters.map((parameter) => printParameter(parameter)).join(', ');
         const header = printLine(
-          `${modifiers}subscript(${parameters}) -> ${printNode(node.returnType)}${printWhereClause(node.genericWhereClause)} {`,
+          `${modifiers}subscript${printGenericParameters(node.genericParameters)}(${parameters}) -> ${printNode(node.returnType)}${printWhereClause(node.genericWhereClause)} {`,
         );
         indentLevel += 1;
         const accessors = printNode(node.accessorBlock);
@@ -572,7 +571,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.SubscriptExpression:
-        return `${printNode(node.base)}[${node.arguments.map((argument) => printNode(argument)).join(', ')}]`;
+        return `${printNode(node.calledExpression)}[${node.arguments.map((argument) => printNode(argument)).join(', ')}]`;
 
       case SwiftNodeKind.SuperExpression:
         return 'super';
@@ -600,7 +599,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return printLine(`throw ${printNode(node.expression)}`);
 
       case SwiftNodeKind.TryExpression:
-        return `${node.tryKind} ${printNode(node.expression)}`;
+        return `try${node.questionOrExclamationMark ?? ''} ${printNode(node.expression)}`;
 
       case SwiftNodeKind.TupleExpression: {
         const elements = node.elements
@@ -619,7 +618,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       case SwiftNodeKind.TupleType: {
         const elements = node.elements
           .map((element) => {
-            const label = element.label ? `${element.label}: ` : '';
+            const label = element.firstName ? `${element.firstName}: ` : '';
             return `${label}${printNode(element.type)}`;
           })
           .join(', ');
@@ -641,13 +640,15 @@ export function createPrinter(options?: SwiftPrinterOptions) {
 
       case SwiftNodeKind.VariableDeclaration: {
         const attributes = printAttributes(node.attributes);
-        const asyncKeyword = node.isAsync ? 'async ' : '';
+        const modifiers = node.modifiers?.length ? `${node.modifiers.join(' ')} ` : '';
         const [firstBinding] = node.bindings;
         if (node.bindings.length === 1 && firstBinding?.accessorBlock) {
-          const type = firstBinding.type ? `: ${printNode(firstBinding.type)}` : '';
-          const value = firstBinding.value ? ` = ${printNode(firstBinding.value)}` : '';
+          const type = firstBinding.typeAnnotation
+            ? `: ${printNode(firstBinding.typeAnnotation)}`
+            : '';
+          const value = firstBinding.initializer ? ` = ${printNode(firstBinding.initializer)}` : '';
           const header = printLine(
-            `${node.bindingSpecifier} ${firstBinding.name}${type}${value} {`,
+            `${modifiers}${node.bindingSpecifier} ${firstBinding.pattern}${type}${value} {`,
           );
           indentLevel += 1;
           const accessors = printNode(firstBinding.accessorBlock);
@@ -656,19 +657,20 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         }
         const bindings = node.bindings
           .map((binding) => {
-            const type = binding.type ? `: ${printNode(binding.type)}` : '';
-            const value = binding.value ? ` = ${printNode(binding.value)}` : '';
-            return `${binding.name}${type}${value}`;
+            const type = binding.typeAnnotation ? `: ${printNode(binding.typeAnnotation)}` : '';
+            const value = binding.initializer ? ` = ${printNode(binding.initializer)}` : '';
+            return `${binding.pattern}${type}${value}`;
           })
           .join(', ');
-        return [
-          ...attributes,
-          printLine(`${asyncKeyword}${node.bindingSpecifier} ${bindings}`),
-        ].join('\n');
+        return [...attributes, printLine(`${modifiers}${node.bindingSpecifier} ${bindings}`)].join(
+          '\n',
+        );
       }
 
-      case SwiftNodeKind.WhileStatement:
-        return printBraceBlock(`while ${printNode(node.condition)}`, node.body);
+      case SwiftNodeKind.WhileStatement: {
+        const conditions = node.conditions.map((condition) => printCondition(condition)).join(', ');
+        return printBraceBlock(`while ${conditions}`, node.body);
+      }
 
       case SwiftNodeKind.WildcardPattern:
         return '_';

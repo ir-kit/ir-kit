@@ -6,8 +6,8 @@ describe('multiline string literal', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'doc',
-          value: swift.factory.createMultilineStringLiteral(['Line one', 'Line two']),
+          initializer: swift.factory.createMultilineStringLiteral(['Line one', 'Line two']),
+          pattern: 'doc',
         },
       ]),
     ]);

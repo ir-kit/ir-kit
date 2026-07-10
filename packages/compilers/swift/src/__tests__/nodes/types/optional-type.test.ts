@@ -6,8 +6,10 @@ describe('optional type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createOptionalType(swift.factory.createIdentifierType('Int')),
+          pattern: 'value',
+          typeAnnotation: swift.factory.createOptionalType(
+            swift.factory.createIdentifierType('Int'),
+          ),
         },
       ]),
     ]);

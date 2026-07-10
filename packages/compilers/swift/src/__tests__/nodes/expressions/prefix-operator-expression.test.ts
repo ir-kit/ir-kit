@@ -6,11 +6,11 @@ describe('prefix operator expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createPrefixOperatorExpression(
+          initializer: swift.factory.createPrefixOperatorExpression(
             '-',
             swift.factory.createIdentifier('value'),
           ),
+          pattern: 'example',
         },
       ]),
     ]);

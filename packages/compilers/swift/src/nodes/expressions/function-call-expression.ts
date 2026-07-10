@@ -9,19 +9,19 @@ export type SwiftCallArgument = {
 
 export interface SwiftFunctionCallExpression extends SwiftNodeBase {
   arguments: ReadonlyArray<SwiftCallArgument>;
-  callee: SwiftExpression;
+  calledExpression: SwiftExpression;
   kind: SwiftNodeKind.FunctionCallExpression;
 }
 
 export function createFunctionCallExpression(
-  callee: SwiftExpression,
+  calledExpression: SwiftExpression,
   args: ReadonlyArray<SwiftCallArgument>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftFunctionCallExpression {
   return {
     arguments: args,
-    callee,
+    calledExpression,
     kind: SwiftNodeKind.FunctionCallExpression,
     leadingComments,
     trailingComments,

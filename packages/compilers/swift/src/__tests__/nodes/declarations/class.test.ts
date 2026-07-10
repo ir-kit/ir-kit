@@ -8,7 +8,7 @@ describe('class declaration', () => {
         'Box',
         [
           swift.factory.createVariableDeclaration('let', [
-            { name: 'value', type: swift.factory.createIdentifierType('T') },
+            { pattern: 'value', typeAnnotation: swift.factory.createIdentifierType('T') },
           ]),
         ],
         undefined,
@@ -25,7 +25,7 @@ describe('class declaration', () => {
         'ViewController',
         [
           swift.factory.createVariableDeclaration('let', [
-            { name: 'title', type: swift.factory.createIdentifierType('String') },
+            { pattern: 'title', typeAnnotation: swift.factory.createIdentifierType('String') },
           ]),
         ],
         ['public', 'final'],

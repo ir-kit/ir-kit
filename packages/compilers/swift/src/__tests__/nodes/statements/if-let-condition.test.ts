@@ -15,11 +15,13 @@ describe('optional binding condition', () => {
         undefined,
         [
           swift.factory.createIfStatement(
-            {
-              bindingSpecifier: 'let',
-              name: 'value',
-              value: swift.factory.createIdentifier('optional'),
-            },
+            [
+              {
+                bindingSpecifier: 'let',
+                initializer: swift.factory.createIdentifier('optional'),
+                pattern: 'value',
+              },
+            ],
             [
               swift.factory.createExpressionStatement(
                 swift.factory.createFunctionCallExpression(

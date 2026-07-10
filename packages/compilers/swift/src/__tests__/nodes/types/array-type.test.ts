@@ -6,8 +6,8 @@ describe('array type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createArrayType(swift.factory.createIdentifierType('Int')),
+          pattern: 'value',
+          typeAnnotation: swift.factory.createArrayType(swift.factory.createIdentifierType('Int')),
         },
       ]),
     ]);

@@ -8,17 +8,17 @@ export type SwiftDictionaryElement = {
 };
 
 export interface SwiftDictionaryLiteral extends SwiftNodeBase {
-  elements: ReadonlyArray<SwiftDictionaryElement>;
+  content: ReadonlyArray<SwiftDictionaryElement>;
   kind: SwiftNodeKind.DictionaryLiteral;
 }
 
 export function createDictionaryLiteral(
-  elements: ReadonlyArray<SwiftDictionaryElement>,
+  content: ReadonlyArray<SwiftDictionaryElement>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftDictionaryLiteral {
   return {
-    elements,
+    content,
     kind: SwiftNodeKind.DictionaryLiteral,
     leadingComments,
     trailingComments,

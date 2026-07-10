@@ -3,19 +3,19 @@ import { SwiftNodeKind } from '../kinds';
 import type { SwiftType } from '../type';
 
 export interface SwiftCompositionType extends SwiftNodeBase {
+  elements: ReadonlyArray<SwiftType>;
   kind: SwiftNodeKind.CompositionType;
-  types: ReadonlyArray<SwiftType>;
 }
 
 export function createCompositionType(
-  types: ReadonlyArray<SwiftType>,
+  elements: ReadonlyArray<SwiftType>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftCompositionType {
   return {
+    elements,
     kind: SwiftNodeKind.CompositionType,
     leadingComments,
     trailingComments,
-    types,
   };
 }

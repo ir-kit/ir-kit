@@ -5,11 +5,11 @@ import type { SwiftCallArgument } from './function-call-expression';
 export interface SwiftMacroExpansionExpression extends SwiftNodeBase {
   arguments?: ReadonlyArray<SwiftCallArgument>;
   kind: SwiftNodeKind.MacroExpansionExpression;
-  name: string;
+  macroName: string;
 }
 
 export function createMacroExpansionExpression(
-  name: string,
+  macroName: string,
   args?: ReadonlyArray<SwiftCallArgument>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
@@ -18,7 +18,7 @@ export function createMacroExpansionExpression(
     arguments: args,
     kind: SwiftNodeKind.MacroExpansionExpression,
     leadingComments,
-    name,
+    macroName,
     trailingComments,
   };
 }

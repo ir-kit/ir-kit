@@ -6,14 +6,14 @@ describe('function call expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createFunctionCallExpression(
+          initializer: swift.factory.createFunctionCallExpression(
             swift.factory.createIdentifier('greet'),
             [
               { expression: swift.factory.createStringLiteral('world') },
               { expression: swift.factory.createIntegerLiteral('2'), label: 'times' },
             ],
           ),
+          pattern: 'example',
         },
       ]),
     ]);

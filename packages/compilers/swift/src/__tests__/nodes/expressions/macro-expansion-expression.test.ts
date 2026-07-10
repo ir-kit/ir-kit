@@ -6,10 +6,10 @@ describe('macro expansion expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'u',
-          value: swift.factory.createMacroExpansionExpression('URL', [
+          initializer: swift.factory.createMacroExpansionExpression('URL', [
             { expression: swift.factory.createStringLiteral('https://x.com') },
           ]),
+          pattern: 'u',
         },
       ]),
     ]);

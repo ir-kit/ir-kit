@@ -6,8 +6,8 @@ describe('composition type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createSomeOrAnyType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createSomeOrAnyType(
             'any',
             swift.factory.createCompositionType([
               swift.factory.createIdentifierType('Codable'),

@@ -6,11 +6,11 @@ describe('is expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createIsExpression(
+          initializer: swift.factory.createIsExpression(
             swift.factory.createIdentifier('value'),
             swift.factory.createIdentifierType('String'),
           ),
+          pattern: 'example',
         },
       ]),
     ]);

@@ -3,18 +3,18 @@ import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftFloatLiteral extends SwiftNodeBase {
   kind: SwiftNodeKind.FloatLiteral;
-  value: string;
+  literal: string;
 }
 
 export function createFloatLiteral(
-  value: string,
+  literal: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftFloatLiteral {
   return {
     kind: SwiftNodeKind.FloatLiteral,
     leadingComments,
+    literal,
     trailingComments,
-    value,
   };
 }

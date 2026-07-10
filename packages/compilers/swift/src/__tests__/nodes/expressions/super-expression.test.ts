@@ -7,9 +7,9 @@ describe('super expression', () => {
       swift.factory.createClassDeclaration('Base', [
         swift.factory.createVariableDeclaration('let', [
           {
-            name: 'value',
-            type: swift.factory.createIdentifierType('Int'),
-            value: swift.factory.createIntegerLiteral('0'),
+            initializer: swift.factory.createIntegerLiteral('0'),
+            pattern: 'value',
+            typeAnnotation: swift.factory.createIdentifierType('Int'),
           },
         ]),
       ]),
@@ -19,11 +19,11 @@ describe('super expression', () => {
           swift.factory.createFunctionDeclaration('read', [], undefined, [
             swift.factory.createVariableDeclaration('let', [
               {
-                name: 'x',
-                value: swift.factory.createMemberAccessExpression(
+                initializer: swift.factory.createMemberAccessExpression(
                   swift.factory.createSuperExpression(),
                   'value',
                 ),
+                pattern: 'x',
               },
             ]),
           ]),

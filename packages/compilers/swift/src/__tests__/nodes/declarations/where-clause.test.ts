@@ -31,7 +31,7 @@ describe('generic where clause', () => {
         'Box',
         [
           swift.factory.createVariableDeclaration('let', [
-            { name: 'value', type: swift.factory.createIdentifierType('T') },
+            { pattern: 'value', typeAnnotation: swift.factory.createIdentifierType('T') },
           ]),
         ],
         undefined,

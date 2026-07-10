@@ -6,12 +6,12 @@ describe('array literal expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createArrayLiteral([
+          initializer: swift.factory.createArrayLiteral([
             swift.factory.createIntegerLiteral('1'),
             swift.factory.createIntegerLiteral('2'),
             swift.factory.createIntegerLiteral('3'),
           ]),
+          pattern: 'example',
         },
       ]),
     ]);

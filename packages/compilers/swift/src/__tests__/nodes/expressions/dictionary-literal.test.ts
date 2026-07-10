@@ -6,8 +6,7 @@ describe('dictionary literal expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createDictionaryLiteral([
+          initializer: swift.factory.createDictionaryLiteral([
             {
               key: swift.factory.createStringLiteral('a'),
               value: swift.factory.createIntegerLiteral('1'),
@@ -17,6 +16,7 @@ describe('dictionary literal expression', () => {
               value: swift.factory.createIntegerLiteral('2'),
             },
           ]),
+          pattern: 'example',
         },
       ]),
     ]);

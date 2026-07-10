@@ -6,8 +6,11 @@ describe('metatype type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createMetatypeType(swift.factory.createIdentifierType('Int'), 'Type'),
+          pattern: 'value',
+          typeAnnotation: swift.factory.createMetatypeType(
+            swift.factory.createIdentifierType('Int'),
+            'Type',
+          ),
         },
       ]),
     ]);
@@ -18,8 +21,8 @@ describe('metatype type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createMetatypeType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createMetatypeType(
             swift.factory.createIdentifierType('Codable'),
             'Protocol',
           ),

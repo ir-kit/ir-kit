@@ -5,7 +5,7 @@ describe('boolean literal expression', () => {
   it('bound to a constant', async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
-        { name: 'example', value: swift.factory.createBooleanLiteral(true) },
+        { initializer: swift.factory.createBooleanLiteral(true), pattern: 'example' },
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'boolean-literal.swift');

@@ -6,8 +6,8 @@ describe('some or any type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createSomeOrAnyType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createSomeOrAnyType(
             'any',
             swift.factory.createIdentifierType('Codable'),
           ),
@@ -21,8 +21,8 @@ describe('some or any type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createSomeOrAnyType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createSomeOrAnyType(
             'some',
             swift.factory.createIdentifierType('Equatable'),
           ),

@@ -6,14 +6,14 @@ export type SwiftAvailabilityCondition = {
 };
 
 export type SwiftMatchingPatternCondition = {
+  initializer: SwiftExpression;
   pattern: SwiftPattern;
-  value: SwiftExpression;
 };
 
 export type SwiftOptionalBindingCondition = {
   bindingSpecifier: 'let' | 'var';
-  name: string;
-  value?: SwiftExpression;
+  initializer?: SwiftExpression;
+  pattern: string;
 };
 
 export type SwiftCondition =

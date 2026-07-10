@@ -7,9 +7,9 @@ describe('actor declaration', () => {
       swift.factory.createActorDeclaration('Counter', [
         swift.factory.createVariableDeclaration('var', [
           {
-            name: 'value',
-            type: swift.factory.createIdentifierType('Int'),
-            value: swift.factory.createIntegerLiteral('0'),
+            initializer: swift.factory.createIntegerLiteral('0'),
+            pattern: 'value',
+            typeAnnotation: swift.factory.createIdentifierType('Int'),
           },
         ]),
       ]),

@@ -4,18 +4,18 @@ import type { SwiftPattern } from '../pattern';
 
 export interface SwiftOptionalPattern extends SwiftNodeBase {
   kind: SwiftNodeKind.OptionalPattern;
-  pattern: SwiftPattern;
+  subPattern: SwiftPattern;
 }
 
 export function createOptionalPattern(
-  pattern: SwiftPattern,
+  subPattern: SwiftPattern,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftOptionalPattern {
   return {
     kind: SwiftNodeKind.OptionalPattern,
     leadingComments,
-    pattern,
+    subPattern,
     trailingComments,
   };
 }

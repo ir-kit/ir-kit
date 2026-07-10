@@ -6,10 +6,10 @@ describe('struct declaration', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createStructDeclaration('User', [
         swift.factory.createVariableDeclaration('let', [
-          { name: 'id', type: swift.factory.createIdentifierType('Int') },
+          { pattern: 'id', typeAnnotation: swift.factory.createIdentifierType('Int') },
         ]),
         swift.factory.createVariableDeclaration('let', [
-          { name: 'name', type: swift.factory.createIdentifierType('String') },
+          { pattern: 'name', typeAnnotation: swift.factory.createIdentifierType('String') },
         ]),
       ]),
     ]);

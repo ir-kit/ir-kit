@@ -4,24 +4,24 @@ import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftInfixOperatorExpression extends SwiftNodeBase {
   kind: SwiftNodeKind.InfixOperatorExpression;
-  left: SwiftExpression;
+  leftOperand: SwiftExpression;
   operator: string;
-  right: SwiftExpression;
+  rightOperand: SwiftExpression;
 }
 
 export function createInfixOperatorExpression(
-  left: SwiftExpression,
+  leftOperand: SwiftExpression,
   operator: string,
-  right: SwiftExpression,
+  rightOperand: SwiftExpression,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftInfixOperatorExpression {
   return {
     kind: SwiftNodeKind.InfixOperatorExpression,
     leadingComments,
-    left,
+    leftOperand,
     operator,
-    right,
+    rightOperand,
     trailingComments,
   };
 }

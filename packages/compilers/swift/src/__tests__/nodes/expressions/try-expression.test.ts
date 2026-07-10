@@ -11,14 +11,13 @@ describe('try expression', () => {
         [
           swift.factory.createVariableDeclaration('let', [
             {
-              name: 'value',
-              value: swift.factory.createTryExpression(
+              initializer: swift.factory.createTryExpression(
                 swift.factory.createFunctionCallExpression(
                   swift.factory.createIdentifier('parse'),
                   [],
                 ),
-                'try',
               ),
+              pattern: 'value',
             },
           ]),
         ],

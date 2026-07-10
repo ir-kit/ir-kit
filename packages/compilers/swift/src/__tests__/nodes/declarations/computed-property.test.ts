@@ -9,15 +9,15 @@ describe('computed property', () => {
           {
             accessorBlock: swift.factory.createAccessorBlock([
               {
+                accessorSpecifier: 'get',
                 body: [
                   swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('0')),
                 ],
-                kind: 'get',
               },
-              { body: [], kind: 'set' },
+              { accessorSpecifier: 'set', body: [] },
             ]),
-            name: 'x',
-            type: swift.factory.createIdentifierType('Int'),
+            pattern: 'x',
+            typeAnnotation: swift.factory.createIdentifierType('Int'),
           },
         ]),
       ]),

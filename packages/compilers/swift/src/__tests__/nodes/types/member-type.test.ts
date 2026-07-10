@@ -6,8 +6,11 @@ describe('member type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createMemberType(swift.factory.createIdentifierType('Swift'), 'Int'),
+          pattern: 'value',
+          typeAnnotation: swift.factory.createMemberType(
+            swift.factory.createIdentifierType('Swift'),
+            'Int',
+          ),
         },
       ]),
     ]);

@@ -6,11 +6,11 @@ describe('postfix operator expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createPostfixOperatorExpression(
+          initializer: swift.factory.createPostfixOperatorExpression(
             swift.factory.createIdentifier('value'),
             '!',
           ),
+          pattern: 'example',
         },
       ]),
     ]);

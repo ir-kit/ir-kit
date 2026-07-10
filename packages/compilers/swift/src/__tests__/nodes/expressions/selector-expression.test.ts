@@ -13,18 +13,18 @@ describe('selector expression', () => {
           undefined,
           undefined,
           undefined,
-          [{ name: 'objc' }],
+          [{ attributeName: 'objc' }],
         ),
       ]),
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'sel',
-          value: swift.factory.createSelectorExpression(
+          initializer: swift.factory.createSelectorExpression(
             swift.factory.createMemberAccessExpression(
               swift.factory.createIdentifier('MyClass'),
               'method',
             ),
           ),
+          pattern: 'sel',
         },
       ]),
     ]);

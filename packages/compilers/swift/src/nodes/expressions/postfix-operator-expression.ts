@@ -3,21 +3,21 @@ import type { SwiftExpression } from '../expression';
 import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftPostfixOperatorExpression extends SwiftNodeBase {
+  expression: SwiftExpression;
   kind: SwiftNodeKind.PostfixOperatorExpression;
-  operand: SwiftExpression;
   operator: string;
 }
 
 export function createPostfixOperatorExpression(
-  operand: SwiftExpression,
+  expression: SwiftExpression,
   operator: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftPostfixOperatorExpression {
   return {
+    expression,
     kind: SwiftNodeKind.PostfixOperatorExpression,
     leadingComments,
-    operand,
     operator,
     trailingComments,
   };

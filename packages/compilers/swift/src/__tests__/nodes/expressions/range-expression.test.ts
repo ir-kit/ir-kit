@@ -6,12 +6,12 @@ describe('range expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'r',
-          value: swift.factory.createRangeExpression(
+          initializer: swift.factory.createRangeExpression(
             '..<',
             swift.factory.createIntegerLiteral('0'),
             swift.factory.createIntegerLiteral('10'),
           ),
+          pattern: 'r',
         },
       ]),
     ]);
@@ -22,12 +22,12 @@ describe('range expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'r',
-          value: swift.factory.createRangeExpression(
+          initializer: swift.factory.createRangeExpression(
             '...',
             swift.factory.createIntegerLiteral('1'),
             swift.factory.createIntegerLiteral('5'),
           ),
+          pattern: 'r',
         },
       ]),
     ]);

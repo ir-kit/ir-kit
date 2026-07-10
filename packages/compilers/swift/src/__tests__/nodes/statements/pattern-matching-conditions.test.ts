@@ -44,10 +44,12 @@ describe('pattern-matching control flow', () => {
         undefined,
         [
           swift.factory.createIfStatement(
-            {
-              pattern: swift.factory.createEnumCasePattern('success'),
-              value: swift.factory.createIdentifier('result'),
-            },
+            [
+              {
+                initializer: swift.factory.createIdentifier('result'),
+                pattern: swift.factory.createEnumCasePattern('success'),
+              },
+            ],
             [
               swift.factory.createExpressionStatement(
                 swift.factory.createFunctionCallExpression(

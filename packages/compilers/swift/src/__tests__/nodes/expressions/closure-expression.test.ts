@@ -6,11 +6,11 @@ describe('closure expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createClosureExpression(
+          initializer: swift.factory.createClosureExpression(
             ['x'],
             [swift.factory.createExpressionStatement(swift.factory.createIdentifier('x'))],
           ),
+          pattern: 'example',
         },
       ]),
     ]);
@@ -24,8 +24,7 @@ describe('closure expression', () => {
         swift.factory.createFunctionDeclaration('schedule', [], undefined, [
           swift.factory.createVariableDeclaration('let', [
             {
-              name: 'c',
-              value: swift.factory.createClosureExpression(
+              initializer: swift.factory.createClosureExpression(
                 [],
                 [
                   swift.factory.createExpressionStatement(
@@ -43,6 +42,7 @@ describe('closure expression', () => {
                 ],
                 [{ name: 'self', specifier: 'weak' }],
               ),
+              pattern: 'c',
             },
           ]),
         ]),

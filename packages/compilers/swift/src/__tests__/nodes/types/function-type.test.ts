@@ -6,8 +6,8 @@ describe('function type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createFunctionType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createFunctionType(
             [swift.factory.createIdentifierType('Int')],
             swift.factory.createIdentifierType('String'),
           ),
@@ -21,8 +21,8 @@ describe('function type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createFunctionType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createFunctionType(
             [swift.factory.createIdentifierType('Int')],
             swift.factory.createIdentifierType('String'),
             true,

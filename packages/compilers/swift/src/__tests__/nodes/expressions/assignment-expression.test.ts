@@ -6,7 +6,7 @@ describe('assignment expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration('run', [], undefined, [
         swift.factory.createVariableDeclaration('var', [
-          { name: 'count', value: swift.factory.createIntegerLiteral('0') },
+          { initializer: swift.factory.createIntegerLiteral('0'), pattern: 'count' },
         ]),
         swift.factory.createExpressionStatement(
           swift.factory.createAssignmentExpression(

@@ -6,12 +6,12 @@ describe('infix operator expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createInfixOperatorExpression(
+          initializer: swift.factory.createInfixOperatorExpression(
             swift.factory.createIntegerLiteral('1'),
             '+',
             swift.factory.createIntegerLiteral('2'),
           ),
+          pattern: 'example',
         },
       ]),
     ]);

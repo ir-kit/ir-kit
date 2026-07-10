@@ -6,8 +6,8 @@ describe('implicitly unwrapped optional type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('var', [
         {
-          name: 'value',
-          type: swift.factory.createImplicitlyUnwrappedOptionalType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createImplicitlyUnwrappedOptionalType(
             swift.factory.createIdentifierType('String'),
           ),
         },

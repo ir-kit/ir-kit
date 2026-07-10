@@ -6,12 +6,12 @@ describe('ternary expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createTernaryExpression(
+          initializer: swift.factory.createTernaryExpression(
             swift.factory.createIdentifier('flag'),
             swift.factory.createIntegerLiteral('1'),
             swift.factory.createIntegerLiteral('2'),
           ),
+          pattern: 'example',
         },
       ]),
     ]);

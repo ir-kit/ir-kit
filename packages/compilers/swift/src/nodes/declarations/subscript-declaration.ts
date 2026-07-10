@@ -3,11 +3,17 @@ import { SwiftNodeKind } from '../kinds';
 import type { SwiftType } from '../type';
 import type { SwiftAccessorBlock } from './accessor-block';
 import type { SwiftFunctionParameter } from './function';
-import type { SwiftAttribute, SwiftGenericRequirement, SwiftModifier } from './shared';
+import type {
+  SwiftAttribute,
+  SwiftGenericParameter,
+  SwiftGenericRequirement,
+  SwiftModifier,
+} from './shared';
 
 export interface SwiftSubscriptDeclaration extends SwiftNodeBase {
   accessorBlock: SwiftAccessorBlock;
   attributes?: ReadonlyArray<SwiftAttribute>;
+  genericParameters?: ReadonlyArray<SwiftGenericParameter>;
   genericWhereClause?: ReadonlyArray<SwiftGenericRequirement>;
   kind: SwiftNodeKind.SubscriptDeclaration;
   modifiers?: ReadonlyArray<SwiftModifier>;
@@ -21,6 +27,7 @@ export function createSubscriptDeclaration(
   accessorBlock: SwiftAccessorBlock,
   modifiers?: ReadonlyArray<SwiftModifier>,
   attributes?: ReadonlyArray<SwiftAttribute>,
+  genericParameters?: ReadonlyArray<SwiftGenericParameter>,
   genericWhereClause?: ReadonlyArray<SwiftGenericRequirement>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
@@ -28,6 +35,7 @@ export function createSubscriptDeclaration(
   return {
     accessorBlock,
     attributes,
+    genericParameters,
     genericWhereClause,
     kind: SwiftNodeKind.SubscriptDeclaration,
     leadingComments,

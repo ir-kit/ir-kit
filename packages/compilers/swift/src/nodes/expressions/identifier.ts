@@ -2,19 +2,19 @@ import type { SwiftNodeBase } from '../base';
 import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftIdentifier extends SwiftNodeBase {
+  baseName: string;
   kind: SwiftNodeKind.Identifier;
-  name: string;
 }
 
 export function createIdentifier(
-  name: string,
+  baseName: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftIdentifier {
   return {
+    baseName,
     kind: SwiftNodeKind.Identifier,
     leadingComments,
-    name,
     trailingComments,
   };
 }

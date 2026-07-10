@@ -8,10 +8,10 @@ describe('struct modifiers and inheritance', () => {
         'Point',
         [
           swift.factory.createVariableDeclaration('let', [
-            { name: 'x', type: swift.factory.createIdentifierType('Int') },
+            { pattern: 'x', typeAnnotation: swift.factory.createIdentifierType('Int') },
           ]),
           swift.factory.createVariableDeclaration('let', [
-            { name: 'y', type: swift.factory.createIdentifierType('Int') },
+            { pattern: 'y', typeAnnotation: swift.factory.createIdentifierType('Int') },
           ]),
         ],
         ['public'],

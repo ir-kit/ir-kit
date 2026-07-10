@@ -3,30 +3,30 @@ import type { SwiftExpression } from '../expression';
 import { SwiftNodeKind } from '../kinds';
 import type { SwiftType } from '../type';
 import type { SwiftAccessorBlock } from './accessor-block';
-import type { SwiftAttribute } from './shared';
+import type { SwiftAttribute, SwiftModifier } from './shared';
 
 export type SwiftBindingSpecifier = 'let' | 'var';
 
 export type SwiftPatternBinding = {
   accessorBlock?: SwiftAccessorBlock;
-  name: string;
-  type?: SwiftType;
-  value?: SwiftExpression;
+  initializer?: SwiftExpression;
+  pattern: string;
+  typeAnnotation?: SwiftType;
 };
 
 export interface SwiftVariableDeclaration extends SwiftNodeBase {
   attributes?: ReadonlyArray<SwiftAttribute>;
   bindingSpecifier: SwiftBindingSpecifier;
   bindings: ReadonlyArray<SwiftPatternBinding>;
-  isAsync?: boolean;
   kind: SwiftNodeKind.VariableDeclaration;
+  modifiers?: ReadonlyArray<SwiftModifier>;
 }
 
 export function createVariableDeclaration(
   bindingSpecifier: SwiftBindingSpecifier,
   bindings: ReadonlyArray<SwiftPatternBinding>,
   attributes?: ReadonlyArray<SwiftAttribute>,
-  isAsync?: boolean,
+  modifiers?: ReadonlyArray<SwiftModifier>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftVariableDeclaration {
@@ -34,9 +34,9 @@ export function createVariableDeclaration(
     attributes,
     bindingSpecifier,
     bindings,
-    isAsync,
     kind: SwiftNodeKind.VariableDeclaration,
     leadingComments,
+    modifiers,
     trailingComments,
   };
 }

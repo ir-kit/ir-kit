@@ -1,24 +1,24 @@
 import type { SwiftNodeBase } from '../base';
 import { SwiftNodeKind } from '../kinds';
 
-export type SwiftOperatorFixity = 'infix' | 'postfix' | 'prefix';
+export type SwiftFixitySpecifier = 'infix' | 'postfix' | 'prefix';
 
 export interface SwiftOperatorDeclaration extends SwiftNodeBase {
-  fixity: SwiftOperatorFixity;
+  fixitySpecifier: SwiftFixitySpecifier;
   kind: SwiftNodeKind.OperatorDeclaration;
   name: string;
   precedenceGroup?: string;
 }
 
 export function createOperatorDeclaration(
-  fixity: SwiftOperatorFixity,
+  fixitySpecifier: SwiftFixitySpecifier,
   name: string,
   precedenceGroup?: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftOperatorDeclaration {
   return {
-    fixity,
+    fixitySpecifier,
     kind: SwiftNodeKind.OperatorDeclaration,
     leadingComments,
     name,

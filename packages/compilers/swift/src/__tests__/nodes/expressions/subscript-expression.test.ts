@@ -6,10 +6,11 @@ describe('subscript expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          value: swift.factory.createSubscriptExpression(swift.factory.createIdentifier('items'), [
-            swift.factory.createIntegerLiteral('0'),
-          ]),
+          initializer: swift.factory.createSubscriptExpression(
+            swift.factory.createIdentifier('items'),
+            [swift.factory.createIntegerLiteral('0')],
+          ),
+          pattern: 'example',
         },
       ]),
     ]);

@@ -3,18 +3,18 @@ import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftIntegerLiteral extends SwiftNodeBase {
   kind: SwiftNodeKind.IntegerLiteral;
-  value: string;
+  literal: string;
 }
 
 export function createIntegerLiteral(
-  value: string,
+  literal: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftIntegerLiteral {
   return {
     kind: SwiftNodeKind.IntegerLiteral,
     leadingComments,
+    literal,
     trailingComments,
-    value,
   };
 }

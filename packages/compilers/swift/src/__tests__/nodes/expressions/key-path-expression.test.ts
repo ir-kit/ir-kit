@@ -6,16 +6,16 @@ describe('key path expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createStructDeclaration('Person', [
         swift.factory.createVariableDeclaration('let', [
-          { name: 'name', type: swift.factory.createIdentifierType('String') },
+          { pattern: 'name', typeAnnotation: swift.factory.createIdentifierType('String') },
         ]),
       ]),
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'kp',
-          value: swift.factory.createKeyPathExpression(
+          initializer: swift.factory.createKeyPathExpression(
             ['name'],
             swift.factory.createIdentifierType('Person'),
           ),
+          pattern: 'kp',
         },
       ]),
     ]);

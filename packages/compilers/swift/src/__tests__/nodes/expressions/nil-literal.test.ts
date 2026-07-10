@@ -6,9 +6,11 @@ describe('nil literal expression', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'example',
-          type: swift.factory.createOptionalType(swift.factory.createIdentifierType('Int')),
-          value: swift.factory.createNilLiteral(),
+          initializer: swift.factory.createNilLiteral(),
+          pattern: 'example',
+          typeAnnotation: swift.factory.createOptionalType(
+            swift.factory.createIdentifierType('Int'),
+          ),
         },
       ]),
     ]);

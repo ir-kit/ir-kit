@@ -10,10 +10,11 @@ describe('accessor block', () => {
           swift.factory.createIdentifierType('Int'),
           swift.factory.createAccessorBlock([
             {
+              accessorSpecifier: 'get',
               body: [swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('0'))],
-              kind: 'get',
             },
             {
+              accessorSpecifier: 'set',
               body: [
                 swift.factory.createExpressionStatement(
                   swift.factory.createFunctionCallExpression(
@@ -22,7 +23,6 @@ describe('accessor block', () => {
                   ),
                 ),
               ],
-              kind: 'set',
             },
           ]),
         ),

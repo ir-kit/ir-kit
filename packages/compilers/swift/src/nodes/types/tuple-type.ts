@@ -3,7 +3,7 @@ import { SwiftNodeKind } from '../kinds';
 import type { SwiftType } from '../type';
 
 export type SwiftTupleTypeElement = {
-  label?: string;
+  firstName?: string;
   type: SwiftType;
 };
 

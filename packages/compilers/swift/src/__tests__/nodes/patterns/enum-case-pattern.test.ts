@@ -37,7 +37,7 @@ describe('enum case pattern', () => {
       swift.factory.createEnumDeclaration('Status', [
         swift.factory.createEnumCaseDeclaration([{ name: 'success' }]),
         swift.factory.createEnumCaseDeclaration([
-          { associatedValues: [swift.factory.createIdentifierType('Int')], name: 'failure' },
+          { name: 'failure', parameterClause: [swift.factory.createIdentifierType('Int')] },
         ]),
       ]),
       swift.factory.createFunctionDeclaration(

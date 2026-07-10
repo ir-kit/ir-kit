@@ -7,7 +7,7 @@ describe('source file import separation', () => {
       swift.factory.createImportDeclaration('Foundation'),
       swift.factory.createStructDeclaration('User', [
         swift.factory.createVariableDeclaration('let', [
-          { name: 'id', type: swift.factory.createIdentifierType('Int') },
+          { pattern: 'id', typeAnnotation: swift.factory.createIdentifierType('Int') },
         ]),
       ]),
     ]);

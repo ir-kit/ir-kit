@@ -6,8 +6,8 @@ describe('dictionary type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createDictionaryType(
+          pattern: 'value',
+          typeAnnotation: swift.factory.createDictionaryType(
             swift.factory.createIdentifierType('String'),
             swift.factory.createIdentifierType('Int'),
           ),

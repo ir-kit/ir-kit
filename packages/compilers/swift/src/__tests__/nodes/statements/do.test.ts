@@ -13,7 +13,6 @@ describe('do statement', () => {
                   swift.factory.createIdentifier('risky'),
                   [],
                 ),
-                'try',
               ),
             ),
           ],

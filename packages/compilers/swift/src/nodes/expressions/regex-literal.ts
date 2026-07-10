@@ -3,18 +3,18 @@ import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftRegexLiteral extends SwiftNodeBase {
   kind: SwiftNodeKind.RegexLiteral;
-  pattern: string;
+  regex: string;
 }
 
 export function createRegexLiteral(
-  pattern: string,
+  regex: string,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftRegexLiteral {
   return {
     kind: SwiftNodeKind.RegexLiteral,
     leadingComments,
-    pattern,
+    regex,
     trailingComments,
   };
 }

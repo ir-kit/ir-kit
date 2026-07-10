@@ -5,8 +5,8 @@ import type { SwiftType } from '../type';
 import type { SwiftAttribute } from './shared';
 
 export type SwiftEnumCaseElement = {
-  associatedValues?: ReadonlyArray<SwiftType>;
   name: string;
+  parameterClause?: ReadonlyArray<SwiftType>;
   rawValue?: SwiftExpression;
 };
 

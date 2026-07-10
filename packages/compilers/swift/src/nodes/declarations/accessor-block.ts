@@ -2,11 +2,11 @@ import type { SwiftNodeBase } from '../base';
 import { SwiftNodeKind } from '../kinds';
 import type { SwiftStatement } from '../statement';
 
-export type SwiftAccessorKind = 'didSet' | 'get' | 'set' | 'willSet';
+export type SwiftAccessorSpecifier = 'didSet' | 'get' | 'set' | 'willSet';
 
 export type SwiftAccessor = {
+  accessorSpecifier: SwiftAccessorSpecifier;
   body: ReadonlyArray<SwiftStatement>;
-  kind: SwiftAccessorKind;
 };
 
 export interface SwiftAccessorBlock extends SwiftNodeBase {

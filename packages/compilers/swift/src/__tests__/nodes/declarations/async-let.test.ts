@@ -19,15 +19,15 @@ describe('async let', () => {
             'let',
             [
               {
-                name: 'value',
-                value: swift.factory.createFunctionCallExpression(
+                initializer: swift.factory.createFunctionCallExpression(
                   swift.factory.createIdentifier('fetch'),
                   [],
                 ),
+                pattern: 'value',
               },
             ],
             undefined,
-            true,
+            ['async'],
           ),
           swift.factory.createExpressionStatement(
             swift.factory.createFunctionCallExpression(swift.factory.createIdentifier('print'), [

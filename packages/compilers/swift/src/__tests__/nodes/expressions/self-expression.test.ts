@@ -7,19 +7,19 @@ describe('self expression', () => {
       swift.factory.createClassDeclaration('Container', [
         swift.factory.createVariableDeclaration('let', [
           {
-            name: 'value',
-            type: swift.factory.createIdentifierType('Int'),
-            value: swift.factory.createIntegerLiteral('0'),
+            initializer: swift.factory.createIntegerLiteral('0'),
+            pattern: 'value',
+            typeAnnotation: swift.factory.createIdentifierType('Int'),
           },
         ]),
         swift.factory.createFunctionDeclaration('read', [], undefined, [
           swift.factory.createVariableDeclaration('let', [
             {
-              name: 'x',
-              value: swift.factory.createMemberAccessExpression(
+              initializer: swift.factory.createMemberAccessExpression(
                 swift.factory.createSelfExpression(),
                 'value',
               ),
+              pattern: 'x',
             },
           ]),
         ]),

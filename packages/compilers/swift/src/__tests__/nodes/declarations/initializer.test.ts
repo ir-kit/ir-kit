@@ -6,7 +6,7 @@ describe('initializer declaration', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createStructDeclaration('Point', [
         swift.factory.createVariableDeclaration('let', [
-          { name: 'x', type: swift.factory.createIdentifierType('Int') },
+          { pattern: 'x', typeAnnotation: swift.factory.createIdentifierType('Int') },
         ]),
         swift.factory.createInitializerDeclaration(
           [{ firstName: 'x', type: swift.factory.createIdentifierType('Int') }],

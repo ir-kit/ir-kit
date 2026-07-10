@@ -1,23 +1,23 @@
 import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
 import { SwiftNodeKind } from '../kinds';
 import type { SwiftStatement } from '../statement';
+import type { SwiftCondition } from './condition';
 
 export interface SwiftWhileStatement extends SwiftNodeBase {
   body: ReadonlyArray<SwiftStatement>;
-  condition: SwiftExpression;
+  conditions: ReadonlyArray<SwiftCondition>;
   kind: SwiftNodeKind.WhileStatement;
 }
 
 export function createWhileStatement(
-  condition: SwiftExpression,
+  conditions: ReadonlyArray<SwiftCondition>,
   body: ReadonlyArray<SwiftStatement>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftWhileStatement {
   return {
     body,
-    condition,
+    conditions,
     kind: SwiftNodeKind.WhileStatement,
     leadingComments,
     trailingComments,

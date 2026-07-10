@@ -3,18 +3,18 @@ import { SwiftNodeKind } from '../kinds';
 
 export interface SwiftBooleanLiteral extends SwiftNodeBase {
   kind: SwiftNodeKind.BooleanLiteral;
-  value: boolean;
+  literal: boolean;
 }
 
 export function createBooleanLiteral(
-  value: boolean,
+  literal: boolean,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftBooleanLiteral {
   return {
     kind: SwiftNodeKind.BooleanLiteral,
     leadingComments,
+    literal,
     trailingComments,
-    value,
   };
 }

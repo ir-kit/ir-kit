@@ -11,13 +11,13 @@ describe('await expression', () => {
         [
           swift.factory.createVariableDeclaration('let', [
             {
-              name: 'value',
-              value: swift.factory.createAwaitExpression(
+              initializer: swift.factory.createAwaitExpression(
                 swift.factory.createFunctionCallExpression(
                   swift.factory.createIdentifier('load'),
                   [],
                 ),
               ),
+              pattern: 'value',
             },
           ]),
         ],

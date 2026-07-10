@@ -5,7 +5,7 @@ describe('string literal expression', () => {
   it('bound to a constant', async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
-        { name: 'example', value: swift.factory.createStringLiteral('hello') },
+        { initializer: swift.factory.createStringLiteral('hello'), pattern: 'example' },
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'string-literal.swift');

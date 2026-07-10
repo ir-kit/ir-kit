@@ -7,10 +7,12 @@ describe('observed property', () => {
       swift.factory.createClassDeclaration('Model', [
         swift.factory.createVariableDeclaration('var', [
           {
-            accessorBlock: swift.factory.createAccessorBlock([{ body: [], kind: 'didSet' }]),
-            name: 'x',
-            type: swift.factory.createIdentifierType('Int'),
-            value: swift.factory.createIntegerLiteral('0'),
+            accessorBlock: swift.factory.createAccessorBlock([
+              { accessorSpecifier: 'didSet', body: [] },
+            ]),
+            initializer: swift.factory.createIntegerLiteral('0'),
+            pattern: 'x',
+            typeAnnotation: swift.factory.createIdentifierType('Int'),
           },
         ]),
       ]),

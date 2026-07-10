@@ -5,7 +5,7 @@ import type { SwiftStatement } from '../statement';
 
 export type SwiftCatchClause = {
   body: ReadonlyArray<SwiftStatement>;
-  pattern?: SwiftExpression;
+  catchItems?: SwiftExpression;
 };
 
 export interface SwiftDoStatement extends SwiftNodeBase {
@@ -16,11 +16,11 @@ export interface SwiftDoStatement extends SwiftNodeBase {
 
 export function createCatchClause(
   body: ReadonlyArray<SwiftStatement>,
-  pattern?: SwiftExpression,
+  catchItems?: SwiftExpression,
 ): SwiftCatchClause {
   return {
     body,
-    pattern,
+    catchItems,
   };
 }
 

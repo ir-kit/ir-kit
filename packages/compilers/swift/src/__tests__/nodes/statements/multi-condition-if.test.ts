@@ -25,8 +25,16 @@ describe('multi-condition if', () => {
         [
           swift.factory.createIfStatement(
             [
-              { bindingSpecifier: 'let', name: 'a', value: swift.factory.createIdentifier('x') },
-              { bindingSpecifier: 'let', name: 'b', value: swift.factory.createIdentifier('y') },
+              {
+                bindingSpecifier: 'let',
+                initializer: swift.factory.createIdentifier('x'),
+                pattern: 'a',
+              },
+              {
+                bindingSpecifier: 'let',
+                initializer: swift.factory.createIdentifier('y'),
+                pattern: 'b',
+              },
             ],
             [printCall],
           ),

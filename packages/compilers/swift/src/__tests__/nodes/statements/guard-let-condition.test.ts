@@ -18,8 +18,8 @@ describe('optional binding condition', () => {
             [
               {
                 bindingSpecifier: 'let',
-                name: 'value',
-                value: swift.factory.createIdentifier('optional'),
+                initializer: swift.factory.createIdentifier('optional'),
+                pattern: 'value',
               },
             ],
             [swift.factory.createReturnStatement()],

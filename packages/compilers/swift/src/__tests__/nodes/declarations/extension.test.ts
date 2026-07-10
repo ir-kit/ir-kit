@@ -23,9 +23,9 @@ describe('extension declaration', () => {
         [
           swift.factory.createVariableDeclaration('var', [
             {
-              name: 'isPositive',
-              type: swift.factory.createIdentifierType('Bool'),
-              value: swift.factory.createBooleanLiteral(true),
+              initializer: swift.factory.createBooleanLiteral(true),
+              pattern: 'isPositive',
+              typeAnnotation: swift.factory.createIdentifierType('Bool'),
             },
           ]),
         ],

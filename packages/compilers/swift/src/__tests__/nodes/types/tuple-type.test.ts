@@ -6,8 +6,8 @@ describe('tuple type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createTupleType([
+          pattern: 'value',
+          typeAnnotation: swift.factory.createTupleType([
             { type: swift.factory.createIdentifierType('Int') },
             { type: swift.factory.createIdentifierType('String') },
           ]),
@@ -21,10 +21,10 @@ describe('tuple type', () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 'value',
-          type: swift.factory.createTupleType([
-            { label: 'x', type: swift.factory.createIdentifierType('Int') },
-            { label: 'y', type: swift.factory.createIdentifierType('Int') },
+          pattern: 'value',
+          typeAnnotation: swift.factory.createTupleType([
+            { firstName: 'x', type: swift.factory.createIdentifierType('Int') },
+            { firstName: 'y', type: swift.factory.createIdentifierType('Int') },
           ]),
         },
       ]),

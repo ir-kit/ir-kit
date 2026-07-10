@@ -10,8 +10,8 @@ describe('subscript declaration', () => {
           swift.factory.createIdentifierType('Int'),
           swift.factory.createAccessorBlock([
             {
+              accessorSpecifier: 'get',
               body: [swift.factory.createReturnStatement(swift.factory.createIdentifier('index'))],
-              kind: 'get',
             },
           ]),
         ),

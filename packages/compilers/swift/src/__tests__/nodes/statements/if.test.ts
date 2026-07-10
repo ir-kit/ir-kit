@@ -10,7 +10,7 @@ describe('if statement', () => {
         undefined,
         [
           swift.factory.createIfStatement(
-            swift.factory.createIdentifier('flag'),
+            [swift.factory.createIdentifier('flag')],
             [
               swift.factory.createExpressionStatement(
                 swift.factory.createFunctionCallExpression(

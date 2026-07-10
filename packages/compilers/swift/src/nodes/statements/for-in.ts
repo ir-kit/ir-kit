@@ -5,15 +5,15 @@ import type { SwiftPattern } from '../pattern';
 import type { SwiftStatement } from '../statement';
 
 export interface SwiftForInStatement extends SwiftNodeBase {
-  binding: string;
   body: ReadonlyArray<SwiftStatement>;
   casePattern?: SwiftPattern;
   kind: SwiftNodeKind.ForInStatement;
+  pattern: string;
   sequence: SwiftExpression;
 }
 
 export function createForInStatement(
-  binding: string,
+  pattern: string,
   sequence: SwiftExpression,
   body: ReadonlyArray<SwiftStatement>,
   casePattern?: SwiftPattern,
@@ -21,11 +21,11 @@ export function createForInStatement(
   trailingComments?: ReadonlyArray<string>,
 ): SwiftForInStatement {
   return {
-    binding,
     body,
     casePattern,
     kind: SwiftNodeKind.ForInStatement,
     leadingComments,
+    pattern,
     sequence,
     trailingComments,
   };

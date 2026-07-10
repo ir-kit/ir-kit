@@ -5,7 +5,7 @@ describe('integer literal expression', () => {
   it('bound to a constant', async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
-        { name: 'example', value: swift.factory.createIntegerLiteral('42') },
+        { initializer: swift.factory.createIntegerLiteral('42'), pattern: 'example' },
       ]),
     ]);
     await assertPrintedMatchesSnapshot(file, 'integer-literal.swift');

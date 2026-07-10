@@ -4,20 +4,20 @@ import type { SwiftStatement } from '../statement';
 import type { SwiftCondition } from './condition';
 
 export interface SwiftGuardStatement extends SwiftNodeBase {
+  body: ReadonlyArray<SwiftStatement>;
   conditions: ReadonlyArray<SwiftCondition>;
-  elseBody: ReadonlyArray<SwiftStatement>;
   kind: SwiftNodeKind.GuardStatement;
 }
 
 export function createGuardStatement(
   conditions: ReadonlyArray<SwiftCondition>,
-  elseBody: ReadonlyArray<SwiftStatement>,
+  body: ReadonlyArray<SwiftStatement>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): SwiftGuardStatement {
   return {
+    body,
     conditions,
-    elseBody,
     kind: SwiftNodeKind.GuardStatement,
     leadingComments,
     trailingComments,

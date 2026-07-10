@@ -2,11 +2,11 @@ import type { SwiftType } from '../type';
 
 export type SwiftAttribute = {
   arguments?: string;
-  name: string;
+  attributeName: string;
 };
 
 export type SwiftGenericParameter = {
-  constraint?: SwiftType;
+  inheritedType?: SwiftType;
   isPack?: boolean;
   name: string;
 };

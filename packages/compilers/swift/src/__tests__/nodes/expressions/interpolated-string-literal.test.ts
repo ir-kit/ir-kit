@@ -5,15 +5,15 @@ describe('interpolated string literal', () => {
   it('text and interpolation segments', async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createVariableDeclaration('let', [
-        { name: 'name', value: swift.factory.createStringLiteral('World') },
+        { initializer: swift.factory.createStringLiteral('World'), pattern: 'name' },
       ]),
       swift.factory.createVariableDeclaration('let', [
         {
-          name: 's',
-          value: swift.factory.createInterpolatedStringLiteral([
-            { text: 'Hello ' },
+          initializer: swift.factory.createInterpolatedStringLiteral([
+            { content: 'Hello ' },
             { expression: swift.factory.createIdentifier('name') },
           ]),
+          pattern: 's',
         },
       ]),
     ]);
