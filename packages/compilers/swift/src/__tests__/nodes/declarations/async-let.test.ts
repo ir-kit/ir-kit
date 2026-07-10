@@ -1,0 +1,49 @@
+import { swift } from '../../../index';
+import { assertPrintedMatchesSnapshot } from '../utils';
+
+describe('async let', () => {
+  it('concurrent binding', async () => {
+    const file = swift.factory.createSourceFile([
+      swift.factory.createFunctionDeclaration(
+        'fetch',
+        [],
+        swift.factory.createIdentifierType('Int'),
+        [swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('0'))],
+      ),
+      swift.factory.createFunctionDeclaration(
+        'run',
+        [],
+        undefined,
+        [
+          swift.factory.createVariableDeclaration(
+            'let',
+            [
+              {
+                name: 'value',
+                value: swift.factory.createFunctionCallExpression(
+                  swift.factory.createIdentifier('fetch'),
+                  [],
+                ),
+              },
+            ],
+            undefined,
+            true,
+          ),
+          swift.factory.createExpressionStatement(
+            swift.factory.createFunctionCallExpression(swift.factory.createIdentifier('print'), [
+              {
+                expression: swift.factory.createAwaitExpression(
+                  swift.factory.createIdentifier('value'),
+                ),
+              },
+            ]),
+          ),
+        ],
+        undefined,
+        undefined,
+        { async: true },
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'concurrent-binding.swift');
+  });
+});

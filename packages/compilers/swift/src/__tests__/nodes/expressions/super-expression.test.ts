@@ -1,0 +1,37 @@
+import { swift } from '../../../index';
+import { assertPrintedMatchesSnapshot } from '../utils';
+
+describe('super expression', () => {
+  it('member access on super inside a subclass method', async () => {
+    const file = swift.factory.createSourceFile([
+      swift.factory.createClassDeclaration('Base', [
+        swift.factory.createVariableDeclaration('let', [
+          {
+            name: 'value',
+            type: swift.factory.createIdentifierType('Int'),
+            value: swift.factory.createIntegerLiteral('0'),
+          },
+        ]),
+      ]),
+      swift.factory.createClassDeclaration(
+        'Derived',
+        [
+          swift.factory.createFunctionDeclaration('read', [], undefined, [
+            swift.factory.createVariableDeclaration('let', [
+              {
+                name: 'x',
+                value: swift.factory.createMemberAccessExpression(
+                  swift.factory.createSuperExpression(),
+                  'value',
+                ),
+              },
+            ]),
+          ]),
+        ],
+        undefined,
+        [swift.factory.createIdentifierType('Base')],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, 'super-member-access.swift');
+  });
+});
