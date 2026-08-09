@@ -1,0 +1,1 @@
+typealias Alias<T> = T
