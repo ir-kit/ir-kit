@@ -5,6 +5,15 @@ import { kt } from '../../index';
 import type { KotlinSourceFile } from '../../nodes/structure/source-file';
 import { snapshotsDir, tmpDir } from '../constants';
 
+export const f = kt.factory;
+
+export const file = (declarations: Parameters<typeof f.createSourceFile>[0]) =>
+  f.createSourceFile(declarations, f.createPackageHeader('com.example'));
+
+export const id = (name: string) => f.createIdentifier(name);
+
+export const t = (name: string) => f.createUserType(name);
+
 function getCallerFile(): string {
   const error = new Error();
   const stack = (error.stack ?? '').split('\n');
