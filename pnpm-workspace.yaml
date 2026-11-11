@@ -1,6 +1,7 @@
 packages:
   - packages/cli
   - packages/shared/*
+  - packages/compilers/*
   - packages/openapi/*
   - packages/openapi/plugins/*
   - packages/asyncapi/*

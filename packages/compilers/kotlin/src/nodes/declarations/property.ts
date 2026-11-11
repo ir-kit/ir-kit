@@ -1,9 +1,13 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinModifier, KotlinPropertyAccessor, KotlinValOrVar } from '../shared';
-import type { KotlinType } from '../type';
-import type { KotlinAnnotation } from './annotation';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type {
+  KotlinModifier,
+  KotlinPropertyAccessor,
+  KotlinValOrVar,
+} from "../shared.js";
+import type { KotlinType } from "../type.js";
+import type { KotlinAnnotation } from "./annotation.js";
 
 export interface KotlinProperty extends KotlinNodeBase {
   accessors?: ReadonlyArray<KotlinPropertyAccessor>;

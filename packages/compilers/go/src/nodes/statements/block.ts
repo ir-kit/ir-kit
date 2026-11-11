@@ -1,6 +1,6 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
-import type { GoStatement } from '../statement';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
+import type { GoStatement } from "../statement.js";
 
 export interface GoBlock extends GoNodeBase {
   kind: GoNodeKind.Block;

@@ -1,8 +1,8 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinDeclaration } from '../declaration';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinImportDirective } from './import-directive';
-import type { KotlinPackageHeader } from './package-header';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinDeclaration } from "../declaration.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinImportDirective } from "./import-directive.js";
+import type { KotlinPackageHeader } from "./package-header.js";
 
 export interface KotlinSourceFile extends KotlinNodeBase {
   declarations: ReadonlyArray<KotlinDeclaration>;

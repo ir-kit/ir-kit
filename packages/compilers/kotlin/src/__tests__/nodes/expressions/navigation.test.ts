@@ -1,39 +1,44 @@
-import { assertPrintedMatchesSnapshot, f, file, id } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file, id } from "../utils.js";
 
-describe('navigation expression', () => {
-  it('property access', async () => {
+describe("navigation expression", () => {
+  it("property access", async () => {
     const node = f.createFunctionDeclaration(
-      'name',
-      [f.createParameter('user', f.createUserType('User'))],
+      "name",
+      [f.createParameter("user", f.createUserType("User"))],
       undefined,
       undefined,
-      f.createNavigationExpression(id('user'), id('name')),
+      f.createNavigationExpression(id("user"), id("name")),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'property-access.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "property-access.kt");
   });
 
-  it('safe call', async () => {
+  it("safe call", async () => {
     const node = f.createFunctionDeclaration(
-      'length',
-      [f.createParameter('text', f.createNullableType(f.createUserType('String')))],
-      f.createNullableType(f.createUserType('Int')),
+      "length",
+      [
+        f.createParameter(
+          "text",
+          f.createNullableType(f.createUserType("String")),
+        ),
+      ],
+      f.createNullableType(f.createUserType("Int")),
       undefined,
-      f.createNavigationExpression(id('text'), id('length'), true),
+      f.createNavigationExpression(id("text"), id("length"), true),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'safe-call.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "safe-call.kt");
   });
 
-  it('chained access', async () => {
+  it("chained access", async () => {
     const node = f.createFunctionDeclaration(
-      'city',
-      [f.createParameter('user', f.createUserType('User'))],
+      "city",
+      [f.createParameter("user", f.createUserType("User"))],
       undefined,
       undefined,
       f.createNavigationExpression(
-        f.createNavigationExpression(id('user'), id('address')),
-        id('city'),
+        f.createNavigationExpression(id("user"), id("address")),
+        id("city"),
       ),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'chained.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "chained.kt");
   });
 });

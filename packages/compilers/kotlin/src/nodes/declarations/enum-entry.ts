@@ -1,8 +1,8 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinDeclaration } from '../declaration';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinValueArgument } from '../shared';
-import type { KotlinAnnotation } from './annotation';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinDeclaration } from "../declaration.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinValueArgument } from "../shared.js";
+import type { KotlinAnnotation } from "./annotation.js";
 
 export interface KotlinEnumEntry extends KotlinNodeBase {
   annotations?: ReadonlyArray<KotlinAnnotation>;

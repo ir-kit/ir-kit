@@ -1,10 +1,10 @@
-import type { GoExpression } from './expression';
-import type { GoNodeKind } from './kinds';
-import type { GoStatement } from './statement';
-import type { GoBlock } from './statements/block';
-import type { GoPackageDeclaration } from './structure/package';
-import type { GoSourceFile } from './structure/source-file';
-import type { GoType } from './type';
+import type { GoExpression } from "./expression.js";
+import type { GoNodeKind } from "./kinds.js";
+import type { GoStatement } from "./statement.js";
+import type { GoBlock } from "./statements/block.js";
+import type { GoPackageDeclaration } from "./structure/package.js";
+import type { GoSourceFile } from "./structure/source-file.js";
+import type { GoType } from "./type.js";
 
 export interface GoNodeBase {
   kind: GoNodeKind;

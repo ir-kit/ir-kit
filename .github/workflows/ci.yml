@@ -53,3 +53,56 @@ jobs:
             echo "::error::Example outputs drifted from committed copy. Run \`pnpm --filter @ir-kit/example-openapi-sdk-petstore gen && pnpm --filter @ir-kit/example-asyncapi-events gen\` and commit the result."
             exit 1
           fi
+
+  go-lint:
+    name: Lint Go compiler snapshots
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5
+        with:
+          go-version: "1.25"
+          cache: false
+
+      - name: Install goimports
+        run: go install golang.org/x/tools/cmd/goimports@v0.38.0
+
+      - name: Lint snapshots
+        run: bash scripts/lint-go.sh
+
+  kotlin-lint:
+    name: Lint Kotlin compiler snapshots
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Install ktlint
+        run: |
+          curl -sSLO https://github.com/pinterest/ktlint/releases/download/1.8.0/ktlint
+          chmod +x ktlint
+          sudo mv ktlint /usr/local/bin/
+
+      - name: Lint snapshots
+        run: bash scripts/lint-kotlin.sh
+
+  swift-lint:
+    name: Lint Swift compiler snapshots
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Lint snapshots
+        run: bash scripts/lint-swift.sh

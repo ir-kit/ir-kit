@@ -1,7 +1,10 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
-import type { GoStatement } from '../statement';
-import { createPackageDeclaration, type GoPackageDeclaration } from './package';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
+import type { GoStatement } from "../statement.js";
+import {
+  createPackageDeclaration,
+  type GoPackageDeclaration,
+} from "./package.js";
 
 export interface GoSourceFile extends GoNodeBase {
   kind: GoNodeKind.SourceFile;

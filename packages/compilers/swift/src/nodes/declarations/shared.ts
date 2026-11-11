@@ -1,4 +1,4 @@
-import type { SwiftType } from '../type';
+import type { SwiftType } from "../type.js";
 
 export type SwiftAttribute = {
   arguments?: string;
@@ -13,7 +13,7 @@ export type SwiftGenericParameter = {
 
 export type SwiftGenericRequirement = {
   left: SwiftType;
-  relation: 'conformance' | 'sameType';
+  relation: "conformance" | "sameType";
   right: SwiftType;
 };
 

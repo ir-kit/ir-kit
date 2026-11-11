@@ -1,5 +1,5 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
 
 export interface KotlinSuperExpression extends KotlinNodeBase {
   kind: KotlinNodeKind.SuperExpression;
@@ -11,5 +11,10 @@ export function createSuperExpression(
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): KotlinSuperExpression {
-  return { kind: KotlinNodeKind.SuperExpression, label, leadingComments, trailingComments };
+  return {
+    kind: KotlinNodeKind.SuperExpression,
+    label,
+    leadingComments,
+    trailingComments,
+  };
 }

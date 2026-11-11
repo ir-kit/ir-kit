@@ -1,12 +1,12 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftType } from '../type';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftType } from "../type.js";
 import type {
   SwiftAttribute,
   SwiftGenericParameter,
   SwiftGenericRequirement,
   SwiftModifier,
-} from './shared';
+} from "./shared.js";
 
 export interface SwiftTypeAliasDeclaration extends SwiftNodeBase {
   attributes?: ReadonlyArray<SwiftAttribute>;

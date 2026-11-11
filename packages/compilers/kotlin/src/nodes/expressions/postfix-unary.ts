@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinPostfixOperator } from '../shared';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinPostfixOperator } from "../shared.js";
 
 export interface KotlinPostfixUnaryExpression extends KotlinNodeBase {
   kind: KotlinNodeKind.PostfixUnaryExpression;

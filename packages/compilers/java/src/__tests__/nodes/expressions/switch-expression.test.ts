@@ -1,26 +1,34 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('switch expression', () => {
-  it('arrow rules with expression and block bodies', async () => {
+describe("switch expression", () => {
+  it("arrow rules with expression and block bodies", async () => {
     const rules = [
       java.factory.createSwitchRule(
         [java.factory.createLiteral(1), java.factory.createLiteral(2)],
-        java.factory.createLiteral('one-two'),
+        java.factory.createLiteral("one-two"),
       ),
       java.factory.createSwitchRule(undefined, [
         java.factory.createExpressionStatement(
-          java.factory.createCallExpression(java.factory.createIdentifier('log'), [
-            java.factory.createLiteral('other'),
-          ]),
+          java.factory.createCallExpression(
+            java.factory.createIdentifier("log"),
+            [java.factory.createLiteral("other")],
+          ),
         ),
-        java.factory.createYieldStatement(java.factory.createLiteral('rest')),
+        java.factory.createYieldStatement(java.factory.createLiteral("rest")),
       ]),
     ];
-    const expr = java.factory.createSwitchExpression(java.factory.createIdentifier('x'), rules);
+    const expr = java.factory.createSwitchExpression(
+      java.factory.createIdentifier("x"),
+      rules,
+    );
     const file = java.factory.createSourceFile(undefined, [
-      java.factory.createVariableDeclaration('s', java.factory.createIdentifier('String'), expr),
+      java.factory.createVariableDeclaration(
+        "s",
+        java.factory.createIdentifier("String"),
+        expr,
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'switch-expression.java');
+    await assertPrintedMatchesSnapshot(file, "switch-expression.java");
   });
 });

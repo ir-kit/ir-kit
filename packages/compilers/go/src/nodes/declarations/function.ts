@@ -1,12 +1,12 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
-import type { GoStatement } from '../statement';
-import type { GoBlock } from '../statements/block';
-import { createBlock } from '../statements/block';
-import type { GoType } from '../type';
-import type { GoFunctionParameter } from '../types/function-parameter';
-import { type GoFunctionReturn } from '../types/function-return';
-import type { GoTypeParameter } from './type-parameter';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
+import type { GoStatement } from "../statement.js";
+import type { GoBlock } from "../statements/block.js";
+import { createBlock } from "../statements/block.js";
+import type { GoType } from "../type.js";
+import type { GoFunctionParameter } from "../types/function-parameter.js";
+import { type GoFunctionReturn } from "../types/function-return.js";
+import type { GoTypeParameter } from "./type-parameter.js";
 
 export type GoReceiverField = {
   name: string;

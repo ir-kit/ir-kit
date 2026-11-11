@@ -1,15 +1,17 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('generics', () => {
-  it('basic class with type parameters', async () => {
-    const T = java.factory.createTypeParameter('T', [java.factory.createIdentifier('Comparable')]);
-    const U = java.factory.createTypeParameter('U');
+describe("generics", () => {
+  it("basic class with type parameters", async () => {
+    const T = java.factory.createTypeParameter("T", [
+      java.factory.createIdentifier("Comparable"),
+    ]);
+    const U = java.factory.createTypeParameter("U");
 
     const cls = java.factory.createClassDeclaration(
-      'Holder',
+      "Holder",
       [],
-      ['public'],
+      ["public"],
       undefined,
       undefined,
       undefined,
@@ -17,42 +19,44 @@ describe('generics', () => {
     );
 
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'generics.java');
+    await assertPrintedMatchesSnapshot(file, "generics.java");
   });
 
-  it('generic class with bounded type parameters', async () => {
-    const T = java.factory.createTypeParameter('T', [java.factory.createIdentifier('Number')]);
-    const U = java.factory.createTypeParameter('U', [
-      java.factory.createIdentifier('Comparable'),
-      java.factory.createIdentifier('Serializable'),
+  it("generic class with bounded type parameters", async () => {
+    const T = java.factory.createTypeParameter("T", [
+      java.factory.createIdentifier("Number"),
+    ]);
+    const U = java.factory.createTypeParameter("U", [
+      java.factory.createIdentifier("Comparable"),
+      java.factory.createIdentifier("Serializable"),
     ]);
 
     const field = java.factory.createVariableDeclaration(
-      'value',
-      java.factory.createIdentifier('T'),
+      "value",
+      java.factory.createIdentifier("T"),
       undefined,
-      ['private'],
+      ["private"],
     );
 
     const getValueMethod = java.factory.createMethodDeclaration(
-      'getValue',
+      "getValue",
       [],
-      java.factory.createIdentifier('T'),
+      java.factory.createIdentifier("T"),
       [
         java.factory.createReturnStatement(
           java.factory.createMemberExpression(
             java.factory.createThisExpression(),
-            java.factory.createIdentifier('value'),
+            java.factory.createIdentifier("value"),
           ),
         ),
       ],
-      ['public'],
+      ["public"],
     );
 
     const cls = java.factory.createClassDeclaration(
-      'BoundedContainer',
+      "BoundedContainer",
       [field, getValueMethod],
-      ['public'],
+      ["public"],
       undefined,
       undefined,
       undefined,
@@ -60,30 +64,36 @@ describe('generics', () => {
     );
 
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'bounded-generics.java');
+    await assertPrintedMatchesSnapshot(file, "bounded-generics.java");
   });
 
-  it('generic interface with multiple bounds', async () => {
-    const T = java.factory.createTypeParameter('T', [
-      java.factory.createIdentifier('Comparable'),
-      java.factory.createIdentifier('Serializable'),
+  it("generic interface with multiple bounds", async () => {
+    const T = java.factory.createTypeParameter("T", [
+      java.factory.createIdentifier("Comparable"),
+      java.factory.createIdentifier("Serializable"),
     ]);
 
     const method = java.factory.createMethodDeclaration(
-      'compare',
+      "compare",
       [
-        java.factory.createMethodParameter('a', java.factory.createIdentifier('T')),
-        java.factory.createMethodParameter('b', java.factory.createIdentifier('T')),
+        java.factory.createMethodParameter(
+          "a",
+          java.factory.createIdentifier("T"),
+        ),
+        java.factory.createMethodParameter(
+          "b",
+          java.factory.createIdentifier("T"),
+        ),
       ],
-      java.factory.createIdentifier('int'),
+      java.factory.createIdentifier("int"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'MultiBoundedComparator',
+      "MultiBoundedComparator",
       [method],
-      ['public'],
+      ["public"],
       undefined,
       undefined,
       false,
@@ -91,145 +101,159 @@ describe('generics', () => {
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'multi-bounded-interface.java');
+    await assertPrintedMatchesSnapshot(file, "multi-bounded-interface.java");
   });
 
-  it('generic enum with type parameters', async () => {
+  it("generic enum with type parameters", async () => {
     const field = java.factory.createVariableDeclaration(
-      'value',
-      java.factory.createIdentifier('T'),
+      "value",
+      java.factory.createIdentifier("T"),
       undefined,
-      ['private', 'final'],
+      ["private", "final"],
     );
 
     const constructor = java.factory.createMethodDeclaration(
-      'GenericEnum',
-      [java.factory.createMethodParameter('value', java.factory.createIdentifier('T'))],
+      "GenericEnum",
+      [
+        java.factory.createMethodParameter(
+          "value",
+          java.factory.createIdentifier("T"),
+        ),
+      ],
       undefined,
       [
         java.factory.createAssignment(
           java.factory.createMemberExpression(
             java.factory.createThisExpression(),
-            java.factory.createIdentifier('value'),
+            java.factory.createIdentifier("value"),
           ),
-          java.factory.createIdentifier('value'),
+          java.factory.createIdentifier("value"),
         ),
       ],
-      ['private'],
+      ["private"],
     );
 
     const getValueMethod = java.factory.createMethodDeclaration(
-      'getValue',
+      "getValue",
       [],
-      java.factory.createIdentifier('T'),
+      java.factory.createIdentifier("T"),
       [
         java.factory.createReturnStatement(
           java.factory.createMemberExpression(
             java.factory.createThisExpression(),
-            java.factory.createIdentifier('value'),
+            java.factory.createIdentifier("value"),
           ),
         ),
       ],
-      ['public'],
+      ["public"],
     );
 
     const e = java.factory.createEnumDeclaration(
-      'GenericEnum',
+      "GenericEnum",
       [
-        { args: [java.factory.createLiteral('first')], name: 'FIRST' },
-        { args: [java.factory.createLiteral('second')], name: 'SECOND' },
+        { args: [java.factory.createLiteral("first")], name: "FIRST" },
+        { args: [java.factory.createLiteral("second")], name: "SECOND" },
       ],
       [field, constructor, getValueMethod],
-      ['public'],
+      ["public"],
       undefined,
       undefined,
       undefined,
-      ['T'],
+      ["T"],
     );
 
     const file = java.factory.createSourceFile(undefined, [e]);
-    await assertPrintedMatchesSnapshot(file, 'generic-enum.java');
+    await assertPrintedMatchesSnapshot(file, "generic-enum.java");
   });
 
-  it('generic method with wildcard bounds', async () => {
+  it("generic method with wildcard bounds", async () => {
     const method = java.factory.createMethodDeclaration(
-      'processList',
+      "processList",
       [
         java.factory.createMethodParameter(
-          'list',
+          "list",
           java.factory.createMemberExpression(
-            java.factory.createIdentifier('List'),
+            java.factory.createIdentifier("List"),
             java.factory.createWildcardTypeArgument(
-              'extends',
-              java.factory.createIdentifier('Number'),
+              "extends",
+              java.factory.createIdentifier("Number"),
             ),
           ),
         ),
       ],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [
         java.factory.createExpressionStatement(
           java.factory.createCallExpression(
             java.factory.createMemberExpression(
               java.factory.createMemberExpression(
-                java.factory.createIdentifier('System'),
-                java.factory.createIdentifier('out'),
+                java.factory.createIdentifier("System"),
+                java.factory.createIdentifier("out"),
               ),
-              java.factory.createIdentifier('println'),
+              java.factory.createIdentifier("println"),
             ),
-            [java.factory.createLiteral('Processing list')],
+            [java.factory.createLiteral("Processing list")],
           ),
         ),
       ],
-      ['public', 'static'],
+      ["public", "static"],
     );
 
-    const cls = java.factory.createClassDeclaration('WildcardProcessor', [method], ['public']);
+    const cls = java.factory.createClassDeclaration(
+      "WildcardProcessor",
+      [method],
+      ["public"],
+    );
 
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'wildcard-generics.java');
+    await assertPrintedMatchesSnapshot(file, "wildcard-generics.java");
   });
 
-  it('generic class with recursive type bounds', async () => {
-    const T = java.factory.createTypeParameter('T', [
+  it("generic class with recursive type bounds", async () => {
+    const T = java.factory.createTypeParameter("T", [
       java.factory.createMemberExpression(
-        java.factory.createIdentifier('Comparable'),
-        java.factory.createIdentifier('T'),
+        java.factory.createIdentifier("Comparable"),
+        java.factory.createIdentifier("T"),
       ),
     ]);
 
     const field = java.factory.createVariableDeclaration(
-      'value',
-      java.factory.createIdentifier('T'),
+      "value",
+      java.factory.createIdentifier("T"),
       undefined,
-      ['private'],
+      ["private"],
     );
 
     const compareToMethod = java.factory.createMethodDeclaration(
-      'compareTo',
-      [java.factory.createMethodParameter('other', java.factory.createIdentifier('T'))],
-      java.factory.createIdentifier('int'),
+      "compareTo",
+      [
+        java.factory.createMethodParameter(
+          "other",
+          java.factory.createIdentifier("T"),
+        ),
+      ],
+      java.factory.createIdentifier("int"),
       [
         java.factory.createReturnStatement(
           java.factory.createCallExpression(
             java.factory.createMemberExpression(
               java.factory.createMemberExpression(
                 java.factory.createThisExpression(),
-                java.factory.createIdentifier('value'),
+                java.factory.createIdentifier("value"),
               ),
-              java.factory.createIdentifier('compareTo'),
+              java.factory.createIdentifier("compareTo"),
             ),
-            [java.factory.createIdentifier('other')],
+            [java.factory.createIdentifier("other")],
           ),
         ),
       ],
-      ['public'],
+      ["public"],
     );
 
     const cls = java.factory.createClassDeclaration(
-      'RecursiveBounded',
+      "RecursiveBounded",
       [field, compareToMethod],
-      ['public'],
+      ["public"],
       undefined,
       undefined,
       undefined,
@@ -237,6 +261,6 @@ describe('generics', () => {
     );
 
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'recursive-bounded-generics.java');
+    await assertPrintedMatchesSnapshot(file, "recursive-bounded-generics.java");
   });
 });

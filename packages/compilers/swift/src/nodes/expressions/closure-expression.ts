@@ -1,10 +1,10 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
 
 export type SwiftCaptureListItem = {
   name: string;
-  specifier?: 'unowned' | 'weak';
+  specifier?: "unowned" | "weak";
 };
 
 export interface SwiftClosureExpression extends SwiftNodeBase {

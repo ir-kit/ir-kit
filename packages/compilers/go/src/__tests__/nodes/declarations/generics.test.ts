@@ -1,114 +1,143 @@
-import { go } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { go } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('generics (type parameters)', () => {
-  it('generic type with instantiation', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
+describe("generics (type parameters)", () => {
+  it("generic type with instantiation", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
       go.factory.createTypeDeclaration([
         go.factory.createTypeSpec(
-          'Stack',
-          go.factory.createArrayType(go.factory.createIdentifier('T')),
-          [{ constraint: go.factory.createIdentifier('any'), names: ['T'] }],
+          "Stack",
+          go.factory.createArrayType(go.factory.createIdentifier("T")),
+          [{ constraint: go.factory.createIdentifier("any"), names: ["T"] }],
         ),
       ]),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createShortVarDeclaration(
-          's',
-          go.factory.createCompositeLiteral(
-            [],
-            go.factory.createGenericType(go.factory.createIdentifier('Stack'), [
-              go.factory.createIdentifier('int'),
-            ]),
-          ),
-        ),
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
-            ),
-            [go.factory.createIdentifier('s')],
-          ),
-        ),
-      ]),
-    ]);
-    await assertPrintedMatchesSnapshot(file, 'generic-type.go');
-  });
-
-  it('generic function with constraints', async () => {
-    const file = go.factory.createSourceFile('main', [
       go.factory.createFunctionDeclaration(
         undefined,
-        'lookup',
+        "main",
+        undefined,
+        undefined,
+        undefined,
         [
-          { constraint: go.factory.createIdentifier('comparable'), names: ['K'] },
-          { constraint: go.factory.createIdentifier('any'), names: ['V'] },
-        ],
-        [
-          go.factory.createFunctionParameter(
-            ['m'],
-            go.factory.createMapType(
-              go.factory.createIdentifier('K'),
-              go.factory.createIdentifier('V'),
+          go.factory.createShortVarDeclaration(
+            "s",
+            go.factory.createCompositeLiteral(
+              [],
+              go.factory.createGenericType(
+                go.factory.createIdentifier("Stack"),
+                [go.factory.createIdentifier("int")],
+              ),
             ),
           ),
-          go.factory.createFunctionParameter(['key'], go.factory.createIdentifier('K')),
-        ],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('V'))],
-        [
-          go.factory.createReturnStatement(
-            go.factory.createIndexExpression(
-              go.factory.createIdentifier('m'),
-              go.factory.createIdentifier('key'),
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [go.factory.createIdentifier("s")],
             ),
           ),
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'generic-function.go');
+    await assertPrintedMatchesSnapshot(file, "generic-type.go");
   });
 
-  it('grouped type parameter names with multi-argument instantiation', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
+  it("generic function with constraints", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "lookup",
+        [
+          {
+            constraint: go.factory.createIdentifier("comparable"),
+            names: ["K"],
+          },
+          { constraint: go.factory.createIdentifier("any"), names: ["V"] },
+        ],
+        [
+          go.factory.createFunctionParameter(
+            ["m"],
+            go.factory.createMapType(
+              go.factory.createIdentifier("K"),
+              go.factory.createIdentifier("V"),
+            ),
+          ),
+          go.factory.createFunctionParameter(
+            ["key"],
+            go.factory.createIdentifier("K"),
+          ),
+        ],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier("V"))],
+        [
+          go.factory.createReturnStatement(
+            go.factory.createIndexExpression(
+              go.factory.createIdentifier("m"),
+              go.factory.createIdentifier("key"),
+            ),
+          ),
+        ],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "generic-function.go");
+  });
+
+  it("grouped type parameter names with multi-argument instantiation", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
       go.factory.createTypeDeclaration([
         go.factory.createTypeSpec(
-          'Pair',
+          "Pair",
           go.factory.createStructType([
-            { names: ['First'], type: go.factory.createIdentifier('T') },
-            { names: ['Second'], type: go.factory.createIdentifier('U') },
+            { names: ["First"], type: go.factory.createIdentifier("T") },
+            { names: ["Second"], type: go.factory.createIdentifier("U") },
           ]),
-          [{ constraint: go.factory.createIdentifier('any'), names: ['T', 'U'] }],
+          [
+            {
+              constraint: go.factory.createIdentifier("any"),
+              names: ["T", "U"],
+            },
+          ],
         ),
       ]),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createVariableStatement(
-          undefined,
-          go.factory.createVariableDeclarationList(
-            [
-              go.factory.createVariableDeclaration(
-                'p',
-                go.factory.createGenericType(go.factory.createIdentifier('Pair'), [
-                  go.factory.createIdentifier('string'),
-                  go.factory.createIdentifier('int'),
-                ]),
-              ),
-            ],
-            go.NodeFlags.Var,
-          ),
-        ),
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createVariableStatement(
+            undefined,
+            go.factory.createVariableDeclarationList(
+              [
+                go.factory.createVariableDeclaration(
+                  "p",
+                  go.factory.createGenericType(
+                    go.factory.createIdentifier("Pair"),
+                    [
+                      go.factory.createIdentifier("string"),
+                      go.factory.createIdentifier("int"),
+                    ],
+                  ),
+                ),
+              ],
+              go.NodeFlags.Var,
             ),
-            [go.factory.createIdentifier('p')],
           ),
-        ),
-      ]),
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [go.factory.createIdentifier("p")],
+            ),
+          ),
+        ],
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'grouped-type-params.go');
+    await assertPrintedMatchesSnapshot(file, "grouped-type-params.go");
   });
 });

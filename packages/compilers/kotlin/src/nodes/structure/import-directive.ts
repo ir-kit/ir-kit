@@ -1,5 +1,5 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
 
 export interface KotlinImportDirective extends KotlinNodeBase {
   alias?: string;

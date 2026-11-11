@@ -1,25 +1,25 @@
-import { assertPrintedMatchesSnapshot, f, file } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file } from "../utils.js";
 
-describe('callable reference', () => {
-  it('class reference', async () => {
+describe("callable reference", () => {
+  it("class reference", async () => {
     const node = f.createFunctionDeclaration(
-      'token',
+      "token",
       [],
       undefined,
       undefined,
-      f.createCallableReference('class', f.createIdentifier('String')),
+      f.createCallableReference("class", f.createIdentifier("String")),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'class-reference.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "class-reference.kt");
   });
 
-  it('unbound function reference', async () => {
+  it("unbound function reference", async () => {
     const node = f.createFunctionDeclaration(
-      'predicate',
+      "predicate",
       [],
       undefined,
       undefined,
-      f.createCallableReference('isValid'),
+      f.createCallableReference("isValid"),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'unbound-reference.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "unbound-reference.kt");
   });
 });

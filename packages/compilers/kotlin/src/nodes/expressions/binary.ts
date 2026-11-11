@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinBinaryOperator } from '../shared';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinBinaryOperator } from "../shared.js";
 
 export interface KotlinBinaryExpression extends KotlinNodeBase {
   kind: KotlinNodeKind.BinaryExpression;

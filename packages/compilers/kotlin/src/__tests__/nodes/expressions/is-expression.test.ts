@@ -1,25 +1,32 @@
-import { assertPrintedMatchesSnapshot, f, file } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file } from "../utils.js";
 
-describe('is expression', () => {
-  it('type check', async () => {
+describe("is expression", () => {
+  it("type check", async () => {
     const node = f.createFunctionDeclaration(
-      'check',
+      "check",
       [],
       undefined,
       undefined,
-      f.createIsExpression(f.createIdentifier('value'), f.createUserType('String')),
+      f.createIsExpression(
+        f.createIdentifier("value"),
+        f.createUserType("String"),
+      ),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'type-check.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "type-check.kt");
   });
 
-  it('negated type check', async () => {
+  it("negated type check", async () => {
     const node = f.createFunctionDeclaration(
-      'missing',
+      "missing",
       [],
       undefined,
       undefined,
-      f.createIsExpression(f.createIdentifier('value'), f.createUserType('Int'), true),
+      f.createIsExpression(
+        f.createIdentifier("value"),
+        f.createUserType("Int"),
+        true,
+      ),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'negated.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "negated.kt");
   });
 });

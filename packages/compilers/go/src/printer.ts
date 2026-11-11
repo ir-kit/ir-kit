@@ -1,10 +1,10 @@
-import type { GoNode } from './nodes/base';
-import type { GoTypeParameter } from './nodes/declarations/type-parameter';
-import type { GoTypeSpec } from './nodes/declarations/type-spec';
-import type { GoExpression } from './nodes/expression';
-import { GoNodeKind } from './nodes/kinds';
-import type { GoType } from './nodes/type';
-import type { GoFunctionReturn } from './nodes/types/function-return';
+import type { GoNode } from "./nodes/base.js";
+import type { GoTypeParameter } from "./nodes/declarations/type-parameter.js";
+import type { GoTypeSpec } from "./nodes/declarations/type-spec.js";
+import type { GoExpression } from "./nodes/expression.js";
+import { GoNodeKind } from "./nodes/kinds.js";
+import type { GoType } from "./nodes/type.js";
+import type { GoFunctionReturn } from "./nodes/types/function-return.js";
 
 export interface GoPrinterOptions {
   /**
@@ -22,33 +22,53 @@ interface PrintContext {
   parentPrecedence?: number;
 }
 
-const GROUPABLE_KINDS = new Set([GoNodeKind.TypeDeclaration, GoNodeKind.VariableStatement]);
+const GROUPABLE_KINDS = new Set([
+  GoNodeKind.TypeDeclaration,
+  GoNodeKind.VariableStatement,
+]);
 
 const INDENT_SIZE = 1;
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 // oxfmt-ignore
 const OPERATOR_PRECEDENCE: Record<string, number> = {
-  '||': 1,
-  '&&': 2,
-  '==': 3, '!=': 3, '<': 3, '<=': 3, '>': 3, '>=': 3,
-  '+': 4, '-': 4, '|': 4, '^': 4,
-  '*': 5, '/': 5, '%': 5, '<<': 5, '>>': 5, '&': 5, '&^': 5,
+  "||": 1,
+  "&&": 2,
+  "==": 3,
+  "!=": 3,
+  "<": 3,
+  "<=": 3,
+  ">": 3,
+  ">=": 3,
+  "+": 4,
+  "-": 4,
+  "|": 4,
+  "^": 4,
+  "*": 5,
+  "/": 5,
+  "%": 5,
+  "<<": 5,
+  ">>": 5,
+  "&": 5,
+  "&^": 5,
 };
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 const GO_STRING_ESCAPES: Record<string, string> = {
-  '\\': '\\\\',
+  "\\": "\\\\",
   '"': '\\"',
-  '\n': '\\n',
-  '\r': '\\r',
-  '\t': '\\t',
+  "\n": "\\n",
+  "\r": "\\r",
+  "\t": "\\t",
 };
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
 function escapeString(value: string): string {
-  return value.replace(/[\\"\n\r\t]/g, (char) => GO_STRING_ESCAPES[char] ?? char);
+  return value.replace(
+    /[\\"\n\r\t]/g,
+    (char) => GO_STRING_ESCAPES[char] ?? char,
+  );
 }
 
 function alignCells(rows: ReadonlyArray<ReadonlyArray<string>>): Array<string> {
@@ -64,8 +84,11 @@ function alignCells(rows: ReadonlyArray<ReadonlyArray<string>>): Array<string> {
         continue;
       }
       let end = start;
-      while (end < padded.length && (padded[end]?.length ?? 0) > col + 1) end += 1;
-      const width = Math.max(...padded.slice(start, end).map((row) => row[col]?.length ?? 0));
+      while (end < padded.length && (padded[end]?.length ?? 0) > col + 1)
+        end += 1;
+      const width = Math.max(
+        ...padded.slice(start, end).map((row) => row[col]?.length ?? 0),
+      );
       for (let i = start; i < end; i++) {
         const row = padded[i];
         const cell = row?.[col];
@@ -75,7 +98,7 @@ function alignCells(rows: ReadonlyArray<ReadonlyArray<string>>): Array<string> {
     }
   }
 
-  return padded.map((row) => row.join(' '));
+  return padded.map((row) => row.join(" "));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,26 +116,31 @@ export function createPrinter(options?: GoPrinterOptions) {
   }
 
   function printLine(line: string): string {
-    return '\t'.repeat(indentLevel * INDENT_SIZE) + line;
+    return "\t".repeat(indentLevel * INDENT_SIZE) + line;
   }
 
-  function printReturnType(returnType: ReadonlyArray<GoFunctionReturn>): string {
-    if (!returnType.length) return '';
-    const rendered = returnType.map((rt) => printNode(rt)).join(', ');
-    const useBrackets = returnType.length > 1 || returnType.some((rt) => rt.name);
+  function printReturnType(
+    returnType: ReadonlyArray<GoFunctionReturn>,
+  ): string {
+    if (!returnType.length) return "";
+    const rendered = returnType.map((rt) => printNode(rt)).join(", ");
+    const useBrackets =
+      returnType.length > 1 || returnType.some((rt) => rt.name);
     return useBrackets ? ` (${rendered})` : ` ${rendered}`;
   }
 
   function printTypeAssert(operand: GoNode, type?: GoNode): string {
-    const target = type ? printInline(type) : 'type';
+    const target = type ? printInline(type) : "type";
     return `${printInline(operand)}.(${target})`;
   }
 
-  function printTypeParameters(typeParameters: ReadonlyArray<GoTypeParameter> | undefined): string {
-    if (!typeParameters?.length) return '';
+  function printTypeParameters(
+    typeParameters: ReadonlyArray<GoTypeParameter> | undefined,
+  ): string {
+    if (!typeParameters?.length) return "";
     const list = typeParameters
-      .map((tp) => `${tp.names.join(', ')} ${printInline(tp.constraint)}`)
-      .join(', ');
+      .map((tp) => `${tp.names.join(", ")} ${printInline(tp.constraint)}`)
+      .join(", ");
     return `[${list}]`;
   }
 
@@ -124,14 +152,14 @@ export function createPrinter(options?: GoPrinterOptions) {
 
     const [firstRow] = rows;
     if (rows.length === 1 && firstRow) {
-      return [printLine(`${keyword} ${firstRow.join(' ')}`)];
+      return [printLine(`${keyword} ${firstRow.join(" ")}`)];
     }
 
     const lines = [printLine(`${keyword} (`)];
     indentLevel += 1;
     lines.push(...alignCells(rows).map((line) => printLine(line)));
     indentLevel -= 1;
-    lines.push(printLine(')'));
+    lines.push(printLine(")"));
     return lines;
   }
 
@@ -142,13 +170,14 @@ export function createPrinter(options?: GoPrinterOptions) {
   }): Array<string> {
     const cells = [declaration.name];
     if (declaration.type) cells.push(printInline(declaration.type));
-    if (declaration.initializer) cells.push(`= ${printInline(declaration.initializer)}`);
+    if (declaration.initializer)
+      cells.push(`= ${printInline(declaration.initializer)}`);
     return cells;
   }
 
   function typeSpecCells(spec: GoTypeSpec): Array<string> {
     const cells = [`${spec.name}${printTypeParameters(spec.typeParameters)}`];
-    if (spec.isAlias) cells.push('=');
+    if (spec.isAlias) cells.push("=");
     cells.push(printInline(spec.type));
     return cells;
   }
@@ -166,9 +195,9 @@ export function createPrinter(options?: GoPrinterOptions) {
 
     switch (node.kind) {
       case GoNodeKind.ArrayType: {
-        let sizePrefix = '[]';
-        if (node.size === '...') {
-          sizePrefix = '[...]';
+        let sizePrefix = "[]";
+        if (node.size === "...") {
+          sizePrefix = "[...]";
         } else if (node.size !== undefined) {
           sizePrefix = `[${printInline(node.size)}]`;
         }
@@ -178,8 +207,12 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.Assignment: {
-        const targets = node.targets.map((target) => printInline(target)).join(', ');
-        const values = node.values.map((value) => printInline(value)).join(', ');
+        const targets = node.targets
+          .map((target) => printInline(target))
+          .join(", ");
+        const values = node.values
+          .map((value) => printInline(value))
+          .join(", ");
         const assignmentText = `${targets} = ${values}`;
         parts.push(context.inline ? assignmentText : printLine(assignmentText));
         break;
@@ -196,7 +229,8 @@ export function createPrinter(options?: GoPrinterOptions) {
         const left = printInline(node.left, { parentPrecedence: precedence });
         const right = printInline(node.right, { parentPrecedence: precedence });
         const tight =
-          context.parentPrecedence !== undefined && precedence > context.parentPrecedence;
+          context.parentPrecedence !== undefined &&
+          precedence > context.parentPrecedence;
         const expr = tight
           ? `${left}${node.operator}${right}`
           : `${left} ${node.operator} ${right}`;
@@ -206,18 +240,18 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.Block:
         if (!node.statements.length) {
-          parts.push('{}');
+          parts.push("{}");
         } else {
-          parts.push(context.inline ? '{' : printLine('{'));
+          parts.push(context.inline ? "{" : printLine("{"));
           indentLevel += 1;
           parts.push(...node.statements.map((stmt) => printNode(stmt)));
           indentLevel -= 1;
-          parts.push(printLine('}'));
+          parts.push(printLine("}"));
         }
         break;
 
       case GoNodeKind.BreakStatement:
-        parts.push(printLine(`break${node.label ? ` ${node.label}` : ''}`));
+        parts.push(printLine(`break${node.label ? ` ${node.label}` : ""}`));
         break;
 
       case GoNodeKind.CallExpression: {
@@ -228,14 +262,14 @@ export function createPrinter(options?: GoPrinterOptions) {
           }
           return base;
         });
-        const text = `${printNode(node.callee)}(${args.join(', ')})`;
+        const text = `${printNode(node.callee)}(${args.join(", ")})`;
         parts.push(context.inline ? text : printLine(text));
         break;
       }
 
       case GoNodeKind.ChannelType: {
-        const lead = node.direction === 'receive' ? '<-' : '';
-        const trail = node.direction === 'send' ? '<-' : '';
+        const lead = node.direction === "receive" ? "<-" : "";
+        const trail = node.direction === "send" ? "<-" : "";
         parts.push(`${lead}chan${trail} ${printInline(node.elementType)}`);
         break;
       }
@@ -245,15 +279,17 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.CompositeLiteral: {
-        const typeText = node.type ? printNode(node.type) : '';
-        const elementsText = node.elements.map((el) => printInline(el)).join(', ');
+        const typeText = node.type ? printNode(node.type) : "";
+        const elementsText = node.elements
+          .map((el) => printInline(el))
+          .join(", ");
         const text = `${typeText}{${elementsText}}`;
         parts.push(text);
         break;
       }
 
       case GoNodeKind.ContinueStatement:
-        parts.push(printLine(`continue${node.label ? ` ${node.label}` : ''}`));
+        parts.push(printLine(`continue${node.label ? ` ${node.label}` : ""}`));
         break;
 
       case GoNodeKind.DeferStatement: {
@@ -263,7 +299,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.EmptyStatement:
-        parts.push('');
+        parts.push("");
         break;
 
       case GoNodeKind.ExpressionStatement: {
@@ -273,81 +309,95 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.FallthroughStatement:
-        parts.push(printLine('fallthrough'));
+        parts.push(printLine("fallthrough"));
         break;
 
       case GoNodeKind.ForRangeStatement: {
-        const names = node.targets?.join(', ');
-        const assignOp = node.useShortVar ? ':=' : '=';
+        const names = node.targets?.join(", ");
+        const assignOp = node.useShortVar ? ":=" : "=";
         const iterText = `range ${printInline(node.iterable)}`;
-        const header = names ? `for ${names} ${assignOp} ${iterText}` : `for ${iterText}`;
+        const header = names
+          ? `for ${names} ${assignOp} ${iterText}`
+          : `for ${iterText}`;
         const body = printInline(node.body);
         parts.push(printLine(`${header} ${body}`));
         break;
       }
 
       case GoNodeKind.ForStatement: {
-        const init = node.init ? `${printInline(node.init)}` : '';
-        const condition = node.condition ? `${printInline(node.condition)}` : '';
-        const post = node.post ? `${printInline(node.post)}` : '';
+        const init = node.init ? `${printInline(node.init)}` : "";
+        const condition = node.condition
+          ? `${printInline(node.condition)}`
+          : "";
+        const post = node.post ? `${printInline(node.post)}` : "";
         const body = printInline(node.body);
-        const joined = [init, condition, post].filter(Boolean).join('; ');
-        const forLine = `for ${joined.length ? `${joined} ` : ''}`;
+        const joined = [init, condition, post].filter(Boolean).join("; ");
+        const forLine = `for ${joined.length ? `${joined} ` : ""}`;
         parts.push(printLine(`${forLine}${body}`));
         break;
       }
 
       case GoNodeKind.FunctionDeclaration: {
-        const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
+        const parameters = node.parameters
+          .map((parameter) => printNode(parameter))
+          .join(", ");
         const finalReturnType = printReturnType(node.returnType);
         const receiver = node.receiver
           ? `(${node.receiver.name} ${printInline(node.receiver.type)})`
-          : '';
+          : "";
         const typeParams = printTypeParameters(node.typeParameters);
-        const signature = `func${receiver ? ` ${receiver}` : ''} ${node.name}${typeParams}(${parameters})${finalReturnType}`;
+        const signature = `func${receiver ? ` ${receiver}` : ""} ${node.name}${typeParams}(${parameters})${finalReturnType}`;
         const blockOutput = printInline(node.body);
         parts.push(
           context.inline
-            ? [signature, blockOutput].join(' ')
-            : printLine([signature, blockOutput].join(' ')),
+            ? [signature, blockOutput].join(" ")
+            : printLine([signature, blockOutput].join(" ")),
         );
         break;
       }
 
       case GoNodeKind.FunctionLiteral: {
-        const parameters = node.parameters.map((parameter) => printNode(parameter)).join(', ');
-        const returnType = node.returnType.map((parameter) => printNode(parameter)).join(', ');
+        const parameters = node.parameters
+          .map((parameter) => printNode(parameter))
+          .join(", ");
+        const returnType = node.returnType
+          .map((parameter) => printNode(parameter))
+          .join(", ");
         const useReturnTypeBrackets =
           node.returnType.length > 1 || node.returnType.some((rt) => rt.name);
         const finalReturnType = useReturnTypeBrackets
           ? ` (${returnType})`
           : returnType
             ? ` ${returnType}`
-            : '';
+            : "";
         const signature = `func(${parameters})${finalReturnType}`;
         const blockOutput = printInline(node.body);
         parts.push(
           context.inline
-            ? [signature, blockOutput].join(' ')
-            : printLine([signature, blockOutput].join(' ')),
+            ? [signature, blockOutput].join(" ")
+            : printLine([signature, blockOutput].join(" ")),
         );
         break;
       }
 
       case GoNodeKind.FunctionParameter: {
-        const variadic = node.isVariadic ? '...' : '';
-        parts.push(`${node.names.join(', ')} ${variadic}${printInline(node.type)}`);
+        const variadic = node.isVariadic ? "..." : "";
+        parts.push(
+          `${node.names.join(", ")} ${variadic}${printInline(node.type)}`,
+        );
         break;
       }
 
       case GoNodeKind.FunctionReturn: {
-        const name = node.name ? `${node.name} ` : '';
+        const name = node.name ? `${node.name} ` : "";
         parts.push(`${name}${printInline(node.type)}`);
         break;
       }
 
       case GoNodeKind.FunctionType: {
-        const parameters = node.parameters.map((parameter) => printInline(parameter)).join(', ');
+        const parameters = node.parameters
+          .map((parameter) => printInline(parameter))
+          .join(", ");
         const finalReturnType = printReturnType(node.returnType);
         parts.push(`func(${parameters})${finalReturnType}`);
         break;
@@ -356,7 +406,7 @@ export function createPrinter(options?: GoPrinterOptions) {
       case GoNodeKind.GenericType: {
         const typeArguments = node.typeArguments
           .map((typeArgument) => printInline(typeArgument))
-          .join(', ');
+          .join(", ");
         parts.push(`${printInline(node.type)}[${typeArguments}]`);
         break;
       }
@@ -376,10 +426,12 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.IfStatement: {
-        const initStatement = node.initStatement ? `${printInline(node.initStatement)}; ` : '';
+        const initStatement = node.initStatement
+          ? `${printInline(node.initStatement)}; `
+          : "";
         const ifLine = `if ${initStatement}${printInline(node.condition)}`;
         const thenBlock = printInline(node.thenBlock);
-        let elseBlock = '';
+        let elseBlock = "";
         if (node.elseBlock) {
           elseBlock = ` else ${printInline(node.elseBlock)}`;
         }
@@ -398,11 +450,11 @@ export function createPrinter(options?: GoPrinterOptions) {
           break;
         }
 
-        parts.push(printLine('import ('));
+        parts.push(printLine("import ("));
         indentLevel += 1;
         parts.push(...specs.map((spec) => printLine(spec)));
         indentLevel -= 1;
-        parts.push(printLine(')'));
+        parts.push(printLine(")"));
         break;
       }
 
@@ -418,23 +470,27 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.InterfaceType: {
         if (!node.fields.length) {
-          parts.push('interface{}');
+          parts.push("interface{}");
           break;
         }
 
-        parts.push('interface {');
+        parts.push("interface {");
         indentLevel += 1;
         for (const field of node.fields) {
-          if ('embed' in field) {
+          if ("embed" in field) {
             parts.push(printLine(printInline(field.embed)));
           } else {
-            const parameters = field.parameters.map((parameter) => printNode(parameter)).join(', ');
+            const parameters = field.parameters
+              .map((parameter) => printNode(parameter))
+              .join(", ");
             const finalReturnType = printReturnType(field.returnType);
-            parts.push(printLine(`${field.name}(${parameters})${finalReturnType}`));
+            parts.push(
+              printLine(`${field.name}(${parameters})${finalReturnType}`),
+            );
           }
         }
         indentLevel -= 1;
-        parts.push(printLine('}'));
+        parts.push(printLine("}"));
         break;
       }
 
@@ -443,20 +499,20 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.LabeledStatement: {
-        const labelIndent = '\t'.repeat(Math.max(0, indentLevel - 1));
+        const labelIndent = "\t".repeat(Math.max(0, indentLevel - 1));
         parts.push(`${labelIndent}${node.label}:`);
         parts.push(printNode(node.statement));
         break;
       }
 
       case GoNodeKind.Literal:
-        if (node.literalKind === 'nil') {
-          parts.push('nil');
-        } else if (node.literalKind === 'rawString') {
+        if (node.literalKind === "nil") {
+          parts.push("nil");
+        } else if (node.literalKind === "rawString") {
           parts.push(`\`${node.value}\``);
-        } else if (node.literalKind === 'rune') {
+        } else if (node.literalKind === "rune") {
           parts.push(`'${node.value}'`);
-        } else if (node.literalKind === 'string') {
+        } else if (node.literalKind === "string") {
           parts.push(`"${escapeString(node.value)}"`);
         } else {
           parts.push(node.value);
@@ -486,25 +542,29 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.ReturnStatement: {
-        const values = node.expressions.map((expr) => printInline(expr)).join(', ');
-        parts.push(printLine(`return${values ? ` ${values}` : ''}`));
+        const values = node.expressions
+          .map((expr) => printInline(expr))
+          .join(", ");
+        parts.push(printLine(`return${values ? ` ${values}` : ""}`));
         break;
       }
 
       case GoNodeKind.SelectStatement: {
-        parts.push(printLine('select {'));
+        parts.push(printLine("select {"));
         for (const selectCase of node.cases) {
           const clause = selectCase.communication
             ? `case ${printInline(selectCase.communication)}`
-            : 'default';
+            : "default";
           parts.push(printLine(`${clause}:`));
           if (selectCase.body.statements.length) {
             indentLevel += 1;
-            parts.push(...selectCase.body.statements.map((stmt) => printNode(stmt)));
+            parts.push(
+              ...selectCase.body.statements.map((stmt) => printNode(stmt)),
+            );
             indentLevel -= 1;
           }
         }
-        parts.push(printLine('}'));
+        parts.push(printLine("}"));
         break;
       }
 
@@ -515,16 +575,18 @@ export function createPrinter(options?: GoPrinterOptions) {
       }
 
       case GoNodeKind.ShortVarDeclaration: {
-        const names = node.names.join(', ');
-        const values = node.values.map((value) => printInline(value)).join(', ');
+        const names = node.names.join(", ");
+        const values = node.values
+          .map((value) => printInline(value))
+          .join(", ");
         const shortVarText = `${names} := ${values}`;
         parts.push(context.inline ? shortVarText : printLine(shortVarText));
         break;
       }
 
       case GoNodeKind.SliceExpression: {
-        const low = node.low ? printInline(node.low) : '';
-        const high = node.high ? printInline(node.high) : '';
+        const low = node.low ? printInline(node.low) : "";
+        const high = node.high ? printInline(node.high) : "";
         if (node.max) {
           const max = printInline(node.max);
           parts.push(`${printInline(node.object)}[${low}:${high}:${max}]`);
@@ -536,13 +598,15 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.SourceFile: {
         parts.push(printNode(node.packageDeclaration));
-        parts.push('');
+        parts.push("");
 
         node.statements.forEach((curr, i) => {
           const prev = node.statements[i - 1];
           const grouped =
-            prev !== undefined && prev.kind === curr.kind && GROUPABLE_KINDS.has(curr.kind);
-          if (i > 0 && !grouped) parts.push('');
+            prev !== undefined &&
+            prev.kind === curr.kind &&
+            GROUPABLE_KINDS.has(curr.kind);
+          if (i > 0 && !grouped) parts.push("");
           parts.push(printNode(curr));
         });
         break;
@@ -550,53 +614,57 @@ export function createPrinter(options?: GoPrinterOptions) {
 
       case GoNodeKind.StructType: {
         if (!node.fields.length) {
-          parts.push('struct{}');
+          parts.push("struct{}");
           break;
         }
 
-        parts.push('struct {');
+        parts.push("struct {");
         indentLevel += 1;
 
         const rows = node.fields.map((field) => ({
-          name: field.names?.join(', ') ?? '',
-          tag: field.tag ? `\`${field.tag}\`` : '',
+          name: field.names?.join(", ") ?? "",
+          tag: field.tag ? `\`${field.tag}\`` : "",
           type: printNode(field.type),
         }));
 
         const nameWidth = Math.max(0, ...rows.map((row) => row.name.length));
         const alignedFlat = alignCells(
           rows
-            .filter((row) => !row.type.includes('\n'))
+            .filter((row) => !row.type.includes("\n"))
             .map((row) => (row.tag ? [row.type, row.tag] : [row.type])),
         );
 
         let flatIndex = 0;
         for (const row of rows) {
-          const prefix = row.name ? row.name.padEnd(nameWidth + 1) : '';
+          const prefix = row.name ? row.name.padEnd(nameWidth + 1) : "";
 
-          if (!row.type.includes('\n')) {
-            parts.push(printLine(`${prefix}${alignedFlat[flatIndex] ?? ''}`));
+          if (!row.type.includes("\n")) {
+            parts.push(printLine(`${prefix}${alignedFlat[flatIndex] ?? ""}`));
             flatIndex += 1;
           } else {
-            const lines = row.type.split('\n');
-            parts.push(printLine(`${prefix}${lines[0] ?? ''}`));
+            const lines = row.type.split("\n");
+            parts.push(printLine(`${prefix}${lines[0] ?? ""}`));
             parts.push(...lines.slice(1, -1));
-            const last = lines.at(-1) ?? '';
+            const last = lines.at(-1) ?? "";
             parts.push(row.tag ? `${last} ${row.tag}` : last);
           }
         }
 
         indentLevel -= 1;
-        parts.push(printLine('}'));
+        parts.push(printLine("}"));
         break;
       }
 
       case GoNodeKind.SwitchStatement: {
-        const init = node.initStatement ? `${printInline(node.initStatement)}; ` : '';
+        const init = node.initStatement
+          ? `${printInline(node.initStatement)}; `
+          : "";
 
-        let content = '';
+        let content = "";
         if (node.typeGuard) {
-          const left = node.typeGuard.assignTo ? `${node.typeGuard.assignTo} := ` : '';
+          const left = node.typeGuard.assignTo
+            ? `${node.typeGuard.assignTo} := `
+            : "";
           content = `${init}${left}${printTypeAssert(node.typeGuard.subject)}`;
         } else if (node.tag) {
           content = `${init}${printInline(node.tag)}`;
@@ -604,21 +672,23 @@ export function createPrinter(options?: GoPrinterOptions) {
           content = `${init}`.trimEnd();
         }
 
-        const header = content ? `switch ${content}` : 'switch';
+        const header = content ? `switch ${content}` : "switch";
         parts.push(printLine(`${header} {`));
         for (const switchCase of node.cases) {
           const clause =
             switchCase.expressions && switchCase.expressions.length
-              ? `case ${switchCase.expressions.map((e) => printInline(e)).join(', ')}`
-              : 'default';
+              ? `case ${switchCase.expressions.map((e) => printInline(e)).join(", ")}`
+              : "default";
           parts.push(printLine(`${clause}:`));
           if (switchCase.body.statements.length) {
             indentLevel += 1;
-            parts.push(...switchCase.body.statements.map((stmt) => printNode(stmt)));
+            parts.push(
+              ...switchCase.body.statements.map((stmt) => printNode(stmt)),
+            );
             indentLevel -= 1;
           }
         }
-        parts.push(printLine('}'));
+        parts.push(printLine("}"));
         break;
       }
 
@@ -627,19 +697,24 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.TypeDeclaration:
-        parts.push(...printDeclarationGroup('type', node.specs.map(typeSpecCells)));
+        parts.push(
+          ...printDeclarationGroup("type", node.specs.map(typeSpecCells)),
+        );
         break;
 
       case GoNodeKind.TypeSet:
         parts.push(
           node.terms
-            .map((term) => `${term.approximate ? '~' : ''}${printInline(term.type)}`)
-            .join(' | '),
+            .map(
+              (term) =>
+                `${term.approximate ? "~" : ""}${printInline(term.type)}`,
+            )
+            .join(" | "),
         );
         break;
 
       case GoNodeKind.TypeSpec:
-        parts.push(typeSpecCells(node).join(' '));
+        parts.push(typeSpecCells(node).join(" "));
         break;
 
       case GoNodeKind.UnaryExpression:
@@ -647,12 +722,15 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       case GoNodeKind.VariableDeclaration:
-        parts.push(variableDeclarationCells(node).join(' '));
+        parts.push(variableDeclarationCells(node).join(" "));
         break;
 
       case GoNodeKind.VariableDeclarationList:
         parts.push(
-          ...printDeclarationGroup(node.flags, node.declarations.map(variableDeclarationCells)),
+          ...printDeclarationGroup(
+            node.flags,
+            node.declarations.map(variableDeclarationCells),
+          ),
         );
         break;
 
@@ -667,17 +745,17 @@ export function createPrinter(options?: GoPrinterOptions) {
 
     if (node.trailingComments) {
       if (!context.inline) {
-        parts.push('');
+        parts.push("");
       }
       printComments(parts, node.trailingComments, false);
     }
 
-    return parts.join('\n');
+    return parts.join("\n");
   }
 
   function printFile(node: GoNode): string {
-    const parts: Array<string> = [printNode(node), ''];
-    return parts.join('\n');
+    const parts: Array<string> = [printNode(node), ""];
+    return parts.join("\n");
   }
 
   return {

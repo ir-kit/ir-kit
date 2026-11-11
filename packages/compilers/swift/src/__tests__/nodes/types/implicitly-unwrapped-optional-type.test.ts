@@ -1,18 +1,21 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('implicitly unwrapped optional type', () => {
-  it('wraps a type in a binding annotation', async () => {
+describe("implicitly unwrapped optional type", () => {
+  it("wraps a type in a binding annotation", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('var', [
+      swift.factory.createVariableDeclaration("var", [
         {
-          pattern: 'value',
+          pattern: "value",
           typeAnnotation: swift.factory.createImplicitlyUnwrappedOptionalType(
-            swift.factory.createIdentifierType('String'),
+            swift.factory.createIdentifierType("String"),
           ),
         },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'implicitly-unwrapped-optional-type.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "implicitly-unwrapped-optional-type.swift",
+    );
   });
 });

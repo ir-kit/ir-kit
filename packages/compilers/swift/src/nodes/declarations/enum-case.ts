@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftType } from '../type';
-import type { SwiftAttribute } from './shared';
+import type { SwiftNodeBase } from "../base.js";
+import type { SwiftExpression } from "../expression.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftType } from "../type.js";
+import type { SwiftAttribute } from "./shared.js";
 
 export type SwiftEnumCaseElement = {
   name: string;

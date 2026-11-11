@@ -1,5 +1,5 @@
-import type { JavaNodeBase } from '../base';
-import { JavaNodeKind } from '../kinds';
+import type { JavaNodeBase } from "../base.js";
+import { JavaNodeKind } from "../kinds.js";
 
 export interface JavaIdentifier extends JavaNodeBase {
   kind: JavaNodeKind.Identifier;

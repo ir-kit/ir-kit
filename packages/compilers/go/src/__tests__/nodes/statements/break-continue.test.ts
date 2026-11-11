@@ -1,110 +1,162 @@
-import { go } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { go } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('break and continue statements', () => {
-  it('break statement', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
+describe("break and continue statements", () => {
+  it("break statement", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
       go.factory.createFunctionDeclaration(
         undefined,
-        'print',
+        "print",
         undefined,
         undefined,
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
+        [
+          go.factory.createFunctionReturn(
+            go.factory.createIdentifier("string"),
+          ),
+        ],
         [
           go.factory.createForStatement(
-            go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
+            go.factory.createShortVarDeclaration(
+              "i",
+              go.factory.createLiteral(0),
+            ),
             go.factory.createBinaryExpression(
-              go.factory.createIdentifier('i'),
-              '<',
+              go.factory.createIdentifier("i"),
+              "<",
               go.factory.createLiteral(5),
             ),
-            go.factory.createIncDecStatement(go.factory.createIdentifier('i'), '++'),
+            go.factory.createIncDecStatement(
+              go.factory.createIdentifier("i"),
+              "++",
+            ),
             [
               go.factory.createExpressionStatement(
                 go.factory.createCallExpression(
                   go.factory.createMemberExpression(
-                    go.factory.createIdentifier('fmt'),
-                    go.factory.createIdentifier('Printf'),
+                    go.factory.createIdentifier("fmt"),
+                    go.factory.createIdentifier("Printf"),
                   ),
                   [
-                    go.factory.createLiteral('Iteration number: %v\n'),
-                    go.factory.createIdentifier('i'),
+                    go.factory.createLiteral("Iteration number: %v\n"),
+                    go.factory.createIdentifier("i"),
                   ],
                 ),
               ),
               go.factory.createBreakStatement(),
-              go.factory.createReturnStatement(go.factory.createLiteral('this is not returned')),
+              go.factory.createReturnStatement(
+                go.factory.createLiteral("this is not returned"),
+              ),
             ],
           ),
-          go.factory.createReturnStatement(go.factory.createLiteral('this is returned')),
+          go.factory.createReturnStatement(
+            go.factory.createLiteral("this is returned"),
+          ),
         ],
       ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
-            ),
-            [go.factory.createCallExpression(go.factory.createIdentifier('print'), [])],
-          ),
-        ),
-      ]),
-    ]);
-    await assertPrintedMatchesSnapshot(file, 'break.go');
-  });
-
-  it('continue statement', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
         undefined,
-        'print',
+        "main",
         undefined,
         undefined,
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
+        undefined,
+        [
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("print"),
+                  [],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "break.go");
+  });
+
+  it("continue statement", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "print",
+        undefined,
+        undefined,
+        [
+          go.factory.createFunctionReturn(
+            go.factory.createIdentifier("string"),
+          ),
+        ],
         [
           go.factory.createForStatement(
-            go.factory.createShortVarDeclaration('i', go.factory.createLiteral(0)),
+            go.factory.createShortVarDeclaration(
+              "i",
+              go.factory.createLiteral(0),
+            ),
             go.factory.createBinaryExpression(
-              go.factory.createIdentifier('i'),
-              '<',
+              go.factory.createIdentifier("i"),
+              "<",
               go.factory.createLiteral(5),
             ),
-            go.factory.createIncDecStatement(go.factory.createIdentifier('i'), '++'),
+            go.factory.createIncDecStatement(
+              go.factory.createIdentifier("i"),
+              "++",
+            ),
             [
               go.factory.createExpressionStatement(
                 go.factory.createCallExpression(
                   go.factory.createMemberExpression(
-                    go.factory.createIdentifier('fmt'),
-                    go.factory.createIdentifier('Printf'),
+                    go.factory.createIdentifier("fmt"),
+                    go.factory.createIdentifier("Printf"),
                   ),
                   [
-                    go.factory.createLiteral('Iteration number: %v\n'),
-                    go.factory.createIdentifier('i'),
+                    go.factory.createLiteral("Iteration number: %v\n"),
+                    go.factory.createIdentifier("i"),
                   ],
                 ),
               ),
               go.factory.createContinueStatement(),
-              go.factory.createReturnStatement(go.factory.createLiteral('this is not returned')),
+              go.factory.createReturnStatement(
+                go.factory.createLiteral("this is not returned"),
+              ),
             ],
           ),
-          go.factory.createReturnStatement(go.factory.createLiteral('this is returned')),
+          go.factory.createReturnStatement(
+            go.factory.createLiteral("this is returned"),
+          ),
         ],
       ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("print"),
+                  [],
+                ),
+              ],
             ),
-            [go.factory.createCallExpression(go.factory.createIdentifier('print'), [])],
           ),
-        ),
-      ]),
+        ],
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'continue.go');
+    await assertPrintedMatchesSnapshot(file, "continue.go");
   });
 });

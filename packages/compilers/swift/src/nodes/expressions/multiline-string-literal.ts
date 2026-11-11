@@ -1,5 +1,5 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
 
 export interface SwiftMultilineStringLiteral extends SwiftNodeBase {
   kind: SwiftNodeKind.MultilineStringLiteral;

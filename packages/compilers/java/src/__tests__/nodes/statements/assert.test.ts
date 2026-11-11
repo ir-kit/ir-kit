@@ -1,31 +1,31 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('assert', () => {
-  it('assert without message', async () => {
+describe("assert", () => {
+  it("assert without message", async () => {
     const file = java.factory.createSourceFile(undefined, [
       java.factory.createAssertStatement(
         java.factory.createBinaryExpression(
-          java.factory.createIdentifier('x'),
-          '!=',
+          java.factory.createIdentifier("x"),
+          "!=",
           java.factory.createLiteral(null),
         ),
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'assert-basic.java');
+    await assertPrintedMatchesSnapshot(file, "assert-basic.java");
   });
 
-  it('assert with message', async () => {
+  it("assert with message", async () => {
     const file = java.factory.createSourceFile(undefined, [
       java.factory.createAssertStatement(
         java.factory.createBinaryExpression(
-          java.factory.createIdentifier('count'),
-          '>=',
+          java.factory.createIdentifier("count"),
+          ">=",
           java.factory.createLiteral(1),
         ),
-        java.factory.createLiteral('count must be >= 1'),
+        java.factory.createLiteral("count must be >= 1"),
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'assert-message.java');
+    await assertPrintedMatchesSnapshot(file, "assert-message.java");
   });
 });

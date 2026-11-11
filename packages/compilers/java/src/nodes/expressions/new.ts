@@ -1,9 +1,9 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import { JavaNodeKind } from '../kinds';
-import type { JavaStatement } from '../statement';
-import type { JavaBlock } from '../statements/block';
-import { createBlock } from '../statements/block';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import { JavaNodeKind } from "../kinds.js";
+import type { JavaStatement } from "../statement.js";
+import type { JavaBlock } from "../statements/block.js";
+import { createBlock } from "../statements/block.js";
 
 export interface JavaNewExpression extends JavaNodeBase {
   args: ReadonlyArray<JavaExpression>;
@@ -35,5 +35,11 @@ export function createNewAnonymousClassExpression(
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): JavaNewExpression {
-  return createNewExpression(callee, args, members, leadingComments, trailingComments);
+  return createNewExpression(
+    callee,
+    args,
+    members,
+    leadingComments,
+    trailingComments,
+  );
 }

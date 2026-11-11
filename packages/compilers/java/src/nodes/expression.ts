@@ -1,28 +1,28 @@
-import type { JavaAnnotation } from './expressions/annotation';
-import type { JavaArrayCreationExpression } from './expressions/array-creation';
-import type { JavaArrayInitializer } from './expressions/array-initializer';
-import type { JavaBinaryExpression } from './expressions/binary';
-import type { JavaCallExpression } from './expressions/call';
-import type { JavaCastExpression } from './expressions/cast';
-import type { JavaIdentifier } from './expressions/identifier';
-import type { JavaIndexExpression } from './expressions/index';
-import type { JavaInstanceOfExpression } from './expressions/instanceof';
-import type { JavaLambdaExpression } from './expressions/lambda';
-import type { JavaLiteral } from './expressions/literal';
-import type { JavaMemberExpression } from './expressions/member';
-import type { JavaMethodReferenceExpression } from './expressions/method-reference';
-import type { JavaNewExpression } from './expressions/new';
-import type { JavaSuperExpression } from './expressions/super';
-import type { JavaSwitchExpression } from './expressions/switch';
-import type { JavaTernaryExpression } from './expressions/ternary';
-import type { JavaThisExpression } from './expressions/this';
+import type { JavaAnnotation } from "./expressions/annotation.js";
+import type { JavaArrayCreationExpression } from "./expressions/array-creation.js";
+import type { JavaArrayInitializer } from "./expressions/array-initializer.js";
+import type { JavaBinaryExpression } from "./expressions/binary.js";
+import type { JavaCallExpression } from "./expressions/call.js";
+import type { JavaCastExpression } from "./expressions/cast.js";
+import type { JavaIdentifier } from "./expressions/identifier.js";
+import type { JavaIndexExpression } from "./expressions/index.js";
+import type { JavaInstanceOfExpression } from "./expressions/instanceof.js";
+import type { JavaLambdaExpression } from "./expressions/lambda.js";
+import type { JavaLiteral } from "./expressions/literal.js";
+import type { JavaMemberExpression } from "./expressions/member.js";
+import type { JavaMethodReferenceExpression } from "./expressions/method-reference.js";
+import type { JavaNewExpression } from "./expressions/new.js";
+import type { JavaSuperExpression } from "./expressions/super.js";
+import type { JavaSwitchExpression } from "./expressions/switch.js";
+import type { JavaTernaryExpression } from "./expressions/ternary.js";
+import type { JavaThisExpression } from "./expressions/this.js";
 import type {
   JavaArrayType,
   JavaParameterizedType,
   JavaTypeParameter,
   JavaWildcardTypeArgument,
-} from './expressions/type';
-import type { JavaUnaryExpression } from './expressions/unary';
+} from "./expressions/type.js";
+import type { JavaUnaryExpression } from "./expressions/unary.js";
 
 export type JavaExpression =
   | JavaCallExpression

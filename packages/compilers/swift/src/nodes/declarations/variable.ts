@@ -1,11 +1,11 @@
-import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftType } from '../type';
-import type { SwiftAccessorBlock } from './accessor-block';
-import type { SwiftAttribute, SwiftModifier } from './shared';
+import type { SwiftNodeBase } from "../base.js";
+import type { SwiftExpression } from "../expression.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftType } from "../type.js";
+import type { SwiftAccessorBlock } from "./accessor-block.js";
+import type { SwiftAttribute, SwiftModifier } from "./shared.js";
 
-export type SwiftBindingSpecifier = 'let' | 'var';
+export type SwiftBindingSpecifier = "let" | "var";
 
 export type SwiftPatternBinding = {
   accessorBlock?: SwiftAccessorBlock;

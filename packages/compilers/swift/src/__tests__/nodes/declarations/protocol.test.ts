@@ -1,22 +1,25 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('protocol declaration', () => {
-  it('with requirements and inheritance', async () => {
+describe("protocol declaration", () => {
+  it("with requirements and inheritance", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createProtocolDeclaration(
-        'Greeter',
+        "Greeter",
         [
           swift.factory.createFunctionDeclaration(
-            'greet',
+            "greet",
             [],
-            swift.factory.createIdentifierType('String'),
+            swift.factory.createIdentifierType("String"),
           ),
         ],
         undefined,
-        [swift.factory.createIdentifierType('Equatable')],
+        [swift.factory.createIdentifierType("Equatable")],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'with-requirements-and-inheritance.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "with-requirements-and-inheritance.swift",
+    );
   });
 });

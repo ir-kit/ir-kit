@@ -1,11 +1,11 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import type { JavaTypeParameter } from '../expressions/type';
-import { JavaNodeKind } from '../kinds';
-import type { JavaBlock } from '../statements/block';
-import { createBlock } from '../statements/block';
-import type { JavaMethodDeclaration } from './method';
-import type { JavaVariableDeclaration } from './variable';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import type { JavaTypeParameter } from "../expressions/type.js";
+import { JavaNodeKind } from "../kinds.js";
+import type { JavaBlock } from "../statements/block.js";
+import { createBlock } from "../statements/block.js";
+import type { JavaMethodDeclaration } from "./method.js";
+import type { JavaVariableDeclaration } from "./variable.js";
 
 export type JavaInterfaceMember =
   | JavaMethodDeclaration

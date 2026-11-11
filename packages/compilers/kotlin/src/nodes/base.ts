@@ -1,11 +1,11 @@
-import type { KotlinDeclaration } from './declaration';
-import type { KotlinExpression } from './expression';
-import type { KotlinNodeKind } from './kinds';
-import type { KotlinStatement } from './statement';
-import type { KotlinImportDirective } from './structure/import-directive';
-import type { KotlinPackageHeader } from './structure/package-header';
-import type { KotlinSourceFile } from './structure/source-file';
-import type { KotlinType } from './type';
+import type { KotlinDeclaration } from "./declaration.js";
+import type { KotlinExpression } from "./expression.js";
+import type { KotlinNodeKind } from "./kinds.js";
+import type { KotlinStatement } from "./statement.js";
+import type { KotlinImportDirective } from "./structure/import-directive.js";
+import type { KotlinPackageHeader } from "./structure/package-header.js";
+import type { KotlinSourceFile } from "./structure/source-file.js";
+import type { KotlinType } from "./type.js";
 
 export interface KotlinNodeBase {
   kind: KotlinNodeKind;

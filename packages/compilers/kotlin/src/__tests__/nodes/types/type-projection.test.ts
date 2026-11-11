@@ -1,15 +1,22 @@
-import { assertPrintedMatchesSnapshot, f, file } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file } from "../utils.js";
 
-describe('TypeProjection', () => {
-  it('out and in variance type arguments', async () => {
+describe("TypeProjection", () => {
+  it("out and in variance type arguments", async () => {
     const producer = f.createTypeAlias(
-      'Producer',
-      f.createUserType('Array', [f.createTypeProjection('out', f.createUserType('String'))]),
+      "Producer",
+      f.createUserType("Array", [
+        f.createTypeProjection("out", f.createUserType("String")),
+      ]),
     );
     const consumer = f.createTypeAlias(
-      'Consumer',
-      f.createUserType('MutableList', [f.createTypeProjection('in', f.createUserType('Number'))]),
+      "Consumer",
+      f.createUserType("MutableList", [
+        f.createTypeProjection("in", f.createUserType("Number")),
+      ]),
     );
-    await assertPrintedMatchesSnapshot(file([producer, consumer]), 'out-and-in.kt');
+    await assertPrintedMatchesSnapshot(
+      file([producer, consumer]),
+      "out-and-in.kt",
+    );
   });
 });

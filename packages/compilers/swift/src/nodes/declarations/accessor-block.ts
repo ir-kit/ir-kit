@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
 
-export type SwiftAccessorSpecifier = 'didSet' | 'get' | 'set' | 'willSet';
+export type SwiftAccessorSpecifier = "didSet" | "get" | "set" | "willSet";
 
 export type SwiftAccessor = {
   accessorSpecifier: SwiftAccessorSpecifier;

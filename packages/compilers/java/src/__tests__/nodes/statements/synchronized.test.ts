@@ -1,22 +1,25 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('synchronized', () => {
-  it('simple synchronized block', async () => {
+describe("synchronized", () => {
+  it("simple synchronized block", async () => {
     const body = [
       java.factory.createExpressionStatement(
         java.factory.createCallExpression(
           java.factory.createMemberExpression(
-            java.factory.createIdentifier('System'),
-            java.factory.createIdentifier('out'),
+            java.factory.createIdentifier("System"),
+            java.factory.createIdentifier("out"),
           ),
-          [java.factory.createLiteral('locked')],
+          [java.factory.createLiteral("locked")],
         ),
       ),
     ];
     const file = java.factory.createSourceFile(undefined, [
-      java.factory.createSynchronizedStatement(java.factory.createIdentifier('this'), body),
+      java.factory.createSynchronizedStatement(
+        java.factory.createIdentifier("this"),
+        body,
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'synchronized.java');
+    await assertPrintedMatchesSnapshot(file, "synchronized.java");
   });
 });

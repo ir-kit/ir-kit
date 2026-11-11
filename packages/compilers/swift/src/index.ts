@@ -1,10 +1,13 @@
-import type { SwiftNode as _SwiftNode, SwiftNodeBase as _SwiftNodeBase } from './nodes/base';
-import { factory } from './nodes/factory';
-import { SwiftNodeKind } from './nodes/kinds';
-import type { SwiftStatement as _SwiftStatement } from './nodes/statement';
-import type { SwiftSourceFile as _SwiftSourceFile } from './nodes/structure/source-file';
-import type { SwiftPrinterOptions as _SwiftPrinterOptions } from './printer';
-import { createPrinter, printAst } from './printer';
+import type {
+  SwiftNode as _SwiftNode,
+  SwiftNodeBase as _SwiftNodeBase,
+} from "./nodes/base.js";
+import { factory } from "./nodes/factory.js";
+import { SwiftNodeKind } from "./nodes/kinds.js";
+import type { SwiftStatement as _SwiftStatement } from "./nodes/statement.js";
+import type { SwiftSourceFile as _SwiftSourceFile } from "./nodes/structure/source-file.js";
+import type { SwiftPrinterOptions as _SwiftPrinterOptions } from "./printer.js";
+import { createPrinter, printAst } from "./printer.js";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace swift {

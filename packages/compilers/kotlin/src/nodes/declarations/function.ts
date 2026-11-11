@@ -1,12 +1,12 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinModifier } from '../shared';
-import type { KotlinStatement } from '../statement';
-import type { KotlinType } from '../type';
-import type { KotlinTypeParameter } from '../types/type-parameter';
-import type { KotlinAnnotation } from './annotation';
-import type { KotlinParameter } from './parameter';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinModifier } from "../shared.js";
+import type { KotlinStatement } from "../statement.js";
+import type { KotlinType } from "../type.js";
+import type { KotlinTypeParameter } from "../types/type-parameter.js";
+import type { KotlinAnnotation } from "./annotation.js";
+import type { KotlinParameter } from "./parameter.js";
 
 export interface KotlinFunctionDeclaration extends KotlinNodeBase {
   annotations?: ReadonlyArray<KotlinAnnotation>;

@@ -1,8 +1,8 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinDeclaration } from '../declaration';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinModifier, KotlinSuperType } from '../shared';
-import type { KotlinAnnotation } from './annotation';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinDeclaration } from "../declaration.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinModifier, KotlinSuperType } from "../shared.js";
+import type { KotlinAnnotation } from "./annotation.js";
 
 export interface KotlinObjectDeclaration extends KotlinNodeBase {
   annotations?: ReadonlyArray<KotlinAnnotation>;

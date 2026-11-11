@@ -1,28 +1,33 @@
-import { assertPrintedMatchesSnapshot, f, file, id } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file, id } from "../utils.js";
 
-describe('elvis expression', () => {
-  it('default value', async () => {
+describe("elvis expression", () => {
+  it("default value", async () => {
     const node = f.createFunctionDeclaration(
-      'name',
-      [f.createParameter('user', f.createNullableType(f.createUserType('User')))],
-      f.createUserType('String'),
+      "name",
+      [
+        f.createParameter(
+          "user",
+          f.createNullableType(f.createUserType("User")),
+        ),
+      ],
+      f.createUserType("String"),
       undefined,
       f.createElvisExpression(
-        f.createNavigationExpression(id('user'), id('name'), true),
-        f.createStringLiteral([{ text: 'anon' }]),
+        f.createNavigationExpression(id("user"), id("name"), true),
+        f.createStringLiteral([{ text: "anon" }]),
       ),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'default-value.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "default-value.kt");
   });
 
-  it('fallback literal', async () => {
+  it("fallback literal", async () => {
     const node = f.createFunctionDeclaration(
-      'count',
+      "count",
       [],
       undefined,
       undefined,
-      f.createElvisExpression(id('size'), f.createLiteral('0', 'int')),
+      f.createElvisExpression(id("size"), f.createLiteral("0", "int")),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'fallback.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "fallback.kt");
   });
 });

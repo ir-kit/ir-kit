@@ -1,37 +1,46 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('class declaration', () => {
-  it('generic', async () => {
+describe("class declaration", () => {
+  it("generic", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createClassDeclaration(
-        'Box',
+        "Box",
         [
-          swift.factory.createVariableDeclaration('let', [
-            { pattern: 'value', typeAnnotation: swift.factory.createIdentifierType('T') },
+          swift.factory.createVariableDeclaration("let", [
+            {
+              pattern: "value",
+              typeAnnotation: swift.factory.createIdentifierType("T"),
+            },
           ]),
         ],
         undefined,
         undefined,
-        [{ name: 'T' }],
+        [{ name: "T" }],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'generic.swift');
+    await assertPrintedMatchesSnapshot(file, "generic.swift");
   });
 
-  it('with modifiers and inheritance', async () => {
+  it("with modifiers and inheritance", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createClassDeclaration(
-        'ViewController',
+        "ViewController",
         [
-          swift.factory.createVariableDeclaration('let', [
-            { pattern: 'title', typeAnnotation: swift.factory.createIdentifierType('String') },
+          swift.factory.createVariableDeclaration("let", [
+            {
+              pattern: "title",
+              typeAnnotation: swift.factory.createIdentifierType("String"),
+            },
           ]),
         ],
-        ['public', 'final'],
-        [swift.factory.createIdentifierType('UIViewController')],
+        ["public", "final"],
+        [swift.factory.createIdentifierType("UIViewController")],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'with-modifiers-and-inheritance.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "with-modifiers-and-inheritance.swift",
+    );
   });
 });

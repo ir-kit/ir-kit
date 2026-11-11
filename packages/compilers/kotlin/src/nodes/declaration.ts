@@ -1,13 +1,13 @@
-import type { KotlinAnnotation } from './declarations/annotation';
-import type { KotlinClassDeclaration } from './declarations/class';
-import type { KotlinEnumEntry } from './declarations/enum-entry';
-import type { KotlinFunctionDeclaration } from './declarations/function';
-import type { KotlinInitBlock } from './declarations/init-block';
-import type { KotlinObjectDeclaration } from './declarations/object';
-import type { KotlinParameter } from './declarations/parameter';
-import type { KotlinPrimaryConstructor } from './declarations/primary-constructor';
-import type { KotlinProperty } from './declarations/property';
-import type { KotlinTypeAlias } from './declarations/type-alias';
+import type { KotlinAnnotation } from "./declarations/annotation.js";
+import type { KotlinClassDeclaration } from "./declarations/class.js";
+import type { KotlinEnumEntry } from "./declarations/enum-entry.js";
+import type { KotlinFunctionDeclaration } from "./declarations/function.js";
+import type { KotlinInitBlock } from "./declarations/init-block.js";
+import type { KotlinObjectDeclaration } from "./declarations/object.js";
+import type { KotlinParameter } from "./declarations/parameter.js";
+import type { KotlinPrimaryConstructor } from "./declarations/primary-constructor.js";
+import type { KotlinProperty } from "./declarations/property.js";
+import type { KotlinTypeAlias } from "./declarations/type-alias.js";
 
 export type KotlinDeclaration =
   | KotlinAnnotation

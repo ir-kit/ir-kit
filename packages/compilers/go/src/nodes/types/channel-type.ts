@@ -1,8 +1,8 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
-import type { GoType } from '../type';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
+import type { GoType } from "../type.js";
 
-export type GoChannelDirection = 'receive' | 'send';
+export type GoChannelDirection = "receive" | "send";
 
 export interface GoChannelType extends GoNodeBase {
   direction?: GoChannelDirection;

@@ -1,31 +1,31 @@
-import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
-import { GoNodeKind } from '../kinds';
+import type { GoNodeBase } from "../base.js";
+import type { GoExpression } from "../expression.js";
+import { GoNodeKind } from "../kinds.js";
 
 export type GoBinaryOperator =
   // Arithmetic
-  | '+'
-  | '-'
-  | '*'
-  | '/'
-  | '%'
+  | "+"
+  | "-"
+  | "*"
+  | "/"
+  | "%"
   // Comparison
-  | '=='
-  | '!='
-  | '<'
-  | '<='
-  | '>'
-  | '>='
+  | "=="
+  | "!="
+  | "<"
+  | "<="
+  | ">"
+  | ">="
   // Logical
-  | '&&'
-  | '||'
+  | "&&"
+  | "||"
   // Bitwise
-  | '&'
-  | '|'
-  | '^'
-  | '<<'
-  | '>>'
-  | '&^';
+  | "&"
+  | "|"
+  | "^"
+  | "<<"
+  | ">>"
+  | "&^";
 
 export interface GoBinaryExpression extends GoNodeBase {
   kind: GoNodeKind.BinaryExpression;

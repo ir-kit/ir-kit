@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SNAPSHOT_DIR="${1:-packages/openapi-kotlin/src/kt-compiler/__snapshots__}"
+SNAPSHOT_DIR="${1:-packages/compilers/kotlin/src/__snapshots__}"
 
 if [ ! -d "$SNAPSHOT_DIR" ]; then
   echo "Directory not found: $SNAPSHOT_DIR"

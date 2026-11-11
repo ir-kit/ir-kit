@@ -1,7 +1,7 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
-import type { GoNodeFlags } from '../node-flags';
-import type { GoVariableDeclaration } from './variable-declaration';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
+import type { GoNodeFlags } from "../node-flags.js";
+import type { GoVariableDeclaration } from "./variable-declaration.js";
 
 export interface GoVariableDeclarationList extends GoNodeBase {
   declarations: ReadonlyArray<GoVariableDeclaration>;

@@ -1,25 +1,29 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('continue statement', () => {
-  it('inside a for-in loop', async () => {
+describe("continue statement", () => {
+  it("inside a for-in loop", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'run',
+        "run",
         [
           {
-            firstName: 'items',
-            type: swift.factory.createArrayType(swift.factory.createIdentifierType('Int')),
+            firstName: "items",
+            type: swift.factory.createArrayType(
+              swift.factory.createIdentifierType("Int"),
+            ),
           },
         ],
         undefined,
         [
-          swift.factory.createForInStatement('item', swift.factory.createIdentifier('items'), [
-            swift.factory.createContinueStatement(),
-          ]),
+          swift.factory.createForInStatement(
+            "item",
+            swift.factory.createIdentifier("items"),
+            [swift.factory.createContinueStatement()],
+          ),
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'continue.swift');
+    await assertPrintedMatchesSnapshot(file, "continue.swift");
   });
 });

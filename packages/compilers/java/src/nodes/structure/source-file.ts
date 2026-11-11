@@ -1,8 +1,8 @@
-import type { JavaNodeBase } from '../base';
-import { JavaNodeKind } from '../kinds';
-import type { JavaStatement } from '../statement';
-import type { JavaPackageDeclaration } from './package';
-import { createPackageDeclaration } from './package';
+import type { JavaNodeBase } from "../base.js";
+import { JavaNodeKind } from "../kinds.js";
+import type { JavaStatement } from "../statement.js";
+import type { JavaPackageDeclaration } from "./package.js";
+import { createPackageDeclaration } from "./package.js";
 
 export interface JavaSourceFile extends JavaNodeBase {
   kind: JavaNodeKind.SourceFile;
@@ -19,7 +19,9 @@ export function createSourceFile(
   return {
     kind: JavaNodeKind.SourceFile,
     leadingComments,
-    packageDeclaration: packageName ? createPackageDeclaration(packageName) : undefined,
+    packageDeclaration: packageName
+      ? createPackageDeclaration(packageName)
+      : undefined,
     statements,
     trailingComments,
   };

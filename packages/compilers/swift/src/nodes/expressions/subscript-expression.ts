@@ -1,6 +1,6 @@
-import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
-import { SwiftNodeKind } from '../kinds';
+import type { SwiftNodeBase } from "../base.js";
+import type { SwiftExpression } from "../expression.js";
+import { SwiftNodeKind } from "../kinds.js";
 
 export interface SwiftSubscriptExpression extends SwiftNodeBase {
   arguments: ReadonlyArray<SwiftExpression>;

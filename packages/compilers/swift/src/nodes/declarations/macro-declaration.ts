@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftType } from '../type';
-import type { SwiftFunctionParameter } from './function';
-import type { SwiftAttribute, SwiftModifier } from './shared';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftType } from "../type.js";
+import type { SwiftFunctionParameter } from "./function.js";
+import type { SwiftAttribute, SwiftModifier } from "./shared.js";
 
 export interface SwiftMacroDeclaration extends SwiftNodeBase {
   attributes?: ReadonlyArray<SwiftAttribute>;

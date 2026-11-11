@@ -1,6 +1,9 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinAnnotationUseSiteTarget, KotlinValueArgument } from '../shared';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type {
+  KotlinAnnotationUseSiteTarget,
+  KotlinValueArgument,
+} from "../shared.js";
 
 export interface KotlinAnnotation extends KotlinNodeBase {
   kind: KotlinNodeKind.Annotation;

@@ -1,6 +1,6 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
 
 export interface SwiftDeferStatement extends SwiftNodeBase {
   body: ReadonlyArray<SwiftStatement>;

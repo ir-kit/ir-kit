@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinPrefixOperator } from '../shared';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinPrefixOperator } from "../shared.js";
 
 export interface KotlinPrefixUnaryExpression extends KotlinNodeBase {
   kind: KotlinNodeKind.PrefixUnaryExpression;

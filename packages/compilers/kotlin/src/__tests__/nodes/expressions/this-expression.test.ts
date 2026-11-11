@@ -1,25 +1,25 @@
-import { assertPrintedMatchesSnapshot, f, file } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file } from "../utils.js";
 
-describe('this expression', () => {
-  it('this reference', async () => {
+describe("this expression", () => {
+  it("this reference", async () => {
     const node = f.createFunctionDeclaration(
-      'self',
+      "self",
       [],
       undefined,
       undefined,
       f.createThisExpression(),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'this-reference.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "this-reference.kt");
   });
 
-  it('qualified this', async () => {
+  it("qualified this", async () => {
     const node = f.createFunctionDeclaration(
-      'outer',
+      "outer",
       [],
       undefined,
       undefined,
-      f.createThisExpression('Container'),
+      f.createThisExpression("Container"),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'qualified-this.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "qualified-this.kt");
   });
 });

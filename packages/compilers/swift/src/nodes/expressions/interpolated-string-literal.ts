@@ -1,8 +1,10 @@
-import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
-import { SwiftNodeKind } from '../kinds';
+import type { SwiftNodeBase } from "../base.js";
+import type { SwiftExpression } from "../expression.js";
+import { SwiftNodeKind } from "../kinds.js";
 
-export type SwiftInterpolationSegment = { content: string } | { expression: SwiftExpression };
+export type SwiftInterpolationSegment =
+  | { content: string }
+  | { expression: SwiftExpression };
 
 export interface SwiftInterpolatedStringLiteral extends SwiftNodeBase {
   kind: SwiftNodeKind.InterpolatedStringLiteral;

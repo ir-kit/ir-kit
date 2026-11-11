@@ -1,8 +1,8 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import { JavaNodeKind } from '../kinds';
-import type { JavaStatement } from '../statement';
-import { createBlock, type JavaBlock } from './block';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import { JavaNodeKind } from "../kinds.js";
+import type { JavaStatement } from "../statement.js";
+import { createBlock, type JavaBlock } from "./block.js";
 
 export interface JavaWhileStatement extends JavaNodeBase {
   body: JavaBlock;

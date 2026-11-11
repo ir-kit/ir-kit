@@ -1,13 +1,13 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
 import type {
   SwiftAttribute,
   SwiftGenericParameter,
   SwiftGenericRequirement,
   SwiftInheritanceClause,
   SwiftModifier,
-} from './shared';
+} from "./shared.js";
 
 export interface SwiftEnumDeclaration extends SwiftNodeBase {
   attributes?: ReadonlyArray<SwiftAttribute>;

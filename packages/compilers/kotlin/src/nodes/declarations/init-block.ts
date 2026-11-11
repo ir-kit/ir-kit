@@ -1,6 +1,6 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinStatement } from '../statement';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinStatement } from "../statement.js";
 
 export interface KotlinInitBlock extends KotlinNodeBase {
   body: ReadonlyArray<KotlinStatement>;
@@ -12,5 +12,10 @@ export function createInitBlock(
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): KotlinInitBlock {
-  return { body, kind: KotlinNodeKind.InitBlock, leadingComments, trailingComments };
+  return {
+    body,
+    kind: KotlinNodeKind.InitBlock,
+    leadingComments,
+    trailingComments,
+  };
 }

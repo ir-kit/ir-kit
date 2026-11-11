@@ -1,6 +1,6 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinStringTemplateEntry } from '../shared';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinStringTemplateEntry } from "../shared.js";
 
 export interface KotlinStringLiteral extends KotlinNodeBase {
   entries: ReadonlyArray<KotlinStringTemplateEntry>;

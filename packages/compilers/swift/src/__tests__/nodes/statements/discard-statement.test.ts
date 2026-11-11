@@ -1,21 +1,28 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('discard statement', () => {
-  it('discarding the result of a call', async () => {
+describe("discard statement", () => {
+  it("discarding the result of a call", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'compute',
+        "compute",
         [],
-        swift.factory.createIdentifierType('Int'),
-        [swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('1'))],
+        swift.factory.createIdentifierType("Int"),
+        [
+          swift.factory.createReturnStatement(
+            swift.factory.createIntegerLiteral("1"),
+          ),
+        ],
       ),
-      swift.factory.createFunctionDeclaration('run', [], undefined, [
+      swift.factory.createFunctionDeclaration("run", [], undefined, [
         swift.factory.createDiscardStatement(
-          swift.factory.createFunctionCallExpression(swift.factory.createIdentifier('compute'), []),
+          swift.factory.createFunctionCallExpression(
+            swift.factory.createIdentifier("compute"),
+            [],
+          ),
         ),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'discard-statement.swift');
+    await assertPrintedMatchesSnapshot(file, "discard-statement.swift");
   });
 });

@@ -1,6 +1,6 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinLiteralKind } from '../shared';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinLiteralKind } from "../shared.js";
 
 export interface KotlinLiteral extends KotlinNodeBase {
   kind: KotlinNodeKind.Literal;

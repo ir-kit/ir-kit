@@ -1,5 +1,5 @@
-import type { SwiftExpression } from '../expression';
-import type { SwiftPattern } from '../pattern';
+import type { SwiftExpression } from "../expression.js";
+import type { SwiftPattern } from "../pattern.js";
 
 export type SwiftAvailabilityCondition = {
   platforms: ReadonlyArray<string>;
@@ -11,7 +11,7 @@ export type SwiftMatchingPatternCondition = {
 };
 
 export type SwiftOptionalBindingCondition = {
-  bindingSpecifier: 'let' | 'var';
+  bindingSpecifier: "let" | "var";
   initializer?: SwiftExpression;
   pattern: string;
 };

@@ -45,3 +45,6 @@ coverage
 .env
 .env.local
 .env.*.local
+
+# compiler snapshot scratch
+packages/compilers/*/src/.tmp

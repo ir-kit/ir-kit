@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinType } from '../type';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinType } from "../type.js";
 
 export interface KotlinIsExpression extends KotlinNodeBase {
   expression: KotlinExpression;

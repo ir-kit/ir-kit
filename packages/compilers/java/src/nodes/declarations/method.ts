@@ -1,11 +1,11 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import type { JavaTypeParameter } from '../expressions/type';
-import { JavaNodeKind } from '../kinds';
-import type { JavaStatement } from '../statement';
-import type { JavaBlock } from '../statements/block';
-import { createBlock } from '../statements/block';
-import type { JavaMethodParameter } from './method-parameter';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import type { JavaTypeParameter } from "../expressions/type.js";
+import { JavaNodeKind } from "../kinds.js";
+import type { JavaStatement } from "../statement.js";
+import type { JavaBlock } from "../statements/block.js";
+import { createBlock } from "../statements/block.js";
+import type { JavaMethodParameter } from "./method-parameter.js";
 
 export interface JavaMethodDeclaration extends JavaNodeBase {
   annotations?: ReadonlyArray<JavaExpression>;

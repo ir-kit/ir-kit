@@ -1,44 +1,54 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('declaration attributes', () => {
-  it('class with available attribute', async () => {
+describe("declaration attributes", () => {
+  it("class with available attribute", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createClassDeclaration(
-        'Widget',
+        "Widget",
         [
-          swift.factory.createVariableDeclaration('let', [
-            { pattern: 'name', typeAnnotation: swift.factory.createIdentifierType('String') },
+          swift.factory.createVariableDeclaration("let", [
+            {
+              pattern: "name",
+              typeAnnotation: swift.factory.createIdentifierType("String"),
+            },
           ]),
         ],
         undefined,
         undefined,
         undefined,
-        [{ arguments: 'macOS 13, *', attributeName: 'available' }],
+        [{ arguments: "macOS 13, *", attributeName: "available" }],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'class-with-available-attribute.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "class-with-available-attribute.swift",
+    );
   });
 
-  it('function with objc attribute', async () => {
+  it("function with objc attribute", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'refresh',
+        "refresh",
         [],
         undefined,
         [
           swift.factory.createExpressionStatement(
-            swift.factory.createFunctionCallExpression(swift.factory.createIdentifier('print'), [
-              { expression: swift.factory.createStringLiteral('refresh') },
-            ]),
+            swift.factory.createFunctionCallExpression(
+              swift.factory.createIdentifier("print"),
+              [{ expression: swift.factory.createStringLiteral("refresh") }],
+            ),
           ),
         ],
         undefined,
         undefined,
         undefined,
-        [{ attributeName: 'objc' }],
+        [{ attributeName: "objc" }],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'function-with-objc-attribute.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "function-with-objc-attribute.swift",
+    );
   });
 });

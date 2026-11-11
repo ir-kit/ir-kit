@@ -1,27 +1,34 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('subscript declaration', () => {
-  it('generic subscript with where clause', async () => {
+describe("subscript declaration", () => {
+  it("generic subscript with where clause", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createStructDeclaration('Box', [
+      swift.factory.createStructDeclaration("Box", [
         swift.factory.createSubscriptDeclaration(
-          [{ firstName: 'index', type: swift.factory.createIdentifierType('Int') }],
-          swift.factory.createIdentifierType('Element'),
+          [
+            {
+              firstName: "index",
+              type: swift.factory.createIdentifierType("Int"),
+            },
+          ],
+          swift.factory.createIdentifierType("Element"),
           swift.factory.createAccessorBlock([
             {
-              accessorSpecifier: 'get',
+              accessorSpecifier: "get",
               body: [
-                swift.factory.createReturnStatement(swift.factory.createIdentifier('storage')),
+                swift.factory.createReturnStatement(
+                  swift.factory.createIdentifier("storage"),
+                ),
               ],
             },
           ]),
           undefined,
           undefined,
-          [{ name: 'Element' }],
+          [{ name: "Element" }],
         ),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'generic-subscript.swift');
+    await assertPrintedMatchesSnapshot(file, "generic-subscript.swift");
   });
 });

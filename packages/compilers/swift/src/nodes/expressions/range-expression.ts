@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
-import { SwiftNodeKind } from '../kinds';
+import type { SwiftNodeBase } from "../base.js";
+import type { SwiftExpression } from "../expression.js";
+import { SwiftNodeKind } from "../kinds.js";
 
-export type SwiftRangeOperator = '...' | '..<';
+export type SwiftRangeOperator = "..." | "..<";
 
 export interface SwiftRangeExpression extends SwiftNodeBase {
   end?: SwiftExpression;

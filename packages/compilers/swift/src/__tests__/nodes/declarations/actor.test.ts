@@ -1,19 +1,19 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('actor declaration', () => {
-  it('with stored property', async () => {
+describe("actor declaration", () => {
+  it("with stored property", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createActorDeclaration('Counter', [
-        swift.factory.createVariableDeclaration('var', [
+      swift.factory.createActorDeclaration("Counter", [
+        swift.factory.createVariableDeclaration("var", [
           {
-            initializer: swift.factory.createIntegerLiteral('0'),
-            pattern: 'value',
-            typeAnnotation: swift.factory.createIdentifierType('Int'),
+            initializer: swift.factory.createIntegerLiteral("0"),
+            pattern: "value",
+            typeAnnotation: swift.factory.createIdentifierType("Int"),
           },
         ]),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'with-stored-property.swift');
+    await assertPrintedMatchesSnapshot(file, "with-stored-property.swift");
   });
 });

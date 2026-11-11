@@ -1,222 +1,271 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('method parameters: varargs and modifiers', () => {
-  it('basic varargs and parameter modifiers', async () => {
+describe("method parameters: varargs and modifiers", () => {
+  it("basic varargs and parameter modifiers", async () => {
     const method = java.factory.createMethodDeclaration(
-      'printf',
+      "printf",
       [
-        java.factory.createMethodParameter('format', java.factory.createIdentifier('String'), [
-          'final',
-        ]),
         java.factory.createMethodParameter(
-          'args',
-          java.factory.createIdentifier('Object'),
+          "format",
+          java.factory.createIdentifier("String"),
+          ["final"],
+        ),
+        java.factory.createMethodParameter(
+          "args",
+          java.factory.createIdentifier("Object"),
           undefined,
           undefined,
           true,
         ),
       ],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [],
-      ['public'],
+      ["public"],
     );
 
-    const cls = java.factory.createClassDeclaration('Printer', [method], ['public']);
+    const cls = java.factory.createClassDeclaration(
+      "Printer",
+      [method],
+      ["public"],
+    );
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'method-param-varargs-mods.java');
+    await assertPrintedMatchesSnapshot(file, "method-param-varargs-mods.java");
   });
 
-  it('method with multiple parameter modifiers', async () => {
+  it("method with multiple parameter modifiers", async () => {
     const method = java.factory.createMethodDeclaration(
-      'processData',
+      "processData",
       [
-        java.factory.createMethodParameter('input', java.factory.createIdentifier('String'), [
-          'final',
-        ]),
-        java.factory.createMethodParameter('count', java.factory.createIdentifier('int'), [
-          'final',
-        ]),
         java.factory.createMethodParameter(
-          'options',
-          java.factory.createArrayType(java.factory.createIdentifier('String'), 1),
+          "input",
+          java.factory.createIdentifier("String"),
+          ["final"],
+        ),
+        java.factory.createMethodParameter(
+          "count",
+          java.factory.createIdentifier("int"),
+          ["final"],
+        ),
+        java.factory.createMethodParameter(
+          "options",
+          java.factory.createArrayType(
+            java.factory.createIdentifier("String"),
+            1,
+          ),
           undefined,
           undefined,
           true, // varargs
         ),
       ],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [
         java.factory.createExpressionStatement(
           java.factory.createCallExpression(
             java.factory.createMemberExpression(
               java.factory.createMemberExpression(
-                java.factory.createIdentifier('System'),
-                java.factory.createIdentifier('out'),
+                java.factory.createIdentifier("System"),
+                java.factory.createIdentifier("out"),
               ),
-              java.factory.createIdentifier('println'),
+              java.factory.createIdentifier("println"),
             ),
-            [java.factory.createIdentifier('input')],
+            [java.factory.createIdentifier("input")],
           ),
         ),
       ],
-      ['public'],
+      ["public"],
     );
 
-    const cls = java.factory.createClassDeclaration('DataProcessor', [method], ['public']);
+    const cls = java.factory.createClassDeclaration(
+      "DataProcessor",
+      [method],
+      ["public"],
+    );
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'multi-param-modifiers.java');
+    await assertPrintedMatchesSnapshot(file, "multi-param-modifiers.java");
   });
 
-  it('method with annotated parameters', async () => {
+  it("method with annotated parameters", async () => {
     const NotNullAnnotation = java.factory.createAnnotation(
-      java.factory.createIdentifier('NotNull'),
+      java.factory.createIdentifier("NotNull"),
     );
 
-    const SizeAnnotation = java.factory.createAnnotation(java.factory.createIdentifier('Size'), [
-      { name: 'min', value: java.factory.createLiteral(1) },
-      { name: 'max', value: java.factory.createLiteral(100) },
-    ]);
+    const SizeAnnotation = java.factory.createAnnotation(
+      java.factory.createIdentifier("Size"),
+      [
+        { name: "min", value: java.factory.createLiteral(1) },
+        { name: "max", value: java.factory.createLiteral(100) },
+      ],
+    );
 
     const method = java.factory.createMethodDeclaration(
-      'validateAndProcess',
+      "validateAndProcess",
       [
         java.factory.createMethodParameter(
-          'name',
-          java.factory.createIdentifier('String'),
-          ['final'],
+          "name",
+          java.factory.createIdentifier("String"),
+          ["final"],
           [NotNullAnnotation, SizeAnnotation],
         ),
         java.factory.createMethodParameter(
-          'values',
-          java.factory.createArrayType(java.factory.createIdentifier('Integer'), 1),
-          ['final'],
+          "values",
+          java.factory.createArrayType(
+            java.factory.createIdentifier("Integer"),
+            1,
+          ),
+          ["final"],
           [NotNullAnnotation],
           true, // varargs
         ),
       ],
-      java.factory.createIdentifier('boolean'),
+      java.factory.createIdentifier("boolean"),
       [java.factory.createReturnStatement(java.factory.createLiteral(true))],
-      ['public'],
+      ["public"],
     );
 
-    const cls = java.factory.createClassDeclaration('Validator', [method], ['public']);
+    const cls = java.factory.createClassDeclaration(
+      "Validator",
+      [method],
+      ["public"],
+    );
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'annotated-params.java');
+    await assertPrintedMatchesSnapshot(file, "annotated-params.java");
   });
 
-  it('method with complex parameter types and varargs', async () => {
+  it("method with complex parameter types and varargs", async () => {
     const method = java.factory.createMethodDeclaration(
-      'processGenericData',
+      "processGenericData",
       [
         java.factory.createMethodParameter(
-          'key',
-          java.factory.createParameterizedType(java.factory.createIdentifier('Map'), [
-            java.factory.createIdentifier('String'),
-            java.factory.createIdentifier('Object'),
-          ]),
-          ['final'],
+          "key",
+          java.factory.createParameterizedType(
+            java.factory.createIdentifier("Map"),
+            [
+              java.factory.createIdentifier("String"),
+              java.factory.createIdentifier("Object"),
+            ],
+          ),
+          ["final"],
         ),
         java.factory.createMethodParameter(
-          'processors',
+          "processors",
           java.factory.createArrayType(
-            java.factory.createParameterizedType(java.factory.createIdentifier('Function'), [
-              java.factory.createIdentifier('String'),
-              java.factory.createIdentifier('String'),
-            ]),
+            java.factory.createParameterizedType(
+              java.factory.createIdentifier("Function"),
+              [
+                java.factory.createIdentifier("String"),
+                java.factory.createIdentifier("String"),
+              ],
+            ),
             1,
           ),
-          ['final'],
+          ["final"],
           undefined,
           true, // varargs
         ),
       ],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [
         java.factory.createExpressionStatement(
           java.factory.createCallExpression(
             java.factory.createMemberExpression(
               java.factory.createMemberExpression(
-                java.factory.createIdentifier('System'),
-                java.factory.createIdentifier('out'),
+                java.factory.createIdentifier("System"),
+                java.factory.createIdentifier("out"),
               ),
-              java.factory.createIdentifier('println'),
+              java.factory.createIdentifier("println"),
             ),
-            [java.factory.createLiteral('Processing generic data')],
+            [java.factory.createLiteral("Processing generic data")],
           ),
         ),
       ],
-      ['public'],
+      ["public"],
     );
 
-    const cls = java.factory.createClassDeclaration('GenericProcessor', [method], ['public']);
+    const cls = java.factory.createClassDeclaration(
+      "GenericProcessor",
+      [method],
+      ["public"],
+    );
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'complex-param-types.java');
+    await assertPrintedMatchesSnapshot(file, "complex-param-types.java");
   });
 
-  it('static method with varargs and parameter annotations', async () => {
+  it("static method with varargs and parameter annotations", async () => {
     const SafeVarargsAnnotation = java.factory.createAnnotation(
-      java.factory.createIdentifier('SafeVarargs'),
+      java.factory.createIdentifier("SafeVarargs"),
     );
 
     const SuppressWarningsAnnotation = java.factory.createAnnotation(
-      java.factory.createIdentifier('SuppressWarnings'),
-      [java.factory.createLiteral('unchecked')],
+      java.factory.createIdentifier("SuppressWarnings"),
+      [java.factory.createLiteral("unchecked")],
     );
 
     const method = java.factory.createMethodDeclaration(
-      'safeVarargsMethod',
+      "safeVarargsMethod",
       [
         java.factory.createMethodParameter(
-          'items',
-          java.factory.createArrayType(java.factory.createIdentifier('Object'), 1),
-          ['final'],
+          "items",
+          java.factory.createArrayType(
+            java.factory.createIdentifier("Object"),
+            1,
+          ),
+          ["final"],
           undefined,
           true, // varargs
         ),
       ],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [
         java.factory.createExpressionStatement(
           java.factory.createCallExpression(
             java.factory.createMemberExpression(
               java.factory.createMemberExpression(
-                java.factory.createIdentifier('System'),
-                java.factory.createIdentifier('out'),
+                java.factory.createIdentifier("System"),
+                java.factory.createIdentifier("out"),
               ),
-              java.factory.createIdentifier('println'),
+              java.factory.createIdentifier("println"),
             ),
-            [java.factory.createLiteral('Safe varargs processing')],
+            [java.factory.createLiteral("Safe varargs processing")],
           ),
         ),
       ],
-      ['public', 'static'],
+      ["public", "static"],
       [SafeVarargsAnnotation, SuppressWarningsAnnotation],
     );
 
-    const cls = java.factory.createClassDeclaration('SafeVarargsUtil', [method], ['public']);
+    const cls = java.factory.createClassDeclaration(
+      "SafeVarargsUtil",
+      [method],
+      ["public"],
+    );
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'safe-varargs-method.java');
+    await assertPrintedMatchesSnapshot(file, "safe-varargs-method.java");
   });
 
-  it('constructor with varargs and parameter modifiers', async () => {
+  it("constructor with varargs and parameter modifiers", async () => {
     const field = java.factory.createVariableDeclaration(
-      'values',
-      java.factory.createArrayType(java.factory.createIdentifier('String'), 1),
+      "values",
+      java.factory.createArrayType(java.factory.createIdentifier("String"), 1),
       undefined,
-      ['private', 'final'],
+      ["private", "final"],
     );
 
     const constructor = java.factory.createMethodDeclaration(
-      'VarargsConstructor',
+      "VarargsConstructor",
       [
-        java.factory.createMethodParameter('name', java.factory.createIdentifier('String'), [
-          'final',
-        ]),
         java.factory.createMethodParameter(
-          'values',
-          java.factory.createArrayType(java.factory.createIdentifier('String'), 1),
-          ['final'],
+          "name",
+          java.factory.createIdentifier("String"),
+          ["final"],
+        ),
+        java.factory.createMethodParameter(
+          "values",
+          java.factory.createArrayType(
+            java.factory.createIdentifier("String"),
+            1,
+          ),
+          ["final"],
           undefined,
           true, // varargs
         ),
@@ -226,20 +275,20 @@ describe('method parameters: varargs and modifiers', () => {
         java.factory.createAssignment(
           java.factory.createMemberExpression(
             java.factory.createThisExpression(),
-            java.factory.createIdentifier('values'),
+            java.factory.createIdentifier("values"),
           ),
-          java.factory.createIdentifier('values'),
+          java.factory.createIdentifier("values"),
         ),
       ],
-      ['public'],
+      ["public"],
     );
 
     const cls = java.factory.createClassDeclaration(
-      'VarargsConstructor',
+      "VarargsConstructor",
       [field, constructor],
-      ['public'],
+      ["public"],
     );
     const file = java.factory.createSourceFile(undefined, [cls]);
-    await assertPrintedMatchesSnapshot(file, 'constructor-varargs.java');
+    await assertPrintedMatchesSnapshot(file, "constructor-varargs.java");
   });
 });

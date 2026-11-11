@@ -1,14 +1,14 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from "node:fs";
+import path from "node:path";
 
-import { kt } from '../../index';
-import type { KotlinSourceFile } from '../../nodes/structure/source-file';
-import { snapshotsDir, tmpDir } from '../constants';
+import { kt } from "../../index.js";
+import type { KotlinSourceFile } from "../../nodes/structure/source-file.js";
+import { snapshotsDir, tmpDir } from "../constants.js";
 
 export const f = kt.factory;
 
 export const file = (declarations: Parameters<typeof f.createSourceFile>[0]) =>
-  f.createSourceFile(declarations, f.createPackageHeader('com.example'));
+  f.createSourceFile(declarations, f.createPackageHeader("com.example"));
 
 export const id = (name: string) => f.createIdentifier(name);
 
@@ -16,25 +16,29 @@ export const t = (name: string) => f.createUserType(name);
 
 function getCallerFile(): string {
   const error = new Error();
-  const stack = (error.stack ?? '').split('\n');
-  const callerLine = stack.find((line) => line.includes('.test.ts'));
+  const stack = (error.stack ?? "").split("\n");
+  const callerLine = stack.find((line) => line.includes(".test.ts"));
   if (!callerLine) {
-    throw new Error('Could not find test file in stack trace');
+    throw new Error("Could not find test file in stack trace");
   }
-  const match = callerLine.match(/\(([^)]+)\)/) || callerLine.match(/at (.+):\d+:\d+/);
+  const match =
+    callerLine.match(/\(([^)]+)\)/) || callerLine.match(/at (.+):\d+:\d+/);
   if (!match?.[1]) {
-    throw new Error('Could not extract file path');
+    throw new Error("Could not extract file path");
   }
   return match[1];
 }
 
-export async function assertPrintedMatchesSnapshot(file: KotlinSourceFile, filename: string) {
+export async function assertPrintedMatchesSnapshot(
+  file: KotlinSourceFile,
+  filename: string,
+) {
   const result = kt.createPrinter().printFile(file);
 
   const caller = getCallerFile();
   const relPath = path
-    .relative(path.join(process.cwd(), 'src', 'kt-compiler', '__tests__'), caller)
-    .replace(/\.test\.ts$/, '');
+    .relative(path.join(process.cwd(), "src", "__tests__"), caller)
+    .replace(/\.test\.ts$/, "");
   const outputPath = path.join(tmpDir, relPath, filename);
   const outputDir = path.dirname(outputPath);
 

@@ -1,29 +1,35 @@
-import { assertPrintedMatchesSnapshot, f, file } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file } from "../utils.js";
 
-describe('super expression', () => {
-  it('super call', async () => {
+describe("super expression", () => {
+  it("super call", async () => {
     const node = f.createFunctionDeclaration(
-      'render',
+      "render",
       [],
       undefined,
       undefined,
       f.createCallExpression(
-        f.createNavigationExpression(f.createSuperExpression(), f.createIdentifier('render')),
+        f.createNavigationExpression(
+          f.createSuperExpression(),
+          f.createIdentifier("render"),
+        ),
       ),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'super-call.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "super-call.kt");
   });
 
-  it('qualified super', async () => {
+  it("qualified super", async () => {
     const node = f.createFunctionDeclaration(
-      'draw',
+      "draw",
       [],
       undefined,
       undefined,
       f.createCallExpression(
-        f.createNavigationExpression(f.createSuperExpression('View'), f.createIdentifier('draw')),
+        f.createNavigationExpression(
+          f.createSuperExpression("View"),
+          f.createIdentifier("draw"),
+        ),
       ),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'qualified-super.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "qualified-super.kt");
   });
 });

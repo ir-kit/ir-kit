@@ -1,22 +1,22 @@
-import { go } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { go } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('select statement', () => {
-  it('receive, send, and default cases', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
+describe("select statement", () => {
+  it("receive, send, and default cases", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
       go.factory.createFunctionDeclaration(
         undefined,
-        'worker',
+        "worker",
         undefined,
         [
           go.factory.createFunctionParameter(
-            ['ch'],
-            go.factory.createChannelType(go.factory.createIdentifier('int')),
+            ["ch"],
+            go.factory.createChannelType(go.factory.createIdentifier("int")),
           ),
           go.factory.createFunctionParameter(
-            ['done'],
-            go.factory.createChannelType(go.factory.createIdentifier('bool')),
+            ["done"],
+            go.factory.createChannelType(go.factory.createIdentifier("bool")),
           ),
         ],
         undefined,
@@ -27,16 +27,19 @@ describe('select statement', () => {
                 go.factory.createExpressionStatement(
                   go.factory.createCallExpression(
                     go.factory.createMemberExpression(
-                      go.factory.createIdentifier('fmt'),
-                      go.factory.createIdentifier('Println'),
+                      go.factory.createIdentifier("fmt"),
+                      go.factory.createIdentifier("Println"),
                     ),
-                    [go.factory.createIdentifier('v')],
+                    [go.factory.createIdentifier("v")],
                   ),
                 ),
               ],
               go.factory.createShortVarDeclaration(
-                'v',
-                go.factory.createUnaryExpression('<-', go.factory.createIdentifier('ch')),
+                "v",
+                go.factory.createUnaryExpression(
+                  "<-",
+                  go.factory.createIdentifier("ch"),
+                ),
               ),
             ),
             go.factory.createSelectCase(
@@ -44,15 +47,15 @@ describe('select statement', () => {
                 go.factory.createExpressionStatement(
                   go.factory.createCallExpression(
                     go.factory.createMemberExpression(
-                      go.factory.createIdentifier('fmt'),
-                      go.factory.createIdentifier('Println'),
+                      go.factory.createIdentifier("fmt"),
+                      go.factory.createIdentifier("Println"),
                     ),
-                    [go.factory.createLiteral('done')],
+                    [go.factory.createLiteral("done")],
                   ),
                 ),
               ],
               go.factory.createSendStatement(
-                go.factory.createIdentifier('done'),
+                go.factory.createIdentifier("done"),
                 go.factory.createLiteral(true),
               ),
             ),
@@ -60,18 +63,25 @@ describe('select statement', () => {
               go.factory.createExpressionStatement(
                 go.factory.createCallExpression(
                   go.factory.createMemberExpression(
-                    go.factory.createIdentifier('fmt'),
-                    go.factory.createIdentifier('Println'),
+                    go.factory.createIdentifier("fmt"),
+                    go.factory.createIdentifier("Println"),
                   ),
-                  [go.factory.createLiteral('waiting')],
+                  [go.factory.createLiteral("waiting")],
                 ),
               ),
             ]),
           ]),
         ],
       ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, []),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [],
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'select.go');
+    await assertPrintedMatchesSnapshot(file, "select.go");
   });
 });

@@ -1,31 +1,31 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import { JavaNodeKind } from '../kinds';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import { JavaNodeKind } from "../kinds.js";
 
 export type JavaBinaryOperator =
   // Arithmetic
-  | '+'
-  | '-'
-  | '*'
-  | '/'
-  | '%'
+  | "+"
+  | "-"
+  | "*"
+  | "/"
+  | "%"
   // Comparison
-  | '=='
-  | '!='
-  | '<'
-  | '<='
-  | '>'
-  | '>='
+  | "=="
+  | "!="
+  | "<"
+  | "<="
+  | ">"
+  | ">="
   // Logical
-  | '&&'
-  | '||'
+  | "&&"
+  | "||"
   // Bitwise
-  | '&'
-  | '|'
-  | '^'
-  | '<<'
-  | '>>'
-  | '>>>';
+  | "&"
+  | "|"
+  | "^"
+  | "<<"
+  | ">>"
+  | ">>>";
 
 export interface JavaBinaryExpression extends JavaNodeBase {
   kind: JavaNodeKind.BinaryExpression;

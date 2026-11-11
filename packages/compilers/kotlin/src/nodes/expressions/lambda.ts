@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinLambdaParameter } from '../shared';
-import type { KotlinStatement } from '../statement';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinLambdaParameter } from "../shared.js";
+import type { KotlinStatement } from "../statement.js";
 
 export interface KotlinLambdaExpression extends KotlinNodeBase {
   kind: KotlinNodeKind.LambdaExpression;

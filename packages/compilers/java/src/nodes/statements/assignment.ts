@@ -1,6 +1,6 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import { JavaNodeKind } from '../kinds';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import { JavaNodeKind } from "../kinds.js";
 
 export interface JavaAssignment extends JavaNodeBase {
   kind: JavaNodeKind.Assignment;
@@ -9,17 +9,17 @@ export interface JavaAssignment extends JavaNodeBase {
 }
 
 export type JavaAugmentedAssignmentOperator =
-  | '+='
-  | '-='
-  | '*='
-  | '/='
-  | '%='
-  | '&='
-  | '|='
-  | '^='
-  | '<<='
-  | '>>='
-  | '>>>=';
+  | "+="
+  | "-="
+  | "*="
+  | "/="
+  | "%="
+  | "&="
+  | "|="
+  | "^="
+  | "<<="
+  | ">>="
+  | ">>>=";
 
 export interface JavaAugmentedAssignment extends JavaNodeBase {
   kind: JavaNodeKind.AugmentedAssignment;

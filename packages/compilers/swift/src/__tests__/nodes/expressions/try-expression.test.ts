@@ -1,23 +1,23 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('try expression', () => {
-  it('inside a throwing function', async () => {
+describe("try expression", () => {
+  it("inside a throwing function", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'run',
+        "run",
         [],
         undefined,
         [
-          swift.factory.createVariableDeclaration('let', [
+          swift.factory.createVariableDeclaration("let", [
             {
               initializer: swift.factory.createTryExpression(
                 swift.factory.createFunctionCallExpression(
-                  swift.factory.createIdentifier('parse'),
+                  swift.factory.createIdentifier("parse"),
                   [],
                 ),
               ),
-              pattern: 'value',
+              pattern: "value",
             },
           ]),
         ],
@@ -26,6 +26,6 @@ describe('try expression', () => {
         { throws: true },
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'try-expression.swift');
+    await assertPrintedMatchesSnapshot(file, "try-expression.swift");
   });
 });

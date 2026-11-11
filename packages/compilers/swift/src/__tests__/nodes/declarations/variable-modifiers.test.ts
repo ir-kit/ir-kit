@@ -1,24 +1,24 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('variable declaration', () => {
-  it('modifiers', async () => {
+describe("variable declaration", () => {
+  it("modifiers", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createStructDeclaration('Counter', [
+      swift.factory.createStructDeclaration("Counter", [
         swift.factory.createVariableDeclaration(
-          'let',
+          "let",
           [
             {
-              initializer: swift.factory.createIntegerLiteral('0'),
-              pattern: 'shared',
-              typeAnnotation: swift.factory.createIdentifierType('Int'),
+              initializer: swift.factory.createIntegerLiteral("0"),
+              pattern: "shared",
+              typeAnnotation: swift.factory.createIdentifierType("Int"),
             },
           ],
           undefined,
-          ['public', 'static'],
+          ["public", "static"],
         ),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'modifiers.swift');
+    await assertPrintedMatchesSnapshot(file, "modifiers.swift");
   });
 });

@@ -1,7 +1,7 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
 
-export type SwiftFixitySpecifier = 'infix' | 'postfix' | 'prefix';
+export type SwiftFixitySpecifier = "infix" | "postfix" | "prefix";
 
 export interface SwiftOperatorDeclaration extends SwiftNodeBase {
   fixitySpecifier: SwiftFixitySpecifier;

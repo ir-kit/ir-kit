@@ -1,19 +1,22 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('postfix operator expression', () => {
-  it('force-unwraps an operand', async () => {
+describe("postfix operator expression", () => {
+  it("force-unwraps an operand", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('let', [
+      swift.factory.createVariableDeclaration("let", [
         {
           initializer: swift.factory.createPostfixOperatorExpression(
-            swift.factory.createIdentifier('value'),
-            '!',
+            swift.factory.createIdentifier("value"),
+            "!",
           ),
-          pattern: 'example',
+          pattern: "example",
         },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'postfix-operator-expression.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "postfix-operator-expression.swift",
+    );
   });
 });

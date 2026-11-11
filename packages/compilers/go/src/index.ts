@@ -1,14 +1,17 @@
-import type { GoNode as _GoNode, GoNodeBase as _GoNodeBase } from './nodes/base';
-import type { GoExpression as _GoExpression } from './nodes/expression';
-import { factory } from './nodes/factory';
-import { GoNodeKind } from './nodes/kinds';
-import { GoNodeFlags } from './nodes/node-flags';
-import type { GoStatement as _GoStatement } from './nodes/statement';
-import type { GoComment as _GoComment } from './nodes/structure/comment';
-import type { GoSourceFile as _GoSourceFile } from './nodes/structure/source-file';
-import type { GoType as _GoType } from './nodes/type';
-import type { GoPrinterOptions as _GoPrinterOptions } from './printer';
-import { createPrinter, printAst } from './printer';
+import type {
+  GoNode as _GoNode,
+  GoNodeBase as _GoNodeBase,
+} from "./nodes/base.js";
+import type { GoExpression as _GoExpression } from "./nodes/expression.js";
+import { factory } from "./nodes/factory.js";
+import { GoNodeKind } from "./nodes/kinds.js";
+import { GoNodeFlags } from "./nodes/node-flags.js";
+import type { GoStatement as _GoStatement } from "./nodes/statement.js";
+import type { GoComment as _GoComment } from "./nodes/structure/comment.js";
+import type { GoSourceFile as _GoSourceFile } from "./nodes/structure/source-file.js";
+import type { GoType as _GoType } from "./nodes/type.js";
+import type { GoPrinterOptions as _GoPrinterOptions } from "./printer.js";
+import { createPrinter, printAst } from "./printer.js";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace go {

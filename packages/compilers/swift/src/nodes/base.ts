@@ -1,9 +1,9 @@
-import type { SwiftExpression } from './expression';
-import type { SwiftNodeKind } from './kinds';
-import type { SwiftPattern } from './pattern';
-import type { SwiftStatement } from './statement';
-import type { SwiftSourceFile } from './structure/source-file';
-import type { SwiftType } from './type';
+import type { SwiftExpression } from "./expression.js";
+import type { SwiftNodeKind } from "./kinds.js";
+import type { SwiftPattern } from "./pattern.js";
+import type { SwiftStatement } from "./statement.js";
+import type { SwiftSourceFile } from "./structure/source-file.js";
+import type { SwiftType } from "./type.js";
 
 export interface SwiftNodeBase {
   kind: SwiftNodeKind;

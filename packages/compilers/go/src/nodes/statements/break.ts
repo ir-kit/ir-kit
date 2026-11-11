@@ -1,5 +1,5 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
 
 export interface GoBreakStatement extends GoNodeBase {
   kind: GoNodeKind.BreakStatement;

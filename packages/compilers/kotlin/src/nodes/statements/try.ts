@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinCatchClause } from '../shared';
-import type { KotlinBlock } from './block';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinCatchClause } from "../shared.js";
+import type { KotlinBlock } from "./block.js";
 
 export interface KotlinTryExpression extends KotlinNodeBase {
   body: KotlinBlock;

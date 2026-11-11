@@ -1,50 +1,60 @@
-import { assertPrintedMatchesSnapshot, f, file, id, t } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file, id, t } from "../utils.js";
 
-describe('function declaration', () => {
-  it('expression body', async () => {
+describe("function declaration", () => {
+  it("expression body", async () => {
     const node = f.createFunctionDeclaration(
-      'add',
-      [f.createParameter('a', t('Int')), f.createParameter('b', t('Int'))],
-      t('Int'),
+      "add",
+      [f.createParameter("a", t("Int")), f.createParameter("b", t("Int"))],
+      t("Int"),
       undefined,
-      f.createBinaryExpression(id('a'), '+', id('b')),
+      f.createBinaryExpression(id("a"), "+", id("b")),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'expression-body.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "expression-body.kt");
   });
 
-  it('block body with multiple statements', async () => {
+  it("block body with multiple statements", async () => {
     const node = f.createFunctionDeclaration(
-      'process',
-      [f.createParameter('value', t('Int'))],
-      t('Int'),
+      "process",
+      [f.createParameter("value", t("Int"))],
+      t("Int"),
       [
         f.createExpressionStatement(
-          f.createCallExpression(id('require'), [
+          f.createCallExpression(id("require"), [
             {
-              expression: f.createBinaryExpression(id('value'), '>', f.createLiteral('0', 'int')),
+              expression: f.createBinaryExpression(
+                id("value"),
+                ">",
+                f.createLiteral("0", "int"),
+              ),
             },
           ]),
         ),
         f.createReturnStatement(
-          f.createBinaryExpression(id('value'), '*', f.createLiteral('2', 'int')),
+          f.createBinaryExpression(
+            id("value"),
+            "*",
+            f.createLiteral("2", "int"),
+          ),
         ),
       ],
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'block-body.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "block-body.kt");
   });
 
-  it('generic extension function', async () => {
+  it("generic extension function", async () => {
     const node = f.createFunctionDeclaration(
-      'second',
+      "second",
       [],
-      f.createUserType('T'),
+      f.createUserType("T"),
       undefined,
-      f.createIndexingExpression(f.createThisExpression(), [f.createLiteral('1', 'int')]),
+      f.createIndexingExpression(f.createThisExpression(), [
+        f.createLiteral("1", "int"),
+      ]),
       undefined,
       undefined,
-      f.createUserType('List', [f.createUserType('T')]),
-      [f.createTypeParameter('T')],
+      f.createUserType("List", [f.createUserType("T")]),
+      [f.createTypeParameter("T")],
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'extension.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "extension.kt");
   });
 });

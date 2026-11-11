@@ -1,36 +1,39 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('function type', () => {
-  it('wraps a plain function type in a binding annotation', async () => {
+describe("function type", () => {
+  it("wraps a plain function type in a binding annotation", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('let', [
+      swift.factory.createVariableDeclaration("let", [
         {
-          pattern: 'value',
+          pattern: "value",
           typeAnnotation: swift.factory.createFunctionType(
-            [swift.factory.createIdentifierType('Int')],
-            swift.factory.createIdentifierType('String'),
+            [swift.factory.createIdentifierType("Int")],
+            swift.factory.createIdentifierType("String"),
           ),
         },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'function-type.swift');
+    await assertPrintedMatchesSnapshot(file, "function-type.swift");
   });
 
-  it('wraps an async throws function type in a binding annotation', async () => {
+  it("wraps an async throws function type in a binding annotation", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('let', [
+      swift.factory.createVariableDeclaration("let", [
         {
-          pattern: 'value',
+          pattern: "value",
           typeAnnotation: swift.factory.createFunctionType(
-            [swift.factory.createIdentifierType('Int')],
-            swift.factory.createIdentifierType('String'),
+            [swift.factory.createIdentifierType("Int")],
+            swift.factory.createIdentifierType("String"),
             true,
             true,
           ),
         },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'function-type-async-throws.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "function-type-async-throws.swift",
+    );
   });
 });

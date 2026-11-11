@@ -1,24 +1,28 @@
-import { assertPrintedMatchesSnapshot, f, file, id, t } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file, id, t } from "../utils.js";
 
 const stmt = (e: Parameters<typeof f.createExpressionStatement>[0]) =>
   f.createExpressionStatement(e);
-const call = (name: string, args: Parameters<typeof f.createCallExpression>[1] = []) =>
-  f.createCallExpression(id(name), args);
+const call = (
+  name: string,
+  args: Parameters<typeof f.createCallExpression>[1] = [],
+) => f.createCallExpression(id(name), args);
 
-describe('init block', () => {
-  it('init block with a precondition', async () => {
+describe("init block", () => {
+  it("init block with a precondition", async () => {
     const node = f.createClassDeclaration(
-      'Range',
-      f.createPrimaryConstructor([f.createParameter('start', t('Int'), undefined, 'val')]),
+      "Range",
+      f.createPrimaryConstructor([
+        f.createParameter("start", t("Int"), undefined, "val"),
+      ]),
       [
         f.createInitBlock([
           stmt(
-            call('require', [
+            call("require", [
               {
                 expression: f.createBinaryExpression(
-                  id('start'),
-                  '>=',
-                  f.createLiteral('0', 'int'),
+                  id("start"),
+                  ">=",
+                  f.createLiteral("0", "int"),
                 ),
               },
             ]),
@@ -26,28 +30,30 @@ describe('init block', () => {
         ]),
       ],
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'precondition.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "precondition.kt");
   });
 
-  it('init block with multiple statements', async () => {
+  it("init block with multiple statements", async () => {
     const node = f.createClassDeclaration(
-      'Config',
-      f.createPrimaryConstructor([f.createParameter('raw', t('String'), undefined, 'val')]),
+      "Config",
+      f.createPrimaryConstructor([
+        f.createParameter("raw", t("String"), undefined, "val"),
+      ]),
       [
         f.createInitBlock([
           stmt(
-            call('require', [
+            call("require", [
               {
                 expression: f.createCallExpression(
-                  f.createNavigationExpression(id('raw'), id('isNotEmpty')),
+                  f.createNavigationExpression(id("raw"), id("isNotEmpty")),
                 ),
               },
             ]),
           ),
-          stmt(call('println', [{ expression: id('raw') }])),
+          stmt(call("println", [{ expression: id("raw") }])),
         ]),
       ],
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'multiple-statements.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "multiple-statements.kt");
   });
 });

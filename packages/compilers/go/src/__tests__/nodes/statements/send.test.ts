@@ -1,36 +1,39 @@
-import { go } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { go } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('send statement', () => {
-  it('send and receive', async () => {
-    const file = go.factory.createSourceFile('main', [
+describe("send statement", () => {
+  it("send and receive", async () => {
+    const file = go.factory.createSourceFile("main", [
       go.factory.createFunctionDeclaration(
         undefined,
-        'relay',
+        "relay",
         undefined,
         [
           go.factory.createFunctionParameter(
-            ['in'],
-            go.factory.createChannelType(go.factory.createIdentifier('int')),
+            ["in"],
+            go.factory.createChannelType(go.factory.createIdentifier("int")),
           ),
           go.factory.createFunctionParameter(
-            ['out'],
-            go.factory.createChannelType(go.factory.createIdentifier('int')),
+            ["out"],
+            go.factory.createChannelType(go.factory.createIdentifier("int")),
           ),
         ],
         undefined,
         [
           go.factory.createShortVarDeclaration(
-            'v',
-            go.factory.createUnaryExpression('<-', go.factory.createIdentifier('in')),
+            "v",
+            go.factory.createUnaryExpression(
+              "<-",
+              go.factory.createIdentifier("in"),
+            ),
           ),
           go.factory.createSendStatement(
-            go.factory.createIdentifier('out'),
-            go.factory.createIdentifier('v'),
+            go.factory.createIdentifier("out"),
+            go.factory.createIdentifier("v"),
           ),
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'send-and-receive.go');
+    await assertPrintedMatchesSnapshot(file, "send-and-receive.go");
   });
 });

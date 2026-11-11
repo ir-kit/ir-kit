@@ -1,6 +1,6 @@
-import type { JavaNodeBase } from '../base';
-import { JavaNodeKind } from '../kinds';
-import type { JavaStatement } from '../statement';
+import type { JavaNodeBase } from "../base.js";
+import { JavaNodeKind } from "../kinds.js";
+import type { JavaStatement } from "../statement.js";
 
 export interface JavaBlock extends JavaNodeBase {
   kind: JavaNodeKind.Block;

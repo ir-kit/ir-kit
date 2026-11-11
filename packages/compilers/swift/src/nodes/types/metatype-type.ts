@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftType } from '../type';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftType } from "../type.js";
 
-export type SwiftMetatypeSpecifier = 'Protocol' | 'Type';
+export type SwiftMetatypeSpecifier = "Protocol" | "Type";
 
 export interface SwiftMetatypeType extends SwiftNodeBase {
   baseType: SwiftType;

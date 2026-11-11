@@ -1,28 +1,32 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('closure expression', () => {
-  it('with a parameter and a body', async () => {
+describe("closure expression", () => {
+  it("with a parameter and a body", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('let', [
+      swift.factory.createVariableDeclaration("let", [
         {
           initializer: swift.factory.createClosureExpression(
-            ['x'],
-            [swift.factory.createExpressionStatement(swift.factory.createIdentifier('x'))],
+            ["x"],
+            [
+              swift.factory.createExpressionStatement(
+                swift.factory.createIdentifier("x"),
+              ),
+            ],
           ),
-          pattern: 'example',
+          pattern: "example",
         },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'closure-expression.swift');
+    await assertPrintedMatchesSnapshot(file, "closure-expression.swift");
   });
 
-  it('capture list with weak self', async () => {
+  it("capture list with weak self", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createClassDeclaration('Worker', [
-        swift.factory.createFunctionDeclaration('run', [], undefined, []),
-        swift.factory.createFunctionDeclaration('schedule', [], undefined, [
-          swift.factory.createVariableDeclaration('let', [
+      swift.factory.createClassDeclaration("Worker", [
+        swift.factory.createFunctionDeclaration("run", [], undefined, []),
+        swift.factory.createFunctionDeclaration("schedule", [], undefined, [
+          swift.factory.createVariableDeclaration("let", [
             {
               initializer: swift.factory.createClosureExpression(
                 [],
@@ -32,22 +36,22 @@ describe('closure expression', () => {
                       swift.factory.createMemberAccessExpression(
                         swift.factory.createPostfixOperatorExpression(
                           swift.factory.createSelfExpression(),
-                          '?',
+                          "?",
                         ),
-                        'run',
+                        "run",
                       ),
                       [],
                     ),
                   ),
                 ],
-                [{ name: 'self', specifier: 'weak' }],
+                [{ name: "self", specifier: "weak" }],
               ),
-              pattern: 'c',
+              pattern: "c",
             },
           ]),
         ]),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'capture-list-weak-self.swift');
+    await assertPrintedMatchesSnapshot(file, "capture-list-weak-self.swift");
   });
 });

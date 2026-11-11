@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SNAPSHOT_DIR="${1:-packages/openapi-swift/src/swift-compiler/__snapshots__}"
+SNAPSHOT_DIR="${1:-packages/compilers/swift/src/__snapshots__}"
 
 if [ ! -d "$SNAPSHOT_DIR" ]; then
   echo "Directory not found: $SNAPSHOT_DIR"

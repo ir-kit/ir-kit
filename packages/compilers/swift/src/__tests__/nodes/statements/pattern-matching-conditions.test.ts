@@ -1,60 +1,67 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('pattern-matching control flow', () => {
-  it('for-case binding', async () => {
+describe("pattern-matching control flow", () => {
+  it("for-case binding", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'run',
+        "run",
         [
           {
-            firstName: 'items',
-            type: swift.factory.createArrayType(swift.factory.createIdentifierType('Int')),
+            firstName: "items",
+            type: swift.factory.createArrayType(
+              swift.factory.createIdentifierType("Int"),
+            ),
           },
         ],
         undefined,
         [
           swift.factory.createForInStatement(
-            '_',
-            swift.factory.createIdentifier('items'),
+            "_",
+            swift.factory.createIdentifier("items"),
             [
               swift.factory.createExpressionStatement(
                 swift.factory.createFunctionCallExpression(
-                  swift.factory.createIdentifier('print'),
-                  [{ expression: swift.factory.createIdentifier('value') }],
+                  swift.factory.createIdentifier("print"),
+                  [{ expression: swift.factory.createIdentifier("value") }],
                 ),
               ),
             ],
             swift.factory.createValueBindingPattern(
-              'let',
-              swift.factory.createIdentifierPattern('value'),
+              "let",
+              swift.factory.createIdentifierPattern("value"),
             ),
           ),
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'for-case-binding.swift');
+    await assertPrintedMatchesSnapshot(file, "for-case-binding.swift");
   });
 
-  it('if-case match', async () => {
+  it("if-case match", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'run',
-        [{ firstName: 'result', type: swift.factory.createIdentifierType('Result') }],
+        "run",
+        [
+          {
+            firstName: "result",
+            type: swift.factory.createIdentifierType("Result"),
+          },
+        ],
         undefined,
         [
           swift.factory.createIfStatement(
             [
               {
-                initializer: swift.factory.createIdentifier('result'),
-                pattern: swift.factory.createEnumCasePattern('success'),
+                initializer: swift.factory.createIdentifier("result"),
+                pattern: swift.factory.createEnumCasePattern("success"),
               },
             ],
             [
               swift.factory.createExpressionStatement(
                 swift.factory.createFunctionCallExpression(
-                  swift.factory.createIdentifier('print'),
-                  [{ expression: swift.factory.createStringLiteral('ok') }],
+                  swift.factory.createIdentifier("print"),
+                  [{ expression: swift.factory.createStringLiteral("ok") }],
                 ),
               ),
             ],
@@ -62,6 +69,6 @@ describe('pattern-matching control flow', () => {
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'if-case-match.swift');
+    await assertPrintedMatchesSnapshot(file, "if-case-match.swift");
   });
 });

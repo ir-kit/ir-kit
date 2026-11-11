@@ -1,7 +1,7 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinFunctionTypeParameter } from '../shared';
-import type { KotlinType } from '../type';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinFunctionTypeParameter } from "../shared.js";
+import type { KotlinType } from "../type.js";
 
 export interface KotlinFunctionType extends KotlinNodeBase {
   kind: KotlinNodeKind.FunctionType;

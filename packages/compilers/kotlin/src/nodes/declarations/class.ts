@@ -1,11 +1,11 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinDeclaration } from '../declaration';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinModifier, KotlinSuperType } from '../shared';
-import type { KotlinTypeParameter } from '../types/type-parameter';
-import type { KotlinAnnotation } from './annotation';
-import type { KotlinEnumEntry } from './enum-entry';
-import type { KotlinPrimaryConstructor } from './primary-constructor';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinDeclaration } from "../declaration.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinModifier, KotlinSuperType } from "../shared.js";
+import type { KotlinTypeParameter } from "../types/type-parameter.js";
+import type { KotlinAnnotation } from "./annotation.js";
+import type { KotlinEnumEntry } from "./enum-entry.js";
+import type { KotlinPrimaryConstructor } from "./primary-constructor.js";
 
 export interface KotlinClassDeclaration extends KotlinNodeBase {
   annotations?: ReadonlyArray<KotlinAnnotation>;

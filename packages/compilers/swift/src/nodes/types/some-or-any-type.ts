@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftType } from '../type';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftType } from "../type.js";
 
-export type SwiftSomeOrAnySpecifier = 'any' | 'some';
+export type SwiftSomeOrAnySpecifier = "any" | "some";
 
 export interface SwiftSomeOrAnyType extends SwiftNodeBase {
   constraint: SwiftType;

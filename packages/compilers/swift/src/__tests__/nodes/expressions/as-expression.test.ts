@@ -1,20 +1,20 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('as expression', () => {
-  it('conditionally casts a value', async () => {
+describe("as expression", () => {
+  it("conditionally casts a value", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('let', [
+      swift.factory.createVariableDeclaration("let", [
         {
           initializer: swift.factory.createAsExpression(
-            swift.factory.createIdentifier('value'),
-            swift.factory.createIdentifierType('String'),
-            '?',
+            swift.factory.createIdentifier("value"),
+            swift.factory.createIdentifierType("String"),
+            "?",
           ),
-          pattern: 'example',
+          pattern: "example",
         },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'as-expression.swift');
+    await assertPrintedMatchesSnapshot(file, "as-expression.swift");
   });
 });

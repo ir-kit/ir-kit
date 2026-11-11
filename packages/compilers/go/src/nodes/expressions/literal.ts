@@ -1,15 +1,15 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
 
 export type GoLiteralKind =
-  | 'bool'
-  | 'float'
-  | 'imaginary'
-  | 'int'
-  | 'nil'
-  | 'rawString'
-  | 'rune'
-  | 'string';
+  | "bool"
+  | "float"
+  | "imaginary"
+  | "int"
+  | "nil"
+  | "rawString"
+  | "rune"
+  | "string";
 
 export interface GoLiteral extends GoNodeBase {
   kind: GoNodeKind.Literal;
@@ -17,11 +17,13 @@ export interface GoLiteral extends GoNodeBase {
   value: string;
 }
 
-function inferLiteralKind(value: string | number | boolean | null): GoLiteralKind {
-  if (value === null) return 'nil';
-  if (typeof value === 'boolean') return 'bool';
-  if (typeof value === 'string') return 'string';
-  return Number.isInteger(value) ? 'int' : 'float';
+function inferLiteralKind(
+  value: string | number | boolean | null,
+): GoLiteralKind {
+  if (value === null) return "nil";
+  if (typeof value === "boolean") return "bool";
+  if (typeof value === "string") return "string";
+  return Number.isInteger(value) ? "int" : "float";
 }
 
 export function createLiteral(
@@ -35,6 +37,6 @@ export function createLiteral(
     leadingComments,
     literalKind: literalKind ?? inferLiteralKind(value),
     trailingComments,
-    value: value === null ? '' : String(value),
+    value: value === null ? "" : String(value),
   };
 }

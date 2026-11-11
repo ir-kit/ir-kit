@@ -1,6 +1,6 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftPattern } from '../pattern';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftPattern } from "../pattern.js";
 
 export interface SwiftEnumCasePattern extends SwiftNodeBase {
   associatedTuple?: ReadonlyArray<SwiftPattern>;

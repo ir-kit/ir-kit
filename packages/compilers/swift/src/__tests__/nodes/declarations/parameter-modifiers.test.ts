@@ -1,50 +1,54 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('parameter modifiers', () => {
-  it('inout parameter', async () => {
+describe("parameter modifiers", () => {
+  it("inout parameter", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'increment',
+        "increment",
         [
           {
-            firstName: '_',
+            firstName: "_",
             isInout: true,
-            secondName: 'value',
-            type: swift.factory.createIdentifierType('Int'),
+            secondName: "value",
+            type: swift.factory.createIdentifierType("Int"),
           },
         ],
         undefined,
         [
           swift.factory.createExpressionStatement(
             swift.factory.createInfixOperatorExpression(
-              swift.factory.createIdentifier('value'),
-              '+=',
-              swift.factory.createIntegerLiteral('1'),
+              swift.factory.createIdentifier("value"),
+              "+=",
+              swift.factory.createIntegerLiteral("1"),
             ),
           ),
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'inout-parameter.swift');
+    await assertPrintedMatchesSnapshot(file, "inout-parameter.swift");
   });
 
-  it('variadic parameter', async () => {
+  it("variadic parameter", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'sum',
+        "sum",
         [
           {
-            firstName: '_',
+            firstName: "_",
             isVariadic: true,
-            secondName: 'numbers',
-            type: swift.factory.createIdentifierType('Int'),
+            secondName: "numbers",
+            type: swift.factory.createIdentifierType("Int"),
           },
         ],
-        swift.factory.createIdentifierType('Int'),
-        [swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('0'))],
+        swift.factory.createIdentifierType("Int"),
+        [
+          swift.factory.createReturnStatement(
+            swift.factory.createIntegerLiteral("0"),
+          ),
+        ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'variadic-parameter.swift');
+    await assertPrintedMatchesSnapshot(file, "variadic-parameter.swift");
   });
 });

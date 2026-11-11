@@ -29,6 +29,7 @@ const END = "<!-- @packages-end -->";
 const CATEGORIES = [
   "Federation core",
   "Native client SDK generators",
+  "Language compilers (AST + printer)",
   "Load testing (k6)",
   "Spec → AsyncAPI targets",
   "`@hey-api/openapi-ts` plugins",
@@ -52,6 +53,10 @@ const CATEGORY_BY_NAME = {
   "@ir-kit/openapi-kotlin": "Native client SDK generators",
   "@ir-kit/openapi-swift": "Native client SDK generators",
   "@ir-kit/openapi-typescript": "Native client SDK generators",
+  "@ir-kit/compiler-go": "Language compilers (AST + printer)",
+  "@ir-kit/compiler-kotlin": "Language compilers (AST + printer)",
+  "@ir-kit/compiler-swift": "Language compilers (AST + printer)",
+  "@ir-kit/compiler-java": "Language compilers (AST + printer)",
   "@ir-kit/k6": "Load testing (k6)",
   "@ir-kit/k6-gen": "Load testing (k6)",
   "@ir-kit/k6-toolkit": "Load testing (k6)",

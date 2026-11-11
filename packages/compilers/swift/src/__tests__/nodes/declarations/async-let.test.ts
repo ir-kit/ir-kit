@@ -1,42 +1,49 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('async let', () => {
-  it('concurrent binding', async () => {
+describe("async let", () => {
+  it("concurrent binding", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'fetch',
+        "fetch",
         [],
-        swift.factory.createIdentifierType('Int'),
-        [swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('0'))],
+        swift.factory.createIdentifierType("Int"),
+        [
+          swift.factory.createReturnStatement(
+            swift.factory.createIntegerLiteral("0"),
+          ),
+        ],
       ),
       swift.factory.createFunctionDeclaration(
-        'run',
+        "run",
         [],
         undefined,
         [
           swift.factory.createVariableDeclaration(
-            'let',
+            "let",
             [
               {
                 initializer: swift.factory.createFunctionCallExpression(
-                  swift.factory.createIdentifier('fetch'),
+                  swift.factory.createIdentifier("fetch"),
                   [],
                 ),
-                pattern: 'value',
+                pattern: "value",
               },
             ],
             undefined,
-            ['async'],
+            ["async"],
           ),
           swift.factory.createExpressionStatement(
-            swift.factory.createFunctionCallExpression(swift.factory.createIdentifier('print'), [
-              {
-                expression: swift.factory.createAwaitExpression(
-                  swift.factory.createIdentifier('value'),
-                ),
-              },
-            ]),
+            swift.factory.createFunctionCallExpression(
+              swift.factory.createIdentifier("print"),
+              [
+                {
+                  expression: swift.factory.createAwaitExpression(
+                    swift.factory.createIdentifier("value"),
+                  ),
+                },
+              ],
+            ),
           ),
         ],
         undefined,
@@ -44,6 +51,6 @@ describe('async let', () => {
         { async: true },
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'concurrent-binding.swift');
+    await assertPrintedMatchesSnapshot(file, "concurrent-binding.swift");
   });
 });

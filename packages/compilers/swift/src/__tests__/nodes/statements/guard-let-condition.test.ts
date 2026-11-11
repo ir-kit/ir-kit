@@ -1,15 +1,17 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('optional binding condition', () => {
-  it('a guard-let unwrapping an optional', async () => {
+describe("optional binding condition", () => {
+  it("a guard-let unwrapping an optional", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'run',
+        "run",
         [
           {
-            firstName: 'optional',
-            type: swift.factory.createOptionalType(swift.factory.createIdentifierType('Int')),
+            firstName: "optional",
+            type: swift.factory.createOptionalType(
+              swift.factory.createIdentifierType("Int"),
+            ),
           },
         ],
         undefined,
@@ -17,21 +19,22 @@ describe('optional binding condition', () => {
           swift.factory.createGuardStatement(
             [
               {
-                bindingSpecifier: 'let',
-                initializer: swift.factory.createIdentifier('optional'),
-                pattern: 'value',
+                bindingSpecifier: "let",
+                initializer: swift.factory.createIdentifier("optional"),
+                pattern: "value",
               },
             ],
             [swift.factory.createReturnStatement()],
           ),
           swift.factory.createExpressionStatement(
-            swift.factory.createFunctionCallExpression(swift.factory.createIdentifier('print'), [
-              { expression: swift.factory.createIdentifier('value') },
-            ]),
+            swift.factory.createFunctionCallExpression(
+              swift.factory.createIdentifier("print"),
+              [{ expression: swift.factory.createIdentifier("value") }],
+            ),
           ),
         ],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'guard-let-condition.swift');
+    await assertPrintedMatchesSnapshot(file, "guard-let-condition.swift");
   });
 });

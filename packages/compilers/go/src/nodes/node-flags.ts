@@ -1,4 +1,4 @@
 export enum GoNodeFlags {
-  Const = 'const',
-  Var = 'var',
+  Const = "const",
+  Var = "var",
 }

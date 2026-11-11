@@ -1,12 +1,12 @@
-import type { GoNodeBase } from '../base';
-import { GoNodeKind } from '../kinds';
+import type { GoNodeBase } from "../base.js";
+import { GoNodeKind } from "../kinds.js";
 
 export type GoImportPath = {
   alias?: GoImportAlias;
   path: string;
 };
 
-export type GoImportAlias = string | '_' | '.';
+export type GoImportAlias = string | "_" | ".";
 
 export interface GoImportStatement extends GoNodeBase {
   kind: GoNodeKind.ImportStatement;
@@ -19,7 +19,7 @@ export function createImportStatement(
   trailingComments?: ReadonlyArray<string>,
 ): GoImportStatement {
   const normalizedPaths = (paths instanceof Array ? paths : [paths]).map(
-    (path): GoImportPath => (typeof path === 'string' ? { path } : path),
+    (path): GoImportPath => (typeof path === "string" ? { path } : path),
   );
 
   return {

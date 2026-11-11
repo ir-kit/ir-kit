@@ -1,6 +1,6 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftCallArgument } from './function-call-expression';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftCallArgument } from "./function-call-expression.js";
 
 export interface SwiftMacroExpansionExpression extends SwiftNodeBase {
   arguments?: ReadonlyArray<SwiftCallArgument>;

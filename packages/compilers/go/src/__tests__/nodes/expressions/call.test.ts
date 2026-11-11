@@ -1,249 +1,360 @@
-import { go } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { go } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('call expression', () => {
-  it('function with no arguments', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
+describe("call expression", () => {
+  it("function with no arguments", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
       go.factory.createFunctionDeclaration(
         undefined,
-        'getValue',
+        "getValue",
         undefined,
         undefined,
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier("int"))],
         [go.factory.createReturnStatement(go.factory.createLiteral(7))],
       ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
-            ),
-            [go.factory.createCallExpression(go.factory.createIdentifier('getValue'), [])],
-          ),
-        ),
-      ]),
-    ]);
-    await assertPrintedMatchesSnapshot(file, 'no-arguments.go');
-  });
-
-  it('function with single argument', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
         undefined,
-        'process',
+        "main",
         undefined,
-        [go.factory.createFunctionParameter(['input'], go.factory.createIdentifier('int'))],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
-        [go.factory.createReturnStatement(go.factory.createIdentifier('input'))],
-      ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
-            ),
-            [
-              go.factory.createCallExpression(go.factory.createIdentifier('process'), [
-                go.factory.createLiteral(3),
-              ]),
-            ],
-          ),
-        ),
-      ]),
-    ]);
-    await assertPrintedMatchesSnapshot(file, 'single-argument.go');
-  });
-
-  it('function with multiple arguments', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration(
         undefined,
-        'add',
         undefined,
         [
-          go.factory.createFunctionParameter(['a'], go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter(['b'], go.factory.createIdentifier('int')),
-          go.factory.createFunctionParameter(['c'], go.factory.createIdentifier('int')),
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("getValue"),
+                  [],
+                ),
+              ],
+            ),
+          ),
         ],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('int'))],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "no-arguments.go");
+  });
+
+  it("function with single argument", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "process",
+        undefined,
+        [
+          go.factory.createFunctionParameter(
+            ["input"],
+            go.factory.createIdentifier("int"),
+          ),
+        ],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier("int"))],
+        [
+          go.factory.createReturnStatement(
+            go.factory.createIdentifier("input"),
+          ),
+        ],
+      ),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("process"),
+                  [go.factory.createLiteral(3)],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "single-argument.go");
+  });
+
+  it("function with multiple arguments", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "add",
+        undefined,
+        [
+          go.factory.createFunctionParameter(
+            ["a"],
+            go.factory.createIdentifier("int"),
+          ),
+          go.factory.createFunctionParameter(
+            ["b"],
+            go.factory.createIdentifier("int"),
+          ),
+          go.factory.createFunctionParameter(
+            ["c"],
+            go.factory.createIdentifier("int"),
+          ),
+        ],
+        [go.factory.createFunctionReturn(go.factory.createIdentifier("int"))],
         [
           go.factory.createReturnStatement(
             go.factory.createBinaryExpression(
               go.factory.createBinaryExpression(
-                go.factory.createIdentifier('a'),
-                '+',
-                go.factory.createIdentifier('b'),
+                go.factory.createIdentifier("a"),
+                "+",
+                go.factory.createIdentifier("b"),
               ),
-              '+',
-              go.factory.createIdentifier('c'),
+              "+",
+              go.factory.createIdentifier("c"),
             ),
           ),
         ],
       ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
-            ),
-            [
-              go.factory.createCallExpression(go.factory.createIdentifier('add'), [
-                go.factory.createLiteral(5),
-                go.factory.createLiteral(10),
-                go.factory.createLiteral(1),
-              ]),
-            ],
-          ),
-        ),
-      ]),
-    ]);
-    await assertPrintedMatchesSnapshot(file, 'multiple-arguments.go');
-  });
-
-  it('nested function calls', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
       go.factory.createFunctionDeclaration(
         undefined,
-        'inner',
+        "main",
         undefined,
-        [go.factory.createFunctionParameter(['s'], go.factory.createIdentifier('string'))],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
-        [go.factory.createReturnStatement(go.factory.createIdentifier('s'))],
+        undefined,
+        undefined,
+        [
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("add"),
+                  [
+                    go.factory.createLiteral(5),
+                    go.factory.createLiteral(10),
+                    go.factory.createLiteral(1),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "multiple-arguments.go");
+  });
+
+  it("nested function calls", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "inner",
+        undefined,
+        [
+          go.factory.createFunctionParameter(
+            ["s"],
+            go.factory.createIdentifier("string"),
+          ),
+        ],
+        [
+          go.factory.createFunctionReturn(
+            go.factory.createIdentifier("string"),
+          ),
+        ],
+        [go.factory.createReturnStatement(go.factory.createIdentifier("s"))],
       ),
       go.factory.createFunctionDeclaration(
         undefined,
-        'outer',
+        "outer",
         undefined,
-        [go.factory.createFunctionParameter(['s'], go.factory.createIdentifier('string'))],
-        [go.factory.createFunctionReturn(go.factory.createIdentifier('string'))],
+        [
+          go.factory.createFunctionParameter(
+            ["s"],
+            go.factory.createIdentifier("string"),
+          ),
+        ],
+        [
+          go.factory.createFunctionReturn(
+            go.factory.createIdentifier("string"),
+          ),
+        ],
         [
           go.factory.createReturnStatement(
             go.factory.createBinaryExpression(
-              go.factory.createIdentifier('s'),
-              '+',
-              go.factory.createLiteral('!'),
+              go.factory.createIdentifier("s"),
+              "+",
+              go.factory.createLiteral("!"),
             ),
           ),
         ],
       ),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("outer"),
+                  [
+                    go.factory.createCallExpression(
+                      go.factory.createIdentifier("inner"),
+                      [go.factory.createLiteral("test")],
+                    ),
+                  ],
+                ),
+              ],
             ),
-            [
-              go.factory.createCallExpression(go.factory.createIdentifier('outer'), [
-                go.factory.createCallExpression(go.factory.createIdentifier('inner'), [
-                  go.factory.createLiteral('test'),
-                ]),
-              ]),
-            ],
           ),
-        ),
-      ]),
+        ],
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'nested-calls.go');
+    await assertPrintedMatchesSnapshot(file, "nested-calls.go");
   });
 
-  it('prints last arg with ...', async () => {
+  it("prints last arg with ...", async () => {
     const callee = go.factory.createMemberExpression(
-      go.factory.createIdentifier('fmt'),
-      go.factory.createIdentifier('Println'),
+      go.factory.createIdentifier("fmt"),
+      go.factory.createIdentifier("Println"),
     );
-    const args = [go.factory.createIdentifier('xs')];
+    const args = [go.factory.createIdentifier("xs")];
     const call = go.factory.createCallExpression(callee, args, true);
 
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createShortVarDeclaration(
-          'xs',
-          go.factory.createCompositeLiteral(
-            [
-              go.factory.createLiteral(1),
-              go.factory.createLiteral('Hi'),
-              go.factory.createLiteral(3),
-            ],
-            go.factory.createArrayType(go.factory.createIdentifier('any')),
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createShortVarDeclaration(
+            "xs",
+            go.factory.createCompositeLiteral(
+              [
+                go.factory.createLiteral(1),
+                go.factory.createLiteral("Hi"),
+                go.factory.createLiteral(3),
+              ],
+              go.factory.createArrayType(go.factory.createIdentifier("any")),
+            ),
           ),
-        ),
-        go.factory.createExpressionStatement(call),
-      ]),
+          go.factory.createExpressionStatement(call),
+        ],
+      ),
     ]);
 
-    await assertPrintedMatchesSnapshot(file, 'call-spread.go');
+    await assertPrintedMatchesSnapshot(file, "call-spread.go");
   });
 
-  it('builtin make with type arguments', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createShortVarDeclaration(
-          'nums',
-          go.factory.createCallExpression(go.factory.createIdentifier('make'), [
-            go.factory.createArrayType(go.factory.createIdentifier('int')),
-            go.factory.createLiteral(0),
-          ]),
-        ),
-        go.factory.createShortVarDeclaration(
-          'lookup',
-          go.factory.createCallExpression(go.factory.createIdentifier('make'), [
-            go.factory.createMapType(
-              go.factory.createIdentifier('string'),
-              go.factory.createIdentifier('int'),
+  it("builtin make with type arguments", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createShortVarDeclaration(
+            "nums",
+            go.factory.createCallExpression(
+              go.factory.createIdentifier("make"),
+              [
+                go.factory.createArrayType(go.factory.createIdentifier("int")),
+                go.factory.createLiteral(0),
+              ],
             ),
-          ]),
-        ),
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
-            ),
-            [go.factory.createIdentifier('nums'), go.factory.createIdentifier('lookup')],
           ),
-        ),
-      ]),
+          go.factory.createShortVarDeclaration(
+            "lookup",
+            go.factory.createCallExpression(
+              go.factory.createIdentifier("make"),
+              [
+                go.factory.createMapType(
+                  go.factory.createIdentifier("string"),
+                  go.factory.createIdentifier("int"),
+                ),
+              ],
+            ),
+          ),
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createIdentifier("nums"),
+                go.factory.createIdentifier("lookup"),
+              ],
+            ),
+          ),
+        ],
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'make-type-arguments.go');
+    await assertPrintedMatchesSnapshot(file, "make-type-arguments.go");
   });
 
-  it('composite-type conversion', async () => {
-    const file = go.factory.createSourceFile('main', [
-      go.factory.createImportStatement('fmt'),
-      go.factory.createFunctionDeclaration(undefined, 'main', undefined, undefined, undefined, [
-        go.factory.createShortVarDeclaration('s', go.factory.createLiteral('hello')),
-        go.factory.createShortVarDeclaration(
-          'b',
-          go.factory.createCallExpression(
-            go.factory.createArrayType(go.factory.createIdentifier('byte')),
-            [go.factory.createIdentifier('s')],
+  it("composite-type conversion", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("fmt"),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createShortVarDeclaration(
+            "s",
+            go.factory.createLiteral("hello"),
           ),
-        ),
-        go.factory.createExpressionStatement(
-          go.factory.createCallExpression(
-            go.factory.createMemberExpression(
-              go.factory.createIdentifier('fmt'),
-              go.factory.createIdentifier('Println'),
+          go.factory.createShortVarDeclaration(
+            "b",
+            go.factory.createCallExpression(
+              go.factory.createArrayType(go.factory.createIdentifier("byte")),
+              [go.factory.createIdentifier("s")],
             ),
-            [
-              go.factory.createCallExpression(go.factory.createIdentifier('len'), [
-                go.factory.createIdentifier('b'),
-              ]),
-            ],
           ),
-        ),
-      ]),
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createCallExpression(
+                  go.factory.createIdentifier("len"),
+                  [go.factory.createIdentifier("b")],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'composite-conversion.go');
+    await assertPrintedMatchesSnapshot(file, "composite-conversion.go");
   });
 });

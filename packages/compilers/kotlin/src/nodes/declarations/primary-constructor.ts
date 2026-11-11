@@ -1,8 +1,8 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinModifier } from '../shared';
-import type { KotlinAnnotation } from './annotation';
-import type { KotlinParameter } from './parameter';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinModifier } from "../shared.js";
+import type { KotlinAnnotation } from "./annotation.js";
+import type { KotlinParameter } from "./parameter.js";
 
 export interface KotlinPrimaryConstructor extends KotlinNodeBase {
   annotations?: ReadonlyArray<KotlinAnnotation>;

@@ -1,5 +1,5 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
 
 export interface KotlinThisExpression extends KotlinNodeBase {
   kind: KotlinNodeKind.ThisExpression;
@@ -11,5 +11,10 @@ export function createThisExpression(
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): KotlinThisExpression {
-  return { kind: KotlinNodeKind.ThisExpression, label, leadingComments, trailingComments };
+  return {
+    kind: KotlinNodeKind.ThisExpression,
+    label,
+    leadingComments,
+    trailingComments,
+  };
 }

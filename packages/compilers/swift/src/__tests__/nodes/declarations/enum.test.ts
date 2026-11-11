@@ -1,30 +1,36 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('enum declaration', () => {
-  it('with cases', async () => {
+describe("enum declaration", () => {
+  it("with cases", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createEnumDeclaration('Direction', [
-        swift.factory.createEnumCaseDeclaration([{ name: 'north' }]),
-        swift.factory.createEnumCaseDeclaration([{ name: 'south' }]),
+      swift.factory.createEnumDeclaration("Direction", [
+        swift.factory.createEnumCaseDeclaration([{ name: "north" }]),
+        swift.factory.createEnumCaseDeclaration([{ name: "south" }]),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'with-cases.swift');
+    await assertPrintedMatchesSnapshot(file, "with-cases.swift");
   });
 
-  it('with raw value inheritance', async () => {
+  it("with raw value inheritance", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createEnumDeclaration(
-        'Status',
+        "Status",
         [
           swift.factory.createEnumCaseDeclaration([
-            { name: 'active', rawValue: swift.factory.createStringLiteral('active') },
+            {
+              name: "active",
+              rawValue: swift.factory.createStringLiteral("active"),
+            },
           ]),
         ],
         undefined,
-        [swift.factory.createIdentifierType('String')],
+        [swift.factory.createIdentifierType("String")],
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'with-raw-value-inheritance.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "with-raw-value-inheritance.swift",
+    );
   });
 });

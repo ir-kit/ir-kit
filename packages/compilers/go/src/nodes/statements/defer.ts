@@ -1,6 +1,6 @@
-import type { GoNodeBase } from '../base';
-import type { GoCallExpression } from '../expressions/call';
-import { GoNodeKind } from '../kinds';
+import type { GoNodeBase } from "../base.js";
+import type { GoCallExpression } from "../expressions/call.js";
+import { GoNodeKind } from "../kinds.js";
 
 export interface GoDeferStatement extends GoNodeBase {
   call: GoCallExpression;

@@ -1,16 +1,16 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('associatedtype declaration', () => {
-  it('inside protocol', async () => {
+describe("associatedtype declaration", () => {
+  it("inside protocol", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createProtocolDeclaration('Container', [
-        swift.factory.createAssociatedTypeDeclaration('Item'),
-        swift.factory.createAssociatedTypeDeclaration('Element', [
-          swift.factory.createIdentifierType('Equatable'),
+      swift.factory.createProtocolDeclaration("Container", [
+        swift.factory.createAssociatedTypeDeclaration("Item"),
+        swift.factory.createAssociatedTypeDeclaration("Element", [
+          swift.factory.createIdentifierType("Equatable"),
         ]),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'inside-protocol.swift');
+    await assertPrintedMatchesSnapshot(file, "inside-protocol.swift");
   });
 });

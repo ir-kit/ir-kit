@@ -1,17 +1,17 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('throw statement', () => {
-  it('inside a throwing function', async () => {
+describe("throw statement", () => {
+  it("inside a throwing function", async () => {
     const file = swift.factory.createSourceFile([
       swift.factory.createFunctionDeclaration(
-        'run',
+        "run",
         [],
         undefined,
         [
           swift.factory.createThrowStatement(
             swift.factory.createFunctionCallExpression(
-              swift.factory.createIdentifier('CancellationError'),
+              swift.factory.createIdentifier("CancellationError"),
               [],
             ),
           ),
@@ -21,6 +21,6 @@ describe('throw statement', () => {
         { throws: true },
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'throw.swift');
+    await assertPrintedMatchesSnapshot(file, "throw.swift");
   });
 });

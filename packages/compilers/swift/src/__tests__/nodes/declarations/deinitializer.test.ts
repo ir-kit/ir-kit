@@ -1,20 +1,20 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('deinitializer declaration', () => {
-  it('inside class', async () => {
+describe("deinitializer declaration", () => {
+  it("inside class", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createClassDeclaration('Resource', [
+      swift.factory.createClassDeclaration("Resource", [
         swift.factory.createDeinitializerDeclaration([
           swift.factory.createExpressionStatement(
             swift.factory.createFunctionCallExpression(
-              swift.factory.createIdentifier('cleanup'),
+              swift.factory.createIdentifier("cleanup"),
               [],
             ),
           ),
         ]),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'inside-class.swift');
+    await assertPrintedMatchesSnapshot(file, "inside-class.swift");
   });
 });

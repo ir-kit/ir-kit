@@ -1,27 +1,30 @@
-import type { JavaClassDeclaration } from './declarations/class';
-import type { JavaEnumDeclaration } from './declarations/enum';
-import type { JavaInterfaceDeclaration } from './declarations/interface';
-import type { JavaMethodDeclaration } from './declarations/method';
-import type { JavaVariableDeclaration } from './declarations/variable';
-import type { JavaAssertStatement } from './statements/assert';
-import type { JavaAssignment, JavaAugmentedAssignment } from './statements/assignment';
-import type { JavaBreakStatement } from './statements/break';
-import type { JavaContinueStatement } from './statements/continue';
-import type { JavaDoWhileStatement } from './statements/dowhile';
-import type { JavaEmptyStatement } from './statements/empty';
-import type { JavaExpressionStatement } from './statements/expression';
-import type { JavaForStatement } from './statements/for';
-import type { JavaIfStatement } from './statements/if';
-import type { JavaImportStatement } from './statements/import';
-import type { JavaLabeledStatement } from './statements/labeled';
-import type { JavaReturnStatement } from './statements/return';
-import type { JavaSwitchStatement } from './statements/switch';
-import type { JavaSynchronizedStatement } from './statements/synchronized';
-import type { JavaThrowStatement } from './statements/throw';
-import type { JavaTryStatement } from './statements/try';
-import type { JavaWhileStatement } from './statements/while';
-import type { JavaYieldStatement } from './statements/yield';
-import type { JavaComment } from './structure/comment';
+import type { JavaClassDeclaration } from "./declarations/class.js";
+import type { JavaEnumDeclaration } from "./declarations/enum.js";
+import type { JavaInterfaceDeclaration } from "./declarations/interface.js";
+import type { JavaMethodDeclaration } from "./declarations/method.js";
+import type { JavaVariableDeclaration } from "./declarations/variable.js";
+import type { JavaAssertStatement } from "./statements/assert.js";
+import type {
+  JavaAssignment,
+  JavaAugmentedAssignment,
+} from "./statements/assignment.js";
+import type { JavaBreakStatement } from "./statements/break.js";
+import type { JavaContinueStatement } from "./statements/continue.js";
+import type { JavaDoWhileStatement } from "./statements/dowhile.js";
+import type { JavaEmptyStatement } from "./statements/empty.js";
+import type { JavaExpressionStatement } from "./statements/expression.js";
+import type { JavaForStatement } from "./statements/for.js";
+import type { JavaIfStatement } from "./statements/if.js";
+import type { JavaImportStatement } from "./statements/import.js";
+import type { JavaLabeledStatement } from "./statements/labeled.js";
+import type { JavaReturnStatement } from "./statements/return.js";
+import type { JavaSwitchStatement } from "./statements/switch.js";
+import type { JavaSynchronizedStatement } from "./statements/synchronized.js";
+import type { JavaThrowStatement } from "./statements/throw.js";
+import type { JavaTryStatement } from "./statements/try.js";
+import type { JavaWhileStatement } from "./statements/while.js";
+import type { JavaYieldStatement } from "./statements/yield.js";
+import type { JavaComment } from "./structure/comment.js";
 
 export type JavaStatement =
   | JavaClassDeclaration

@@ -1,15 +1,15 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
 
 export type SwiftImportKindSpecifier =
-  | 'class'
-  | 'enum'
-  | 'func'
-  | 'let'
-  | 'protocol'
-  | 'struct'
-  | 'typealias'
-  | 'var';
+  | "class"
+  | "enum"
+  | "func"
+  | "let"
+  | "protocol"
+  | "struct"
+  | "typealias"
+  | "var";
 
 export interface SwiftImportDeclaration extends SwiftNodeBase {
   importKindSpecifier?: SwiftImportKindSpecifier;

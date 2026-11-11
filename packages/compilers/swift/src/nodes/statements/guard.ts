@@ -1,7 +1,7 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
-import type { SwiftCondition } from './condition';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
+import type { SwiftCondition } from "./condition.js";
 
 export interface SwiftGuardStatement extends SwiftNodeBase {
   body: ReadonlyArray<SwiftStatement>;

@@ -1,24 +1,33 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('accessor block', () => {
-  it('with getter and setter in subscript', async () => {
+describe("accessor block", () => {
+  it("with getter and setter in subscript", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createStructDeclaration('Store', [
+      swift.factory.createStructDeclaration("Store", [
         swift.factory.createSubscriptDeclaration(
-          [{ firstName: 'key', type: swift.factory.createIdentifierType('String') }],
-          swift.factory.createIdentifierType('Int'),
+          [
+            {
+              firstName: "key",
+              type: swift.factory.createIdentifierType("String"),
+            },
+          ],
+          swift.factory.createIdentifierType("Int"),
           swift.factory.createAccessorBlock([
             {
-              accessorSpecifier: 'get',
-              body: [swift.factory.createReturnStatement(swift.factory.createIntegerLiteral('0'))],
+              accessorSpecifier: "get",
+              body: [
+                swift.factory.createReturnStatement(
+                  swift.factory.createIntegerLiteral("0"),
+                ),
+              ],
             },
             {
-              accessorSpecifier: 'set',
+              accessorSpecifier: "set",
               body: [
                 swift.factory.createExpressionStatement(
                   swift.factory.createFunctionCallExpression(
-                    swift.factory.createIdentifier('store'),
+                    swift.factory.createIdentifier("store"),
                     [],
                   ),
                 ),
@@ -28,6 +37,9 @@ describe('accessor block', () => {
         ),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'with-getter-and-setter-in-subscript.swift');
+    await assertPrintedMatchesSnapshot(
+      file,
+      "with-getter-and-setter-in-subscript.swift",
+    );
   });
 });

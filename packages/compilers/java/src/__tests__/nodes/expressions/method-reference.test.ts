@@ -1,49 +1,49 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('method reference', () => {
-  it('static method reference', async () => {
+describe("method reference", () => {
+  it("static method reference", async () => {
     const expr = java.factory.createMethodReferenceExpression(
-      java.factory.createIdentifier('Math'),
-      'abs',
+      java.factory.createIdentifier("Math"),
+      "abs",
     );
     const file = java.factory.createSourceFile(undefined, [
       java.factory.createVariableDeclaration(
-        'f',
-        java.factory.createIdentifier('Function<Integer, Integer>'),
+        "f",
+        java.factory.createIdentifier("Function<Integer, Integer>"),
         expr,
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'method-ref-static.java');
+    await assertPrintedMatchesSnapshot(file, "method-ref-static.java");
   });
 
-  it('instance method reference', async () => {
+  it("instance method reference", async () => {
     const expr = java.factory.createMethodReferenceExpression(
-      java.factory.createIdentifier('s'),
-      'toLowerCase',
+      java.factory.createIdentifier("s"),
+      "toLowerCase",
     );
     const file = java.factory.createSourceFile(undefined, [
       java.factory.createVariableDeclaration(
-        'g',
-        java.factory.createIdentifier('Supplier<String>'),
+        "g",
+        java.factory.createIdentifier("Supplier<String>"),
         expr,
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'method-ref-instance.java');
+    await assertPrintedMatchesSnapshot(file, "method-ref-instance.java");
   });
 
-  it('constructor method reference', async () => {
+  it("constructor method reference", async () => {
     const expr = java.factory.createMethodReferenceExpression(
-      java.factory.createIdentifier('ArrayList'),
-      'new',
+      java.factory.createIdentifier("ArrayList"),
+      "new",
     );
     const file = java.factory.createSourceFile(undefined, [
       java.factory.createVariableDeclaration(
-        'h',
-        java.factory.createIdentifier('Supplier<List>'),
+        "h",
+        java.factory.createIdentifier("Supplier<List>"),
         expr,
       ),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'method-ref-ctor.java');
+    await assertPrintedMatchesSnapshot(file, "method-ref-ctor.java");
   });
 });

@@ -1,13 +1,16 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('boolean literal expression', () => {
-  it('bound to a constant', async () => {
+describe("boolean literal expression", () => {
+  it("bound to a constant", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createVariableDeclaration('let', [
-        { initializer: swift.factory.createBooleanLiteral(true), pattern: 'example' },
+      swift.factory.createVariableDeclaration("let", [
+        {
+          initializer: swift.factory.createBooleanLiteral(true),
+          pattern: "example",
+        },
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'boolean-literal.swift');
+    await assertPrintedMatchesSnapshot(file, "boolean-literal.swift");
   });
 });

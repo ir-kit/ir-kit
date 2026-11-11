@@ -1,9 +1,9 @@
-import type { GoNodeBase } from '../base';
-import type { GoExpression } from '../expression';
-import { GoNodeKind } from '../kinds';
-import type { GoType } from '../type';
+import type { GoNodeBase } from "../base.js";
+import type { GoExpression } from "../expression.js";
+import { GoNodeKind } from "../kinds.js";
+import type { GoType } from "../type.js";
 
-export type GoArraySize = GoExpression | '...';
+export type GoArraySize = GoExpression | "...";
 
 export interface GoArrayType extends GoNodeBase {
   elementType: GoType;

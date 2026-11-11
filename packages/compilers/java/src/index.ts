@@ -1,6 +1,6 @@
-import { factory } from './nodes/factory';
-import { JavaNodeKind } from './nodes/kinds';
-import { createPrinter, printAst } from './printer';
+import { factory } from "./nodes/factory.js";
+import { JavaNodeKind } from "./nodes/kinds.js";
+import { createPrinter, printAst } from "./printer.js";
 
 export const java = {
   JavaNodeKind,

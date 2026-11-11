@@ -1,7 +1,7 @@
-import type { SwiftNodeBase } from '../base';
-import type { SwiftExpression } from '../expression';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
+import type { SwiftNodeBase } from "../base.js";
+import type { SwiftExpression } from "../expression.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
 
 export type SwiftCatchClause = {
   body: ReadonlyArray<SwiftStatement>;

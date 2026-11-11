@@ -1,16 +1,16 @@
-import { swift } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { swift } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('do statement', () => {
-  it('with a catch clause', async () => {
+describe("do statement", () => {
+  it("with a catch clause", async () => {
     const file = swift.factory.createSourceFile([
-      swift.factory.createFunctionDeclaration('run', [], undefined, [
+      swift.factory.createFunctionDeclaration("run", [], undefined, [
         swift.factory.createDoStatement(
           [
             swift.factory.createExpressionStatement(
               swift.factory.createTryExpression(
                 swift.factory.createFunctionCallExpression(
-                  swift.factory.createIdentifier('risky'),
+                  swift.factory.createIdentifier("risky"),
                   [],
                 ),
               ),
@@ -20,8 +20,8 @@ describe('do statement', () => {
             swift.factory.createCatchClause([
               swift.factory.createExpressionStatement(
                 swift.factory.createFunctionCallExpression(
-                  swift.factory.createIdentifier('print'),
-                  [{ expression: swift.factory.createStringLiteral('failed') }],
+                  swift.factory.createIdentifier("print"),
+                  [{ expression: swift.factory.createStringLiteral("failed") }],
                 ),
               ),
             ]),
@@ -29,6 +29,6 @@ describe('do statement', () => {
         ),
       ]),
     ]);
-    await assertPrintedMatchesSnapshot(file, 'do.swift');
+    await assertPrintedMatchesSnapshot(file, "do.swift");
   });
 });

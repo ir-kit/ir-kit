@@ -1,6 +1,6 @@
-import type { JavaNodeBase } from '../base';
-import type { JavaExpression } from '../expression';
-import { JavaNodeKind } from '../kinds';
+import type { JavaNodeBase } from "../base.js";
+import type { JavaExpression } from "../expression.js";
+import { JavaNodeKind } from "../kinds.js";
 
 export interface JavaTypeParameter extends JavaNodeBase {
   bounds?: ReadonlyArray<JavaExpression>;
@@ -25,13 +25,13 @@ export function createTypeParameter(
 
 export interface JavaWildcardTypeArgument extends JavaNodeBase {
   // '?', '? extends T', '? super T'
-  boundKind?: 'extends' | 'super';
+  boundKind?: "extends" | "super";
   boundType?: JavaExpression;
   kind: JavaNodeKind.WildcardTypeArgument;
 }
 
 export function createWildcardTypeArgument(
-  boundKind?: 'extends' | 'super',
+  boundKind?: "extends" | "super",
   boundType?: JavaExpression,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,

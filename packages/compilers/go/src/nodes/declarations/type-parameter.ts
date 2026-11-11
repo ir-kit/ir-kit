@@ -1,4 +1,4 @@
-import type { GoType } from '../type';
+import type { GoType } from "../type.js";
 
 export type GoTypeParameter = {
   constraint: GoType;

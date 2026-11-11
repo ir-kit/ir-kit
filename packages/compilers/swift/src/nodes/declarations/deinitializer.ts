@@ -1,7 +1,7 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftStatement } from '../statement';
-import type { SwiftAttribute } from './shared';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftStatement } from "../statement.js";
+import type { SwiftAttribute } from "./shared.js";
 
 export interface SwiftDeinitializerDeclaration extends SwiftNodeBase {
   attributes?: ReadonlyArray<SwiftAttribute>;

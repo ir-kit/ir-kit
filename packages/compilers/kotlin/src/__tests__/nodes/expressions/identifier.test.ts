@@ -1,14 +1,14 @@
-import { assertPrintedMatchesSnapshot, f, file } from '../utils';
+import { assertPrintedMatchesSnapshot, f, file } from "../utils.js";
 
-describe('identifier', () => {
-  it('simple reference', async () => {
+describe("identifier", () => {
+  it("simple reference", async () => {
     const node = f.createFunctionDeclaration(
-      'ref',
+      "ref",
       [],
       undefined,
       undefined,
-      f.createIdentifier('value'),
+      f.createIdentifier("value"),
     );
-    await assertPrintedMatchesSnapshot(file([node]), 'reference.kt');
+    await assertPrintedMatchesSnapshot(file([node]), "reference.kt");
   });
 });

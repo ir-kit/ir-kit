@@ -1,6 +1,6 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinStatement } from '../statement';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinStatement } from "../statement.js";
 
 export interface KotlinBlock extends KotlinNodeBase {
   kind: KotlinNodeKind.Block;

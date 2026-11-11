@@ -124,6 +124,15 @@ flowchart LR
 | [`@ir-kit/openapi-swift`](./packages/openapi/swift) | Generate idiomatic Swift (Codable + URLSession + async throws) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-typescript`](./packages/openapi/typescript) | Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline. |
 
+### Language compilers (AST + printer)
+
+| Package | Description |
+| --- | --- |
+| [`@ir-kit/compiler-go`](./packages/compilers/go) | Typed Go AST + printer. Build Go source with a TypeScript-compiler-style factory API and print gofmt-clean output. Zero runtime dependencies. |
+| [`@ir-kit/compiler-java`](./packages/compilers/java) | Typed Java AST + printer. Build Java source with a TypeScript-compiler-style factory API and print google-java-format-clean output. Zero runtime dependencies. |
+| [`@ir-kit/compiler-kotlin`](./packages/compilers/kotlin) | Typed Kotlin AST + printer. Build Kotlin source with a TypeScript-compiler-style factory API and print ktlint-clean output. Zero runtime dependencies. |
+| [`@ir-kit/compiler-swift`](./packages/compilers/swift) | Typed Swift AST + printer. Build Swift source with a TypeScript-compiler-style factory API and print swift-format-clean output. Zero runtime dependencies. |
+
 ### Load testing (k6)
 
 | Package | Description |

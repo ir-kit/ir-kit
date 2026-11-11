@@ -1,8 +1,8 @@
-import type { SwiftNodeBase } from '../base';
-import { SwiftNodeKind } from '../kinds';
-import type { SwiftPattern } from '../pattern';
+import type { SwiftNodeBase } from "../base.js";
+import { SwiftNodeKind } from "../kinds.js";
+import type { SwiftPattern } from "../pattern.js";
 
-export type SwiftValueBindingSpecifier = 'let' | 'var';
+export type SwiftValueBindingSpecifier = "let" | "var";
 
 export interface SwiftValueBindingPattern extends SwiftNodeBase {
   bindingSpecifier: SwiftValueBindingSpecifier;

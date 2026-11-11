@@ -1,187 +1,240 @@
-import { java } from '../../../index';
-import { assertPrintedMatchesSnapshot } from '../utils';
+import { java } from "../../../index.js";
+import { assertPrintedMatchesSnapshot } from "../utils.js";
 
-describe('interface declarations', () => {
-  it('basic interface extending another interface', async () => {
-    const i = java.factory.createInterfaceDeclaration('Repository', [], ['public'], undefined, [
-      java.factory.createIdentifier('Closeable'),
-    ]);
+describe("interface declarations", () => {
+  it("basic interface extending another interface", async () => {
+    const i = java.factory.createInterfaceDeclaration(
+      "Repository",
+      [],
+      ["public"],
+      undefined,
+      [java.factory.createIdentifier("Closeable")],
+    );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'interface.java');
+    await assertPrintedMatchesSnapshot(file, "interface.java");
   });
 
-  it('data repository interface with constants and methods', async () => {
+  it("data repository interface with constants and methods", async () => {
     const constant = java.factory.createVariableDeclaration(
-      'MAX_CACHE_SIZE',
-      java.factory.createIdentifier('int'),
+      "MAX_CACHE_SIZE",
+      java.factory.createIdentifier("int"),
       java.factory.createLiteral(1000),
-      ['public', 'static', 'final'],
+      ["public", "static", "final"],
     );
 
     const saveMethod = java.factory.createMethodDeclaration(
-      'save',
-      [java.factory.createMethodParameter('entity', java.factory.createIdentifier('Object'))],
-      java.factory.createIdentifier('void'),
+      "save",
+      [
+        java.factory.createMethodParameter(
+          "entity",
+          java.factory.createIdentifier("Object"),
+        ),
+      ],
+      java.factory.createIdentifier("void"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const findMethod = java.factory.createMethodDeclaration(
-      'findById',
-      [java.factory.createMethodParameter('id', java.factory.createIdentifier('Long'))],
-      java.factory.createIdentifier('Object'),
+      "findById",
+      [
+        java.factory.createMethodParameter(
+          "id",
+          java.factory.createIdentifier("Long"),
+        ),
+      ],
+      java.factory.createIdentifier("Object"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'DataRepository',
+      "DataRepository",
       [constant, saveMethod, findMethod],
-      ['public'],
+      ["public"],
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'interface-with-methods.java');
+    await assertPrintedMatchesSnapshot(file, "interface-with-methods.java");
   });
 
-  it('functional interface for string transformation', async () => {
+  it("functional interface for string transformation", async () => {
     const FunctionalInterfaceAnnotation = java.factory.createAnnotation(
-      java.factory.createIdentifier('FunctionalInterface'),
+      java.factory.createIdentifier("FunctionalInterface"),
     );
 
     const transformMethod = java.factory.createMethodDeclaration(
-      'transform',
-      [java.factory.createMethodParameter('input', java.factory.createIdentifier('String'))],
-      java.factory.createIdentifier('String'),
+      "transform",
+      [
+        java.factory.createMethodParameter(
+          "input",
+          java.factory.createIdentifier("String"),
+        ),
+      ],
+      java.factory.createIdentifier("String"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'StringTransformer',
+      "StringTransformer",
       [transformMethod],
-      ['public'],
+      ["public"],
       [FunctionalInterfaceAnnotation],
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'functional-interface.java');
+    await assertPrintedMatchesSnapshot(file, "functional-interface.java");
   });
 
-  it('file processor interface with default and static methods', async () => {
+  it("file processor interface with default and static methods", async () => {
     const processMethod = java.factory.createMethodDeclaration(
-      'process',
-      [java.factory.createMethodParameter('content', java.factory.createIdentifier('String'))],
-      java.factory.createIdentifier('String'),
+      "process",
+      [
+        java.factory.createMethodParameter(
+          "content",
+          java.factory.createIdentifier("String"),
+        ),
+      ],
+      java.factory.createIdentifier("String"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const defaultMethod = java.factory.createMethodDeclaration(
-      'processWithValidation',
-      [java.factory.createMethodParameter('content', java.factory.createIdentifier('String'))],
-      java.factory.createIdentifier('String'),
+      "processWithValidation",
+      [
+        java.factory.createMethodParameter(
+          "content",
+          java.factory.createIdentifier("String"),
+        ),
+      ],
+      java.factory.createIdentifier("String"),
       [
         java.factory.createReturnStatement(
           java.factory.createCallExpression(
             java.factory.createMemberExpression(
               java.factory.createThisExpression(),
-              java.factory.createIdentifier('process'),
+              java.factory.createIdentifier("process"),
             ),
-            [java.factory.createIdentifier('content')],
+            [java.factory.createIdentifier("content")],
           ),
         ),
       ],
-      ['public', 'default'],
+      ["public", "default"],
     );
 
     const staticMethod = java.factory.createMethodDeclaration(
-      'getDefaultProcessor',
+      "getDefaultProcessor",
       [],
-      java.factory.createIdentifier('FileProcessor'),
-      [java.factory.createReturnStatement(java.factory.createLiteral('DefaultProcessor'))],
-      ['public', 'static'],
+      java.factory.createIdentifier("FileProcessor"),
+      [
+        java.factory.createReturnStatement(
+          java.factory.createLiteral("DefaultProcessor"),
+        ),
+      ],
+      ["public", "static"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'FileProcessor',
+      "FileProcessor",
       [processMethod, defaultMethod, staticMethod],
-      ['public'],
+      ["public"],
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'interface-default-static.java');
+    await assertPrintedMatchesSnapshot(file, "interface-default-static.java");
   });
 
-  it('file stream interface extending multiple interfaces', async () => {
+  it("file stream interface extending multiple interfaces", async () => {
     const readMethod = java.factory.createMethodDeclaration(
-      'read',
+      "read",
       [],
-      java.factory.createIdentifier('String'),
+      java.factory.createIdentifier("String"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const writeMethod = java.factory.createMethodDeclaration(
-      'write',
-      [java.factory.createMethodParameter('data', java.factory.createIdentifier('String'))],
-      java.factory.createIdentifier('void'),
+      "write",
+      [
+        java.factory.createMethodParameter(
+          "data",
+          java.factory.createIdentifier("String"),
+        ),
+      ],
+      java.factory.createIdentifier("void"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const closeMethod = java.factory.createMethodDeclaration(
-      'close',
+      "close",
       [],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'FileStream',
+      "FileStream",
       [readMethod, writeMethod, closeMethod],
-      ['public'],
+      ["public"],
       undefined,
       [
-        java.factory.createIdentifier('Readable'),
-        java.factory.createIdentifier('Writable'),
-        java.factory.createIdentifier('Closeable'),
+        java.factory.createIdentifier("Readable"),
+        java.factory.createIdentifier("Writable"),
+        java.factory.createIdentifier("Closeable"),
       ],
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'interface-multiple-extends.java');
+    await assertPrintedMatchesSnapshot(file, "interface-multiple-extends.java");
   });
 
-  it('generic comparator interface with type bounds', async () => {
-    const T = java.factory.createTypeParameter('T', [java.factory.createIdentifier('Comparable')]);
-    const U = java.factory.createTypeParameter('U', [java.factory.createIdentifier('Number')]);
+  it("generic comparator interface with type bounds", async () => {
+    const T = java.factory.createTypeParameter("T", [
+      java.factory.createIdentifier("Comparable"),
+    ]);
+    const U = java.factory.createTypeParameter("U", [
+      java.factory.createIdentifier("Number"),
+    ]);
 
     const compareMethod = java.factory.createMethodDeclaration(
-      'compare',
+      "compare",
       [
-        java.factory.createMethodParameter('first', java.factory.createIdentifier('T')),
-        java.factory.createMethodParameter('second', java.factory.createIdentifier('T')),
+        java.factory.createMethodParameter(
+          "first",
+          java.factory.createIdentifier("T"),
+        ),
+        java.factory.createMethodParameter(
+          "second",
+          java.factory.createIdentifier("T"),
+        ),
       ],
-      java.factory.createIdentifier('int'),
+      java.factory.createIdentifier("int"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const calculateMethod = java.factory.createMethodDeclaration(
-      'calculate',
-      [java.factory.createMethodParameter('value', java.factory.createIdentifier('U'))],
-      java.factory.createIdentifier('double'),
+      "calculate",
+      [
+        java.factory.createMethodParameter(
+          "value",
+          java.factory.createIdentifier("U"),
+        ),
+      ],
+      java.factory.createIdentifier("double"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'GenericComparator',
+      "GenericComparator",
       [compareMethod, calculateMethod],
-      ['public'],
+      ["public"],
       undefined,
       undefined,
       false,
@@ -189,73 +242,73 @@ describe('interface declarations', () => {
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'generic-interface.java');
+    await assertPrintedMatchesSnapshot(file, "generic-interface.java");
   });
 
-  it('deprecated legacy interface with annotations', async () => {
+  it("deprecated legacy interface with annotations", async () => {
     const DeprecatedAnnotation = java.factory.createAnnotation(
-      java.factory.createIdentifier('Deprecated'),
+      java.factory.createIdentifier("Deprecated"),
     );
 
     const SuppressWarningsAnnotation = java.factory.createAnnotation(
-      java.factory.createIdentifier('SuppressWarnings'),
-      [java.factory.createLiteral('unchecked')],
+      java.factory.createIdentifier("SuppressWarnings"),
+      [java.factory.createLiteral("unchecked")],
     );
 
     const legacyMethod = java.factory.createMethodDeclaration(
-      'legacyMethod',
+      "legacyMethod",
       [],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const i = java.factory.createInterfaceDeclaration(
-      'LegacyInterface',
+      "LegacyInterface",
       [legacyMethod],
-      ['public'],
+      ["public"],
       [DeprecatedAnnotation, SuppressWarningsAnnotation],
       undefined,
       false,
       undefined,
-      ['// Legacy interface', '// Will be removed in future version'],
-      ['// End of legacy interface'],
+      ["// Legacy interface", "// Will be removed in future version"],
+      ["// End of legacy interface"],
     );
 
     const file = java.factory.createSourceFile(undefined, [i]);
-    await assertPrintedMatchesSnapshot(file, 'annotated-interface.java');
+    await assertPrintedMatchesSnapshot(file, "annotated-interface.java");
   });
 
-  it('outer interface with nested static interface', async () => {
+  it("outer interface with nested static interface", async () => {
     const outerMethod = java.factory.createMethodDeclaration(
-      'process',
+      "process",
       [],
-      java.factory.createIdentifier('void'),
+      java.factory.createIdentifier("void"),
       [], // interface methods have no body
-      ['public'],
+      ["public"],
     );
 
     const nestedInterface = java.factory.createInterfaceDeclaration(
-      'InnerProcessor',
+      "InnerProcessor",
       [
         java.factory.createMethodDeclaration(
-          'processInner',
+          "processInner",
           [],
-          java.factory.createIdentifier('void'),
+          java.factory.createIdentifier("void"),
           [], // interface methods have no body
-          ['public'],
+          ["public"],
         ),
       ],
-      ['public', 'static'],
+      ["public", "static"],
     );
 
     const outerInterface = java.factory.createInterfaceDeclaration(
-      'OuterProcessor',
+      "OuterProcessor",
       [outerMethod, nestedInterface],
-      ['public'],
+      ["public"],
     );
 
     const file = java.factory.createSourceFile(undefined, [outerInterface]);
-    await assertPrintedMatchesSnapshot(file, 'nested-interface.java');
+    await assertPrintedMatchesSnapshot(file, "nested-interface.java");
   });
 });

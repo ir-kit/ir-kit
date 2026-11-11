@@ -1,9 +1,9 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinModifier, KotlinValOrVar } from '../shared';
-import type { KotlinType } from '../type';
-import type { KotlinAnnotation } from './annotation';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinModifier, KotlinValOrVar } from "../shared.js";
+import type { KotlinType } from "../type.js";
+import type { KotlinAnnotation } from "./annotation.js";
 
 export interface KotlinParameter extends KotlinNodeBase {
   annotations?: ReadonlyArray<KotlinAnnotation>;

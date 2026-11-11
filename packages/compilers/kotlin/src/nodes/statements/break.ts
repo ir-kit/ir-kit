@@ -1,5 +1,5 @@
-import type { KotlinNodeBase } from '../base';
-import { KotlinNodeKind } from '../kinds';
+import type { KotlinNodeBase } from "../base.js";
+import { KotlinNodeKind } from "../kinds.js";
 
 export interface KotlinBreakStatement extends KotlinNodeBase {
   kind: KotlinNodeKind.BreakStatement;
@@ -11,5 +11,10 @@ export function createBreakStatement(
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): KotlinBreakStatement {
-  return { kind: KotlinNodeKind.BreakStatement, label, leadingComments, trailingComments };
+  return {
+    kind: KotlinNodeKind.BreakStatement,
+    label,
+    leadingComments,
+    trailingComments,
+  };
 }

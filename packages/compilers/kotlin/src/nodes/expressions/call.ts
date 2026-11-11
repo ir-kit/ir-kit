@@ -1,9 +1,9 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
-import type { KotlinValueArgument } from '../shared';
-import type { KotlinType } from '../type';
-import type { KotlinLambdaExpression } from './lambda';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
+import type { KotlinValueArgument } from "../shared.js";
+import type { KotlinType } from "../type.js";
+import type { KotlinLambdaExpression } from "./lambda.js";
 
 export interface KotlinCallExpression extends KotlinNodeBase {
   callee: KotlinExpression;

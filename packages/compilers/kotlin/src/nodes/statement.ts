@@ -1,16 +1,16 @@
-import type { KotlinProperty } from './declarations/property';
-import type { KotlinAssignment } from './statements/assignment';
-import type { KotlinBlock } from './statements/block';
-import type { KotlinBreakStatement } from './statements/break';
-import type { KotlinContinueStatement } from './statements/continue';
-import type { KotlinExpressionStatement } from './statements/expression';
-import type { KotlinForStatement } from './statements/for';
-import type { KotlinIfStatement } from './statements/if';
-import type { KotlinReturnStatement } from './statements/return';
-import type { KotlinThrowStatement } from './statements/throw';
-import type { KotlinTryExpression } from './statements/try';
-import type { KotlinWhenStatement } from './statements/when';
-import type { KotlinWhileStatement } from './statements/while';
+import type { KotlinProperty } from "./declarations/property.js";
+import type { KotlinAssignment } from "./statements/assignment.js";
+import type { KotlinBlock } from "./statements/block.js";
+import type { KotlinBreakStatement } from "./statements/break.js";
+import type { KotlinContinueStatement } from "./statements/continue.js";
+import type { KotlinExpressionStatement } from "./statements/expression.js";
+import type { KotlinForStatement } from "./statements/for.js";
+import type { KotlinIfStatement } from "./statements/if.js";
+import type { KotlinReturnStatement } from "./statements/return.js";
+import type { KotlinThrowStatement } from "./statements/throw.js";
+import type { KotlinTryExpression } from "./statements/try.js";
+import type { KotlinWhenStatement } from "./statements/when.js";
+import type { KotlinWhileStatement } from "./statements/while.js";
 
 export type KotlinStatement =
   | KotlinAssignment

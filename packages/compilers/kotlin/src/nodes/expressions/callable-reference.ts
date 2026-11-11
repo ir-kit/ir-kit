@@ -1,6 +1,6 @@
-import type { KotlinNodeBase } from '../base';
-import type { KotlinExpression } from '../expression';
-import { KotlinNodeKind } from '../kinds';
+import type { KotlinNodeBase } from "../base.js";
+import type { KotlinExpression } from "../expression.js";
+import { KotlinNodeKind } from "../kinds.js";
 
 export interface KotlinCallableReference extends KotlinNodeBase {
   kind: KotlinNodeKind.CallableReference;

@@ -1,56 +1,71 @@
-import { createClassDeclaration } from './declarations/class';
-import { createEnumDeclaration } from './declarations/enum';
-import { createInterfaceDeclaration } from './declarations/interface';
-import { createMethodDeclaration } from './declarations/method';
-import { createMethodParameter } from './declarations/method-parameter';
-import { createVariableDeclaration } from './declarations/variable';
-import { createAnnotation } from './expressions/annotation';
-import { createArrayCreationExpression } from './expressions/array-creation';
-import { createArrayInitializer } from './expressions/array-initializer';
-import { createBinaryExpression } from './expressions/binary';
-import { createCallExpression } from './expressions/call';
-import { createCastExpression } from './expressions/cast';
-import { createIdentifier } from './expressions/identifier';
-import { createIndexExpression } from './expressions/index';
-import { createInstanceOfExpression } from './expressions/instanceof';
-import { createLambdaExpression } from './expressions/lambda';
-import { createLiteral } from './expressions/literal';
-import { createMemberExpression } from './expressions/member';
-import { createMethodReferenceExpression } from './expressions/method-reference';
-import { createNewAnonymousClassExpression, createNewExpression } from './expressions/new';
-import { createSuperExpression } from './expressions/super';
-import { createSwitchExpression, createSwitchRule } from './expressions/switch';
-import { createTernaryExpression } from './expressions/ternary';
-import { createThisExpression } from './expressions/this';
+import { createClassDeclaration } from "./declarations/class.js";
+import { createEnumDeclaration } from "./declarations/enum.js";
+import { createInterfaceDeclaration } from "./declarations/interface.js";
+import { createMethodDeclaration } from "./declarations/method.js";
+import { createMethodParameter } from "./declarations/method-parameter.js";
+import { createVariableDeclaration } from "./declarations/variable.js";
+import { createAnnotation } from "./expressions/annotation.js";
+import { createArrayCreationExpression } from "./expressions/array-creation.js";
+import { createArrayInitializer } from "./expressions/array-initializer.js";
+import { createBinaryExpression } from "./expressions/binary.js";
+import { createCallExpression } from "./expressions/call.js";
+import { createCastExpression } from "./expressions/cast.js";
+import { createIdentifier } from "./expressions/identifier.js";
+import { createIndexExpression } from "./expressions/index.js";
+import { createInstanceOfExpression } from "./expressions/instanceof.js";
+import { createLambdaExpression } from "./expressions/lambda.js";
+import { createLiteral } from "./expressions/literal.js";
+import { createMemberExpression } from "./expressions/member.js";
+import { createMethodReferenceExpression } from "./expressions/method-reference.js";
+import {
+  createNewAnonymousClassExpression,
+  createNewExpression,
+} from "./expressions/new.js";
+import { createSuperExpression } from "./expressions/super.js";
+import {
+  createSwitchExpression,
+  createSwitchRule,
+} from "./expressions/switch.js";
+import { createTernaryExpression } from "./expressions/ternary.js";
+import { createThisExpression } from "./expressions/this.js";
 import {
   createArrayType,
   createParameterizedType,
   createTypeParameter,
   createWildcardTypeArgument,
-} from './expressions/type';
-import { createUnaryExpression } from './expressions/unary';
-import { createAssertStatement } from './statements/assert';
-import { createAssignment, createAugmentedAssignment } from './statements/assignment';
-import { createBlock } from './statements/block';
-import { createBreakStatement } from './statements/break';
-import { createContinueStatement } from './statements/continue';
-import { createDoWhileStatement } from './statements/dowhile';
-import { createEmptyStatement } from './statements/empty';
-import { createExpressionStatement } from './statements/expression';
-import { createEnhancedForStatement, createForStatement } from './statements/for';
-import { createIfStatement } from './statements/if';
-import { createImportStatement } from './statements/import';
-import { createLabeledStatement } from './statements/labeled';
-import { createReturnStatement } from './statements/return';
-import { createSwitchCase, createSwitchStatement } from './statements/switch';
-import { createSynchronizedStatement } from './statements/synchronized';
-import { createThrowStatement } from './statements/throw';
-import { createCatchClause, createTryStatement } from './statements/try';
-import { createWhileStatement } from './statements/while';
-import { createYieldStatement } from './statements/yield';
-import { createComment } from './structure/comment';
-import { createPackageDeclaration } from './structure/package';
-import { createSourceFile } from './structure/source-file';
+} from "./expressions/type.js";
+import { createUnaryExpression } from "./expressions/unary.js";
+import { createAssertStatement } from "./statements/assert.js";
+import {
+  createAssignment,
+  createAugmentedAssignment,
+} from "./statements/assignment.js";
+import { createBlock } from "./statements/block.js";
+import { createBreakStatement } from "./statements/break.js";
+import { createContinueStatement } from "./statements/continue.js";
+import { createDoWhileStatement } from "./statements/dowhile.js";
+import { createEmptyStatement } from "./statements/empty.js";
+import { createExpressionStatement } from "./statements/expression.js";
+import {
+  createEnhancedForStatement,
+  createForStatement,
+} from "./statements/for.js";
+import { createIfStatement } from "./statements/if.js";
+import { createImportStatement } from "./statements/import.js";
+import { createLabeledStatement } from "./statements/labeled.js";
+import { createReturnStatement } from "./statements/return.js";
+import {
+  createSwitchCase,
+  createSwitchStatement,
+} from "./statements/switch.js";
+import { createSynchronizedStatement } from "./statements/synchronized.js";
+import { createThrowStatement } from "./statements/throw.js";
+import { createCatchClause, createTryStatement } from "./statements/try.js";
+import { createWhileStatement } from "./statements/while.js";
+import { createYieldStatement } from "./statements/yield.js";
+import { createComment } from "./structure/comment.js";
+import { createPackageDeclaration } from "./structure/package.js";
+import { createSourceFile } from "./structure/source-file.js";
 
 export const factory = {
   createAnnotation,
