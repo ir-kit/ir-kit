@@ -14,7 +14,7 @@ import {
   goPtr,
   goRef,
 } from "../go-dsl/index.js";
-import { exportedIdent, newTypeNames } from "./identifiers.js";
+import { exportedIdent, newTypeNames, tagFileName } from "./identifiers.js";
 import { buildClientStruct } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -89,19 +89,21 @@ export function operationsToDecls(
   let needsAuth = false;
   for (const [tag, sigs] of byTag) {
     const ifaceName = interfaceName(tag);
-    decls.push(
-      goInterface({
+    const file = tagFileName(tag);
+    decls.push({
+      file,
+      ...goInterface({
         name: ifaceName,
         methods: sigs.flatMap((sig) => [
           buildInterfaceMethod(sig, /* withResponse */ false),
           buildInterfaceMethod(sig, /* withResponse */ true),
         ]),
       }),
-    );
+    });
     if (sigs.some(hasSecurity)) needsAuth = true;
     if (!opts.interfaceOnly) {
       const result = buildClientStruct(clientStructName(ifaceName), sigs);
-      for (const d of result.decls) decls.push(d);
+      for (const d of result.decls) decls.push({ ...d, file });
       if (result.needsMultipart) needsMultipart = true;
     }
   }

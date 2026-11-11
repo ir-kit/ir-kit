@@ -148,3 +148,16 @@ export function exportedIdent(s: string): string {
   if (p === "") return "Empty";
   return /^[0-9]/.test(p) ? `X${p}` : p;
 }
+
+/** File a tag's interface, client struct and methods live in. */
+export function tagFileName(tag: string): string {
+  return `${snakeCase(exportedIdent(tag))}.go`;
+}
+
+function snakeCase(s: string): string {
+  return s
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2")
+    .replace(/__+/g, "_")
+    .toLowerCase();
+}

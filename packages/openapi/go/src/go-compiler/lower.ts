@@ -5,6 +5,7 @@ import type { GoExpr } from "../go-dsl/expr/types.js";
 import type { GoFile } from "../go-dsl/file.js";
 import type { GoControlStmt, GoStmt } from "../go-dsl/stmt/types.js";
 import type { GoType } from "../go-dsl/type/types.js";
+import { collectImports } from "./imports.js";
 
 const f = go.factory;
 
@@ -372,10 +373,15 @@ export function lowerDecl(d: GoDecl): AstStmt {
   }
 }
 
+/** Lower a file; imports are the union of `file.imports` and every
+ *  package the lowered declarations reference. */
 export function lowerFile(file: GoFile): go.SourceFile {
+  const decls = file.decls.map(lowerDecl);
+  const imports = [
+    ...new Set([...file.imports, ...collectImports(decls)]),
+  ].sort();
   const statements: AstStmt[] = [];
-  if (file.imports.length > 0)
-    statements.push(f.createImportStatement([...file.imports]));
-  statements.push(...file.decls.map(lowerDecl));
+  if (imports.length > 0) statements.push(f.createImportStatement(imports));
+  statements.push(...decls);
   return f.createSourceFile(file.pkg, statements);
 }

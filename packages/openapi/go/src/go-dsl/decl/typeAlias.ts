@@ -2,6 +2,8 @@ import type { GoType } from "../type/types.js";
 
 export interface GoTypeAlias {
   kind: "typeAlias";
+  /** Output file (e.g. `users.go`), set by the emitter. Default: `models.go`. */
+  file?: string;
   name: string;
   type: GoType;
   /** When true, render as `type Name = Underlying` (true alias —
