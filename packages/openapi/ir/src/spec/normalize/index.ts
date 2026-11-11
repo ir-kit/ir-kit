@@ -15,6 +15,7 @@ import { pruneUnusedSchemas } from "./prune.js";
 export type { EnumPassOptions } from "./enums.js";
 export type { Casing, NamingConfig, NamingRule } from "./name.js";
 export type { ObjectPassOptions } from "./objects.js";
+export { hoistForeignSchemaRefs } from "./refs.js";
 
 export interface NormalizeOptions {
   /** Hoist identical inline enums to `components.schemas`. */

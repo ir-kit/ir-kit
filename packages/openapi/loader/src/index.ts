@@ -1,6 +1,7 @@
 import { isAbsolute, resolve } from "node:path";
 import { $RefParser } from "@hey-api/json-schema-ref-parser";
 import {
+  hoistForeignSchemaRefs,
   type NormalizeOptions,
   normalizeSpec,
   SAFE_NORMALIZE,
@@ -22,6 +23,8 @@ export async function loadOpenAPI(
   const bundled = (await new $RefParser().bundle({
     pathOrUrlOrSchema: resolveOpenAPIInput(opts.input, opts.cwd),
   })) as Record<string, unknown>;
+
+  hoistForeignSchemaRefs(bundled);
 
   if (opts.normalize) {
     normalizeSpec(

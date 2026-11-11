@@ -14,7 +14,7 @@ import {
   goPtr,
   goRef,
 } from "../go-dsl/index.js";
-import { newTypeNames } from "./identifiers.js";
+import { exportedIdent, newTypeNames } from "./identifiers.js";
 import { buildClientStruct } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -58,7 +58,7 @@ export function operationsToDecls(
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
   const interfaceName =
-    opts.interfaceName ?? ((tag: string) => `${safeIdent(tag)}API`);
+    opts.interfaceName ?? ((tag: string) => `${exportedIdent(tag)}API`);
   const clientStructName =
     opts.clientStructName ?? ((p: string) => `NetHTTP${p}`);
 

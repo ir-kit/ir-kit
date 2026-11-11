@@ -95,7 +95,7 @@ const GO_RESERVED_KEYWORDS: ReadonlySet<string> = new Set([
 /** Owns every top-level Go type name for one generation run. */
 export function newTypeNames(): Namespace {
   return new Namespace({
-    normalize: (s) => safeIdent(s) || "Empty",
+    normalize: exportedIdent,
     reserved: GO_RUNTIME_IDENTIFIERS,
   });
 }
@@ -139,3 +139,12 @@ const GO_PARAM_RESERVED: ReadonlySet<string> = new Set([
   ...GO_RESERVED_KEYWORDS,
   ...GO_BODY_SCOPE,
 ]);
+
+/** Exported Go identifier: PascalCase, `X`-prefixed when it would start
+ *  with a digit (a `_` prefix would make it unexported), `Empty` when
+ *  nothing alphanumeric survives. */
+export function exportedIdent(s: string): string {
+  const p = pascal(s);
+  if (p === "") return "Empty";
+  return /^[0-9]/.test(p) ? `X${p}` : p;
+}
