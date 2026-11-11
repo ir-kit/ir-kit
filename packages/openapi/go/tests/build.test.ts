@@ -34,10 +34,10 @@ describe("buildGoProject", () => {
     });
     assert.equal(files.length, 1);
     assert.equal(files[0]!.path, "models.go");
-    assert.match(files[0]!.content, /^package petstore\n/);
-    assert.match(files[0]!.content, /import "time"/);
-    assert.match(files[0]!.content, /type User struct/);
-    assert.match(files[0]!.content, /type Pet struct/);
+    assert.match(files[0]!.content, /^package +petstore\n/);
+    assert.match(files[0]!.content, /import +"time"/);
+    assert.match(files[0]!.content, /type +User +struct/);
+    assert.match(files[0]!.content, /type +Pet +struct/);
   });
 
   it("groups each tag's interface + impl + methods into <tag>.go", () => {
@@ -79,18 +79,21 @@ describe("buildGoProject", () => {
     assert.ok(tagFile, "expected per-tag file");
     // Interface + impl struct + constructor + every method (incl.
     // *WithResponse twins) all collapse into the same file.
-    assert.match(tagFile!.content, /type UsersAPI interface/);
-    assert.match(tagFile!.content, /type NetHTTPUsersAPI struct/);
-    assert.match(tagFile!.content, /func NewNetHTTPUsersAPI\(/);
-    assert.match(tagFile!.content, /func \(a \*NetHTTPUsersAPI\) GetUser\(/);
+    assert.match(tagFile!.content, /type +UsersAPI +interface/);
+    assert.match(tagFile!.content, /type +NetHTTPUsersAPI +struct/);
+    assert.match(tagFile!.content, /func +NewNetHTTPUsersAPI\(/);
+    assert.match(tagFile!.content, /func +\(a +\*NetHTTPUsersAPI\) +GetUser\(/);
     assert.match(
       tagFile!.content,
-      /func \(a \*NetHTTPUsersAPI\) GetUserWithResponse\(/,
+      /func +\(a +\*NetHTTPUsersAPI\) +GetUserWithResponse\(/,
     );
-    assert.match(tagFile!.content, /func \(a \*NetHTTPUsersAPI\) DeleteUser\(/);
     assert.match(
       tagFile!.content,
-      /func \(a \*NetHTTPUsersAPI\) DeleteUserWithResponse\(/,
+      /func +\(a +\*NetHTTPUsersAPI\) +DeleteUser\(/,
+    );
+    assert.match(
+      tagFile!.content,
+      /func +\(a +\*NetHTTPUsersAPI\) +DeleteUserWithResponse\(/,
     );
   });
 

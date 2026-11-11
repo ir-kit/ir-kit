@@ -44,14 +44,14 @@ describe("operationsToDecls", () => {
     const ifaces = decls.filter((d) => d.kind === "interface");
     assert.equal(ifaces.length, 1);
     const out = printDecl(ifaces[0]!);
-    assert.match(out, /type UsersAPI interface \{/);
+    assert.match(out, /type +UsersAPI +interface +\{/);
     assert.match(
       out,
-      /GetUser\(ctx context\.Context, id string, opts RequestOptions\) \(\*GetUserResponse, error\)/,
+      /GetUser\(ctx +context\.Context, +id +string, +opts +RequestOptions\) +\(\*GetUserResponse, +error\)/,
     );
     assert.match(
       out,
-      /GetUserWithResponse\(.+\) \(\*GetUserResponse, \*http\.Response, error\)/,
+      /GetUserWithResponse\(.+\) +\(\*GetUserResponse, +\*http\.Response, +error\)/,
     );
   });
 
@@ -83,8 +83,11 @@ describe("operationsToDecls", () => {
     const method = decls.find((d) => d.kind === "func" && d.name === "GetUser");
     assert.ok(method);
     const out = printDecl(method!);
-    assert.match(out, /\(result \*GetUserResponse, err error\)/);
-    assert.match(out, /err = Wrap\(APIErrorKindTransport, err\)\n\t\treturn/);
+    assert.match(out, /\(result +\*GetUserResponse, +err +error\)/);
+    assert.match(
+      out,
+      /err += +Wrap\(APIErrorKindTransport, +err\)\n\t\treturn/,
+    );
   });
 
   it("ctx is the first param, opts the last", () => {
@@ -92,7 +95,7 @@ describe("operationsToDecls", () => {
     const { decls } = operationsToDecls(m.paths);
     const iface = decls.find((d) => d.kind === "interface")!;
     const out = printDecl(iface);
-    assert.match(out, /GetUser\(ctx context\.Context.+opts RequestOptions\)/);
+    assert.match(out, /GetUser\(ctx +context\.Context.+opts +RequestOptions\)/);
   });
 
   it("path templating: addPathSegment-equivalent via path.Join", () => {
@@ -104,7 +107,7 @@ describe("operationsToDecls", () => {
     const out = printDecl(method);
     assert.match(
       out,
-      /u\.Path = path\.Join\(u\.Path, "users", url\.PathEscape\(id\)\)/,
+      /u\.Path += +path\.Join\(u\.Path, +"users", +url\.PathEscape\(id\)\)/,
     );
   });
 
@@ -126,11 +129,11 @@ describe("operationsToDecls", () => {
     // No return type means just `error` / `(*http.Response, error)`.
     assert.match(
       out,
-      /Ping\(ctx context\.Context, opts RequestOptions\) error/,
+      /Ping\(ctx +context\.Context, +opts +RequestOptions\) +error/,
     );
     assert.match(
       out,
-      /PingWithResponse\(ctx context\.Context, opts RequestOptions\) \(\*http\.Response, error\)/,
+      /PingWithResponse\(ctx +context\.Context, +opts +RequestOptions\) +\(\*http\.Response, +error\)/,
     );
   });
 
@@ -202,9 +205,9 @@ describe("operationsToDecls", () => {
     assert.equal(needsAuth, true);
     const method = decls.find((d) => d.kind === "func" && d.name === "Me")!;
     const out = printDecl(method);
-    assert.match(out, /for _, name := range \[\]string\{"bearerAuth"\}/);
-    assert.match(out, /auth, ok := client\.Auth\[name\]/);
-    assert.match(out, /u = auth\.Apply\(req, u\)/);
+    assert.match(out, /for +_, +name +:= +range +\[\]string\{"bearerAuth"\}/);
+    assert.match(out, /auth, +ok +:= +client\.Auth\[name\]/);
+    assert.match(out, /u += +auth\.Apply\(req, +u\)/);
   });
 
   it("multipart body builds via NewMultipartFormBody helper", () => {
@@ -238,11 +241,11 @@ describe("operationsToDecls", () => {
     assert.equal(needsMultipart, true);
     const method = decls.find((d) => d.kind === "func" && d.name === "Upload")!;
     const out = printDecl(method);
-    assert.match(out, /multipart := NewMultipartFormBody\(\)/);
-    assert.match(out, /multipart\.AppendFile\("file", "file", file\)/);
+    assert.match(out, /multipart +:= +NewMultipartFormBody\(\)/);
+    assert.match(out, /multipart\.AppendFile\("file", +"file", +file\)/);
     assert.match(
       out,
-      /multipart\.AppendText\("caption", fmt\.Sprint\(\*caption\)\)/,
+      /multipart\.AppendText\("caption", +fmt\.Sprint\(\*caption\)\)/,
     );
   });
 
@@ -272,6 +275,6 @@ describe("operationsToDecls", () => {
     // Param ident is `timeframe` (trailing `[]` stripped); the wire-
     // level query name (`timeframe[]`) is still preserved by the impl
     // via the original IR.ParameterObject.name.
-    assert.match(out, /List\(.+timeframe \[\]string,/);
+    assert.match(out, /List\(.+timeframe +\[\]string,/);
   });
 });

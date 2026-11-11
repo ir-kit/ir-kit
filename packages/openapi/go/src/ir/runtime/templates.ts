@@ -135,13 +135,13 @@ import (
 //     converts the call into a failure.
 //   - ResponseTransformer rewrites the response body before decoding.
 type RequestOptions struct {
-\tClient               *APIClient
-\tBaseURL              string
-\tTimeout              time.Duration
-\tHeaders              map[string]string
-\tRequestInterceptors  []func(*http.Request) (*http.Request, error)
-\tResponseValidator    func(body []byte, resp *http.Response) error
-\tResponseTransformer  func(body []byte) ([]byte, error)
+\tClient              *APIClient
+\tBaseURL             string
+\tTimeout             time.Duration
+\tHeaders             map[string]string
+\tRequestInterceptors []func(*http.Request) (*http.Request, error)
+\tResponseValidator   func(body []byte, resp *http.Response) error
+\tResponseTransformer func(body []byte) ([]byte, error)
 }
 
 // applyTimeout returns a context derived from ctx with opts.Timeout
@@ -500,7 +500,6 @@ func sendAndDispatch(client *APIClient, req *http.Request, opts RequestOptions) 
 
 \treturn body, resp, nil
 }
-
 `;
 
 export function apiClientGo(opts: RuntimeOpts): string {

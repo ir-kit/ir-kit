@@ -23,9 +23,9 @@ describe("schemasToDecls", () => {
     const decls = schemasToDecls(m.components?.schemas ?? {});
     assert.equal(decls.length, 1);
     const out = printDecl(decls[0]!);
-    assert.match(out, /type User struct \{/);
-    assert.match(out, /\tId string `json:"id"`/);
-    assert.match(out, /\tName \*string `json:"name,omitempty"`/);
+    assert.match(out, /type +User +struct +\{/);
+    assert.match(out, /\tId +string +`json:"id"`/);
+    assert.match(out, /\tName +\*string +`json:"name,omitempty"`/);
   });
 
   it("emits typed-string + const-block for enum schemas", () => {
@@ -38,9 +38,9 @@ describe("schemasToDecls", () => {
     });
     const decls = schemasToDecls(m.components?.schemas ?? {});
     const out = decls.map(printDecl).join("\n");
-    assert.match(out, /type Status string/);
-    assert.match(out, /StatusActive Status = "active"/);
-    assert.match(out, /StatusPending Status = "pending"/);
+    assert.match(out, /type +Status +string/);
+    assert.match(out, /StatusActive +Status += +"active"/);
+    assert.match(out, /StatusPending +Status += +"pending"/);
   });
 
   it("maps integer formats: int64 → int64, default → int", () => {
@@ -61,8 +61,8 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /Small int /);
-    assert.match(out, /Big int64 /);
+    assert.match(out, /Small +int +/);
+    assert.match(out, /Big +int64 +/);
   });
 
   it("date-time → time.Time; date / uuid → string", () => {
@@ -82,10 +82,10 @@ describe("schemasToDecls", () => {
       },
     });
     const out = printDecl(schemasToDecls(m.components?.schemas ?? {})[0]!);
-    assert.match(out, /StartedAt time\.Time /);
+    assert.match(out, /StartedAt +time\.Time +/);
     // date-only doesn't unmarshal into time.Time; stay on string.
-    assert.match(out, /Day string /);
-    assert.match(out, /Id string /);
+    assert.match(out, /Day +string +/);
+    assert.match(out, /Id +string +/);
   });
 
   it("inlines nested objects as Owner+Property structs (no underscore)", () => {
@@ -142,8 +142,8 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /FooUserName Foo = "user_name"/);
-    assert.match(out, /FooUserName2 Foo = "userName"/);
+    assert.match(out, /FooUserName +Foo += +"user_name"/);
+    assert.match(out, /FooUserName2 +Foo += +"userName"/);
   });
 
   it("emits a typed-int enum for integer-valued enum schemas", () => {
@@ -157,11 +157,11 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /type Rotate int/);
-    assert.match(out, /Rotate0 Rotate = 0/);
-    assert.match(out, /Rotate90 Rotate = 90/);
-    assert.match(out, /Rotate180 Rotate = 180/);
-    assert.match(out, /Rotate270 Rotate = 270/);
+    assert.match(out, /type +Rotate +int/);
+    assert.match(out, /Rotate0 +Rotate += +0/);
+    assert.match(out, /Rotate90 +Rotate += +90/);
+    assert.match(out, /Rotate180 +Rotate += +180/);
+    assert.match(out, /Rotate270 +Rotate += +270/);
   });
 
   it("integer-enum negative values get a Neg<abs> suffix", () => {
@@ -175,9 +175,9 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /BiasNeg1 Bias = -1/);
-    assert.match(out, /Bias0 Bias = 0/);
-    assert.match(out, /Bias1 Bias = 1/);
+    assert.match(out, /BiasNeg1 +Bias += +-1/);
+    assert.match(out, /Bias0 +Bias += +0/);
+    assert.match(out, /Bias1 +Bias += +1/);
   });
 
   it("degrades mixed / boolean / number enums to their value type", () => {
@@ -193,9 +193,9 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /type Mixed any/);
-    assert.match(out, /type Flag bool/);
-    assert.match(out, /type Ratio float64/);
+    assert.match(out, /type +Mixed +any/);
+    assert.match(out, /type +Flag +bool/);
+    assert.match(out, /type +Ratio +float64/);
   });
 
   it("names component schemas once and resolves $refs to the same identifier", () => {
@@ -218,8 +218,8 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /type PropertiesStore struct/);
-    assert.match(out, /Store \*PropertiesStore `json:"store,omitempty"`/);
+    assert.match(out, /type +PropertiesStore +struct/);
+    assert.match(out, /Store +\*PropertiesStore +`json:"store,omitempty"`/);
   });
 
   it("never declares the same synthesized name twice", () => {
@@ -237,8 +237,8 @@ describe("schemasToDecls", () => {
     const out = schemasToDecls(m.components?.schemas ?? {})
       .map(printDecl)
       .join("\n");
-    assert.match(out, /type WebhookAssetShotsStatus string/);
-    assert.match(out, /type WebhookAssetShotsStatus2 string/);
-    assert.match(out, /Status \*WebhookAssetShotsStatus2/);
+    assert.match(out, /type +WebhookAssetShotsStatus +string/);
+    assert.match(out, /type +WebhookAssetShotsStatus2 +string/);
+    assert.match(out, /Status +\*WebhookAssetShotsStatus2/);
   });
 });

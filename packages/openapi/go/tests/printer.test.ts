@@ -35,11 +35,11 @@ describe("printer", () => {
       ],
     });
     const out = printFile(file);
-    assert.match(out, /^package petstore\n/);
-    assert.match(out, /type Pet struct \{/);
-    assert.match(out, /\tId \*int64 `json:"id,omitempty"`/);
-    assert.match(out, /\tName string `json:"name"`/);
-    assert.match(out, /\tTags \[\]Tag `json:"tags,omitempty"`/);
+    assert.match(out, /^package +petstore\n/);
+    assert.match(out, /type +Pet +struct +\{/);
+    assert.match(out, /\tId +\*int64 +`json:"id,omitempty"`/);
+    assert.match(out, /\tName +string +`json:"name"`/);
+    assert.match(out, /\tTags +\[\]Tag +`json:"tags,omitempty"`/);
   });
 
   it("emits an interface with method signatures", () => {
@@ -64,10 +64,10 @@ describe("printer", () => {
       ],
     });
     const out = printFile(file);
-    assert.match(out, /import "context"/);
+    assert.match(out, /import +"context"/);
     assert.match(
       out,
-      /type PetAPI interface \{\n\t\/\/ GET \/pet\/\{id\}\n\tGetPet\(ctx context\.Context, id int64\) \(\*Pet, error\)\n\}/,
+      /type +PetAPI +interface +\{\n\t\/\/ +GET +\/pet\/\{id\}\n\tGetPet\(ctx +context\.Context, +id +int64\) +\(\*Pet, +error\)\n\}/,
     );
   });
 
@@ -86,7 +86,7 @@ describe("printer", () => {
     });
     assert.match(
       printFile(file),
-      /func Execute\[T any\]\(v T\) \(T, error\) \{\}/,
+      /func +Execute\[T +any\]\(v +T\) +\(T, +error\) +\{\}/,
     );
   });
 
@@ -99,7 +99,7 @@ describe("printer", () => {
     const out = printFile(file);
     assert.match(
       out,
-      /import \(\n\t"fmt"\n\t"net\/http"\n\n\t"github\.com\/example\/foo"\n\)/,
+      /import +\(\n\t"fmt"\n\t"net\/http"\n\n\t"github\.com\/example\/foo"\n\)/,
     );
   });
 
@@ -114,7 +114,7 @@ describe("printer", () => {
         }),
       ],
     });
-    assert.match(printFile(single), /func F\(\) int \{\}/);
+    assert.match(printFile(single), /func +F\(\) +int +\{\}/);
 
     const multi = goFile({
       pkg: "x",
@@ -126,6 +126,6 @@ describe("printer", () => {
         }),
       ],
     });
-    assert.match(printFile(multi), /func G\(\) \(int, error\) \{\}/);
+    assert.match(printFile(multi), /func +G\(\) +\(int, +error\) +\{\}/);
   });
 });
