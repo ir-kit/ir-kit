@@ -168,7 +168,7 @@ describe("schemasToDecls", () => {
     assert.match(out, /public val id: String,/);
   });
 
-  it("rejects enums whose normalized entry names collide", () => {
+  it("disambiguates enum entries whose normalized names collide", () => {
     const m = ir({
       components: {
         schemas: {
@@ -176,10 +176,11 @@ describe("schemasToDecls", () => {
         },
       },
     });
-    assert.throws(
-      () => schemasToDecls(m.components?.schemas ?? {}),
-      /entry name "USER" collides/,
-    );
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /USER\("USER"\)/);
+    assert.match(out, /USER_2\("user"\)/);
   });
 
   it("degrades integer-valued enum schemas to a Int typealias", () => {
@@ -196,17 +197,19 @@ describe("schemasToDecls", () => {
     assert.match(out, /typealias Rotate = Int/);
   });
 
-  it("rejects enums with mixed string + integer members", () => {
+  it("degrades mixed / boolean enums to their value type", () => {
     const m = ir({
       components: {
         schemas: {
           Mixed: { type: "string", enum: ["a", 1] },
+          Flag: { type: "boolean", enum: [true, false] },
         },
       },
     });
-    assert.throws(
-      () => schemasToDecls(m.components?.schemas ?? {}),
-      /must all be strings or all integers/,
-    );
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /typealias Mixed = /);
+    assert.match(out, /typealias Flag = Boolean/);
   });
 });

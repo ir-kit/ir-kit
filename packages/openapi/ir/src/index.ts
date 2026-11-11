@@ -11,7 +11,6 @@ export type {
   UnionShape,
 } from "@ir-kit/schema";
 export {
-  assertNoEnumCollisions,
   classifyEnumLiterals,
   classifyObject,
   classifyUnion,
@@ -25,6 +24,7 @@ export {
   primitiveTag,
   refName,
   typeList,
+  uniqueEnumEntries,
 } from "@ir-kit/schema";
 export { fromHeyApi } from "@ir-kit/schema/adapters/heyapi";
 export type { BodyShape, ClassifiedBody } from "./operation/body.js";
@@ -71,4 +71,9 @@ export { isMeaningless } from "./spec/ref.js";
 export { extractSecuritySchemeNames, securityKey } from "./spec/security.js";
 export type { TypeCtx } from "./type/context.js";
 export type { SchemaToTypeOps } from "./type/dispatch.js";
-export { schemaToType } from "./type/dispatch.js";
+export {
+  enumType,
+  schemaToType,
+  schemaTypeName,
+  synthTypeName,
+} from "./type/dispatch.js";

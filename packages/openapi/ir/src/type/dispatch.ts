@@ -1,3 +1,4 @@
+import type { Namespace } from "@ir-kit/codegen-core";
 import {
   classifyEnumLiterals,
   classifyObject,
@@ -59,11 +60,13 @@ export interface SchemaToTypeOps<T, D> {
     name: string,
     raws: ReadonlyArray<string>,
     emit: (d: D) => void,
+    names: Namespace,
   ): T;
   emitIntegerEnum(
     name: string,
     raws: ReadonlyArray<number>,
     emit: (d: D) => void,
+    names: Namespace,
   ): T;
 }
 
@@ -95,7 +98,7 @@ export function inlineObjectType<T, D>(
   const shape = classifyObject(schema);
   switch (shape.kind) {
     case "named-struct": {
-      const name = ops.synthName(ctx.ownerName, ctx.propPath);
+      const name = synthTypeName(ctx, ops);
       const properties = Array.from(iterateObjectProperties(schema));
       ctx.emit(ops.buildStructDecl(name, properties, ctx, dispatch));
       return ops.refType(name);
@@ -127,21 +130,21 @@ export function schemaToType<T, D>(
 ): T {
   const dispatch = (s: Schema, c: TypeCtx<D>): T => schemaToType(s, c, ops);
 
-  if (schema.$ref) return ops.refType(refName(schema.$ref));
+  if (schema.$ref)
+    return ops.refType(schemaTypeName(ctx.names, refName(schema.$ref)));
 
   const enumValues = extractEnumValues(schema);
   if (enumValues && enumValues.length > 0) {
-    const name = ops.synthName(ctx.ownerName, ctx.propPath);
-    const filtered = enumValues.filter(
+    const literals = enumValues.filter(
       (v): v is EnumLiteral =>
         typeof v === "string" ||
         typeof v === "number" ||
         typeof v === "boolean",
     );
-    const kind = classifyEnumLiterals(filtered, name);
-    if (kind === "integer")
-      return ops.emitIntegerEnum(name, filtered as number[], ctx.emit);
-    return ops.emitStringEnum(name, filtered as string[], ctx.emit);
+    const kind = classifyEnumLiterals(literals);
+    const name =
+      kind === "string" || kind === "integer" ? synthTypeName(ctx, ops) : "";
+    return enumType(name, literals, ops, ctx).type;
   }
 
   if (isUnionShape(schema)) return unionToType(schema, ctx, ops, dispatch);
@@ -165,5 +168,60 @@ export function schemaToType<T, D>(
       return ops.nullableAnyType();
     default:
       return ops.anyType();
+  }
+}
+
+/** Type name for the component schema `rawName` (`#/components/schemas/<rawName>`). */
+export function schemaTypeName(names: Namespace, rawName: string): string {
+  return names.claim(`schema:${rawName}`, rawName);
+}
+
+/** Type name for the inline schema at `ctx.ownerName` + `ctx.propPath`. */
+export function synthTypeName<T, D>(
+  ctx: TypeCtx<D>,
+  ops: Pick<SchemaToTypeOps<T, D>, "synthName">,
+  path: ReadonlyArray<string> = ctx.propPath,
+): string {
+  return ctx.names.claim(
+    `synth:${ctx.ownerName}/${path.join("/")}`,
+    ops.synthName(ctx.ownerName, path),
+  );
+}
+
+/**
+ * Map enum literals onto a target type. String / integer domains emit a
+ * named enum (`named: true`); number / boolean domains become the
+ * matching primitive and mixed domains the untyped fallback — those
+ * leave `name` unused so the caller decides whether to alias it.
+ */
+export function enumType<T, D>(
+  name: string,
+  literals: ReadonlyArray<EnumLiteral>,
+  ops: SchemaToTypeOps<T, D>,
+  { emit, names }: Pick<TypeCtx<D>, "emit" | "names">,
+): { type: T; named: boolean } {
+  switch (classifyEnumLiterals(literals)) {
+    case "string":
+      return {
+        type: ops.emitStringEnum(name, literals as string[], emit, names),
+        named: true,
+      };
+    case "integer":
+      return {
+        type: ops.emitIntegerEnum(name, literals as number[], emit, names),
+        named: true,
+      };
+    case "number":
+      return {
+        type: ops.primitiveType({ type: "number" }) ?? ops.anyType(),
+        named: false,
+      };
+    case "boolean":
+      return {
+        type: ops.primitiveType({ type: "boolean" }) ?? ops.anyType(),
+        named: false,
+      };
+    case "mixed":
+      return { type: ops.anyType(), named: false };
   }
 }

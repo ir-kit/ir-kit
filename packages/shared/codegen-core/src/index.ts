@@ -8,4 +8,6 @@ export {
   safeIdent,
   softCamel,
   synthName,
+  typeIdent,
 } from "./identifiers.js";
+export { Namespace, type NamingPolicy } from "./namespace.js";

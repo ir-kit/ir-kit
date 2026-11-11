@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { classifyReturnShape } from "@ir-kit/openapi";
+import { classifyReturnShape, synthTypeName } from "@ir-kit/openapi";
 
 import {
   type GoType,
@@ -67,7 +67,7 @@ export function returnTypeFor(
       return { type: finalType, cases: [] };
     }
     case "multi": {
-      const ifaceName = synthName(ctx.ownerName, ["Response"]);
+      const ifaceName = synthTypeName(ctx, { synthName }, ["Response"]);
       const markerMethod = `is${ifaceName}`;
       const cases: ResponseCase[] = shape.cases.map(
         ({ statusCode, schema }) => {

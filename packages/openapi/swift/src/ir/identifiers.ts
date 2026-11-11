@@ -1,7 +1,9 @@
 import {
   avoidLeadingDigit,
   escapeIfReserved,
+  Namespace,
   softCamel,
+  typeIdent,
 } from "@ir-kit/codegen-core";
 
 /**
@@ -114,3 +116,8 @@ const SWIFT_RESERVED_KEYWORDS: ReadonlySet<string> = new Set([
   "weak",
   "willSet",
 ]);
+
+/** Owns every top-level Swift type name for one generation run. */
+export function newTypeNames(): Namespace {
+  return new Namespace({ normalize: typeIdent });
+}

@@ -513,6 +513,45 @@ export function apiClientGo(opts: RuntimeOpts): string {
 }
 
 /** Ordered runtime files. The orchestrator places them in the SDK package. */
+/** Package-scope identifiers the runtime files declare. Generated
+ *  declarations must never reuse them. */
+export const GO_RUNTIME_IDENTIFIERS: ReadonlySet<string> = new Set([
+  "APIClient",
+  "APIError",
+  "APIErrorKind",
+  "APIErrorKindClient",
+  "APIErrorKindDecoding",
+  "APIErrorKindEncoding",
+  "APIErrorKindServer",
+  "APIErrorKindTransport",
+  "APIErrorKindUnexpected",
+  "APIKeyAuth",
+  "APIKeyCookie",
+  "APIKeyHeader",
+  "APIKeyLocation",
+  "APIKeyQuery",
+  "Auth",
+  "BasicAuth",
+  "BearerAuth",
+  "Execute",
+  "ExecuteRaw",
+  "ExecuteUnit",
+  "ExecuteUnitWithResponse",
+  "ExecuteWithResponse",
+  "HTTPError",
+  "MultipartFormBody",
+  "NewAPIClient",
+  "NewMultipartFormBody",
+  "QueryStyle",
+  "QueryStyleForm",
+  "QueryStylePipeDelimited",
+  "QueryStyleSpaceDelimited",
+  "RequestOptions",
+  "URLEncoding",
+  "Unexpected",
+  "Wrap",
+]);
+
 export function buildRuntimeFiles(
   opts: RuntimeOpts,
   pkg: string,

@@ -8,8 +8,15 @@
  * `propPath` drive deterministic names for those synthesised types
  * (e.g. `Owner_Path`).
  */
+import type { Namespace } from "@ir-kit/codegen-core";
+
 export interface TypeCtx<D> {
   emit: (d: D) => void;
+  /** Owns every top-level type name for one generation run. Component
+   *  schemas, `$ref`s and synthesized inline types all resolve through
+   *  it, so a name is spelled the same at every site and never declared
+   *  twice. */
+  names: Namespace;
   /** Used to synthesise names for inline objects/enums: `Owner_Path`. */
   ownerName: string;
   propPath: ReadonlyArray<string>;

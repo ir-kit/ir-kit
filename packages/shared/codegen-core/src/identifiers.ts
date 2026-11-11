@@ -80,3 +80,17 @@ export function escapeIfReserved(
 export function synthName(owner: string, path: ReadonlyArray<string>): string {
   return [owner, ...path.map(pascal)].join("_");
 }
+
+/**
+ * PascalCase that keeps `_` as a word separator (`Owner_Path` stays
+ * intact) while collapsing every other non-alphanumeric run. Leading
+ * digits get a `_` prefix. Empty results become `"Empty"`.
+ */
+export function typeIdent(s: string): string {
+  const p = s
+    .replace(/^[^a-zA-Z0-9_]+/, "")
+    .replace(/[^a-zA-Z0-9_]+$/, "")
+    .replace(/[^a-zA-Z0-9_]+(.)/g, (_, c: string) => c.toUpperCase())
+    .replace(/^./, (c) => c.toUpperCase());
+  return avoidLeadingDigit(p) || "Empty";
+}

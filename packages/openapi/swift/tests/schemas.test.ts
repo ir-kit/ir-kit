@@ -254,13 +254,16 @@ describe("schemas (IR-driven)", () => {
     assert.match(out, /case _270 = 270/);
   });
 
-  it("rejects enums with mixed string + integer members", () => {
-    assert.throws(
-      () =>
-        decls({
+  it("degrades mixed / boolean enums to their value type", () => {
+    const out = printFile(
+      swFile({
+        decls: decls({
           Mixed: { type: "string", enum: ["a", 1] },
+          Flag: { type: "boolean", enum: [true, false] },
         }),
-      /must all be strings or all integers/,
+      }),
     );
+    assert.match(out, /typealias Mixed = /);
+    assert.match(out, /typealias Flag = Bool/);
   });
 });

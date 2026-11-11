@@ -1,8 +1,4 @@
-import {
-  assertNoEnumCollisions,
-  type Schema,
-  type SchemaToTypeOps,
-} from "@ir-kit/openapi";
+import { type Schema, type SchemaToTypeOps } from "@ir-kit/openapi";
 
 import type { GoDecl } from "../go-dsl/decl/types.js";
 import {
@@ -63,6 +59,7 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
         const naming = propertyName(jsonKey);
         const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
+          names: ctx.names,
           ownerName: name,
           propPath: [propPathSegment],
         });
@@ -77,12 +74,16 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
     );
     return goStruct({ name, fields });
   },
-  emitStringEnum: (name, rawValues, emit) => {
-    const entries = rawValues.map((raw) => ({
-      identifier: `${name}${enumEntrySuffix(raw)}`,
+  // Go consts share the package scope with types, so entry names are
+  // claimed in the same namespace as every type name.
+  emitStringEnum: (name, rawValues, emit, names) => {
+    const entries = [...new Set(rawValues)].map((raw) => ({
       raw,
+      identifier: names.claim(
+        `enum:${name}/${raw}`,
+        `${name}${enumEntrySuffix(raw)}`,
+      ),
     }));
-    assertNoEnumCollisions(name, entries);
     emit(goTypeAlias({ name, type: goString }));
     emit(
       goConstBlock({
@@ -95,12 +96,14 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
     );
     return goRef(name);
   },
-  emitIntegerEnum: (name, rawValues, emit) => {
-    const entries = rawValues.map((raw) => ({
-      identifier: `${name}${integerEntrySuffix(raw)}`,
+  emitIntegerEnum: (name, rawValues, emit, names) => {
+    const entries = [...new Set(rawValues)].map((raw) => ({
       raw,
+      identifier: names.claim(
+        `enum:${name}/${raw}`,
+        `${name}${integerEntrySuffix(raw)}`,
+      ),
     }));
-    assertNoEnumCollisions(name, entries);
     emit(goTypeAlias({ name, type: goInt }));
     emit(
       goConstBlock({
