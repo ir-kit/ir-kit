@@ -25,8 +25,9 @@ export interface OperationSignature {
   /** Same name pre-PascalCase — used for synth naming of inline types. */
   ownerName: string;
   params: ReadonlyArray<GoFuncParam>;
-  /** `undefined` means "no return value, only error" — the function
-   *  results list is just `error`. */
+  /** Final Go result type: `*T` for a single struct/alias payload, the
+   *  bare interface for multi-2xx; `undefined` means the results
+   *  list is just `error`. */
   returnType: GoType | undefined;
   doc: string;
   locatedParams: ReadonlyArray<LocatedParam>;

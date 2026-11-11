@@ -114,8 +114,7 @@ function buildInterfaceMethod(
 ): GoMethodSignature {
   const name = withResponse ? `${sig.name}WithResponse` : sig.name;
   const results: GoFuncResult[] = [];
-  if (sig.returnType)
-    results.push(goFuncResult(returnTypeShape(sig.returnType)));
+  if (sig.returnType) results.push(goFuncResult(sig.returnType));
   if (withResponse) results.push(goFuncResult(goPtr(goRef("http.Response"))));
   results.push(goFuncResult(goError));
   return goMethodSig(
@@ -124,10 +123,6 @@ function buildInterfaceMethod(
     results,
     sig.doc,
   );
-}
-
-function returnTypeShape(t: GoType): GoType {
-  return t.kind === "ref" ? goPtr(t) : t;
 }
 
 function hasSecurity(sig: OperationSignature): boolean {

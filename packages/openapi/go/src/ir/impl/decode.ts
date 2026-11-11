@@ -86,7 +86,7 @@ function buildMultiResponseStmts(
 ): ReadonlyArray<GoStmt> {
   return [
     goShort(
-      ["body", "resp", "err"],
+      ["respBody", "resp", "err"],
       [goCall(goIdent("ExecuteRaw"), [clientArg(), reqArg(), optsArg()])],
     ),
     errCheck("transport"),
@@ -128,15 +128,18 @@ function caseBody(
   ]);
   return [
     goVar("value", underlying),
-    goShort(
-      ["err"],
-      [
+    // Assign, don't redeclare: `err` is the named result and the bare
+    // `return` in errCheck must see it.
+    {
+      kind: "assign",
+      targets: [goIdent("err")],
+      values: [
         goCall(goSelector(goIdent("json"), "Unmarshal"), [
-          { expr: goIdent("body") },
+          { expr: goIdent("respBody") },
           { expr: { kind: "unary", op: "&", operand: goIdent("value") } },
         ]),
       ],
-    ),
+    },
     errCheck("decoding"),
     goReturn(withResponse ? [result, goIdent("resp"), goNil] : [result, goNil]),
   ];
@@ -145,7 +148,7 @@ function caseBody(
 function defaultBranch(withResponse: boolean): GoStmt {
   const apiErr = goCall(goIdent("Unexpected"), [
     { expr: goSelector(goIdent("resp"), "StatusCode") },
-    { expr: goIdent("body") },
+    { expr: goIdent("respBody") },
   ]);
   return withResponse
     ? goReturn([goNil, goNil, apiErr])

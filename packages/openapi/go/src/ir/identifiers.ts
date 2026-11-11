@@ -27,7 +27,7 @@ import { GO_RUNTIME_IDENTIFIERS } from "./runtime/templates.js";
 export function paramIdent(name: string): string {
   return escapeIfReserved(
     avoidLeadingDigit(camel(name)),
-    GO_RESERVED_KEYWORDS,
+    GO_PARAM_RESERVED,
     (s) => `${s}_`,
   );
 }
@@ -99,3 +99,43 @@ export function newTypeNames(): Namespace {
     reserved: GO_RUNTIME_IDENTIFIERS,
   });
 }
+
+/**
+ * Function-scope identifiers every generated method body declares, plus
+ * the packages generated files import. A parameter spelled like one of
+ * these would shadow it (`path` hides `path.Join`, `body` collides with
+ * `body, resp, err := ExecuteRaw(...)`).
+ */
+const GO_BODY_SCOPE: ReadonlyArray<string> = [
+  "body",
+  "client",
+  "ctx",
+  "err",
+  "form",
+  "multipart",
+  "opts",
+  "payload",
+  "q",
+  "req",
+  "resp",
+  "respBody",
+  "result",
+  "u",
+  "bytes",
+  "context",
+  "errors",
+  "fmt",
+  "http",
+  "io",
+  "json",
+  "path",
+  "strconv",
+  "strings",
+  "time",
+  "url",
+];
+
+const GO_PARAM_RESERVED: ReadonlySet<string> = new Set([
+  ...GO_RESERVED_KEYWORDS,
+  ...GO_BODY_SCOPE,
+]);
