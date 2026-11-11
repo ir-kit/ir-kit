@@ -335,4 +335,30 @@ describe("struct type via type declaration", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "grouped-field-names.go");
   });
+
+  it("field comments keep column alignment", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          "Pet",
+          go.factory.createStructType([
+            {
+              leadingComments: ["Unique identifier."],
+              names: ["ID"],
+              tag: 'json:"id"',
+              type: go.factory.createIdentifier("int64"),
+            },
+            {
+              names: ["DisplayName"],
+              tag: 'json:"display_name,omitempty"',
+              type: go.factory.createPointerType(
+                go.factory.createIdentifier("string"),
+              ),
+            },
+          ]),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "field-comments.go");
+  });
 });

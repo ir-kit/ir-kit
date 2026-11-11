@@ -7,6 +7,7 @@ type Shape interface {
 	Scale(factor float64)
 	Move(x int, y int)
 }
+
 type Rectangle struct {
 	W float64
 	H float64

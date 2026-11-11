@@ -6,6 +6,7 @@ type Person struct {
 	Name string
 	Age  int
 }
+
 type Employee struct {
 	Person
 	Salary float64
