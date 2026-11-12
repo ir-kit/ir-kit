@@ -6,7 +6,14 @@
 
 const INT_RE = /^\d+$/;
 const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const HEX_ID_RE = /^[0-9a-f]{16,}$/i;
+
+/** Segments that are identifiers on their own, without needing peers to vary: integers, UUIDs, long hex ids. */
+function isStrongId(value: string): boolean {
+  return INT_RE.test(value) || UUID_RE.test(value) || HEX_ID_RE.test(value);
+}
+
 // "ID-like" = numeric, UUID, or a slug containing at least one digit (`item-12ab`).
 // Pure-alphabetic words like `active`, `me`, `latest` are NOT id-like — leaving
 // them as literal segments avoids the `/users/active` vs `/users/123` collision.
@@ -27,17 +34,48 @@ export function templateSinglePath(pathname: string): TemplatedPath {
 }
 
 /**
- * Template `rawPath` against its peers in `allPaths`, clustered by segment
- * count so we only attempt to unify shape-compatible paths. Falls back to
- * single-path mode if templating can't safely unify.
+ * Template `rawPath` segment by segment. A segment becomes a parameter when it
+ * is a strong id (integer, UUID, long hex) on its own, or when it is id-like
+ * and peers with the same shape and prefix carry other id-like values there.
+ * Other segments stay literal, so `/users/me` and `/users/{userId}` coexist.
  */
 export function templatePathFor(
   rawPath: string,
   allPaths: ReadonlyArray<string>,
 ): TemplatedPath {
-  const segCount = rawPath.split("/").length;
-  const sameShape = allPaths.filter((p) => p.split("/").length === segCount);
-  return templatePaths(sameShape) ?? templateSinglePath(rawPath);
+  const segs = rawPath.split("/");
+  const peers = allPaths
+    .map((p) => p.split("/"))
+    .filter((p) => p.length === segs.length);
+  const segments: string[] = [];
+  const paramTypes: Record<string, "string" | "integer"> = {};
+  const usedNames = new Set<string>();
+
+  segs.forEach((value, i) => {
+    const varied = peers
+      .filter((peer) =>
+        segments.every((seg, j) =>
+          seg.startsWith("{") ? isIdLike(peer[j]) : peer[j] === seg,
+        ),
+      )
+      .map((peer) => peer[i])
+      .filter((v) => v !== value && isIdLike(v));
+    const isParam =
+      value !== "" &&
+      (isStrongId(value) || (isIdLike(value) && varied.length > 0));
+    if (!isParam) {
+      segments.push(value);
+      return;
+    }
+    const name = paramNameFromContext(segments, usedNames);
+    usedNames.add(name);
+    paramTypes[name] = [value, ...varied].every((v) => INT_RE.test(v))
+      ? "integer"
+      : "string";
+    segments.push(`{${name}}`);
+  });
+
+  return { template: segments.join("/"), paramTypes };
 }
 
 /**
