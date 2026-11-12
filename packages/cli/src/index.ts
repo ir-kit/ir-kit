@@ -6,6 +6,7 @@ export type {
 export { reconCommand } from "./commands/recon.js";
 export { sdkAllCommand } from "./commands/sdk-all.js";
 export { sdkGoCommand } from "./commands/sdk-go.js";
+export { sdkJavaCommand } from "./commands/sdk-java.js";
 export { sdkK6Command } from "./commands/sdk-k6.js";
 export { sdkKotlinCommand } from "./commands/sdk-kotlin.js";
 export { sdkSwiftCommand } from "./commands/sdk-swift.js";

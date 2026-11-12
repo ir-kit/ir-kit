@@ -10,6 +10,7 @@ import { k6SyncCommand } from "./commands/k6-sync.js";
 import { reconCommand } from "./commands/recon.js";
 import { sdkAllCommand } from "./commands/sdk-all.js";
 import { sdkGoCommand } from "./commands/sdk-go.js";
+import { sdkJavaCommand } from "./commands/sdk-java.js";
 import { sdkK6Command } from "./commands/sdk-k6.js";
 import { sdkKotlinCommand } from "./commands/sdk-kotlin.js";
 import { sdkSwiftCommand } from "./commands/sdk-swift.js";
@@ -30,6 +31,7 @@ await runCli({
     sdkGoCommand,
     sdkKotlinCommand,
     sdkSwiftCommand,
+    sdkJavaCommand,
     sdkTypescriptCommand,
     sdkK6Command,
     sdkAllCommand,
