@@ -32,7 +32,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.execute(
       request, as: [String: Int32].self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -58,7 +59,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.executeWithResponse(
       request, as: [String: Int32].self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -82,7 +84,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.execute(
       request, as: Order.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -106,7 +109,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.executeWithResponse(
       request, as: Order.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -128,7 +132,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.execute(
       request, as: Order.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -150,7 +155,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.executeWithResponse(
       request, as: Order.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -215,7 +221,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.execute(
       request, as: CreateShapeResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -239,7 +246,8 @@ public final class URLSessionStoreAPI: StoreAPI {
     }
     return try await client.executeWithResponse(
       request, as: CreateShapeResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
