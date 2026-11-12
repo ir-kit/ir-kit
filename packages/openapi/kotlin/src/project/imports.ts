@@ -41,7 +41,13 @@ export function referencedNames(
  */
 export function importsFor(
   names: ReadonlySet<string>,
-  ctx: { isApiSurface: boolean; rootPkg: string; subPkg: string },
+  ctx: {
+    isApiSurface: boolean;
+    /** Package of every generated declaration, by name. */
+    declared: ReadonlyMap<string, string>;
+    rootPkg: string;
+    subPkg: string;
+  },
 ): ReadonlyArray<string> {
   const set = new Set<string>();
   const when = (name: string, imp: string) => {
@@ -70,78 +76,14 @@ export function importsFor(
     when("FormBody", "okhttp3.FormBody");
     when("toMediaType", "okhttp3.MediaType.Companion.toMediaType");
     when("toRequestBody", "okhttp3.RequestBody.Companion.toRequestBody");
-    if (
-      ctx.subPkg === `${ctx.rootPkg}.api` &&
-      [...names].some((n) => /^[A-Z]/.test(n) && !NON_MODEL_TYPES.has(n))
-    ) {
-      set.add(`${ctx.rootPkg}.models.*`);
-    }
+  }
+  for (const name of names) {
+    const pkg = ctx.declared.get(name);
+    if (pkg && pkg !== ctx.subPkg) set.add(`${pkg}.${name}`);
   }
 
   return [...set].filter((i) => !i.startsWith(`${ctx.subPkg}.`)).sort();
 }
-
-/**
- * Identifiers that ship in `kotlin.*` / `okhttp3.*` / kotlinx — and so
- * do NOT trigger a `<root>.models.*` import. Used to keep the wildcard
- * model import out of files that never actually reference user types.
- */
-const NON_MODEL_TYPES = new Set([
-  // Kotlin stdlib
-  "Any",
-  "Unit",
-  "Nothing",
-  "String",
-  "Int",
-  "Long",
-  "Short",
-  "Byte",
-  "Double",
-  "Float",
-  "Boolean",
-  "ByteArray",
-  "List",
-  "Map",
-  "Pair",
-  "Triple",
-  "Throwable",
-  "Exception",
-  "RuntimeException",
-  "Result",
-  "Charsets",
-  "Base64",
-  "TimeUnit",
-  // kotlinx
-  "Instant",
-  "LocalDate",
-  "JsonElement",
-  "Json",
-  "Dispatchers",
-  "Serializable",
-  "SerialName",
-  "ListSerializer",
-  "MapSerializer",
-  "ByteArraySerializer",
-  // OkHttp
-  "HttpUrl",
-  "Request",
-  "Response",
-  "OkHttpClient",
-  "FormBody",
-  "MultipartBody",
-  "RequestBody",
-  "MediaType",
-  // Runtime helpers (same package)
-  "APIClient",
-  "APIError",
-  "APIInterceptors",
-  "Auth",
-  "APIKeyLocation",
-  "MultipartFormBody",
-  "QueryStyle",
-  "RequestOptions",
-  "URLEncoding",
-]);
 
 /** API-surface predicate, exposed for the build orchestrator. */
 export function isApiSurface(decl: KtDecl): boolean {

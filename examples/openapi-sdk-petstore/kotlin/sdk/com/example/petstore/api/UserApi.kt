@@ -1,6 +1,8 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.UpdateProfileBody
+import com.example.petstore.models.UpdateProfileResponse
+import com.example.petstore.models.User
 import okhttp3.Response
 
 public interface UserApi {
@@ -88,13 +90,13 @@ public interface UserApi {
 
     /** POST /profile */
     suspend fun updateProfile(
-        body: UpdateProfile_Body,
+        body: UpdateProfileBody,
         options: RequestOptions,
-    ): UpdateProfile_Response
+    ): UpdateProfileResponse
 
     /** POST /profile */
     suspend fun updateProfileWithResponse(
-        body: UpdateProfile_Body,
+        body: UpdateProfileBody,
         options: RequestOptions,
-    ): Pair<UpdateProfile_Response, Response>
+    ): Pair<UpdateProfileResponse, Response>
 }

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class Circle(
-    public val kind: Circle_Kind,
+    public val kind: CircleKind,
     public val radius: Double,
 )

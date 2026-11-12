@@ -23,6 +23,8 @@ export interface ResolvedReturn {
    * dispatches on `response.code`.
    */
   cases: ReadonlyArray<ResponseCase>;
+  /** Name of the emitted sealed class, for multi-2xx ops. */
+  sealedName?: string;
 }
 
 export function returnTypeFor(
@@ -36,7 +38,10 @@ export function returnTypeFor(
     case "single":
       return { type: schemaToType(shape.schema, ctx), cases: [] };
     case "multi": {
-      const sealedName = synthName(ctx.ownerName, ["response"]);
+      const sealedName = ctx.names.claim(
+        `synth:${ctx.ownerName}/response`,
+        synthName(ctx.ownerName, ["response"]),
+      );
       const cases: ResponseCase[] = shape.cases.map(
         ({ statusCode, schema }) => {
           const caseName = `Status${statusCode}`;
@@ -67,7 +72,7 @@ export function returnTypeFor(
           ),
         }),
       );
-      return { type: ktRef(sealedName), cases };
+      return { type: ktRef(sealedName), cases, sealedName };
     }
   }
 }

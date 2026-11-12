@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class FindPetsByStatus_Param_Status(
+public enum class FindPetsByStatusParamStatus(
     public val raw: String,
 ) {
     @SerialName("available")

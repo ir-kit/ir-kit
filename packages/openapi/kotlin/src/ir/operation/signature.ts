@@ -30,6 +30,7 @@ export interface OperationSignature {
   pathStr: string;
   securitySchemeNames: ReadonlyArray<string>;
   responseCases: ReadonlyArray<ResponseCase>;
+  sealedName?: string;
 }
 
 /**
@@ -64,7 +65,11 @@ export function operationSignature(
   const { params: nonBody, located } = buildNonBodyParams(op, ctx);
   const bodyParams = op.body ? buildBodyParams(op.body, ctx) : [];
   const params = [...nonBody, ...bodyParams, optionsParam()];
-  const { type: returnType, cases: responseCases } = returnTypeFor(op, {
+  const {
+    type: returnType,
+    cases: responseCases,
+    sealedName,
+  } = returnTypeFor(op, {
     ...ctx,
     propPath: ["response"],
   });
@@ -74,6 +79,7 @@ export function operationSignature(
     ownerName,
     params,
     returnType,
+    sealedName,
     doc: operationDocLine(method, pathStr),
     locatedParams: located,
     op,

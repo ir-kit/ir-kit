@@ -214,7 +214,7 @@ describe("operationsToDecls", () => {
     const sealed = decls.find((d) => d.kind === "sealedClass");
     assert.ok(sealed);
     const out = printDecl(sealed!);
-    assert.match(out, /sealed class SubmitJob_Response/);
+    assert.match(out, /sealed class SubmitJobResponse/);
     assert.match(out, /data class Status200\(/);
     assert.match(out, /data class Status202\(/);
     assert.match(out, /object Status204 :/);
@@ -224,7 +224,7 @@ describe("operationsToDecls", () => {
     assert.match(implOut, /executeRaw/);
     assert.match(implOut, /when \(response\.code\)/);
     assert.match(implOut, /200 ->/);
-    assert.match(implOut, /SubmitJob_Response\.Status204/);
+    assert.match(implOut, /SubmitJobResponse\.Status204/);
   });
 
   it("auto-wires security: walks scheme names and applies via Auth.apply", () => {

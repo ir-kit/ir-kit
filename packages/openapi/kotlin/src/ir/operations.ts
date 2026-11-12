@@ -18,7 +18,7 @@ import {
   ktReturn,
   ktTopLevelFun,
 } from "../ast/index.js";
-import { newTypeNames } from "./identifiers.js";
+import { kotlinTypeIdent, newTypeNames } from "./identifiers.js";
 import { buildClientClass } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -74,7 +74,7 @@ export function operationsToDecls(
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
   const interfaceName =
-    opts.interfaceName ?? ((tag: string) => `${pascal(tag)}Api`);
+    opts.interfaceName ?? ((tag: string) => kotlinTypeIdent(`${tag} Api`));
   const clientClassName = opts.clientClassName ?? ((p: string) => `OkHttp${p}`);
 
   const decls: KtDecl[] = [];

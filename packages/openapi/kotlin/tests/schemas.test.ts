@@ -121,7 +121,7 @@ describe("schemasToDecls", () => {
     assert.match(out, /public val big: Long,/);
   });
 
-  it("inlines nested object schemas as Owner_Property data classes", () => {
+  it("inlines nested object schemas as OwnerProperty data classes", () => {
     const m = ir({
       components: {
         schemas: {
@@ -141,7 +141,7 @@ describe("schemasToDecls", () => {
     });
     const decls = schemasToDecls(m.components?.schemas ?? {});
     const names = decls.map((d) => d.name);
-    assert.deepEqual(names.sort(), ["User", "User_Address"]);
+    assert.deepEqual(names.sort(), ["User", "UserAddress"]);
   });
 
   it("maps date-time / date formats to Instant / LocalDate; uuid → String", () => {

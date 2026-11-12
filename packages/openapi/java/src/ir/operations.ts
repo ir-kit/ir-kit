@@ -14,7 +14,7 @@ import {
   jMethodCall,
   jReturn,
 } from "../ast/index.js";
-import { newTypeNames } from "./identifiers.js";
+import { javaTypeIdent, newTypeNames } from "./identifiers.js";
 import { buildClientClass, withResponseType } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -41,7 +41,8 @@ export function operationsToDecls(
   opts: OperationsOptions = {},
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
-  const interfaceName = opts.interfaceName ?? ((tag) => `${pascal(tag)}Api`);
+  const interfaceName =
+    opts.interfaceName ?? ((tag) => javaTypeIdent(`${tag} Api`));
   const clientClassName = opts.clientClassName ?? ((i) => `Http${i}`);
   const names = opts.names ?? newTypeNames();
   const decls: JEmitted[] = [];

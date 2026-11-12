@@ -362,11 +362,14 @@ export function ktDataClass(
     kind: "dataClass",
     name: opts.name,
     runtime: opts.runtime,
+    // A data class needs at least one constructor property.
     node: f.createClassDeclaration(
       opts.name,
-      primaryConstructor(opts.properties),
+      opts.properties.length ? primaryConstructor(opts.properties) : undefined,
       opts.funs,
-      [opts.visibility ?? "public", "data"],
+      opts.properties.length
+        ? [opts.visibility ?? "public", "data"]
+        : [opts.visibility ?? "public"],
       opts.annotations,
       superTypes(opts.superTypes),
     ),

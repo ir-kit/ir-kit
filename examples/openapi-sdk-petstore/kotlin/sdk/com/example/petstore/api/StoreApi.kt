@@ -1,6 +1,8 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.CreateShapeResponse
+import com.example.petstore.models.Order
+import com.example.petstore.models.SubmitMeasurementBody
 import okhttp3.Response
 
 public interface StoreApi {
@@ -50,23 +52,23 @@ public interface StoreApi {
     suspend fun createShape(
         body: ByteArray,
         options: RequestOptions,
-    ): CreateShape_Response
+    ): CreateShapeResponse
 
     /** POST /shapes */
     suspend fun createShapeWithResponse(
         body: ByteArray,
         options: RequestOptions,
-    ): Pair<CreateShape_Response, Response>
+    ): Pair<CreateShapeResponse, Response>
 
     /** POST /measurements */
     suspend fun submitMeasurement(
-        body: SubmitMeasurement_Body,
+        body: SubmitMeasurementBody,
         options: RequestOptions,
     )
 
     /** POST /measurements */
     suspend fun submitMeasurementWithResponse(
-        body: SubmitMeasurement_Body,
+        body: SubmitMeasurementBody,
         options: RequestOptions,
     ): Response
 }

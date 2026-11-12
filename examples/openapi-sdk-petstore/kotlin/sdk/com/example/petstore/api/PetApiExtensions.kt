@@ -1,6 +1,10 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.ApiResponse
+import com.example.petstore.models.FindPetsByStatusParamStatus
+import com.example.petstore.models.Pet
+import com.example.petstore.models.SubmitTagsBody
+import com.example.petstore.models.SubmitTagsResponse
 import okhttp3.Response
 
 /** POST /pet */
@@ -18,11 +22,11 @@ public suspend fun PetApi.updatePetWithResponse(body: Pet): Pair<Pet, Response> 
     this.updatePetWithResponse(body = body, options = RequestOptions())
 
 /** GET /pet/findByStatus */
-public suspend fun PetApi.findPetsByStatus(status: FindPetsByStatus_Param_Status): List<Pet> =
+public suspend fun PetApi.findPetsByStatus(status: FindPetsByStatusParamStatus): List<Pet> =
     this.findPetsByStatus(status = status, options = RequestOptions())
 
 /** GET /pet/findByStatus */
-public suspend fun PetApi.findPetsByStatusWithResponse(status: FindPetsByStatus_Param_Status): Pair<List<Pet>, Response> =
+public suspend fun PetApi.findPetsByStatusWithResponse(status: FindPetsByStatusParamStatus): Pair<List<Pet>, Response> =
     this.findPetsByStatusWithResponse(status = status, options = RequestOptions())
 
 /** GET /pet/findByTags */
@@ -100,8 +104,8 @@ public suspend fun PetApi.uploadPetDocumentWithResponse(
     this.uploadPetDocumentWithResponse(petId = petId, file = file, title = title, description = description, options = RequestOptions())
 
 /** POST /tags */
-public suspend fun PetApi.submitTags(body: SubmitTags_Body): SubmitTags_Response = this.submitTags(body = body, options = RequestOptions())
+public suspend fun PetApi.submitTags(body: SubmitTagsBody): SubmitTagsResponse = this.submitTags(body = body, options = RequestOptions())
 
 /** POST /tags */
-public suspend fun PetApi.submitTagsWithResponse(body: SubmitTags_Body): Pair<SubmitTags_Response, Response> =
+public suspend fun PetApi.submitTagsWithResponse(body: SubmitTagsBody): Pair<SubmitTagsResponse, Response> =
     this.submitTagsWithResponse(body = body, options = RequestOptions())

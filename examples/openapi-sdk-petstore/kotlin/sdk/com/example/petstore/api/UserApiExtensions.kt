@@ -1,6 +1,8 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.UpdateProfileBody
+import com.example.petstore.models.UpdateProfileResponse
+import com.example.petstore.models.User
 import okhttp3.Response
 
 /** POST /user */
@@ -69,9 +71,9 @@ public suspend fun UserApi.deleteUserWithResponse(username: String): Response =
     this.deleteUserWithResponse(username = username, options = RequestOptions())
 
 /** POST /profile */
-public suspend fun UserApi.updateProfile(body: UpdateProfile_Body): UpdateProfile_Response =
+public suspend fun UserApi.updateProfile(body: UpdateProfileBody): UpdateProfileResponse =
     this.updateProfile(body = body, options = RequestOptions())
 
 /** POST /profile */
-public suspend fun UserApi.updateProfileWithResponse(body: UpdateProfile_Body): Pair<UpdateProfile_Response, Response> =
+public suspend fun UserApi.updateProfileWithResponse(body: UpdateProfileBody): Pair<UpdateProfileResponse, Response> =
     this.updateProfileWithResponse(body = body, options = RequestOptions())
