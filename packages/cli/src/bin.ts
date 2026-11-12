@@ -9,11 +9,13 @@ import { k6BundleCommand } from "./commands/k6-bundle.js";
 import { k6SyncCommand } from "./commands/k6-sync.js";
 import { reconCommand } from "./commands/recon.js";
 import { sdkAllCommand } from "./commands/sdk-all.js";
-import { sdkGoCommand } from "./commands/sdk-go.js";
-import { sdkJavaCommand } from "./commands/sdk-java.js";
 import { sdkK6Command } from "./commands/sdk-k6.js";
-import { sdkKotlinCommand } from "./commands/sdk-kotlin.js";
-import { sdkSwiftCommand } from "./commands/sdk-swift.js";
+import {
+  sdkGoCommand,
+  sdkJavaCommand,
+  sdkKotlinCommand,
+  sdkSwiftCommand,
+} from "./commands/sdk-native.js";
 import { sdkTypescriptCommand } from "./commands/sdk-typescript.js";
 import { specConvertCommand } from "./commands/spec-convert.js";
 import { specDiffCommand } from "./commands/spec-diff.js";

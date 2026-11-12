@@ -1,7 +1,11 @@
 import type { WalkedOperation } from "@ir-kit/k6-gen";
+import {
+  defaultExportProp,
+  namespaceImport,
+  reExportConst,
+} from "@ir-kit/k6-gen/ast";
 import ts from "typescript";
 
-import { namespaceImport } from "../ast-imports.js";
 import {
   type AuthFlavor,
   type AuthScaffoldOpts,
@@ -9,12 +13,7 @@ import {
   k6FrameworkImport,
 } from "../loadtest-scaffold.js";
 import { printStatements } from "../print.js";
-import {
-  defaultExportProp,
-  objLit,
-  reExportConst,
-  varConst,
-} from "./ast-helpers.js";
+import { objLit, varConst } from "./ast-helpers.js";
 import { buildFlowExpression, type ChainMode } from "./chains.js";
 
 const f = ts.factory;
@@ -24,7 +23,6 @@ export type PacePreset = "smoke" | "load" | "stress" | "spike" | "soak";
 export interface ScaffoldScenarioOpts {
   /** Relative import path for the generated client (`./src/gen/index.js`). */
   clientImportPath: string;
-  /** Pace preset selector. */
   pace: PacePreset;
   /** Duration string passed to the pace preset. Default `"30s"`. */
   duration?: string;

@@ -1,6 +1,5 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
-import { basename, dirname, join, resolve } from "node:path";
-import { assertSafeOutputDir } from "@ir-kit/codegen-core";
+import { basename, join, resolve } from "node:path";
+import { writeOutput } from "@ir-kit/codegen-core";
 import { swift } from "@ir-kit/compiler-swift";
 import {
   extractSecuritySchemeNames,
@@ -96,15 +95,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     ? packageSwiftFile(resolvePackageOptions(opts.package, out))
     : undefined;
   const files = packageFile ? [...sdkFiles, packageFile] : sdkFiles;
-  if (opts.clean !== false) {
-    assertSafeOutputDir(out);
-    await rm(out, { recursive: true, force: true });
-  }
-  for (const file of files) {
-    const full = join(out, file.path);
-    await mkdir(dirname(full), { recursive: true });
-    await writeFile(full, file.content);
-  }
+  await writeOutput(out, files, { clean: opts.clean });
   return { files, output: out };
 }
 

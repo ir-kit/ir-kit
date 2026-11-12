@@ -228,6 +228,26 @@ function applyValidatorAndTransformerStmts(): ReadonlyArray<
   ];
 }
 
+function perCallHookParams() {
+  return [
+    swFunParam({
+      name: "extraInterceptors",
+      type: swArray(INTERCEPTOR_FN),
+      default: "[]",
+    }),
+    swFunParam({
+      name: "responseValidator",
+      type: swOptional(VALIDATOR_FN),
+      default: "nil",
+    }),
+    swFunParam({
+      name: "responseTransformer",
+      type: swOptional(TRANSFORMER_FN),
+      default: "nil",
+    }),
+  ];
+}
+
 function executeDecodable(): SwFun {
   const T = swRef("T");
   return swFun({
@@ -238,21 +258,7 @@ function executeDecodable(): SwFun {
     params: [
       swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
       swFunParam({ name: "type", label: "as", type: swRef("T.Type") }),
-      swFunParam({
-        name: "extraInterceptors",
-        type: swArray(INTERCEPTOR_FN),
-        default: "[]",
-      }),
-      swFunParam({
-        name: "responseValidator",
-        type: swOptional(VALIDATOR_FN),
-        default: "nil",
-      }),
-      swFunParam({
-        name: "responseTransformer",
-        type: swOptional(TRANSFORMER_FN),
-        default: "nil",
-      }),
+      ...perCallHookParams(),
     ],
     returnType: T,
     body: [
@@ -301,21 +307,7 @@ function executeDecodableWithResponse(): SwFun {
     params: [
       swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
       swFunParam({ name: "type", label: "as", type: swRef("T.Type") }),
-      swFunParam({
-        name: "extraInterceptors",
-        type: swArray(INTERCEPTOR_FN),
-        default: "[]",
-      }),
-      swFunParam({
-        name: "responseValidator",
-        type: swOptional(VALIDATOR_FN),
-        default: "nil",
-      }),
-      swFunParam({
-        name: "responseTransformer",
-        type: swOptional(TRANSFORMER_FN),
-        default: "nil",
-      }),
+      ...perCallHookParams(),
     ],
     returnType: swTupleType([T, swRef("HTTPURLResponse")]),
     body: [
@@ -475,21 +467,7 @@ function executeRawFn(): SwFun {
     effects: ["async", "throws"],
     params: [
       swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
-      swFunParam({
-        name: "extraInterceptors",
-        type: swArray(INTERCEPTOR_FN),
-        default: "[]",
-      }),
-      swFunParam({
-        name: "responseValidator",
-        type: swOptional(VALIDATOR_FN),
-        default: "nil",
-      }),
-      swFunParam({
-        name: "responseTransformer",
-        type: swOptional(TRANSFORMER_FN),
-        default: "nil",
-      }),
+      ...perCallHookParams(),
     ],
     returnType: swTupleType([swData, swRef("HTTPURLResponse")]),
     body: [

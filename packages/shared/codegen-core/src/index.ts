@@ -1,4 +1,9 @@
-export { assertSafeOutputDir, defaultProjectName } from "./fs.js";
+export {
+  assertSafeOutputDir,
+  defaultProjectName,
+  type OutputFile,
+  writeOutput,
+} from "./fs.js";
 export {
   avoidLeadingDigit,
   camel,

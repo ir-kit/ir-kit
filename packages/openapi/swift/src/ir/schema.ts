@@ -1,11 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import type { Namespace } from "@ir-kit/codegen-core";
-import {
-  fromHeyApi,
-  refName,
-  type Schema,
-  schemaTypeName,
-} from "@ir-kit/openapi";
+import { classifyComponents } from "@ir-kit/openapi";
 import type { SwDecl } from "../ast/index.js";
 import {
   swDict,
@@ -25,9 +20,6 @@ import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
  *  - object schemas with only `additionalProperties` → typealias to
  *    `[String: V]`
  *  - everything else → typealias to the dispatcher's resolved type
- *
- * Schemas come in as hey-api's `IR.SchemaObject` and are folded to
- * canonical {@link Schema} at the boundary.
  */
 export function schemasToDecls(
   schemas: Record<string, IR.SchemaObject>,
@@ -35,58 +27,33 @@ export function schemasToDecls(
 ): SwDecl[] {
   const decls: SwDecl[] = [];
   const emit = (d: SwDecl) => decls.push(d);
-
-  // Components claim their names before any synthesized inline type.
-  for (const rawName of Object.keys(schemas)) schemaTypeName(names, rawName);
-
-  for (const [rawName, heySchema] of Object.entries(schemas)) {
-    const name = schemaTypeName(names, rawName);
-    const schema = fromHeyApi(heySchema);
-
-    if (schema.$ref) {
-      decls.push(
-        swTypeAlias({
-          name,
-          type: swRef(schemaTypeName(names, refName(schema.$ref))),
-        }),
-      );
-      continue;
-    }
-    const isEnum = Array.isArray(schema.enum) && schema.enum.length > 0;
-    if (isEnum) {
-      buildEnumFromIR(name, schema, emit, names);
-      continue;
-    }
-    if (schema.type === "object" && schema.properties) {
-      decls.push(buildStruct(name, schema, { emit, names }));
-      continue;
-    }
-    if (schema.type === "object") {
-      const ap = schema.additionalProperties;
-      const sealed = ap === false;
-      if (sealed) {
+  for (const { name, schema, shape } of classifyComponents(schemas, names)) {
+    const ctx = () => ({ emit, names, ownerName: name, propPath: [] });
+    switch (shape.kind) {
+      case "ref":
+        decls.push(swTypeAlias({ name, type: swRef(shape.target) }));
+        break;
+      case "enum":
+        buildEnumFromIR(name, schema, emit, names);
+        break;
+      case "struct":
         decls.push(buildStruct(name, schema, { emit, names }));
-        continue;
-      }
-      const valueType =
-        ap && typeof ap === "object"
-          ? schemaToType(ap, { emit, names, ownerName: name, propPath: [] })
-          : swJSONValue;
-      decls.push(swTypeAlias({ name, type: swDict(swString, valueType) }));
-      continue;
+        break;
+      case "map":
+        decls.push(
+          swTypeAlias({
+            name,
+            type: swDict(
+              swString,
+              shape.value ? schemaToType(shape.value, ctx()) : swJSONValue,
+            ),
+          }),
+        );
+        break;
+      case "type":
+        decls.push(swTypeAlias({ name, type: schemaToType(schema, ctx()) }));
+        break;
     }
-    decls.push(
-      swTypeAlias({
-        name,
-        type: schemaToType(schema, {
-          emit,
-          names,
-          ownerName: name,
-          propPath: [],
-        }),
-      }),
-    );
   }
-
   return decls;
 }

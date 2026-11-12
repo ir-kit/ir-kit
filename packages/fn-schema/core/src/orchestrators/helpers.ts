@@ -42,6 +42,21 @@ export function makeListFiles(
     });
 }
 
+/** Glob the source files named by `fromArg`, falling back to the config's `files`. */
+export async function listSourceFiles(
+  fromArg: string | ReadonlyArray<string> | undefined,
+  fromConfig: string | ReadonlyArray<string> | undefined,
+  cwd: string,
+): Promise<string[]> {
+  const patterns = collectPatterns(fromArg, fromConfig);
+  if (patterns.length === 0) {
+    throw new Error(
+      "No source patterns supplied. Pass patterns or set `files` in fn-schema.config.{ts,js,json}.",
+    );
+  }
+  return makeListFiles(patterns, cwd)();
+}
+
 export function mergeInclude(
   fromConfig: IncludeFilter | undefined,
   cliTag: string | undefined,

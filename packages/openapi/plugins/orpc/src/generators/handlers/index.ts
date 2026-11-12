@@ -32,7 +32,6 @@ export interface HandlersGeneratorInput {
   mode?: HandlerMode;
   /** When true, existing handler files are completely rewritten. @default false */
   override?: boolean;
-  /** Proxy-specific config. */
   proxyConfig?: ProxyHandlerConfig;
   /**
    * Faker mode: map of operationName → factory function name.

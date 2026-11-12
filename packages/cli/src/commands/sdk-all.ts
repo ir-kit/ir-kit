@@ -1,16 +1,17 @@
 import { join } from "node:path";
 import { generate as generateK6 } from "@ir-kit/k6-gen";
-import { generate as generateGo } from "@ir-kit/openapi-go";
-import { generate as generateJava } from "@ir-kit/openapi-java";
-import { generate as generateKotlin } from "@ir-kit/openapi-kotlin";
-import { generate as generateSwift } from "@ir-kit/openapi-swift";
 import { generate as generateTypescript } from "@ir-kit/openapi-typescript";
 import type { Schema } from "@ir-kit/schema";
 
 import type { CommandSpec } from "../command-spec.js";
 import { loadOpenAPIForSdk } from "./_load-openapi.js";
+import { type NativeSdkTargetName, nativeSdkTargets } from "./sdk-native.js";
 
-const TARGETS = ["go", "kotlin", "swift", "java", "typescript", "k6"] as const;
+const TARGETS = [
+  ...(Object.keys(nativeSdkTargets) as NativeSdkTargetName[]),
+  "typescript",
+  "k6",
+] as const;
 type Target = (typeof TARGETS)[number];
 
 interface Input {
@@ -68,22 +69,23 @@ export const sdkAllCommand: CommandSpec<Input, void> = {
       }
     }
     const targets = requested as ReadonlyArray<Target>;
-    const native = targets.some((t) => t !== "typescript" && t !== "k6")
+    const native = targets.some((t) => t in nativeSdkTargets)
       ? await loadOpenAPIForSdk(input.input)
       : undefined;
 
     for (const target of targets) {
       const out = join(input.output, target);
       const common = {
-        input: native ?? input.input,
+        input: input.input,
         output: out,
         clean: input.clean,
         normalize: input.normalize,
       };
-      if (target === "go") await generateGo(common);
-      else if (target === "kotlin") await generateKotlin(common);
-      else if (target === "swift") await generateSwift(common);
-      else if (target === "java") await generateJava(common);
+      if (native && target in nativeSdkTargets)
+        await nativeSdkTargets[target as NativeSdkTargetName].generate(
+          native,
+          common,
+        );
       else if (target === "typescript")
         await generateTypescript({
           input: input.input,

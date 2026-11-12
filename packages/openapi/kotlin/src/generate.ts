@@ -1,7 +1,6 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { resolve } from "node:path";
 
-import { assertSafeOutputDir, defaultProjectName } from "@ir-kit/codegen-core";
+import { defaultProjectName, writeOutput } from "@ir-kit/codegen-core";
 import {
   extractSecuritySchemeNames,
   type NormalizeOptions,
@@ -110,15 +109,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     files.push(settingsGradleFile(defaultProjectName(out)));
   }
 
-  if (opts.clean !== false) {
-    assertSafeOutputDir(out);
-    await rm(out, { recursive: true, force: true });
-  }
-  for (const file of files) {
-    const full = join(out, file.path);
-    await mkdir(dirname(full), { recursive: true });
-    await writeFile(full, file.content);
-  }
+  await writeOutput(out, files, { clean: opts.clean });
   return { files, output: out };
 }
 

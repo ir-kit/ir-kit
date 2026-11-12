@@ -7,8 +7,7 @@ import type { Diagnostic, ExtractOptions, ExtractResult } from "../types.js";
 
 import { loadFnSchemaConfig } from "./config.js";
 import {
-  collectPatterns,
-  makeListFiles,
+  listSourceFiles,
   mergeExclude,
   mergeInclude,
   resolveCwd,
@@ -65,14 +64,7 @@ export async function runExtract(
   const cwd = resolveCwd(opts.cwd);
   const config = await loadFnSchemaConfig(cwd);
 
-  const patternList = collectPatterns(opts.patterns, config.files);
-  if (patternList.length === 0) {
-    throw new Error(
-      "No source patterns supplied. Pass patterns or set `files` in fn-schema.config.{ts,js,json}.",
-    );
-  }
-
-  const fileList = await makeListFiles(patternList, cwd)();
+  const fileList = await listSourceFiles(opts.patterns, config.files, cwd);
   if (fileList.length === 0) {
     return emptyResult(start);
   }

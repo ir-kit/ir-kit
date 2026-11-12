@@ -1,11 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import type { Namespace } from "@ir-kit/codegen-core";
-import {
-  fromHeyApi,
-  refName,
-  type Schema,
-  schemaTypeName,
-} from "@ir-kit/openapi";
+import { classifyComponents } from "@ir-kit/openapi";
 
 import { type JEmitted, jMap, jObject, jRef } from "../ast/index.js";
 import { newTypeNames } from "./identifiers.js";
@@ -17,34 +12,30 @@ export function schemasToDecls(
 ): JEmitted[] {
   const decls: JEmitted[] = [];
   const emit = (d: JEmitted) => decls.push(d);
-
-  for (const rawName of Object.keys(schemas)) schemaTypeName(names, rawName);
-
-  for (const [rawName, heySchema] of Object.entries(schemas)) {
-    const name = schemaTypeName(names, rawName);
-    const schema: Schema = fromHeyApi(heySchema);
-    const ctx = { emit, names, ownerName: name, propPath: [] };
-
-    if (schema.$ref) {
-      emit({
-        kind: "alias",
-        name,
-        target: jRef(schemaTypeName(names, refName(schema.$ref))),
-      });
-    } else if (Array.isArray(schema.enum) && schema.enum.length > 0) {
-      buildEnumFromIR(name, schema, emit, names);
-    } else if (
-      schema.type === "object" &&
-      (schema.properties || schema.additionalProperties === false)
-    ) {
-      emit(buildStruct(name, schema, { emit, names }));
-    } else if (schema.type === "object") {
-      const ap = schema.additionalProperties;
-      const value =
-        ap && typeof ap === "object" ? schemaToType(ap, ctx) : jObject;
-      emit({ kind: "alias", name, target: jMap(value) });
-    } else {
-      emit({ kind: "alias", name, target: schemaToType(schema, ctx) });
+  for (const { name, schema, shape } of classifyComponents(schemas, names)) {
+    const ctx = () => ({ emit, names, ownerName: name, propPath: [] });
+    switch (shape.kind) {
+      case "ref":
+        emit({ kind: "alias", name, target: jRef(shape.target) });
+        break;
+      case "enum":
+        buildEnumFromIR(name, schema, emit, names);
+        break;
+      case "struct":
+        emit(buildStruct(name, schema, { emit, names }));
+        break;
+      case "map":
+        emit({
+          kind: "alias",
+          name,
+          target: jMap(
+            shape.value ? schemaToType(shape.value, ctx()) : jObject,
+          ),
+        });
+        break;
+      case "type":
+        emit({ kind: "alias", name, target: schemaToType(schema, ctx()) });
+        break;
     }
   }
   return decls;

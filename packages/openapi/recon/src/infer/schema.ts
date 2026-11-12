@@ -1,7 +1,6 @@
 import type { Schema } from "../types.js";
 import { detectIntegerFormat, detectStringFormat } from "./format.js";
 
-/** Infer a JSON Schema from a single JSON value. */
 export function inferSchema(value: unknown): Schema {
   if (value === null) {
     return { type: "null" };

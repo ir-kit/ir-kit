@@ -70,3 +70,43 @@ export function defaultImport(
     f.createStringLiteral(moduleSpecifier),
   );
 }
+
+/** `export const <localName> = <sourceVar>.<sourceProp>;` */
+export function reExportConst(
+  localName: string,
+  sourceVar: string,
+  sourceProp: string,
+): ts.Statement {
+  return f.createVariableStatement(
+    [f.createModifier(ts.SyntaxKind.ExportKeyword)],
+    f.createVariableDeclarationList(
+      [
+        f.createVariableDeclaration(
+          localName,
+          undefined,
+          undefined,
+          f.createPropertyAccessExpression(
+            f.createIdentifier(sourceVar),
+            f.createIdentifier(sourceProp),
+          ),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+}
+
+/** `export default <sourceVar>.<sourceProp>;` */
+export function defaultExportProp(
+  sourceVar: string,
+  sourceProp: string,
+): ts.Statement {
+  return f.createExportAssignment(
+    undefined,
+    false,
+    f.createPropertyAccessExpression(
+      f.createIdentifier(sourceVar),
+      f.createIdentifier(sourceProp),
+    ),
+  );
+}

@@ -50,7 +50,6 @@ export const generateClients = ({
     .map((type) => CLIENT_TYPE_CONFIGS[type])
     .filter((config): config is ClientTypeConfig => config !== null);
 
-  // Generate each client
   for (const config of clientConfigs) {
     generateClient(
       plugin,
@@ -130,7 +129,6 @@ function generateClient(
 
   plugin.node(clientConfigStatement);
 
-  // createClient function
   const createClientSymbol = plugin.symbol(functionName, {
     getFilePath: () => clientFile,
     meta: {
