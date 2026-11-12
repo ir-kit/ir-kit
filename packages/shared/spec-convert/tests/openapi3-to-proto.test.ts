@@ -334,3 +334,59 @@ describe("openAPIToProto allOf", () => {
     ).toEqual(["street", "city"]);
   });
 });
+
+describe("openAPIToProto field names", () => {
+  it("gives colliding properties their own nested types", () => {
+    const { source } = convert(
+      spec(
+        {},
+        {
+          Item: {
+            type: "object",
+            properties: {
+              petId: { type: "object", properties: { a: { type: "string" } } },
+              pet_id: { type: "object", properties: { b: { type: "string" } } },
+            },
+          },
+        },
+      ),
+    );
+    expect(source).toContain("ItemPetId pet_id = 1;");
+    expect(source).toContain('ItemPetId2 pet_id_2 = 2 [json_name = "pet_id"];');
+    expect(source.match(/^message ItemPetId \{/gm)).toHaveLength(1);
+  });
+
+  it("keeps same-named parameters and the body apart", () => {
+    const { source } = convert(
+      spec({
+        paths: {
+          "/items/{id}": {
+            post: {
+              operationId: "update",
+              parameters: [
+                {
+                  name: "id",
+                  in: "path",
+                  required: true,
+                  schema: { type: "string" },
+                },
+                { name: "id", in: "query", schema: { type: "string" } },
+                { name: "body", in: "query", schema: { type: "string" } },
+              ],
+              requestBody: {
+                content: { "application/json": { schema: { type: "string" } } },
+              },
+              responses: { "204": { description: "ok" } },
+            },
+          },
+        },
+      }),
+    );
+    expect(source).toContain(`message UpdateRequest {
+  string id = 1;
+  optional string id_2 = 2;
+  optional string body = 3;
+  optional string body_2 = 4;
+}`);
+  });
+});

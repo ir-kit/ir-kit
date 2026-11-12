@@ -159,10 +159,20 @@ export function createProtoOps(state: ProtoState): ProtoOps {
   ): ProtoMessage => {
     const fieldNames = newFieldNames();
     const numbers = fieldNumbers();
-    const fields = properties.map((p): ProtoField => {
-      const raw = dispatch(p.schema, ctx(name, [p.propPathSegment]));
-      const type = slot(raw, name, p.propPathSegment, false);
-      const fieldName = fieldNames.claim(p.jsonKey);
+    const jsonNames = new Set<string>();
+    const fields = properties.map((p, i): ProtoField => {
+      // Keys can repeat (a path and a query parameter both named `id`) or
+      // snake_case to the same name, so claim per position and derive
+      // synthesized type names from the unique field name.
+      const fieldName = fieldNames.claim(String(i), p.jsonKey);
+      const segment = pascal(fieldName);
+      const raw = dispatch(p.schema, ctx(name, [segment]));
+      const type = slot(raw, name, segment, false);
+      const jsonName =
+        defaultJsonName(fieldName) === p.jsonKey || jsonNames.has(p.jsonKey)
+          ? undefined
+          : p.jsonKey;
+      jsonNames.add(jsonName ?? defaultJsonName(fieldName));
       return {
         name: fieldName,
         number: numbers(),
@@ -170,8 +180,7 @@ export function createProtoOps(state: ProtoState): ProtoOps {
         optional:
           !p.required &&
           (type.kind === "scalar" || (type.kind === "named" && type.isEnum)),
-        jsonName:
-          defaultJsonName(fieldName) === p.jsonKey ? undefined : p.jsonKey,
+        jsonName,
         deprecated: p.schema.deprecated === true || undefined,
         comment: p.schema.description,
       };
