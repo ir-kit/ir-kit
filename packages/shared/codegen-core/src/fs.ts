@@ -1,5 +1,11 @@
 import { mkdir, rm, writeFile } from "node:fs/promises";
-import { basename, dirname, join, parse as parsePath } from "node:path";
+import {
+  basename,
+  dirname,
+  join,
+  parse as parsePath,
+  resolve,
+} from "node:path";
 
 /**
  * Refuse to wipe the current working directory or a filesystem root.
@@ -9,7 +15,8 @@ import { basename, dirname, join, parse as parsePath } from "node:path";
  * positives — generators always want output under a dedicated subdir.
  */
 export function assertSafeOutputDir(out: string): void {
-  if (out === process.cwd() || out === parsePath(out).root) {
+  const dir = resolve(out);
+  if (dir === process.cwd() || dir === parsePath(dir).root) {
     throw new Error(
       `Refusing to clean output directory: ${out} (would wipe cwd or filesystem root). Use a dedicated subdirectory.`,
     );
@@ -30,7 +37,9 @@ export function defaultProjectName(outputDir: string): string {
 }
 
 export interface OutputFile {
+  /** Path relative to the output directory. */
   path: string;
+  /** File contents. */
   content: string;
 }
 
