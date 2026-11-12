@@ -2,7 +2,7 @@
 
 Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`@ir-kit/spec-loader`](../../shared/spec-loader) instead.
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`@ir-kit/spec-loader`](../../shared/spec-loader) instead.
 
 ## Install
 

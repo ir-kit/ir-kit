@@ -10,9 +10,9 @@
     "openapi",
     "asyncapi"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/shared/schema",
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/shared/schema",
   "bugs": {
-    "url": "https://github.com/ir-kit/ir-kit/issues"
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
     "directory": "packages/shared/schema"
   },
   "type": "module",

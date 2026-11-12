@@ -2,7 +2,7 @@
 
 Regenerate a Go / Kotlin / Swift / TypeScript client SDK from an OpenAPI 3.x spec on every push or PR — and either commit the result back or open a PR with the diff. Drops in next to a committed SDK to keep it in sync with its source spec without manual `pnpm gen` invocations.
 
-Powered by [`@ir-kit/openapi-go`](https://www.npmjs.com/package/@ir-kit/openapi-go) / [`-kotlin`](https://www.npmjs.com/package/@ir-kit/openapi-kotlin) / [`-swift`](https://www.npmjs.com/package/@ir-kit/openapi-swift) for native targets, and [`-typescript`](https://www.npmjs.com/package/@ir-kit/openapi-typescript) (a thin wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) for the TS target. Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Powered by [`@ir-kit/openapi-go`](https://www.npmjs.com/package/@ir-kit/openapi-go) / [`-kotlin`](https://www.npmjs.com/package/@ir-kit/openapi-kotlin) / [`-swift`](https://www.npmjs.com/package/@ir-kit/openapi-swift) for native targets, and [`-typescript`](https://www.npmjs.com/package/@ir-kit/openapi-typescript) (a thin wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) for the TS target. Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Usage
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
+      - uses: ahmedrowaihi/ir-kit/actions/sdk-regen@sdk-regen-v1
         with:
           target: go
           input: openapi.yaml
@@ -50,7 +50,7 @@ jobs:
         target: [go, kotlin, swift]
     steps:
       - uses: actions/checkout@v4
-      - uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
+      - uses: ahmedrowaihi/ir-kit/actions/sdk-regen@sdk-regen-v1
         with:
           target: ${{ matrix.target }}
           input: openapi.yaml
@@ -63,7 +63,7 @@ jobs:
 Skips the PR step. The default `GITHUB_TOKEN` cannot trigger downstream workflows on the push it creates — pass a PAT or App token via `token:` if you need that.
 
 ```yaml
-- uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
+- uses: ahmedrowaihi/ir-kit/actions/sdk-regen@sdk-regen-v1
   with:
     target: go
     input: openapi.yaml
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
+      - uses: ahmedrowaihi/ir-kit/actions/sdk-regen@sdk-regen-v1
         with:
           target: go
           input: https://www.mux.com/full-combined-spec.json
@@ -104,7 +104,7 @@ jobs:
 `commit-strategy: none` runs the generator and exits. Useful if you want to bundle the regen into a larger PR your own workflow opens, or to fail CI when the committed SDK is stale:
 
 ```yaml
-- uses: ir-kit/ir-kit/actions/sdk-regen@sdk-regen-v1
+- uses: ahmedrowaihi/ir-kit/actions/sdk-regen@sdk-regen-v1
   id: regen
   with:
     target: go

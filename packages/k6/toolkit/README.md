@@ -51,7 +51,7 @@ k6-ts sync ./openapi.yaml --output ./src/gen
 k6-ts scaffold --spec ./openapi.yaml --tags pets --output-dir loadtests/
 ```
 
-`k6-ts sync` also accepts `-` to read the spec from stdin, so it composes cleanly with [`@ir-kit/openapi-recon`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/recon) (HAR → spec) and similar pipes.
+`k6-ts sync` also accepts `-` to read the spec from stdin, so it composes cleanly with [`@ir-kit/openapi-recon`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/recon) (HAR → spec) and similar pipes.
 
 ## Status
 
@@ -59,4 +59,4 @@ k6-ts scaffold --spec ./openapi.yaml --tags pets --output-dir loadtests/
 
 ## Repo
 
-Source at [ir-kit/ir-kit](https://github.com/ir-kit/ir-kit/tree/main/packages/k6/toolkit).
+Source at [ahmedrowaihi/ir-kit](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/k6/toolkit).

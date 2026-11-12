@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
+      - uses: ahmedrowaihi/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
         with:
           input: asyncapi.yaml
           output: generated/events
@@ -37,7 +37,7 @@ jobs:
 Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`). To emit just types + events const (no dispatcher, no amqplib helpers):
 
 ```yaml
-- uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
+- uses: ahmedrowaihi/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
   with:
     input: asyncapi.yaml
     output: generated/events
@@ -47,7 +47,7 @@ Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`
 ### Commit directly back
 
 ```yaml
-- uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
+- uses: ahmedrowaihi/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
   with:
     input: asyncapi.yaml
     output: generated/events
@@ -57,7 +57,7 @@ Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`
 ### Just regen, leave the diff for following steps
 
 ```yaml
-- uses: ir-kit/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
+- uses: ahmedrowaihi/ir-kit/actions/asyncapi-regen@asyncapi-regen-v1
   id: regen
   with:
     input: asyncapi.yaml

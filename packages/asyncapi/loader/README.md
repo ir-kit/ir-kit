@@ -2,7 +2,7 @@
 
 Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `@ir-kit/asyncapi-core`'s `parseSpec` for unified input dispatch.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`@ir-kit/spec-loader`](../../shared/spec-loader) instead.
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`@ir-kit/spec-loader`](../../shared/spec-loader) instead.
 
 ## Install
 

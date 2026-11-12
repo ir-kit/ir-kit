@@ -1,6 +1,6 @@
 # ir-kit
 
-[![pkg.pr.new](https://pkg.pr.new/badge/ir-kit/ir-kit)](https://pkg.pr.new)
+[![pkg.pr.new](https://pkg.pr.new/badge/ahmedrowaihi/ir-kit)](https://pkg.pr.new)
 
 A federation toolchain for API specifications — every standard talks to every other, and every downstream tool (SDK gen, docs, diff, load test, mock data) reads the same canonical input regardless of source format.
 
@@ -39,13 +39,13 @@ ir-kit ships six Agent Skills that teach AI coding agents — Claude Code, Curso
 
 ```bash
 # Install all skills (auto-detects your installed agents)
-npx skills add ir-kit/ir-kit
+npx skills add ahmedrowaihi/ir-kit
 
 # Pick specific skills
-npx skills add ir-kit/ir-kit --skill k6-loadtest --skill openapi-sdk
+npx skills add ahmedrowaihi/ir-kit --skill k6-loadtest --skill openapi-sdk
 
 # Install globally for every project
-npx skills add ir-kit/ir-kit -g
+npx skills add ahmedrowaihi/ir-kit -g
 ```
 
 </details>
@@ -53,7 +53,7 @@ npx skills add ir-kit/ir-kit -g
 <details>
 <summary><strong>Agent</strong> — paste this into Claude Code, Cursor, Copilot, …</summary>
 
-> Install the ir-kit Agent Skills from https://github.com/ir-kit/ir-kit into this project so you can use them in future sessions. Run `npx skills add ir-kit/ir-kit` — it auto-detects whichever agent I'm using and writes each `SKILL.md` to the right location. If that command isn't available, clone the repo and copy `skills/<name>/SKILL.md` into the skill directory for your agent (Claude Code: `.claude/skills/<name>/SKILL.md`). Then confirm these six are installed: `k6-loadtest`, `openapi-sdk`, `openapi-from-traffic`, `asyncapi-typescript`, `fn-schema`, `heyapi-plugin-author`.
+> Install the ir-kit Agent Skills from https://github.com/ahmedrowaihi/ir-kit into this project so you can use them in future sessions. Run `npx skills add ahmedrowaihi/ir-kit` — it auto-detects whichever agent I'm using and writes each `SKILL.md` to the right location. If that command isn't available, clone the repo and copy `skills/<name>/SKILL.md` into the skill directory for your agent (Claude Code: `.claude/skills/<name>/SKILL.md`). Then confirm these six are installed: `k6-loadtest`, `openapi-sdk`, `openapi-from-traffic`, `asyncapi-typescript`, `fn-schema`, `heyapi-plugin-author`.
 
 </details>
 
@@ -120,6 +120,7 @@ flowchart LR
 | Package | Description |
 | --- | --- |
 | [`@ir-kit/openapi-go`](./packages/openapi/go) | Generate idiomatic Go (net/http + encoding/json + context.Context) client SDKs from an OpenAPI 3.x spec. |
+| [`@ir-kit/openapi-java`](./packages/openapi/java) | Generate idiomatic Java 17 (java.net.http + Jackson) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-kotlin`](./packages/openapi/kotlin) | Generate idiomatic Kotlin (OkHttp + kotlinx-serialization + suspend) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-swift`](./packages/openapi/swift) | Generate idiomatic Swift (Codable + URLSession + async throws) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-typescript`](./packages/openapi/typescript) | Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline. |
@@ -184,12 +185,6 @@ flowchart LR
 | [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 | [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
-
-### Other
-
-| Package | Description |
-| --- | --- |
-| [`@ir-kit/openapi-java`](./packages/openapi/java) | Generate idiomatic Java 17 (java.net.http + Jackson) client SDKs from an OpenAPI 3.x spec. |
 
 <!-- @packages-end -->
 

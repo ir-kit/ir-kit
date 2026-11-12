@@ -11,9 +11,9 @@
     "json-schema",
     "typescript"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/recon",
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/recon",
   "bugs": {
-    "url": "https://github.com/ir-kit/ir-kit/issues"
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
     "directory": "packages/openapi/recon"
   },
   "type": "module",

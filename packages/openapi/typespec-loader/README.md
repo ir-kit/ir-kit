@@ -2,7 +2,7 @@
 
 Compile a [TypeSpec](https://typespec.io) file or inline source to an OpenAPI 3 document in memory. Thin wrapper over `@typespec/compiler` + `@typespec/openapi3` — plugs into any ir-kit OpenAPI generator at the spec-loading boundary.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

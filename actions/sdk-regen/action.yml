@@ -218,6 +218,6 @@ runs:
         branch: ${{ steps.vars.outputs.pr-branch }}
         delete-branch: true
         body: |
-          Auto-regenerated `${{ inputs.target }}` SDK from `${{ inputs.input }}` via [`ir-kit/ir-kit/actions/sdk-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/sdk-regen).
+          Auto-regenerated `${{ inputs.target }}` SDK from `${{ inputs.input }}` via [`ahmedrowaihi/ir-kit/actions/sdk-regen`](https://github.com/ahmedrowaihi/ir-kit/tree/main/actions/sdk-regen).
 
           ${{ steps.diff.outputs.files-changed }} file(s) changed under `${{ inputs.output }}`.

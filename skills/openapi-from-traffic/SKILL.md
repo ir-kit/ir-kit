@@ -135,7 +135,7 @@ Both paths handle HTTP/2 pseudo-headers (`:authority` etc.), body-on-GET edge ca
 
 ## Glean — the Chrome extension
 
-For ad-hoc capture from a browser, install [`@ir-kit/glean`](https://github.com/ir-kit/ir-kit/tree/main/apps/glean) (or the Chrome Web Store listing once shipped). It adds a DevTools panel that:
+For ad-hoc capture from a browser, install [`@ir-kit/glean`](https://github.com/ahmedrowaihi/ir-kit/tree/main/apps/glean) (or the Chrome Web Store listing once shipped). It adds a DevTools panel that:
 
 1. Captures network traffic from the inspected page.
 2. Folds it through `openapi-recon` in real time.

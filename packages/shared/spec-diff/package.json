@@ -12,9 +12,9 @@
     "breaking-change",
     "ir-kit"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/shared/spec-diff",
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/shared/spec-diff",
   "bugs": {
-    "url": "https://github.com/ir-kit/ir-kit/issues"
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
     "directory": "packages/shared/spec-diff"
   },
   "type": "module",
