@@ -38,3 +38,24 @@ export function* iterOperations(
     }
   }
 }
+
+/**
+ * Group every operation under its first tag (or `defaultTag`), mapped
+ * through `sign`. Tags keep first-seen order; operations keep walk order.
+ */
+export function groupOperationsByTag<S>(
+  paths: IR.PathsObject | undefined,
+  schemeNames: ReadonlyMap<string, ReadonlyArray<string>> | undefined,
+  defaultTag: string,
+  sign: (operation: IteratedOperation) => S,
+): Map<string, S[]> {
+  const byTag = new Map<string, S[]>();
+  for (const operation of iterOperations(paths, schemeNames)) {
+    const tag = operation.op.tags?.[0] ?? defaultTag;
+    const signed = sign(operation);
+    const list = byTag.get(tag);
+    if (list) list.push(signed);
+    else byTag.set(tag, [signed]);
+  }
+  return byTag;
+}

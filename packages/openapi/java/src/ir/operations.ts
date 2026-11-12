@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { type Namespace, pascal } from "@ir-kit/codegen-core";
-import { iterOperations } from "@ir-kit/openapi";
+import { groupOperationsByTag } from "@ir-kit/openapi";
 
 import {
   isVoid,
@@ -48,22 +48,13 @@ export function operationsToDecls(
   const decls: JEmitted[] = [];
   const emit = (d: JEmitted) => decls.push(d);
 
-  const byTag = new Map<string, OperationSignature[]>();
-  for (const { pathStr, method, op, schemeNames } of iterOperations(
+  const byTag = groupOperationsByTag(
     paths,
     opts.securitySchemeNames,
-  )) {
-    const sig = operationSignature(
-      op,
-      method,
-      pathStr,
-      emit,
-      schemeNames,
-      names,
-    );
-    const tag = op.tags?.[0] ?? defaultTag;
-    byTag.set(tag, [...(byTag.get(tag) ?? []), sig]);
-  }
+    defaultTag,
+    ({ pathStr, method, op, schemeNames }) =>
+      operationSignature(op, method, pathStr, emit, schemeNames, names),
+  );
 
   let needsMultipart = false;
   for (const [tag, sigs] of byTag) {

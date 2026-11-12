@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { type Namespace, safeIdent } from "@ir-kit/codegen-core";
-import { iterOperations } from "@ir-kit/openapi";
+import { groupOperationsByTag } from "@ir-kit/openapi";
 
 import {
   type GoDecl,
@@ -64,26 +64,14 @@ export function operationsToDecls(
 
   const decls: GoDecl[] = [];
   const emit = (d: GoDecl) => decls.push(d);
-  const byTag = new Map<string, OperationSignature[]>();
-
   const names = opts.names ?? newTypeNames();
-  for (const { pathStr, method, op, schemeNames } of iterOperations(
+  const byTag = groupOperationsByTag(
     paths,
     opts.securitySchemeNames,
-  )) {
-    const sig = operationSignature(
-      op,
-      method,
-      pathStr,
-      emit,
-      schemeNames,
-      names,
-    );
-    const tag = op.tags?.[0] ?? defaultTag;
-    const list = byTag.get(tag);
-    if (list) list.push(sig);
-    else byTag.set(tag, [sig]);
-  }
+    defaultTag,
+    ({ pathStr, method, op, schemeNames }) =>
+      operationSignature(op, method, pathStr, emit, schemeNames, names),
+  );
 
   let needsMultipart = false;
   let needsAuth = false;

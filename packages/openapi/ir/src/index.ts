@@ -30,7 +30,7 @@ export { fromHeyApi } from "@ir-kit/schema/adapters/heyapi";
 export type { BodyShape, ClassifiedBody } from "./operation/body.js";
 export { classifyBody, isOpaqueJsonBody } from "./operation/body.js";
 export type { IteratedOperation } from "./operation/iter.js";
-export { iterOperations } from "./operation/iter.js";
+export { groupOperationsByTag, iterOperations } from "./operation/iter.js";
 export type { LocatedParam, ParamLocation } from "./operation/params.js";
 export {
   collectLocatedParams,
