@@ -17,6 +17,7 @@ import { createMemberExpression } from "./expressions/member.js";
 import { createParenthesizedExpression } from "./expressions/parenthesized.js";
 import { createSliceExpression } from "./expressions/slice.js";
 import { createTypeAssertExpression } from "./expressions/type-assert.js";
+import { createTypeExpression } from "./expressions/type-expression.js";
 import { createUnaryExpression } from "./expressions/unary.js";
 import { createAssignment } from "./statements/assignment.js";
 import { createAugmentAssignment } from "./statements/augment-assignment.js";
@@ -97,6 +98,7 @@ export const factory = {
   createMapType,
   createMemberExpression,
   createParenthesizedExpression,
+  createTypeExpression,
   createPointerType,
   createReturnStatement,
   createSelectCase,

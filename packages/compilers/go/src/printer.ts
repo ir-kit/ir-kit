@@ -557,6 +557,10 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push(printLine(`package ${node.name}`));
         break;
 
+      case GoNodeKind.TypeExpression:
+        parts.push(printInline(node.type));
+        break;
+
       case GoNodeKind.ParenthesizedExpression:
         parts.push(`(${printInline(node.expression)})`);
         break;

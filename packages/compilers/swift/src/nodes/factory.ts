@@ -24,6 +24,7 @@ import { createDictionaryLiteral } from "./expressions/dictionary-literal.js";
 import { createFloatLiteral } from "./expressions/float-literal.js";
 import { createFunctionCallExpression } from "./expressions/function-call-expression.js";
 import { createIdentifier } from "./expressions/identifier.js";
+import { createImplicitMemberExpression } from "./expressions/implicit-member-expression.js";
 import { createInfixOperatorExpression } from "./expressions/infix-operator-expression.js";
 import { createIntegerLiteral } from "./expressions/integer-literal.js";
 import { createInterpolatedStringLiteral } from "./expressions/interpolated-string-literal.js";
@@ -45,6 +46,7 @@ import { createSuperExpression } from "./expressions/super-expression.js";
 import { createTernaryExpression } from "./expressions/ternary-expression.js";
 import { createTryExpression } from "./expressions/try-expression.js";
 import { createTupleExpression } from "./expressions/tuple-expression.js";
+import { createTypeExpression } from "./expressions/type-expression.js";
 import { createEnumCasePattern } from "./patterns/enum-case-pattern.js";
 import { createExpressionPattern } from "./patterns/expression-pattern.js";
 import { createIdentifierPattern } from "./patterns/identifier-pattern.js";
@@ -162,7 +164,9 @@ export const factory = {
   createRepeatWhileStatement,
   createReturnStatement,
   createSelectorExpression,
+  createImplicitMemberExpression,
   createSelfExpression,
+  createTypeExpression,
   createSomeOrAnyType,
   createSourceFile,
   createStringLiteral,

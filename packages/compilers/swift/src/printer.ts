@@ -1021,6 +1021,12 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       case SwiftNodeKind.SelfExpression:
         return "self";
 
+      case SwiftNodeKind.ImplicitMemberExpression:
+        return `.${node.name}`;
+
+      case SwiftNodeKind.TypeExpression:
+        return printNode(node.type);
+
       case SwiftNodeKind.SomeOrAnyType:
         return `${node.someOrAnySpecifier} ${printNode(node.constraint)}`;
 

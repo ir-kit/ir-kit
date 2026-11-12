@@ -2,7 +2,6 @@ import { swift } from "@ir-kit/compiler-swift";
 
 const f = swift.factory;
 const K = swift.SwiftNodeKind;
-const printer = swift.createPrinter();
 
 export type SwType = swift.Type;
 export type SwExpr = swift.Expression;
@@ -37,7 +36,6 @@ const PATTERN_KINDS: ReadonlySet<string> = new Set([
   K.WildcardPattern,
 ]);
 
-const typeText = (t: SwType): string => printer.printFile(t).trimEnd();
 const access = (a: SwAccess | undefined): string[] =>
   (a ?? "public") === "internal" ? [] : [a ?? "public"];
 
@@ -89,7 +87,7 @@ export const tupleTypes = (t: SwType): ReadonlyArray<SwType> =>
 export const swIdent = (name: string): SwExpr => f.createIdentifier(name);
 /** Implicit member expression (`.form`). */
 export const swDotCase = (name: string): SwExpr =>
-  f.createIdentifier(`.${name}`);
+  f.createImplicitMemberExpression(name);
 export const swEnumPattern = (
   caseName: string,
   bindings: ReadonlyArray<string> = [],
@@ -129,7 +127,7 @@ export const swArrayLit = (
 ): SwExpr =>
   items.length === 0 && elementType
     ? f.createFunctionCallExpression(
-        f.createIdentifier(`[${typeText(elementType)}]`),
+        f.createTypeExpression(f.createArrayType(elementType)),
         [],
       )
     : f.createArrayLiteral(items);
@@ -160,7 +158,7 @@ export const swTuple = (items: ReadonlyArray<SwExpr>): SwExpr =>
   f.createTupleExpression(items.map((expression) => ({ expression })));
 /** `T.self` */
 export const swTypeRef = (type: SwType): SwExpr =>
-  f.createMemberAccessExpression(f.createIdentifier(typeText(type)), "self");
+  f.createMemberAccessExpression(f.createTypeExpression(type), "self");
 export const swRange = (low: SwExpr, high: SwExpr): SwExpr =>
   f.createRangeExpression("..<", low, high);
 /** `lhs ?? rhs` */

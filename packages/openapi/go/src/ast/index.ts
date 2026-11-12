@@ -78,11 +78,7 @@ export const isNilable = (t: GoType): boolean =>
   (t.kind === K.ArrayType && t.size === undefined);
 
 /** A type used in expression position (conversions, type args). */
-export function goTypeExpr(t: GoType): GoExpr {
-  if (t.kind === K.PointerType)
-    return f.createUnaryExpression("*", goTypeExpr(t.elementType));
-  return t as unknown as GoExpr;
-}
+export const goTypeExpr = (t: GoType): GoExpr => f.createTypeExpression(t);
 
 export interface GoCallArg {
   expr: GoExpr;

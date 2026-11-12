@@ -8,6 +8,7 @@ import type { SwiftDictionaryLiteral } from "./expressions/dictionary-literal.js
 import type { SwiftFloatLiteral } from "./expressions/float-literal.js";
 import type { SwiftFunctionCallExpression } from "./expressions/function-call-expression.js";
 import type { SwiftIdentifier } from "./expressions/identifier.js";
+import type { SwiftImplicitMemberExpression } from "./expressions/implicit-member-expression.js";
 import type { SwiftInfixOperatorExpression } from "./expressions/infix-operator-expression.js";
 import type { SwiftIntegerLiteral } from "./expressions/integer-literal.js";
 import type { SwiftInterpolatedStringLiteral } from "./expressions/interpolated-string-literal.js";
@@ -29,6 +30,7 @@ import type { SwiftSuperExpression } from "./expressions/super-expression.js";
 import type { SwiftTernaryExpression } from "./expressions/ternary-expression.js";
 import type { SwiftTryExpression } from "./expressions/try-expression.js";
 import type { SwiftTupleExpression } from "./expressions/tuple-expression.js";
+import type { SwiftTypeExpression } from "./expressions/type-expression.js";
 
 export type SwiftExpression =
   | SwiftArrayLiteral
@@ -41,6 +43,7 @@ export type SwiftExpression =
   | SwiftFloatLiteral
   | SwiftFunctionCallExpression
   | SwiftIdentifier
+  | SwiftImplicitMemberExpression
   | SwiftInfixOperatorExpression
   | SwiftIntegerLiteral
   | SwiftInterpolatedStringLiteral
@@ -61,4 +64,5 @@ export type SwiftExpression =
   | SwiftSuperExpression
   | SwiftTernaryExpression
   | SwiftTryExpression
-  | SwiftTupleExpression;
+  | SwiftTupleExpression
+  | SwiftTypeExpression;
