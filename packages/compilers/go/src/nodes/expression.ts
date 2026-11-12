@@ -10,8 +10,8 @@ import type { GoMemberExpression } from "./expressions/member.js";
 import type { GoParenthesizedExpression } from "./expressions/parenthesized.js";
 import type { GoSliceExpression } from "./expressions/slice.js";
 import type { GoTypeAssertExpression } from "./expressions/type-assert.js";
+import type { GoTypeExpression } from "./expressions/type-expression.js";
 import type { GoUnaryExpression } from "./expressions/unary.js";
-
 export type GoExpression =
   | GoBinaryExpression
   | GoCallExpression
@@ -25,4 +25,5 @@ export type GoExpression =
   | GoParenthesizedExpression
   | GoSliceExpression
   | GoTypeAssertExpression
+  | GoTypeExpression
   | GoUnaryExpression;

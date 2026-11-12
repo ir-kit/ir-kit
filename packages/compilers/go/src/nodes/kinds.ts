@@ -37,6 +37,7 @@ export enum GoNodeKind {
   MemberExpression = "MemberExpression",
   PackageDeclaration = "PackageDeclaration",
   ParenthesizedExpression = "ParenthesizedExpression",
+  TypeExpression = "TypeExpression",
   PointerType = "PointerType",
   Receiver = "Receiver",
   ReturnStatement = "ReturnStatement",

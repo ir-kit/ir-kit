@@ -262,7 +262,8 @@ export function createPrinter(options?: GoPrinterOptions) {
           }
           return base;
         });
-        const text = `${printNode(node.callee)}(${args.join(", ")})`;
+        const callee = printNode(node.callee);
+        const text = `${conversionNeedsParens(node.callee) ? `(${callee})` : callee}(${args.join(", ")})`;
         parts.push(context.inline ? text : printLine(text));
         break;
       }
@@ -557,6 +558,10 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push(printLine(`package ${node.name}`));
         break;
 
+      case GoNodeKind.TypeExpression:
+        parts.push(printInline(node.type));
+        break;
+
       case GoNodeKind.ParenthesizedExpression:
         parts.push(`(${printInline(node.expression)})`);
         break;
@@ -772,8 +777,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       default:
-        // @ts-expect-error
-        throw new Error(`Unsupported node kind: ${node.kind}`);
+        return unsupported(node);
     }
 
     if (node.trailingComments) {
@@ -798,4 +802,20 @@ export function createPrinter(options?: GoPrinterOptions) {
 
 export function printAst(node: GoNode): string {
   return JSON.stringify(node, null, 2);
+}
+
+// why: Go spec, Conversions — a type starting with `*` or `<-`, or a `func`
+// type without results, must be parenthesized to be read as a conversion.
+function conversionNeedsParens(callee: GoNode): boolean {
+  if (callee.kind !== GoNodeKind.TypeExpression) return false;
+  const { type } = callee;
+  return (
+    type.kind === GoNodeKind.PointerType ||
+    (type.kind === GoNodeKind.ChannelType && type.direction === "receive") ||
+    (type.kind === GoNodeKind.FunctionType && type.returnType.length === 0)
+  );
+}
+
+function unsupported(node: never): never {
+  throw new Error(`Unsupported node kind: ${(node as { kind: string }).kind}`);
 }

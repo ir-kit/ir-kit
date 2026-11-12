@@ -10,18 +10,18 @@ export interface JavaCatchClause {
   parameterType?: string;
 }
 
+/** A `try (Type name = initializer)` resource declaration. */
+export interface JavaTryResource {
+  initializer?: JavaExpression;
+  name: string;
+  type: JavaExpression;
+}
+
 export interface JavaTryStatement extends JavaNodeBase {
   catchClauses?: ReadonlyArray<JavaCatchClause>;
   finallyBlock?: JavaBlock;
   kind: JavaNodeKind.TryStatement;
-  resources?: ReadonlyArray<
-    | {
-        initializer?: JavaExpression;
-        name: string;
-        type: JavaExpression;
-      }
-    | JavaExpression
-  >;
+  resources?: ReadonlyArray<JavaTryResource | JavaExpression>;
   tryBlock: JavaBlock;
 }
 
@@ -41,14 +41,7 @@ export function createTryStatement(
   tryBlock: ReadonlyArray<JavaStatement>,
   catchClauses?: ReadonlyArray<JavaCatchClause>,
   finallyBlock?: ReadonlyArray<JavaStatement>,
-  resources?: ReadonlyArray<
-    | {
-        initializer?: JavaExpression;
-        name: string;
-        type: JavaExpression;
-      }
-    | JavaExpression
-  >,
+  resources?: ReadonlyArray<JavaTryResource | JavaExpression>,
 ): JavaTryStatement {
   return {
     catchClauses,

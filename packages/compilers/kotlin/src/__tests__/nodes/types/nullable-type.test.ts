@@ -23,4 +23,9 @@ describe("NullableType", () => {
     );
     await assertPrintedMatchesSnapshot(file([handler]), "function-type.kt");
   });
+
+  it("does not nest an already nullable type", () => {
+    const maybe = f.createNullableType(f.createUserType("String"));
+    expect(f.createNullableType(maybe)).toBe(maybe);
+  });
 });

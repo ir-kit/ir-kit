@@ -12,6 +12,7 @@ export function createNullableType(
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
 ): KotlinNullableType {
+  if (type.kind === KotlinNodeKind.NullableType) return type;
   return {
     kind: KotlinNodeKind.NullableType,
     leadingComments,

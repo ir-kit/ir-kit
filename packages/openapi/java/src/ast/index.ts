@@ -49,14 +49,6 @@ export const jRef = (name: string, args: ReadonlyArray<JType> = []): JType =>
 export const jList = (element: JType): JType => jRef("List", [element]);
 export const jMap = (value: JType): JType => jRef("Map", [jString, value]);
 
-/** Simple names a type node mentions (for imports). */
-export function typeNames(t: JType, out: Set<string> = new Set()): Set<string> {
-  walk(t, (node) => {
-    if (node.kind === java.JavaNodeKind.Identifier) out.add(node.name);
-  });
-  return out;
-}
-
 /** Depth-first walk over every object-valued child of a node. */
 export function walk(
   node: unknown,
@@ -93,19 +85,13 @@ export const jNewAnon = (
   type: JType,
   members: ReadonlyArray<JStmt> = [],
 ): JExpr => f.createNewExpression(type, [], members);
-export const jBinary = (left: JExpr, op: string, right: JExpr): JExpr =>
-  f.createBinaryExpression(left, op as never, right);
+export const jBinary = (
+  left: JExpr,
+  op: java.BinaryOperator,
+  right: JExpr,
+): JExpr => f.createBinaryExpression(left, op, right);
 export const jTernary = (cond: JExpr, a: JExpr, b: JExpr): JExpr =>
   f.createTernaryExpression(cond, a, b);
-export const jLambda = (
-  params: ReadonlyArray<string>,
-  body: ReadonlyArray<JStmt> | JExpr,
-): JExpr =>
-  f.createLambdaExpression(
-    params.map((name) => ({ name })),
-    body,
-  );
-
 export const jLocal = (name: string, value: JExpr, type?: JType): JStmt =>
   f.createVariableDeclaration(name, type ?? named("var"), value);
 export const jAssign = (target: JExpr, value: JExpr): JStmt =>
@@ -228,7 +214,7 @@ export function jClass(opts: {
     name: opts.name,
     node: f.createClassDeclaration(
       opts.name,
-      opts.members as never,
+      opts.members,
       ["public", ...(opts.modifiers ?? [])],
       undefined,
       undefined,
@@ -240,9 +226,9 @@ export function jClass(opts: {
 export const jField = (
   name: string,
   type: JType,
-  modifiers: ReadonlyArray<string> = ["private", "final"],
+  modifiers: ReadonlyArray<java.Modifier> = ["private", "final"],
   value?: JExpr,
-): JStmt => f.createVariableDeclaration(name, type, value, modifiers as never);
+): JStmt => f.createVariableDeclaration(name, type, value, modifiers);
 
 /** String enum carrying its wire value via `@JsonValue`. */
 export function jValueEnum(
@@ -260,7 +246,7 @@ export function jValueEnum(
         args: [value],
       })),
       [
-        jField("value", valueType) as never,
+        jField("value", valueType),
         f.createMethodDeclaration(
           name,
           [jParam("value", valueType)],
