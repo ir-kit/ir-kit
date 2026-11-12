@@ -236,7 +236,7 @@ describe("schemas (IR-driven)", () => {
       }),
     );
     assert.match(out, /public typealias Bag = \[String: Int\]/);
-    assert.match(out, /public typealias Anything = \[String: Any\]/);
+    assert.match(out, /public typealias Anything = \[String: JSONValue\]/);
     assert.match(out, /public struct Sealed: Codable \{\}/);
   });
 

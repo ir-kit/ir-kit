@@ -124,6 +124,10 @@ jobs:
       - name: Lint generated example SDK
         run: bash scripts/lint-swift.sh examples/openapi-sdk-petstore/swift/sdk
 
+      - name: Build generated example SDK
+        working-directory: examples/openapi-sdk-petstore/swift/sdk
+        run: swift build
+
   lint-java:
     name: Lint generated Java SDK
     runs-on: ubuntu-latest

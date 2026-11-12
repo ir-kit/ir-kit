@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public enum Auth {
   case bearer(token: String)
   case apiKey(name: String, value: String, in: APIKeyLocation)

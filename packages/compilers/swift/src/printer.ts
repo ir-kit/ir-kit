@@ -569,10 +569,14 @@ export function createPrinter(options?: SwiftPrinterOptions) {
           ? `${node.modifiers.join(" ")} `
           : "";
         const failable = node.failable ? "?" : "";
+        const effects = [
+          node.effectSpecifiers?.async ? " async" : "",
+          node.effectSpecifiers?.throws ? " throws" : "",
+        ].join("");
         const signature = printParameterList(
           node.parameters,
           (list) =>
-            `${modifiers}init${failable}${list}${printWhereClause(node.genericWhereClause)}`,
+            `${modifiers}init${failable}${list}${effects}${printWhereClause(node.genericWhereClause)}`,
         );
         return [
           ...printAttributes(node.attributes),

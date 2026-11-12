@@ -1,7 +1,10 @@
 import type { SwiftNodeBase } from "../base.js";
 import { SwiftNodeKind } from "../kinds.js";
 import type { SwiftStatement } from "../statement.js";
-import type { SwiftFunctionParameter } from "./function.js";
+import type {
+  SwiftEffectSpecifiers,
+  SwiftFunctionParameter,
+} from "./function.js";
 import type {
   SwiftAttribute,
   SwiftGenericRequirement,
@@ -11,6 +14,7 @@ import type {
 export interface SwiftInitializerDeclaration extends SwiftNodeBase {
   attributes?: ReadonlyArray<SwiftAttribute>;
   body: ReadonlyArray<SwiftStatement>;
+  effectSpecifiers?: SwiftEffectSpecifiers;
   failable?: boolean;
   genericWhereClause?: ReadonlyArray<SwiftGenericRequirement>;
   kind: SwiftNodeKind.InitializerDeclaration;

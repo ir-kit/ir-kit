@@ -7,7 +7,13 @@ import {
   schemaTypeName,
 } from "@ir-kit/openapi";
 import type { SwDecl } from "../ast/index.js";
-import { swAny, swDict, swRef, swString, swTypeAlias } from "../ast/index.js";
+import {
+  swDict,
+  swJSONValue,
+  swRef,
+  swString,
+  swTypeAlias,
+} from "../ast/index.js";
 import { newTypeNames } from "./identifiers.js";
 import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
 
@@ -65,7 +71,7 @@ export function schemasToDecls(
       const valueType =
         ap && typeof ap === "object"
           ? schemaToType(ap, { emit, names, ownerName: name, propPath: [] })
-          : swAny;
+          : swJSONValue;
       decls.push(swTypeAlias({ name, type: swDict(swString, valueType) }));
       continue;
     }

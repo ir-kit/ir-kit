@@ -10,6 +10,11 @@ export function printFile(file: SwFile): string {
   return printer.printFile(
     f.createSourceFile([
       ...file.imports.map((i) => f.createImportDeclaration(i)),
+      ...file.conditionalImports.map((i) =>
+        f.createConditionalCompilation(`canImport(${i})`, [
+          f.createImportDeclaration(i),
+        ]),
+      ),
       ...file.decls.map((d) => d.node),
     ]),
   );

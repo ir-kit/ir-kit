@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public final class URLSessionUserAPI: UserAPI {
   let client: APIClient
 

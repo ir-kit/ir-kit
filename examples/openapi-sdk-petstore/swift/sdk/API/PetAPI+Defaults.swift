@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 extension PetAPI {
   /// POST /pet
   public func addPet(body: Pet) async throws -> Pet {
