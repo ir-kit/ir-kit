@@ -196,7 +196,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   public func createShape(
     body: Data,
     options: RequestOptions = RequestOptions()
-  ) async throws -> CreateShape_Response {
+  ) async throws -> CreateShapeResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = URLEncoding.path(baseURL, ["shapes"])
@@ -211,7 +211,7 @@ public final class URLSessionStoreAPI: StoreAPI {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
     return try await client.execute(
-      request, as: CreateShape_Response.self, extraInterceptors: options.requestInterceptors,
+      request, as: CreateShapeResponse.self, extraInterceptors: options.requestInterceptors,
       responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
     )
   }
@@ -220,7 +220,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   public func createShapeWithResponse(
     body: Data,
     options: RequestOptions = RequestOptions()
-  ) async throws -> (CreateShape_Response, HTTPURLResponse) {
+  ) async throws -> (CreateShapeResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = URLEncoding.path(baseURL, ["shapes"])
@@ -235,14 +235,14 @@ public final class URLSessionStoreAPI: StoreAPI {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
     return try await client.executeWithResponse(
-      request, as: CreateShape_Response.self, extraInterceptors: options.requestInterceptors,
+      request, as: CreateShapeResponse.self, extraInterceptors: options.requestInterceptors,
       responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
     )
   }
 
   /// POST /measurements
   public func submitMeasurement(
-    body: SubmitMeasurement_Body,
+    body: SubmitMeasurementBody,
     options: RequestOptions = RequestOptions()
   ) async throws {
     let client = options.client ?? self.client
@@ -266,7 +266,7 @@ public final class URLSessionStoreAPI: StoreAPI {
 
   /// POST /measurements
   public func submitMeasurementWithResponse(
-    body: SubmitMeasurement_Body,
+    body: SubmitMeasurementBody,
     options: RequestOptions = RequestOptions()
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client

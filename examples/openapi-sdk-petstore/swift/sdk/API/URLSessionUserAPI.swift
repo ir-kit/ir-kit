@@ -353,9 +353,9 @@ public final class URLSessionUserAPI: UserAPI {
 
   /// POST /profile
   public func updateProfile(
-    body: UpdateProfile_Body,
+    body: UpdateProfileBody,
     options: RequestOptions = RequestOptions()
-  ) async throws -> UpdateProfile_Response {
+  ) async throws -> UpdateProfileResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = URLEncoding.path(baseURL, ["profile"])
@@ -370,16 +370,16 @@ public final class URLSessionUserAPI: UserAPI {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
     return try await client.execute(
-      request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors,
+      request, as: UpdateProfileResponse.self, extraInterceptors: options.requestInterceptors,
       responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
     )
   }
 
   /// POST /profile
   public func updateProfileWithResponse(
-    body: UpdateProfile_Body,
+    body: UpdateProfileBody,
     options: RequestOptions = RequestOptions()
-  ) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
+  ) async throws -> (UpdateProfileResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = URLEncoding.path(baseURL, ["profile"])
@@ -394,7 +394,7 @@ public final class URLSessionUserAPI: UserAPI {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
     return try await client.executeWithResponse(
-      request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors,
+      request, as: UpdateProfileResponse.self, extraInterceptors: options.requestInterceptors,
       responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
     )
   }

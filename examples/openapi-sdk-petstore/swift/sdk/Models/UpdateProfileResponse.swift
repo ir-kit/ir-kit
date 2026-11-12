@@ -1,6 +1,6 @@
 import Foundation
 
-public struct UpdateProfile_Response: Codable {
+public struct UpdateProfileResponse: Codable {
   public let ok: Bool?
 
   public init(ok: Bool? = nil) {

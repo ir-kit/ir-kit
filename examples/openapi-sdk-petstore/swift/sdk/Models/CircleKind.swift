@@ -1,5 +1,5 @@
 import Foundation
 
-public enum Circle_Kind: String, Codable {
+public enum CircleKind: String, Codable {
   case circle = "circle"
 }

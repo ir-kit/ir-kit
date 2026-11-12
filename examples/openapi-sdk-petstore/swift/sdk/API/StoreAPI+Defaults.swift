@@ -42,25 +42,25 @@ extension StoreAPI {
   }
 
   /// POST /shapes
-  public func createShape(body: Data) async throws -> CreateShape_Response {
+  public func createShape(body: Data) async throws -> CreateShapeResponse {
     return try await self.createShape(body: body, options: RequestOptions())
   }
 
   /// POST /shapes
   public func createShapeWithResponse(
     body: Data
-  ) async throws -> (CreateShape_Response, HTTPURLResponse) {
+  ) async throws -> (CreateShapeResponse, HTTPURLResponse) {
     return try await self.createShapeWithResponse(body: body, options: RequestOptions())
   }
 
   /// POST /measurements
-  public func submitMeasurement(body: SubmitMeasurement_Body) async throws {
+  public func submitMeasurement(body: SubmitMeasurementBody) async throws {
     try await self.submitMeasurement(body: body, options: RequestOptions())
   }
 
   /// POST /measurements
   public func submitMeasurementWithResponse(
-    body: SubmitMeasurement_Body
+    body: SubmitMeasurementBody
   ) async throws -> HTTPURLResponse {
     return try await self.submitMeasurementWithResponse(body: body, options: RequestOptions())
   }

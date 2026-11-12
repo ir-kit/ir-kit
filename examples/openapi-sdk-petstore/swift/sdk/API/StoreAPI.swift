@@ -37,20 +37,20 @@ public protocol StoreAPI {
   ) async throws -> HTTPURLResponse
 
   /// POST /shapes
-  func createShape(body: Data, options: RequestOptions) async throws -> CreateShape_Response
+  func createShape(body: Data, options: RequestOptions) async throws -> CreateShapeResponse
 
   /// POST /shapes
   func createShapeWithResponse(
     body: Data,
     options: RequestOptions
-  ) async throws -> (CreateShape_Response, HTTPURLResponse)
+  ) async throws -> (CreateShapeResponse, HTTPURLResponse)
 
   /// POST /measurements
-  func submitMeasurement(body: SubmitMeasurement_Body, options: RequestOptions) async throws
+  func submitMeasurement(body: SubmitMeasurementBody, options: RequestOptions) async throws
 
   /// POST /measurements
   func submitMeasurementWithResponse(
-    body: SubmitMeasurement_Body,
+    body: SubmitMeasurementBody,
     options: RequestOptions
   ) async throws -> HTTPURLResponse
 }

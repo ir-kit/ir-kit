@@ -21,13 +21,13 @@ public protocol PetAPI {
 
   /// GET /pet/findByStatus
   func findPetsByStatus(
-    status: FindPetsByStatus_Param_Status,
+    status: FindPetsByStatusParamStatus,
     options: RequestOptions
   ) async throws -> [Pet]
 
   /// GET /pet/findByStatus
   func findPetsByStatusWithResponse(
-    status: FindPetsByStatus_Param_Status,
+    status: FindPetsByStatusParamStatus,
     options: RequestOptions
   ) async throws -> ([Pet], HTTPURLResponse)
 
@@ -111,13 +111,13 @@ public protocol PetAPI {
 
   /// POST /tags
   func submitTags(
-    body: SubmitTags_Body,
+    body: SubmitTagsBody,
     options: RequestOptions
-  ) async throws -> SubmitTags_Response
+  ) async throws -> SubmitTagsResponse
 
   /// POST /tags
   func submitTagsWithResponse(
-    body: SubmitTags_Body,
+    body: SubmitTagsBody,
     options: RequestOptions
-  ) async throws -> (SubmitTags_Response, HTTPURLResponse)
+  ) async throws -> (SubmitTagsResponse, HTTPURLResponse)
 }

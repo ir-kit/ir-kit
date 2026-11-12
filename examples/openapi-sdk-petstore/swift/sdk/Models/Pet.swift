@@ -6,7 +6,7 @@ public struct Pet: Codable {
   public let category: Category?
   public let photoUrls: [String]
   public let tags: [Tag]?
-  public let status: Pet_Status?
+  public let status: PetStatus?
 
   public init(
     id: Int64? = nil,
@@ -14,7 +14,7 @@ public struct Pet: Codable {
     category: Category? = nil,
     photoUrls: [String],
     tags: [Tag]? = nil,
-    status: Pet_Status? = nil
+    status: PetStatus? = nil
   ) {
     self.id = id
     self.name = name

@@ -30,7 +30,10 @@ export function returnTypeFor(
     case "single":
       return { type: schemaToType(shape.schema, ctx), cases: [] };
     case "multi": {
-      const enumName = synthName(ctx.ownerName, ["response"]);
+      const enumName = ctx.names.claim(
+        `synth:${ctx.ownerName}/response`,
+        synthName(ctx.ownerName, ["response"]),
+      );
       const cases: ResponseCase[] = shape.cases.map(
         ({ statusCode, schema }) => {
           const caseName = `status${statusCode}`;

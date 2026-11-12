@@ -69,13 +69,13 @@ public protocol UserAPI {
 
   /// POST /profile
   func updateProfile(
-    body: UpdateProfile_Body,
+    body: UpdateProfileBody,
     options: RequestOptions
-  ) async throws -> UpdateProfile_Response
+  ) async throws -> UpdateProfileResponse
 
   /// POST /profile
   func updateProfileWithResponse(
-    body: UpdateProfile_Body,
+    body: UpdateProfileBody,
     options: RequestOptions
-  ) async throws -> (UpdateProfile_Response, HTTPURLResponse)
+  ) async throws -> (UpdateProfileResponse, HTTPURLResponse)
 }

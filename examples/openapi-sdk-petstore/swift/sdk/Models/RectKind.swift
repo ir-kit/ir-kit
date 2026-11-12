@@ -1,5 +1,5 @@
 import Foundation
 
-public enum Rect_Kind: String, Codable {
+public enum RectKind: String, Codable {
   case rect = "rect"
 }

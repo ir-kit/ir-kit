@@ -81,14 +81,14 @@ extension UserAPI {
   }
 
   /// POST /profile
-  public func updateProfile(body: UpdateProfile_Body) async throws -> UpdateProfile_Response {
+  public func updateProfile(body: UpdateProfileBody) async throws -> UpdateProfileResponse {
     return try await self.updateProfile(body: body, options: RequestOptions())
   }
 
   /// POST /profile
   public func updateProfileWithResponse(
-    body: UpdateProfile_Body
-  ) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
+    body: UpdateProfileBody
+  ) async throws -> (UpdateProfileResponse, HTTPURLResponse) {
     return try await self.updateProfileWithResponse(body: body, options: RequestOptions())
   }
 }
