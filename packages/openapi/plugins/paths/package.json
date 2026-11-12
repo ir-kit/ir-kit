@@ -1,7 +1,7 @@
 {
   "name": "@ir-kit/openapi-ts-paths",
   "version": "0.1.0",
-  "description": "Plugin for @hey-api/openapi-ts — emit per-operation route consts (spec template, URLPattern, method, operationId) for tree-shakable runtime routing and matching",
+  "description": "Plugin for @hey-api/openapi-ts \u2014 emit per-operation route consts (spec template, URLPattern, method, operationId) for tree-shakable runtime routing and matching",
   "keywords": [
     "openapi",
     "openapi-ts",
@@ -53,6 +53,9 @@
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
+  },
+  "dependencies": {
+    "@ir-kit/openapi-ts-plugin-kit": "workspace:^"
   },
   "peerDependencies": {
     "@hey-api/codegen-core": ">=0.9.0",

@@ -1,9 +1,5 @@
-import {
-  coerce,
-  collectDeps,
-  defineConfig as defineConfigTable,
-  definePluginConfig,
-} from "@hey-api/shared";
+import { coerce } from "@hey-api/shared";
+import { definePlugin } from "@ir-kit/openapi-ts-plugin-kit";
 
 import { DEFAULT_FORMAT_MAPPING } from "./core/hints.js";
 import { handler } from "./plugin.js";
@@ -47,27 +43,4 @@ export const defaultConfig: FakerPlugin["Config"] = {
   tags: ["transformer"],
 };
 
-/**
- * `definePluginConfig` spreads user config over the default table, so a
- * nested user object replaces its table (losing defaults and coercers).
- * Resolve user config against the table here instead.
- */
-const pluginFromDefaults = definePluginConfig(defaultConfig);
-const normalizeConfig = defineConfigTable<
-  Record<string, unknown>,
-  Record<string, unknown>
->(defaultConfig.config as never);
-
-export const defineConfig = (
-  userConfig?: Parameters<typeof pluginFromDefaults>[0],
-) => {
-  const plugin = pluginFromDefaults();
-  const config = normalizeConfig({ ...userConfig });
-  const dependencies = new Set<string>(defaultConfig.dependencies);
-  collectDeps(defaultConfig.config as never, config, dependencies);
-  return {
-    ...plugin,
-    config: config as typeof plugin.config,
-    dependencies: [...dependencies] as typeof plugin.dependencies,
-  };
-};
+export const defineConfig = definePlugin(defaultConfig);

@@ -120,70 +120,73 @@ function emitMethodWithRawBody(method: HttpMethod, mt: string): KtStmt {
 }
 
 function emitMultipartBody(schema: Schema, method: HttpMethod): KtStmt[] {
-  const required = new Set(schema.required ?? []);
-  const stmts: KtStmt[] = [
-    ktVal("multipart", ktCall(ktIdent("MultipartFormBody"), [])),
-  ];
-  for (const [propName, propSchema] of Object.entries(
-    schema.properties ?? {},
-  )) {
-    if (!isSchemaObject(propSchema)) continue;
-    const id = operationParamIdent(propName);
-    const isBinary =
-      propSchema.type === "string" && propSchema.format === "binary";
-    const append: KtStmt = isBinary
-      ? ktExprStmt(
-          ktCall(ktMember(ktIdent("multipart"), "appendFile"), [
+  return emitFieldBody(
+    schema,
+    method,
+    "multipart",
+    "MultipartFormBody",
+    (propName, propSchema, id) => {
+      if (!isSchemaObject(propSchema)) return undefined;
+      const isBinary =
+        propSchema.type === "string" && propSchema.format === "binary";
+      return isBinary
+        ? ktCall(ktMember(ktIdent("multipart"), "appendFile"), [
             ktArg(ktStr(propName)),
             ktArg(ktStr(propName)),
             ktArg(ktIdent(id)),
-          ]),
-        )
-      : ktExprStmt(
-          ktCall(ktMember(ktIdent("multipart"), "appendText"), [
+          ])
+        : ktCall(ktMember(ktIdent("multipart"), "appendText"), [
             ktArg(ktStr(propName)),
             ktArg(ktInterp([ktIdent(id)])),
-          ]),
-        );
-    stmts.push(
-      required.has(propName)
-        ? append
-        : ktIf(ktNe(ktIdent(id), ktNull), [append]),
-    );
-  }
-  stmts.push(
-    setMethodWithBody(
-      method,
-      ktCall(ktMember(ktIdent("multipart"), "build"), []),
-    ),
+          ]);
+    },
   );
-  return stmts;
 }
 
 function emitFormUrlEncodedBody(schema: Schema, method: HttpMethod): KtStmt[] {
-  const required = new Set(schema.required ?? []);
-  const stmts: KtStmt[] = [
-    ktVal("formBuilder", ktCall(ktIdent("FormBody.Builder"), [])),
-  ];
-  for (const propName of Object.keys(schema.properties ?? {})) {
-    const id = operationParamIdent(propName);
-    const append: KtStmt = ktExprStmt(
+  return emitFieldBody(
+    schema,
+    method,
+    "formBuilder",
+    "FormBody.Builder",
+    (propName, _, id) =>
       ktCall(ktMember(ktIdent("formBuilder"), "add"), [
         ktArg(ktStr(propName)),
         ktArg(ktInterp([ktIdent(id)])),
       ]),
-    );
+  );
+}
+
+/**
+ * Append each property to a `builder` val, guarding optional ones with a
+ * null check, then send `builder.build()` as the request body.
+ */
+function emitFieldBody(
+  schema: Schema,
+  method: HttpMethod,
+  builder: string,
+  builderCtor: string,
+  append: (
+    propName: string,
+    propSchema: NonNullable<Schema["properties"]>[string],
+    id: string,
+  ) => KtExpr | undefined,
+): KtStmt[] {
+  const required = new Set(schema.required ?? []);
+  const stmts: KtStmt[] = [ktVal(builder, ktCall(ktIdent(builderCtor), []))];
+  for (const [propName, propSchema] of Object.entries(
+    schema.properties ?? {},
+  )) {
+    const id = operationParamIdent(propName);
+    const call = append(propName, propSchema, id);
+    if (!call) continue;
+    const stmt = ktExprStmt(call);
     stmts.push(
-      required.has(propName)
-        ? append
-        : ktIf(ktNe(ktIdent(id), ktNull), [append]),
+      required.has(propName) ? stmt : ktIf(ktNe(ktIdent(id), ktNull), [stmt]),
     );
   }
   stmts.push(
-    setMethodWithBody(
-      method,
-      ktCall(ktMember(ktIdent("formBuilder"), "build"), []),
-    ),
+    setMethodWithBody(method, ktCall(ktMember(ktIdent(builder), "build"), [])),
   );
   return stmts;
 }

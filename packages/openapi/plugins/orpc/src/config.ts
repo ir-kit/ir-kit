@@ -1,11 +1,5 @@
-import {
-  coerce,
-  collectDeps,
-  defineConfig as defineConfigTable,
-  definePluginConfig,
-  type NamingRule,
-  resolveNaming,
-} from "@hey-api/shared";
+import { coerce, type NamingRule, resolveNaming } from "@hey-api/shared";
+import { definePlugin } from "@ir-kit/openapi-ts-plugin-kit";
 
 import { handler } from "./plugin.js";
 import { orpcImports } from "./symbols/external.js";
@@ -100,27 +94,4 @@ export const defaultConfig: ORPCPlugin["Config"] = {
   tags: ["transformer"],
 };
 
-/**
- * `definePluginConfig` spreads user config over the default table, so a
- * nested user object replaces its table (losing defaults and coercers).
- * Resolve user config against the table here instead.
- */
-const pluginFromDefaults = definePluginConfig(defaultConfig);
-const normalizeConfig = defineConfigTable<
-  Record<string, unknown>,
-  Record<string, unknown>
->(defaultConfig.config as never);
-
-export const defineConfig = (
-  userConfig?: Parameters<typeof pluginFromDefaults>[0],
-) => {
-  const plugin = pluginFromDefaults();
-  const config = normalizeConfig({ ...userConfig });
-  const dependencies = new Set<string>(defaultConfig.dependencies);
-  collectDeps(defaultConfig.config as never, config, dependencies);
-  return {
-    ...plugin,
-    config: config as typeof plugin.config,
-    dependencies: [...dependencies] as typeof plugin.dependencies,
-  };
-};
+export const defineConfig = definePlugin(defaultConfig);

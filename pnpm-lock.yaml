@@ -935,6 +935,10 @@ importers:
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/openapi/plugins/faker:
+    dependencies:
+      '@ir-kit/openapi-ts-plugin-kit':
+        specifier: workspace:^
+        version: link:../kit
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.4.0
@@ -961,7 +965,26 @@ importers:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
+  packages/openapi/plugins/kit:
+    devDependencies:
+      '@hey-api/shared':
+        specifier: 'catalog:'
+        version: 0.5.0(magicast@0.5.2)
+      '@ir-kit/tsconfig':
+        specifier: workspace:*
+        version: link:../../../../tooling/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.17
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+
   packages/openapi/plugins/orpc:
+    dependencies:
+      '@ir-kit/openapi-ts-plugin-kit':
+        specifier: workspace:^
+        version: link:../kit
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.4.0
@@ -1016,6 +1039,10 @@ importers:
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/openapi/plugins/paths:
+    dependencies:
+      '@ir-kit/openapi-ts-plugin-kit':
+        specifier: workspace:^
+        version: link:../kit
     devDependencies:
       '@hey-api/codegen-core':
         specifier: 'catalog:'
@@ -1037,6 +1064,10 @@ importers:
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/openapi/plugins/typia:
+    dependencies:
+      '@ir-kit/openapi-ts-plugin-kit':
+        specifier: workspace:^
+        version: link:../kit
     devDependencies:
       '@hey-api/codegen-core':
         specifier: 'catalog:'

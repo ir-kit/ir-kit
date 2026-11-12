@@ -74,6 +74,7 @@ function toStringList(input?: string | string[]): string[] | null {
   return Array.isArray(input) ? input : [input];
 }
 
-function escapeRegExp(s: string): string {
+/** `s` with every RegExp metacharacter escaped, for literal matching. */
+export function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
