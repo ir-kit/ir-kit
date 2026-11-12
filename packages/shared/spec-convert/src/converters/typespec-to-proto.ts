@@ -6,6 +6,7 @@ import type { ConvertOutput, SpecDocument } from "../types.js";
 registerConverter({
   from: "typespec",
   to: "proto",
+  authoredInputOnly: true,
   handler: async (document: SpecDocument, options): Promise<ConvertOutput> => {
     const path =
       typeof document.__path === "string" ? document.__path : undefined;

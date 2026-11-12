@@ -1,6 +1,3 @@
-import { readFile } from "node:fs/promises";
-import { isAbsolute, resolve } from "node:path";
-
 import type { AsyncAPIDocumentInterface } from "@asyncapi/parser";
 import {
   type AsyncAPIInput,
@@ -11,6 +8,7 @@ import {
   type LoadOpenAPIOptions,
   loadOpenAPI,
   type OpenAPIInput,
+  readSpecDocument,
   resolveOpenAPIInput,
 } from "@ir-kit/openapi-loader";
 import {
@@ -30,6 +28,7 @@ export {
   isTypespecPath,
   loadAsyncAPI,
   loadOpenAPI,
+  readSpecDocument,
   resolveOpenAPIInput,
 };
 
@@ -103,40 +102,35 @@ export async function loadSpec(opts: LoadSpecOptions): Promise<LoadSpecResult> {
   return { kind: "openapi", document };
 }
 
+/** Classify a parsed document by its root version field. */
+export function classifySpecDocument(
+  document: Record<string, unknown>,
+): "openapi" | "asyncapi" | undefined {
+  if (document.asyncapi !== undefined) return "asyncapi";
+  if (document.openapi !== undefined || document.swagger !== undefined)
+    return "openapi";
+  return undefined;
+}
+
 async function detectKind(
   input: SpecInput,
   cwd: string | undefined,
 ): Promise<SpecKind> {
-  if (typeof input !== "string") {
-    return isAsyncAPIDocument(input) ? "asyncapi" : "openapi";
+  if (isAsyncAPIDocument(input)) return "asyncapi";
+  if (typeof input === "string" && isTypespecPath(input.trim()))
+    return "typespec";
+  const document =
+    typeof input === "string" ? await readSpecDocument(input, cwd) : input;
+  const kind = isPlainOpenAPIObject(document)
+    ? classifySpecDocument(document)
+    : undefined;
+  if (!kind) {
+    const label = typeof input === "string" ? ` ${input}` : "";
+    throw new Error(
+      `Unrecognized spec${label}: expected a top-level "openapi", "swagger" or "asyncapi" field.`,
+    );
   }
-  const str: string = input;
-  if (/\.tsp$/i.test(str.trim())) return "typespec";
-
-  const trimmed = str.trim();
-  if (/^https?:\/\//i.test(trimmed)) {
-    return sniffKindFromString(await fetchHead(trimmed));
-  }
-  const path = isAbsolute(trimmed)
-    ? trimmed
-    : resolve(cwd ?? process.cwd(), trimmed);
-  return sniffKindFromString(await readFile(path, "utf8"));
-}
-
-function sniffKindFromString(text: string): SpecKind {
-  const head = text.slice(0, 2048);
-  if (/(^|\n)\s*"?asyncapi"?\s*:/.test(head)) return "asyncapi";
-  if (/(^|\n)\s*"?openapi"?\s*:/.test(head)) return "openapi";
-  if (/(^|\n)\s*"?swagger"?\s*:/.test(head)) return "openapi";
-  return "openapi";
-}
-
-async function fetchHead(url: string): Promise<string> {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
-  }
-  return res.text();
+  return kind;
 }
 
 function isAsyncAPIDocument(

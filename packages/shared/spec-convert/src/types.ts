@@ -27,4 +27,6 @@ export interface ConverterPair {
   from: SpecFormat;
   to: SpecFormat;
   handler: ConvertHandler;
+  /** The edge only accepts input written for it (e.g. TypeSpec using the protobuf library), so routes may start with it but never pass through it. */
+  authoredInputOnly?: boolean;
 }
