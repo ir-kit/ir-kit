@@ -41,6 +41,7 @@ export type {
 } from "./plugins/index-barrel/index.js";
 export { indexBarrel } from "./plugins/index-barrel/index.js";
 export type {
+  TypescriptApi,
   TypescriptPluginConfig,
   TypescriptResolvedConfig,
 } from "./plugins/typescript/index.js";

@@ -1,3 +1,5 @@
+import { AvroSchemaParser } from "@asyncapi/avro-schema-parser";
+import { OpenAPISchemaParser } from "@asyncapi/openapi-schema-parser";
 import {
   type AsyncAPIDocumentInterface,
   type Diagnostic,
@@ -29,7 +31,9 @@ export type ParseInput =
   | { kind: "url"; url: string }
   | { kind: "string"; spec: string };
 
-const sharedParser = new Parser();
+const sharedParser = new Parser({
+  schemaParsers: [AvroSchemaParser(), OpenAPISchemaParser()],
+});
 
 /**
  * Parse an AsyncAPI 3.x spec from a file, URL, or string. Delegates to
