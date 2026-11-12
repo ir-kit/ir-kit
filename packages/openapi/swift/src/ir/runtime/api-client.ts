@@ -228,7 +228,6 @@ function applyValidatorAndTransformerStmts(): ReadonlyArray<
   ];
 }
 
-/** Per-call hook parameters every `execute*` variant accepts. */
 function perCallHookParams() {
   return [
     swFunParam({
