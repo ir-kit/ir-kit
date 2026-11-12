@@ -37,15 +37,12 @@ const named = (name: string): KtType => f.createUserType(name);
 export const ktString: KtType = named("String");
 export const ktInt: KtType = named("Int");
 export const ktLong: KtType = named("Long");
-export const ktShort: KtType = named("Short");
-export const ktByte: KtType = named("Byte");
 export const ktDouble: KtType = named("Double");
 export const ktFloat: KtType = named("Float");
 export const ktBoolean: KtType = named("Boolean");
 export const ktUnit: KtType = named("Unit");
 export const ktAny: KtType = named("Any");
 export const ktJsonElement: KtType = named("JsonElement");
-export const ktNothing: KtType = named("Nothing");
 export const ktByteArray: KtType = named("ByteArray");
 
 export const ktNullable = (inner: KtType): KtType =>
@@ -56,15 +53,6 @@ export const ktMap = (key: KtType, value: KtType): KtType =>
   f.createUserType("Map", [key, value]);
 export const ktRef = (name: string, args?: ReadonlyArray<KtType>): KtType =>
   f.createUserType(name, args?.length ? args : undefined);
-export const ktFunc = (
-  params: ReadonlyArray<KtType>,
-  returnType: KtType,
-): KtType =>
-  f.createFunctionType(
-    params.map((type) => ({ type })),
-    returnType,
-  );
-
 /** `Pet` for `Pet` / `Pair<Pet, Response>`; `undefined` for composites. */
 export const typeName = (t: KtType): string | undefined =>
   t.kind === K.UserType ? t.name : undefined;
@@ -81,20 +69,10 @@ export const ktSafeMember = (on: KtExpr, name: string): KtExpr =>
   f.createNavigationExpression(on, f.createIdentifier(name), true);
 export const ktIndex = (on: KtExpr, index: KtExpr): KtExpr =>
   f.createIndexingExpression(on, [index]);
-export const ktNotNull = (on: KtExpr): KtExpr =>
-  f.createPostfixUnaryExpression(on, "!!");
-export const ktThis: KtExpr = f.createThisExpression();
-
 export const ktStr = (value: string): KtExpr =>
   f.createStringLiteral([{ text: value }]);
 export const ktIntLit = (value: number): KtExpr =>
   f.createLiteral(String(value), "int");
-export const ktLongLit = (value: number): KtExpr =>
-  f.createLiteral(`${value}L`, "long");
-export const ktDoubleLit = (value: number): KtExpr => {
-  const s = String(value);
-  return f.createLiteral(s.includes(".") ? s : `${s}.0`, "double");
-};
 export const ktBoolLit = (value: boolean): KtExpr =>
   f.createLiteral(String(value), "boolean");
 export const ktNull: KtExpr = f.createLiteral("null", "null");
@@ -139,16 +117,9 @@ export const ktLambda = (
     body,
     params.map((name) => ({ name })),
   );
-
-export const ktAs = (expr: KtExpr, type: KtType): KtExpr =>
-  f.createAsExpression(expr, type);
-export const ktAsSafe = (expr: KtExpr, type: KtType): KtExpr =>
-  f.createAsExpression(expr, type, true);
-
 type BinOp = "==" | "!=" | "<" | "<=" | ">" | ">=" | "&&" | "||" | "+";
 export const ktBinOp = (op: BinOp, left: KtExpr, right: KtExpr): KtExpr =>
   f.createBinaryExpression(left, op, right);
-export const ktEq = (l: KtExpr, r: KtExpr): KtExpr => ktBinOp("==", l, r);
 export const ktNe = (l: KtExpr, r: KtExpr): KtExpr => ktBinOp("!=", l, r);
 export const ktElvis = (l: KtExpr, r: KtExpr): KtExpr =>
   f.createElvisExpression(l, r);
@@ -192,19 +163,6 @@ export const ktForIn = (
   source: KtExpr,
   body: ReadonlyArray<KtStmt>,
 ): KtStmt => f.createForStatement([name], source, block(body));
-export const ktCatch = (
-  name: string,
-  type: KtType,
-  body: ReadonlyArray<KtStmt>,
-): KtCatchClause => ({
-  parameter: f.createParameter(name, type),
-  body: block(body),
-});
-export const ktTryCatch = (
-  body: ReadonlyArray<KtStmt>,
-  catches: ReadonlyArray<KtCatchClause>,
-): KtStmt => f.createTryExpression(block(body), catches);
-
 // Declarations
 
 /** A function parameter as carried on operation signatures. */
@@ -416,23 +374,6 @@ export function ktSealedClass(
         ...(opts.funs ?? []),
       ],
       [opts.visibility ?? "public", "sealed"],
-      opts.annotations,
-      superTypes(opts.superTypes),
-    ),
-  };
-}
-
-export function ktObject(
-  opts: DeclOpts & { properties?: ReadonlyArray<KtProp> },
-): KtDecl {
-  return {
-    kind: "object",
-    name: opts.name,
-    runtime: opts.runtime,
-    node: f.createObjectDeclaration(
-      opts.name,
-      [...(opts.properties ?? []), ...(opts.funs ?? [])],
-      [opts.visibility ?? "public"],
       opts.annotations,
       superTypes(opts.superTypes),
     ),

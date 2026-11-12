@@ -49,14 +49,6 @@ export const jRef = (name: string, args: ReadonlyArray<JType> = []): JType =>
 export const jList = (element: JType): JType => jRef("List", [element]);
 export const jMap = (value: JType): JType => jRef("Map", [jString, value]);
 
-/** Simple names a type node mentions (for imports). */
-export function typeNames(t: JType, out: Set<string> = new Set()): Set<string> {
-  walk(t, (node) => {
-    if (node.kind === java.JavaNodeKind.Identifier) out.add(node.name);
-  });
-  return out;
-}
-
 /** Depth-first walk over every object-valued child of a node. */
 export function walk(
   node: unknown,
@@ -97,15 +89,6 @@ export const jBinary = (left: JExpr, op: string, right: JExpr): JExpr =>
   f.createBinaryExpression(left, op as never, right);
 export const jTernary = (cond: JExpr, a: JExpr, b: JExpr): JExpr =>
   f.createTernaryExpression(cond, a, b);
-export const jLambda = (
-  params: ReadonlyArray<string>,
-  body: ReadonlyArray<JStmt> | JExpr,
-): JExpr =>
-  f.createLambdaExpression(
-    params.map((name) => ({ name })),
-    body,
-  );
-
 export const jLocal = (name: string, value: JExpr, type?: JType): JStmt =>
   f.createVariableDeclaration(name, type ?? named("var"), value);
 export const jAssign = (target: JExpr, value: JExpr): JStmt =>

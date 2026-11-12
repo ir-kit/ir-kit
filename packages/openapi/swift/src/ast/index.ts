@@ -54,7 +54,6 @@ export const swFloat: SwType = named("Float");
 export const swBool: SwType = named("Bool");
 export const swData: SwType = named("Data");
 export const swVoid: SwType = named("Void");
-export const swAny: SwType = named("Any");
 /** Any JSON value; the runtime `JSONValue` enum keeps models `Codable`. */
 export const swJSONValue: SwType = named("JSONValue");
 
