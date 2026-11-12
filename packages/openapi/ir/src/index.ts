@@ -73,6 +73,11 @@ export {
 } from "./spec/normalize/index.js";
 export { isMeaningless } from "./spec/ref.js";
 export { extractSecuritySchemeNames, securityKey } from "./spec/security.js";
+export {
+  type Component,
+  type ComponentShape,
+  classifyComponents,
+} from "./type/components.js";
 export type { TypeCtx } from "./type/context.js";
 export type { SchemaToTypeOps } from "./type/dispatch.js";
 export {
