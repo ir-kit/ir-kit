@@ -1,7 +1,7 @@
 import type { IR } from "@hey-api/shared";
 import type { HttpMethod, Schema } from "@ir-kit/openapi";
 import { classifyBody, isSchemaObject } from "@ir-kit/openapi";
-import type { KtType } from "../../kt-dsl/index.js";
+import type { KtType } from "../../ast/index.js";
 import {
   type KtExpr,
   type KtStmt,
@@ -16,7 +16,7 @@ import {
   ktNull,
   ktStr,
   ktVal,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import { setMethodWithBody } from "./request.js";
 import { serializerFor } from "./serializer.js";

@@ -10,7 +10,7 @@ import {
   ktNull,
   ktStr,
   ktVal,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * Initial request builder + HTTP method. Body-bearing methods can re-call
@@ -40,7 +40,7 @@ export function buildRequestStmts(method: HttpMethod): ReadonlyArray<KtStmt> {
  *  RequestBody is produced. */
 export function setMethodWithBody(
   method: HttpMethod,
-  bodyExpr: import("../../kt-dsl/index.js").KtExpr,
+  bodyExpr: import("../../ast/index.js").KtExpr,
 ): KtStmt {
   return ktExprStmt(
     ktCall(ktMember(ktIdent("builder"), "method"), [

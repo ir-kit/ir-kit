@@ -1,7 +1,7 @@
+import { type KtDecl, ktFile } from "../ast/index.js";
 import { DEFAULT_PACKAGE } from "../ir/constants.js";
-import { printDecl, printFile } from "../kt-compiler/index.js";
-import { type KtDecl, ktFile } from "../kt-dsl/index.js";
-import { importsForSource, isApiSurface } from "./imports.js";
+import { printFile } from "../kt-compiler/index.js";
+import { importsFor, isApiSurface, referencedNames } from "./imports.js";
 import { declFileName, type PlacementOptions, placeDecl } from "./layout.js";
 
 export interface BuildOptions extends PlacementOptions {
@@ -47,12 +47,8 @@ export function buildKotlinProject(
     else groups.set(path, { decls: [decl], subPkg });
   }
   return [...groups.entries()].map(([path, group]) => {
-    // Print bodies first, scan the printed output for actually-used
-    // identifiers, then re-print with the right imports. Avoids
-    // shipping unused imports per file.
-    const bodyOnly = group.decls.map((d) => printDecl(d)).join("\n\n");
     const apiSurface = group.decls.some(isApiSurface);
-    const imports = importsForSource(bodyOnly, {
+    const imports = importsFor(referencedNames(group.decls), {
       isApiSurface: apiSurface,
       rootPkg: pkg,
       subPkg: group.subPkg,

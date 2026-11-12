@@ -12,7 +12,7 @@ import {
   ktNe,
   ktNull,
   ktStr,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 
 /**

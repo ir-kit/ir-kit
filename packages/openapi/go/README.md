@@ -263,15 +263,15 @@ Conventions:
 | `printFile(file)` / `go*` builders | Lower-level Go AST + printer. |
 
 ```text
-src/go-dsl/                   Go AST: type/, expr/, stmt/, decl/, file.ts
-src/go-compiler/              AST → string, mirrors the AST tree
+src/ast/                      go* builders returning @ir-kit/compiler-go nodes; GoDecl
+src/go-compiler/              printFile / printDecl via @ir-kit/compiler-go
 src/ir/
 ├── type/                     IR.SchemaObject → GoType
 ├── operation/                IR.OperationObject → signature shared by interface + impl
 ├── impl/                     net/http body builders (url, request, headers, body, decode)
-├── runtime/                  Templated Go source for runtime helpers
+├── runtime/                  Copies runtime/*.go into the SDK
 ├── schema.ts                 schemasToDecls
 └── operations.ts             paths → interfaces + impl structs (orchestrator)
 ```
 
-Per-method bodies are AST-built; runtime helpers (the same Go every time) ship as templated strings in `ir/runtime/templates.ts`.
+Per-method bodies are built as `@ir-kit/compiler-go` nodes; imports are collected from those nodes. Runtime helpers (the same Go every time) are real, vetted sources in `runtime/` and are copied with the package clause rewritten.

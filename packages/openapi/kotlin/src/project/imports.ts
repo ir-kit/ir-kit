@@ -1,86 +1,83 @@
-import type { KtDecl } from "../kt-dsl/index.js";
+import { kt } from "@ir-kit/compiler-kotlin";
+
+import type { KtDecl } from "../ast/index.js";
+
+const K = kt.KotlinNodeKind;
+const NAME_TOKEN = /[A-Za-z_][A-Za-z0-9_]*/g;
 
 /**
- * Compute the import list for a single Kotlin file by walking the
- * already-printed source and matching against known identifiers.
- * Coarse-import-everything caused unused imports per file; the
- * print-then-scan pattern is precise without needing a full type-tree
- * walker.
- *
- * Identifiers that share names across packages (e.g. `Response` exists
- * in both `okhttp3` and a hypothetical user model) are disambiguated
- * by file kind: API-layer files always pull `okhttp3.Response`, model
- * files never do.
+ * Every identifier, type and annotation name the declarations reference,
+ * collected from the AST (string literals and comments never count).
  */
-export function importsForSource(
-  source: string,
+export function referencedNames(
+  decls: ReadonlyArray<KtDecl>,
+): ReadonlySet<string> {
+  const names = new Set<string>();
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      for (const item of value) visit(item);
+      return;
+    }
+    if (!value || typeof value !== "object") return;
+    const node = value as { kind?: unknown; name?: unknown };
+    if (
+      (node.kind === K.Identifier ||
+        node.kind === K.UserType ||
+        node.kind === K.Annotation) &&
+      typeof node.name === "string"
+    ) {
+      for (const m of node.name.matchAll(NAME_TOKEN)) names.add(m[0]);
+    }
+    for (const child of Object.values(value)) visit(child);
+  };
+  for (const decl of decls) visit(decl.node);
+  return names;
+}
+
+/**
+ * Import list for one Kotlin file. Names shared across packages (e.g.
+ * `Response` in `okhttp3` vs. a user model) are disambiguated by file
+ * kind: API-layer files pull `okhttp3.Response`, model files never do.
+ */
+export function importsFor(
+  names: ReadonlySet<string>,
   ctx: { isApiSurface: boolean; rootPkg: string; subPkg: string },
 ): ReadonlyArray<string> {
   const set = new Set<string>();
+  const when = (name: string, imp: string) => {
+    if (names.has(name)) set.add(imp);
+  };
 
-  // kotlinx-serialization annotations.
-  if (/@Serializable\b/.test(source)) {
-    set.add("kotlinx.serialization.Serializable");
-  }
-  if (/@SerialName\b/.test(source)) {
-    set.add("kotlinx.serialization.SerialName");
-  }
+  when("Serializable", "kotlinx.serialization.Serializable");
+  when("SerialName", "kotlinx.serialization.SerialName");
+  when("Instant", "kotlinx.datetime.Instant");
+  when("LocalDate", "kotlinx.datetime.LocalDate");
+  when("ListSerializer", "kotlinx.serialization.builtins.ListSerializer");
+  when("MapSerializer", "kotlinx.serialization.builtins.MapSerializer");
+  when(
+    "ByteArraySerializer",
+    "kotlinx.serialization.builtins.ByteArraySerializer",
+  );
+  when("nullable", "kotlinx.serialization.builtins.nullable");
+  when("JsonElement", "kotlinx.serialization.json.JsonElement");
 
-  // kotlinx-datetime model fields.
-  if (/\bInstant\b/.test(source)) set.add("kotlinx.datetime.Instant");
-  if (/\bLocalDate\b/.test(source)) set.add("kotlinx.datetime.LocalDate");
-
-  // kotlinx-serialization builtins (only when actually mentioned).
-  if (/\bListSerializer\(/.test(source)) {
-    set.add("kotlinx.serialization.builtins.ListSerializer");
-  }
-  if (/\bMapSerializer\(/.test(source)) {
-    set.add("kotlinx.serialization.builtins.MapSerializer");
-  }
-  if (/\bByteArraySerializer\(\)/.test(source)) {
-    set.add("kotlinx.serialization.builtins.ByteArraySerializer");
-  }
-  if (/\.nullable\b/.test(source)) {
-    set.add("kotlinx.serialization.builtins.nullable");
-  }
-  if (/\bserializer\(\)/.test(source) && ctx.isApiSurface) {
-    // Built-in `String.serializer()`, `Int.serializer()`, etc. live
-    // under kotlinx.serialization.builtins. Only the API surface uses
-    // them — model files use the auto-generated companion form.
-    set.add("kotlinx.serialization.builtins.serializer");
-  }
-  if (/\bJsonElement\b/.test(source)) {
-    set.add("kotlinx.serialization.json.JsonElement");
-  }
-
-  // OkHttp types — only API-surface files reference them.
   if (ctx.isApiSurface) {
-    if (/\bHttpUrl\b/.test(source)) set.add("okhttp3.HttpUrl");
-    if (/\bRequest\b/.test(source)) set.add("okhttp3.Request");
-    if (/\bResponse\b/.test(source)) set.add("okhttp3.Response");
-    if (/\bFormBody\b/.test(source)) set.add("okhttp3.FormBody");
-    if (/\.toMediaType\(\)/.test(source)) {
-      set.add("okhttp3.MediaType.Companion.toMediaType");
-    }
-    if (/\.toRequestBody\(/.test(source)) {
-      set.add("okhttp3.RequestBody.Companion.toRequestBody");
-    }
-
-    // Cross-package model refs. The API surface lives in `<root>.api`
-    // and references model types from `<root>.models`. Wildcard-import
-    // when the file mentions any PascalCased identifier that isn't a
-    // built-in (cheap heuristic; the alternative is walking every type
-    // ref through the decl tree).
+    // `String.serializer()` etc.; model files use generated companions.
+    when("serializer", "kotlinx.serialization.builtins.serializer");
+    when("HttpUrl", "okhttp3.HttpUrl");
+    when("Request", "okhttp3.Request");
+    when("Response", "okhttp3.Response");
+    when("FormBody", "okhttp3.FormBody");
+    when("toMediaType", "okhttp3.MediaType.Companion.toMediaType");
+    when("toRequestBody", "okhttp3.RequestBody.Companion.toRequestBody");
     if (
       ctx.subPkg === `${ctx.rootPkg}.api` &&
-      /\b[A-Z][A-Za-z0-9_]*\b/.test(source) &&
-      hasLikelyModelRef(source)
+      [...names].some((n) => /^[A-Z]/.test(n) && !NON_MODEL_TYPES.has(n))
     ) {
       set.add(`${ctx.rootPkg}.models.*`);
     }
   }
 
-  // Drop self-package imports — Kotlin allows them but they're noise.
   return [...set].filter((i) => !i.startsWith(`${ctx.subPkg}.`)).sort();
 }
 
@@ -145,14 +142,6 @@ const NON_MODEL_TYPES = new Set([
   "RequestOptions",
   "URLEncoding",
 ]);
-
-function hasLikelyModelRef(source: string): boolean {
-  const matches = source.matchAll(/\b([A-Z][A-Za-z0-9_]*)\b/g);
-  for (const m of matches) {
-    if (!NON_MODEL_TYPES.has(m[1]!)) return true;
-  }
-  return false;
-}
 
 /** API-surface predicate, exposed for the build orchestrator. */
 export function isApiSurface(decl: KtDecl): boolean {

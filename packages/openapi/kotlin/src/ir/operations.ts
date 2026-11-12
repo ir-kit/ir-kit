@@ -3,6 +3,7 @@ import { type Namespace, pascal } from "@ir-kit/codegen-core";
 import { iterOperations } from "@ir-kit/openapi";
 
 import {
+  isUnit,
   type KtDecl,
   type KtFun,
   type KtType,
@@ -16,7 +17,7 @@ import {
   ktRef,
   ktReturn,
   ktTopLevelFun,
-} from "../kt-dsl/index.js";
+} from "../ast/index.js";
 import { newTypeNames } from "./identifiers.js";
 import { buildClientClass } from "./impl/index.js";
 import {
@@ -148,8 +149,8 @@ function withResponseSignature(sig: OperationSignature): OperationSignature {
 }
 
 function withResponseReturnType(t: KtType): KtType {
-  const isUnit = t.kind === "primitive" && t.name === "Unit";
-  return isUnit ? ktRef("Response") : ktRef("Pair", [t, ktRef("Response")]);
+  const unit = isUnit(t);
+  return unit ? ktRef("Response") : ktRef("Pair", [t, ktRef("Response")]);
 }
 
 function hasSecurity(sig: OperationSignature): boolean {
@@ -200,8 +201,7 @@ function signatureToConvenienceFun(
   const callArgs = baseParams.map((p) => ktArg(ktIdent(p.name), p.name));
   callArgs.push(ktArg(ktCall(ktIdent("RequestOptions"), []), "options"));
   const forwarded = ktCall(ktMember(ktIdent("this"), sig.name), callArgs);
-  const isUnit =
-    sig.returnType.kind === "primitive" && sig.returnType.name === "Unit";
+  const unit = isUnit(sig.returnType);
   return ktFun({
     name: sig.name,
     params: baseParams,
@@ -209,6 +209,6 @@ function signatureToConvenienceFun(
     modifiers: ["suspend"],
     doc: sig.doc,
     receiver: ktRef(receiverName),
-    body: [isUnit ? ktExprStmt(forwarded) : ktReturn(forwarded)],
+    body: [unit ? ktExprStmt(forwarded) : ktReturn(forwarded)],
   });
 }

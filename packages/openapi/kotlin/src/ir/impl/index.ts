@@ -1,6 +1,6 @@
 import {
-  type KtClass,
   type KtClassModifier,
+  type KtDecl,
   type KtFun,
   type KtStmt,
   ktArg,
@@ -22,7 +22,7 @@ import {
   ktStr,
   ktVal,
   ktVar,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import type { OperationSignature } from "../operation/signature.js";
 import { buildBodyStmts } from "./body.js";
 import { buildSendAndDecodeStmts } from "./decode.js";
@@ -186,7 +186,7 @@ function applyAuthStmts(
 
 export interface ClientClassResult {
   /** The impl class itself. */
-  class: KtClass;
+  class: KtDecl;
   /** True when at least one method uses the `MultipartFormBody` helper,
    *  so the orchestrator should ship it. */
   needsMultipart: boolean;
@@ -222,7 +222,6 @@ export function buildClientClass(
         ktProp({
           name: "client",
           type: ktRef("APIClient"),
-          inPrimary: true,
         }),
       ],
       funs: built.map((b) => b.fun),

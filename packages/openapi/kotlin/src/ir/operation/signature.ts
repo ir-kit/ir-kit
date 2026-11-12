@@ -12,7 +12,7 @@ import {
   type KtType,
   ktFunParam,
   ktRef,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import type { TypeCtx } from "../type/index.js";
 import { buildBodyParams } from "./body.js";
 import { buildNonBodyParams } from "./params.js";

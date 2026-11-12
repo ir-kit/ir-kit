@@ -140,9 +140,7 @@ describe("schemasToDecls", () => {
       },
     });
     const decls = schemasToDecls(m.components?.schemas ?? {});
-    const names = decls.map((d) =>
-      d.kind === "topLevelFun" ? d.fun.name : (d as { name: string }).name,
-    );
+    const names = decls.map((d) => d.name);
     assert.deepEqual(names.sort(), ["User", "User_Address"]);
   });
 

@@ -7,8 +7,8 @@ import {
 } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
-import type { KtDecl } from "../../kt-dsl/decl/types.js";
-import { type KtType, ktRef, ktTypeAlias } from "../../kt-dsl/index.js";
+import type { KtDecl } from "../../ast/index.js";
+import { type KtType, ktRef, ktTypeAlias } from "../../ast/index.js";
 import { ktOps } from "../type-ops.js";
 import type { TypeCtx } from "./context.js";
 

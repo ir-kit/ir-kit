@@ -245,15 +245,15 @@ Runtime dependencies (set up by the `gradle:` option, or by the consuming module
 | `printFile(file)` / `kt*` builders | Lower-level Kotlin AST + printer. |
 
 ```text
-src/kt-dsl/                   Kotlin AST: type/, expr/, stmt/, decl/, fun.ts, file.ts
-src/kt-compiler/              AST → string, mirrors the AST tree
+src/ast/                      kt* builders returning @ir-kit/compiler-kotlin nodes; KtDecl
+src/kt-compiler/              printFile / printDecl via @ir-kit/compiler-kotlin
 src/ir/
 ├── type/                     IR.SchemaObject → KtType
 ├── operation/                IR.OperationObject → signature shared by interface + impl
 ├── impl/                     OkHttp body builders (url, request, headers, body, decode)
-├── runtime/                  Templated Kotlin source for runtime helpers
+├── runtime/                  Copies runtime/*.kt into the SDK
 ├── schema.ts                 schemasToDecls
 └── operations.ts             paths → interfaces + impl classes (orchestrator)
 ```
 
-Adding a new statement / expression node: add to `kt-dsl/{expr,stmt}/types.ts`, builder, one printer case. Per-method bodies are AST-built; runtime helpers (the same Kotlin every time) ship as templated strings in `ir/runtime/templates.ts`.
+Per-method bodies are built as `@ir-kit/compiler-kotlin` nodes; imports are collected from those nodes. Runtime helpers (the same Kotlin every time) are real, ktlint-checked sources in `runtime/` and are copied with the package header rewritten.
