@@ -4,10 +4,116 @@ import { JavaNodeKind } from "./nodes/kinds.js";
 
 export interface JavaPrinterOptions {
   indentSize?: number;
+  maxLineLength?: number;
 }
 
 export function createPrinter(options?: JavaPrinterOptions) {
   const indentSize = options?.indentSize ?? 2;
+  const maxLineLength = options?.maxLineLength ?? 100;
+  const spaces = (n: number) => " ".repeat(n);
+  const baseIndent = () => indentLevel * indentSize;
+
+  function fitOrWrap(
+    base: number,
+    prefix: string,
+    items: ReadonlyArray<JavaNode | string>,
+    suffix: string,
+  ): string {
+    const text = (it: JavaNode | string) =>
+      typeof it === "string" ? it : printNode(it);
+    const flat = `${prefix}${items.map(text).join(", ")}${suffix}`;
+    if (base + flat.length <= maxLineLength) return spaces(base) + flat;
+    const cont = base + 4;
+    const oneLine = `${items.map(text).join(", ")}${suffix}`;
+    if (!oneLine.includes("\n") && cont + oneLine.length <= maxLineLength) {
+      return `${spaces(base)}${prefix}\n${spaces(cont)}${oneLine}`;
+    }
+    const last = items.length - 1;
+    return [
+      spaces(base) + prefix,
+      ...items.map((it, i) =>
+        typeof it === "string"
+          ? spaces(cont) + it + (i < last ? "," : suffix)
+          : wrapExpr(it, cont, "", i < last ? "," : suffix),
+      ),
+    ].join("\n");
+  }
+
+  function wrapExpr(
+    node: JavaNode,
+    base: number,
+    prefix: string,
+    suffix: string,
+  ): string {
+    const flat = `${prefix}${printNode(node)}${suffix}`;
+    if (base + flat.length <= maxLineLength) return spaces(base) + flat;
+    if (node.kind === JavaNodeKind.CallExpression && node.args.length > 0) {
+      return fitOrWrap(
+        base,
+        `${prefix}${printNode(node.callee)}(`,
+        node.args,
+        `)${suffix}`,
+      );
+    }
+    if (
+      node.kind === JavaNodeKind.NewExpression &&
+      !node.body &&
+      node.args.length > 0
+    ) {
+      return fitOrWrap(
+        base,
+        `${prefix}new ${printNode(node.callee)}(`,
+        node.args,
+        `)${suffix}`,
+      );
+    }
+    return spaces(base) + flat;
+  }
+
+  /** Re-wraps an over-long declaration header at its parameter list. */
+  function wrapHeader(
+    printed: string,
+    open: string,
+    items: ReadonlyArray<string>,
+  ): string {
+    const nl = printed.indexOf("\n");
+    const head = nl === -1 ? printed : printed.slice(0, nl);
+    if (head.length <= maxLineLength) return printed;
+    const list = items.join(", ");
+    const at = head.indexOf(`${open}${list})`);
+    if (at === -1) return printed;
+    const start = at + open.length;
+    const base = head.length - head.trimStart().length;
+    const wrapped = fitOrWrap(
+      base,
+      head.slice(base, start),
+      items,
+      head.slice(start + list.length),
+    );
+    return nl === -1 ? wrapped : wrapped + printed.slice(nl);
+  }
+
+  function printMemberBlock(members: ReadonlyArray<JavaNode>): string {
+    if (members.length === 0) return "{}";
+    const lines: string[] = ["{"];
+    indentLevel += 1;
+    members.forEach((member, i) => {
+      const prev = members[i - 1];
+      if (
+        prev &&
+        !(
+          prev.kind === JavaNodeKind.VariableDeclaration &&
+          member.kind === JavaNodeKind.VariableDeclaration
+        )
+      ) {
+        lines.push("");
+      }
+      lines.push(printNode(member));
+    });
+    indentLevel -= 1;
+    lines.push(printLine("}"));
+    return lines.join("\n");
+  }
   let indentLevel = 0;
 
   function printParameter(p: JavaMethodParameter): string {
@@ -255,7 +361,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
         break;
 
       case JavaNodeKind.ExpressionStatement:
-        parts.push(printLine(`${printNode(node.expression)};`));
+        parts.push(wrapExpr(node.expression, baseIndent(), "", ";"));
         break;
 
       case JavaNodeKind.LabeledStatement: {
@@ -274,9 +380,9 @@ export function createPrinter(options?: JavaPrinterOptions) {
 
       case JavaNodeKind.ReturnStatement:
         parts.push(
-          printLine(
-            `return${node.expression ? ` ${printNode(node.expression)}` : ""};`,
-          ),
+          node.expression
+            ? wrapExpr(node.expression, baseIndent(), "return ", ";")
+            : printLine("return;"),
         );
         break;
 
@@ -321,10 +427,12 @@ export function createPrinter(options?: JavaPrinterOptions) {
             : "";
         const typeText = node.type ? `${printNode(node.type)} ` : "";
         const valueText = node.value ? ` = ${printNode(node.value)}` : "";
+        const declText = `${inlineAnnotations}${modifiers}${typeText}${node.name}`;
+        const line = printLine(`${declText}${valueText};`);
         parts.push(
-          printLine(
-            `${inlineAnnotations}${modifiers}${typeText}${node.name}${valueText};`,
-          ),
+          node.value && line.length > maxLineLength
+            ? `${printLine(`${declText} =`)}\n${wrapExpr(node.value, baseIndent() + 4, "", ";")}`
+            : line,
         );
         break;
       }
@@ -358,7 +466,16 @@ export function createPrinter(options?: JavaPrinterOptions) {
         if (node.packageDeclaration) {
           parts.push(printNode(node.packageDeclaration));
         }
-        parts.push(...node.statements.map((stmt: JavaNode) => printNode(stmt)));
+        node.statements.forEach((stmt: JavaNode, i: number) => {
+          const prev = node.statements[i - 1];
+          if (
+            prev?.kind === JavaNodeKind.ImportStatement &&
+            stmt.kind !== JavaNodeKind.ImportStatement
+          ) {
+            parts.push("");
+          }
+          parts.push(printNode(stmt));
+        });
         break;
       }
 
@@ -387,7 +504,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
             : "";
         parts.push(
           printLine(
-            `${modifiers}class ${node.name}${typeParams}${extendsText}${implementsText} ${printNode(node.body)}`,
+            `${modifiers}class ${node.name}${typeParams}${extendsText}${implementsText} ${printMemberBlock(node.body.statements)}`,
           ),
         );
         break;
@@ -411,8 +528,12 @@ export function createPrinter(options?: JavaPrinterOptions) {
           .map((c) => printParameter(c))
           .join(", ");
         parts.push(
-          printLine(
-            `${modifiers}record ${node.name}(${components})${implementsText} ${printNode(node.body)}`,
+          wrapHeader(
+            printLine(
+              `${modifiers}record ${node.name}(${components})${implementsText} ${printMemberBlock(node.body.statements)}`,
+            ),
+            `record ${node.name}(`,
+            node.components.map((c) => printParameter(c)),
           ),
         );
         break;
@@ -438,7 +559,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
             : "";
         parts.push(
           printLine(
-            `${modifiers}${node.annotationInterface ? "@interface" : "interface"} ${node.name}${typeParams}${extendsText} ${printNode(node.body)}`,
+            `${modifiers}${node.annotationInterface ? "@interface" : "interface"} ${node.name}${typeParams}${extendsText} ${printMemberBlock(node.body.statements)}`,
           ),
         );
         break;
@@ -458,24 +579,26 @@ export function createPrinter(options?: JavaPrinterOptions) {
           node.implements && node.implements.length > 0
             ? ` implements ${node.implements.map((i) => printNode(i)).join(", ")}`
             : "";
-        const constantsText = node.constants
-          .map((c) =>
-            c.args && c.args.length > 0
-              ? `${c.name}(${c.args.map((a) => printNode(a)).join(", ")})`
-              : c.name,
-          )
-          .join(", ");
+        const constantsText = node.constants.map((c) =>
+          c.args && c.args.length > 0
+            ? `${c.name}(${c.args.map((a) => printNode(a)).join(", ")})`
+            : c.name,
+        );
         const header = `${modifiers}enum ${node.name}${implementsText}`;
         parts.push(printLine(`${header} {`));
         indentLevel += 1;
         const hasMembers = node.body.statements.length > 0;
-        if (constantsText.length > 0) {
-          parts.push(printLine(constantsText + (hasMembers ? ";" : "")));
-        }
+        const last = constantsText.length - 1;
+        constantsText.forEach((c, i) => {
+          const end = i < last ? "," : hasMembers ? ";" : "";
+          parts.push(printLine(c + end));
+        });
         if (hasMembers) {
-          parts.push(
-            ...node.body.statements.map((stmt: JavaNode) => printNode(stmt)),
-          );
+          indentLevel -= 1;
+          const body = printMemberBlock(node.body.statements).split("\n");
+          indentLevel += 1;
+          if (constantsText.length > 0) parts.push("");
+          parts.push(...body.slice(1, -1));
         }
         indentLevel -= 1;
         parts.push(printLine("}"));
@@ -697,6 +820,15 @@ export function createPrinter(options?: JavaPrinterOptions) {
         throw new Error(`Unsupported node kind: ${(node as any).kind}`);
     }
 
+    if (node.kind === JavaNodeKind.MethodDeclaration) {
+      const typeParams =
+        node.typeParameters && node.typeParameters.length > 0
+          ? `<${node.typeParameters.map((p: JavaNode) => printNode(p)).join(", ")}>`
+          : "";
+      const items = node.parameters.map((p) => printParameter(p));
+      const open = `${node.name}${typeParams}(`;
+      return parts.map((part) => wrapHeader(part, open, items)).join("\n");
+    }
     return parts.join("\n");
   }
 

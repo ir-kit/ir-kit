@@ -123,3 +123,24 @@ jobs:
 
       - name: Lint generated example SDK
         run: bash scripts/lint-swift.sh examples/openapi-sdk-petstore/swift/sdk
+
+  lint-java:
+    name: Lint generated Java SDK
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Lint generated example SDK
+        run: bash scripts/lint-java.sh examples/openapi-sdk-petstore/java/sdk
+
+      - name: Lint SDK runtime
+        run: bash scripts/lint-java.sh packages/openapi/java/runtime
