@@ -186,6 +186,12 @@ flowchart LR
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 | [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
 
+### Other
+
+| Package | Description |
+| --- | --- |
+| [`@ir-kit/openapi-ts-plugin-kit`](./packages/openapi/plugins/kit) | Helpers shared by the ir-kit plugins for @hey-api/openapi-ts |
+
 <!-- @packages-end -->
 
 > The package list above is auto-generated from each `package.json`'s `description` field, with categories driven by [`scripts/sync-readme.mjs`](./scripts/sync-readme.mjs). The lefthook pre-commit hook keeps it current; run `pnpm sync:readme` manually if needed.
