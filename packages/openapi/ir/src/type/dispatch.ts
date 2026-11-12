@@ -68,6 +68,14 @@ export interface SchemaToTypeOps<T, D> {
     emit: (d: D) => void,
     names: Namespace,
   ): T;
+  /** Unions with 2+ non-null branches. Targets with a native sum type
+   *  (e.g. protobuf `oneof`) build it here; others fall back to
+   *  `unionFallback`. */
+  multiUnion?(
+    schema: Schema,
+    ctx: TypeCtx<D>,
+    dispatch: (s: Schema, c: TypeCtx<D>) => T,
+  ): T;
 }
 
 export function unionToType<T, D>(
@@ -85,7 +93,9 @@ export function unionToType<T, D>(
     case "single":
       return ops.wrapForUnionSingle(dispatch(shape.inner, ctx), shape.nullable);
     case "multi":
-      return ops.unionFallback(shape.nullable);
+      return ops.multiUnion
+        ? ops.multiUnion(schema, ctx, dispatch)
+        : ops.unionFallback(shape.nullable);
   }
 }
 
