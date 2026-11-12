@@ -53,7 +53,6 @@ function pathsOf(doc: OpenAPIV3_1.Document): string[] {
 
 describe("fromHAR", () => {
   it("folds a single GET entry into a spec", async () => {
-    // Path templating requires multiple samples — one entry keeps the literal path.
     const har = harWith([
       {
         method: "GET",
@@ -66,7 +65,7 @@ describe("fromHAR", () => {
 
     const recon = await fromHAR(har);
     expect(recon.sampleCount()).toBe(1);
-    expect(pathsOf(recon.toOpenAPI())).toEqual(["/pets/1"]);
+    expect(pathsOf(recon.toOpenAPI())).toEqual(["/pets/{petId}"]);
   });
 
   it("accepts JSON content as a string", async () => {
