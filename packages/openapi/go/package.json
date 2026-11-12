@@ -38,6 +38,7 @@
   },
   "files": [
     "dist",
+    "runtime/*.go",
     "README.md",
     "LICENSE.md"
   ],

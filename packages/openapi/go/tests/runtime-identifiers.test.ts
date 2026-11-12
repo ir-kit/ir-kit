@@ -25,10 +25,7 @@ function declaredIdentifiers(source: string): string[] {
 
 describe("GO_RUNTIME_IDENTIFIERS", () => {
   it("lists every exported package-scope identifier the runtime declares", () => {
-    const files = buildRuntimeFiles(
-      { hasAuth: true, hasMultipart: true },
-      "api",
-    );
+    const files = buildRuntimeFiles({ hasMultipart: true }, "api");
     const missing = files
       .flatMap((f) => declaredIdentifiers(f.content))
       .filter((id) => !GO_RUNTIME_IDENTIFIERS.has(id));
