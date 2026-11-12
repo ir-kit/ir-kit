@@ -4,7 +4,12 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { sdkAllCommand } from "../src/commands/sdk-all.js";
-import { sdkJavaCommand } from "../src/commands/sdk-native.js";
+import {
+  sdkGoCommand,
+  sdkJavaCommand,
+  sdkKotlinCommand,
+  sdkSwiftCommand,
+} from "../src/commands/sdk-native.js";
 
 const fixture = join(
   import.meta.dirname,
@@ -62,5 +67,15 @@ describe("sdk commands", () => {
     expect(
       await readdir(join(out, "src/main/java/com/acme/api")),
     ).not.toHaveLength(0);
+  });
+
+  it.each([
+    ["go", sdkGoCommand, { gomod: "example.com/acme" }, "go.mod"],
+    ["kotlin", sdkKotlinCommand, { gradle: true }, "build.gradle.kts"],
+    ["swift", sdkSwiftCommand, { swiftPackage: true }, "Package.swift"],
+  ] as const)("sdk %s passes its project flag through", async (_, command, flags, file) => {
+    out = await mkdtemp(join(tmpdir(), "ir-sdk-native-"));
+    await command.handler({ input: fixture, output: out, ...flags });
+    expect(await readdir(out)).toContain(file);
   });
 });
