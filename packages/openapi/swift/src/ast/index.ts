@@ -253,6 +253,9 @@ export const swForIn = (
   source: SwExpr,
   body: ReadonlyArray<SwStmt>,
 ): SwStmt => f.createForInStatement(name, source, body);
+/** A bare `do { … }` scope. */
+export const swDo = (body: ReadonlyArray<SwStmt>): SwStmt =>
+  f.createDoStatement(body, []);
 export const swDoCatch = (
   body: ReadonlyArray<SwStmt>,
   catch_: ReadonlyArray<SwStmt>,
@@ -573,10 +576,16 @@ export function swExtension(opts: {
     kind: "extension",
     name: opts.name ?? `${opts.on}+Defaults`,
     runtime: opts.runtime,
+    // swift-format moves access off extensions onto their members.
     node: f.createExtensionDeclaration(
       named(opts.on),
-      opts.funs.map(withoutAccess),
-      access(opts.access),
+      opts.funs.map((fn) => ({
+        ...withoutAccess(fn),
+        modifiers: [
+          ...access(opts.access),
+          ...(withoutAccess(fn).modifiers ?? []),
+        ],
+      })),
     ),
   };
 }

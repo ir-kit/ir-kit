@@ -13,17 +13,21 @@ public final class MultipartFormBody {
   }
 
   public func append(_ value: String, name: String) {
-    if let encoded = "--\(boundary)\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = "--\(boundary)\r\n"
+      data.append(Data(text.utf8))
     }
-    if let encoded = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n"
+      data.append(Data(text.utf8))
     }
-    if let encoded = value.data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = value
+      data.append(Data(text.utf8))
     }
-    if let encoded = "\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = "\r\n"
+      data.append(Data(text.utf8))
     }
   }
 
@@ -33,15 +37,19 @@ public final class MultipartFormBody {
     filename: String,
     mimeType: String = "application/octet-stream"
   ) {
-    if let encoded = "--\(boundary)\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = "--\(boundary)\r\n"
+      data.append(Data(text.utf8))
     }
-    if let encoded = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\nContent-Type: \(mimeType)\r\n\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text =
+        "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\nContent-Type: \(mimeType)\r\n\r\n"
+      data.append(Data(text.utf8))
     }
     data.append(blob)
-    if let encoded = "\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = "\r\n"
+      data.append(Data(text.utf8))
     }
   }
 
@@ -50,8 +58,9 @@ public final class MultipartFormBody {
       return data
     }
     finalized = true
-    if let encoded = "--\(boundary)--\r\n".data(using: .utf8) {
-      data.append(encoded)
+    do {
+      let text = "--\(boundary)--\r\n"
+      data.append(Data(text.utf8))
     }
     return data
   }

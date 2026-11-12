@@ -7,6 +7,7 @@ import {
   swCall,
   swClass,
   swData,
+  swDo,
   swDotCase,
   swExprStmt,
   swFun,
@@ -16,6 +17,7 @@ import {
   swIfLet,
   swInit,
   swInterp,
+  swLet,
   swMember,
   swProp,
   swRef,
@@ -169,22 +171,18 @@ function finalizeFn() {
   });
 }
 
-/** `data.append(<expr>.data(using: .utf8)!)` */
+/** `do { let text = <expr>; data.append(Data(text.utf8)) }` */
 function writeText(value: SwExpr): SwStmt {
-  // Use `if let` to avoid a force-unwrap in the rare case a string can't
-  // be UTF-8 encoded — but since interpolation always yields valid UTF-8,
-  // a direct force-unwrap is also safe. We pick `if let` for safety.
-  return swIfLet(
-    "encoded",
-    swCall(swMember(value, "data"), [swArg(swDotCase("utf8"), "using")]),
-    [
-      swExprStmt(
-        swCall(swMember(swIdent("data"), "append"), [
-          swArg(swIdent("encoded")),
-        ]),
-      ),
-    ],
-  );
+  return swDo([
+    swLet("text", value),
+    swExprStmt(
+      swCall(swMember(swIdent("data"), "append"), [
+        swArg(
+          swCall(swIdent("Data"), [swArg(swMember(swIdent("text"), "utf8"))]),
+        ),
+      ]),
+    ),
+  ]);
 }
 
 /** `data.append("--<boundary>\r\n".data(using: .utf8)!)` */

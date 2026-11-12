@@ -23,6 +23,8 @@ const INDENT = "  ";
 export function createPrinter(options?: SwiftPrinterOptions) {
   const maxLineLength = options?.maxLineLength ?? 100;
   let indentLevel = 0;
+  /** Column where the expression being printed starts. */
+  let column = 0;
 
   /** `(a: A, b: B)`, or one parameter per line when the header overflows. */
   function printParameterList(
@@ -129,6 +131,38 @@ export function createPrinter(options?: SwiftPrinterOptions) {
     return `case ${printNode(condition.pattern)} = ${printNode(condition.initializer)}`;
   }
 
+  function printConditions(
+    conditions: ReadonlyArray<SwiftCondition>,
+    offset: number,
+  ): string {
+    return conditions
+      .map((condition) => {
+        column = INDENT.length * indentLevel + offset;
+        return printCondition(condition);
+      })
+      .join(", ");
+  }
+
+  /** swift-format style for conditions that span lines. */
+  function printBrokenHeader(
+    keyword: string,
+    conditions: ReadonlyArray<SwiftCondition>,
+    opener: string,
+    body: ReadonlyArray<SwiftNode>,
+  ): string {
+    indentLevel += 1;
+    const printed = printLine(printConditions(conditions, 0));
+    const lines = body.map((statement) => printNode(statement));
+    indentLevel -= 1;
+    return [
+      printLine(keyword),
+      printed,
+      printLine(opener),
+      ...lines,
+      printLine("}"),
+    ].join("\n");
+  }
+
   function printBraceBlock(
     header: string,
     body: ReadonlyArray<SwiftNode>,
@@ -217,6 +251,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         ].join("\n");
 
       case SwiftNodeKind.AwaitExpression:
+        column += "await ".length;
         return `await ${printNode(node.expression)}`;
 
       case SwiftNodeKind.BooleanLiteral:
@@ -370,6 +405,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return printNode(node.expression);
 
       case SwiftNodeKind.ExpressionStatement:
+        column = INDENT.length * indentLevel;
         return printLine(printNode(node.expression));
 
       case SwiftNodeKind.ExtensionDeclaration: {
@@ -400,19 +436,43 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.FunctionCallExpression: {
-        const args = node.arguments
-          .map((argument) =>
-            argument.label
-              ? `${argument.label}: ${printNode(argument.expression)}`
-              : printNode(argument.expression),
-          )
-          .join(", ");
+        const start = column;
+        const callee = printNode(node.calledExpression);
+        const args = node.arguments.map((argument) =>
+          argument.label
+            ? `${argument.label}: ${printNode(argument.expression)}`
+            : printNode(argument.expression),
+        );
         const closure = node.trailingClosure
           ? ` ${printNode(node.trailingClosure)}`
           : "";
         const parens =
-          node.arguments.length || !node.trailingClosure ? `(${args})` : "";
-        return `${printNode(node.calledExpression)}${parens}${closure}`;
+          args.length || !node.trailingClosure ? `(${args.join(", ")})` : "";
+        const inline = `${callee}${parens}${closure}`;
+        const firstLine = inline.split("\n")[0] ?? "";
+        if (
+          !args.length ||
+          maxLineLength <= 0 ||
+          start + firstLine.length <= maxLineLength ||
+          args.some((arg) => arg.includes("\n"))
+        )
+          return inline;
+        const indent = INDENT.repeat(indentLevel + 1);
+        const width = maxLineLength - indent.length;
+        const lines: Array<string> = [];
+        let current = "";
+        args.forEach((arg, index) => {
+          const candidate = current ? `${current}, ${arg}` : arg;
+          const comma = index < args.length - 1 ? 1 : 0;
+          if (current && candidate.length + comma > width) {
+            lines.push(current);
+            current = arg;
+          } else current = candidate;
+        });
+        if (!lines.length && current.length + 1 <= width)
+          return `${callee}(\n${indent}${current})${closure}`;
+        lines.push(current);
+        return `${callee}(\n${lines.map((line) => `${indent}${line}`).join(",\n")}\n${INDENT.repeat(indentLevel)})${closure}`;
       }
 
       case SwiftNodeKind.FunctionDeclaration: {
@@ -455,10 +515,10 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.GuardStatement: {
-        const conditions = node.conditions
-          .map((condition) => printCondition(condition))
-          .join(", ");
-        return printBraceBlock(`guard ${conditions} else`, node.body);
+        const conditions = printConditions(node.conditions, "guard ".length);
+        if (!conditions.includes("\n"))
+          return printBraceBlock(`guard ${conditions} else`, node.body);
+        return printBrokenHeader("guard", node.conditions, "else {", node.body);
       }
 
       case SwiftNodeKind.Identifier:
@@ -473,9 +533,9 @@ export function createPrinter(options?: SwiftPrinterOptions) {
           : node.name;
 
       case SwiftNodeKind.IfStatement: {
-        const conditions = node.conditions
-          .map((condition) => printCondition(condition))
-          .join(", ");
+        const conditions = printConditions(node.conditions, "if ".length);
+        if (conditions.includes("\n") && !node.elseBody)
+          return printBrokenHeader("if", node.conditions, "{", node.body);
         const header = printLine(`if ${conditions} {`);
         indentLevel += 1;
         const body = node.body.map((statement) => printNode(statement));
@@ -684,6 +744,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.ReturnStatement:
+        column = INDENT.length * indentLevel + "return ".length;
         return printLine(
           node.expression ? `return ${printNode(node.expression)}` : "return",
         );
@@ -778,6 +839,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         return printLine(`throw ${printNode(node.expression)}`);
 
       case SwiftNodeKind.TryExpression:
+        column += `try${node.questionOrExclamationMark ?? ""} `.length;
         return `try${node.questionOrExclamationMark ?? ""} ${printNode(node.expression)}`;
 
       case SwiftNodeKind.TupleExpression: {
@@ -845,9 +907,22 @@ export function createPrinter(options?: SwiftPrinterOptions) {
             const type = binding.typeAnnotation
               ? `: ${printNode(binding.typeAnnotation)}`
               : "";
-            const value = binding.initializer
-              ? ` = ${printNode(binding.initializer)}`
-              : "";
+            column =
+              INDENT.length * indentLevel +
+              `${modifiers}${node.bindingSpecifier} ${binding.pattern}${type} = `
+                .length;
+            const start = column;
+            const initializer = binding.initializer
+              ? printNode(binding.initializer)
+              : undefined;
+            const value =
+              initializer === undefined
+                ? ""
+                : maxLineLength > 0 &&
+                    !initializer.includes("\n") &&
+                    start + initializer.length > maxLineLength
+                  ? ` =\n${INDENT.repeat(indentLevel + 1)}${initializer}`
+                  : ` = ${initializer}`;
             return `${binding.pattern}${type}${value}`;
           })
           .join(", ");

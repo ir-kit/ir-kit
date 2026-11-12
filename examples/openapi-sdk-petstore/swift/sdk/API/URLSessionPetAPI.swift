@@ -11,7 +11,7 @@ public final class URLSessionPetAPI: PetAPI {
   public func addPet(body: Pet, options: RequestOptions = RequestOptions()) async throws -> Pet {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet")
+    let url = URLEncoding.path(baseURL, ["pet"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -27,7 +27,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /pet
@@ -37,7 +40,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet")
+    let url = URLEncoding.path(baseURL, ["pet"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -53,14 +56,17 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// PUT /pet
   public func updatePet(body: Pet, options: RequestOptions = RequestOptions()) async throws -> Pet {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet")
+    let url = URLEncoding.path(baseURL, ["pet"])
     var request = URLRequest(url: url)
     request.httpMethod = "PUT"
     if let timeout = options.timeout {
@@ -76,7 +82,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// PUT /pet
@@ -86,7 +95,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet")
+    let url = URLEncoding.path(baseURL, ["pet"])
     var request = URLRequest(url: url)
     request.httpMethod = "PUT"
     if let timeout = options.timeout {
@@ -102,7 +111,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /pet/findByStatus
@@ -112,7 +124,10 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> [Pet] {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByStatus"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "findByStatus"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -134,7 +149,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: [Pet].self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /pet/findByStatus
@@ -144,7 +162,10 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> ([Pet], HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByStatus"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "findByStatus"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -166,7 +187,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: [Pet].self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /pet/findByTags
@@ -176,12 +200,16 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> [Pet] {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByTags"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "findByTags"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
     components.queryItems = [URLQueryItem]()
-    components.queryItems?.append(contentsOf: URLEncoding.query("tags", values: tags, style: .form, explode: true))
+    components.queryItems?.append(
+      contentsOf: URLEncoding.query("tags", values: tags, style: .form, explode: true))
     guard let url = components.url else {
       throw APIError.transport(URLError(.badURL))
     }
@@ -198,7 +226,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: [Pet].self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /pet/findByTags
@@ -208,12 +239,16 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> ([Pet], HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByTags"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "findByTags"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
     components.queryItems = [URLQueryItem]()
-    components.queryItems?.append(contentsOf: URLEncoding.query("tags", values: tags, style: .form, explode: true))
+    components.queryItems?.append(
+      contentsOf: URLEncoding.query("tags", values: tags, style: .form, explode: true))
     guard let url = components.url else {
       throw APIError.transport(URLError(.badURL))
     }
@@ -230,7 +265,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: [Pet].self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /pet/{petId}
@@ -240,7 +278,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> Pet {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
+    let url = URLEncoding.path(baseURL, ["pet", "\(petId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -254,7 +292,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /pet/{petId}
@@ -264,7 +305,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
+    let url = URLEncoding.path(baseURL, ["pet", "\(petId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -278,7 +319,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /pet/{petId}
@@ -290,7 +334,10 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> Pet {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "\(petId)"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -313,7 +360,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /pet/{petId}
@@ -325,7 +375,10 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "\(petId)"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -348,7 +401,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: Pet.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: Pet.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// DELETE /pet/{petId}
@@ -359,7 +415,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
+    let url = URLEncoding.path(baseURL, ["pet", "\(petId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -376,7 +432,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// DELETE /pet/{petId}
@@ -387,7 +446,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
+    let url = URLEncoding.path(baseURL, ["pet", "\(petId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -404,7 +463,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// POST /pet/{petId}/uploadImage
@@ -416,12 +478,18 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> ApiResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadImage"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "\(petId)", "uploadImage"]),
+        resolvingAgainstBaseURL: false
+      )
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
     components.queryItems = [URLQueryItem]()
-    components.queryItems?.append(contentsOf: URLEncoding.query("additionalMetadata", value: additionalMetadata))
+    components.queryItems?.append(
+      contentsOf: URLEncoding.query("additionalMetadata", value: additionalMetadata))
     guard let url = components.url else {
       throw APIError.transport(URLError(.badURL))
     }
@@ -440,7 +508,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /pet/{petId}/uploadImage
@@ -452,12 +523,18 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (ApiResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadImage"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["pet", "\(petId)", "uploadImage"]),
+        resolvingAgainstBaseURL: false
+      )
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
     components.queryItems = [URLQueryItem]()
-    components.queryItems?.append(contentsOf: URLEncoding.query("additionalMetadata", value: additionalMetadata))
+    components.queryItems?.append(
+      contentsOf: URLEncoding.query("additionalMetadata", value: additionalMetadata))
     guard let url = components.url else {
       throw APIError.transport(URLError(.badURL))
     }
@@ -476,7 +553,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /pet/{petId}/uploadDocument
@@ -489,7 +569,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> ApiResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadDocument")
+    let url = URLEncoding.path(baseURL, ["pet", "\(petId)", "uploadDocument"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -513,7 +593,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /pet/{petId}/uploadDocument
@@ -526,7 +609,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (ApiResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadDocument")
+    let url = URLEncoding.path(baseURL, ["pet", "\(petId)", "uploadDocument"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -550,7 +633,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /tags
@@ -560,7 +646,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> SubmitTags_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("tags")
+    let url = URLEncoding.path(baseURL, ["tags"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -571,7 +657,10 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: SubmitTags_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: SubmitTags_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /tags
@@ -581,7 +670,7 @@ public final class URLSessionPetAPI: PetAPI {
   ) async throws -> (SubmitTags_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("tags")
+    let url = URLEncoding.path(baseURL, ["tags"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -592,6 +681,9 @@ public final class URLSessionPetAPI: PetAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: SubmitTags_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: SubmitTags_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 }

@@ -14,7 +14,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user")
+    let url = URLEncoding.path(baseURL, ["user"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -25,7 +25,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /user
@@ -35,7 +38,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user")
+    let url = URLEncoding.path(baseURL, ["user"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -46,7 +49,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /user/createWithList
@@ -56,7 +62,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("createWithList")
+    let url = URLEncoding.path(baseURL, ["user", "createWithList"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -67,7 +73,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /user/createWithList
@@ -77,7 +86,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("createWithList")
+    let url = URLEncoding.path(baseURL, ["user", "createWithList"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -88,7 +97,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/login
@@ -99,7 +111,10 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> String {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("user").appendingPathComponent("login"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["user", "login"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -117,7 +132,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: String.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: String.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/login
@@ -128,7 +146,10 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (String, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("user").appendingPathComponent("login"), resolvingAgainstBaseURL: false) else {
+    guard
+      let urlComponents = URLComponents(
+        url: URLEncoding.path(baseURL, ["user", "login"]), resolvingAgainstBaseURL: false)
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -146,14 +167,17 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: String.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: String.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/logout
   public func logoutUser(options: RequestOptions = RequestOptions()) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("logout")
+    let url = URLEncoding.path(baseURL, ["user", "logout"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -162,7 +186,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// GET /user/logout
@@ -171,7 +198,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("logout")
+    let url = URLEncoding.path(baseURL, ["user", "logout"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -180,7 +207,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// GET /user/{username}
@@ -190,7 +220,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -199,7 +229,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/{username}
@@ -209,7 +242,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -218,7 +251,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// PUT /user/{username}
@@ -229,7 +265,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "PUT"
     if let timeout = options.timeout {
@@ -240,7 +276,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// PUT /user/{username}
@@ -251,7 +290,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "PUT"
     if let timeout = options.timeout {
@@ -262,7 +301,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// DELETE /user/{username}
@@ -272,7 +314,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -281,7 +323,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// DELETE /user/{username}
@@ -291,7 +336,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -300,7 +345,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// POST /profile
@@ -310,7 +358,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> UpdateProfile_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("profile")
+    let url = URLEncoding.path(baseURL, ["profile"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -321,7 +369,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /profile
@@ -331,7 +382,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("profile")
+    let url = URLEncoding.path(baseURL, ["profile"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -342,6 +393,9 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 }
