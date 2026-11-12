@@ -57,4 +57,45 @@ describe("function declaration", () => {
     );
     await assertPrintedMatchesSnapshot(file([node]), "extension.kt");
   });
+
+  it("prints leading comments", async () => {
+    const node = {
+      ...f.createFunctionDeclaration("ping", [], undefined, []),
+      leadingComments: ["/** GET /ping */"],
+    };
+    await assertPrintedMatchesSnapshot(file([node]), "leading-comments.kt");
+  });
+
+  it("wraps a long expression body onto the next line", async () => {
+    const node = f.createFunctionDeclaration(
+      "getInventoryWithResponse",
+      [],
+      f.createUserType("Pair", [
+        f.createUserType("Map", [
+          f.createUserType("String"),
+          f.createUserType("Int"),
+        ]),
+        f.createUserType("Response"),
+      ]),
+      undefined,
+      f.createCallExpression(
+        f.createIdentifier("this.getInventoryWithResponse"),
+        [
+          {
+            expression: f.createCallExpression(
+              f.createIdentifier("RequestOptions"),
+            ),
+            name: "options",
+          },
+        ],
+      ),
+      ["public", "suspend"],
+      undefined,
+      f.createUserType("StoreApi"),
+    );
+    await assertPrintedMatchesSnapshot(
+      file([node]),
+      "wrapped-expression-body.kt",
+    );
+  });
 });

@@ -1,8 +1,8 @@
 package com.example.petstore.api
 
-import java.util.Base64
 import okhttp3.HttpUrl
 import okhttp3.Request
+import java.util.Base64
 
 /**
  * Auth schemes consumers reach for in practice:
@@ -22,10 +22,18 @@ import okhttp3.Request
  * can re-thread its name=value into the URL.
  */
 public sealed class Auth {
-    public abstract fun apply(builder: Request.Builder, url: HttpUrl): HttpUrl
+    public abstract fun apply(
+        builder: Request.Builder,
+        url: HttpUrl,
+    ): HttpUrl
 
-    public data class Bearer(public val token: String) : Auth() {
-        override fun apply(builder: Request.Builder, url: HttpUrl): HttpUrl {
+    public data class Bearer(
+        public val token: String,
+    ) : Auth() {
+        override fun apply(
+            builder: Request.Builder,
+            url: HttpUrl,
+        ): HttpUrl {
             builder.header("Authorization", "Bearer $token")
             return url
         }
@@ -36,14 +44,20 @@ public sealed class Auth {
         public val value: String,
         public val location: APIKeyLocation,
     ) : Auth() {
-        override fun apply(builder: Request.Builder, url: HttpUrl): HttpUrl =
+        override fun apply(
+            builder: Request.Builder,
+            url: HttpUrl,
+        ): HttpUrl =
             when (location) {
                 APIKeyLocation.HEADER -> {
                     builder.header(name, value)
                     url
                 }
-                APIKeyLocation.QUERY ->
+
+                APIKeyLocation.QUERY -> {
                     url.newBuilder().addQueryParameter(name, value).build()
+                }
+
                 APIKeyLocation.COOKIE -> {
                     val cookie = "$name=$value"
                     val existing = builder.build().header("Cookie")
@@ -57,9 +71,14 @@ public sealed class Auth {
         public val username: String,
         public val password: String,
     ) : Auth() {
-        override fun apply(builder: Request.Builder, url: HttpUrl): HttpUrl {
-            val encoded = Base64.getEncoder()
-                .encodeToString("$username:$password".toByteArray(Charsets.UTF_8))
+        override fun apply(
+            builder: Request.Builder,
+            url: HttpUrl,
+        ): HttpUrl {
+            val encoded =
+                Base64
+                    .getEncoder()
+                    .encodeToString("$username:$password".toByteArray(Charsets.UTF_8))
             builder.header("Authorization", "Basic $encoded")
             return url
         }

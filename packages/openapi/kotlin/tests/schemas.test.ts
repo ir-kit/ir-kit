@@ -43,8 +43,8 @@ describe("schemasToDecls", () => {
     const decls = schemasToDecls(m.components?.schemas ?? {});
     const out = decls.map(printDecl).join("\n");
     assert.match(out, /enum class Status/);
-    assert.match(out, /@SerialName\("active"\) ACTIVE\("active"\)/);
-    assert.match(out, /@SerialName\("pending"\) PENDING\("pending"\)/);
+    assert.match(out, /@SerialName\("active"\)\n\s+ACTIVE\("active"\)/);
+    assert.match(out, /@SerialName\("pending"\)\n\s+PENDING\("pending"\)/);
   });
 
   it("emits a typealias for a primitive schema", () => {

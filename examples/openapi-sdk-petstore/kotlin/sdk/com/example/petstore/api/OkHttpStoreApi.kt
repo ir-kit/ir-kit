@@ -12,9 +12,7 @@ public class OkHttpStoreApi(
     public val client: APIClient,
 ) : StoreApi {
     /** GET /store/inventory */
-    public override suspend fun getInventory(
-        options: RequestOptions
-    ): Map<String, Int> {
+    public override suspend fun getInventory(options: RequestOptions): Map<String, Int> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
@@ -30,13 +28,18 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), MapSerializer(String.serializer(), Int.serializer()), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            MapSerializer(String.serializer(), Int.serializer()),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /store/inventory */
-    public override suspend fun getInventoryWithResponse(
-        options: RequestOptions
-    ): Pair<Map<String, Int>, Response> {
+    public override suspend fun getInventoryWithResponse(options: RequestOptions): Pair<Map<String, Int>, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
@@ -52,13 +55,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), MapSerializer(String.serializer(), Int.serializer()), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            MapSerializer(String.serializer(), Int.serializer()),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /store/order */
     public override suspend fun placeOrder(
         body: Order,
-        options: RequestOptions
+        options: RequestOptions,
     ): Order {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -72,13 +82,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), Order.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            Order.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /store/order */
     public override suspend fun placeOrderWithResponse(
         body: Order,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Order, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -92,13 +109,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), Order.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            Order.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /store/order/{orderId} */
     public override suspend fun getOrderById(
         orderId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Order {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -111,13 +135,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), Order.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            Order.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /store/order/{orderId} */
     public override suspend fun getOrderByIdWithResponse(
         orderId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Order, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -130,13 +161,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), Order.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            Order.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** DELETE /store/order/{orderId} */
     public override suspend fun deleteOrder(
         orderId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ) {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -149,13 +187,18 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        client.executeUnit(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        client.executeUnit(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** DELETE /store/order/{orderId} */
     public override suspend fun deleteOrderWithResponse(
         orderId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -168,13 +211,18 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeUnitWithResponse(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        return client.executeUnitWithResponse(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** POST /shapes */
     public override suspend fun createShape(
         body: ByteArray,
-        options: RequestOptions
+        options: RequestOptions,
     ): CreateShape_Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -186,13 +234,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), CreateShape_Response.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            CreateShape_Response.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /shapes */
     public override suspend fun createShapeWithResponse(
         body: ByteArray,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<CreateShape_Response, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -204,13 +259,20 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), CreateShape_Response.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            CreateShape_Response.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /measurements */
     public override suspend fun submitMeasurement(
         body: SubmitMeasurement_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ) {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -223,13 +285,18 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        client.executeUnit(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        client.executeUnit(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** POST /measurements */
     public override suspend fun submitMeasurementWithResponse(
         body: SubmitMeasurement_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -242,6 +309,11 @@ public class OkHttpStoreApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeUnitWithResponse(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        return client.executeUnitWithResponse(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 }

@@ -20,7 +20,10 @@ public class MultipartFormBody {
     private val builder: MultipartBody.Builder =
         MultipartBody.Builder().setType(MultipartBody.FORM)
 
-    public fun appendText(name: String, value: String) {
+    public fun appendText(
+        name: String,
+        value: String,
+    ) {
         builder.addFormDataPart(name, value)
     }
 

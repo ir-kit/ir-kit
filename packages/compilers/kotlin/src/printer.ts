@@ -15,12 +15,16 @@ export interface KotlinPrinterOptions {
    * such as parameters, fields, or list items.
    * Set to `0` to disable wrapping.
    *
-   * @default 80
+   * @default 140 (ktlint_official)
    */
   maxLineLength?: number;
+  /**
+   * Spaces per indentation level.
+   *
+   * @default 2
+   */
+  indentSize?: number;
 }
-
-const INDENT = "  ";
 
 const MODIFIER_ORDER = [
   "public",
@@ -58,11 +62,52 @@ const MODIFIER_RANK = new Map(
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function createPrinter(options?: KotlinPrinterOptions) {
+  const maxLineLength = options?.maxLineLength ?? 140;
+  const INDENT = " ".repeat(options?.indentSize ?? 2);
+  /** Nesting depth of the line currently being printed. */
+  let depth = 0;
+  /** Absolute column where the node being printed starts. */
+  let column = 0;
+
   function indent(source: string): string {
     return source
       .split("\n")
       .map((line) => (line.length ? INDENT + line : line))
       .join("\n");
+  }
+
+  function nested(print: () => string): string {
+    depth++;
+    try {
+      return indent(print());
+    } finally {
+      depth--;
+    }
+  }
+
+  function atLineStart(node: KotlinNode): string {
+    column = depth * INDENT.length;
+    return printNode(node);
+  }
+
+  function printAt(col: number, node: KotlinNode): string {
+    column = col;
+    return printNode(node);
+  }
+
+  /** Column right after `text` when it is printed starting at `start`. */
+  function columnAfter(start: number, text: string): number {
+    const newline = text.lastIndexOf("\n");
+    return newline < 0
+      ? start + text.length
+      : depth * INDENT.length + text.length - newline - 1;
+  }
+
+  /** Whether the first line of `text`, printed at `start`, fits. */
+  function fits(start: number, text: string): boolean {
+    if (maxLineLength <= 0) return true;
+    const newline = text.indexOf("\n");
+    return start + (newline < 0 ? text.length : newline) <= maxLineLength;
   }
 
   function printModifiers(
@@ -111,10 +156,11 @@ export function createPrinter(options?: KotlinPrinterOptions) {
   function printParameters(
     parameters: ReadonlyArray<KotlinParameter> | undefined,
     wrapFrom: number,
+    force = false,
   ): string {
     const list = parameters ?? [];
-    if (list.length >= wrapFrom) {
-      return `\n${list.map((parameter) => `${INDENT}${printNode(parameter)},`).join("\n")}\n`;
+    if (list.length && (force || list.length >= wrapFrom)) {
+      return `\n${nested(() => list.map((parameter) => `${atLineStart(parameter)},`).join("\n"))}\n`;
     }
     return list.map((parameter) => printNode(parameter)).join(", ");
   }
@@ -168,13 +214,12 @@ export function createPrinter(options?: KotlinPrinterOptions) {
   }
 
   function printBody(members: ReadonlyArray<KotlinNode>): string {
-    const body = members.map((member) => printNode(member)).join("\n\n");
-    return ` {\n${indent(body)}\n}`;
+    return ` {\n${nested(() => members.map(atLineStart).join("\n\n"))}\n}`;
   }
 
   function printStatementBlock(statements: ReadonlyArray<KotlinNode>): string {
     if (!statements.length) return "{}";
-    return `{\n${indent(statements.map((statement) => printNode(statement)).join("\n"))}\n}`;
+    return `{\n${nested(() => statements.map(atLineStart).join("\n"))}\n}`;
   }
 
   function printTypeArguments(
@@ -220,13 +265,21 @@ export function createPrinter(options?: KotlinPrinterOptions) {
     subject?: KotlinNode;
   }): string {
     const subject = node.subject ? ` (${printNode(node.subject)})` : "";
-    const entries = node.entries.map((entry) => {
-      const label = entry.conditions?.length
-        ? entry.conditions.map((condition) => printNode(condition)).join(", ")
-        : "else";
-      return `${label} -> ${printNode(entry.body)}`;
-    });
-    return `when${subject} {\n${indent(entries.join("\n"))}\n}`;
+    const entries = nested(() =>
+      node.entries
+        .map((entry) => {
+          column = depth * INDENT.length;
+          const label = entry.conditions?.length
+            ? entry.conditions
+                .map((condition) => printNode(condition))
+                .join(", ")
+            : "else";
+          const start = depth * INDENT.length;
+          return `${label} -> ${printAt(start + label.length + 4, entry.body)}`;
+        })
+        .join("\n"),
+    );
+    return `when${subject} {\n${entries}\n}`;
   }
 
   function singleReturnExpression(
@@ -245,14 +298,67 @@ export function createPrinter(options?: KotlinPrinterOptions) {
     return undefined;
   }
 
-  function assignBody(signature: string, expression: KotlinNode): string {
-    const body = printNode(expression);
-    return body.includes("\n")
-      ? `${signature} =\n${indent(body)}`
-      : `${signature} = ${body}`;
+  function assignBody(
+    start: number,
+    signature: string,
+    expression: KotlinNode,
+  ): string {
+    const bodyStart = columnAfter(start, signature) + 3;
+    const body = printAt(bodyStart, expression);
+    if (!body.includes("\n") && fits(bodyStart, body))
+      return `${signature} = ${body}`;
+    return `${signature} =\n${nested(() => atLineStart(expression))}`;
+  }
+
+  function printCall(node: {
+    callee: KotlinNode;
+    trailingLambda?: KotlinNode;
+    typeArguments?: ReadonlyArray<KotlinNode>;
+    valueArguments?: ReadonlyArray<KotlinValueArgument>;
+  }): string {
+    const start = column;
+    const head = `${printNode(node.callee)}${printTypeArguments(node.typeArguments)}`;
+    const lambda = node.trailingLambda
+      ? ` ${printNode(node.trailingLambda)}`
+      : "";
+    const args = node.valueArguments ?? [];
+    if (!args.length)
+      return `${head}${node.trailingLambda ? "" : "()"}${lambda}`;
+    const argPrefix = (a: KotlinValueArgument) =>
+      `${a.spread ? "*" : ""}${a.name ? `${a.name} = ` : ""}`;
+    let col = columnAfter(start, head) + 1;
+    const inline = args.map((a) => {
+      const prefix = argPrefix(a);
+      const text = `${prefix}${printAt(col + prefix.length, a.expression)}`;
+      col = columnAfter(col, text) + 2;
+      return text;
+    });
+    const oneLine = `${head}(${inline.join(", ")})`;
+    if (
+      !inline.some((text) => text.includes("\n")) &&
+      fits(start, `${oneLine}${lambda}`)
+    )
+      return `${oneLine}${lambda}`;
+    const wrapped = nested(() =>
+      args
+        .map((a) => {
+          const prefix = argPrefix(a);
+          const at = depth * INDENT.length + prefix.length;
+          return `${prefix}${printAt(at, a.expression)},`;
+        })
+        .join("\n"),
+    );
+    return `${head}(\n${wrapped}\n)${lambda}`;
   }
 
   function printNode(node: KotlinNode): string {
+    const comments = node.leadingComments?.length
+      ? `${node.leadingComments.join("\n")}\n`
+      : "";
+    return comments + printBareNode(node);
+  }
+
+  function printBareNode(node: KotlinNode): string {
     switch (node.kind) {
       case KotlinNodeKind.Annotation: {
         const target = node.useSiteTarget ? `${node.useSiteTarget}:` : "";
@@ -265,8 +371,11 @@ export function createPrinter(options?: KotlinPrinterOptions) {
       case KotlinNodeKind.AsExpression:
         return `${printNode(node.expression)} as${node.safe ? "?" : ""} ${printNode(node.type)}`;
 
-      case KotlinNodeKind.Assignment:
-        return `${printNode(node.target)} ${node.operator ?? "="} ${printNode(node.value)}`;
+      case KotlinNodeKind.Assignment: {
+        const start = column;
+        const head = `${printNode(node.target)} ${node.operator ?? "="} `;
+        return `${head}${printAt(columnAfter(start, head), node.value)}`;
+      }
 
       case KotlinNodeKind.BinaryExpression: {
         const range = node.operator === ".." || node.operator === "..<";
@@ -280,18 +389,8 @@ export function createPrinter(options?: KotlinPrinterOptions) {
       case KotlinNodeKind.BreakStatement:
         return `break${node.label ? `@${node.label}` : ""}`;
 
-      case KotlinNodeKind.CallExpression: {
-        const typeArgs = printTypeArguments(node.typeArguments);
-        const hasArgs = node.valueArguments?.length;
-        const parens =
-          hasArgs || !node.trailingLambda
-            ? `(${printValueArguments(node.valueArguments)})`
-            : "";
-        const lambda = node.trailingLambda
-          ? ` ${printNode(node.trailingLambda)}`
-          : "";
-        return `${printNode(node.callee)}${typeArgs}${parens}${lambda}`;
-      }
+      case KotlinNodeKind.CallExpression:
+        return printCall(node);
 
       case KotlinNodeKind.CallableReference:
         return `${node.receiver ? printNode(node.receiver) : ""}::${node.name}`;
@@ -305,14 +404,21 @@ export function createPrinter(options?: KotlinPrinterOptions) {
         const entries = node.entries ?? [];
         const members = node.members ?? [];
         if (!entries.length && !members.length) return header;
-        const parts: Array<string> = [];
-        if (entries.length) {
-          const printed = entries.map((entry) => printNode(entry)).join(",\n");
-          parts.push(members.length ? `${printed},\n;` : `${printed},`);
-        }
-        if (members.length)
-          parts.push(members.map((member) => printNode(member)).join("\n\n"));
-        return `${header} {\n${indent(parts.join("\n\n"))}\n}`;
+        const body = nested(() => {
+          const parts: Array<string> = [];
+          if (entries.length) {
+            const printed = entries
+              .map((entry, i) => {
+                const text = atLineStart(entry);
+                return i > 0 && entry.annotations?.length ? `\n${text}` : text;
+              })
+              .join(",\n");
+            parts.push(members.length ? `${printed},\n;` : `${printed},`);
+          }
+          if (members.length) parts.push(members.map(atLineStart).join("\n\n"));
+          return parts.join("\n\n");
+        });
+        return `${header} {\n${body}\n}`;
       }
 
       case KotlinNodeKind.ContinueStatement:
@@ -348,10 +454,23 @@ export function createPrinter(options?: KotlinPrinterOptions) {
           ? `: ${printNode(node.returnType)}`
           : "";
         const typeParams = printTypeParameters(node.typeParameters);
-        const signature = `${printPrefix(node.annotations, node.modifiers)}fun ${typeParams ? `${typeParams} ` : ""}${receiver}${node.name}(${printParameters(node.parameters, 2)})${returnType}${printWhereClause(node.typeParameters)}`;
+        const start = column;
+        const prefix = printPrefix(node.annotations, node.modifiers);
+        const sign = (force: boolean) =>
+          `${prefix}fun ${typeParams ? `${typeParams} ` : ""}${receiver}${node.name}(${printParameters(node.parameters, 2, force)})${returnType}${printWhereClause(node.typeParameters)}`;
+        let signature = sign(false);
+        const lastLine = signature.slice(signature.lastIndexOf("\n") + 1);
+        if (
+          !lastLine.includes("(\n") &&
+          !fits(
+            columnAfter(start, prefix),
+            `${lastLine.slice(lastLine === signature ? prefix.length : 0)} {`,
+          )
+        )
+          signature = sign(true);
         const expressionBody =
           node.expressionBody ?? singleReturnExpression(node.body ?? []);
-        if (expressionBody) return assignBody(signature, expressionBody);
+        if (expressionBody) return assignBody(start, signature, expressionBody);
         if (node.body) return `${signature} ${printStatementBlock(node.body)}`;
         return signature;
       }
@@ -409,9 +528,7 @@ export function createPrinter(options?: KotlinPrinterOptions) {
           const body = first ? printNode(first) : "";
           return `{ ${header}${body} }`;
         }
-        const body = indent(
-          node.statements.map((statement) => printNode(statement)).join("\n"),
-        );
+        const body = nested(() => node.statements.map(atLineStart).join("\n"));
         return `{${header ? ` ${header.trimEnd()}` : ""}\n${body}\n}`;
       }
 
@@ -420,8 +537,11 @@ export function createPrinter(options?: KotlinPrinterOptions) {
           ? `'${escape(node.text, "'")}'`
           : node.text;
 
-      case KotlinNodeKind.NavigationExpression:
-        return `${printNode(node.receiver)}${node.safe ? "?." : "."}${printNode(node.selector)}`;
+      case KotlinNodeKind.NavigationExpression: {
+        const start = column;
+        const head = `${printNode(node.receiver)}${node.safe ? "?." : "."}`;
+        return `${head}${printAt(columnAfter(start, head), node.selector)}`;
+      }
 
       case KotlinNodeKind.NullableType: {
         const wrap = node.type.kind === KotlinNodeKind.FunctionType;
@@ -469,11 +589,14 @@ export function createPrinter(options?: KotlinPrinterOptions) {
       }
 
       case KotlinNodeKind.Property: {
+        const start = column;
         const type = node.type ? `: ${printNode(node.type)}` : "";
+        const lead = `${printPrefix(node.annotations, node.modifiers)}${node.valOrVar} ${node.name}${type}`;
         let tail = "";
-        if (node.initializer) tail = ` = ${printNode(node.initializer)}`;
+        if (node.initializer)
+          tail = ` = ${printAt(columnAfter(start, lead) + 3, node.initializer)}`;
         else if (node.delegate) tail = ` by ${printNode(node.delegate)}`;
-        const head = `${printPrefix(node.annotations, node.modifiers)}${node.valOrVar} ${node.name}${type}${tail}`;
+        const head = `${lead}${tail}`;
         if (!node.accessors?.length) return head;
         const accessors = node.accessors.map((accessor) => {
           const mods = printModifiersSpaced(accessor.modifiers);
@@ -491,7 +614,10 @@ export function createPrinter(options?: KotlinPrinterOptions) {
 
       case KotlinNodeKind.ReturnStatement: {
         const label = node.label ? `@${node.label}` : "";
-        return `return${label}${node.expression ? ` ${printNode(node.expression)}` : ""}`;
+        const head = `return${label}`;
+        return node.expression
+          ? `${head} ${printAt(column + head.length + 1, node.expression)}`
+          : head;
       }
 
       case KotlinNodeKind.SourceFile: {
@@ -503,11 +629,7 @@ export function createPrinter(options?: KotlinPrinterOptions) {
           );
         }
         if (node.declarations.length) {
-          blocks.push(
-            node.declarations
-              .map((declaration) => printNode(declaration))
-              .join("\n\n"),
-          );
+          blocks.push(node.declarations.map(atLineStart).join("\n\n"));
         }
         return blocks.join("\n\n");
       }

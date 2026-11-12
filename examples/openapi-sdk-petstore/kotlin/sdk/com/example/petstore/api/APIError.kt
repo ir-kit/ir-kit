@@ -13,9 +13,10 @@ package com.example.petstore.api
  * `ByteArray` so callers can decode error envelopes themselves with the
  * codec they prefer.
  */
-public sealed class APIError(message: String? = null, cause: Throwable? = null) :
-    RuntimeException(message, cause) {
-
+public sealed class APIError(
+    message: String? = null,
+    cause: Throwable? = null,
+) : RuntimeException(message, cause) {
     public class ClientError(
         public val statusCode: Int,
         public val body: ByteArray,
@@ -31,9 +32,11 @@ public sealed class APIError(message: String? = null, cause: Throwable? = null) 
         public val body: ByteArray,
     ) : APIError("Unexpected status: $statusCode")
 
-    public class DecodingFailed(cause: Throwable) :
-        APIError("Decoding failed: ${cause.message}", cause)
+    public class DecodingFailed(
+        cause: Throwable,
+    ) : APIError("Decoding failed: ${cause.message}", cause)
 
-    public class Transport(cause: Throwable) :
-        APIError("Transport failure: ${cause.message}", cause)
+    public class Transport(
+        cause: Throwable,
+    ) : APIError("Transport failure: ${cause.message}", cause)
 }

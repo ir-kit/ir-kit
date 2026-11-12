@@ -7,7 +7,12 @@ import kotlinx.serialization.Serializable
 public enum class Order_Status(
     public val raw: String,
 ) {
-    @SerialName("placed") PLACED("placed"),
-    @SerialName("approved") APPROVED("approved"),
-    @SerialName("delivered") DELIVERED("delivered"),
+    @SerialName("placed")
+    PLACED("placed"),
+
+    @SerialName("approved")
+    APPROVED("approved"),
+
+    @SerialName("delivered")
+    DELIVERED("delivered"),
 }

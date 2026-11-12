@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 public enum class Circle_Kind(
     public val raw: String,
 ) {
-    @SerialName("circle") CIRCLE("circle"),
+    @SerialName("circle")
+    CIRCLE("circle"),
 }

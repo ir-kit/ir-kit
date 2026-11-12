@@ -25,7 +25,7 @@ FORMATTED="$(mktemp)"
 trap 'rm -f "$FORMATTED"' EXIT
 
 while IFS= read -r file; do
-  ktlint --format --stdin --log-level=none <"$file" >"$FORMATTED" 2>/dev/null || true
+  ktlint --format --stdin --stdin-path="$(realpath "$file")" --log-level=none <"$file" >"$FORMATTED" 2>/dev/null || true
   if ! diff -q "$FORMATTED" "$file" >/dev/null 2>&1; then
     echo "Not canonically formatted: $file"
     diff "$file" "$FORMATTED" || true
