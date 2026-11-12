@@ -1,9 +1,13 @@
-import { TypeScriptGenerator } from "@asyncapi/modelina";
+import {
+  TypeScriptGenerator,
+  typeScriptDefaultEnumValueConstraints,
+} from "@asyncapi/modelina";
 
 import { definePluginConfig } from "../../plugin.js";
 
 import { defaultConfig } from "./config.js";
 import type {
+  TypescriptApi,
   TypescriptPluginConfig,
   TypescriptResolvedConfig,
 } from "./types.js";
@@ -28,17 +32,29 @@ export const typescript = definePluginConfig<
   "typescript",
   TypescriptPluginConfig,
   TypescriptResolvedConfig,
-  unknown
+  MessageTypeRegistry
 >({
   name: "typescript",
   defaultConfig,
+  createApi: () => {
+    const names = new Map<string, string>();
+    return { names, messageTypeName: (messageId) => names.get(messageId) };
+  },
   async handler(plugin) {
+    const { names } = plugin.api;
+
     const generator = new TypeScriptGenerator({
       modelType: "interface",
       processorOptions: {
         interpreter: { ignoreAdditionalProperties: true },
       },
       rawPropertyNames: true,
+      constraints: {
+        enumValue: (context) =>
+          typeof context.enumValue === "string"
+            ? JSON.stringify(context.enumValue)
+            : defaultEnumValue(context),
+      },
     });
 
     for (const schema of plugin.document.components()?.schemas()?.all() ?? []) {
@@ -56,14 +72,19 @@ export const typescript = definePluginConfig<
       const payload = ev.message.payload();
       if (!payload) continue;
 
-      const schema = JSON.parse(JSON.stringify(payload.json())) as Record<
-        string,
-        unknown
-      >;
+      const schema = JSON.parse(
+        JSON.stringify(payloadJsonSchema(payload.json())),
+      ) as Record<string, unknown>;
       schema.title = `${ev.message.id()}${plugin.config.messageSuffix}`;
       schema.$schema = "http://json-schema.org/draft-07/schema#";
 
       const models = await generator.generate(schema);
+      const root = models.find(
+        (m) =>
+          (m.model.originalInput as { title?: unknown } | undefined)?.title ===
+          schema.title,
+      );
+      if (root) names.set(ev.message.id(), root.modelName);
       for (const model of models) {
         if (!seen.has(model.modelName)) {
           seen.set(model.modelName, model.result);
@@ -81,6 +102,27 @@ export const typescript = definePluginConfig<
     });
   },
 });
+
+/** Modelina interpolates string enum values without escaping, so `const: "\r\n"` printed a broken literal. */
+const defaultEnumValue = typeScriptDefaultEnumValueConstraints();
+
+/** Multi-format payloads (Avro, OpenAPI, …) keep the parser-converted JSON Schema under `schema`. */
+function payloadJsonSchema(json: unknown): unknown {
+  if (
+    json &&
+    typeof json === "object" &&
+    "schemaFormat" in json &&
+    "schema" in json
+  ) {
+    return json.schema;
+  }
+  return json;
+}
+
+/** Modelina constrains names (`turnOn` → `TurnOn`, `1abc` → `Number_1abc`), so its root model name is recorded per message for other plugins. */
+interface MessageTypeRegistry extends TypescriptApi {
+  names: Map<string, string>;
+}
 
 /** Modelina emits unexported decls; add `export` to top-level interface/type/enum. */
 function prefixExports(block: string): string {

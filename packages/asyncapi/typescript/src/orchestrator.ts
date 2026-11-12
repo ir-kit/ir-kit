@@ -50,13 +50,14 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
 
   for (const reg of orderPlugins(opts.plugins)) {
     const def = reg.__definition;
-    if (def.api !== undefined) apiRegistry.set(def.name, def.api);
+    const api = def.createApi ? def.createApi() : def.api;
+    if (api !== undefined) apiRegistry.set(def.name, api);
 
     const config = def.resolveConfig
       ? def.resolveConfig(reg.__userConfig, { document })
       : { ...def.defaultConfig, ...(reg.__userConfig ?? {}) };
 
-    const instance = createPluginInstance(def.name, config, def.api, {
+    const instance = createPluginInstance(def.name, config, api, {
       document,
       project,
       files: filesEmitted,

@@ -1,8 +1,6 @@
 export interface EventMapPluginConfig {
-  /** Suffix used on the message-level interface name. Must match `typescript` plugin's. Default: `"Message"`. */
+  /** @deprecated Ignored; message interface names come from the `typescript` plugin. */
   messageSuffix?: string;
 }
 
-export interface EventMapResolvedConfig {
-  messageSuffix: string;
-}
+export type EventMapResolvedConfig = Record<string, never>;

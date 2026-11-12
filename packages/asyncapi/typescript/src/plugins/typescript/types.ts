@@ -6,3 +6,8 @@ export interface TypescriptPluginConfig {
 export interface TypescriptResolvedConfig {
   messageSuffix: string;
 }
+
+export interface TypescriptApi {
+  /** Name of the interface generated for a message's payload, or `undefined` when the message has no payload. */
+  messageTypeName(messageId: string): string | undefined;
+}

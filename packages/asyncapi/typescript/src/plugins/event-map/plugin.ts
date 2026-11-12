@@ -3,6 +3,7 @@ import ts from "typescript";
 
 import { exportInterface, tn } from "../../ast/ts-build.js";
 import { definePluginConfig } from "../../plugin.js";
+import type { TypescriptApi } from "../typescript/types.js";
 
 import { defaultConfig } from "./config.js";
 import type { EventMapPluginConfig, EventMapResolvedConfig } from "./types.js";
@@ -25,12 +26,17 @@ export const eventMap = definePluginConfig<
     const eventMapMembers: ts.TypeElement[] = [];
     const importNames = new Set<string>();
 
+    const types = plugin.getApi<TypescriptApi>("typescript");
+
     for (const ev of plugin.forEach("message")) {
       if (ev.type !== "message") continue;
-      const interfaceName = `${ev.message.id()}${plugin.config.messageSuffix}`;
-      importNames.add(interfaceName);
+      const interfaceName = types?.messageTypeName(ev.message.id());
+      if (interfaceName) importNames.add(interfaceName);
       eventMapMembers.push(
-        tn.property(inferEventType(ev.message), tn.ref(interfaceName)),
+        tn.property(
+          inferEventType(ev.message),
+          interfaceName ? tn.ref(interfaceName) : tn.unknown(),
+        ),
       );
     }
 
@@ -105,15 +111,20 @@ function buildIsMessageOfType(): ts.FunctionDeclaration {
       [
         f.createReturnStatement(
           f.createBinaryExpression(
-            f.createPropertyAccessExpression(
+            f.createPropertyAccessChain(
               f.createParenthesizedExpression(
                 f.createAsExpression(
                   f.createIdentifier("msg"),
-                  f.createTypeLiteralNode([
-                    tn.property("type", tn.string(), true),
+                  f.createUnionTypeNode([
+                    f.createTypeLiteralNode([
+                      tn.property("type", tn.string(), true),
+                    ]),
+                    f.createLiteralTypeNode(f.createNull()),
+                    f.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
                   ]),
                 ),
               ),
+              f.createToken(ts.SyntaxKind.QuestionDotToken),
               "type",
             ),
             f.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
