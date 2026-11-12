@@ -41,6 +41,15 @@ describe("convertSpec", () => {
     expect(result.from).toBe("postman");
   });
 
+  it("passes a Postman collection through when the target is postman", async () => {
+    const path = join(dir, "collection.json");
+    const result = await convertSpec({ input: path, to: "postman" });
+    expect(result.output).toMatchObject({
+      kind: "document",
+      document: { info: { name: "c" } },
+    });
+  });
+
   it("converts proto to OpenAPI", async () => {
     const result = await convertSpec({
       input: join(fixtures, "petstore.proto"),

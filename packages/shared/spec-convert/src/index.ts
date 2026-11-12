@@ -70,7 +70,10 @@ export async function convertSpec(
   const from = opts.from ?? (await detectFormat(opts.input, opts.cwd));
 
   if (from === opts.to) {
-    const document = await readAsDocument(opts.input, opts.cwd);
+    const document =
+      from === "postman" && typeof opts.input === "string"
+        ? await readSpecDocument(opts.input, opts.cwd)
+        : await readAsDocument(opts.input, opts.cwd);
     return { from, to: opts.to, output: { kind: "document", document } };
   }
 
