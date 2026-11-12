@@ -78,6 +78,11 @@ jobs:
       - name: Lint generated example SDK
         run: bash scripts/lint-go.sh examples/openapi-sdk-petstore/go/sdk
 
+      - name: Vet Go SDK runtime
+        run: |
+          bash scripts/lint-go.sh packages/openapi/go/runtime
+          (cd packages/openapi/go/runtime && go vet ./...)
+
   kotlin-lint:
     name: Lint Kotlin compiler snapshots
     runs-on: ubuntu-latest
