@@ -12,6 +12,17 @@ describe("string literal", () => {
     await assertPrintedMatchesSnapshot(file([node]), "template.kt");
   });
 
+  it("braces an identifier the next text would extend", async () => {
+    const node = f.createFunctionDeclaration(
+      "plural",
+      [f.createParameter("noun", f.createUserType("String"))],
+      undefined,
+      undefined,
+      f.createStringLiteral([{ expression: id("noun") }, { text: "s" }]),
+    );
+    await assertPrintedMatchesSnapshot(file([node]), "template-adjacent.kt");
+  });
+
   it("expression interpolation", async () => {
     const node = f.createFunctionDeclaration(
       "total",

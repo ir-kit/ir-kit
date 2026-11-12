@@ -9,6 +9,8 @@ import type {
 } from "./nodes/shared.js";
 import type { KotlinTypeParameter } from "./nodes/types/type-parameter.js";
 
+const SIMPLE_NAME = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
 export interface KotlinPrinterOptions {
   /**
    * Maximum line length before the printer wraps elements
@@ -653,9 +655,12 @@ export function createPrinter(options?: KotlinPrinterOptions) {
       case KotlinNodeKind.StringLiteral: {
         const quote = node.multiline ? '"""' : '"';
         const body = node.entries
-          .map((entry) => {
+          .map((entry, i) => {
             if (entry.expression) {
-              return entry.expression.kind === KotlinNodeKind.Identifier
+              const next = node.entries[i + 1]?.text ?? "";
+              return entry.expression.kind === KotlinNodeKind.Identifier &&
+                SIMPLE_NAME.test(entry.expression.name) &&
+                !/^\w/.test(next)
                 ? `$${entry.expression.name}`
                 : `\${${printNode(entry.expression)}}`;
             }

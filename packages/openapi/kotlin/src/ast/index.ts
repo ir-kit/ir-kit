@@ -25,7 +25,6 @@ const VISIBILITIES: ReadonlySet<string> = new Set([
   "private",
   "protected",
 ]);
-const SIMPLE_IDENT = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
 /** Verbatim source fragment (defaults, annotation args). */
 const raw = (text: string): KtExpr => f.createIdentifier(text);
@@ -46,7 +45,7 @@ export const ktJsonElement: KtType = named("JsonElement");
 export const ktByteArray: KtType = named("ByteArray");
 
 export const ktNullable = (inner: KtType): KtType =>
-  inner.kind === K.NullableType ? inner : f.createNullableType(inner);
+  f.createNullableType(inner);
 export const ktList = (element: KtType): KtType =>
   f.createUserType("List", [element]);
 export const ktMap = (key: KtType, value: KtType): KtType =>
@@ -79,13 +78,7 @@ export const ktNull: KtExpr = f.createLiteral("null", "null");
 
 export const ktInterp = (parts: ReadonlyArray<string | KtExpr>): KtExpr =>
   f.createStringLiteral(
-    parts.map((p) => {
-      if (typeof p === "string") return { text: p };
-      const simple = p.kind !== K.Identifier || SIMPLE_IDENT.test(p.name);
-      return {
-        expression: simple ? p : f.createParenthesizedExpression(p),
-      };
-    }),
+    parts.map((p) => (typeof p === "string" ? { text: p } : { expression: p })),
   );
 export const ktListLit = (items: ReadonlyArray<KtExpr>): KtExpr =>
   ktCall(
