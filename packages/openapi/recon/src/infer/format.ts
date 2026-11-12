@@ -30,7 +30,6 @@ const IPV4_RE =
 const INT32_MIN = -2147483648;
 const INT32_MAX = 2147483647;
 
-/** Detect a string format from a single value. Returns undefined if no match. */
 export function detectStringFormat(value: string): string | undefined {
   if (value.length < 4 || value.length > 4096) return undefined;
   if (UUID_RE.test(value)) return "uuid";
