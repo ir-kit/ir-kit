@@ -120,7 +120,7 @@ export const generateFactories = ({
   outputFile,
 }: GenerateFactoriesInput): void => {
   const config = plugin.config;
-  const faker = plugin.external("@faker-js/faker.faker");
+  const faker = plugin.imports.faker;
 
   const { graph } = buildGraph(plugin.context.spec, plugin.context.logger);
   const reaches = (fromName: string, toName: string): boolean => {

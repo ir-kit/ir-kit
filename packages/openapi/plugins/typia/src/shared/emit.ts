@@ -29,7 +29,7 @@ export function registerTypiaSymbol({
   namingAnchor,
   plugin,
 }: RegisterSymbolArgs): Symbol {
-  return plugin.registerSymbol(
+  return plugin.symbol(
     buildSymbolIn({
       meta: {
         category: "schema",
@@ -61,11 +61,8 @@ export function emitValidator({
   symbol,
   typeExpr,
 }: EmitValidatorArgs): void {
-  const createValidate = plugin.external("typia.createValidate");
-  const iValidation = plugin.external("typia.IValidation");
-  const standardSchema = plugin.external(
-    "@standard-schema/spec.StandardSchemaV1",
-  );
+  const { createValidate, IValidation: iValidation } = plugin.imports.typia;
+  const standardSchema = plugin.imports.StandardSchemaV1;
 
   const callable = $.type
     .func()
@@ -96,8 +93,8 @@ export function emitBulkJsonSchemas({
   plugin,
   typeExprs,
 }: EmitBulkJsonSchemasArgs): Symbol {
-  const json = plugin.external("typia.json");
-  const symbol = plugin.registerSymbol(
+  const json = plugin.imports.typia.json;
+  const symbol = plugin.symbol(
     buildSymbolIn({
       meta: {
         category: "schema",
@@ -157,7 +154,7 @@ export function emitJsonComponents({
   plugin,
 }: EmitJsonComponentsArgs): Symbol {
   const name = "typiaJsonComponents";
-  const symbol = plugin.registerSymbol(
+  const symbol = plugin.symbol(
     buildSymbolIn({
       meta: {
         category: "schema",

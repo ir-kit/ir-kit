@@ -10,7 +10,7 @@ export const generateServer = ({
   routerSymbol,
   serverFile,
 }: ServerGeneratorInput): void => {
-  const implementSymbol = plugin.external("@orpc/server.implement");
+  const implementSymbol = plugin.imports.implement;
 
   // Export server implementer: os = implement(router)
   const osSymbol = plugin.symbol("os", {

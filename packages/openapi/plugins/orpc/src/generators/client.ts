@@ -10,23 +10,23 @@ const CLIENT_TYPE_CONFIGS: Record<ClientType, ClientTypeConfig | null> = {
   openapi: {
     configTypeName: "OpenApiLinkClientConfig",
     functionName: "createOpenApiClient",
-    linkSymbolResource: "@orpc/openapi-client/fetch.OpenAPILink",
+    linkImport: "OpenAPILink",
     needsRouter: true, // OpenAPILink requires router as first arg
   },
   rpc: {
     configTypeName: "RpcLinkClientConfig",
     functionName: "createRpcLinkClient",
-    linkSymbolResource: "@orpc/client/fetch.RPCLink",
+    linkImport: "RPCLink",
   },
   messageport: {
     configTypeName: "RpcMessagePortClientConfig",
     functionName: "createRpcMessagePortClient",
-    linkSymbolResource: "@orpc/client/message-port.RPCLink",
+    linkImport: "RPCLinkMessagePort",
   },
   websocket: {
     configTypeName: "RpcWebSocketClientConfig",
     functionName: "createRpcWebSocketClient",
-    linkSymbolResource: "@orpc/client/websocket.RPCLink",
+    linkImport: "RPCLinkWebSocket",
   },
   tanstack: null, // Handled by tanstack generator
 };
@@ -41,12 +41,8 @@ export const generateClients = ({
 }: ClientGeneratorInput): void => {
   const { clientFile, plugin, routerSymbol } = context;
 
-  const contractRouterClientSymbol = plugin.external(
-    "@orpc/contract.ContractRouterClient",
-  );
-  const createORPCClientSymbol = plugin.external(
-    "@orpc/client.createORPCClient",
-  );
+  const contractRouterClientSymbol = plugin.imports.ContractRouterClient;
+  const createORPCClientSymbol = plugin.imports.createORPCClient;
 
   // Filter out tanstack and get configs
   const clientConfigs = clientTypes
@@ -104,11 +100,11 @@ function generateClient(
   const {
     configTypeName,
     functionName,
-    linkSymbolResource,
+    linkImport,
     needsRouter = false,
   } = config;
 
-  const linkSymbol = plugin.external(linkSymbolResource);
+  const linkSymbol = plugin.imports[linkImport];
 
   // ClientConfig type: inferred from Link constructor
   const clientConfigSymbol = plugin.symbol(configTypeName, {

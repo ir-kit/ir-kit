@@ -57,8 +57,12 @@ export interface ClientTypeConfig {
   configTypeName: string;
   /** Client creation function name (e.g., 'createRpcLinkClient') */
   functionName: string;
-  /** External package path (e.g., '@orpc/client/fetch.RPCLink') */
-  linkSymbolResource: string;
+  /** Key of the Link constructor in `plugin.imports`. */
+  linkImport:
+    | "OpenAPILink"
+    | "RPCLink"
+    | "RPCLinkMessagePort"
+    | "RPCLinkWebSocket";
   /** Whether the Link constructor requires router as first arg (OpenAPILink) */
   needsRouter?: boolean;
 }

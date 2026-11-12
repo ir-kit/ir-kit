@@ -32,14 +32,6 @@ type CollectedSlot = {
 };
 
 export const handlerV1: TypiaPlugin["Handler"] = ({ plugin }) => {
-  plugin.symbol("createValidate", { external: "typia" });
-  plugin.symbol("json", { external: "typia" });
-  plugin.symbol("IValidation", { external: "typia", kind: "type" });
-  plugin.symbol("StandardSchemaV1", {
-    external: "@standard-schema/spec",
-    kind: "type",
-  });
-
   const slots: Array<CollectedSlot> = [];
 
   plugin.forEach("operation", (event) => {

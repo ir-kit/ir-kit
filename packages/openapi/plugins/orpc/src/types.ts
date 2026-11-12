@@ -5,6 +5,8 @@ import type {
   Plugin,
 } from "@hey-api/shared";
 
+import type { ORPCImports } from "./symbols/external";
+
 /**
  * Handler generation mode.
  * - 'stub': Throws `ORPCError('NOT_IMPLEMENTED')` (default).
@@ -249,7 +251,7 @@ export type Config = Plugin.Hooks &
     };
   };
 
-export type ORPCPlugin = DefinePlugin<UserConfig, Config>;
+export type ORPCPlugin = DefinePlugin<UserConfig, Config, never, ORPCImports>;
 
 // Module augmentation to register the orpc plugin in the PluginConfigMap
 declare module "@hey-api/openapi-ts" {

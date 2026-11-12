@@ -25,7 +25,7 @@ export const generateContracts = ({
   plugin,
 }: ContractGeneratorInput): ContractGeneratorOutput => {
   const routerStructure = new Map<string, RouterNode[]>();
-  const oc = plugin.external("@orpc/contract.oc");
+  const oc = plugin.imports.oc;
   const { input: inputValidator, output: outputValidator } =
     plugin.config.validator;
 

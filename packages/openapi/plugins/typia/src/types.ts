@@ -1,3 +1,4 @@
+import type { Symbol } from "@hey-api/codegen-core";
 import type {
   Casing,
   DefinePlugin,
@@ -131,7 +132,12 @@ export type Config = Plugin.Hooks &
     };
   };
 
-export type TypiaPlugin = DefinePlugin<UserConfig, Config, IApi>;
+export type TypiaImports = {
+  StandardSchemaV1: Symbol;
+  typia: { IValidation: Symbol; createValidate: Symbol; json: Symbol };
+};
+
+export type TypiaPlugin = DefinePlugin<UserConfig, Config, IApi, TypiaImports>;
 
 // Register plugin name in hey-api's PluginConfigMap.
 declare module "@hey-api/openapi-ts" {

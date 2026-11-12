@@ -11,7 +11,6 @@ import {
 } from "./generators";
 import type { ResponseSchemaInfo } from "./generators/handlers";
 import { extractResponseSchema } from "./schema/extractor";
-import { registerExternalSymbols } from "./symbols/external";
 import type { ClientType, ORPCPlugin } from "./types";
 import { operationName } from "./utils";
 
@@ -20,12 +19,6 @@ import { operationName } from "./utils";
  * Orchestrates the generation pipeline.
  */
 export const handler: ORPCPlugin["Handler"] = ({ plugin }) => {
-  // ============================================================================
-  // External Symbols Registration
-  // ============================================================================
-
-  registerExternalSymbols(plugin, plugin.config);
-
   // ============================================================================
   // File Paths Configuration
   // ============================================================================

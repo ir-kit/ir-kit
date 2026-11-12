@@ -45,7 +45,7 @@ export const generateFakerFactories = ({
   responseSchemas,
   config,
 }: FakerGeneratorInput): FakerGeneratorOutput => {
-  const faker = plugin.external("@faker-js/faker.faker");
+  const faker = plugin.imports.faker;
   const factoryNames = new Map<string, string>();
 
   const buildOpts: BuildFakerOptions = {
