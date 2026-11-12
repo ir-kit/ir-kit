@@ -1,5 +1,9 @@
-import type { SwCallArg, SwExpr, SwStmt, SwType } from "../../sw-dsl/index.js";
 import {
+  isVoid,
+  type SwCallArg,
+  type SwExpr,
+  type SwStmt,
+  type SwType,
   swArg,
   swCall,
   swCase,
@@ -18,7 +22,9 @@ import {
   swTuple,
   swTupleBinding,
   swTypeRef,
-} from "../../sw-dsl/index.js";
+  tupleTypes,
+  typeName,
+} from "../../ast/index.js";
 import type {
   OperationSignature,
   ResponseCase,
@@ -82,24 +88,24 @@ interface DispatchShape {
 }
 
 function classifyReturn(t: SwType): DispatchShape {
-  if (t.kind === "primitive" && t.name === "Void") {
+  if (isVoid(t)) {
     return {
       method: "execute",
       includeTransformer: false,
       discardResult: true,
     };
   }
-  if (t.kind === "ref" && t.name === "HTTPURLResponse") {
+  if (typeName(t) === "HTTPURLResponse") {
     return {
       method: "executeWithResponse",
       includeTransformer: false,
       discardResult: false,
     };
   }
-  if (t.kind === "tuple") {
+  if (tupleTypes(t).length > 0) {
     return {
       method: "executeWithResponse",
-      decodableType: t.items[0],
+      decodableType: tupleTypes(t)[0],
       includeTransformer: true,
       discardResult: false,
     };
@@ -117,7 +123,7 @@ function classifyReturn(t: SwType): DispatchShape {
 function buildMultiResponseStmts(
   sig: OperationSignature,
 ): ReadonlyArray<SwStmt> {
-  const wrapWithResponse = sig.returnType.kind === "tuple";
+  const wrapWithResponse = tupleTypes(sig.returnType).length > 0;
   const args: SwCallArg[] = [
     swArg(swIdent("request")),
     swArg(

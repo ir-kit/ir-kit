@@ -60,4 +60,26 @@ describe("function declaration", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "generic-async-throws.swift");
   });
+
+  it("wraps parameters past the max line length", async () => {
+    const param = (name: string) => ({
+      firstName: name,
+      type: swift.factory.createOptionalType(
+        swift.factory.createIdentifierType("String"),
+      ),
+      defaultValue: swift.factory.createNilLiteral(),
+    });
+    const file = swift.factory.createSourceFile([
+      swift.factory.createFunctionDeclaration(
+        "updatePetWithForm",
+        [param("petId"), param("name"), param("status"), param("category")],
+        swift.factory.createIdentifierType("Pet"),
+        [swift.factory.createReturnStatement(swift.factory.createNilLiteral())],
+        ["public"],
+        undefined,
+        { async: true, throws: true },
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "wrapped-parameters.swift");
+  });
 });

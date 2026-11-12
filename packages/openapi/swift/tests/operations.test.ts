@@ -52,7 +52,7 @@ describe("operations (IR-driven)", () => {
     );
     assert.match(out, /public protocol UsersAPI \{/);
     assert.match(out, /\/\/\/ GET \/users\/\{id\}/);
-    assert.match(out, /func getUser\(\s+id: String\s+\) async throws -> User/);
+    assert.match(out, /func getUser\(\s*id: String\s*\) async throws -> User/);
   });
 
   it("optional query param → optional + nil default", () => {
@@ -329,7 +329,7 @@ describe("operations (IR-driven)", () => {
     // Protocol method has options but no `-> Type` (Void return).
     assert.match(
       out,
-      /func logout\(\s+options: RequestOptions\s+\) async throws\n/,
+      /func logout\(\s*options: RequestOptions\s*\) async throws\n/,
     );
     // Convenience overload in the extension drops options entirely.
     assert.match(out, /func logout\(\) async throws \{/);
@@ -405,8 +405,8 @@ describe("operations (IR-driven)", () => {
     // Impl class holds a single `client: APIClient` and delegates send/
     // dispatch/decode to it.
     assert.match(out, /public final class URLSessionUsersAPI: UsersAPI \{/);
-    assert.match(out, /^ {4}let client: APIClient$/m);
-    assert.match(out, /public init\(\s+client: APIClient\s+\)/);
+    assert.match(out, /^ {2}let client: APIClient$/m);
+    assert.match(out, /public init\(\s*client: APIClient\s*\)/);
     assert.match(
       out,
       /let url = baseURL\.appendingPathComponent\("users"\)\.appendingPathComponent\("\\\(id\)"\)/,
@@ -679,7 +679,7 @@ describe("operations (IR-driven)", () => {
     assert.match(out, /public protocol UsersAPI \{/);
     assert.match(
       out,
-      /func getUser\(\s+id: String,\s+options: RequestOptions\s+\) async throws/,
+      /func getUser\(\s*id: String,\s+options: RequestOptions\s*\) async throws/,
     );
     // Extension provides the no-options convenience overload.
     assert.match(out, /public extension UsersAPI \{/);
@@ -854,7 +854,7 @@ describe("operations (IR-driven)", () => {
     );
     assert.match(
       out,
-      /public func executeWithResponse\(\s+_ request: URLRequest[\s\S]+?\) async throws -> HTTPURLResponse/,
+      /public func executeWithResponse\(\s*_ request: URLRequest[\s\S]+?\) async throws -> HTTPURLResponse/,
     );
   });
 
@@ -1025,7 +1025,7 @@ describe("operations (IR-driven)", () => {
     assert.match(out, /case basic\(username: String, password: String\)/);
     assert.match(
       out,
-      /public func apply\(\s+to request: URLRequest\s+\) -> URLRequest/,
+      /public func apply\(\s*to request: URLRequest\s*\) -> URLRequest/,
     );
     assert.match(out, /case \.bearer\(let token\):/);
     assert.match(

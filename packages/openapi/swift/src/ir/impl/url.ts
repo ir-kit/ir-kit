@@ -5,7 +5,7 @@ import {
   parseTemplatedSegment,
   splitPathSegments,
 } from "@ir-kit/openapi";
-import type { SwCallArg, SwExpr, SwStmt } from "../../sw-dsl/index.js";
+import type { SwCallArg, SwExpr, SwStmt } from "../../ast/index.js";
 import {
   swArg,
   swArrayLit,
@@ -24,7 +24,7 @@ import {
   swStr,
   swThrow,
   swVar,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 
 /**

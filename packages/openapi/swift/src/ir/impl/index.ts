@@ -4,13 +4,14 @@ import type {
   SwExpr,
   SwFun,
   SwStmt,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 import {
   swArg,
   swArrayLit,
   swAssign,
   swCall,
   swClass,
+  swCoalesce,
   swExprStmt,
   swForIn,
   swFun,
@@ -24,7 +25,7 @@ import {
   swRef,
   swStr,
   swSubscript,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 import type { OperationSignature } from "../operation/signature.js";
 import { buildBodyStmts } from "./body.js";
 import { buildSendAndDecodeStmts } from "./decode.js";
@@ -144,7 +145,7 @@ function applyOptionsHeadersStmt(): SwStmt {
 }
 
 function coalesce(lhs: SwExpr, rhs: SwExpr): SwExpr {
-  return { kind: "binOp", op: "??", left: lhs, right: rhs };
+  return swCoalesce(lhs, rhs);
 }
 
 /**

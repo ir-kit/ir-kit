@@ -1,4 +1,4 @@
-import type { SwDecl, SwExpr, SwType } from "../../sw-dsl/index.js";
+import type { SwDecl, SwExpr, SwType } from "../../ast/index.js";
 import {
   swArg,
   swArray,
@@ -6,6 +6,7 @@ import {
   swBool,
   swCall,
   swCase,
+  swClass,
   swClosure,
   swDotCase,
   swEnum,
@@ -16,15 +17,17 @@ import {
   swGuardLet,
   swIdent,
   swIf,
+  swInit,
   swInterp,
   swLet,
   swMember,
+  swOptional,
   swRef,
   swReturn,
   swStr,
   swString,
   swSwitch,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 const URL_QUERY_ITEM_ARRAY: SwType = swArray(swRef("URLQueryItem"));
 
@@ -62,17 +65,13 @@ function queryStyleEnum(): SwDecl {
 }
 
 function urlEncodingNamespace(): SwDecl {
-  return {
-    kind: "class",
+  return swClass({
     name: "URLEncoding",
-    access: "public",
-    modifiers: ["final"],
-    conforms: [],
     properties: [],
-    inits: [{ kind: "init", access: "private", params: [], body: [] }],
+    inits: [swInit({ params: [], access: "private" })],
     funs: [scalarQueryFn(), arrayQueryFn()],
     runtime: true,
-  };
+  });
 }
 
 function scalarQueryFn() {
@@ -84,7 +83,7 @@ function scalarQueryFn() {
     generics: [swGenericParam("T")],
     params: [
       swFunParam({ name: "name", label: "_", type: swString }),
-      swFunParam({ name: "value", type: { kind: "optional", inner: t } }),
+      swFunParam({ name: "value", type: swOptional(t) }),
     ],
     returnType: URL_QUERY_ITEM_ARRAY,
     body: [
@@ -112,7 +111,7 @@ function arrayQueryFn() {
       swFunParam({ name: "name", label: "_", type: swString }),
       swFunParam({
         name: "values",
-        type: { kind: "optional", inner: swArray(t) },
+        type: swOptional(swArray(t)),
       }),
       swFunParam({
         name: "style",

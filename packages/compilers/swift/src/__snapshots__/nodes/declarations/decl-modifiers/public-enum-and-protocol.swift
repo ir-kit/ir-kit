@@ -1,4 +1,2 @@
-public enum Direction {
-}
-public protocol Greeter {
-}
+public enum Direction {}
+public protocol Greeter {}

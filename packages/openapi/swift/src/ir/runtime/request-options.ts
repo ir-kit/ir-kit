@@ -1,4 +1,4 @@
-import type { SwDecl, SwFunParam, SwProp, SwType } from "../../sw-dsl/index.js";
+import type { SwDecl, SwFunParam, SwProp, SwType } from "../../ast/index.js";
 import {
   swArray,
   swData,
@@ -12,7 +12,7 @@ import {
   swString,
   swStruct,
   swVoid,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 const URL_REQUEST = swRef("URLRequest");
 const HTTP_URL_RESPONSE = swRef("HTTPURLResponse");

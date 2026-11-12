@@ -1028,6 +1028,9 @@ importers:
       '@ir-kit/codegen-core':
         specifier: workspace:*
         version: link:../../shared/codegen-core
+      '@ir-kit/compiler-swift':
+        specifier: workspace:*
+        version: link:../../compilers/swift
       '@ir-kit/openapi':
         specifier: workspace:*
         version: link:../ir

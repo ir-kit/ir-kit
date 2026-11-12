@@ -249,8 +249,8 @@ Zero runtime dependencies — the SDK only imports `Foundation`.
 | `printFile(file)` / `sw*` builders | Lower-level Swift AST + printer. |
 
 ```text
-src/sw-dsl/                   Swift AST: types/, expr/, stmt/, decl/, fun.ts, file.ts
-src/sw-compiler/              AST → string, mirrors the AST tree
+src/ast/                      sw* builders returning @ir-kit/compiler-swift nodes; SwDecl
+src/sw-compiler/              printFile / printDecl via @ir-kit/compiler-swift
 src/ir/
 ├── type/                     IR.SchemaObject → SwType
 ├── operation/                IR.OperationObject → signature shared by protocol + impl
@@ -260,4 +260,4 @@ src/ir/
 └── operations.ts             paths → protocols + impl classes (orchestrator)
 ```
 
-Adding a new statement / expression node: add to `sw-dsl/{expr,stmt}/types.ts`, builder, one printer case. No string templating — everything is AST-built.
+Everything — per-method bodies and runtime helpers — is built as `@ir-kit/compiler-swift` nodes; no string templating.

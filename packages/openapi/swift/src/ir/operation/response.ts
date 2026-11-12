@@ -2,14 +2,8 @@ import type { IR } from "@hey-api/shared";
 import { synthName } from "@ir-kit/codegen-core";
 import { classifyReturnShape } from "@ir-kit/openapi";
 
-import type { SwType } from "../../sw-dsl/index.js";
-import {
-  swAssoc,
-  swEnum,
-  swEnumCase,
-  swRef,
-  swVoid,
-} from "../../sw-dsl/index.js";
+import type { SwType } from "../../ast/index.js";
+import { swAssoc, swEnum, swEnumCase, swRef, swVoid } from "../../ast/index.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 import type { ResponseCase } from "./signature.js";

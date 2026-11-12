@@ -12,7 +12,7 @@ import {
   type SwType,
   swRef,
   swTypeAlias,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 import { swOps } from "../type-ops.js";
 import type { TypeCtx } from "./context.js";
 

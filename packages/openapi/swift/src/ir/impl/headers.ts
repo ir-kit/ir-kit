@@ -1,6 +1,6 @@
 import type { IR } from "@hey-api/shared";
 import { type LocatedParam, paramsAt } from "@ir-kit/openapi";
-import type { SwExpr, SwStmt } from "../../sw-dsl/index.js";
+import type { SwExpr, SwStmt } from "../../ast/index.js";
 import {
   swArg,
   swCall,
@@ -10,7 +10,7 @@ import {
   swInterp,
   swMember,
   swStr,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 
 /**

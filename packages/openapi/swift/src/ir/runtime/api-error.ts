@@ -1,4 +1,4 @@
-import type { SwDecl } from "../../sw-dsl/index.js";
+import type { SwDecl } from "../../ast/index.js";
 import {
   swAssoc,
   swData,
@@ -6,7 +6,7 @@ import {
   swEnumCase,
   swInt,
   swRef,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * The typed error every impl method throws on non-2xx responses.

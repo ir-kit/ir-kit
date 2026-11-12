@@ -1,11 +1,12 @@
 import type { IR } from "@hey-api/shared";
 import { classifyBody, isSchemaObject, type Schema } from "@ir-kit/openapi";
-import type { SwExpr, SwStmt } from "../../sw-dsl/index.js";
+import type { SwExpr, SwStmt } from "../../ast/index.js";
 import {
   swArg,
   swArrayLit,
   swAssign,
   swCall,
+  swCoalesce,
   swDotCase,
   swExprStmt,
   swIdent,
@@ -19,7 +20,7 @@ import {
   swThrow,
   swTry,
   swVar,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 
 export interface BodyResult {
@@ -226,12 +227,10 @@ function formUrlEncodedBody(schema: Schema): ReadonlyArray<SwStmt> {
     [swArg(swDotCase("utf8"), "using")],
   );
   stmts.push(
-    swAssign(swMember(swIdent("request"), "httpBody"), {
-      kind: "binOp",
-      op: "??",
-      left: encodedQuery,
-      right: swCall(swIdent("Data"), []),
-    }),
+    swAssign(
+      swMember(swIdent("request"), "httpBody"),
+      swCoalesce(encodedQuery, swCall(swIdent("Data"), [])),
+    ),
   );
   return stmts;
 }

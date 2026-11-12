@@ -1,4 +1,4 @@
-import type { SwClass, SwFun, SwInit, SwProp } from "../../sw-dsl/index.js";
+import type { SwClass, SwFun, SwInit, SwProp } from "../../ast/index.js";
 import {
   swArg,
   swArray,
@@ -6,6 +6,7 @@ import {
   swAssign,
   swCall,
   swCase,
+  swClass,
   swData,
   swDict,
   swDoCatch,
@@ -39,7 +40,7 @@ import {
   swTypeRef,
   swVar,
   swVoid,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 const URL_REQUEST = swRef("URLRequest");
 const INTERCEPTOR_FN = swFunc([URL_REQUEST], URL_REQUEST, ["async", "throws"]);
@@ -61,12 +62,8 @@ const INTERCEPTORS_TYPE = swRef("APIInterceptors");
  * ```
  */
 export function apiInterceptorsDecl(): SwClass {
-  return {
-    kind: "class",
+  return swClass({
     name: "APIInterceptors",
-    access: "public",
-    modifiers: ["final"],
-    conforms: [],
     runtime: true,
     properties: [
       swProp({
@@ -79,7 +76,7 @@ export function apiInterceptorsDecl(): SwClass {
     ],
     inits: [swInit({ params: [] })],
     funs: [],
-  };
+  });
 }
 
 /**
@@ -115,12 +112,8 @@ export interface ApiClientOptions {
 }
 
 export function apiClientDecl(opts: ApiClientOptions = {}): SwClass {
-  return {
-    kind: "class",
+  return swClass({
     name: "APIClient",
-    access: "public",
-    modifiers: ["final"],
-    conforms: [],
     runtime: true,
     properties: clientProps(opts),
     inits: [clientInit()],
@@ -132,7 +125,7 @@ export function apiClientDecl(opts: ApiClientOptions = {}): SwClass {
       executeRawFn(),
       sendAndDispatchFn(),
     ],
-  };
+  });
 }
 
 function clientProps(opts: ApiClientOptions): ReadonlyArray<SwProp> {

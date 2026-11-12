@@ -1,4 +1,4 @@
-import type { SwDecl } from "../sw-dsl/decl/types.js";
+import type { SwDecl } from "../ast/index.js";
 
 const FOUNDATION = "Foundation";
 

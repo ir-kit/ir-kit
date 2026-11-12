@@ -1,4 +1,4 @@
-import type { SwDecl, SwExpr, SwStmt } from "../../sw-dsl/index.js";
+import type { SwDecl, SwExpr, SwStmt } from "../../ast/index.js";
 import {
   swArg,
   swAssign,
@@ -7,6 +7,7 @@ import {
   swCall,
   swClass,
   swData,
+  swDotCase,
   swExprStmt,
   swFun,
   swFunParam,
@@ -21,7 +22,7 @@ import {
   swReturn,
   swStr,
   swString,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 /** Real CR+LF bytes — the printer escapes them to `\r\n` in the Swift source. */
 const CRLF = "\r\n";
@@ -175,9 +176,7 @@ function writeText(value: SwExpr): SwStmt {
   // a direct force-unwrap is also safe. We pick `if let` for safety.
   return swIfLet(
     "encoded",
-    swCall(swMember(value, "data"), [
-      swArg({ kind: "dotCase", name: "utf8" }, "using"),
-    ]),
+    swCall(swMember(value, "data"), [swArg(swDotCase("utf8"), "using")]),
     [
       swExprStmt(
         swCall(swMember(swIdent("data"), "append"), [
