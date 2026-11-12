@@ -11,7 +11,7 @@ import {
   goNil,
   goSelector,
   goStr,
-} from "../../go-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import { paramValue } from "./param-value.js";
 

@@ -10,16 +10,11 @@ import {
   type GoType,
   goFuncParam,
   goPtr,
-} from "../../go-dsl/index.js";
+  isNilable,
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
-
-const isPointerable = (t: GoType): boolean =>
-  t.kind !== "ptr" &&
-  t.kind !== "slice" &&
-  t.kind !== "map" &&
-  t.kind !== "interface";
 
 /**
  * Produce the function parameters for path/query/header parameters.
@@ -42,7 +37,7 @@ export function buildNonBodyParams(
       ...ctx,
       propPath: ["param", p.name],
     });
-    const finalType = p.required || !isPointerable(t) ? t : goPtr(t);
+    const finalType = p.required || isNilable(t) ? t : goPtr(t);
     return goFuncParam(paramIdent(p.name), finalType);
   });
 

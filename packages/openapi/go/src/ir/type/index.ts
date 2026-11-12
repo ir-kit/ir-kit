@@ -7,8 +7,8 @@ import {
 } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
-import type { GoDecl } from "../../go-dsl/decl/types.js";
-import { type GoType, goRef, goTypeAlias } from "../../go-dsl/index.js";
+import type { GoDecl } from "../../ast/index.js";
+import { type GoType, goRef, goTypeAlias } from "../../ast/index.js";
 import { goOps } from "../type-ops.js";
 import type { TypeCtx } from "./context.js";
 

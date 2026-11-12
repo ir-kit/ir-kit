@@ -1,4 +1,10 @@
-import { type GoExpr, type GoFuncParam, goIdent } from "../../go-dsl/index.js";
+import {
+  type GoExpr,
+  type GoFuncParam,
+  goDeref,
+  goIdent,
+  isPtr,
+} from "../../ast/index.js";
 
 /**
  * Value expression for a method parameter, read off its declared type:
@@ -11,7 +17,5 @@ export function paramValue(
   params: ReadonlyArray<GoFuncParam>,
 ): GoExpr {
   const param = params.find((p) => p.name === id);
-  return param?.type.kind === "ptr"
-    ? { kind: "unary", op: "*", operand: goIdent(id) }
-    : goIdent(id);
+  return param && isPtr(param.type) ? goDeref(goIdent(id)) : goIdent(id);
 }

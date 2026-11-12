@@ -3,6 +3,8 @@ import {
   type GoExpr,
   type GoStmt,
   type GoType,
+  goAddr,
+  goAssign,
   goCall,
   goCase,
   goIdent,
@@ -15,7 +17,9 @@ import {
   goStructLit,
   goSwitch,
   goVar,
-} from "../../go-dsl/index.js";
+  isPtr,
+  unwrapPtr,
+} from "../../ast/index.js";
 import type {
   OperationSignature,
   ResponseCase,
@@ -75,10 +79,6 @@ function buildSingleResponseStmts(
   ];
 }
 
-function unwrapPtr(t: GoType): GoType {
-  return t.kind === "ptr" ? t.inner : t;
-}
-
 function buildMultiResponseStmts(
   sig: OperationSignature,
   withResponse: boolean,
@@ -119,10 +119,9 @@ function caseBody(
   // matches whatever `payloadType` originally was — pointer-typed
   // (`*Pet`) means we wrap with `&value`; bare type means `value`.
   const underlying = unwrapPtr(c.payloadType);
-  const wrapped: GoExpr =
-    c.payloadType.kind === "ptr"
-      ? { kind: "unary", op: "&", operand: goIdent("value") }
-      : goIdent("value");
+  const wrapped: GoExpr = isPtr(c.payloadType)
+    ? goAddr(goIdent("value"))
+    : goIdent("value");
   const result = goStructLit(goRef(c.caseName), [
     { name: "Value", value: wrapped },
   ]);
@@ -130,16 +129,15 @@ function caseBody(
     goVar("value", underlying),
     // Assign, don't redeclare: `err` is the named result and the bare
     // `return` in errCheck must see it.
-    {
-      kind: "assign",
-      targets: [goIdent("err")],
-      values: [
+    goAssign(
+      [goIdent("err")],
+      [
         goCall(goSelector(goIdent("json"), "Unmarshal"), [
           { expr: goIdent("respBody") },
-          { expr: { kind: "unary", op: "&", operand: goIdent("value") } },
+          { expr: goAddr(goIdent("value")) },
         ]),
       ],
-    },
+    ),
     errCheck("decoding"),
     goReturn(withResponse ? [result, goIdent("resp"), goNil] : [result, goNil]),
   ];

@@ -11,7 +11,8 @@ import {
   goReceiver,
   goRef,
   goStruct,
-} from "../../go-dsl/index.js";
+  isNamed,
+} from "../../ast/index.js";
 import { synthName } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
@@ -63,7 +64,7 @@ export function returnTypeFor(
       return { type: undefined, cases: [] };
     case "single": {
       const t = schemaToType(shape.schema, ctx);
-      const finalType = t.kind === "ref" || t.kind === "ptr" ? maybePtr(t) : t;
+      const finalType = isNamed(t) ? goPtr(t) : t;
       return { type: finalType, cases: [] };
     }
     case "multi": {
@@ -88,7 +89,7 @@ export function returnTypeFor(
       );
       for (const c of cases) {
         const fields = c.payloadType
-          ? [goField("Value", c.payloadType, '`json:"-"`')]
+          ? [goField("Value", c.payloadType, 'json:"-"')]
           : [];
         ctx.emit(goStruct({ name: c.caseName, fields }));
         ctx.emit(
@@ -102,8 +103,4 @@ export function returnTypeFor(
       return { type: goRef(ifaceName), cases };
     }
   }
-}
-
-function maybePtr(t: GoType): GoType {
-  return t.kind === "ptr" ? t : goPtr(t);
 }

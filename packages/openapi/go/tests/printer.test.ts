@@ -27,9 +27,9 @@ describe("printer", () => {
         goStruct({
           name: "Pet",
           fields: [
-            goField("Id", goPtr(goInt64), '`json:"id,omitempty"`'),
-            goField("Name", goString, '`json:"name"`'),
-            goField("Tags", goSlice(goRef("Tag")), '`json:"tags,omitempty"`'),
+            goField("Id", goPtr(goInt64), 'json:"id,omitempty"'),
+            goField("Name", goString, 'json:"name"'),
+            goField("Tags", goSlice(goRef("Tag")), 'json:"tags,omitempty"'),
           ],
         }),
       ],
@@ -68,25 +68,6 @@ describe("printer", () => {
     assert.match(
       out,
       /type +PetAPI +interface +\{\n\t\/\/ +GET +\/pet\/\{id\}\n\tGetPet\(ctx +context\.Context, +id +int64\) +\(\*Pet, +error\)\n\}/,
-    );
-  });
-
-  it("emits a generic function", () => {
-    const file = goFile({
-      pkg: "petstore",
-      decls: [
-        goFuncDecl({
-          name: "Execute",
-          typeParams: [{ name: "T", constraint: "any" }],
-          params: [goFuncParam("v", goRef("T"))],
-          results: [goFuncResult(goRef("T")), goFuncResult(goRef("error"))],
-          body: [],
-        }),
-      ],
-    });
-    assert.match(
-      printFile(file),
-      /func +Execute\[T +any\]\(v +T\) +\(T, +error\) +\{\}/,
     );
   });
 

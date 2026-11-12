@@ -1,5 +1,5 @@
-import { printFile } from "../go-compiler/index.js";
-import { type GoDecl, goFile } from "../go-dsl/index.js";
+import type { GoDecl } from "../ast/index.js";
+import { goFile, printFile } from "../go-compiler/index.js";
 import { DEFAULT_PACKAGE } from "../ir/constants.js";
 import { type PlacementOptions, placeDecl } from "./layout.js";
 

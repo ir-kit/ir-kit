@@ -8,7 +8,7 @@ import {
   goSelector,
   goShort,
   goStr,
-} from "../../go-dsl/index.js";
+} from "../../ast/index.js";
 import type { ErrCheckFn } from "./errors.js";
 
 /**

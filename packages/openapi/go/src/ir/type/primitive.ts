@@ -11,7 +11,7 @@ import {
   goRef,
   goSlice,
   goString,
-} from "../../go-dsl/index.js";
+} from "../../ast/index.js";
 
 function typeForStringFormat(format: string | undefined): GoType {
   switch (format) {

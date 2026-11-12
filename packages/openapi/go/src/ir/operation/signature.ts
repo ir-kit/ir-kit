@@ -12,7 +12,7 @@ import {
   goContext,
   goFuncParam,
   goRef,
-} from "../../go-dsl/index.js";
+} from "../../ast/index.js";
 import { exportedIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { buildBodyParams } from "./body.js";
