@@ -43,6 +43,12 @@ describe("templatePathFor", () => {
     expect(templatePathFor("/users/1", peers).paramTypes).toEqual({
       userId: "string",
     });
+    const hexPeers = ["/objects/deadbeefdeadbeef", "/objects/1"];
+    for (const path of hexPeers) {
+      expect(templatePathFor(path, hexPeers).paramTypes).toEqual({
+        objectId: "string",
+      });
+    }
     expect(templatePathFor("/users/7", ["/users/7"]).paramTypes).toEqual({
       userId: "integer",
     });

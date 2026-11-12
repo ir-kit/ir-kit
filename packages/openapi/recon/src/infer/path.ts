@@ -18,8 +18,7 @@ function isStrongId(value: string): boolean {
 // Pure-alphabetic words like `active`, `me`, `latest` are NOT id-like — leaving
 // them as literal segments avoids the `/users/active` vs `/users/123` collision.
 function isIdLike(value: string): boolean {
-  if (INT_RE.test(value)) return true;
-  if (UUID_RE.test(value)) return true;
+  if (isStrongId(value)) return true;
   return /\d/.test(value) && /^[A-Za-z0-9._~-]+$/.test(value);
 }
 
