@@ -31,7 +31,7 @@ await generate({
   input: "./asyncapi.yaml",       // path, URL, or parsed AsyncAPIDocumentInterface
   output: "./generated",
   plugins: [
-    typescript(),    // types.gen.ts        — payload interfaces (via @asyncapi/modelina)
+    typescript(),    // types.gen.ts        — payload types (via @hey-api/openapi-ts)
     events(),        // events.gen.ts       — Events const + EventName type
     eventMap(),      // event-map.gen.ts    — typed message map + isMessageOfType discriminator
     dispatch(),      // dispatch.gen.ts     — Registry runtime + spec-bound handlers() factory
@@ -47,7 +47,7 @@ await generate({
 
 | Plugin | File | What it emits | Depends on |
 |---|---|---|---|
-| `typescript()` | `types.gen.ts` | TS interfaces from message payload schemas (via `@asyncapi/modelina`). | — |
+| `typescript()` | `types.gen.ts` | TS types from message payload schemas (via `@hey-api/openapi-ts`). | — |
 | `events()` | `events.gen.ts` | `Events` const: `{ type, routingKey, exchange, exchangeType, contentType }` per channel × operation. Plus `EventName` type alias. | — |
 | `eventMap()` | `event-map.gen.ts` | `EventMap` keyed by event-type literal → message interface. `AnyMessage` union. `isMessageOfType` discriminator. | `typescript`, `events` |
 | `dispatch()` | `dispatch.gen.ts` + `handlers.gen.ts` | Generic `Registry` runtime (`.on`, `.dispatch`, `.toCallback`, `.bindings`) + spec-bound `handlers()` factory. | `eventMap`, `events` |

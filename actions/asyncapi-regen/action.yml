@@ -88,7 +88,7 @@ runs:
           echo "::notice::asyncapi-regen — installing from local tarballs in $ABS_TARBALL_DIR"
           npm install --silent --no-audit --no-fund \
             "${tarballs[@]}" \
-            "@asyncapi/modelina" \
+            "@hey-api/openapi-ts" \
             "@asyncapi/parser" \
             "@hey-api/codegen-core" \
             "amqplib" \
@@ -98,7 +98,7 @@ runs:
             "@ir-kit/asyncapi-typescript@${VERSION}" \
             "@ir-kit/asyncapi-core" \
             "@ir-kit/codegen-core" \
-            "@asyncapi/modelina" \
+            "@hey-api/openapi-ts" \
             "@asyncapi/parser" \
             "@hey-api/codegen-core" \
             "amqplib" \
