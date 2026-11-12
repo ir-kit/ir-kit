@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "description": "__DESCRIPTION__",
   "keywords": [],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/__PKG_PATH__",
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit/tree/main/__PKG_PATH__",
   "bugs": {
-    "url": "https://github.com/ir-kit/ir-kit/issues"
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
     "directory": "__PKG_PATH__"
   },
   "type": "module",

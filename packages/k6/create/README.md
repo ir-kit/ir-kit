@@ -1,6 +1,6 @@
 # `@ir-kit/create-k6`
 
-Wizard scaffolder for the [`@ir-kit/k6`](https://github.com/ir-kit/ir-kit/tree/main/packages/k6/framework) stack. Run `npm create @ir-kit/k6` (or the pnpm / yarn equivalent) to generate a typed client from your OpenAPI spec and a starter `loadtest.ts` in one shot.
+Wizard scaffolder for the [`@ir-kit/k6`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/k6/framework) stack. Run `npm create @ir-kit/k6` (or the pnpm / yarn equivalent) to generate a typed client from your OpenAPI spec and a starter `loadtest.ts` in one shot.
 
 ## Use
 
@@ -43,4 +43,4 @@ export default defineLoadTest({
 
 ## Repo
 
-Source at [ir-kit/ir-kit](https://github.com/ir-kit/ir-kit/tree/main/packages/k6/create).
+Source at [ahmedrowaihi/ir-kit](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/k6/create).

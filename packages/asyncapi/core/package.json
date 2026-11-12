@@ -11,9 +11,9 @@
     "codegen",
     "shared"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/asyncapi/core",
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/asyncapi/core",
   "bugs": {
-    "url": "https://github.com/ir-kit/ir-kit/issues"
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
     "directory": "packages/asyncapi/core"
   },
   "type": "module",

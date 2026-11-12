@@ -2,7 +2,7 @@
 
 OpenAPI utilities built on top of [`@hey-api/codegen-core`](https://github.com/hey-api/openapi-ts) and `@hey-api/shared`. Spec diffing, parsing, and helpers — usable on their own without `@hey-api/openapi-ts` plugins.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

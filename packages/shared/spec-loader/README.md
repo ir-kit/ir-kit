@@ -2,7 +2,7 @@
 
 Universal spec loader for OpenAPI, AsyncAPI, and TypeSpec. Detects format by extension + content sniff and dispatches to the matching per-format loader, returning a discriminated `{ kind, document }` result.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

@@ -118,11 +118,11 @@ The ir-kit monorepo ships five plugins. Each demonstrates a different pattern:
 
 | Plugin | Pattern | LoC |
 |---|---|---|
-| [`@ir-kit/openapi-ts-paths`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/paths) | Simplest — per-operation route consts. Best starting point. | ~150 |
-| [`@ir-kit/openapi-ts-faker`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/faker) | Schema-driven — emits faker factories per top-level schema. Shows schema iteration. | ~600 |
-| [`@ir-kit/openapi-ts-typia`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/typia) | Validator emission — types → typia validators. Shows IR walking + format hints. | ~400 |
-| [`@ir-kit/openapi-ts-orpc`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/orpc) | Multi-file emission — oRPC clients + contract + server. Largest of the set. | ~800 |
-| [`@ir-kit/openapi-ts-k6`](https://github.com/ir-kit/ir-kit/tree/main/packages/k6/hey-api) | Thin delegator — defers all real work to `@ir-kit/k6-gen`. Shows "plugin as adapter". | ~30 |
+| [`@ir-kit/openapi-ts-paths`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/plugins/paths) | Simplest — per-operation route consts. Best starting point. | ~150 |
+| [`@ir-kit/openapi-ts-faker`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/plugins/faker) | Schema-driven — emits faker factories per top-level schema. Shows schema iteration. | ~600 |
+| [`@ir-kit/openapi-ts-typia`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/plugins/typia) | Validator emission — types → typia validators. Shows IR walking + format hints. | ~400 |
+| [`@ir-kit/openapi-ts-orpc`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/plugins/orpc) | Multi-file emission — oRPC clients + contract + server. Largest of the set. | ~800 |
+| [`@ir-kit/openapi-ts-k6`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/k6/hey-api) | Thin delegator — defers all real work to `@ir-kit/k6-gen`. Shows "plugin as adapter". | ~30 |
 
 **Start with `openapi-ts-paths`** if you're new — smallest surface, complete shape.
 

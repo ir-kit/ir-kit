@@ -10,9 +10,9 @@
     "sdk",
     "client"
   ],
-  "homepage": "https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/java",
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/java",
   "bugs": {
-    "url": "https://github.com/ir-kit/ir-kit/issues"
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
   },
   "license": "MIT",
   "author": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ir-kit/ir-kit.git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
     "directory": "packages/openapi/java"
   },
   "type": "module",

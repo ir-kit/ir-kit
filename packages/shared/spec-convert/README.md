@@ -2,7 +2,7 @@
 
 Convert between API specification formats — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, Postman, JSON Schema. Graph-routed dispatcher: registered `(from → to)` converters compose automatically, so any new edge unlocks every other format combinatorially.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

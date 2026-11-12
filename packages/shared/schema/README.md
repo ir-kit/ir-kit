@@ -52,4 +52,4 @@ Subset of JSON Schema 2020-12. Omitted (codegen can't bind cleanly): `$dynamicRe
 
 ## Repo
 
-Source at [ir-kit/ir-kit](https://github.com/ir-kit/ir-kit/tree/main/packages/shared/schema).
+Source at [ahmedrowaihi/ir-kit](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/shared/schema).

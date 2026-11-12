@@ -2,7 +2,7 @@
 
 Cross-family API spec diff. Normalizes both inputs to OpenAPI 3 via `@ir-kit/spec-convert`, then delegates classification to [`api-smart-diff`](https://github.com/udamir/api-smart-diff) — community-standard breaking / non-breaking / annotation / unclassified / deprecated buckets.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

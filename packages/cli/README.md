@@ -2,7 +2,7 @@
 
 The unified `ir` CLI — one entry point for every ir-kit operation across every supported API standard. Commands are JSON-Schema-defined; the runtime auto-derives flags, prompts, help, and validation from the schema.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

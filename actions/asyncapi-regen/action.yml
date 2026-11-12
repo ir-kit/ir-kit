@@ -168,7 +168,7 @@ runs:
         branch: ${{ steps.vars.outputs.pr-branch }}
         delete-branch: true
         body: |
-          Auto-regenerated AsyncAPI TypeScript SDK from `${{ inputs.input }}` via [`ir-kit/ir-kit/actions/asyncapi-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/asyncapi-regen).
+          Auto-regenerated AsyncAPI TypeScript SDK from `${{ inputs.input }}` via [`ahmedrowaihi/ir-kit/actions/asyncapi-regen`](https://github.com/ahmedrowaihi/ir-kit/tree/main/actions/asyncapi-regen).
 
           Plugins enabled: `${{ inputs.plugins }}`
           ${{ steps.diff.outputs.files-changed }} file(s) changed under `${{ inputs.output }}`.

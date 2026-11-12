@@ -4,7 +4,7 @@ Instead of Zod, you can use [Typia](https://typia.io/) for runtime validation.
 Typia generates validators at compile-time from TypeScript types — no schema
 duplication.
 
-Integration is via the [`@ir-kit/openapi-ts-typia`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/plugins/typia)
+Integration is via the [`@ir-kit/openapi-ts-typia`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/plugins/typia)
 companion plugin. This oRPC plugin consumes it through the standard
 validator API, the same way it consumes `zod`, `valibot`, or `arktype`.
 

@@ -117,10 +117,10 @@ Run the project's typecheck / build / test scripts. If anything fails, the most 
 
 ## Edge cases
 
-- **GitHub Action references** (`uses: ahmedrowaihi/contract-kit/actions/sdk-regen@...`) — repo also moved to `ir-kit/ir-kit`. Rewrite those `uses:` lines too:
+- **GitHub Action references** (`uses: ahmedrowaihi/contract-kit/actions/sdk-regen@...`) — repo also moved to `ahmedrowaihi/ir-kit`. Rewrite those `uses:` lines too:
   ```bash
   rg -l "ahmedrowaihi/contract-kit" --hidden -g '!node_modules' -g '!.git' \
-    | xargs sed -i '' 's|ahmedrowaihi/contract-kit|ir-kit/ir-kit|g'
+    | xargs sed -i '' 's|ahmedrowaihi/contract-kit|ahmedrowaihi/ir-kit|g'
   ```
   GitHub serves redirects for the old URL for ~6 months, so existing pinned refs keep working — but updating is cleaner.
 

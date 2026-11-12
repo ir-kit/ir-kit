@@ -1,6 +1,6 @@
 # `@ir-kit/asyncapi-core`
 
-Shared AsyncAPI 3.0 primitives for codegen. Mirror of [`@ir-kit/openapi`](https://github.com/ir-kit/ir-kit/tree/main/packages/openapi/ir) for the AsyncAPI track — uniform `parseSpec` entry point on top of `@asyncapi/parser`, plus AMQP binding extractors and routing-key matching.
+Shared AsyncAPI 3.0 primitives for codegen. Mirror of [`@ir-kit/openapi`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/openapi/ir) for the AsyncAPI track — uniform `parseSpec` entry point on top of `@asyncapi/parser`, plus AMQP binding extractors and routing-key matching.
 
 ## Install
 
@@ -27,4 +27,4 @@ Designed for emitters (`@ir-kit/asyncapi-typescript`) to consume; not typically 
 
 ## Repo
 
-Source at [ir-kit/ir-kit](https://github.com/ir-kit/ir-kit/tree/main/packages/asyncapi/core).
+Source at [ahmedrowaihi/ir-kit](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/asyncapi/core).

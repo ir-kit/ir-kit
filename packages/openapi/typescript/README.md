@@ -1,8 +1,8 @@
 # @ir-kit/openapi-typescript
 
-Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ir-kit/openapi-{go,kotlin,swift}`](https://github.com/ir-kit/ir-kit). Lets the [`sdk-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/sdk-regen) GitHub Action drive a TypeScript SDK alongside the native ones — same workflow, same inputs, four targets.
+Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ir-kit/openapi-{go,kotlin,swift}`](https://github.com/ahmedrowaihi/ir-kit). Lets the [`sdk-regen`](https://github.com/ahmedrowaihi/ir-kit/tree/main/actions/sdk-regen) GitHub Action drive a TypeScript SDK alongside the native ones — same workflow, same inputs, four targets.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit). **No new codegen** — the entire TypeScript pipeline (types, sdk, schemas, transformers, validators, query hooks, ...) is hey-api's; this package only normalises the calling convention and the result shape.
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). **No new codegen** — the entire TypeScript pipeline (types, sdk, schemas, transformers, validators, query hooks, ...) is hey-api's; this package only normalises the calling convention and the result shape.
 
 ## Install
 
@@ -63,7 +63,7 @@ interface GenerateResult {
 }
 ```
 
-Matches the result shape of `@ir-kit/openapi-go` / `-kotlin` / `-swift`, so downstream tooling (the [`sdk-regen`](https://github.com/ir-kit/ir-kit/tree/main/actions/sdk-regen) action, your own CI scripts) can iterate the four packages uniformly.
+Matches the result shape of `@ir-kit/openapi-go` / `-kotlin` / `-swift`, so downstream tooling (the [`sdk-regen`](https://github.com/ahmedrowaihi/ir-kit/tree/main/actions/sdk-regen) action, your own CI scripts) can iterate the four packages uniformly.
 
 ## Why a wrapper
 

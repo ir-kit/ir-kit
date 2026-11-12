@@ -1,6 +1,6 @@
 # ir-kit
 
-[![pkg.pr.new](https://pkg.pr.new/badge/ir-kit/ir-kit)](https://pkg.pr.new)
+[![pkg.pr.new](https://pkg.pr.new/badge/ahmedrowaihi/ir-kit)](https://pkg.pr.new)
 
 A federation toolchain for API specifications — every standard talks to every other, and every downstream tool (SDK gen, docs, diff, load test, mock data) reads the same canonical input regardless of source format.
 
@@ -39,13 +39,13 @@ ir-kit ships six Agent Skills that teach AI coding agents — Claude Code, Curso
 
 ```bash
 # Install all skills (auto-detects your installed agents)
-npx skills add ir-kit/ir-kit
+npx skills add ahmedrowaihi/ir-kit
 
 # Pick specific skills
-npx skills add ir-kit/ir-kit --skill k6-loadtest --skill openapi-sdk
+npx skills add ahmedrowaihi/ir-kit --skill k6-loadtest --skill openapi-sdk
 
 # Install globally for every project
-npx skills add ir-kit/ir-kit -g
+npx skills add ahmedrowaihi/ir-kit -g
 ```
 
 </details>
@@ -53,7 +53,7 @@ npx skills add ir-kit/ir-kit -g
 <details>
 <summary><strong>Agent</strong> — paste this into Claude Code, Cursor, Copilot, …</summary>
 
-> Install the ir-kit Agent Skills from https://github.com/ir-kit/ir-kit into this project so you can use them in future sessions. Run `npx skills add ir-kit/ir-kit` — it auto-detects whichever agent I'm using and writes each `SKILL.md` to the right location. If that command isn't available, clone the repo and copy `skills/<name>/SKILL.md` into the skill directory for your agent (Claude Code: `.claude/skills/<name>/SKILL.md`). Then confirm these six are installed: `k6-loadtest`, `openapi-sdk`, `openapi-from-traffic`, `asyncapi-typescript`, `fn-schema`, `heyapi-plugin-author`.
+> Install the ir-kit Agent Skills from https://github.com/ahmedrowaihi/ir-kit into this project so you can use them in future sessions. Run `npx skills add ahmedrowaihi/ir-kit` — it auto-detects whichever agent I'm using and writes each `SKILL.md` to the right location. If that command isn't available, clone the repo and copy `skills/<name>/SKILL.md` into the skill directory for your agent (Claude Code: `.claude/skills/<name>/SKILL.md`). Then confirm these six are installed: `k6-loadtest`, `openapi-sdk`, `openapi-from-traffic`, `asyncapi-typescript`, `fn-schema`, `heyapi-plugin-author`.
 
 </details>
 

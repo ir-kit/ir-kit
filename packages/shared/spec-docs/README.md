@@ -2,7 +2,7 @@
 
 Render any supported API spec as a standalone HTML documentation page via [Scalar API Reference](https://github.com/scalar/scalar). Converts the input to OpenAPI 3 first (using `@ir-kit/spec-convert`), then delegates HTML emission to `@scalar/core`'s `getHtmlDocument` — the same renderer the official Express / Hono / Fastify integrations use.
 
-Part of [ir-kit](https://github.com/ir-kit/ir-kit).
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 

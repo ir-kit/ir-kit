@@ -51,4 +51,4 @@ defaultProjectName("./out/petstore-sdk");   // "petstore-sdk"
 
 ## Repo
 
-Source at [ir-kit/ir-kit](https://github.com/ir-kit/ir-kit/tree/main/packages/shared/codegen-core).
+Source at [ahmedrowaihi/ir-kit](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/shared/codegen-core).

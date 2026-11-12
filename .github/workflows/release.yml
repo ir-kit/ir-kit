@@ -30,9 +30,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: "20"
-          cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
+          node-version: "24"
+
+      # Trusted publishing (OIDC) needs npm >= 11.5.1; `pnpm publish` delegates to it.
+      - name: Update npm
+        run: npm install -g npm@^11.5.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -47,5 +49,6 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Only for publishing a package's first version; npm trusted
+          # publishing (OIDC) is used whenever this secret is unset.
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
