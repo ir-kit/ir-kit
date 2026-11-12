@@ -1,0 +1,22 @@
+import type { SwiftType } from "../type.js";
+
+export type SwiftAttribute = {
+  arguments?: string;
+  attributeName: string;
+};
+
+export type SwiftGenericParameter = {
+  inheritedType?: SwiftType;
+  isPack?: boolean;
+  name: string;
+};
+
+export type SwiftGenericRequirement = {
+  left: SwiftType;
+  relation: "conformance" | "sameType";
+  right: SwiftType;
+};
+
+export type SwiftInheritanceClause = ReadonlyArray<SwiftType>;
+
+export type SwiftModifier = string;
