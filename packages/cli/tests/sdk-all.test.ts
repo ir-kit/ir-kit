@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { sdkAllCommand } from "../src/commands/sdk-all.js";
-import { sdkJavaCommand } from "../src/commands/sdk-java.js";
+import { sdkJavaCommand } from "../src/commands/sdk-native.js";
 
 const fixture = join(
   import.meta.dirname,
