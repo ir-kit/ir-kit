@@ -2,7 +2,11 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, extname, join, resolve } from "node:path";
 
-import { loadSpec } from "@ir-kit/spec-loader";
+import {
+  classifySpecDocument,
+  loadSpec,
+  readSpecDocument,
+} from "@ir-kit/spec-loader";
 
 const require = createRequire(import.meta.url);
 
@@ -120,26 +124,21 @@ async function detectFormat(
   input: ConvertSpecInput,
   cwd: string | undefined,
 ): Promise<SpecFormat> {
-  if (typeof input === "object") {
-    if ((input as { asyncapi?: unknown }).asyncapi !== undefined)
-      return "asyncapi3";
-    if (isPostmanCollection(input)) return "postman";
-    return "openapi3";
+  if (typeof input === "string") {
+    const ext = extname(input).toLowerCase();
+    if (ext === ".tsp") return "typespec";
+    if (ext === ".proto") return "proto";
   }
-  const ext = extname(input).toLowerCase();
-  if (ext === ".tsp") return "typespec";
-  if (ext === ".proto") return "proto";
-  if (input.toLowerCase().endsWith(".postman_collection.json"))
-    return "postman";
-  const result = await loadSpec({ input, cwd });
-  if (result.kind === "asyncapi") return "asyncapi3";
-  if (
-    result.kind === "openapi" &&
-    isPostmanCollection(result.document as Record<string, unknown>)
-  ) {
-    return "postman";
-  }
-  return "openapi3";
+  const document =
+    typeof input === "object" ? input : await readSpecDocument(input, cwd);
+  if (isPostmanCollection(document)) return "postman";
+  const kind = classifySpecDocument(document);
+  if (kind === "asyncapi") return "asyncapi3";
+  if (kind === "openapi") return "openapi3";
+  const label = typeof input === "string" ? ` ${input}` : "";
+  throw new Error(
+    `Unrecognized spec${label}: expected OpenAPI, AsyncAPI, a Postman collection, a .tsp or a .proto file.`,
+  );
 }
 
 function isPostmanCollection(doc: Record<string, unknown>): boolean {

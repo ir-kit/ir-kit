@@ -49,6 +49,7 @@ export function findConverterPath(
     const { node, path } = queue.shift()!;
     for (const edge of adjacency.get(node) ?? []) {
       if (visited.has(edge.to)) continue;
+      if (edge.authoredInputOnly && path.length > 0) continue;
       const next = [...path, edge];
       if (edge.to === to) return next;
       visited.add(edge.to);
