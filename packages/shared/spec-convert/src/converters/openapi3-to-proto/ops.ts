@@ -27,6 +27,7 @@ import {
   defaultJsonName,
   fieldIdent,
   newFieldNames,
+  newTypeNames,
   upperSnake,
 } from "./names.js";
 
@@ -169,14 +170,15 @@ export function createProtoOps(state: ProtoState): ProtoOps {
     comment?: string,
   ): ProtoMessage => {
     const fieldNames = newFieldNames();
+    const segments = newTypeNames();
     const numbers = fieldNumbers();
     const jsonNames = new Set<string>();
     const fields = properties.map((p, i): ProtoField => {
       // Keys can repeat (a path and a query parameter both named `id`) or
-      // snake_case to the same name, so claim per position and derive
-      // synthesized type names from the unique field name.
+      // snake_case to the same name, so claim field names and the
+      // segments naming synthesized types per position.
       const fieldName = fieldNames.claim(String(i), p.jsonKey);
-      const segment = pascal(fieldName);
+      const segment = segments.claim(String(i), fieldName);
       const raw = dispatch(p.schema, ctx(name, [segment]));
       const type = slot(raw, name, segment, false);
       const jsonName =

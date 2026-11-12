@@ -484,3 +484,23 @@ describe("openAPIToProto allOf property merging", () => {
     );
   });
 });
+
+it("names nested types uniquely when suffixed field names collide", () => {
+  const { source } = convert(
+    spec(
+      {},
+      {
+        Item: {
+          type: "object",
+          properties: {
+            petId: { type: "string" },
+            pet_id: { type: "object", properties: { a: { type: "string" } } },
+            petId2: { type: "object", properties: { b: { type: "string" } } },
+          },
+        },
+      },
+    ),
+  );
+  const names = [...source.matchAll(/^message (\w+) \{/gm)].map((m) => m[1]);
+  expect(new Set(names).size).toBe(names.length);
+});
