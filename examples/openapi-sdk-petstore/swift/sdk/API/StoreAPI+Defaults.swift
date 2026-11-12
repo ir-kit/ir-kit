@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 extension StoreAPI {
   /// GET /store/inventory
   public func getInventory() async throws -> [String: Int32] {

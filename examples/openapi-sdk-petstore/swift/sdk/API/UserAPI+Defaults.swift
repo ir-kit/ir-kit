@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 extension UserAPI {
   /// POST /user
   public func createUser(body: User) async throws -> User {

@@ -8,6 +8,7 @@
 export { apiClientDecl, apiInterceptorsDecl } from "./api-client.js";
 export { apiErrorEnum } from "./api-error.js";
 export { authDecls } from "./auth.js";
+export { jsonValueDecl } from "./json-value.js";
 export { multipartFormBodyDecl } from "./multipart.js";
 export { requestOptionsDecl } from "./request-options.js";
 export { unimplementedBodyEnum } from "./unimplemented-body.js";

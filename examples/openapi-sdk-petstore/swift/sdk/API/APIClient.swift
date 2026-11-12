@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public final class APIClient {
   public let baseURL: URL
   public let session: URLSession

@@ -1,4 +1,4 @@
-import { safeCaseName, synthName } from "@ir-kit/codegen-core";
+import { synthName } from "@ir-kit/codegen-core";
 import {
   type Schema,
   type SchemaToTypeOps,
@@ -7,7 +7,6 @@ import {
 
 import type { SwCodingKeysEntry, SwDecl, SwType } from "../ast/index.js";
 import {
-  swAny,
   swArray,
   swDict,
   swEnum,
@@ -15,6 +14,7 @@ import {
   swFunParam,
   swInit,
   swInt,
+  swJSONValue,
   swOptional,
   swProp,
   swRef,
@@ -22,8 +22,9 @@ import {
   swStruct,
   swVoid,
 } from "../ast/index.js";
+import { caseName, escapeKeyword } from "./identifiers.js";
 import { typeForPrimitive } from "./type/primitive.js";
-import { propertyName } from "./type/property-naming.js";
+import { type PropertyName, propertyName } from "./type/property-naming.js";
 
 function intCaseName(n: number): string {
   return n < 0 ? `_neg${Math.abs(n)}` : `_${n}`;
@@ -41,18 +42,20 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
   arrayType: swArray,
   mapType: (value) => swDict(swString, value),
   voidType: () => swVoid,
-  anyType: () => swAny,
-  nullableAnyType: () => swOptional(swAny),
+  anyType: () => swJSONValue,
+  nullableAnyType: () => swOptional(swJSONValue),
   wrapForUnionSingle: (inner, nullable) =>
     nullable ? swOptional(inner) : inner,
-  unionFallback: (nullable) => (nullable ? swOptional(swAny) : swAny),
+  unionFallback: (nullable) =>
+    nullable ? swOptional(swJSONValue) : swJSONValue,
   primitiveType: typeForPrimitive,
   // Swift convention: `Owner_Property` (underscore joiner).
   synthName,
   buildStructDecl: (name, properties, ctx, dispatch) => {
+    const taken = new Set<string>();
     const entries = properties.map(
       ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
-        const naming = propertyName(jsonKey);
+        const naming = distinctName(propertyName(jsonKey), taken);
         const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
           names: ctx.names,
@@ -94,9 +97,9 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
     });
   },
   emitStringEnum: (name, rawValues, emit) => {
-    const idents = uniqueEnumEntries(rawValues, safeCaseName);
+    const idents = uniqueEnumEntries(rawValues, caseName);
     const cases = idents.map(({ identifier, raw }) =>
-      swEnumCase(identifier, raw),
+      swEnumCase(escapeKeyword(identifier), raw),
     );
     emit(
       swEnum({
@@ -124,3 +127,14 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
     return swRef(name);
   },
 };
+
+/** Suffixes a property name already used by an earlier key of the same struct. */
+function distinctName(naming: PropertyName, taken: Set<string>): PropertyName {
+  const bare = naming.swiftName.replace(/`/g, "");
+  let name = naming.swiftName;
+  for (let n = 2; taken.has(name.replace(/`/g, "")); n++) name = `${bare}${n}`;
+  taken.add(name.replace(/`/g, ""));
+  return name === naming.swiftName
+    ? naming
+    : { ...naming, swiftName: name, renamed: true };
+}

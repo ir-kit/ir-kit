@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public final class URLSessionUserAPI: UserAPI {
   let client: APIClient
 
@@ -27,7 +30,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.execute(
       request, as: User.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -51,7 +55,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.executeWithResponse(
       request, as: User.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -75,7 +80,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.execute(
       request, as: User.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -99,7 +105,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.executeWithResponse(
       request, as: User.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -134,7 +141,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.execute(
       request, as: String.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -169,7 +177,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.executeWithResponse(
       request, as: String.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -231,7 +240,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.execute(
       request, as: User.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -253,7 +263,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.executeWithResponse(
       request, as: User.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -371,7 +382,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.execute(
       request, as: UpdateProfileResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -395,7 +407,8 @@ public final class URLSessionUserAPI: UserAPI {
     }
     return try await client.executeWithResponse(
       request, as: UpdateProfileResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 }

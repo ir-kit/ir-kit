@@ -25,6 +25,7 @@ export function createPrinter(options?: SwiftPrinterOptions) {
   let indentLevel = 0;
   /** Column where the expression being printed starts. */
   let column = 0;
+  let memberBreaks = 0;
 
   /** `(a: A, b: B)`, or one parameter per line when the header overflows. */
   function printParameterList(
@@ -39,9 +40,86 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       return inline;
     const inner = INDENT.repeat(indentLevel + 1);
     const list = parameters
-      .map((parameter) => `${inner}${printParameter(parameter)}`)
-      .join(",\n");
+      .map((parameter, index) =>
+        printListedParameter(
+          parameter,
+          inner,
+          index < parameters.length - 1 ? "," : "",
+        ),
+      )
+      .join("\n");
     return header(`(\n${list}\n${INDENT.repeat(indentLevel)})`);
+  }
+
+  /** One parameter of a vertical list, broken the way swift-format breaks it. */
+  function printListedParameter(
+    parameter: Parameters<typeof printParameter>[0],
+    inner: string,
+    comma: string,
+  ): string {
+    const line = `${inner}${printParameter(parameter)}${comma}`;
+    if (maxLineLength <= 0 || line.length <= maxLineLength) return line;
+    const secondName = parameter.secondName ? ` ${parameter.secondName}` : "";
+    const name = `${parameter.firstName}${secondName}:`;
+    const type = `${parameter.isInout ? "inout " : ""}${printNode(parameter.type)}${parameter.isVariadic ? "..." : ""}`;
+    const value = parameter.defaultValue
+      ? printNode(parameter.defaultValue)
+      : undefined;
+    const continuation = `${inner}${INDENT}`;
+    const head = `${inner}${name} ${type} =`;
+    if (value !== undefined && head.length <= maxLineLength)
+      return `${head}\n${continuation}${value}${comma}`;
+    const broken = `${continuation}${type}${value === undefined ? "" : ` = ${value}`}${comma}`;
+    if (value !== undefined && broken.length > maxLineLength)
+      return `${inner}${name}\n${continuation}${type} =\n${continuation}${value}${comma}`;
+    return `${inner}${name}\n${broken}`;
+  }
+
+  /**
+   * `kind Name: A, B`, filling inheritance onto continuation lines when
+   * the header overflows.
+   */
+  function printTypeHeader(
+    prefix: string,
+    inheritanceClause: ReadonlyArray<SwiftNode> | undefined,
+    whereClause: string,
+  ): string {
+    const types = (inheritanceClause ?? []).map((type) => printNode(type));
+    const inline = `${prefix}${types.length ? `: ${types.join(", ")}` : ""}${whereClause}`;
+    const base = INDENT.length * indentLevel;
+    if (
+      !types.length ||
+      maxLineLength <= 0 ||
+      base + inline.length + 2 <= maxLineLength
+    )
+      return inline;
+    let continuation = INDENT.repeat(indentLevel + 1);
+    const lines = [`${prefix}:`];
+    const split = prefix.lastIndexOf(" ");
+    if (base + prefix.length + 1 > maxLineLength && split > 0) {
+      lines.splice(
+        0,
+        1,
+        prefix.slice(0, split),
+        `${continuation}${prefix.slice(split + 1)}:`,
+      );
+      continuation = INDENT.repeat(indentLevel + 2);
+    }
+    types.forEach((type, index) => {
+      const item = index < types.length - 1 ? `${type},` : type;
+      const last = lines.length - 1;
+      const width = (last ? 0 : base) + lines[last]!.length + 1 + item.length;
+      if (width <= maxLineLength) lines[last] = `${lines[last]} ${item}`;
+      else lines.push(`${continuation}${item}`);
+    });
+    return `${lines.join("\n")}${whereClause}`;
+  }
+
+  /** True when `{` cannot share the last header line. */
+  function braceOnOwnLine(header: string): boolean {
+    if (maxLineLength <= 0) return false;
+    if (header.includes("\n")) return true;
+    return INDENT.length * indentLevel + header.length + 2 > maxLineLength;
   }
 
   function printLine(line: string): string {
@@ -124,10 +202,13 @@ export function createPrinter(options?: SwiftPrinterOptions) {
     if ("kind" in condition) return printNode(condition);
     if ("platforms" in condition)
       return `#available(${condition.platforms.join(", ")})`;
-    if ("bindingSpecifier" in condition)
-      return condition.initializer
-        ? `${condition.bindingSpecifier} ${condition.pattern} = ${printNode(condition.initializer)}`
-        : `${condition.bindingSpecifier} ${condition.pattern}`;
+    if ("bindingSpecifier" in condition) {
+      if (!condition.initializer)
+        return `${condition.bindingSpecifier} ${condition.pattern}`;
+      const binding = `${condition.bindingSpecifier} ${condition.pattern} = `;
+      column += binding.length;
+      return `${binding}${printNode(condition.initializer)}`;
+    }
     return `case ${printNode(condition.pattern)} = ${printNode(condition.initializer)}`;
   }
 
@@ -166,8 +247,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
   function printBraceBlock(
     header: string,
     body: ReadonlyArray<SwiftNode>,
+    ownLineBrace = false,
   ): string {
-    const headerLine = printLine(`${header} {`);
+    const headerLine = ownLineBrace
+      ? `${printLine(header)}\n${printLine("{")}`
+      : printLine(`${header} {`);
     indentLevel += 1;
     const lines = body.map((statement) => printNode(statement));
     indentLevel -= 1;
@@ -178,8 +262,13 @@ export function createPrinter(options?: SwiftPrinterOptions) {
     header: string,
     members: ReadonlyArray<SwiftNode>,
   ): string {
-    if (!members.length) return printLine(`${header} {}`);
-    const headerLine = printLine(`${header} {`);
+    const ownLine = braceOnOwnLine(header);
+    const opener = (brace: string) =>
+      ownLine
+        ? `${printLine(header)}\n${printLine(brace)}`
+        : printLine(`${header} ${brace}`);
+    if (!members.length) return opener("{}");
+    const headerLine = opener("{");
     indentLevel += 1;
     const printed = members.map((member) => printNode(member));
     indentLevel -= 1;
@@ -230,8 +319,30 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         ].join("\n");
       }
 
-      case SwiftNodeKind.ArrayLiteral:
-        return `[${node.elements.map((element) => printNode(element)).join(", ")}]`;
+      case SwiftNodeKind.ArrayLiteral: {
+        const start = column;
+        const elements = node.elements.map((element) => printNode(element));
+        const inline = `[${elements.join(", ")}]`;
+        if (
+          !elements.length ||
+          maxLineLength <= 0 ||
+          inline.includes("\n") ||
+          start + inline.length + 1 <= maxLineLength
+        )
+          return inline;
+        const inner = INDENT.repeat(indentLevel + 1);
+        const lines: Array<string> = [];
+        let current = "";
+        for (const element of elements) {
+          const candidate = current ? `${current} ${element},` : `${element},`;
+          if (current && inner.length + candidate.length > maxLineLength) {
+            lines.push(current);
+            current = `${element},`;
+          } else current = candidate;
+        }
+        lines.push(current);
+        return `[\n${lines.map((line) => `${inner}${line}`).join("\n")}\n${INDENT.repeat(indentLevel)}]`;
+      }
 
       case SwiftNodeKind.ArrayType:
         return `[${printNode(node.element)}]`;
@@ -239,8 +350,18 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       case SwiftNodeKind.AsExpression:
         return `${printNode(node.expression)} as${node.questionOrExclamationMark ?? ""} ${printNode(node.type)}`;
 
-      case SwiftNodeKind.AssignmentExpression:
-        return `${printNode(node.target)} = ${printNode(node.value)}`;
+      case SwiftNodeKind.AssignmentExpression: {
+        const target = printNode(node.target);
+        const value = printNode(node.value);
+        const line = `${target} = ${value}`;
+        if (
+          maxLineLength > 0 &&
+          !line.includes("\n") &&
+          INDENT.length * indentLevel + line.length > maxLineLength
+        )
+          return `${target} =\n${INDENT.repeat(indentLevel + 1)}${value}`;
+        return line;
+      }
 
       case SwiftNodeKind.AssociatedTypeDeclaration:
         return [
@@ -264,7 +385,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
-        const header = `${modifiers}class ${node.name}${printGenericParameters(node.genericParameters)}${printInheritanceClause(node.inheritanceClause)}${printWhereClause(node.genericWhereClause)}`;
+        const header = printTypeHeader(
+          `${modifiers}class ${node.name}${printGenericParameters(node.genericParameters)}`,
+          node.inheritanceClause,
+          printWhereClause(node.genericWhereClause),
+        );
         return [
           ...printAttributes(node.attributes),
           printMemberBlock(header, node.members),
@@ -377,10 +502,22 @@ export function createPrinter(options?: SwiftPrinterOptions) {
             : "";
           return `${element.name}${associatedValues}${rawValue}`;
         });
-        return [
-          ...printAttributes(node.attributes),
-          printLine(`case ${elements.join(", ")}`),
-        ].join("\n");
+        const [only] = node.elements;
+        const line = printLine(`case ${elements.join(", ")}`);
+        if (
+          node.elements.length === 1 &&
+          only?.rawValue &&
+          maxLineLength > 0 &&
+          line.length > maxLineLength
+        )
+          return [
+            ...printAttributes(node.attributes),
+            printLine(
+              `case ${elements[0]!.slice(0, elements[0]!.lastIndexOf(" = "))} =`,
+            ),
+            `${INDENT.repeat(indentLevel + 1)}${printNode(only.rawValue)}`,
+          ].join("\n");
+        return [...printAttributes(node.attributes), line].join("\n");
       }
 
       case SwiftNodeKind.EnumCasePattern: {
@@ -394,7 +531,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
-        const header = `${modifiers}enum ${node.name}${printGenericParameters(node.genericParameters)}${printInheritanceClause(node.inheritanceClause)}${printWhereClause(node.genericWhereClause)}`;
+        const header = printTypeHeader(
+          `${modifiers}enum ${node.name}${printGenericParameters(node.genericParameters)}`,
+          node.inheritanceClause,
+          printWhereClause(node.genericWhereClause),
+        );
         return [
           ...printAttributes(node.attributes),
           printMemberBlock(header, node.members),
@@ -412,7 +553,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
-        const header = `${modifiers}extension ${printNode(node.extendedType)}${printInheritanceClause(node.inheritanceClause)}${printWhereClause(node.genericWhereClause)}`;
+        const header = printTypeHeader(
+          `${modifiers}extension ${printNode(node.extendedType)}`,
+          node.inheritanceClause,
+          printWhereClause(node.genericWhereClause),
+        );
         return [
           ...printAttributes(node.attributes),
           printMemberBlock(header, node.members),
@@ -437,7 +582,25 @@ export function createPrinter(options?: SwiftPrinterOptions) {
 
       case SwiftNodeKind.FunctionCallExpression: {
         const start = column;
-        const callee = printNode(node.calledExpression);
+        const member =
+          node.calledExpression.kind === SwiftNodeKind.MemberAccessExpression
+            ? node.calledExpression
+            : undefined;
+        let callee = printNode(node.calledExpression);
+        // swift-format moves `.member(` to its own line when even the callee overflows.
+        if (
+          member &&
+          maxLineLength > 0 &&
+          !callee.includes("\n") &&
+          start + callee.length + 1 > maxLineLength
+        ) {
+          callee = `${printNode(member.base)}\n${INDENT.repeat(indentLevel)}.${member.declName}`;
+          memberBreaks += 1;
+        }
+        const calleeStart = callee.includes("\n")
+          ? INDENT.length * indentLevel
+          : start;
+        const calleeLast = callee.slice(callee.lastIndexOf("\n") + 1);
         const args = node.arguments.map((argument) =>
           argument.label
             ? `${argument.label}: ${printNode(argument.expression)}`
@@ -449,29 +612,54 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const parens =
           args.length || !node.trailingClosure ? `(${args.join(", ")})` : "";
         const inline = `${callee}${parens}${closure}`;
-        const firstLine = inline.split("\n")[0] ?? "";
+        const firstLine = `${calleeLast}${parens}`.split("\n")[0] ?? "";
+        const onlyClosuresSpanLines = node.arguments.every(
+          (argument, index) =>
+            !args[index]!.includes("\n") ||
+            argument.expression.kind === SwiftNodeKind.ClosureExpression,
+        );
         if (
           !args.length ||
           maxLineLength <= 0 ||
-          start + firstLine.length <= maxLineLength ||
-          args.some((arg) => arg.includes("\n"))
+          (onlyClosuresSpanLines &&
+            (calleeStart + firstLine.length < maxLineLength ||
+              args.some((arg) => arg.includes("\n"))))
         )
           return inline;
         const indent = INDENT.repeat(indentLevel + 1);
         const width = maxLineLength - indent.length;
+        indentLevel += 1;
+        const broken = node.arguments.map((argument) => {
+          const label = argument.label ? `${argument.label}: ` : "";
+          column = indent.length + label.length + 1;
+          return `${label}${printNode(argument.expression)}`;
+        });
+        indentLevel -= 1;
         const lines: Array<string> = [];
         let current = "";
-        args.forEach((arg, index) => {
+        broken.forEach((arg) => {
+          if (arg.includes("\n")) {
+            if (current) lines.push(current);
+            lines.push(arg);
+            current = "";
+            return;
+          }
           const candidate = current ? `${current}, ${arg}` : arg;
-          const comma = index < args.length - 1 ? 1 : 0;
-          if (current && candidate.length + comma > width) {
+          // Each line ends in `,` or the closing `)`.
+          if (current && candidate.length + 1 > width) {
             lines.push(current);
             current = arg;
           } else current = candidate;
         });
-        if (!lines.length && current.length + 1 <= width)
-          return `${callee}(\n${indent}${current})${closure}`;
-        lines.push(current);
+        if (current) lines.push(current);
+        const lastLine =
+          (lines[lines.length - 1] ?? "").split("\n").pop() ?? "";
+        const lastWidth =
+          lines.length === 1 && !lines[0]!.includes("\n")
+            ? width
+            : maxLineLength;
+        if (lines.length === 1 && lastLine.length + 1 <= lastWidth)
+          return `${callee}(\n${indent}${lines[0]})${closure}`;
         return `${callee}(\n${lines.map((line) => `${indent}${line}`).join(",\n")}\n${INDENT.repeat(indentLevel)})${closure}`;
       }
 
@@ -489,13 +677,71 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const returnClause = node.returnType
           ? ` -> ${printNode(node.returnType)}`
           : "";
-        const signature = printParameterList(
+        const head = `${modifiers}func ${node.name}${printGenericParameters(node.genericParameters)}`;
+        const whereClause = printWhereClause(node.genericWhereClause);
+        let signature = printParameterList(
           node.parameters,
           (list) =>
-            `${modifiers}func ${node.name}${printGenericParameters(node.genericParameters)}${list}${effectClause}${returnClause}${printWhereClause(node.genericWhereClause)}`,
+            `${head}${list}${effectClause}${returnClause}${whereClause}`,
         );
+        let ownLineBrace = false;
+        const base = INDENT.length * indentLevel;
+        if (maxLineLength > 0 && base + head.length + 1 > maxLineLength) {
+          indentLevel += 1;
+          const named = printParameterList(
+            node.parameters,
+            (list) =>
+              `${node.name}${printGenericParameters(node.genericParameters)}${list}${effectClause}${returnClause}${whereClause}`,
+          );
+          indentLevel -= 1;
+          signature = `${modifiers}func\n${INDENT.repeat(indentLevel + 1)}${named}`;
+          ownLineBrace = true;
+        }
+        if (
+          !ownLineBrace &&
+          !node.parameters.length &&
+          maxLineLength > 0 &&
+          base + signature.length + (node.body ? 2 : 0) > maxLineLength
+        ) {
+          const tuple =
+            node.returnType?.kind === SwiftNodeKind.TupleType
+              ? printNode(node.returnType).slice(1, -1)
+              : undefined;
+          const opened = `${head}()${effectClause} -> (`;
+          if (node.body && base + signature.length <= maxLineLength)
+            ownLineBrace = true;
+          else if (tuple !== undefined && base + opened.length <= maxLineLength)
+            signature = `${opened}\n${INDENT.repeat(indentLevel + 1)}${tuple}\n${INDENT.repeat(indentLevel)})${whereClause}`;
+          else {
+            ownLineBrace = Boolean(node.body);
+            const result =
+              tuple !== undefined
+                ? `-> (\n${INDENT.repeat(indentLevel + 2)}${tuple}\n${INDENT.repeat(indentLevel + 1)})`
+                : returnClause.trim();
+            const effects = `${head}()${effectClause}`;
+            signature =
+              base + effects.length <= maxLineLength
+                ? `${effects}\n${INDENT.repeat(indentLevel + 1)}${result}${whereClause}`
+                : `${head}()\n${INDENT.repeat(indentLevel + 1)}${[effectClause.trim(), result].filter(Boolean).join(" ")}${whereClause}`;
+          }
+        }
+        const closing = signature.slice(signature.lastIndexOf("\n") + 1);
+        if (
+          node.parameters.length &&
+          signature.includes("\n") &&
+          maxLineLength > 0 &&
+          closing.length > maxLineLength &&
+          node.returnType?.kind === SwiftNodeKind.TupleType
+        )
+          signature = `${signature.slice(0, signature.lastIndexOf("\n") + 1)}${INDENT.repeat(indentLevel)})${effectClause} -> (\n${INDENT.repeat(indentLevel + 1)}${printNode(node.returnType).slice(1, -1)}\n${INDENT.repeat(indentLevel)})${whereClause}`;
+        if (node.body && !ownLineBrace && maxLineLength > 0) {
+          const lastLine = signature.includes("\n")
+            ? signature.slice(signature.lastIndexOf("\n") + 1)
+            : `${INDENT.repeat(indentLevel)}${signature}`;
+          ownLineBrace = lastLine.length + 2 > maxLineLength;
+        }
         const declaration = node.body
-          ? printBraceBlock(signature, node.body)
+          ? printBraceBlock(signature, node.body, ownLineBrace)
           : printLine(signature);
         return [...printAttributes(node.attributes), declaration].join("\n");
       }
@@ -569,10 +815,14 @@ export function createPrinter(options?: SwiftPrinterOptions) {
           ? `${node.modifiers.join(" ")} `
           : "";
         const failable = node.failable ? "?" : "";
+        const effects = [
+          node.effectSpecifiers?.async ? " async" : "",
+          node.effectSpecifiers?.throws ? " throws" : "",
+        ].join("");
         const signature = printParameterList(
           node.parameters,
           (list) =>
-            `${modifiers}init${failable}${list}${printWhereClause(node.genericWhereClause)}`,
+            `${modifiers}init${failable}${list}${effects}${printWhereClause(node.genericWhereClause)}`,
         );
         return [
           ...printAttributes(node.attributes),
@@ -715,7 +965,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
-        const header = `${modifiers}protocol ${node.name}${printInheritanceClause(node.inheritanceClause)}${printWhereClause(node.genericWhereClause)}`;
+        const header = printTypeHeader(
+          `${modifiers}protocol ${node.name}`,
+          node.inheritanceClause,
+          printWhereClause(node.genericWhereClause),
+        );
         return [
           ...printAttributes(node.attributes),
           printMemberBlock(header, node.members),
@@ -743,11 +997,23 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         ].join("\n");
       }
 
-      case SwiftNodeKind.ReturnStatement:
+      case SwiftNodeKind.ReturnStatement: {
+        if (!node.expression) return printLine("return");
         column = INDENT.length * indentLevel + "return ".length;
-        return printLine(
-          node.expression ? `return ${printNode(node.expression)}` : "return",
-        );
+        const breaksBefore = memberBreaks;
+        const line = printLine(`return ${printNode(node.expression)}`);
+        const first = line.split("\n")[0] ?? "";
+        if (
+          maxLineLength <= 0 ||
+          (first.length <= maxLineLength && memberBreaks === breaksBefore)
+        )
+          return line;
+        indentLevel += 1;
+        column = INDENT.length * indentLevel;
+        const broken = printLine(printNode(node.expression));
+        indentLevel -= 1;
+        return `${printLine("return")}\n${broken}`;
+      }
 
       case SwiftNodeKind.SelectorExpression:
         return `#selector(${printNode(node.target)})`;
@@ -780,7 +1046,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
-        const header = `${modifiers}struct ${node.name}${printGenericParameters(node.genericParameters)}${printInheritanceClause(node.inheritanceClause)}${printWhereClause(node.genericWhereClause)}`;
+        const header = printTypeHeader(
+          `${modifiers}struct ${node.name}${printGenericParameters(node.genericParameters)}`,
+          node.inheritanceClause,
+          printWhereClause(node.genericWhereClause),
+        );
         return [
           ...printAttributes(node.attributes),
           printMemberBlock(header, node.members),
@@ -870,11 +1140,14 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
+        const head = `${modifiers}typealias ${node.name}${printGenericParameters(node.genericParameters)} =`;
+        const type = `${printNode(node.type)}${printWhereClause(node.genericWhereClause)}`;
+        const line = printLine(`${head} ${type}`);
         return [
           ...printAttributes(node.attributes),
-          printLine(
-            `${modifiers}typealias ${node.name}${printGenericParameters(node.genericParameters)} = ${printNode(node.type)}${printWhereClause(node.genericWhereClause)}`,
-          ),
+          maxLineLength > 0 && line.length > maxLineLength
+            ? `${printLine(head)}\n${INDENT.repeat(indentLevel + 1)}${type}`
+            : line,
         ].join("\n");
       }
 
@@ -907,6 +1180,17 @@ export function createPrinter(options?: SwiftPrinterOptions) {
             const type = binding.typeAnnotation
               ? `: ${printNode(binding.typeAnnotation)}`
               : "";
+            if (
+              !binding.initializer &&
+              binding.typeAnnotation &&
+              node.bindings.length === 1 &&
+              maxLineLength > 0 &&
+              INDENT.length * indentLevel +
+                `${modifiers}${node.bindingSpecifier} ${binding.pattern}${type}`
+                  .length >
+                maxLineLength
+            )
+              return `${binding.pattern}:\n${INDENT.repeat(indentLevel + 1)}${printNode(binding.typeAnnotation)}`;
             column =
               INDENT.length * indentLevel +
               `${modifiers}${node.bindingSpecifier} ${binding.pattern}${type} = `

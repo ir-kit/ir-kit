@@ -33,6 +33,40 @@ describe("buildSwiftProject", () => {
     assert.match(files[0]!.content, /^import Foundation\n\n/);
   });
 
+  it("imports FoundationNetworking only where networking types appear", () => {
+    const m = ir({
+      paths: {
+        "/users": {
+          get: {
+            operationId: "listUsers",
+            responses: {
+              "200": {
+                description: "ok",
+                content: { "application/json": { schema: { type: "string" } } },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          User: { type: "object", properties: { id: { type: "string" } } },
+        },
+      },
+    });
+    const files = buildSwiftProject([
+      ...schemasToDecls(m.components?.schemas ?? {}),
+      ...operationsToDecls(m.paths),
+    ]);
+    const model = files.find((f) => f.path === "Models/User.swift");
+    assert.doesNotMatch(model!.content, /FoundationNetworking/);
+    const impl = files.find((f) => /^API\/URLSession.*\.swift$/.test(f.path));
+    assert.match(
+      impl!.content,
+      /#if canImport\(FoundationNetworking\)\n {2}import FoundationNetworking\n#endif/,
+    );
+  });
+
   it("split layout (default): protocols in API/, models in Models/", () => {
     const m = ir({
       components: {
@@ -124,7 +158,9 @@ describe("buildSwiftProject", () => {
       "APIClient.swift",
       "APIError.swift",
       "APIInterceptors.swift",
+      "QueryStyle.swift",
       "RequestOptions.swift",
+      "URLEncoding.swift",
       "URLSessionUsersAPI.swift",
       "User.swift",
       "UsersAPI+Defaults.swift",

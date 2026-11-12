@@ -1,4 +1,4 @@
-import { camel } from "@ir-kit/codegen-core";
+import { memberIdent } from "../identifiers.js";
 
 export interface PropertyName {
   /** The original key as it appears in the OpenAPI schema / JSON wire format. */
@@ -20,10 +20,10 @@ export interface PropertyName {
  *   id           → id          (no rename)
  */
 export function propertyName(jsonKey: string): PropertyName {
-  const swiftName = camel(jsonKey);
+  const swiftName = memberIdent(jsonKey);
   return {
     jsonKey,
     swiftName,
-    renamed: swiftName !== jsonKey,
+    renamed: swiftName.replace(/`/g, "") !== jsonKey,
   };
 }

@@ -143,7 +143,8 @@ export function operationsToDecls(
     decls.push(apiErrorEnum());
   }
   if (needsUnimplementedEnum) decls.push(unimplementedBodyEnum());
-  if (needsUrlEncoding) decls.push(...urlEncodingDecls());
+  // Every impl builds its URL with `URLEncoding.path`.
+  if (needsUrlEncoding || anyImplEmitted) decls.push(...urlEncodingDecls());
   if (needsMultipart) decls.push(multipartFormBodyDecl());
   if (needsAuth) decls.push(...authDecls());
   return decls;

@@ -1,7 +1,9 @@
 import {
   avoidLeadingDigit,
+  camel,
   escapeIfReserved,
   Namespace,
+  safeCaseName,
   softCamel,
   typeIdent,
 } from "@ir-kit/codegen-core";
@@ -14,13 +16,107 @@ import {
  * Swift: backtick-escaping for the reserved-keyword set.
  */
 export function paramIdent(name: string): string {
-  const ident = softCamel(name).replace(/[^A-Za-z0-9_]/g, "") || "value";
-  return escapeIfReserved(
-    avoidLeadingDigit(ident),
-    SWIFT_RESERVED_KEYWORDS,
-    (s) => `\`${s}\``,
+  const ident = avoidLeadingDigit(
+    softCamel(name).replace(/[^A-Za-z0-9_]/g, "") || "value",
+  );
+  return escapeKeyword(OPERATION_LOCALS.has(ident) ? `${ident}Param` : ident);
+}
+
+/** Stored-property identifier for a JSON key. */
+export function memberIdent(jsonKey: string): string {
+  return escapeKeyword(
+    unshadowSelf(avoidLeadingDigit(camel(jsonKey) || "value")),
   );
 }
+
+/** `self` stays a keyword in member access even when escaped, so it is renamed. */
+const unshadowSelf = (name: string): string =>
+  name === "self" ? "selfValue" : name;
+
+/** Enum case identifier for a raw value, before keyword escaping. */
+export const caseName = (raw: string): string =>
+  unshadowSelf(safeCaseName(raw) || "empty");
+
+export const escapeKeyword = (name: string): string =>
+  escapeIfReserved(name, SWIFT_RESERVED_KEYWORDS, (s) => `\`${s}\``);
+
+/**
+ * Names generated method bodies bind (`let url`, `var request`, …) or
+ * declare as parameters (`options`). An operation parameter spelled the
+ * same would be shadowed, so it takes a `Param` suffix.
+ */
+const OPERATION_LOCALS: ReadonlySet<string> = new Set([
+  "baseURL",
+  "body",
+  "client",
+  "components",
+  "data",
+  "formComponents",
+  "multipart",
+  "options",
+  "request",
+  "self",
+  "timeout",
+  "url",
+  "urlComponents",
+]);
+
+/**
+ * Type names the generated module already uses: runtime helpers and the
+ * Swift / Foundation types generated code refers to unqualified.
+ */
+const RESERVED_TYPE_NAMES: ReadonlySet<string> = new Set([
+  "APIClient",
+  "APIError",
+  "APIInterceptors",
+  "APIKeyLocation",
+  "Any",
+  "AnyObject",
+  "Array",
+  "Auth",
+  "Bool",
+  "Codable",
+  "CodingKey",
+  "CodingKeys",
+  "Data",
+  "Date",
+  "Decimal",
+  "Decodable",
+  "Decoder",
+  "Dictionary",
+  "Double",
+  "Encodable",
+  "Encoder",
+  "Error",
+  "Float",
+  "HTTPURLResponse",
+  "Int",
+  "Int64",
+  "JSONDecoder",
+  "JSONEncoder",
+  "JSONValue",
+  "MultipartFormBody",
+  "Never",
+  "Optional",
+  "QueryStyle",
+  "RequestOptions",
+  "Result",
+  "Self",
+  "Set",
+  "String",
+  "Task",
+  "Type",
+  "URL",
+  "URLComponents",
+  "URLEncoding",
+  "URLQueryItem",
+  "URLRequest",
+  "URLResponse",
+  "URLSession",
+  "URLSessionAPIError",
+  "UUID",
+  "Void",
+]);
 
 /**
  * Swift reserved keywords from the Language Guide's Lexical Structure
@@ -129,5 +225,8 @@ export function swiftTypeIdent(name: string): string {
 
 /** Owns every top-level Swift type name for one generation run. */
 export function newTypeNames(): Namespace {
-  return new Namespace({ normalize: swiftTypeIdent });
+  return new Namespace({
+    normalize: swiftTypeIdent,
+    reserved: RESERVED_TYPE_NAMES,
+  });
 }

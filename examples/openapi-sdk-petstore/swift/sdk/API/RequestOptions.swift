@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public struct RequestOptions {
   public var client: APIClient? = nil
   public var baseURL: URL? = nil

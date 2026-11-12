@@ -55,6 +55,8 @@ export const swBool: SwType = named("Bool");
 export const swData: SwType = named("Data");
 export const swVoid: SwType = named("Void");
 export const swAny: SwType = named("Any");
+/** Any JSON value; the runtime `JSONValue` enum keeps models `Codable`. */
+export const swJSONValue: SwType = named("JSONValue");
 
 export const swOptional = (inner: SwType): SwType =>
   inner.kind === K.OptionalType ? inner : f.createOptionalType(inner);
@@ -151,6 +153,8 @@ export const swClosure = (
 ): SwClosureExpr => f.createClosureExpression(params, body);
 
 export const swTry = (expr: SwExpr): SwExpr => f.createTryExpression(expr);
+export const swTryOpt = (expr: SwExpr): SwExpr =>
+  f.createTryExpression(expr, "?");
 export const swTryAwait = (expr: SwExpr): SwExpr =>
   f.createTryExpression(f.createAwaitExpression(expr));
 export const swTuple = (items: ReadonlyArray<SwExpr>): SwExpr =>
@@ -376,18 +380,26 @@ export function swInit(opts: {
   params: ReadonlyArray<SwFunParam>;
   body?: ReadonlyArray<SwStmt>;
   access?: SwAccess;
+  memberwise?: boolean;
+  throws?: boolean;
 }): SwInit {
-  return f.createInitializerDeclaration(
+  const init = f.createInitializerDeclaration(
     opts.params.map((p) => parameter(p, true)),
     [
-      ...opts.params.map((p) =>
-        swAssign(swMember(f.createSelfExpression(), p.name), swIdent(p.name)),
-      ),
+      ...(opts.memberwise === false
+        ? []
+        : opts.params.map((p) =>
+            swAssign(
+              swMember(f.createSelfExpression(), p.name),
+              swIdent(p.name),
+            ),
+          )),
       ...(opts.body ?? []),
     ],
     false,
     access(opts.access),
   );
+  return opts.throws ? { ...init, effectSpecifiers: { throws: true } } : init;
 }
 
 export interface SwEnumAssoc {
@@ -508,6 +520,7 @@ export function swEnum(opts: {
   rawType?: SwType;
   conforms?: ReadonlyArray<string>;
   access?: SwAccess;
+  inits?: ReadonlyArray<SwInit>;
   funs?: ReadonlyArray<SwFun>;
   runtime?: boolean;
 }): SwEnum {
@@ -517,7 +530,7 @@ export function swEnum(opts: {
     runtime: opts.runtime,
     node: f.createEnumDeclaration(
       opts.name,
-      [...opts.cases, ...(opts.funs ?? [])],
+      [...opts.cases, ...(opts.inits ?? []), ...(opts.funs ?? [])],
       access(opts.access),
       inheritance(opts.conforms, opts.rawType),
     ),
@@ -608,10 +621,16 @@ export function swTypeAlias(opts: {
 
 export interface SwFile {
   imports: ReadonlyArray<string>;
+  conditionalImports: ReadonlyArray<string>;
   decls: ReadonlyArray<SwDecl>;
 }
 
 export const swFile = (opts: {
   decls: ReadonlyArray<SwDecl>;
   imports?: ReadonlyArray<string>;
-}): SwFile => ({ imports: opts.imports ?? [], decls: opts.decls });
+  conditionalImports?: ReadonlyArray<string>;
+}): SwFile => ({
+  imports: opts.imports ?? [],
+  conditionalImports: opts.conditionalImports ?? [],
+  decls: opts.decls,
+});

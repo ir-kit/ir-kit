@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public enum Auth {
   case bearer(token: String)
   case apiKey(name: String, value: String, in: APIKeyLocation)
@@ -36,7 +39,8 @@ public enum Auth {
       }
     case .basic(let username, let password):
       if let data = "\(username):\(password)".data(using: .utf8) {
-        request.setValue("Basic \(data.base64EncodedString())", forHTTPHeaderField: "Authorization")
+        request.setValue(
+          "Basic \(data.base64EncodedString())", forHTTPHeaderField: "Authorization")
       }
     }
     return request

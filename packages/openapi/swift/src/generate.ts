@@ -1,19 +1,22 @@
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
-
 import { assertSafeOutputDir } from "@ir-kit/codegen-core";
+import { swift } from "@ir-kit/compiler-swift";
 import {
   extractSecuritySchemeNames,
   type NormalizeOptions,
 } from "@ir-kit/openapi";
 import { loadOpenAPI } from "@ir-kit/openapi-loader";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
+import { someNode } from "./ast/walk.js";
 import { newTypeNames } from "./ir/identifiers.js";
 import {
   type OperationsOptions,
   operationsToDecls,
   schemasToDecls,
 } from "./ir/index.js";
+import { jsonValueDecl } from "./ir/runtime/index.js";
+import { boxValueCycles } from "./ir/value-cycles.js";
 import {
   type BuildOptions,
   type BuiltFile,
@@ -73,7 +76,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   const ir = parseSpec(bundled);
   const names = newTypeNames();
 
-  const decls = [
+  const decls = boxValueCycles([
     ...schemasToDecls(ir.components?.schemas ?? {}, names),
     ...operationsToDecls(ir.paths, {
       defaultTag: opts.defaultTag,
@@ -84,7 +87,9 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
       securitySchemeNames: extractSecuritySchemeNames(bundled),
       names,
     }),
-  ];
+  ]);
+  if (decls.some((d) => someNode(d.node, isJSONValue)))
+    decls.push(jsonValueDecl());
   const sdkFiles = buildSwiftProject(decls, opts);
   const out = resolve(opts.output);
   const packageFile = opts.package
@@ -130,3 +135,6 @@ function defaultPackageName(outputDir: string): string {
       .join("") || "GeneratedSDK"
   );
 }
+
+const isJSONValue = (n: Record<string, unknown>): boolean =>
+  n.kind === swift.SwiftNodeKind.IdentifierType && n.name === "JSONValue";

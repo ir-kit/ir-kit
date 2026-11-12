@@ -23,9 +23,7 @@ export function buildSwiftProject(
     const { dir } = placeDecl(decl, opts);
     return {
       path: dir === "." ? `${decl.name}.swift` : `${dir}/${decl.name}.swift`,
-      content: printFile(
-        swFile({ imports: collectImports(decl), decls: [decl] }),
-      ),
+      content: printFile(swFile({ ...collectImports(decl), decls: [decl] })),
     };
   });
 }

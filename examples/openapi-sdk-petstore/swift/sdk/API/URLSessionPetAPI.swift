@@ -1,5 +1,8 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 public final class URLSessionPetAPI: PetAPI {
   let client: APIClient
 
@@ -29,7 +32,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -58,7 +62,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -84,7 +89,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -113,7 +119,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -151,7 +158,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -189,7 +197,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -228,7 +237,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -267,7 +277,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: [Pet].self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -294,7 +305,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -321,7 +333,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -362,7 +375,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -403,7 +417,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: Pet.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -510,7 +525,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -555,7 +571,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -595,7 +612,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -635,7 +653,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: ApiResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -659,7 +678,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.execute(
       request, as: SubmitTagsResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 
@@ -683,7 +703,8 @@ public final class URLSessionPetAPI: PetAPI {
     }
     return try await client.executeWithResponse(
       request, as: SubmitTagsResponse.self, extraInterceptors: options.requestInterceptors,
-      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+      responseValidator: options.responseValidator,
+      responseTransformer: options.responseTransformer
     )
   }
 }
