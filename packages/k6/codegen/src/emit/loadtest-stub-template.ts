@@ -1,7 +1,12 @@
 import ts from "typescript";
 
 import { GENERATED_HEADER, printStatements } from "../print.js";
-import { namedImport, namespaceImport } from "./ast-imports.js";
+import {
+  defaultExportProp,
+  namedImport,
+  namespaceImport,
+  reExportConst,
+} from "./ast.js";
 
 export interface LoadtestStubInput {
   fnName: string;
@@ -26,7 +31,7 @@ export function renderLoadtestStub(input: LoadtestStubInput): string {
       namedImport([{ name: "data" }], input.dataImport),
       defineLoadTestConst(input),
       reExportConst("options", "lt", "options"),
-      defaultExport("lt", "default"),
+      defaultExportProp("lt", "default"),
     ],
     header,
   );
@@ -112,41 +117,6 @@ function defineLoadTestConst(input: LoadtestStubInput): ts.Statement {
         ),
       ],
       ts.NodeFlags.Const,
-    ),
-  );
-}
-
-function reExportConst(
-  localName: string,
-  sourceVar: string,
-  sourceProp: string,
-): ts.Statement {
-  return f.createVariableStatement(
-    [f.createModifier(ts.SyntaxKind.ExportKeyword)],
-    f.createVariableDeclarationList(
-      [
-        f.createVariableDeclaration(
-          localName,
-          undefined,
-          undefined,
-          f.createPropertyAccessExpression(
-            f.createIdentifier(sourceVar),
-            f.createIdentifier(sourceProp),
-          ),
-        ),
-      ],
-      ts.NodeFlags.Const,
-    ),
-  );
-}
-
-function defaultExport(sourceVar: string, sourceProp: string): ts.Statement {
-  return f.createExportAssignment(
-    undefined,
-    false,
-    f.createPropertyAccessExpression(
-      f.createIdentifier(sourceVar),
-      f.createIdentifier(sourceProp),
     ),
   );
 }

@@ -1,7 +1,7 @@
 import { $ } from "@hey-api/openapi-ts";
 import ts from "typescript";
 
-import { defaultImport, namedImport, namespaceImport } from "./ast-imports.js";
+import { defaultImport, namedImport, namespaceImport } from "./ast.js";
 
 const f = ts.factory;
 

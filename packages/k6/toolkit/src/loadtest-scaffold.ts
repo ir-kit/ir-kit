@@ -1,13 +1,13 @@
-import ts from "typescript";
-
-import { namedImport, namespaceImport } from "./ast-imports.js";
-import { printStatements } from "./print.js";
 import {
   defaultExportProp,
-  objLit,
+  namedImport,
+  namespaceImport,
   reExportConst,
-  varConst,
-} from "./scaffold/ast-helpers.js";
+} from "@ir-kit/k6-gen/ast";
+import ts from "typescript";
+
+import { printStatements } from "./print.js";
+import { objLit, varConst } from "./scaffold/ast-helpers.js";
 
 export type AuthFlavor = "none" | "bearer" | "basic" | "apiKey" | "session";
 
