@@ -1,4 +1,5 @@
-import { basename, parse as parsePath } from "node:path";
+import { mkdir, rm, writeFile } from "node:fs/promises";
+import { basename, dirname, join, parse as parsePath } from "node:path";
 
 /**
  * Refuse to wipe the current working directory or a filesystem root.
@@ -26,4 +27,28 @@ export function assertSafeOutputDir(out: string): void {
 export function defaultProjectName(outputDir: string): string {
   const base = basename(outputDir).replace(/[^A-Za-z0-9-]+/g, "-");
   return base || "generated-sdk";
+}
+
+export interface OutputFile {
+  path: string;
+  content: string;
+}
+
+/**
+ * Write `files` under `out`, first wiping `out` unless `clean` is `false`.
+ */
+export async function writeOutput(
+  out: string,
+  files: ReadonlyArray<OutputFile>,
+  { clean = true }: { clean?: boolean } = {},
+): Promise<void> {
+  if (clean) {
+    assertSafeOutputDir(out);
+    await rm(out, { recursive: true, force: true });
+  }
+  for (const file of files) {
+    const full = join(out, file.path);
+    await mkdir(dirname(full), { recursive: true });
+    await writeFile(full, file.content);
+  }
 }
