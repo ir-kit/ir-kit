@@ -3,6 +3,7 @@ import { createEnumDeclaration } from "./declarations/enum.js";
 import { createInterfaceDeclaration } from "./declarations/interface.js";
 import { createMethodDeclaration } from "./declarations/method.js";
 import { createMethodParameter } from "./declarations/method-parameter.js";
+import { createRecordDeclaration } from "./declarations/record.js";
 import { createVariableDeclaration } from "./declarations/variable.js";
 import { createAnnotation } from "./expressions/annotation.js";
 import { createArrayCreationExpression } from "./expressions/array-creation.js";
@@ -82,6 +83,7 @@ export const factory = {
   createCastExpression,
   createCatchClause,
   createClassDeclaration,
+  createRecordDeclaration,
   createComment,
   createContinueStatement,
   createDoWhileStatement,

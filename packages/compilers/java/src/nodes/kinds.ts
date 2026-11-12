@@ -35,6 +35,7 @@ export enum JavaNodeKind {
   NewExpression = "NewExpression",
   PackageDeclaration = "PackageDeclaration",
   ParameterizedType = "ParameterizedType",
+  RecordDeclaration = "RecordDeclaration",
   ReturnStatement = "ReturnStatement",
   SourceFile = "SourceFile",
   SuperExpression = "SuperExpression",
