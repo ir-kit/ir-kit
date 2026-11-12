@@ -9,16 +9,17 @@ import type { KtDecl } from "../ast/index.js";
 import {
   type KtType,
   ktAnnotation,
-  ktAny,
   ktDataClass,
   ktEnum,
   ktEnumEntry,
   ktInt,
+  ktJsonElement,
   ktList,
   ktMap,
   ktNullable,
   ktProp,
   ktRef,
+  ktStr,
   ktString,
   ktTypeAlias,
   ktUnit,
@@ -40,13 +41,14 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
   arrayType: ktList,
   mapType: (value) => ktMap(ktString, value),
   voidType: () => ktUnit,
-  anyType: () => ktAny,
+  anyType: () => ktJsonElement,
   // `null`-typed primitive → `Any?`.
-  nullableAnyType: () => ktNullable(ktAny),
+  nullableAnyType: () => ktNullable(ktJsonElement),
   // Single non-null + nullable → wrap in nullable iff not already.
   wrapForUnionSingle: (inner, nullable) =>
     nullable ? ktNullable(inner) : inner,
-  unionFallback: (nullable) => (nullable ? ktNullable(ktAny) : ktAny),
+  unionFallback: (nullable) =>
+    nullable ? ktNullable(ktJsonElement) : ktJsonElement,
   primitiveType: typeForPrimitive,
   // kotlinx convention: `Owner_Property` (underscore joiner).
   synthName,
@@ -67,7 +69,7 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
           type: finalType,
           default: optional ? "null" : undefined,
           annotations: naming.renamed
-            ? [ktAnnotation("SerialName", JSON.stringify(naming.jsonKey))]
+            ? [ktAnnotation("SerialName", ktStr(naming.jsonKey))]
             : [],
         });
       },
@@ -85,8 +87,8 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
       (b, n) => `${b}_${n}`,
     );
     const entries = idents.map(({ identifier, raw }) =>
-      ktEnumEntry(identifier, JSON.stringify(raw), [
-        ktAnnotation("SerialName", JSON.stringify(raw)),
+      ktEnumEntry(identifier, ktStr(raw), [
+        ktAnnotation("SerialName", ktStr(raw)),
       ]),
     );
     emit(

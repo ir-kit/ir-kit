@@ -15,6 +15,7 @@ import {
   ktNullable,
   ktProp,
   ktRef,
+  ktStr,
   ktString,
   printFile,
 } from "../src/index.ts";
@@ -64,11 +65,11 @@ public data class User(
           annotations: [ktAnnotation("Serializable")],
           properties: [ktProp({ name: "raw", type: ktString })],
           entries: [
-            ktEnumEntry("ACTIVE", `"active"`, [
-              ktAnnotation("SerialName", `"active"`),
+            ktEnumEntry("ACTIVE", ktStr("active"), [
+              ktAnnotation("SerialName", ktStr("active")),
             ]),
-            ktEnumEntry("PENDING", `"pending"`, [
-              ktAnnotation("SerialName", `"pending"`),
+            ktEnumEntry("PENDING", ktStr("pending"), [
+              ktAnnotation("SerialName", ktStr("pending")),
             ]),
           ],
         }),

@@ -210,4 +210,58 @@ describe("schemasToDecls", () => {
     assert.match(out, /typealias Mixed = /);
     assert.match(out, /typealias Flag = Boolean/);
   });
+
+  it("maps free-form values to JsonElement so they stay serializable", () => {
+    const m = ir({
+      components: {
+        schemas: {
+          Event: {
+            type: "object",
+            properties: { payload: {} },
+          },
+          Bag: { type: "object" },
+        },
+      },
+    });
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /public val payload: JsonElement\? = null/);
+    assert.match(out, /typealias Bag = Map<String, JsonElement>/);
+    assert.doesNotMatch(out, /\bAny\b/);
+  });
+
+  it("emits @SerialName arguments as string literals with `$` escaped", () => {
+    const m = ir({
+      components: {
+        schemas: {
+          Perms: {
+            type: "object",
+            properties: { $canEdit: { type: "boolean" } },
+          },
+          Kind: { type: "string", enum: ["$ref"] },
+        },
+      },
+    });
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /@SerialName\("\\\$canEdit"\)/);
+    assert.match(out, /@SerialName\("\\\$ref"\)\n\s+REF\("\\\$ref"\)/);
+  });
+
+  it("does not let schemas take runtime or library type names", () => {
+    const m = ir({
+      components: {
+        schemas: {
+          Response: { type: "object", properties: { id: { type: "string" } } },
+        },
+      },
+    });
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.doesNotMatch(out, /class Response\(/);
+    assert.match(out, /class Response2\(/);
+  });
 });

@@ -78,7 +78,7 @@ public class OkHttpStoreApi(
         urlBuilder.addPathSegment("store")
         urlBuilder.addPathSegment("order")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(Order.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -105,7 +105,7 @@ public class OkHttpStoreApi(
         urlBuilder.addPathSegment("store")
         urlBuilder.addPathSegment("order")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(Order.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -231,7 +231,7 @@ public class OkHttpStoreApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("shapes")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         builder.method("POST", body.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
@@ -256,7 +256,7 @@ public class OkHttpStoreApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("shapes")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         builder.method("POST", body.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
@@ -281,7 +281,7 @@ public class OkHttpStoreApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("measurements")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(SubmitMeasurementBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -305,7 +305,7 @@ public class OkHttpStoreApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("measurements")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(SubmitMeasurementBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {

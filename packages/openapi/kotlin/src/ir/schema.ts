@@ -9,7 +9,7 @@ import {
 
 import {
   type KtDecl,
-  ktAny,
+  ktJsonElement,
   ktMap,
   ktRef,
   ktString,
@@ -73,7 +73,7 @@ export function schemasToDecls(
       const valueType =
         ap && typeof ap === "object"
           ? schemaToType(ap, { emit, names, ownerName: name, propPath: [] })
-          : ktAny;
+          : ktJsonElement;
       decls.push(ktTypeAlias({ name, type: ktMap(ktString, valueType) }));
       continue;
     }

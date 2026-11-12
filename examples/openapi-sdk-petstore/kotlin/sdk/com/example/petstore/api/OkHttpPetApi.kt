@@ -25,7 +25,7 @@ public class OkHttpPetApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("pet")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(Pet.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         var currentUrl = url
@@ -56,7 +56,7 @@ public class OkHttpPetApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("pet")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(Pet.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         var currentUrl = url
@@ -87,7 +87,7 @@ public class OkHttpPetApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("pet")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("PUT", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(Pet.serializer(), body)
         builder.method("PUT", payload.toRequestBody("application/json".toMediaType()))
         var currentUrl = url
@@ -118,7 +118,7 @@ public class OkHttpPetApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("pet")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("PUT", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(Pet.serializer(), body)
         builder.method("PUT", payload.toRequestBody("application/json".toMediaType()))
         var currentUrl = url
@@ -338,7 +338,7 @@ public class OkHttpPetApi(
         URLEncoding.addScalar(urlBuilder, "name", name)
         URLEncoding.addScalar(urlBuilder, "status", status)
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url).method("POST", ByteArray(0).toRequestBody())
         var currentUrl = url
         for (schemeName in listOf("petstore_auth")) {
             client.auth[schemeName]?.let { auth -> currentUrl = auth.apply(builder, currentUrl) }
@@ -372,7 +372,7 @@ public class OkHttpPetApi(
         URLEncoding.addScalar(urlBuilder, "name", name)
         URLEncoding.addScalar(urlBuilder, "status", status)
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url).method("POST", ByteArray(0).toRequestBody())
         var currentUrl = url
         for (schemeName in listOf("petstore_auth")) {
             client.auth[schemeName]?.let { auth -> currentUrl = auth.apply(builder, currentUrl) }
@@ -470,7 +470,7 @@ public class OkHttpPetApi(
         urlBuilder.addPathSegment("uploadImage")
         URLEncoding.addScalar(urlBuilder, "additionalMetadata", additionalMetadata)
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         builder.method("POST", body.toRequestBody("application/octet-stream".toMediaType()))
         var currentUrl = url
         for (schemeName in listOf("petstore_auth")) {
@@ -505,7 +505,7 @@ public class OkHttpPetApi(
         urlBuilder.addPathSegment("uploadImage")
         URLEncoding.addScalar(urlBuilder, "additionalMetadata", additionalMetadata)
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         builder.method("POST", body.toRequestBody("application/octet-stream".toMediaType()))
         var currentUrl = url
         for (schemeName in listOf("petstore_auth")) {
@@ -540,7 +540,7 @@ public class OkHttpPetApi(
         urlBuilder.addPathSegment(petId.toString())
         urlBuilder.addPathSegment("uploadDocument")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val multipart = MultipartFormBody()
         multipart.appendFile("file", "file", file)
         if (title != null) {
@@ -583,7 +583,7 @@ public class OkHttpPetApi(
         urlBuilder.addPathSegment(petId.toString())
         urlBuilder.addPathSegment("uploadDocument")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val multipart = MultipartFormBody()
         multipart.appendFile("file", "file", file)
         if (title != null) {
@@ -621,7 +621,7 @@ public class OkHttpPetApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("tags")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(SubmitTagsBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -647,7 +647,7 @@ public class OkHttpPetApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("tags")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(SubmitTagsBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {

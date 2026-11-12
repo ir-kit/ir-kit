@@ -20,7 +20,7 @@ import {
   ktVal,
   ktVar,
 } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 
 /**
  * Statements that build an `HttpUrl` from `baseUrl`, the path template,
@@ -78,7 +78,7 @@ function segmentExpr(
     p.kind === "literal"
       ? p.text
       : {
-          expr: ktIdent(paramIdent(p.param ? p.param.name : p.name)),
+          expr: ktIdent(operationParamIdent(p.param ? p.param.name : p.name)),
           isString: p.param?.schema.type === "string",
         },
   );
@@ -96,7 +96,7 @@ function segmentExpr(
 }
 
 function buildQueryStmt(p: IR.ParameterObject): KtStmt {
-  const id = paramIdent(p.name);
+  const id = operationParamIdent(p.name);
   const isArray = p.schema.type === "array";
   const helper = isArray ? "addArray" : "addScalar";
   const args: KtCallArg[] = [

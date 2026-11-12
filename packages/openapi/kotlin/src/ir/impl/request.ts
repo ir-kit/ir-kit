@@ -6,32 +6,49 @@ import {
   ktCall,
   ktExprStmt,
   ktIdent,
+  ktIntLit,
   ktMember,
   ktNull,
   ktStr,
   ktVal,
 } from "../../ast/index.js";
 
+/** Methods OkHttp rejects without a request body. */
+const REQUIRES_BODY: ReadonlySet<string> = new Set(["POST", "PUT", "PATCH"]);
+
 /**
- * Initial request builder + HTTP method. Body-bearing methods can re-call
- * `.method(verb, body)` later from the body builder; bodyless methods
- * (`GET` / `HEAD` / `DELETE` without body) keep the `null` body set here.
+ * Request builder for the URL. When the operation has a body, the body
+ * builder sets the method together with it; otherwise the method is set
+ * here, with an empty body for verbs OkHttp requires one for.
  *
  *   val builder = Request.Builder().url(url).method("GET", null)
  */
-export function buildRequestStmts(method: HttpMethod): ReadonlyArray<KtStmt> {
+export function buildRequestStmts(
+  method: HttpMethod,
+  hasBody: boolean,
+): ReadonlyArray<KtStmt> {
+  const verb = HTTP_METHOD_LITERAL[method];
+  const withUrl = ktCall(
+    ktMember(ktCall(ktIdent("Request.Builder"), []), "url"),
+    [ktArg(ktIdent("url"))],
+  );
+  if (hasBody) return [ktVal("builder", withUrl)];
+  const emptyBody = REQUIRES_BODY.has(verb)
+    ? ktCall(
+        ktMember(
+          ktCall(ktIdent("ByteArray"), [ktArg(ktIntLit(0))]),
+          "toRequestBody",
+        ),
+        [],
+      )
+    : ktNull;
   return [
     ktVal(
       "builder",
-      ktCall(
-        ktMember(
-          ktCall(ktMember(ktCall(ktIdent("Request.Builder"), []), "url"), [
-            ktArg(ktIdent("url")),
-          ]),
-          "method",
-        ),
-        [ktArg(ktStr(HTTP_METHOD_LITERAL[method])), ktArg(ktNull)],
-      ),
+      ktCall(ktMember(withUrl, "method"), [
+        ktArg(ktStr(verb)),
+        ktArg(emptyBody),
+      ]),
     ),
   ];
 }

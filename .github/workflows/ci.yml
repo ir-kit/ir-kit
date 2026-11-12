@@ -108,6 +108,14 @@ jobs:
       - name: Lint generated example SDK
         run: bash scripts/lint-kotlin.sh examples/openapi-sdk-petstore/kotlin/sdk
 
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build generated example SDK
+        run: bash scripts/build-kotlin.sh examples/openapi-sdk-petstore/kotlin/sdk
+
   swift-lint:
     name: Lint Swift compiler snapshots and generated SDK
     runs-on: macos-latest

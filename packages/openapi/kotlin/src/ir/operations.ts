@@ -48,6 +48,8 @@ export interface OperationsOptions {
   securitySchemeNames?: ReadonlyMap<string, ReadonlyArray<string>>;
   /** Shared type-name owner; pass the one used for `schemasToDecls`. */
   names?: Namespace;
+  /** Type aliases declared outside these operations (component schemas). */
+  aliases?: ReadonlyMap<string, KtType>;
 }
 
 export interface OperationsResult {
@@ -125,6 +127,7 @@ export function operationsToDecls(
         allSigs,
         {
           open: opts.openImpl,
+          aliases: new Map([...(opts.aliases ?? []), ...aliasesOf(decls)]),
         },
       );
       decls.push(result.class);
@@ -211,4 +214,12 @@ function signatureToConvenienceFun(
     receiver: ktRef(receiverName),
     body: [unit ? ktExprStmt(forwarded) : ktReturn(forwarded)],
   });
+}
+
+export function aliasesOf(
+  decls: ReadonlyArray<KtDecl>,
+): Array<[string, KtType]> {
+  return decls.flatMap((d) =>
+    d.aliasOf ? [[d.name, d.aliasOf] as [string, KtType]] : [],
+  );
 }

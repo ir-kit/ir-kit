@@ -10,6 +10,7 @@ import { loadOpenAPI } from "@ir-kit/openapi-loader";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
 import { newTypeNames } from "./ir/identifiers.js";
 import {
+  aliasesOf,
   type OperationsOptions,
   operationsToDecls,
   schemasToDecls,
@@ -84,6 +85,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     openImpl: opts.openImpl,
     securitySchemeNames: extractSecuritySchemeNames(bundled),
     names,
+    aliases: new Map(aliasesOf(schemaDecls)),
   });
   const decls = [...schemaDecls, ...opsResult.decls];
   const sdkFiles = buildKotlinProject(decls, opts);

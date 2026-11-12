@@ -28,6 +28,7 @@ import { buildBodyStmts } from "./body.js";
 import { buildSendAndDecodeStmts } from "./decode.js";
 import { buildHeaderStmts } from "./headers.js";
 import { buildRequestStmts } from "./request.js";
+import type { SerializerAliases } from "./serializer.js";
 import { buildUrlStmts } from "./url.js";
 
 interface BuiltMethod {
@@ -52,18 +53,21 @@ interface BuiltMethod {
  *  8. Delegate to `client.execute(...)` with timeout + interceptors +
  *     validator + transformer.
  */
-function buildImplFun(sig: OperationSignature): BuiltMethod {
+function buildImplFun(
+  sig: OperationSignature,
+  aliases: SerializerAliases,
+): BuiltMethod {
   const stmts: KtStmt[] = [];
   stmts.push(...resolveOverrideStmts());
   stmts.push(...buildUrlStmts(sig.pathStr, sig.locatedParams));
-  stmts.push(...buildRequestStmts(sig.method));
+  stmts.push(...buildRequestStmts(sig.method, Boolean(sig.op.body)));
   stmts.push(...buildHeaderStmts(sig.locatedParams));
 
   let needsMultipart = false;
   if (sig.op.body) {
     const bodyParam = sig.params.find((p) => p.name === "body");
     const bodyType = bodyParam?.type ?? ktRef("ByteArray");
-    const result = buildBodyStmts(sig.op.body, sig.method, bodyType);
+    const result = buildBodyStmts(sig.op.body, sig.method, bodyType, aliases);
     stmts.push(...result.stmts);
     needsMultipart = result.needsMultipart;
   }
@@ -72,7 +76,7 @@ function buildImplFun(sig: OperationSignature): BuiltMethod {
     stmts.push(...applyAuthStmts(sig.securitySchemeNames));
   }
   stmts.push(applyOptionsHeadersStmt());
-  stmts.push(...buildSendAndDecodeStmts(sig));
+  stmts.push(...buildSendAndDecodeStmts(sig, aliases));
 
   // Kotlin forbids defaults on `override` methods (the interface
   // signature carries them via the convenience extension fun).
@@ -196,6 +200,8 @@ export interface ClientClassOptions {
   /** When true, the class is `open` (subclassable) instead of final.
    *  Default: `false`. */
   open?: boolean;
+  /** Type aliases visible to serializer resolution. */
+  aliases?: SerializerAliases;
 }
 
 /**
@@ -211,7 +217,9 @@ export function buildClientClass(
   signatures: ReadonlyArray<OperationSignature>,
   opts: ClientClassOptions = {},
 ): ClientClassResult {
-  const built = signatures.map(buildImplFun);
+  const built = signatures.map((sig) =>
+    buildImplFun(sig, opts.aliases ?? new Map()),
+  );
   const modifiers: ReadonlyArray<KtClassModifier> = opts.open ? ["open"] : [];
   return {
     class: ktClass({
