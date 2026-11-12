@@ -182,20 +182,21 @@ function responseType(
   let schema: Schema | undefined;
   if (shape.kind === "single") schema = shape.schema;
   if (shape.kind === "multi") {
-    const cases = shape.cases.filter(
-      (c): c is { statusCode: string; schema: Schema } =>
-        c.schema !== undefined,
-    );
-    const distinct = new Set(cases.map((c) => JSON.stringify(c.schema)));
-    if (distinct.size === 1) schema = cases[0]!.schema;
-    if (distinct.size > 1) {
-      // One branch per status code, so callers can tell 200 from 202.
+    const bodies = shape.cases.filter((c) => c.schema !== undefined);
+    const distinct = new Set(bodies.map((c) => JSON.stringify(c.schema)));
+    const hasEmpty = bodies.length < shape.cases.length;
+    if (distinct.size === 1 && !hasEmpty) schema = bodies[0]!.schema;
+    else if (distinct.size > 0) {
+      // One branch per status code, so callers can tell 200 from 202 or
+      // a 204 with no body.
       const name = claim();
       state.decls.push(
         ops.oneofMessage(
           name,
-          { oneOf: cases.map((c) => c.schema) },
-          cases.map((c) => `status_${c.statusCode}`),
+          shape.cases.map((c) => ({
+            schema: c.schema,
+            label: `status_${c.statusCode}`,
+          })),
         ),
       );
       return ops.refType(name);
@@ -228,7 +229,7 @@ function namedMessage(ops: ProtoOps, name: string, schema: Schema) {
       schema.description,
     );
   }
-  return ops.oneofMessage(name, schema);
+  return ops.unionMessage(name, schema);
 }
 
 function isStringEnum(schema: Schema): boolean {

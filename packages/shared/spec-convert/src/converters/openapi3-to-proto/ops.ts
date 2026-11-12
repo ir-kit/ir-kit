@@ -18,6 +18,7 @@ import {
   type ProtoField,
   type ProtoMessage,
   type ProtoType,
+  protoEmpty,
   protoTimestamp,
   protoValue,
   scalar,
@@ -54,16 +55,26 @@ export interface ProtoOps extends SchemaToTypeOps<ProtoType, ProtoDecl> {
     comment?: string,
   ): ProtoMessage;
   /** Message holding a `oneof` with one field per union branch. */
+  unionMessage(name: string, schema: Schema): ProtoMessage;
+  /** Message holding a `oneof` with the given branches. */
   oneofMessage(
     name: string,
-    schema: Schema,
-    labels?: ReadonlyArray<string>,
+    branches: ReadonlyArray<OneofBranch>,
+    comment?: string,
   ): ProtoMessage;
   /** Message wrapping a single value of any type in field `value`. */
   wrapperMessage(name: string, type: ProtoType): ProtoMessage;
   /** Schema that becomes its own message when given a name: a plain
    *  object or a multi-branch union. */
   isMessageShape(schema: Schema): boolean;
+}
+
+/** A `oneof` branch. `label` names its field and synthesized type
+ *  (otherwise it's named after its type); no `schema` means an empty
+ *  result (`google.protobuf.Empty`). */
+export interface OneofBranch {
+  schema?: Schema;
+  label?: string;
 }
 
 export function createProtoOps(state: ProtoState): ProtoOps {
@@ -188,29 +199,23 @@ export function createProtoOps(state: ProtoState): ProtoOps {
     return { kind: "message", name, fields, oneofs: [], comment };
   };
 
-  /** `labels[i]` names branch `i`'s field and synthesized type; branches
-   *  are otherwise named after their type. */
   const oneofMessage = (
     name: string,
-    schema: Schema,
-    labels?: ReadonlyArray<string>,
+    branches: ReadonlyArray<OneofBranch>,
+    comment?: string,
   ): ProtoMessage => {
     const fieldNames = newFieldNames();
     fieldNames.claim("variant");
-    const fields = unionBranches(schema).map((branch, i): ProtoField => {
-      const label = labels?.[i];
+    const fields = branches.map(({ schema, label }, i): ProtoField => {
       const segment = label ? pascal(label) : `Option${i + 1}`;
-      const type = slot(
-        dispatch(branch, ctx(name, [segment])),
-        name,
-        segment,
-        true,
-      );
+      const type = schema
+        ? slot(dispatch(schema, ctx(name, [segment])), name, segment, true)
+        : protoEmpty;
       return {
         name: fieldNames.claim(String(i), label ?? branchFieldName(type)),
         number: i + 1,
         type,
-        comment: branch.description,
+        comment: schema?.description,
       };
     });
     return {
@@ -218,9 +223,17 @@ export function createProtoOps(state: ProtoState): ProtoOps {
       name,
       fields: [],
       oneofs: [{ name: "variant", fields }],
-      comment: schema.description,
+      comment,
     };
   };
+
+  /** Message holding a `oneof` with one field per union branch. */
+  const unionMessage = (name: string, schema: Schema): ProtoMessage =>
+    oneofMessage(
+      name,
+      unionBranches(schema).map((branch) => ({ schema: branch })),
+      schema.description,
+    );
 
   const isMessageShape = (schema: Schema): boolean => {
     if (schema.$ref || extractEnumValues(schema)?.length) return false;
@@ -238,6 +251,7 @@ export function createProtoOps(state: ProtoState): ProtoOps {
     ctx,
     message,
     oneofMessage,
+    unionMessage,
     wrapperMessage,
     isMessageShape,
     refType(name) {
@@ -256,7 +270,7 @@ export function createProtoOps(state: ProtoState): ProtoOps {
     buildStructDecl: (name, properties) => message(name, properties),
     multiUnion(schema, c) {
       const name = synthTypeName(c, ops);
-      emit(oneofMessage(name, schema));
+      emit(unionMessage(name, schema));
       return named(name);
     },
     emitStringEnum(name, raws, emitDecl) {

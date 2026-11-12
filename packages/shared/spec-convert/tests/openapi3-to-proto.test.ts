@@ -390,3 +390,35 @@ describe("openAPIToProto field names", () => {
 }`);
   });
 });
+
+describe("openAPIToProto responses", () => {
+  it("keeps empty 2xx responses next to ones with a body", () => {
+    const { source } = convert(
+      spec({
+        paths: {
+          "/jobs": {
+            post: {
+              operationId: "createJob",
+              responses: {
+                "200": {
+                  description: "done",
+                  content: {
+                    "application/json": { schema: { type: "string" } },
+                  },
+                },
+                "204": { description: "nothing to do" },
+              },
+            },
+          },
+        },
+      }),
+    );
+    expect(source).toContain(`message CreateJobResponse {
+  oneof variant {
+    // done
+    string status_200 = 1;
+    google.protobuf.Empty status_204 = 2;
+  }
+}`);
+  });
+});
