@@ -1,7 +1,7 @@
 import { coerce } from "@hey-api/shared";
 import { describe, expect, it } from "vitest";
 
-import { definePlugin } from "../src/index";
+import { definePlugin } from "../src/index.js";
 
 const defineConfig = definePlugin({
   config: {
