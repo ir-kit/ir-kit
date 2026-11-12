@@ -85,5 +85,6 @@ describe("message type names", () => {
 
   it("maps messages without a payload to unknown", () => {
     expect(eventMapSource).toMatch(/ping: unknown/);
+    expect(eventMapSource).toContain("?.type === type");
   });
 });

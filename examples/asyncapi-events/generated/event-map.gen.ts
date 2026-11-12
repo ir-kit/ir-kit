@@ -8,5 +8,5 @@ export type AnyMessage = EventMap[keyof EventMap];
 export function isMessageOfType<K extends keyof EventMap>(msg: AnyMessage, type: K): msg is EventMap[K] {
     return (msg as {
         type?: string;
-    }).type === type;
+    } | null | undefined)?.type === type;
 }

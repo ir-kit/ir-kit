@@ -132,6 +132,8 @@ export interface PluginDefinition<
   ) => ResolvedConfig;
   /** API surface other plugins can fetch via `plugin.getApi(name)`. */
   api?: Api;
+  /** Like `api`, but built fresh for each `generate()` run so the plugin can hold per-run state. */
+  createApi?: () => Api;
   hooks?: PluginHooks<ResolvedConfig, Api>;
   /** Names of plugins this one depends on. The orchestrator topologically sorts. */
   dependsOn?: ReadonlyArray<string>;

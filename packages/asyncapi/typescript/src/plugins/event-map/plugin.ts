@@ -30,10 +30,7 @@ export const eventMap = definePluginConfig<
 
     for (const ev of plugin.forEach("message")) {
       if (ev.type !== "message") continue;
-      const interfaceName = types?.messageTypeName(
-        plugin.document,
-        ev.message.id(),
-      );
+      const interfaceName = types?.messageTypeName(ev.message.id());
       if (interfaceName) importNames.add(interfaceName);
       eventMapMembers.push(
         tn.property(
@@ -114,15 +111,20 @@ function buildIsMessageOfType(): ts.FunctionDeclaration {
       [
         f.createReturnStatement(
           f.createBinaryExpression(
-            f.createPropertyAccessExpression(
+            f.createPropertyAccessChain(
               f.createParenthesizedExpression(
                 f.createAsExpression(
                   f.createIdentifier("msg"),
-                  f.createTypeLiteralNode([
-                    tn.property("type", tn.string(), true),
+                  f.createUnionTypeNode([
+                    f.createTypeLiteralNode([
+                      tn.property("type", tn.string(), true),
+                    ]),
+                    f.createLiteralTypeNode(f.createNull()),
+                    f.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
                   ]),
                 ),
               ),
+              f.createToken(ts.SyntaxKind.QuestionDotToken),
               "type",
             ),
             f.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),

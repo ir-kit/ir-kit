@@ -2,7 +2,6 @@ import {
   TypeScriptGenerator,
   typeScriptDefaultEnumValueConstraints,
 } from "@asyncapi/modelina";
-import type { AsyncAPIDocumentInterface } from "@asyncapi/parser";
 
 import { definePluginConfig } from "../../plugin.js";
 
@@ -33,17 +32,16 @@ export const typescript = definePluginConfig<
   "typescript",
   TypescriptPluginConfig,
   TypescriptResolvedConfig,
-  TypescriptApi
+  MessageTypeRegistry
 >({
   name: "typescript",
   defaultConfig,
-  api: {
-    messageTypeName: (document, messageId) =>
-      messageTypeNames.get(document)?.get(messageId),
+  createApi: () => {
+    const names = new Map<string, string>();
+    return { names, messageTypeName: (messageId) => names.get(messageId) };
   },
   async handler(plugin) {
-    const names = new Map<string, string>();
-    messageTypeNames.set(plugin.document, names);
+    const { names } = plugin.api;
 
     const generator = new TypeScriptGenerator({
       modelType: "interface",
@@ -122,10 +120,9 @@ function payloadJsonSchema(json: unknown): unknown {
 }
 
 /** Modelina constrains names (`turnOn` → `TurnOn`, `1abc` → `Number_1abc`), so its root model name is recorded per message for other plugins. */
-const messageTypeNames = new WeakMap<
-  AsyncAPIDocumentInterface,
-  Map<string, string>
->();
+interface MessageTypeRegistry extends TypescriptApi {
+  names: Map<string, string>;
+}
 
 /** Modelina emits unexported decls; add `export` to top-level interface/type/enum. */
 function prefixExports(block: string): string {
