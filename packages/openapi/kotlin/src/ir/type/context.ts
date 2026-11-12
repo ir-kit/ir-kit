@@ -1,5 +1,5 @@
 import type { TypeCtx as IRTypeCtx } from "@ir-kit/openapi";
 
-import type { KtDecl } from "../../kt-dsl/decl/types.js";
+import type { KtDecl } from "../../ast/index.js";
 
 export type TypeCtx = IRTypeCtx<KtDecl>;

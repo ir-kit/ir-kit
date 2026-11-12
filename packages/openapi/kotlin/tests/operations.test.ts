@@ -66,7 +66,7 @@ describe("operationsToDecls", () => {
     const m = ir(getUserSpec);
     const { decls } = operationsToDecls(m.paths);
     const ext = decls.find(
-      (d) => d.kind === "topLevelFun" && d.fun.name === "getUser",
+      (d) => d.kind === "topLevelFun" && d.name === "getUser",
     );
     assert.ok(ext);
     const out = printDecl(ext!);

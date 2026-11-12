@@ -14,7 +14,7 @@ import {
   ktRef,
   ktString,
   ktTypeAlias,
-} from "../kt-dsl/index.js";
+} from "../ast/index.js";
 import { newTypeNames } from "./identifiers.js";
 import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
 

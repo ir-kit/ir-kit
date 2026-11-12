@@ -10,7 +10,7 @@ import {
   ktByteArray,
   ktFunParam,
   ktNullable,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";

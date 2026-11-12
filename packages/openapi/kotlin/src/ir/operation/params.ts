@@ -5,7 +5,7 @@ import {
   type LocatedParam,
 } from "@ir-kit/openapi";
 
-import { type KtFunParam, ktFunParam, ktNullable } from "../../kt-dsl/index.js";
+import { type KtFunParam, ktFunParam, ktNullable } from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";

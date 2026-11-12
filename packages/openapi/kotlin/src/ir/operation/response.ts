@@ -9,7 +9,7 @@ import {
   ktSealedClass,
   ktSealedSubclass,
   ktUnit,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 import type { ResponseCase } from "./signature.js";
@@ -60,7 +60,6 @@ export function returnTypeFor(
                     ktProp({
                       name: "value",
                       type: c.payloadType,
-                      inPrimary: true,
                     }),
                   ],
                 })

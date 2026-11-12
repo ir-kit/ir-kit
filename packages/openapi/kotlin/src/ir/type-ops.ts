@@ -5,7 +5,7 @@ import {
   uniqueEnumEntries,
 } from "@ir-kit/openapi";
 
-import type { KtDecl } from "../kt-dsl/decl/types.js";
+import type { KtDecl } from "../ast/index.js";
 import {
   type KtType,
   ktAnnotation,
@@ -22,7 +22,7 @@ import {
   ktString,
   ktTypeAlias,
   ktUnit,
-} from "../kt-dsl/index.js";
+} from "../ast/index.js";
 import { enumEntryIdent } from "./identifiers.js";
 import { typeForPrimitive } from "./type/primitive.js";
 import { propertyName } from "./type/property-naming.js";
@@ -45,7 +45,7 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
   nullableAnyType: () => ktNullable(ktAny),
   // Single non-null + nullable → wrap in nullable iff not already.
   wrapForUnionSingle: (inner, nullable) =>
-    nullable && inner.kind !== "nullable" ? ktNullable(inner) : inner,
+    nullable ? ktNullable(inner) : inner,
   unionFallback: (nullable) => (nullable ? ktNullable(ktAny) : ktAny),
   primitiveType: typeForPrimitive,
   // kotlinx convention: `Owner_Property` (underscore joiner).
@@ -61,11 +61,10 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
           propPath: [propPathSegment],
         });
         const optional = !required;
-        const finalType = optional && t.kind !== "nullable" ? ktNullable(t) : t;
+        const finalType = optional ? ktNullable(t) : t;
         return ktProp({
           name: naming.kotlinName,
           type: finalType,
-          inPrimary: true,
           default: optional ? "null" : undefined,
           annotations: naming.renamed
             ? [ktAnnotation("SerialName", JSON.stringify(naming.jsonKey))]
@@ -94,7 +93,7 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
       ktEnum({
         name,
         annotations: [ktAnnotation("Serializable")],
-        properties: [ktProp({ name: "raw", type: ktString, inPrimary: true })],
+        properties: [ktProp({ name: "raw", type: ktString })],
         entries,
       }),
     );

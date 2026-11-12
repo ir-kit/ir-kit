@@ -1,5 +1,5 @@
 import { posix as pathPosix } from "node:path";
-import type { KtDecl } from "../kt-dsl/decl/types.js";
+import type { KtDecl } from "../ast/index.js";
 
 export type LayoutKind = "flat" | "split";
 
@@ -71,10 +71,7 @@ function isApiDecl(decl: KtDecl): boolean {
  */
 export function declFileName(decl: KtDecl): string {
   if (decl.kind === "topLevelFun") {
-    const receiver = decl.fun.receiver;
-    const recvName =
-      receiver && receiver.kind === "ref" ? receiver.name : "Extensions";
-    return `${recvName}Extensions.kt`;
+    return `${decl.receiver ?? "Extensions"}Extensions.kt`;
   }
   return `${decl.name}.kt`;
 }

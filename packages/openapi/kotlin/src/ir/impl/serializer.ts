@@ -1,3 +1,5 @@
+import { kt } from "@ir-kit/compiler-kotlin";
+
 import {
   type KtExpr,
   type KtType,
@@ -5,7 +7,11 @@ import {
   ktCall,
   ktIdent,
   ktMember,
-} from "../../kt-dsl/index.js";
+  typeArgs,
+  typeName,
+} from "../../ast/index.js";
+
+const K = kt.KotlinNodeKind;
 
 /**
  * Build the kotlinx-serialization `KSerializer<T>` expression for a
@@ -25,46 +31,37 @@ import {
  * the right `import kotlinx.serialization.builtins.*` line.
  */
 export function serializerFor(t: KtType): KtExpr {
-  switch (t.kind) {
-    case "primitive":
-      return primitiveSerializer(t.name);
-    case "nullable":
-      return ktMember(serializerFor(t.inner), "nullable");
-    case "list":
-      return ktCall(ktIdent("ListSerializer"), [
-        ktArg(serializerFor(t.element)),
-      ]);
-    case "map":
-      return ktCall(ktIdent("MapSerializer"), [
-        ktArg(serializerFor(t.key)),
-        ktArg(serializerFor(t.value)),
-      ]);
-    case "ref":
-      return ktCall(ktMember(ktIdent(t.name), "serializer"), []);
-    case "func":
-      // No good serializer for closure types; falls back to JsonElement.
-      return ktCall(ktMember(ktIdent("JsonElement"), "serializer"), []);
-  }
+  if (t.kind === K.NullableType)
+    return ktMember(serializerFor(t.type), "nullable");
+  const name = typeName(t);
+  if (name === undefined) return jsonElementSerializer();
+  const [first, second] = typeArgs(t);
+  if (name === "List" && first)
+    return ktCall(ktIdent("ListSerializer"), [ktArg(serializerFor(first))]);
+  if (name === "Map" && first && second)
+    return ktCall(ktIdent("MapSerializer"), [
+      ktArg(serializerFor(first)),
+      ktArg(serializerFor(second)),
+    ]);
+  if (BUILTIN_SERIALIZERS.has(name))
+    return ktCall(ktMember(ktIdent(name), "serializer"), []);
+  if (name === "ByteArray") return ktCall(ktIdent("ByteArraySerializer"), []);
+  if (OPAQUE.has(name)) return jsonElementSerializer();
+  return ktCall(ktMember(ktIdent(name), "serializer"), []);
 }
 
-function primitiveSerializer(name: string): KtExpr {
-  switch (name) {
-    case "String":
-    case "Int":
-    case "Long":
-    case "Short":
-    case "Byte":
-    case "Double":
-    case "Float":
-    case "Boolean":
-      return ktCall(ktMember(ktIdent(name), "serializer"), []);
-    case "ByteArray":
-      // ByteArraySerializer is a top-level value, not a fun.
-      return ktIdent("ByteArraySerializer()");
-    case "Unit":
-    case "Any":
-    case "Nothing":
-    default:
-      return ktCall(ktMember(ktIdent("JsonElement"), "serializer"), []);
-  }
-}
+const BUILTIN_SERIALIZERS: ReadonlySet<string> = new Set([
+  "String",
+  "Int",
+  "Long",
+  "Short",
+  "Byte",
+  "Double",
+  "Float",
+  "Boolean",
+]);
+
+const OPAQUE: ReadonlySet<string> = new Set(["Unit", "Any", "Nothing"]);
+
+const jsonElementSerializer = (): KtExpr =>
+  ktCall(ktMember(ktIdent("JsonElement"), "serializer"), []);

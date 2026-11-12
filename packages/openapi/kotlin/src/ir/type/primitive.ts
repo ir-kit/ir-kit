@@ -10,7 +10,7 @@ import {
   ktLong,
   ktRef,
   ktString,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * OpenAPI string `format` → Kotlin / kotlinx-datetime / `String` type.

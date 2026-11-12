@@ -1,4 +1,5 @@
 import {
+  isUnit,
   type KtCallArg,
   type KtExpr,
   type KtStmt,
@@ -14,7 +15,9 @@ import {
   ktVal,
   ktWhen,
   ktWhenCase,
-} from "../../kt-dsl/index.js";
+  typeArgs,
+  typeName,
+} from "../../ast/index.js";
 import type {
   OperationSignature,
   ResponseCase,
@@ -84,24 +87,24 @@ interface DispatchShape {
 }
 
 function classifyReturn(t: KtType): DispatchShape {
-  if (t.kind === "primitive" && t.name === "Unit") {
+  if (isUnit(t)) {
     return {
       method: "executeUnit",
       includeTransformer: false,
       discardResult: true,
     };
   }
-  if (t.kind === "ref" && t.name === "Response") {
+  if (typeName(t) === "Response") {
     return {
       method: "executeUnitWithResponse",
       includeTransformer: false,
       discardResult: false,
     };
   }
-  if (t.kind === "ref" && t.name === "Pair" && t.args && t.args.length > 0) {
+  if (typeName(t) === "Pair" && typeArgs(t).length > 0) {
     return {
       method: "executeWithResponse",
-      deserializerType: t.args[0],
+      deserializerType: typeArgs(t)[0],
       includeTransformer: true,
       discardResult: false,
     };
@@ -119,8 +122,7 @@ function classifyReturn(t: KtType): DispatchShape {
 function buildMultiResponseStmts(
   sig: OperationSignature,
 ): ReadonlyArray<KtStmt> {
-  const wrapWithResponse =
-    sig.returnType.kind === "ref" && sig.returnType.name === "Pair";
+  const wrapWithResponse = typeName(sig.returnType) === "Pair";
   const sealedName = `${sig.ownerName}_Response`;
   const args: KtCallArg[] = [
     ktArg(ktCall(ktMember(ktIdent("builder"), "build"), [])),

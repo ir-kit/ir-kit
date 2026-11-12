@@ -29,11 +29,10 @@ describe("printer", () => {
           name: "User",
           annotations: [ktAnnotation("Serializable")],
           properties: [
-            ktProp({ name: "id", type: ktString, inPrimary: true }),
+            ktProp({ name: "id", type: ktString }),
             ktProp({
               name: "name",
               type: ktNullable(ktString),
-              inPrimary: true,
               default: "null",
             }),
           ],
@@ -63,9 +62,7 @@ public data class User(
         ktEnum({
           name: "Status",
           annotations: [ktAnnotation("Serializable")],
-          properties: [
-            ktProp({ name: "raw", type: ktString, inPrimary: true }),
-          ],
+          properties: [ktProp({ name: "raw", type: ktString })],
           entries: [
             ktEnumEntry("ACTIVE", `"active"`, [
               ktAnnotation("SerialName", `"active"`),
@@ -123,13 +120,11 @@ public interface UsersApi {
             ktProp({
               name: "items",
               type: ktList(ktRef("User")),
-              inPrimary: true,
             }),
-            ktProp({ name: "total", type: ktInt, inPrimary: true }),
+            ktProp({ name: "total", type: ktInt }),
             ktProp({
               name: "next",
               type: ktNullable(ktString),
-              inPrimary: true,
               default: "null",
             }),
           ],
@@ -142,10 +137,7 @@ public interface UsersApi {
   });
 
   it("ktNullable is idempotent (does not double-wrap)", () => {
-    const t = ktNullable(ktNullable(ktString));
-    assert.equal(t.kind, "nullable");
-    if (t.kind === "nullable") {
-      assert.equal(t.inner.kind, "primitive");
-    }
+    const t = ktNullable(ktString);
+    assert.equal(ktNullable(t), t);
   });
 });

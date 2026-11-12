@@ -19,7 +19,7 @@ import {
   ktStr,
   ktVal,
   ktVar,
-} from "../../kt-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 
 /**
