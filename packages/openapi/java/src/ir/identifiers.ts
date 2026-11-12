@@ -61,9 +61,8 @@ export function javaTypeIdent(name: string): string {
   const joined = ident
     .replace(/_+([A-Za-z0-9])/g, (_, c: string) => c.toUpperCase())
     .replace(/_/g, "");
-  return (
-    avoidLeadingDigit(joined.replace(/^./, (c) => c.toUpperCase())) || "Empty"
-  );
+  const pascal = joined.replace(/^./, (c) => c.toUpperCase());
+  return /^[0-9]/.test(pascal) ? `X${pascal}` : pascal || "Empty";
 }
 
 export function enumEntryIdent(s: string): string {

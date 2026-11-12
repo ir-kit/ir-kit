@@ -1,6 +1,10 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.ApiResponse
+import com.example.petstore.models.FindPetsByStatusParamStatus
+import com.example.petstore.models.Pet
+import com.example.petstore.models.SubmitTagsBody
+import com.example.petstore.models.SubmitTagsResponse
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import okhttp3.MediaType.Companion.toMediaType
@@ -137,7 +141,7 @@ public class OkHttpPetApi(
 
     /** GET /pet/findByStatus */
     public override suspend fun findPetsByStatus(
-        status: FindPetsByStatus_Param_Status,
+        status: FindPetsByStatusParamStatus,
         options: RequestOptions,
     ): List<Pet> {
         val client = options.client ?: this.client
@@ -168,7 +172,7 @@ public class OkHttpPetApi(
 
     /** GET /pet/findByStatus */
     public override suspend fun findPetsByStatusWithResponse(
-        status: FindPetsByStatus_Param_Status,
+        status: FindPetsByStatusParamStatus,
         options: RequestOptions,
     ): Pair<List<Pet>, Response> {
         val client = options.client ?: this.client
@@ -609,23 +613,23 @@ public class OkHttpPetApi(
 
     /** POST /tags */
     public override suspend fun submitTags(
-        body: SubmitTags_Body,
+        body: SubmitTagsBody,
         options: RequestOptions,
-    ): SubmitTags_Response {
+    ): SubmitTagsResponse {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("tags")
         val url = urlBuilder.build()
         val builder = Request.Builder().url(url).method("POST", null)
-        val payload = client.json.encodeToString(SubmitTags_Body.serializer(), body)
+        val payload = client.json.encodeToString(SubmitTagsBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
         return client.execute(
             builder.build(),
-            SubmitTags_Response.serializer(),
+            SubmitTagsResponse.serializer(),
             timeout = options.timeout,
             extraInterceptors = options.requestInterceptors,
             responseValidator = options.responseValidator,
@@ -635,23 +639,23 @@ public class OkHttpPetApi(
 
     /** POST /tags */
     public override suspend fun submitTagsWithResponse(
-        body: SubmitTags_Body,
+        body: SubmitTagsBody,
         options: RequestOptions,
-    ): Pair<SubmitTags_Response, Response> {
+    ): Pair<SubmitTagsResponse, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("tags")
         val url = urlBuilder.build()
         val builder = Request.Builder().url(url).method("POST", null)
-        val payload = client.json.encodeToString(SubmitTags_Body.serializer(), body)
+        val payload = client.json.encodeToString(SubmitTagsBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
         return client.executeWithResponse(
             builder.build(),
-            SubmitTags_Response.serializer(),
+            SubmitTagsResponse.serializer(),
             timeout = options.timeout,
             extraInterceptors = options.requestInterceptors,
             responseValidator = options.responseValidator,

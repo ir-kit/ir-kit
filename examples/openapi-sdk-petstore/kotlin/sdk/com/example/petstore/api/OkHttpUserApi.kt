@@ -1,6 +1,8 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.UpdateProfileBody
+import com.example.petstore.models.UpdateProfileResponse
+import com.example.petstore.models.User
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import okhttp3.MediaType.Companion.toMediaType
@@ -363,23 +365,23 @@ public class OkHttpUserApi(
 
     /** POST /profile */
     public override suspend fun updateProfile(
-        body: UpdateProfile_Body,
+        body: UpdateProfileBody,
         options: RequestOptions,
-    ): UpdateProfile_Response {
+    ): UpdateProfileResponse {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("profile")
         val url = urlBuilder.build()
         val builder = Request.Builder().url(url).method("POST", null)
-        val payload = client.json.encodeToString(UpdateProfile_Body.serializer(), body)
+        val payload = client.json.encodeToString(UpdateProfileBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
         return client.execute(
             builder.build(),
-            UpdateProfile_Response.serializer(),
+            UpdateProfileResponse.serializer(),
             timeout = options.timeout,
             extraInterceptors = options.requestInterceptors,
             responseValidator = options.responseValidator,
@@ -389,23 +391,23 @@ public class OkHttpUserApi(
 
     /** POST /profile */
     public override suspend fun updateProfileWithResponse(
-        body: UpdateProfile_Body,
+        body: UpdateProfileBody,
         options: RequestOptions,
-    ): Pair<UpdateProfile_Response, Response> {
+    ): Pair<UpdateProfileResponse, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("profile")
         val url = urlBuilder.build()
         val builder = Request.Builder().url(url).method("POST", null)
-        val payload = client.json.encodeToString(UpdateProfile_Body.serializer(), body)
+        val payload = client.json.encodeToString(UpdateProfileBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
         return client.executeWithResponse(
             builder.build(),
-            UpdateProfile_Response.serializer(),
+            UpdateProfileResponse.serializer(),
             timeout = options.timeout,
             extraInterceptors = options.requestInterceptors,
             responseValidator = options.responseValidator,

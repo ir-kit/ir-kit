@@ -9,5 +9,5 @@ public data class Pet(
     public val category: Category? = null,
     public val photoUrls: List<String>,
     public val tags: List<Tag>? = null,
-    public val status: Pet_Status? = null,
+    public val status: PetStatus? = null,
 )

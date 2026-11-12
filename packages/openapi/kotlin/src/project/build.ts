@@ -46,10 +46,14 @@ export function buildKotlinProject(
     if (existing) existing.decls.push(decl);
     else groups.set(path, { decls: [decl], subPkg });
   }
+  const declared = new Map(
+    decls.map((d) => [d.name, declPackage(pkg, placeDecl(d, opts).dir)]),
+  );
   return [...groups.entries()].map(([path, group]) => {
     const apiSurface = group.decls.some(isApiSurface);
     const imports = importsFor(referencedNames(group.decls), {
       isApiSurface: apiSurface,
+      declared,
       rootPkg: pkg,
       subPkg: group.subPkg,
     });

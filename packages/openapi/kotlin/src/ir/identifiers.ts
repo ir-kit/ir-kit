@@ -23,8 +23,9 @@ import {
  * pass through unchanged.
  */
 export function paramIdent(name: string): string {
+  const ident = softCamel(name).replace(/[^A-Za-z0-9_]/g, "") || "value";
   return escapeIfReserved(
-    avoidLeadingDigit(softCamel(name)),
+    avoidLeadingDigit(ident),
     KOTLIN_RESERVED_KEYWORDS,
     (s) => `\`${s}\``,
   );
@@ -43,7 +44,8 @@ export function enumEntryIdent(s: string): string {
     .split(/_+/)
     .filter(Boolean);
   const upper = parts.join("_").toUpperCase();
-  return avoidLeadingDigit(upper) || "EMPTY";
+  if (!upper) return "EMPTY";
+  return /^[0-9]/.test(upper) ? `VALUE_${upper}` : upper;
 }
 
 /**
@@ -83,7 +85,16 @@ const KOTLIN_RESERVED_KEYWORDS: ReadonlySet<string> = new Set([
   "while",
 ]);
 
+/** `typeIdent` joined into the PascalCase form Kotlin's class-naming convention expects. */
+export function kotlinTypeIdent(name: string): string {
+  const joined = typeIdent(name)
+    .replace(/_+([A-Za-z0-9])/g, (_, c: string) => c.toUpperCase())
+    .replace(/_/g, "");
+  const pascal = joined.replace(/^./, (c) => c.toUpperCase());
+  return /^[0-9]/.test(pascal) ? `X${pascal}` : pascal || "Empty";
+}
+
 /** Owns every top-level Kotlin type name for one generation run. */
 export function newTypeNames(): Namespace {
-  return new Namespace({ normalize: typeIdent });
+  return new Namespace({ normalize: kotlinTypeIdent });
 }

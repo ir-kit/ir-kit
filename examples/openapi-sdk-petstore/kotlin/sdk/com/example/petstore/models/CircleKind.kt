@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class Rect_Kind(
+public enum class CircleKind(
     public val raw: String,
 ) {
-    @SerialName("rect")
-    RECT("rect"),
+    @SerialName("circle")
+    CIRCLE("circle"),
 }

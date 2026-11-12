@@ -265,20 +265,18 @@ export function createPrinter(options?: KotlinPrinterOptions) {
     subject?: KotlinNode;
   }): string {
     const subject = node.subject ? ` (${printNode(node.subject)})` : "";
-    const entries = nested(() =>
-      node.entries
-        .map((entry) => {
-          column = depth * INDENT.length;
-          const label = entry.conditions?.length
-            ? entry.conditions
-                .map((condition) => printNode(condition))
-                .join(", ")
-            : "else";
-          const start = depth * INDENT.length;
-          return `${label} -> ${printAt(start + label.length + 4, entry.body)}`;
-        })
-        .join("\n"),
-    );
+    const entries = nested(() => {
+      const printed = node.entries.map((entry) => {
+        column = depth * INDENT.length;
+        const label = entry.conditions?.length
+          ? entry.conditions.map((condition) => printNode(condition)).join(", ")
+          : "else";
+        const start = depth * INDENT.length;
+        return `${label} -> ${printAt(start + label.length + 4, entry.body)}`;
+      });
+      const multiline = printed.some((entry) => entry.includes("\n"));
+      return printed.join(multiline ? "\n\n" : "\n");
+    });
     return `when${subject} {\n${entries}\n}`;
   }
 
@@ -565,7 +563,14 @@ export function createPrinter(options?: KotlinPrinterOptions) {
         const def = node.defaultValue
           ? ` = ${printNode(node.defaultValue)}`
           : "";
-        return `${printAnnotationsInline(node.annotations)}${printModifiersSpaced(node.modifiers)}${valOrVar}${node.name}: ${printNode(node.type)}${def}`;
+        const decl = `${printModifiersSpaced(node.modifiers)}${valOrVar}${node.name}:`;
+        const type = `${printNode(node.type)}${def}`;
+        const flat = `${printAnnotationsInline(node.annotations)}${decl} ${type}`;
+        if (fits(column, `${flat},`)) return flat;
+        const annotations = printAnnotationLines(node.annotations);
+        if (fits(column, `${decl} ${type},`))
+          return `${annotations}${decl} ${type}`;
+        return `${annotations}${decl}\n${INDENT}${type}`;
       }
 
       case KotlinNodeKind.ParenthesizedExpression:
@@ -593,9 +598,14 @@ export function createPrinter(options?: KotlinPrinterOptions) {
         const type = node.type ? `: ${printNode(node.type)}` : "";
         const lead = `${printPrefix(node.annotations, node.modifiers)}${node.valOrVar} ${node.name}${type}`;
         let tail = "";
-        if (node.initializer)
-          tail = ` = ${printAt(columnAfter(start, lead) + 3, node.initializer)}`;
-        else if (node.delegate) tail = ` by ${printNode(node.delegate)}`;
+        const init = node.initializer;
+        if (init) {
+          const value = printAt(columnAfter(start, lead) + 3, init);
+          tail =
+            value.includes("\n") && init.kind === KotlinNodeKind.CallExpression
+              ? ` =\n${nested(() => atLineStart(init))}`
+              : ` = ${value}`;
+        } else if (node.delegate) tail = ` by ${printNode(node.delegate)}`;
         const head = `${lead}${tail}`;
         if (!node.accessors?.length) return head;
         const accessors = node.accessors.map((accessor) => {

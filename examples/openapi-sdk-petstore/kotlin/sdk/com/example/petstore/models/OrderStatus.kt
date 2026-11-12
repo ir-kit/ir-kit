@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class Order_Status(
+public enum class OrderStatus(
     public val raw: String,
 ) {
     @SerialName("placed")

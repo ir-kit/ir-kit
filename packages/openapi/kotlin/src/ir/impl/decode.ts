@@ -123,7 +123,7 @@ function buildMultiResponseStmts(
   sig: OperationSignature,
 ): ReadonlyArray<KtStmt> {
   const wrapWithResponse = typeName(sig.returnType) === "Pair";
-  const sealedName = `${sig.ownerName}_Response`;
+  const sealedName = sig.sealedName ?? sig.ownerName;
   const args: KtCallArg[] = [
     ktArg(ktCall(ktMember(ktIdent("builder"), "build"), [])),
     ktArg(ktMember(ktIdent("options"), "timeout"), "timeout"),

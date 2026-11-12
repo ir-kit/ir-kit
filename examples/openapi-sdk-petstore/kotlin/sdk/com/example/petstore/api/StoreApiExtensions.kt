@@ -1,6 +1,8 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.CreateShapeResponse
+import com.example.petstore.models.Order
+import com.example.petstore.models.SubmitMeasurementBody
 import okhttp3.Response
 
 /** GET /store/inventory */
@@ -34,17 +36,17 @@ public suspend fun StoreApi.deleteOrderWithResponse(orderId: Long): Response =
     this.deleteOrderWithResponse(orderId = orderId, options = RequestOptions())
 
 /** POST /shapes */
-public suspend fun StoreApi.createShape(body: ByteArray): CreateShape_Response = this.createShape(body = body, options = RequestOptions())
+public suspend fun StoreApi.createShape(body: ByteArray): CreateShapeResponse = this.createShape(body = body, options = RequestOptions())
 
 /** POST /shapes */
-public suspend fun StoreApi.createShapeWithResponse(body: ByteArray): Pair<CreateShape_Response, Response> =
+public suspend fun StoreApi.createShapeWithResponse(body: ByteArray): Pair<CreateShapeResponse, Response> =
     this.createShapeWithResponse(body = body, options = RequestOptions())
 
 /** POST /measurements */
-public suspend fun StoreApi.submitMeasurement(body: SubmitMeasurement_Body) {
+public suspend fun StoreApi.submitMeasurement(body: SubmitMeasurementBody) {
     this.submitMeasurement(body = body, options = RequestOptions())
 }
 
 /** POST /measurements */
-public suspend fun StoreApi.submitMeasurementWithResponse(body: SubmitMeasurement_Body): Response =
+public suspend fun StoreApi.submitMeasurementWithResponse(body: SubmitMeasurementBody): Response =
     this.submitMeasurementWithResponse(body = body, options = RequestOptions())

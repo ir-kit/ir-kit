@@ -15,9 +15,9 @@ import com.example.petstore.api.findPetsByStatus
 import com.example.petstore.api.updatePet
 import com.example.petstore.api.uploadPetDocument
 import com.example.petstore.models.ApiResponse
-import com.example.petstore.models.FindPetsByStatus_Param_Status
+import com.example.petstore.models.FindPetsByStatusParamStatus
 import com.example.petstore.models.Pet
-import com.example.petstore.models.Pet_Status
+import com.example.petstore.models.PetStatus
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
@@ -37,7 +37,7 @@ suspend fun create(): Pet {
     val new = Pet(
         name = "Rex",
         photoUrls = listOf(),
-        status = Pet_Status.AVAILABLE,
+        status = PetStatus.AVAILABLE,
     )
     return Api.pets.addPet(body = new)
 }
@@ -53,7 +53,7 @@ suspend fun delete(id: Long) {
 }
 
 suspend fun listAvailable(): List<Pet> =
-    Api.pets.findPetsByStatus(status = FindPetsByStatus_Param_Status.AVAILABLE)
+    Api.pets.findPetsByStatus(status = FindPetsByStatusParamStatus.AVAILABLE)
 
 fun configureBearerAuth(token: String) {
     Api.client.auth["petstore_auth"] = Auth.Bearer(token)

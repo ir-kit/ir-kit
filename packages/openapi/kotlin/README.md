@@ -38,18 +38,18 @@ public data class Pet(
     public val category: Category? = null,
     public val photoUrls: List<String>,
     public val tags: List<Tag>? = null,
-    public val status: Pet_Status? = null,
+    public val status: PetStatus? = null,
 )
 
 @Serializable
-public enum class Pet_Status(public val raw: String) {
+public enum class PetStatus(public val raw: String) {
     @SerialName("available") AVAILABLE("available"),
     @SerialName("pending") PENDING("pending"),
     @SerialName("sold") SOLD("sold"),
 }
 ```
 
-Inline enums on a property get promoted to a top-level `Owner_Property` enum class. Renamed JSON keys (snake_case → camelCase) get a `@SerialName` so the wire format stays untouched.
+Inline enums on a property get promoted to a top-level `OwnerProperty` enum class. Renamed JSON keys (snake_case → camelCase) get a `@SerialName` so the wire format stays untouched.
 
 ### Operations → interfaces + impls
 
@@ -150,10 +150,10 @@ public sealed class APIError(message: String? = null, cause: Throwable? = null) 
 When an operation declares more than one 2xx response code with distinct schemas, the generator emits a sealed-class hierarchy and the impl dispatches on `response.code`:
 
 ```kotlin
-public sealed class SubmitJob_Response {
-    public data class Status200(public val value: JobResult) : SubmitJob_Response()
-    public data class Status202(public val value: Pending) : SubmitJob_Response()
-    public object Status204 : SubmitJob_Response()
+public sealed class SubmitJobResponse {
+    public data class Status200(public val value: JobResult) : SubmitJobResponse()
+    public data class Status202(public val value: Pending) : SubmitJobResponse()
+    public object Status204 : SubmitJobResponse()
 }
 ```
 
@@ -212,7 +212,7 @@ sdk-kotlin/
 │   │   └── RequestOptions.kt
 │   └── models/
 │       ├── Pet.kt                     # @Serializable data classes
-│       ├── Pet_Status.kt              # enum classes
+│       ├── PetStatus.kt              # enum classes
 │       └── …
 └── (build.gradle.kts + settings.gradle.kts when `gradle:` is set)
 ```

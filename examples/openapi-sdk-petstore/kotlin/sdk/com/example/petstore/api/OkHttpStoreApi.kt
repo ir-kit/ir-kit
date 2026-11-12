@@ -1,6 +1,8 @@
 package com.example.petstore.api
 
-import com.example.petstore.models.*
+import com.example.petstore.models.CreateShapeResponse
+import com.example.petstore.models.Order
+import com.example.petstore.models.SubmitMeasurementBody
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import okhttp3.MediaType.Companion.toMediaType
@@ -223,7 +225,7 @@ public class OkHttpStoreApi(
     public override suspend fun createShape(
         body: ByteArray,
         options: RequestOptions,
-    ): CreateShape_Response {
+    ): CreateShapeResponse {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
@@ -236,7 +238,7 @@ public class OkHttpStoreApi(
         }
         return client.execute(
             builder.build(),
-            CreateShape_Response.serializer(),
+            CreateShapeResponse.serializer(),
             timeout = options.timeout,
             extraInterceptors = options.requestInterceptors,
             responseValidator = options.responseValidator,
@@ -248,7 +250,7 @@ public class OkHttpStoreApi(
     public override suspend fun createShapeWithResponse(
         body: ByteArray,
         options: RequestOptions,
-    ): Pair<CreateShape_Response, Response> {
+    ): Pair<CreateShapeResponse, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
@@ -261,7 +263,7 @@ public class OkHttpStoreApi(
         }
         return client.executeWithResponse(
             builder.build(),
-            CreateShape_Response.serializer(),
+            CreateShapeResponse.serializer(),
             timeout = options.timeout,
             extraInterceptors = options.requestInterceptors,
             responseValidator = options.responseValidator,
@@ -271,7 +273,7 @@ public class OkHttpStoreApi(
 
     /** POST /measurements */
     public override suspend fun submitMeasurement(
-        body: SubmitMeasurement_Body,
+        body: SubmitMeasurementBody,
         options: RequestOptions,
     ) {
         val client = options.client ?: this.client
@@ -280,7 +282,7 @@ public class OkHttpStoreApi(
         urlBuilder.addPathSegment("measurements")
         val url = urlBuilder.build()
         val builder = Request.Builder().url(url).method("POST", null)
-        val payload = client.json.encodeToString(SubmitMeasurement_Body.serializer(), body)
+        val payload = client.json.encodeToString(SubmitMeasurementBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
@@ -295,7 +297,7 @@ public class OkHttpStoreApi(
 
     /** POST /measurements */
     public override suspend fun submitMeasurementWithResponse(
-        body: SubmitMeasurement_Body,
+        body: SubmitMeasurementBody,
         options: RequestOptions,
     ): Response {
         val client = options.client ?: this.client
@@ -304,7 +306,7 @@ public class OkHttpStoreApi(
         urlBuilder.addPathSegment("measurements")
         val url = urlBuilder.build()
         val builder = Request.Builder().url(url).method("POST", null)
-        val payload = client.json.encodeToString(SubmitMeasurement_Body.serializer(), body)
+        val payload = client.json.encodeToString(SubmitMeasurementBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
             builder.header(header.key, header.value)
