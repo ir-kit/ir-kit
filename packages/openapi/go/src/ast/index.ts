@@ -18,8 +18,6 @@ function withDoc<T extends go.Node>(node: T, doc?: string): T {
   return lines ? { ...node, leadingComments: lines } : node;
 }
 
-// ── types ────────────────────────────────────────────────────────────
-
 const named = (name: string): GoType => f.createIdentifier(name);
 
 export const goString: GoType = named("string");
@@ -86,8 +84,6 @@ export function goTypeExpr(t: GoType): GoExpr {
   return t as unknown as GoExpr;
 }
 
-// ── expressions ──────────────────────────────────────────────────────
-
 export interface GoCallArg {
   expr: GoExpr;
   spread?: boolean;
@@ -148,8 +144,6 @@ export const goSliceLit = (
   items: ReadonlyArray<GoExpr>,
 ): GoExpr => f.createCompositeLiteral(items, goSlice(element));
 
-// ── statements ───────────────────────────────────────────────────────
-
 export const goShort = (
   names: ReadonlyArray<string>,
   values: ReadonlyArray<GoExpr>,
@@ -208,8 +202,6 @@ export function goSwitch(
   if (default_) out.push(f.createSwitchCase(default_));
   return f.createSwitchStatement(out, tag);
 }
-
-// ── declarations ─────────────────────────────────────────────────────
 
 /**
  * A top-level declaration plus what the project layer needs to place
