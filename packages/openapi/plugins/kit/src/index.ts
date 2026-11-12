@@ -1,9 +1,16 @@
 import {
+  applyNaming,
   collectDeps,
   defineConfig as defineConfigTable,
   definePluginConfig,
+  type NamingConfig,
   type Plugin,
 } from "@hey-api/shared";
+
+/** `name` cased by `naming`, with every non-identifier character removed. */
+export function identifierName(name: string, naming: NamingConfig): string {
+  return applyNaming(name, naming).replace(/[^\w]/g, "");
+}
 
 /**
  * `definePluginConfig` with user config resolved against the default table.

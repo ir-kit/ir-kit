@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { JSONSchema } from "@ir-kit/fn-schema-core";
+import { escapeRegExp, type JSONSchema } from "@ir-kit/fn-schema-core";
 import {
   type ImportDeclaration,
   Node,
@@ -509,10 +509,6 @@ function detectBrandedAlias(
   const { brand, primitive } = stripBrand(rhs.getText());
   if (!brand) return null;
   return { brand, primitive };
-}
-
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function relSpecifier(absHostFile: string, virtualDir: string): string {

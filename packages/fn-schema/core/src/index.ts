@@ -1,7 +1,7 @@
 export { resolveSchemaOptions, resolveSignatureOptions } from "./defaults.js";
 export { DiagnosticSink, FailFastError } from "./diagnostics.js";
 export * as emit from "./emit/index.js";
-export { applyFilter, resolveFilter } from "./filter.js";
+export { applyFilter, escapeRegExp, resolveFilter } from "./filter.js";
 export { resolveNaming } from "./naming.js";
 export {
   type FnSchemaConfig,
