@@ -37,7 +37,8 @@ describe("loadSpec", () => {
     );
     const result = await loadSpec({ input: path });
     expect(result.kind).toBe("asyncapi");
-  });
+    // The first AsyncAPI parse cold-loads the parser and its schemas.
+  }, 30_000);
 
   it("rejects files that are not API specs", async () => {
     const path = await write("package.json", '{ "name": "pkg" }');
