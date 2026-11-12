@@ -24,6 +24,21 @@ describe("sealed interfaces and line wrapping", () => {
     );
   });
 
+  it("breaks before implements when the record header does not fit", async () => {
+    const decl = f.createRecordDeclaration(
+      "GetInformationAboutTheUsersCurrentPlaybackResponseStatus200",
+      [f.createMethodParameter("value", id("CurrentlyPlayingContextObject"))],
+      [],
+      ["public"],
+      undefined,
+      [id("GetInformationAboutTheUsersCurrentPlaybackResponse")],
+    );
+    await assertPrintedMatchesSnapshot(
+      f.createSourceFile(undefined, [decl]),
+      "record-implements.java",
+    );
+  });
+
   it("wraps long headers, enum constants, comments and calls", async () => {
     const longType =
       "CustomerBalanceResourceCashBalanceTransactionResourceFundedTransaction";

@@ -498,4 +498,30 @@ describe("function declaration", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "unnamed-receiver.go");
   });
+
+  it("breaks an empty body when the header reaches 100 columns", async () => {
+    const recv = (type: string) => ({
+      name: "",
+      type: go.factory.createIdentifier(type),
+    });
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createFunctionDeclaration(
+        recv("ShortCase"),
+        "isShortResponse",
+        undefined,
+        undefined,
+        undefined,
+        [],
+      ),
+      go.factory.createFunctionDeclaration(
+        recv("GetInformationAboutTheUsersCurrentPlaybackResponseStatus200"),
+        "isGetInformationAboutTheUsersCurrentPlaybackResponse",
+        undefined,
+        undefined,
+        undefined,
+        [],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "empty-body-wrapping.go");
+  });
 });

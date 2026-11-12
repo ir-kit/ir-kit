@@ -454,20 +454,23 @@ export function createPrinter(options?: KotlinPrinterOptions) {
         const typeParams = printTypeParameters(node.typeParameters);
         const start = column;
         const prefix = printPrefix(node.annotations, node.modifiers);
-        const sign = (force: boolean) =>
-          `${prefix}fun ${typeParams ? `${typeParams} ` : ""}${receiver}${node.name}(${printParameters(node.parameters, 2, force)})${returnType}${printWhereClause(node.typeParameters)}`;
-        let signature = sign(false);
-        const lastLine = signature.slice(signature.lastIndexOf("\n") + 1);
-        if (
-          !lastLine.includes("(\n") &&
-          !fits(
+        const sign = (force: boolean, wrapReturn = false) =>
+          `${prefix}fun ${typeParams ? `${typeParams} ` : ""}${receiver}${node.name}(${printParameters(node.parameters, 2, force)})${wrapReturn && node.returnType ? `:\n${INDENT}${printNode(node.returnType)}` : returnType}${printWhereClause(node.typeParameters)}`;
+        const headerFits = (signature: string) => {
+          const lastLine = signature.slice(signature.lastIndexOf("\n") + 1);
+          return fits(
             columnAfter(start, prefix),
             `${lastLine.slice(lastLine === signature ? prefix.length : 0)} {`,
-          )
-        )
-          signature = sign(true);
+          );
+        };
+        let signature = sign(false);
+        if (!headerFits(signature)) signature = sign(true);
+        const wrapReturn = !!node.returnType && !headerFits(signature);
+        if (wrapReturn) signature = sign(true, true);
         const expressionBody =
           node.expressionBody ?? singleReturnExpression(node.body ?? []);
+        if (expressionBody && wrapReturn)
+          return `${signature} =\n${nested(() => atLineStart(expressionBody))}`;
         if (expressionBody) return assignBody(start, signature, expressionBody);
         if (node.body) return `${signature} ${printStatementBlock(node.body)}`;
         return signature;

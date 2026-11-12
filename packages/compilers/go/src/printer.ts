@@ -347,7 +347,11 @@ export function createPrinter(options?: GoPrinterOptions) {
           : "";
         const typeParams = printTypeParameters(node.typeParameters);
         const signature = `func${receiver ? ` ${receiver}` : ""} ${node.name}${typeParams}(${parameters})${finalReturnType}`;
-        const blockOutput = printInline(node.body);
+        // gofmt keeps an empty body on the header line only while the header is under 100 columns.
+        const blockOutput =
+          !node.body.statements.length && signature.length >= 100
+            ? `{\n${printLine("}")}`
+            : printInline(node.body);
         parts.push(
           context.inline
             ? [signature, blockOutput].join(" ")
