@@ -1246,6 +1246,15 @@ importers:
 
   packages/shared/spec-convert:
     dependencies:
+      '@ir-kit/codegen-core':
+        specifier: workspace:*
+        version: link:../codegen-core
+      '@ir-kit/openapi':
+        specifier: workspace:*
+        version: link:../../openapi/ir
+      '@ir-kit/openapi-tools':
+        specifier: workspace:*
+        version: link:../../openapi/tools
       '@ir-kit/spec-loader':
         specifier: workspace:*
         version: link:../spec-loader
@@ -1262,6 +1271,9 @@ importers:
         specifier: ^7.4.0
         version: 7.5.6
     devDependencies:
+      '@hey-api/shared':
+        specifier: 'catalog:'
+        version: 0.5.0(magicast@0.5.2)
       '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../../tooling/tsconfig

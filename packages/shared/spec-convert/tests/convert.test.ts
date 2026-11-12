@@ -60,8 +60,10 @@ describe("convertSpec", () => {
 });
 
 describe("findConverterPath", () => {
-  it("does not route OpenAPI to proto through generated TypeSpec", () => {
-    expect(findConverterPath("openapi3", "proto")).toBeUndefined();
+  it("converts OpenAPI to proto directly, not through generated TypeSpec", () => {
+    expect(findConverterPath("openapi3", "proto")?.map((e) => e.to)).toEqual([
+      "proto",
+    ]);
   });
 
   it("still routes TypeSpec to proto directly", () => {

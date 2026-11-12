@@ -18,6 +18,7 @@ const typespecLoaderDir = dirname(
 
 import "./converters/openapi3-to-json-schema.js";
 import "./converters/openapi3-to-postman.js";
+import "./converters/openapi3-to-proto.js";
 import "./converters/openapi3-to-typespec.js";
 import "./converters/postman-to-openapi3.js";
 import "./converters/proto-to-openapi3.js";

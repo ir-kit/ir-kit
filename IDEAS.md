@@ -62,7 +62,6 @@ ir-kit's thesis: **every API standard talks to every other**. One canonical hub 
 ### Format coverage
 
 - **GraphQL** — never integrated. Add `graphql → openapi3` (and ideally back) to bring GraphQL into the federation. Candidate libs: `graphql-to-openapi`, IBM `openapi-to-graphql` (reverse).
-- **`openapi3 → proto` (direct)** — currently blocked because the TypeSpec → Protobuf hop loses `@field` numbers + `@TypeSpec.Protobuf.package` decorators. Either build a direct OpenAPI → proto generator, or invest in a decorator-injection pass over the intermediate TypeSpec.
 - **`asyncapi3 → openapi3` (and back)** — bring AsyncAPI into the converter graph. Today it loads via `spec-loader` but isn't a `spec-convert` source or target.
 - **Postman v2.0** — only v2.1 is wired through `@readme/postman-to-openapi`; older collections may need a pre-conversion pass.
 
