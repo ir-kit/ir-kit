@@ -38,6 +38,23 @@ channels:
             fields:
               - name: id
                 type: long
+      accountUpdated:
+        name: accountUpdated
+        payload:
+          type: object
+          properties:
+            $schema:
+              type: string
+            account:
+              $ref: '#/components/schemas/Account'
+components:
+  schemas:
+    Account:
+      $id: https://example.org/Account
+      type: object
+      properties:
+        id:
+          type: string
 operations:
   send:
     action: send
@@ -81,6 +98,19 @@ describe("message type names", () => {
 
   it("escapes string enum values", () => {
     expect(typesSource).toContain("export type HeartbeatMessage = '\\r\\n';");
+  });
+
+  it("references components that declare a URI $id by their component key", () => {
+    expect(typesSource).toContain("export type Account = {");
+    expect(typesSource).toMatch(
+      /export type AccountUpdatedMessage = \{[^}]*account\?: Account;/,
+    );
+  });
+
+  it("keeps payload fields named like schema metadata", () => {
+    expect(typesSource).toMatch(
+      /export type AccountUpdatedMessage = \{[^}]*\$schema\?: string;/,
+    );
   });
 
   it("maps messages without a payload to unknown", () => {

@@ -1,3 +1,5 @@
+import { basename } from "node:path";
+
 import { createClient } from "@hey-api/openapi-ts";
 
 import { definePluginConfig } from "../../plugin.js";
@@ -33,14 +35,20 @@ export const typescript = definePluginConfig<
     return { names, messageTypeName: (messageId) => names.get(messageId) };
   },
   async handler(plugin) {
-    const components = (plugin.document.components()?.schemas()?.all() ?? [])
-      .map((schema) => ({ id: schema.id(), json: schema.json() }))
-      .filter(({ id }) => Boolean(id));
-    const componentIds = new Set(components.map(({ id }) => id));
+    const components = Object.entries(
+      plugin.document.json().components?.schemas ?? {},
+    );
+    // why: the parser tags component copies with `$id` when present, not the component key.
+    const componentKeys = new Map(
+      components.map(([key, json]) => [
+        (json as Record<string, unknown>)["x-parser-schema-id"] as string,
+        key,
+      ]),
+    );
 
     const schemas: Record<string, unknown> = {};
-    for (const { id, json } of components) {
-      schemas[id] = toOpenApiSchema(json, componentIds, json);
+    for (const [key, json] of components) {
+      schemas[key] = toOpenApiSchema(json, componentKeys, json);
     }
 
     const messageKeys = new Map<string, string>();
@@ -54,12 +62,14 @@ export const typescript = definePluginConfig<
       );
       schemas[key] = toOpenApiSchema(
         payloadJsonSchema(payload.json()),
-        componentIds,
+        componentKeys,
       );
       messageKeys.set(ev.message.id(), key);
     }
 
     const [context] = await createClient({
+      // why: stop Hey API from merging in an `openapi-ts.config.*` from the cwd.
+      configFile: "ir-kit-asyncapi-no-config.none",
       dryRun: true,
       input: {
         openapi: "3.1.0",
@@ -69,7 +79,12 @@ export const typescript = definePluginConfig<
       },
       logs: { file: false, level: "silent" },
       // why: Hey API empties `output.path` even on a dry run.
-      output: { clean: false, header: HEADER, path: "." },
+      output: {
+        clean: false,
+        fileName: { case: "preserve", suffix: ".gen" },
+        header: HEADER,
+        path: ".",
+      },
       plugins: ["@hey-api/typescript"],
     });
     if (!context) throw new Error("@hey-api/openapi-ts produced no output");
@@ -77,13 +92,13 @@ export const typescript = definePluginConfig<
     for (const [messageId, key] of messageKeys) {
       const [symbol] = context.gen.symbols.query({
         resource: "definition",
-        resourceId: `#/components/schemas/${key}`,
+        resourceId: schemaRef(key),
       });
       if (symbol) plugin.api.names.set(messageId, symbol.finalName);
     }
 
-    const types = [...context.gen.render()].find((file) =>
-      file.path.endsWith("types.gen.ts"),
+    const types = [...context.gen.render()].find(
+      (file) => basename(file.path) === "types.gen.ts",
     );
     if (!types) throw new Error("@hey-api/typescript emitted no types.gen.ts");
     plugin.emit({ path: "types.gen.ts", content: types.content });
@@ -103,33 +118,57 @@ function payloadJsonSchema(json: unknown): unknown {
   return json;
 }
 
+/** Keywords whose value maps names to schemas, so its keys are data, not schema metadata. */
+const SCHEMA_MAPS = new Set([
+  "$defs",
+  "definitions",
+  "dependentSchemas",
+  "patternProperties",
+  "properties",
+]);
+
 /** Copy a dereferenced schema, turning nested component schemas back into `$ref`s and dropping parser bookkeeping. */
 function toOpenApiSchema(
   node: unknown,
-  componentIds: ReadonlySet<string>,
+  componentKeys: ReadonlyMap<string, string>,
   root?: unknown,
   path = new Set<object>(),
 ): unknown {
   if (!node || typeof node !== "object") return node;
-  const id = (node as Record<string, unknown>)["x-parser-schema-id"];
-  if (node !== root && typeof id === "string" && componentIds.has(id)) {
-    return { $ref: `#/components/schemas/${id}` };
-  }
+  const key = componentKeys.get(
+    (node as Record<string, unknown>)["x-parser-schema-id"] as string,
+  );
+  if (node !== root && key) return { $ref: schemaRef(key) };
   // why: an anonymous schema that contains itself has no name to `$ref`.
   if (path.has(node)) return {};
   path.add(node);
+  const recurse = (value: unknown) =>
+    toOpenApiSchema(value, componentKeys, root, path);
   const copy = Array.isArray(node)
-    ? node.map((item) => toOpenApiSchema(item, componentIds, root, path))
+    ? node.map(recurse)
     : Object.fromEntries(
         Object.entries(node)
-          .filter(([key]) => !key.startsWith("x-parser-") && key !== "$schema")
-          .map(([key, value]) => [
-            key,
-            toOpenApiSchema(value, componentIds, root, path),
+          .filter(
+            ([name]) => !name.startsWith("x-parser-") && name !== "$schema",
+          )
+          .map(([name, value]) => [
+            name,
+            SCHEMA_MAPS.has(name) && value && typeof value === "object"
+              ? Object.fromEntries(
+                  Object.entries(value).map(([field, schema]) => [
+                    field,
+                    recurse(schema),
+                  ]),
+                )
+              : recurse(value),
           ]),
       );
   path.delete(node);
   return copy;
+}
+
+function schemaRef(key: string): string {
+  return `#/components/schemas/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`;
 }
 
 function freeKey(key: string, taken: Record<string, unknown>): string {
