@@ -1,12 +1,9 @@
 import { basename, join, resolve } from "node:path";
-import { writeOutput } from "@ir-kit/codegen-core";
+import { pascal, writeOutput } from "@ir-kit/codegen-core";
 import { swift } from "@ir-kit/compiler-swift";
-import {
-  extractSecuritySchemeNames,
-  type NormalizeOptions,
-} from "@ir-kit/openapi";
+import type { NormalizeOptions } from "@ir-kit/openapi";
 import { loadOpenAPI } from "@ir-kit/openapi-loader";
-import { parseSpec } from "@ir-kit/openapi-tools/parse";
+import { parseForCodegen } from "@ir-kit/openapi-tools/parse";
 import { someNode } from "./ast/walk.js";
 import { newTypeNames } from "./ir/identifiers.js";
 import {
@@ -68,11 +65,9 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const bundled = await loadOpenAPI({
-    input: opts.input,
-    normalize: opts.normalize,
-  });
-  const ir = parseSpec(bundled);
+  const { ir, securitySchemeNames } = parseForCodegen(
+    await loadOpenAPI({ input: opts.input, normalize: opts.normalize }),
+  );
   const names = newTypeNames();
 
   const decls = boxValueCycles([
@@ -83,7 +78,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
       clientClassName: opts.clientClassName,
       protocolOnly: opts.protocolOnly,
       openImpl: opts.openImpl,
-      securitySchemeNames: extractSecuritySchemeNames(bundled),
+      securitySchemeNames,
       names,
     }),
   ]);
@@ -116,15 +111,7 @@ function resolvePackageOptions(
 }
 
 function defaultPackageName(outputDir: string): string {
-  const base = basename(outputDir)
-    .replace(/[^A-Za-z0-9]+/g, " ")
-    .trim();
-  return (
-    base
-      .split(/\s+/)
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-      .join("") || "GeneratedSDK"
-  );
+  return pascal(basename(outputDir)) || "GeneratedSDK";
 }
 
 const isJSONValue = (n: Record<string, unknown>): boolean =>
