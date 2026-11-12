@@ -777,14 +777,14 @@ describe("operations (IR-driven)", () => {
       }),
     );
     // Sum-type enum lands in Models with one case per 2xx code.
-    assert.match(flat(out), /public enum SubmitJob_Response \{/);
+    assert.match(flat(out), /public enum SubmitJobResponse \{/);
     assert.match(flat(out), /case status200\(JobResult\)/);
     assert.match(flat(out), /case status202\(Pending\)/);
     assert.match(flat(out), /case status204\b/);
     // Method returns the enum.
     assert.match(
       flat(out),
-      /func submitJob\([\s\S]+?\) async throws -> SubmitJob_Response/,
+      /func submitJob\([\s\S]+?\) async throws -> SubmitJobResponse/,
     );
     // Impl uses executeRaw + status-dispatch decode.
     assert.match(flat(out), /try await client\.executeRaw\(request,/);
@@ -798,7 +798,7 @@ describe("operations (IR-driven)", () => {
     // WithResponse companion bundles the case with httpResponse.
     assert.match(
       flat(out),
-      /func submitJobWithResponse\([\s\S]+?\) async throws -> \(SubmitJob_Response, HTTPURLResponse\)/,
+      /func submitJobWithResponse\([\s\S]+?\) async throws -> \(SubmitJobResponse, HTTPURLResponse\)/,
     );
     assert.match(flat(out), /return \(\.status200\(value\), httpResponse\)/);
   });

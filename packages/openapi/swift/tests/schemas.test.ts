@@ -125,11 +125,11 @@ describe("schemas (IR-driven)", () => {
     );
     assert.match(
       out,
-      /public struct User: Codable \{\n\s+public let address: User_Address\n/,
+      /public struct User: Codable \{\n\s+public let address: UserAddress\n/,
     );
     assert.match(
       out,
-      /public struct User_Address: Codable \{\n\s+public let street: String\n\s+public let zip: String\?\n/,
+      /public struct UserAddress: Codable \{\n\s+public let street: String\n\s+public let zip: String\?\n/,
     );
   });
 
@@ -162,8 +162,8 @@ describe("schemas (IR-driven)", () => {
         }),
       }),
     );
-    assert.match(out, /public let status: User_Status\n/);
-    assert.match(out, /public enum User_Status: String, Codable \{/);
+    assert.match(out, /public let status: UserStatus\n/);
+    assert.match(out, /public enum UserStatus: String, Codable \{/);
   });
 
   it("snake_case JSON keys → camelCase Swift names + CodingKeys enum", () => {

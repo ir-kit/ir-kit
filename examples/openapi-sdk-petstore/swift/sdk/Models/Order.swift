@@ -5,7 +5,7 @@ public struct Order: Codable {
   public let petId: Int64?
   public let quantity: Int32?
   public let shipDate: Date?
-  public let status: Order_Status?
+  public let status: OrderStatus?
   public let complete: Bool?
 
   public init(
@@ -13,7 +13,7 @@ public struct Order: Codable {
     petId: Int64? = nil,
     quantity: Int32? = nil,
     shipDate: Date? = nil,
-    status: Order_Status? = nil,
+    status: OrderStatus? = nil,
     complete: Bool? = nil
   ) {
     self.id = id

@@ -14,8 +14,9 @@ import {
  * Swift: backtick-escaping for the reserved-keyword set.
  */
 export function paramIdent(name: string): string {
+  const ident = softCamel(name).replace(/[^A-Za-z0-9_]/g, "") || "value";
   return escapeIfReserved(
-    avoidLeadingDigit(softCamel(name)),
+    avoidLeadingDigit(ident),
     SWIFT_RESERVED_KEYWORDS,
     (s) => `\`${s}\``,
   );
@@ -117,7 +118,16 @@ const SWIFT_RESERVED_KEYWORDS: ReadonlySet<string> = new Set([
   "willSet",
 ]);
 
+/** `typeIdent` joined into the UpperCamelCase form Swift type names use. */
+export function swiftTypeIdent(name: string): string {
+  const joined = typeIdent(name)
+    .replace(/_+([A-Za-z0-9])/g, (_, c: string) => c.toUpperCase())
+    .replace(/_/g, "");
+  const pascal = joined.replace(/^./, (c) => c.toUpperCase());
+  return /^[0-9]/.test(pascal) ? `X${pascal}` : pascal || "Empty";
+}
+
 /** Owns every top-level Swift type name for one generation run. */
 export function newTypeNames(): Namespace {
-  return new Namespace({ normalize: typeIdent });
+  return new Namespace({ normalize: swiftTypeIdent });
 }

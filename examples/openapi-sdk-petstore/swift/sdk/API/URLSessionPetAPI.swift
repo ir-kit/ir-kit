@@ -119,7 +119,7 @@ public final class URLSessionPetAPI: PetAPI {
 
   /// GET /pet/findByStatus
   public func findPetsByStatus(
-    status: FindPetsByStatus_Param_Status,
+    status: FindPetsByStatusParamStatus,
     options: RequestOptions = RequestOptions()
   ) async throws -> [Pet] {
     let client = options.client ?? self.client
@@ -157,7 +157,7 @@ public final class URLSessionPetAPI: PetAPI {
 
   /// GET /pet/findByStatus
   public func findPetsByStatusWithResponse(
-    status: FindPetsByStatus_Param_Status,
+    status: FindPetsByStatusParamStatus,
     options: RequestOptions = RequestOptions()
   ) async throws -> ([Pet], HTTPURLResponse) {
     let client = options.client ?? self.client
@@ -641,9 +641,9 @@ public final class URLSessionPetAPI: PetAPI {
 
   /// POST /tags
   public func submitTags(
-    body: SubmitTags_Body,
+    body: SubmitTagsBody,
     options: RequestOptions = RequestOptions()
-  ) async throws -> SubmitTags_Response {
+  ) async throws -> SubmitTagsResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = URLEncoding.path(baseURL, ["tags"])
@@ -658,16 +658,16 @@ public final class URLSessionPetAPI: PetAPI {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
     return try await client.execute(
-      request, as: SubmitTags_Response.self, extraInterceptors: options.requestInterceptors,
+      request, as: SubmitTagsResponse.self, extraInterceptors: options.requestInterceptors,
       responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
     )
   }
 
   /// POST /tags
   public func submitTagsWithResponse(
-    body: SubmitTags_Body,
+    body: SubmitTagsBody,
     options: RequestOptions = RequestOptions()
-  ) async throws -> (SubmitTags_Response, HTTPURLResponse) {
+  ) async throws -> (SubmitTagsResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = URLEncoding.path(baseURL, ["tags"])
@@ -682,7 +682,7 @@ public final class URLSessionPetAPI: PetAPI {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
     return try await client.executeWithResponse(
-      request, as: SubmitTags_Response.self, extraInterceptors: options.requestInterceptors,
+      request, as: SubmitTagsResponse.self, extraInterceptors: options.requestInterceptors,
       responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
     )
   }

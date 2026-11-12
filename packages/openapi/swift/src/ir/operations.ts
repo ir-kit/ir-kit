@@ -20,7 +20,7 @@ import {
   swTryAwait,
   swTupleType,
 } from "../ast/index.js";
-import { newTypeNames } from "./identifiers.js";
+import { newTypeNames, swiftTypeIdent } from "./identifiers.js";
 import { buildClientClass } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -74,7 +74,7 @@ export function operationsToDecls(
 ): SwDecl[] {
   const defaultTag = opts.defaultTag ?? "Default";
   const protocolName =
-    opts.protocolName ?? ((tag: string) => `${pascal(tag)}API`);
+    opts.protocolName ?? ((tag: string) => `${swiftTypeIdent(tag)}API`);
   const clientClassName =
     opts.clientClassName ?? ((p: string) => `URLSession${p}`);
 

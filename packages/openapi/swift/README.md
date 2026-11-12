@@ -36,7 +36,7 @@ public struct Pet: Codable {
     public let category: Category?
     public let photoUrls: [String]
     public let tags: [Tag]?
-    public let status: Pet_Status?
+    public let status: PetStatus?
 
     public init(
         id: Int64? = nil,
@@ -44,11 +44,11 @@ public struct Pet: Codable {
         category: Category? = nil,
         photoUrls: [String],
         tags: [Tag]? = nil,
-        status: Pet_Status? = nil
+        status: PetStatus? = nil
     ) { /* … */ }
 }
 
-public enum Pet_Status: String, Codable {
+public enum PetStatus: String, Codable {
     case available = "available"
     case pending = "pending"
     case sold = "sold"
@@ -163,7 +163,7 @@ public enum APIError: Error {
 When an operation declares more than one 2xx response code with distinct schemas, the generator emits a sum-type enum and the impl dispatches on `httpResponse.statusCode`:
 
 ```swift
-public enum SubmitJob_Response {
+public enum SubmitJobResponse {
     case status200(JobResult)
     case status202(Pending)
     case status204
@@ -223,7 +223,7 @@ sdk-swift/
 │   └── RequestOptions.swift
 └── Models/
     ├── Pet.swift                   # Codable structs
-    ├── Pet_Status.swift            # enums
+    ├── PetStatus.swift            # enums
     └── …
 ```
 

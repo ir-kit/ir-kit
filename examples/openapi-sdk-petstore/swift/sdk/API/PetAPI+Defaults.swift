@@ -22,13 +22,13 @@ extension PetAPI {
   }
 
   /// GET /pet/findByStatus
-  public func findPetsByStatus(status: FindPetsByStatus_Param_Status) async throws -> [Pet] {
+  public func findPetsByStatus(status: FindPetsByStatusParamStatus) async throws -> [Pet] {
     return try await self.findPetsByStatus(status: status, options: RequestOptions())
   }
 
   /// GET /pet/findByStatus
   public func findPetsByStatusWithResponse(
-    status: FindPetsByStatus_Param_Status
+    status: FindPetsByStatusParamStatus
   ) async throws -> ([Pet], HTTPURLResponse) {
     return try await self.findPetsByStatusWithResponse(status: status, options: RequestOptions())
   }
@@ -130,14 +130,14 @@ extension PetAPI {
   }
 
   /// POST /tags
-  public func submitTags(body: SubmitTags_Body) async throws -> SubmitTags_Response {
+  public func submitTags(body: SubmitTagsBody) async throws -> SubmitTagsResponse {
     return try await self.submitTags(body: body, options: RequestOptions())
   }
 
   /// POST /tags
   public func submitTagsWithResponse(
-    body: SubmitTags_Body
-  ) async throws -> (SubmitTags_Response, HTTPURLResponse) {
+    body: SubmitTagsBody
+  ) async throws -> (SubmitTagsResponse, HTTPURLResponse) {
     return try await self.submitTagsWithResponse(body: body, options: RequestOptions())
   }
 }
