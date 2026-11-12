@@ -12,7 +12,8 @@ import {
   goFuncParam,
   goPtr,
   goSlice,
-} from "../../go-dsl/index.js";
+  isNilable,
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
@@ -43,7 +44,7 @@ export function buildBodyParams(
       return [goFuncParam("body", goBytes())];
     case "json-typed": {
       const t = schemaToType(schema, { ...ctx, propPath: ["body"] });
-      const finalType = t.kind === "ptr" ? t : goPtr(t);
+      const finalType = goPtr(t);
       return [goFuncParam("body", finalType)];
     }
     case "multipart-object":
@@ -54,12 +55,6 @@ export function buildBodyParams(
       return [goFuncParam("body", goBytes())];
   }
 }
-
-const isPointerable = (t: GoType): boolean =>
-  t.kind !== "ptr" &&
-  t.kind !== "slice" &&
-  t.kind !== "map" &&
-  t.kind !== "interface";
 
 function objectBodyToFlatParams(
   schema: Schema,
@@ -72,7 +67,7 @@ function objectBodyToFlatParams(
         binaryAsBytes && isBinary
           ? goBytes()
           : schemaToType(propSchema, { ...ctx, propPath: ["body", propName] });
-      const finalType = required || !isPointerable(t) ? t : goPtr(t);
+      const finalType = required || isNilable(t) ? t : goPtr(t);
       return goFuncParam(paramIdent(propName), finalType);
     },
   );

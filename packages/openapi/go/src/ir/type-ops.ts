@@ -1,7 +1,7 @@
 import { Namespace } from "@ir-kit/codegen-core";
 import { type Schema, type SchemaToTypeOps } from "@ir-kit/openapi";
 
-import type { GoDecl } from "../go-dsl/decl/types.js";
+import type { GoDecl } from "../ast/index.js";
 import {
   type GoType,
   goAny,
@@ -18,19 +18,11 @@ import {
   goString,
   goStruct,
   goTypeAlias,
-} from "../go-dsl/index.js";
+  isNilable,
+} from "../ast/index.js";
 import { enumEntrySuffix, exportedIdent, synthName } from "./identifiers.js";
 import { typeForPrimitive } from "./type/primitive.js";
 import { propertyName } from "./type/property-naming.js";
-
-const isMapOrSlice = (t: GoType): boolean =>
-  t.kind === "map" || t.kind === "slice";
-
-const isPointerable = (t: GoType): boolean =>
-  t.kind !== "ptr" &&
-  t.kind !== "slice" &&
-  t.kind !== "map" &&
-  t.kind !== "interface";
 
 function integerEntrySuffix(n: number): string {
   return n < 0 ? `Neg${Math.abs(n)}` : String(n);
@@ -50,7 +42,7 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
   anyType: () => goAny,
   nullableAnyType: () => goPtr(goAny),
   wrapForUnionSingle: (inner, nullable) =>
-    nullable && isPointerable(inner) ? goPtr(inner) : inner,
+    nullable && !isNilable(inner) ? goPtr(inner) : inner,
   unionFallback: () => goAny,
   primitiveType: typeForPrimitive,
   synthName,
@@ -67,11 +59,10 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
           propPath: [propPathSegment],
         });
         const optional = !required;
-        const finalType =
-          optional && t.kind !== "ptr" && !isMapOrSlice(t) ? goPtr(t) : t;
+        const finalType = optional && !isNilable(t) ? goPtr(t) : t;
         const tag = optional
-          ? `\`json:"${naming.jsonKey},omitempty"\``
-          : `\`json:"${naming.jsonKey}"\``;
+          ? `json:"${naming.jsonKey},omitempty"`
+          : `json:"${naming.jsonKey}"`;
         return goField(goName, finalType, tag);
       },
     );

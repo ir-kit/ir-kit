@@ -67,11 +67,7 @@ describe("operationsToDecls", () => {
     );
     assert.ok(ctor);
     const methods = decls.filter(
-      (d) =>
-        d.kind === "func" &&
-        d.receiver?.type.kind === "ptr" &&
-        d.receiver.type.inner.kind === "ref" &&
-        d.receiver.type.inner.name === "NetHTTPUsersAPI",
+      (d) => d.kind === "func" && d.receiver === "NetHTTPUsersAPI",
     );
     // One per op + one *WithResponse twin.
     assert.equal(methods.length, 2);

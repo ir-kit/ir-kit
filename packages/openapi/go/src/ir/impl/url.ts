@@ -16,7 +16,7 @@ import {
   goSelector,
   goShort,
   goStr,
-} from "../../go-dsl/index.js";
+} from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { ErrCheckFn } from "./errors.js";
 

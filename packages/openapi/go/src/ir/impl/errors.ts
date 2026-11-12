@@ -8,7 +8,7 @@ import {
   goNe,
   goNil,
   goReturn,
-} from "../../go-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * The kind of `APIError` to wrap a transient `err` in. Drives which

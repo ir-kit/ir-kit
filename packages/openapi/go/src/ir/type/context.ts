@@ -1,5 +1,5 @@
 import type { TypeCtx as IRTypeCtx } from "@ir-kit/openapi";
 
-import type { GoDecl } from "../../go-dsl/decl/types.js";
+import type { GoDecl } from "../../ast/index.js";
 
 export type TypeCtx = IRTypeCtx<GoDecl>;

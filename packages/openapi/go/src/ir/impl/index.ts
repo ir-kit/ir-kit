@@ -4,8 +4,10 @@ import {
   type GoFuncResult,
   type GoStmt,
   type GoType,
+  goAddr,
   goAssign,
   goCall,
+  goEq,
   goError,
   goExprStmt,
   goField,
@@ -15,17 +17,20 @@ import {
   goFuncResult,
   goIdent,
   goIf,
+  goIndex,
   goNil,
   goPtr,
   goReceiver,
   goRef,
+  goReturn,
   goSelector,
   goShort,
   goSliceLit,
   goStr,
   goString,
   goStruct,
-} from "../../go-dsl/index.js";
+  goStructLit,
+} from "../../ast/index.js";
 import type { OperationSignature } from "../operation/signature.js";
 import { buildBodyStmts } from "./body.js";
 import { buildSendAndDecodeStmts } from "./decode.js";
@@ -80,20 +85,13 @@ export function buildClientStruct(
       params: [goFuncParam("client", goPtr(goRef("APIClient")))],
       results: [goFuncResult(goPtr(goRef(className)))],
       body: [
-        {
-          kind: "return",
-          values: [
-            {
-              kind: "unary",
-              op: "&",
-              operand: {
-                kind: "structLit",
-                type: goRef(className),
-                fields: [{ name: "client", value: goIdent("client") }],
-              },
-            },
-          ],
-        },
+        goReturn([
+          goAddr(
+            goStructLit(goRef(className), [
+              { name: "client", value: goIdent("client") },
+            ]),
+          ),
+        ]),
       ],
     }),
   );
@@ -192,7 +190,7 @@ function resolveOverrideStmts(): GoStmt[] {
           ]),
         ],
       ),
-      { kind: "return", values: [] },
+      goReturn(),
     ]),
     goShort(["baseURL"], [goSelector(goIdent("opts"), "BaseURL")]),
     goIf(goEqEmpty(goIdent("baseURL")), [
@@ -205,11 +203,11 @@ function resolveOverrideStmts(): GoStmt[] {
 }
 
 function goEqNil(e: GoExpr): GoExpr {
-  return { kind: "binOp", op: "==", left: e, right: goNil };
+  return goEq(e, goNil);
 }
 
 function goEqEmpty(e: GoExpr): GoExpr {
-  return { kind: "binOp", op: "==", left: e, right: goStr("") };
+  return goEq(e, goStr(""));
 }
 
 function applyOptionsHeadersStmt(): GoStmt {
@@ -238,13 +236,7 @@ function applyAuthStmts(schemeNames: ReadonlyArray<string>): GoStmt[] {
       [
         goShort(
           ["auth", "ok"],
-          [
-            {
-              kind: "index",
-              on: goSelector(goIdent("client"), "Auth"),
-              index: goIdent("name"),
-            },
-          ],
+          [goIndex(goSelector(goIdent("client"), "Auth"), goIdent("name"))],
         ),
         goIf(goIdent("ok"), [
           goAssign(

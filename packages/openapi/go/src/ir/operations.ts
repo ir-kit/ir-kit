@@ -13,7 +13,7 @@ import {
   goMethodSig,
   goPtr,
   goRef,
-} from "../go-dsl/index.js";
+} from "../ast/index.js";
 import { exportedIdent, newTypeNames, tagFileName } from "./identifiers.js";
 import { buildClientStruct } from "./impl/index.js";
 import {

@@ -1,5 +1,5 @@
 import { posix as pathPosix } from "node:path";
-import type { GoDecl } from "../go-dsl/decl/types.js";
+import type { GoDecl } from "../ast/index.js";
 
 export interface PlacementOptions {
   /** Per-decl override; `undefined` falls back to the default
