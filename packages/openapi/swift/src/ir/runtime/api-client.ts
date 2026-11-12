@@ -118,10 +118,10 @@ export function apiClientDecl(opts: ApiClientOptions = {}): SwClass {
     properties: clientProps(opts),
     inits: [clientInit()],
     funs: [
-      executeDecodable(),
-      executeVoid(),
-      executeDecodableWithResponse(),
-      executeVoidWithResponse(),
+      executeFn(true, false),
+      executeFn(false, false),
+      executeFn(true, true),
+      executeFn(false, true),
       executeRawFn(),
       sendAndDispatchFn(),
     ],
@@ -228,7 +228,7 @@ function applyValidatorAndTransformerStmts(): ReadonlyArray<
   ];
 }
 
-function perCallHookParams() {
+function perCallHookParams(transform: boolean) {
   return [
     swFunParam({
       name: "extraInterceptors",
@@ -240,187 +240,86 @@ function perCallHookParams() {
       type: swOptional(VALIDATOR_FN),
       default: "nil",
     }),
-    swFunParam({
-      name: "responseTransformer",
-      type: swOptional(TRANSFORMER_FN),
-      default: "nil",
-    }),
+    ...(transform
+      ? [
+          swFunParam({
+            name: "responseTransformer",
+            type: swOptional(TRANSFORMER_FN),
+            default: "nil",
+          }),
+        ]
+      : []),
   ];
 }
 
-function executeDecodable(): SwFun {
-  const T = swRef("T");
-  return swFun({
-    name: "execute",
-    access: "public",
-    effects: ["async", "throws"],
-    generics: [swGenericParam("T", ["Decodable"])],
-    params: [
-      swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
-      swFunParam({ name: "type", label: "as", type: swRef("T.Type") }),
-      ...perCallHookParams(),
-    ],
-    returnType: T,
-    body: [
-      swLet(
-        swTupleBinding(["data", "httpResponse"]),
-        swTryAwait(sendAndDispatchCall()),
-      ),
-      ...applyValidatorAndTransformerStmts(),
-      swDoCatch(
-        [
-          swReturn(
-            swTry(
-              swCall(swMember(swIdent("decoder"), "decode"), [
-                swArg(swTypeRef(T)),
-                swArg(swIdent("body"), "from"),
-              ]),
-            ),
-          ),
-        ],
-        [
-          swThrow(
-            swCall(swMember(swIdent("APIError"), "decodingFailed"), [
-              swArg(swIdent("error")),
-            ]),
-          ),
-        ],
-      ),
-    ],
-  });
-}
-
 /**
- * `func executeWithResponse<T: Decodable>(_:as:…) async throws -> (T, HTTPURLResponse)`
- *
- * Same pipeline as `execute<T>` but bundles the decoded value with the
- * `HTTPURLResponse`. Callers reach for this when they need response
- * headers (pagination cursors, ETag, rate-limit, …).
+ * `execute` / `executeWithResponse`, decoding into `T` or returning nothing.
+ * The `WithResponse` forms also hand back the `HTTPURLResponse` so callers
+ * can read headers (pagination cursors, ETag, rate limits).
  */
-function executeDecodableWithResponse(): SwFun {
+function executeFn(decodable: boolean, withResponse: boolean): SwFun {
   const T = swRef("T");
-  return swFun({
-    name: "executeWithResponse",
-    access: "public",
-    effects: ["async", "throws"],
-    generics: [swGenericParam("T", ["Decodable"])],
-    params: [
-      swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
-      swFunParam({ name: "type", label: "as", type: swRef("T.Type") }),
-      ...perCallHookParams(),
-    ],
-    returnType: swTupleType([T, swRef("HTTPURLResponse")]),
-    body: [
-      swLet(
-        swTupleBinding(["data", "httpResponse"]),
-        swTryAwait(sendAndDispatchCall()),
-      ),
-      ...applyValidatorAndTransformerStmts(),
-      swDoCatch(
-        [
-          swLet(
-            "value",
-            swTry(
-              swCall(swMember(swIdent("decoder"), "decode"), [
-                swArg(swTypeRef(T)),
-                swArg(swIdent("body"), "from"),
-              ]),
-            ),
-          ),
-          swReturn(swTuple([swIdent("value"), swIdent("httpResponse")])),
-        ],
-        [
-          swThrow(
-            swCall(swMember(swIdent("APIError"), "decodingFailed"), [
-              swArg(swIdent("error")),
-            ]),
-          ),
-        ],
-      ),
-    ],
-  });
-}
-
-/**
- * `func executeWithResponse(_:…) async throws -> HTTPURLResponse`
- *
- * Void-returning variant — surfaces the response so callers can read
- * headers from a 204 / no-body endpoint.
- */
-function executeVoidWithResponse(): SwFun {
-  return swFun({
-    name: "executeWithResponse",
-    access: "public",
-    effects: ["async", "throws"],
-    params: [
-      swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
-      swFunParam({
-        name: "extraInterceptors",
-        type: swArray(INTERCEPTOR_FN),
-        default: "[]",
-      }),
-      swFunParam({
-        name: "responseValidator",
-        type: swOptional(VALIDATOR_FN),
-        default: "nil",
-      }),
-    ],
-    returnType: swRef("HTTPURLResponse"),
-    body: [
-      swLet(
-        swTupleBinding(["data", "httpResponse"]),
-        swTryAwait(sendAndDispatchCall()),
-      ),
-      swIfLet("validator", swIdent("responseValidator"), [
-        swExprStmt(
-          swTryAwait(
-            swCall(swIdent("validator"), [
-              swArg(swIdent("data")),
-              swArg(swIdent("httpResponse")),
-            ]),
-          ),
+  const send = swLet(
+    swTupleBinding(["data", "httpResponse"]),
+    swTryAwait(sendAndDispatchCall()),
+  );
+  const decode = swTry(
+    swCall(swMember(swIdent("decoder"), "decode"), [
+      swArg(swTypeRef(T)),
+      swArg(swIdent("body"), "from"),
+    ]),
+  );
+  const decodableBody = [
+    send,
+    ...applyValidatorAndTransformerStmts(),
+    swDoCatch(
+      withResponse
+        ? [
+            swLet("value", decode),
+            swReturn(swTuple([swIdent("value"), swIdent("httpResponse")])),
+          ]
+        : [swReturn(decode)],
+      [
+        swThrow(
+          swCall(swMember(swIdent("APIError"), "decodingFailed"), [
+            swArg(swIdent("error")),
+          ]),
         ),
-      ]),
-      swReturn(swIdent("httpResponse")),
-    ],
-  });
-}
-
-function executeVoid(): SwFun {
+      ],
+    ),
+  ];
+  const voidBody = [
+    send,
+    swIfLet("validator", swIdent("responseValidator"), [
+      swExprStmt(
+        swTryAwait(
+          swCall(swIdent("validator"), [
+            swArg(swIdent("data")),
+            swArg(swIdent("httpResponse")),
+          ]),
+        ),
+      ),
+    ]),
+    ...(withResponse ? [swReturn(swIdent("httpResponse"))] : []),
+  ];
   return swFun({
-    name: "execute",
+    name: withResponse ? "executeWithResponse" : "execute",
     access: "public",
     effects: ["async", "throws"],
+    generics: decodable ? [swGenericParam("T", ["Decodable"])] : undefined,
     params: [
       swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
-      swFunParam({
-        name: "extraInterceptors",
-        type: swArray(INTERCEPTOR_FN),
-        default: "[]",
-      }),
-      swFunParam({
-        name: "responseValidator",
-        type: swOptional(VALIDATOR_FN),
-        default: "nil",
-      }),
+      ...(decodable
+        ? [swFunParam({ name: "type", label: "as", type: swRef("T.Type") })]
+        : []),
+      ...perCallHookParams(decodable),
     ],
-    returnType: swRef("Void"),
-    body: [
-      swLet(
-        swTupleBinding(["data", "httpResponse"]),
-        swTryAwait(sendAndDispatchCall()),
-      ),
-      swIfLet("validator", swIdent("responseValidator"), [
-        swExprStmt(
-          swTryAwait(
-            swCall(swIdent("validator"), [
-              swArg(swIdent("data")),
-              swArg(swIdent("httpResponse")),
-            ]),
-          ),
-        ),
-      ]),
-    ],
+    returnType: decodable
+      ? withResponse
+        ? swTupleType([T, swRef("HTTPURLResponse")])
+        : T
+      : swRef(withResponse ? "HTTPURLResponse" : "Void"),
+    body: decodable ? decodableBody : voidBody,
   });
 }
 
@@ -467,7 +366,7 @@ function executeRawFn(): SwFun {
     effects: ["async", "throws"],
     params: [
       swFunParam({ name: "request", label: "_", type: URL_REQUEST }),
-      ...perCallHookParams(),
+      ...perCallHookParams(true),
     ],
     returnType: swTupleType([swData, swRef("HTTPURLResponse")]),
     body: [

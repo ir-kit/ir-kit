@@ -1,12 +1,9 @@
 import { resolve } from "node:path";
 
 import { defaultProjectName, writeOutput } from "@ir-kit/codegen-core";
-import {
-  extractSecuritySchemeNames,
-  type NormalizeOptions,
-} from "@ir-kit/openapi";
+import type { NormalizeOptions } from "@ir-kit/openapi";
 import { loadOpenAPI } from "@ir-kit/openapi-loader";
-import { parseSpec } from "@ir-kit/openapi-tools/parse";
+import { parseForCodegen } from "@ir-kit/openapi-tools/parse";
 import { newTypeNames } from "./ir/identifiers.js";
 import {
   aliasesOf,
@@ -68,11 +65,9 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const bundled = await loadOpenAPI({
-    input: opts.input,
-    normalize: opts.normalize,
-  });
-  const ir = parseSpec(bundled);
+  const { ir, securitySchemeNames } = parseForCodegen(
+    await loadOpenAPI({ input: opts.input, normalize: opts.normalize }),
+  );
   const names = newTypeNames();
 
   const schemaDecls = schemasToDecls(ir.components?.schemas ?? {}, names);
@@ -82,7 +77,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     clientClassName: opts.clientClassName,
     interfaceOnly: opts.interfaceOnly,
     openImpl: opts.openImpl,
-    securitySchemeNames: extractSecuritySchemeNames(bundled),
+    securitySchemeNames,
     names,
     aliases: new Map(aliasesOf(schemaDecls)),
   });
