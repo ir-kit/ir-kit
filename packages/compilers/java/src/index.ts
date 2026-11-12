@@ -1,7 +1,9 @@
 import type { JavaEnumConstant as _JavaEnumConstant } from "./nodes/declarations/enum.js";
 import type { JavaMethodDeclaration as _JavaMethodDeclaration } from "./nodes/declarations/method.js";
 import type { JavaMethodParameter as _JavaMethodParameter } from "./nodes/declarations/method-parameter.js";
+import type { JavaModifier as _JavaModifier } from "./nodes/declarations/variable.js";
 import type { JavaExpression as _JavaExpression } from "./nodes/expression.js";
+import type { JavaBinaryOperator as _JavaBinaryOperator } from "./nodes/expressions/binary.js";
 import type { JavaLambdaParameter as _JavaLambdaParameter } from "./nodes/expressions/lambda.js";
 import { factory } from "./nodes/factory.js";
 import { JavaNodeKind } from "./nodes/kinds.js";
@@ -23,4 +25,6 @@ export declare namespace java {
   export type LambdaParameter = _JavaLambdaParameter;
   export type MethodDeclaration = _JavaMethodDeclaration;
   export type MethodParameter = _JavaMethodParameter;
+  export type BinaryOperator = _JavaBinaryOperator;
+  export type Modifier = _JavaModifier;
 }

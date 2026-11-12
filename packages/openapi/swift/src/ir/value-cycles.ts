@@ -14,14 +14,6 @@ const INDIRECT: ReadonlySet<string> = new Set([
   K.InitializerDeclaration,
 ]);
 
-type ClassArgs = Parameters<typeof f.createClassDeclaration>;
-interface StructNode {
-  name: string;
-  members: ClassArgs[1];
-  modifiers?: ClassArgs[2];
-  inheritanceClause?: ClassArgs[3];
-}
-
 /**
  * Structs whose stored properties reach themselves by value have
  * infinite size. Each struct on such a cycle becomes a `final class`,
@@ -53,7 +45,8 @@ export function boxValueCycles(decls: ReadonlyArray<SwDecl>): SwDecl[] {
 }
 
 function toFinalClass(d: SwDecl): SwDecl {
-  const s = d.node as unknown as StructNode;
+  const s = d.node;
+  if (s.kind !== K.StructDeclaration) return d;
   return {
     ...d,
     kind: "class",
