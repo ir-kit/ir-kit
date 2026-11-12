@@ -1,6 +1,6 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { ClientType } from "../types";
-import type { ClientGeneratorInput, ClientTypeConfig } from "./types";
+import type { ClientType } from "../types.js";
+import type { ClientGeneratorInput, ClientTypeConfig } from "./types.js";
 
 /**
  * Client type configurations.

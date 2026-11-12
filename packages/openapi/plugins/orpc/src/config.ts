@@ -7,9 +7,9 @@ import {
   resolveNaming,
 } from "@hey-api/shared";
 
-import { handler } from "./plugin";
-import { orpcImports } from "./symbols/external";
-import type { ORPCPlugin, ServerConfig, UserConfig } from "./types";
+import { handler } from "./plugin.js";
+import { orpcImports } from "./symbols/external.js";
+import type { ORPCPlugin, ServerConfig, UserConfig } from "./types.js";
 
 function resolveHandlers(server: UserConfig["server"]):
   | false
@@ -17,10 +17,10 @@ function resolveHandlers(server: UserConfig["server"]):
       dir: string;
       importAlias?: string;
       implementer?: { name: string; from: string };
-      mode: import("./types").HandlerMode;
+      mode: import("./types.js").HandlerMode;
       override: boolean;
-      faker?: import("./types").FakerHandlerConfig;
-      proxy?: import("./types").ProxyHandlerConfig;
+      faker?: import("./types.js").FakerHandlerConfig;
+      proxy?: import("./types.js").ProxyHandlerConfig;
     } {
   const handlers = server?.handlers;
   const implementation = server?.implementation ?? false;

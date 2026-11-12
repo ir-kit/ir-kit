@@ -6,7 +6,7 @@ import type {
   Plugin,
 } from "@hey-api/shared";
 
-import type { IApi } from "./api";
+import type { IApi } from "./api.js";
 
 export type UserConfig = Plugin.Hooks &
   Plugin.UserExports & {

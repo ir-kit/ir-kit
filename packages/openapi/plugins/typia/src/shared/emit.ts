@@ -5,8 +5,8 @@ import {
   type Casing,
   type NameTransformer,
 } from "@hey-api/shared";
-import type { TypiaPlugin } from "../types";
-import type { RequestInputType } from "./operation";
+import type { TypiaPlugin } from "../types.js";
+import type { RequestInputType } from "./operation.js";
 
 const BULK_SCHEMAS_NAME = "typiaSchemas";
 

@@ -6,10 +6,10 @@ import {
   type ResponseSchemaInfo,
 } from "@ir-kit/openapi-ts-faker/core";
 
-import type { RouterNode } from "../router-organizer";
-import type { FakerHandlerConfig } from "../types";
-import { operationName } from "../utils";
-import type { GeneratorContext } from "./types";
+import type { RouterNode } from "../router-organizer.js";
+import type { FakerHandlerConfig } from "../types.js";
+import { operationName } from "../utils.js";
+import type { GeneratorContext } from "./types.js";
 
 export interface FakerGeneratorInput {
   plugin: GeneratorContext["plugin"];

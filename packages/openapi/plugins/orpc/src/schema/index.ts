@@ -1,1 +1,1 @@
-export { extractResponseSchema } from "./extractor";
+export { extractResponseSchema } from "./extractor.js";

@@ -3,7 +3,7 @@ import { $ } from "@hey-api/openapi-ts";
 import type { IR, NamingConfig } from "@hey-api/shared";
 import { OperationPath } from "@hey-api/shared";
 
-import { operationName } from "./utils";
+import { operationName } from "./utils.js";
 
 const pathStrategy = OperationPath.fromPath();
 const operationIdStrategy = OperationPath.fromOperationId();

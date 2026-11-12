@@ -1,5 +1,5 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { GeneratorContext } from "./types";
+import type { GeneratorContext } from "./types.js";
 
 /**
  * Generates TanStack Query utilities for oRPC.

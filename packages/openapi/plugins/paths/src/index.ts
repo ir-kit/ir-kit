@@ -1,4 +1,4 @@
-import "./types";
+import "./types.js";
 
-export { defaultConfig, defineConfig } from "./config";
-export type { PathsPlugin } from "./types";
+export { defaultConfig, defineConfig } from "./config.js";
+export type { PathsPlugin } from "./types.js";

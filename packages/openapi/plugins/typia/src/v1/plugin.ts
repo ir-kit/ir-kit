@@ -11,15 +11,15 @@ import {
   emitJsonSchemaTwin,
   emitValidator,
   registerTypiaSymbol,
-} from "../shared/emit";
+} from "../shared/emit.js";
 import {
   buildRequestInputType,
   queryDataTypeSymbol,
   queryErrorsTypeSymbol,
   queryResponseTypeSymbol,
   type RequestInputType,
-} from "../shared/operation";
-import type { TypiaPlugin } from "../types";
+} from "../shared/operation.js";
+import type { TypiaPlugin } from "../types.js";
 
 type SlotRole = "data" | "response" | `error-${number}`;
 

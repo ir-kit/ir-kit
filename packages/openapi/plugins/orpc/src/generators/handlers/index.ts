@@ -6,14 +6,19 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import type { RouterNode } from "../../router-organizer";
-import type { HandlerMode, ProxyHandlerConfig } from "../../types";
-import { operationName } from "../../utils";
-import type { FileGenContext } from "./ast";
-import { analyzeHandlerFile, buildFile, patchFile, safeVarName } from "./ast";
+import type { RouterNode } from "../../router-organizer.js";
+import type { HandlerMode, ProxyHandlerConfig } from "../../types.js";
+import { operationName } from "../../utils.js";
+import type { FileGenContext } from "./ast.js";
+import {
+  analyzeHandlerFile,
+  buildFile,
+  patchFile,
+  safeVarName,
+} from "./ast.js";
 
 // Re-export types that consumers need
-export type { PropertyInfo, ResponseSchemaInfo } from "./ast";
+export type { PropertyInfo, ResponseSchemaInfo } from "./ast.js";
 
 export interface HandlersGeneratorInput {
   /** Absolute path to the handlers directory. */

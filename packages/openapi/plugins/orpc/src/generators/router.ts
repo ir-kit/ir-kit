@@ -1,6 +1,6 @@
 import { $ } from "@hey-api/openapi-ts";
-import { buildRouterObject } from "../router-organizer";
-import type { RouterGeneratorInput, RouterGeneratorOutput } from "./types";
+import { buildRouterObject } from "../router-organizer.js";
+import type { RouterGeneratorInput, RouterGeneratorOutput } from "./types.js";
 
 /**
  * Generates the oRPC router from the contract structure.

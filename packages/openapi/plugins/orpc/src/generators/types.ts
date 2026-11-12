@@ -1,5 +1,5 @@
-import type { RouterNode } from "../router-organizer";
-import type { ClientType, ORPCPlugin } from "../types";
+import type { RouterNode } from "../router-organizer.js";
+import type { ClientType, ORPCPlugin } from "../types.js";
 
 /**
  * Plugin instance type for ORPC generators

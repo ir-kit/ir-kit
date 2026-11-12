@@ -7,8 +7,8 @@ import {
   type NamingRule,
 } from "@hey-api/shared";
 
-import { handler } from "./plugin";
-import type { PathsPlugin } from "./types";
+import { handler } from "./plugin.js";
+import type { PathsPlugin } from "./types.js";
 
 const CASINGS: ReadonlySet<string> = new Set<Casing>([
   "camelCase",

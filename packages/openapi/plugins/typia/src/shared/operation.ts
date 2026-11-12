@@ -3,7 +3,7 @@ import { $, type MaybeTsDsl, TsDsl, type TypeTsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import ts from "typescript";
 
-import type { TypiaPlugin } from "../types";
+import type { TypiaPlugin } from "../types.js";
 
 export type RequestInputType = MaybeTsDsl<TypeTsDsl<ts.TypeNode>>;
 

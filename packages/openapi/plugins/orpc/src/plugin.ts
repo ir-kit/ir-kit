@@ -1,5 +1,5 @@
 import { dirname, join, relative } from "node:path";
-
+import type { ResponseSchemaInfo } from "./generators/handlers/index.js";
 import {
   generateClients,
   generateContracts,
@@ -8,11 +8,10 @@ import {
   generateRouter,
   generateServer,
   generateTanstack,
-} from "./generators";
-import type { ResponseSchemaInfo } from "./generators/handlers";
-import { extractResponseSchema } from "./schema/extractor";
-import type { ClientType, ORPCPlugin } from "./types";
-import { operationName } from "./utils";
+} from "./generators/index.js";
+import { extractResponseSchema } from "./schema/extractor.js";
+import type { ClientType, ORPCPlugin } from "./types.js";
+import { operationName } from "./utils.js";
 
 /**
  * Main oRPC plugin handler.

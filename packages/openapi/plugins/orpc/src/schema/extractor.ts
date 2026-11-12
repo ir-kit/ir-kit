@@ -9,7 +9,7 @@ import type {
   PropertyInfo,
   ResponseSchemaInfo,
 } from "@ir-kit/openapi-ts-faker/core";
-import type { ORPCPlugin } from "../types";
+import type { ORPCPlugin } from "../types.js";
 
 type PluginCtx = ORPCPlugin["Instance"];
 

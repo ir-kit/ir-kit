@@ -1,7 +1,7 @@
 import { $ } from "@hey-api/openapi-ts";
 import { applyNaming } from "@hey-api/shared";
 
-import type { PathsPlugin } from "./types";
+import type { PathsPlugin } from "./types.js";
 
 /** `/users/{id}/posts/{postId}` → `/users/:id/posts/:postId` */
 function specToPattern(spec: string): string {

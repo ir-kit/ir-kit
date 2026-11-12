@@ -4,9 +4,9 @@ import {
   definePluginConfig,
 } from "@hey-api/shared";
 
-import { Api } from "./api";
-import { handler } from "./plugin";
-import type { TypiaPlugin } from "./types";
+import { Api } from "./api.js";
+import { handler } from "./plugin.js";
+import type { TypiaPlugin } from "./types.js";
 
 const namingCoercers = {
   boolean: (enabled: boolean) => ({ enabled }),

@@ -5,7 +5,7 @@ import type {
   Plugin,
 } from "@hey-api/shared";
 
-import type { ORPCImports } from "./symbols/external";
+import type { ORPCImports } from "./symbols/external.js";
 
 /**
  * Handler generation mode.

@@ -1,5 +1,5 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { ServerGeneratorInput } from "./types";
+import type { ServerGeneratorInput } from "./types.js";
 
 /**
  * Generates server implementation skeleton.

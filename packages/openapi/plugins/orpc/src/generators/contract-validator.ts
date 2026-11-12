@@ -8,7 +8,7 @@ import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { operationResponsesMap } from "@hey-api/shared";
 
-import type { ORPCPlugin } from "../types";
+import type { ORPCPlugin } from "../types.js";
 
 // ---------------------------------------------------------------------------
 // Types
