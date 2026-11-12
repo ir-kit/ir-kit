@@ -41,6 +41,20 @@ describe("function declaration", () => {
     await assertPrintedMatchesSnapshot(file([node]), "block-body.kt");
   });
 
+  it("moves a return type that does not fit onto its own line", async () => {
+    const node = f.createFunctionDeclaration(
+      "getMetadataTemplatesEnterpriseSecurityClassificationSchemaWithResponseAndALongerName",
+      [],
+      f.createUserType("Pair", [t("ClassificationTemplate"), t("Response")]),
+      undefined,
+      f.createCallExpression(id("fetchClassification"), []),
+      undefined,
+      undefined,
+      t("ClassificationsApi"),
+    );
+    await assertPrintedMatchesSnapshot(file([node]), "wrapped-return-type.kt");
+  });
+
   it("generic extension function", async () => {
     const node = f.createFunctionDeclaration(
       "second",

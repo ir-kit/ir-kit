@@ -187,6 +187,11 @@ export function createPrinter(options?: JavaPrinterOptions) {
       (items.length === 0 || base + before.length + open.length > maxLineLength)
     ) {
       wrapped = `${spaces(base)}${before.trimEnd()}\n${fitOrWrap(base + declIndent, open, items, suffix)}`;
+    } else if (
+      clause !== -1 &&
+      base + 4 + `${list}${suffix}`.length > maxLineLength
+    ) {
+      wrapped = `${fitOrWrap(base, head.slice(base, start), items, suffix.slice(0, clause))}\n${spaces(base + 4)}${suffix.slice(clause + 1)}`;
     } else {
       wrapped = fitOrWrap(base, head.slice(base, start), items, suffix);
     }
