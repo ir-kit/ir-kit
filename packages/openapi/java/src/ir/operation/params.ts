@@ -6,7 +6,7 @@ import {
 } from "@ir-kit/openapi";
 
 import { type JParam, jParam } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
@@ -18,7 +18,7 @@ export function buildNonBodyParams(
   located.sort((a, b) => Number(!a.param.required) - Number(!b.param.required));
   const params = located.map(({ param: p }) =>
     jParam(
-      paramIdent(p.name),
+      operationParamIdent(p.name),
       schemaToType(fromHeyApi(p.schema), {
         ...ctx,
         propPath: ["param", p.name],

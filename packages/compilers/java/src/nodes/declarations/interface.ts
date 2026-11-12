@@ -20,6 +20,7 @@ export interface JavaInterfaceDeclaration extends JavaNodeBase {
   kind: JavaNodeKind.InterfaceDeclaration;
   modifiers?: ReadonlyArray<string>;
   name: string;
+  permits?: ReadonlyArray<JavaExpression>;
   typeParameters?: ReadonlyArray<JavaTypeParameter>;
 }
 
@@ -33,6 +34,7 @@ export function createInterfaceDeclaration(
   typeParameters?: ReadonlyArray<JavaTypeParameter>,
   leadingComments?: ReadonlyArray<string>,
   trailingComments?: ReadonlyArray<string>,
+  permits?: ReadonlyArray<JavaExpression>,
 ): JavaInterfaceDeclaration {
   return {
     annotationInterface,
@@ -43,6 +45,7 @@ export function createInterfaceDeclaration(
     leadingComments,
     modifiers,
     name,
+    permits,
     trailingComments,
     typeParameters,
   };

@@ -19,6 +19,7 @@ import {
   jAssign,
   jBinary,
   jClass,
+  jDiamond,
   jExprStmt,
   jField,
   jForEach,
@@ -38,7 +39,7 @@ import {
   jTernary,
   jThrow,
 } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 import {
   type OperationSignature,
   optionsParam,
@@ -222,7 +223,7 @@ function segmentExpr(
   const parts = parseTemplatedSegment(seg, pathParams).map((p) =>
     p.kind === "literal"
       ? str(p.text)
-      : valueOf(ident(paramIdent(p.param ? p.param.name : p.name))),
+      : valueOf(ident(operationParamIdent(p.param ? p.param.name : p.name))),
   );
   if (parts.length === 0) return str("");
   return parts
@@ -234,7 +235,7 @@ function queryStmt(p: IR.ParameterObject): JStmt {
   const args: JExpr[] = [
     ident("query"),
     str(p.name),
-    ident(paramIdent(p.name)),
+    ident(operationParamIdent(p.name)),
   ];
   const isArray = p.schema.type === "array";
   if (isArray) {
@@ -256,7 +257,7 @@ function queryStyle(style: IR.ParameterObject["style"]): string {
 
 function headerStmts(sig: OperationSignature): JStmt[] {
   return paramsAt(sig.locatedParams, "header").map((p) => {
-    const id = ident(paramIdent(p.name));
+    const id = ident(operationParamIdent(p.name));
     const set = jExprStmt(
       jMethodCall(ident("builder"), "header", [str(p.name), valueOf(id)]),
     );
@@ -318,7 +319,7 @@ function bodyStmts(
               jMethodCall(ident("UrlEncoding"), "addScalar", [
                 ident("form"),
                 str(jsonKey),
-                ident(paramIdent(jsonKey)),
+                ident(operationParamIdent(jsonKey)),
               ]),
             ),
           ),
@@ -336,7 +337,7 @@ function bodyStmts(
     case "multipart-object": {
       const props = Array.from(iterateObjectProperties(schema));
       const parts = props.map(({ jsonKey, isBinary }) => {
-        const id = ident(paramIdent(jsonKey));
+        const id = ident(operationParamIdent(jsonKey));
         const append = isBinary
           ? jMethodCall(ident("form"), "appendFile", [
               str(jsonKey),
@@ -394,7 +395,7 @@ function multiDecodeStmts(
   const status = jMethodCall(jMethodCall(raw, "response"), "statusCode");
   const wrap = (value: JExpr) =>
     withResponse
-      ? jNew(jRef("ApiResult", []), [value, jMethodCall(raw, "response")])
+      ? jNew(jDiamond("ApiResult"), [value, jMethodCall(raw, "response")])
       : value;
   return [
     jLocal(

@@ -9,6 +9,7 @@ import {
   type JEmitted,
   type JType,
   jAnnotation,
+  jIdent,
   jInteger,
   jList,
   jLit,
@@ -17,7 +18,7 @@ import {
   jParam,
   jRecord,
   jRef,
-  jStringEnum,
+  jValueEnum,
   jVoid,
 } from "../ast/index.js";
 import { enumEntryIdent } from "./identifiers.js";
@@ -61,15 +62,28 @@ export const javaOps: SchemaToTypeOps<JType, JEmitted> = {
     }),
   emitStringEnum: (name, rawValues, emit) => {
     emit(
-      jStringEnum(
+      jValueEnum(
         name,
-        uniqueEnumEntries(rawValues, enumEntryIdent, (b, n) => `${b}_${n}`),
+        uniqueEnumEntries(rawValues, enumEntryIdent, (b, n) => `${b}_${n}`).map(
+          ({ identifier, raw }) => ({ identifier, value: jLit(raw) }),
+        ),
       ),
     );
     return jRef(name);
   },
-  emitIntegerEnum: (name, _rawValues, emit) => {
-    emit({ kind: "alias", name, target: jInteger });
+  emitIntegerEnum: (name, rawValues, emit) => {
+    const values = [...new Set(rawValues.map(Number))];
+    const wide = values.some((v) => v > 2147483647 || v < -2147483648);
+    emit(
+      jValueEnum(
+        name,
+        values.map((v) => ({
+          identifier: v < 0 ? `VALUE_MINUS_${-v}` : `VALUE_${v}`,
+          value: wide ? jIdent(`${v}L`) : jLit(v),
+        })),
+        jRef(wide ? "long" : "int"),
+      ),
+    );
     return jRef(name);
   },
 };
