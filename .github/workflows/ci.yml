@@ -40,6 +40,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Check published entry points load under Node
+        run: pnpm check:exports
+
       - name: Test
         run: pnpm test
         env:

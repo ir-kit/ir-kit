@@ -11,15 +11,15 @@ import {
   emitJsonSchemaTwin,
   emitValidator,
   registerTypiaSymbol,
-} from "../shared/emit";
+} from "../shared/emit.js";
 import {
   buildRequestInputType,
   queryDataTypeSymbol,
   queryErrorsTypeSymbol,
   queryResponseTypeSymbol,
   type RequestInputType,
-} from "../shared/operation";
-import type { TypiaPlugin } from "../types";
+} from "../shared/operation.js";
+import type { TypiaPlugin } from "../types.js";
 
 type SlotRole = "data" | "response" | `error-${number}`;
 
@@ -32,14 +32,6 @@ type CollectedSlot = {
 };
 
 export const handlerV1: TypiaPlugin["Handler"] = ({ plugin }) => {
-  plugin.symbol("createValidate", { external: "typia" });
-  plugin.symbol("json", { external: "typia" });
-  plugin.symbol("IValidation", { external: "typia", kind: "type" });
-  plugin.symbol("StandardSchemaV1", {
-    external: "@standard-schema/spec",
-    kind: "type",
-  });
-
   const slots: Array<CollectedSlot> = [];
 
   plugin.forEach("operation", (event) => {

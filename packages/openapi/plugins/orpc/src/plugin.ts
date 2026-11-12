@@ -1,5 +1,5 @@
 import { dirname, join, relative } from "node:path";
-
+import type { ResponseSchemaInfo } from "./generators/handlers/index.js";
 import {
   generateClients,
   generateContracts,
@@ -8,24 +8,16 @@ import {
   generateRouter,
   generateServer,
   generateTanstack,
-} from "./generators";
-import type { ResponseSchemaInfo } from "./generators/handlers";
-import { extractResponseSchema } from "./schema/extractor";
-import { registerExternalSymbols } from "./symbols/external";
-import type { ClientType, ORPCPlugin } from "./types";
-import { operationName } from "./utils";
+} from "./generators/index.js";
+import { extractResponseSchema } from "./schema/extractor.js";
+import type { ClientType, ORPCPlugin } from "./types.js";
+import { operationName } from "./utils.js";
 
 /**
  * Main oRPC plugin handler.
  * Orchestrates the generation pipeline.
  */
 export const handler: ORPCPlugin["Handler"] = ({ plugin }) => {
-  // ============================================================================
-  // External Symbols Registration
-  // ============================================================================
-
-  registerExternalSymbols(plugin, plugin.config);
-
   // ============================================================================
   // File Paths Configuration
   // ============================================================================

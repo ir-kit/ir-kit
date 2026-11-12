@@ -13,6 +13,7 @@ import type ts from "typescript";
 export class TsStatementNode implements ICoreNode<ts.Statement> {
   readonly "~brand" = nodeBrand;
   readonly language = "typescript";
+  meta: unknown = undefined;
   exported?: boolean;
   root: boolean;
   scope?: NodeScope;

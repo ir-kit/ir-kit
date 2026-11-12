@@ -1,3 +1,4 @@
+import type { Symbol } from "@hey-api/codegen-core";
 import type { DefinePlugin, IR, Plugin } from "@hey-api/shared";
 
 import type { FieldNameHints, FormatMapping } from "./core/types.js";
@@ -68,7 +69,9 @@ export type Config = Plugin.Hooks &
     respectConstraints: boolean;
   };
 
-export type FakerPlugin = DefinePlugin<UserConfig, Config>;
+export type FakerImports = { faker: Symbol };
+
+export type FakerPlugin = DefinePlugin<UserConfig, Config, never, FakerImports>;
 
 declare module "@hey-api/openapi-ts" {
   export interface PluginConfigMap {

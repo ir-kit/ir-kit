@@ -1,5 +1,5 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { GeneratorContext } from "./types";
+import type { GeneratorContext } from "./types.js";
 
 /**
  * Generates TanStack Query utilities for oRPC.
@@ -8,12 +8,9 @@ import type { GeneratorContext } from "./types";
 export const generateTanstack = (context: GeneratorContext): void => {
   const { plugin, routerSymbol, tanstackFile } = context;
 
-  const contractRouterClientSymbol = plugin.external(
-    "@orpc/contract.ContractRouterClient",
-  );
-  const createTanstackQueryUtilsSymbol = plugin.external(
-    "@orpc/tanstack-query.createTanstackQueryUtils",
-  );
+  const contractRouterClientSymbol = plugin.imports.ContractRouterClient;
+  const createTanstackQueryUtilsSymbol =
+    plugin.imports.createTanstackQueryUtils;
 
   const createOrpcUtilsSymbol = plugin.symbol("createOrpcUtils", {
     getFilePath: () => tanstackFile,
