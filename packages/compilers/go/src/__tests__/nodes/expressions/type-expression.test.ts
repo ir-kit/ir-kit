@@ -29,6 +29,19 @@ describe("type expression", () => {
               [f.createLiteral("go")],
             ),
           ),
+          f.createShortVarDeclaration(
+            "none",
+            f.createCallExpression(
+              f.createTypeExpression(
+                f.createPointerType(f.createIdentifier("int64")),
+              ),
+              [f.createIdentifier("nil")],
+            ),
+          ),
+          f.createAssignment(
+            [f.createIdentifier("_")],
+            [f.createIdentifier("none")],
+          ),
           f.createAssignment(
             [f.createIdentifier("_")],
             [f.createIdentifier("big")],
