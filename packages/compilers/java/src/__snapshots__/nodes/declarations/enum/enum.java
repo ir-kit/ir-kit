@@ -1,4 +1,7 @@
 public enum Color {
-  RED, GREEN, BLUE;
+  RED,
+  GREEN,
+  BLUE;
+
   String hex;
 }
