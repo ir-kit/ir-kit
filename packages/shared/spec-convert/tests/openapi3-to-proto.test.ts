@@ -296,3 +296,41 @@ describe("openAPIToProto", () => {
     );
   });
 });
+
+describe("openAPIToProto allOf", () => {
+  it("keeps nested fields every member declares for the same property", () => {
+    const { root } = convert(
+      spec(
+        {},
+        {
+          Base: {
+            type: "object",
+            properties: {
+              address: {
+                type: "object",
+                properties: { street: { type: "string" } },
+              },
+            },
+          },
+          Extended: {
+            allOf: [
+              { $ref: "#/components/schemas/Base" },
+              {
+                type: "object",
+                properties: {
+                  address: {
+                    type: "object",
+                    properties: { city: { type: "string" } },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ),
+    );
+    expect(
+      Object.keys(root.lookupType("pet_store.ExtendedAddress").fields),
+    ).toEqual(["street", "city"]);
+  });
+});

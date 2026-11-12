@@ -41,12 +41,12 @@ export function mergeObjectAllOf(doc: Json): void {
         if (!isObject(member)) return undefined;
         const flat = flatten(member, nextSeen);
         if (!flat) return undefined;
-        Object.assign(properties, flat.properties);
+        mergeProperties(properties, flat.properties);
         for (const r of flat.required) required.add(r);
       }
     }
     if (isObject(target.properties))
-      Object.assign(properties, target.properties);
+      mergeProperties(properties, target.properties);
     if (Array.isArray(target.required)) {
       for (const r of target.required) {
         if (typeof r === "string") required.add(r);
@@ -54,6 +54,31 @@ export function mergeObjectAllOf(doc: Json): void {
     }
     return { properties, required: [...required] };
   };
+
+  const isObjectSchema = (node: unknown): boolean => {
+    const target = isObject(node) ? resolve(node) : undefined;
+    return (
+      target !== undefined &&
+      (target.type === "object" ||
+        isObject(target.properties) ||
+        Array.isArray(target.allOf))
+    );
+  };
+
+  /** A property several members declare as an object keeps every
+   *  member's fields: the walk below flattens the nested `allOf`. */
+  function mergeProperties(into: Json, from: Json): void {
+    for (const [key, schema] of Object.entries(from)) {
+      const prev = into[key];
+      into[key] =
+        prev !== undefined &&
+        prev !== schema &&
+        isObjectSchema(prev) &&
+        isObjectSchema(schema)
+          ? { allOf: [prev, schema] }
+          : schema;
+    }
+  }
 
   const visited = new WeakSet<object>();
   const walk = (node: unknown): void => {
