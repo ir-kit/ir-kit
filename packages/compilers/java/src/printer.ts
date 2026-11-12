@@ -1,4 +1,5 @@
 import type { JavaNode } from "./nodes/base.js";
+import type { JavaMethodParameter } from "./nodes/declarations/method-parameter.js";
 import { JavaNodeKind } from "./nodes/kinds.js";
 
 export interface JavaPrinterOptions {
@@ -8,6 +9,17 @@ export interface JavaPrinterOptions {
 export function createPrinter(options?: JavaPrinterOptions) {
   const indentSize = options?.indentSize ?? 2;
   let indentLevel = 0;
+
+  function printParameter(p: JavaMethodParameter): string {
+    const anns = (p.annotations ?? [])
+      .map((ann) => `@${printNode(ann)} `)
+      .join("");
+    const mods = p.modifiers?.length ? `${p.modifiers.join(" ")} ` : "";
+    const typeTxt = p.type
+      ? `${printNode(p.type)}${p.varargs ? "..." : ""} `
+      : "";
+    return `${anns}${mods}${typeTxt}${p.name}`.trim();
+  }
 
   function printComments(
     parts: Array<string>,
@@ -381,6 +393,31 @@ export function createPrinter(options?: JavaPrinterOptions) {
         break;
       }
 
+      case JavaNodeKind.RecordDeclaration: {
+        if (node.annotations && node.annotations.length > 0) {
+          parts.push(
+            ...node.annotations.map((ann) => printLine(`@${printNode(ann)}`)),
+          );
+        }
+        const modifiers =
+          node.modifiers && node.modifiers.length > 0
+            ? `${node.modifiers.join(" ")} `
+            : "";
+        const implementsText =
+          node.implements && node.implements.length > 0
+            ? ` implements ${node.implements.map((i) => printNode(i)).join(", ")}`
+            : "";
+        const components = node.components
+          .map((c) => printParameter(c))
+          .join(", ");
+        parts.push(
+          printLine(
+            `${modifiers}record ${node.name}(${components})${implementsText} ${printNode(node.body)}`,
+          ),
+        );
+        break;
+      }
+
       case JavaNodeKind.InterfaceDeclaration: {
         if (node.annotations && node.annotations.length > 0) {
           parts.push(
@@ -464,32 +501,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
           node.typeParameters && node.typeParameters.length > 0
             ? `<${node.typeParameters.map((p: JavaNode) => printNode(p)).join(", ")}>`
             : "";
-        const params = node.parameters
-          .map(
-            (p: {
-              annotations?: ReadonlyArray<JavaNode>;
-              modifiers?: ReadonlyArray<string>;
-              name: string;
-              type?: JavaNode;
-              varargs?: boolean;
-            }) => {
-              const anns =
-                p.annotations && p.annotations.length > 0
-                  ? p.annotations
-                      .map((ann: JavaNode) => `@${printNode(ann)} `)
-                      .join("")
-                  : "";
-              const mods =
-                p.modifiers && p.modifiers.length > 0
-                  ? `${p.modifiers.join(" ")} `
-                  : "";
-              const typeTxt = p.type
-                ? `${printNode(p.type)}${p.varargs ? "..." : ""} `
-                : "";
-              return `${anns}${mods}${typeTxt}${p.name}`.trim();
-            },
-          )
-          .join(", ");
+        const params = node.parameters.map((p) => printParameter(p)).join(", ");
         const isAnnotationElement =
           node.defaultValue !== undefined &&
           node.parameters.length === 0 &&

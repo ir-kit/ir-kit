@@ -2,6 +2,7 @@ import type { JavaClassDeclaration } from "./declarations/class.js";
 import type { JavaEnumDeclaration } from "./declarations/enum.js";
 import type { JavaInterfaceDeclaration } from "./declarations/interface.js";
 import type { JavaMethodDeclaration } from "./declarations/method.js";
+import type { JavaRecordDeclaration } from "./declarations/record.js";
 import type { JavaVariableDeclaration } from "./declarations/variable.js";
 import type { JavaAssertStatement } from "./statements/assert.js";
 import type {
@@ -28,6 +29,7 @@ import type { JavaComment } from "./structure/comment.js";
 
 export type JavaStatement =
   | JavaClassDeclaration
+  | JavaRecordDeclaration
   | JavaInterfaceDeclaration
   | JavaEnumDeclaration
   | JavaAssignment
