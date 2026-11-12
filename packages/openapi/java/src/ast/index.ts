@@ -188,14 +188,34 @@ export function jInterface(opts: {
   name: string;
   methods: ReadonlyArray<JMethod>;
   api?: boolean;
+  /** Makes the interface `sealed`, permitting exactly these subtypes. */
+  permits?: ReadonlyArray<string>;
 }): JDecl {
+  const permits = opts.permits?.length
+    ? opts.permits.map((p) => named(p))
+    : undefined;
   return {
     kind: "interface",
     name: opts.name,
     api: opts.api,
-    node: f.createInterfaceDeclaration(opts.name, opts.methods, ["public"]),
+    node: f.createInterfaceDeclaration(
+      opts.name,
+      opts.methods,
+      permits ? ["public", "sealed"] : ["public"],
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      permits,
+    ),
   };
 }
+
+/** `Type<>` for constructor calls that infer their type arguments. */
+export const jDiamond = (name: string): JType =>
+  f.createParameterizedType(named(name), []);
 
 export function jClass(opts: {
   name: string;
@@ -225,28 +245,37 @@ export const jField = (
 ): JStmt => f.createVariableDeclaration(name, type, value, modifiers as never);
 
 /** String enum carrying its wire value via `@JsonValue`. */
-export function jStringEnum(
+export function jValueEnum(
   name: string,
-  entries: ReadonlyArray<{ identifier: string; raw: string }>,
+  entries: ReadonlyArray<{ identifier: string; value: JExpr }>,
+  valueType: JType = jString,
 ): JDecl {
   return {
     kind: "enum",
     name,
     node: f.createEnumDeclaration(
       name,
-      entries.map(({ identifier, raw }) => ({
+      entries.map(({ identifier, value }) => ({
         name: identifier,
-        args: [jLit(raw)],
+        args: [value],
       })),
       [
-        jField("value", jString) as never,
-        f.createMethodDeclaration(name, [jParam("value", jString)], undefined, [
-          jAssign(jMember(f.createThisExpression(), "value"), jIdent("value")),
-        ]),
+        jField("value", valueType) as never,
+        f.createMethodDeclaration(
+          name,
+          [jParam("value", valueType)],
+          undefined,
+          [
+            jAssign(
+              jMember(f.createThisExpression(), "value"),
+              jIdent("value"),
+            ),
+          ],
+        ),
         jMethod({
           name: "value",
           params: [],
-          returnType: jString,
+          returnType: valueType,
           modifiers: ["public"],
           annotations: [jAnnotation("JsonValue")],
           body: [jReturn(jIdent("value"))],

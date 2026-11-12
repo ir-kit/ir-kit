@@ -53,7 +53,13 @@ export function returnTypeFor(
           return { statusCode, caseName, payloadType };
         },
       );
-      ctx.emit(jInterface({ name: sealedName, methods: [] }));
+      ctx.emit(
+        jInterface({
+          name: sealedName,
+          methods: [],
+          permits: cases.map((c) => c.caseName),
+        }),
+      );
       for (const c of cases) {
         ctx.emit(
           jRecord({

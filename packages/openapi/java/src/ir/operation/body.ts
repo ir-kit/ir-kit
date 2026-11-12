@@ -6,7 +6,7 @@ import {
 } from "@ir-kit/openapi";
 
 import { type JParam, jBytes, jParam } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
@@ -38,7 +38,7 @@ function flatParams(
   return Array.from(iterateObjectProperties(schema)).map(
     ({ jsonKey, schema: propSchema, isBinary }) =>
       jParam(
-        paramIdent(jsonKey),
+        operationParamIdent(jsonKey),
         binaryAsBytes && isBinary
           ? jBytes
           : schemaToType(propSchema, { ...ctx, propPath: ["body", jsonKey] }),

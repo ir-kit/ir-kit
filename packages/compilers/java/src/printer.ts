@@ -7,6 +7,33 @@ export interface JavaPrinterOptions {
   maxLineLength?: number;
 }
 
+const TYPE_DECLARATIONS: ReadonlySet<JavaNodeKind> = new Set([
+  JavaNodeKind.ClassDeclaration,
+  JavaNodeKind.EnumDeclaration,
+  JavaNodeKind.InterfaceDeclaration,
+  JavaNodeKind.RecordDeclaration,
+]);
+
+const STRING_ESCAPES: Readonly<Record<string, string>> = {
+  "\b": "\\b",
+  "\t": "\\t",
+  "\n": "\\n",
+  "\f": "\\f",
+  "\r": "\\r",
+  '"': '\\"',
+  "\\": "\\\\",
+};
+
+function quoteString(value: string): string {
+  const body = value.replace(
+    /[\b\t\n\f\r"\\]|[\u0000-\u001f\u007f]/g,
+    (c) =>
+      STRING_ESCAPES[c] ??
+      `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`,
+  );
+  return `"${body}"`;
+}
+
 export function createPrinter(options?: JavaPrinterOptions) {
   const indentSize = options?.indentSize ?? 2;
   const maxLineLength = options?.maxLineLength ?? 100;
@@ -22,7 +49,9 @@ export function createPrinter(options?: JavaPrinterOptions) {
     const text = (it: JavaNode | string) =>
       typeof it === "string" ? it : printNode(it);
     const flat = `${prefix}${items.map(text).join(", ")}${suffix}`;
-    if (base + flat.length <= maxLineLength) return spaces(base) + flat;
+    if (items.length === 0 || base + flat.length <= maxLineLength) {
+      return spaces(base) + flat;
+    }
     const cont = base + 4;
     const oneLine = `${items.map(text).join(", ")}${suffix}`;
     if (!oneLine.includes("\n") && cont + oneLine.length <= maxLineLength) {
@@ -33,9 +62,59 @@ export function createPrinter(options?: JavaPrinterOptions) {
       spaces(base) + prefix,
       ...items.map((it, i) =>
         typeof it === "string"
-          ? spaces(cont) + it + (i < last ? "," : suffix)
+          ? wrapAnnotated(it, cont, i < last ? "," : suffix)
           : wrapExpr(it, cont, "", i < last ? "," : suffix),
       ),
+    ].join("\n");
+  }
+
+  /** Breaks after a leading annotation when an annotated parameter overflows. */
+  function wrapAnnotated(item: string, base: number, end: string): string {
+    const line = spaces(base) + item + end;
+    if (line.length <= maxLineLength) return line;
+    const match =
+      /^(@[\w.]+(?:\((?:"(?:[^"\\]|\\.)*"|[^()"])*\))?) (.+)$/s.exec(item);
+    if (match) {
+      return `${spaces(base)}${match[1]}\n${splitTypeAndName(match[2]!, base + 4, end)}`;
+    }
+    return splitTypeAndName(item, base, end);
+  }
+
+  function splitTypeAndName(item: string, base: number, end: string): string {
+    const line = spaces(base) + item + end;
+    const space = item.lastIndexOf(" ");
+    if (line.length <= maxLineLength || space === -1) return line;
+    return `${breakType(item.slice(0, space), base)}\n${spaces(base + 4)}${item.slice(space + 1)}${end}`;
+  }
+
+  /** Breaks an over-long generic type after `<`, one type argument per line. */
+  function breakType(type: string, base: number): string {
+    const lt = type.indexOf("<");
+    if (
+      base + type.length <= maxLineLength ||
+      lt === -1 ||
+      !type.endsWith(">")
+    ) {
+      return spaces(base) + type;
+    }
+    const args: string[] = [];
+    let depth = 0;
+    let current = "";
+    for (const ch of type.slice(lt + 1, -1)) {
+      if (ch === "<") depth += 1;
+      if (ch === ">") depth -= 1;
+      if (ch === "," && depth === 0) {
+        args.push(current.trim());
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+    args.push(current.trim());
+    const last = args.length - 1;
+    return [
+      spaces(base) + type.slice(0, lt + 1),
+      ...args.map((arg, i) => spaces(base + 8) + arg + (i < last ? "," : ">")),
     ].join("\n");
   }
 
@@ -48,6 +127,18 @@ export function createPrinter(options?: JavaPrinterOptions) {
     const flat = `${prefix}${printNode(node)}${suffix}`;
     if (base + flat.length <= maxLineLength) return spaces(base) + flat;
     if (node.kind === JavaNodeKind.CallExpression && node.args.length > 0) {
+      const callee = node.callee;
+      if (
+        callee.kind === JavaNodeKind.MemberExpression &&
+        base + prefix.length + printNode(callee).length + 1 > maxLineLength
+      ) {
+        return `${spaces(base)}${prefix}${printNode(callee.object)}\n${fitOrWrap(
+          base + 4,
+          `.${printNode(callee.member)}(`,
+          node.args,
+          `)${suffix}`,
+        )}`;
+      }
       return fitOrWrap(
         base,
         `${prefix}${printNode(node.callee)}(`,
@@ -75,6 +166,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
     printed: string,
     open: string,
     items: ReadonlyArray<string>,
+    declIndent = 4,
   ): string {
     const nl = printed.indexOf("\n");
     const head = nl === -1 ? printed : printed.slice(0, nl);
@@ -84,12 +176,44 @@ export function createPrinter(options?: JavaPrinterOptions) {
     if (at === -1) return printed;
     const start = at + open.length;
     const base = head.length - head.trimStart().length;
-    const wrapped = fitOrWrap(
-      base,
-      head.slice(base, start),
-      items,
-      head.slice(start + list.length),
-    );
+    const suffix = head.slice(start + list.length);
+    const before = head.slice(base, at);
+    const clause = suffix.indexOf(" implements ");
+    let wrapped: string;
+    if (clause !== -1 && start + list.length + clause <= maxLineLength) {
+      wrapped = `${head.slice(0, start + list.length + clause)}\n${spaces(base + 4)}${suffix.slice(clause + 1)}`;
+    } else if (
+      before.trim() &&
+      (items.length === 0 || base + before.length + open.length > maxLineLength)
+    ) {
+      wrapped = `${spaces(base)}${before.trimEnd()}\n${fitOrWrap(base + declIndent, open, items, suffix)}`;
+    } else {
+      wrapped = fitOrWrap(base, head.slice(base, start), items, suffix);
+    }
+    return nl === -1 ? wrapped : wrapped + printed.slice(nl);
+  }
+
+  function wrapClauseList(piece: string, base: number): string {
+    if (base + piece.length <= maxLineLength) return spaces(base) + piece;
+    const items = piece.split(", ");
+    return [
+      spaces(base) + items[0],
+      ...items.slice(1).map((item) => spaces(base + 4) + item),
+    ].join(",\n");
+  }
+
+  /** Moves `extends` / `implements` clauses of an over-long type header onto continuation lines. */
+  function wrapClauses(printed: string): string {
+    const nl = printed.indexOf("\n");
+    const head = nl === -1 ? printed : printed.slice(0, nl);
+    if (head.length <= maxLineLength) return printed;
+    const base = head.length - head.trimStart().length;
+    const pieces = head.split(/ (?=(?:extends|implements|permits) )/);
+    if (pieces.length === 1) return printed;
+    const wrapped = [
+      pieces[0],
+      ...pieces.slice(1).map((piece) => wrapClauseList(piece, base + 4)),
+    ].join("\n");
     return nl === -1 ? wrapped : wrapped + printed.slice(nl);
   }
 
@@ -127,13 +251,33 @@ export function createPrinter(options?: JavaPrinterOptions) {
     return `${anns}${mods}${typeTxt}${p.name}`.trim();
   }
 
+  /** Reflows an over-long `//` comment at spaces, as google-java-format does. */
+  function wrapComment(text: string): string[] {
+    const width = maxLineLength - baseIndent() - 3;
+    if (text.length <= width) return [text];
+    const lines: string[] = [];
+    let current = "";
+    for (const word of text.split(" ")) {
+      if (current && current.length + 1 + word.length > width) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = current ? `${current} ${word}` : word;
+      }
+    }
+    lines.push(current);
+    return lines;
+  }
+
   function printComments(
     parts: Array<string>,
     lines: ReadonlyArray<string>,
     indent?: boolean,
   ): void {
     if (indent) indentLevel += 1;
-    parts.push(...lines.map((line) => printLine(`// ${line}`)));
+    parts.push(
+      ...lines.flatMap(wrapComment).map((line) => printLine(`// ${line}`)),
+    );
     if (indent) indentLevel -= 1;
   }
 
@@ -192,7 +336,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
 
       case JavaNodeKind.Literal:
         if (typeof node.value === "string") {
-          parts.push(`"${node.value}"`);
+          parts.push(quoteString(node.value));
         } else if (typeof node.value === "boolean") {
           parts.push(node.value ? "true" : "false");
         } else if (node.value === null) {
@@ -469,8 +613,11 @@ export function createPrinter(options?: JavaPrinterOptions) {
         node.statements.forEach((stmt: JavaNode, i: number) => {
           const prev = node.statements[i - 1];
           if (
-            prev?.kind === JavaNodeKind.ImportStatement &&
-            stmt.kind !== JavaNodeKind.ImportStatement
+            prev &&
+            ((prev.kind === JavaNodeKind.ImportStatement &&
+              stmt.kind !== JavaNodeKind.ImportStatement) ||
+              (TYPE_DECLARATIONS.has(prev.kind) &&
+                TYPE_DECLARATIONS.has(stmt.kind)))
           ) {
             parts.push("");
           }
@@ -503,8 +650,10 @@ export function createPrinter(options?: JavaPrinterOptions) {
             ? ` implements ${node.implements.map((i: JavaNode) => printNode(i)).join(", ")}`
             : "";
         parts.push(
-          printLine(
-            `${modifiers}class ${node.name}${typeParams}${extendsText}${implementsText} ${printMemberBlock(node.body.statements)}`,
+          wrapClauses(
+            printLine(
+              `${modifiers}class ${node.name}${typeParams}${extendsText}${implementsText} ${printMemberBlock(node.body.statements)}`,
+            ),
           ),
         );
         break;
@@ -534,6 +683,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
             ),
             `record ${node.name}(`,
             node.components.map((c) => printParameter(c)),
+            0,
           ),
         );
         break;
@@ -557,9 +707,15 @@ export function createPrinter(options?: JavaPrinterOptions) {
           node.typeParameters && node.typeParameters.length > 0
             ? `<${node.typeParameters.map((p: JavaNode) => printNode(p)).join(", ")}>`
             : "";
+        const permitsText =
+          node.permits && node.permits.length > 0
+            ? ` permits ${node.permits.map((p) => printNode(p)).join(", ")}`
+            : "";
         parts.push(
-          printLine(
-            `${modifiers}${node.annotationInterface ? "@interface" : "interface"} ${node.name}${typeParams}${extendsText} ${printMemberBlock(node.body.statements)}`,
+          wrapClauses(
+            printLine(
+              `${modifiers}${node.annotationInterface ? "@interface" : "interface"} ${node.name}${typeParams}${extendsText}${permitsText} ${printMemberBlock(node.body.statements)}`,
+            ),
           ),
         );
         break;
@@ -579,25 +735,28 @@ export function createPrinter(options?: JavaPrinterOptions) {
           node.implements && node.implements.length > 0
             ? ` implements ${node.implements.map((i) => printNode(i)).join(", ")}`
             : "";
-        const constantsText = node.constants.map((c) =>
-          c.args && c.args.length > 0
-            ? `${c.name}(${c.args.map((a) => printNode(a)).join(", ")})`
-            : c.name,
+        const header = `${modifiers}enum ${node.name}${implementsText} {`;
+        parts.push(
+          baseIndent() + header.length > maxLineLength
+            ? `${printLine(`${modifiers}enum`)}\n${spaces(baseIndent() + 4)}${node.name}${implementsText} {`
+            : printLine(header),
         );
-        const header = `${modifiers}enum ${node.name}${implementsText}`;
-        parts.push(printLine(`${header} {`));
         indentLevel += 1;
         const hasMembers = node.body.statements.length > 0;
-        const last = constantsText.length - 1;
-        constantsText.forEach((c, i) => {
+        const last = node.constants.length - 1;
+        node.constants.forEach((c, i) => {
           const end = i < last ? "," : hasMembers ? ";" : "";
-          parts.push(printLine(c + end));
+          parts.push(
+            c.args && c.args.length > 0
+              ? fitOrWrap(baseIndent(), `${c.name}(`, c.args, `)${end}`)
+              : printLine(c.name + end),
+          );
         });
         if (hasMembers) {
           indentLevel -= 1;
           const body = printMemberBlock(node.body.statements).split("\n");
           indentLevel += 1;
-          if (constantsText.length > 0) parts.push("");
+          if (node.constants.length > 0) parts.push("");
           parts.push(...body.slice(1, -1));
         }
         indentLevel -= 1;

@@ -65,6 +65,39 @@ describe("schemas", () => {
     expect(sort).toContain("@JsonValue");
   });
 
+  it("emits integer enums as Java enums over int", () => {
+    const files = build({
+      components: { schemas: { Level: { type: "integer", enum: [1, 2, -1] } } },
+    });
+    const level = files["com/acme/model/Level.java"];
+    expect(level).toContain(
+      "  VALUE_1(1),\n  VALUE_2(2),\n  VALUE_MINUS_1(-1);",
+    );
+    expect(level).toContain("  private final int value;");
+  });
+
+  it("uses long literals when integer enum values exceed int", () => {
+    const files = build({
+      components: {
+        schemas: { Big: { type: "integer", enum: [1, 3000000000] } },
+      },
+    });
+    const big = files["com/acme/model/Big.java"];
+    expect(big).toContain("  VALUE_1(1L),\n  VALUE_3000000000(3000000000L);");
+    expect(big).toContain("  private final long value;");
+  });
+
+  it("escapes string enum wire values", () => {
+    const files = build({
+      components: {
+        schemas: { Quote: { type: "string", enum: ['say "hi"', "a\\b"] } },
+      },
+    });
+    const quote = files["com/acme/model/Quote.java"];
+    expect(quote).toContain('("say \\"hi\\"")');
+    expect(quote).toContain('("a\\\\b")');
+  });
+
   it("inlines aliases because Java has no typealias", () => {
     const files = build({
       components: {
@@ -80,6 +113,34 @@ describe("schemas", () => {
     expect(files["com/acme/model/Tags.java"]).toBeUndefined();
     expect(files["com/acme/model/Post.java"]).toContain(
       "public record Post(List<String> tags) {}",
+    );
+  });
+});
+
+describe("multi-status responses", () => {
+  it("returns a sealed interface permitting one record per status", () => {
+    const files = build({
+      paths: {
+        "/jobs": {
+          post: {
+            operationId: "createJob",
+            tags: ["jobs"],
+            responses: {
+              "200": {
+                description: "done",
+                content: { "application/json": { schema: { type: "string" } } },
+              },
+              "202": { description: "accepted" },
+            },
+          },
+        },
+      },
+    });
+    expect(files["com/acme/model/CreateJobResponse.java"]).toContain(
+      "public sealed interface CreateJobResponse\n    permits CreateJobResponseStatus200, CreateJobResponseStatus202 {}",
+    );
+    expect(files["com/acme/model/CreateJobResponseStatus200.java"]).toContain(
+      "public record CreateJobResponseStatus200(String value) implements CreateJobResponse {}",
     );
   });
 });
