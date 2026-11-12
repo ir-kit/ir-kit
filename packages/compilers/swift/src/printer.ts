@@ -12,7 +12,7 @@ export interface SwiftPrinterOptions {
    * such as parameters, fields, or list items.
    * Set to `0` to disable wrapping.
    *
-   * @default 80
+   * @default 100 (swift-format)
    */
   maxLineLength?: number;
 }
@@ -21,7 +21,26 @@ const INDENT = "  ";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function createPrinter(options?: SwiftPrinterOptions) {
+  const maxLineLength = options?.maxLineLength ?? 100;
   let indentLevel = 0;
+
+  /** `(a: A, b: B)`, or one parameter per line when the header overflows. */
+  function printParameterList(
+    parameters: ReadonlyArray<Parameters<typeof printParameter>[0]>,
+    header: (list: string) => string,
+  ): string {
+    const inline = header(
+      `(${parameters.map((parameter) => printParameter(parameter)).join(", ")})`,
+    );
+    const width = INDENT.length * indentLevel + inline.length + 2;
+    if (!parameters.length || maxLineLength <= 0 || width <= maxLineLength)
+      return inline;
+    const inner = INDENT.repeat(indentLevel + 1);
+    const list = parameters
+      .map((parameter) => `${inner}${printParameter(parameter)}`)
+      .join(",\n");
+    return header(`(\n${list}\n${INDENT.repeat(indentLevel)})`);
+  }
 
   function printLine(line: string): string {
     return INDENT.repeat(indentLevel) + line;
@@ -400,9 +419,6 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const modifiers = node.modifiers?.length
           ? `${node.modifiers.join(" ")} `
           : "";
-        const parameters = node.parameters
-          .map((parameter) => printParameter(parameter))
-          .join(", ");
         const effects = [
           node.effectSpecifiers?.async ? "async" : "",
           node.effectSpecifiers?.throws ? "throws" : "",
@@ -413,7 +429,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
         const returnClause = node.returnType
           ? ` -> ${printNode(node.returnType)}`
           : "";
-        const signature = `${modifiers}func ${node.name}${printGenericParameters(node.genericParameters)}(${parameters})${effectClause}${returnClause}${printWhereClause(node.genericWhereClause)}`;
+        const signature = printParameterList(
+          node.parameters,
+          (list) =>
+            `${modifiers}func ${node.name}${printGenericParameters(node.genericParameters)}${list}${effectClause}${returnClause}${printWhereClause(node.genericWhereClause)}`,
+        );
         const declaration = node.body
           ? printBraceBlock(signature, node.body)
           : printLine(signature);
@@ -489,10 +509,11 @@ export function createPrinter(options?: SwiftPrinterOptions) {
           ? `${node.modifiers.join(" ")} `
           : "";
         const failable = node.failable ? "?" : "";
-        const parameters = node.parameters
-          .map((parameter) => printParameter(parameter))
-          .join(", ");
-        const signature = `${modifiers}init${failable}(${parameters})${printWhereClause(node.genericWhereClause)}`;
+        const signature = printParameterList(
+          node.parameters,
+          (list) =>
+            `${modifiers}init${failable}${list}${printWhereClause(node.genericWhereClause)}`,
+        );
         return [
           ...printAttributes(node.attributes),
           printBraceBlock(signature, node.body),

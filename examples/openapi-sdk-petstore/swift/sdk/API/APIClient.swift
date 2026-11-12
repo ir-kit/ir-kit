@@ -8,7 +8,12 @@ public final class APIClient {
   public let interceptors: APIInterceptors
   public var auth: [String: Auth] = [:]
 
-  public init(baseURL: URL, session: URLSession = .shared, decoder: JSONDecoder = JSONDecoder(), encoder: JSONEncoder = JSONEncoder()) {
+  public init(
+    baseURL: URL,
+    session: URLSession = .shared,
+    decoder: JSONDecoder = JSONDecoder(),
+    encoder: JSONEncoder = JSONEncoder()
+  ) {
     self.baseURL = baseURL
     self.session = session
     self.decoder = decoder
@@ -16,7 +21,13 @@ public final class APIClient {
     self.interceptors = APIInterceptors()
   }
 
-  public func execute<T: Decodable>(_ request: URLRequest, as type: T.Type, extraInterceptors: [(URLRequest) async throws -> URLRequest] = [], responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil, responseTransformer: ((Data) async throws -> Data)? = nil) async throws -> T {
+  public func execute<T: Decodable>(
+    _ request: URLRequest,
+    as type: T.Type,
+    extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
+    responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil,
+    responseTransformer: ((Data) async throws -> Data)? = nil
+  ) async throws -> T {
     let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
@@ -32,14 +43,24 @@ public final class APIClient {
     }
   }
 
-  public func execute(_ request: URLRequest, extraInterceptors: [(URLRequest) async throws -> URLRequest] = [], responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil) async throws {
+  public func execute(
+    _ request: URLRequest,
+    extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
+    responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil
+  ) async throws {
     let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
     }
   }
 
-  public func executeWithResponse<T: Decodable>(_ request: URLRequest, as type: T.Type, extraInterceptors: [(URLRequest) async throws -> URLRequest] = [], responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil, responseTransformer: ((Data) async throws -> Data)? = nil) async throws -> (T, HTTPURLResponse) {
+  public func executeWithResponse<T: Decodable>(
+    _ request: URLRequest,
+    as type: T.Type,
+    extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
+    responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil,
+    responseTransformer: ((Data) async throws -> Data)? = nil
+  ) async throws -> (T, HTTPURLResponse) {
     let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
@@ -56,7 +77,11 @@ public final class APIClient {
     }
   }
 
-  public func executeWithResponse(_ request: URLRequest, extraInterceptors: [(URLRequest) async throws -> URLRequest] = [], responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil) async throws -> HTTPURLResponse {
+  public func executeWithResponse(
+    _ request: URLRequest,
+    extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
+    responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil
+  ) async throws -> HTTPURLResponse {
     let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
@@ -64,7 +89,12 @@ public final class APIClient {
     return httpResponse
   }
 
-  public func executeRaw(_ request: URLRequest, extraInterceptors: [(URLRequest) async throws -> URLRequest] = [], responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil, responseTransformer: ((Data) async throws -> Data)? = nil) async throws -> (Data, HTTPURLResponse) {
+  public func executeRaw(
+    _ request: URLRequest,
+    extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
+    responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil,
+    responseTransformer: ((Data) async throws -> Data)? = nil
+  ) async throws -> (Data, HTTPURLResponse) {
     let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
@@ -76,7 +106,10 @@ public final class APIClient {
     return (body, httpResponse)
   }
 
-  private func sendAndDispatch(_ request: URLRequest, extraInterceptors: [(URLRequest) async throws -> URLRequest]) async throws -> (Data, HTTPURLResponse) {
+  private func sendAndDispatch(
+    _ request: URLRequest,
+    extraInterceptors: [(URLRequest) async throws -> URLRequest]
+  ) async throws -> (Data, HTTPURLResponse) {
     var req = request
     for interceptor in interceptors.request {
       req = try await interceptor(req)

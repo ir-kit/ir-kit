@@ -27,7 +27,9 @@ public extension PetAPI {
   }
 
   /// GET /pet/findByStatus
-  func findPetsByStatusWithResponse(status: FindPetsByStatus_Param_Status) async throws -> ([Pet], HTTPURLResponse) {
+  func findPetsByStatusWithResponse(
+    status: FindPetsByStatus_Param_Status
+  ) async throws -> ([Pet], HTTPURLResponse) {
     return try await self.findPetsByStatusWithResponse(status: status, options: RequestOptions())
   }
 
@@ -52,12 +54,20 @@ public extension PetAPI {
   }
 
   /// POST /pet/{petId}
-  func updatePetWithForm(petId: Int64, name: String? = nil, status: String? = nil) async throws -> Pet {
+  func updatePetWithForm(
+    petId: Int64,
+    name: String? = nil,
+    status: String? = nil
+  ) async throws -> Pet {
     return try await self.updatePetWithForm(petId: petId, name: name, status: status, options: RequestOptions())
   }
 
   /// POST /pet/{petId}
-  func updatePetWithFormWithResponse(petId: Int64, name: String? = nil, status: String? = nil) async throws -> (Pet, HTTPURLResponse) {
+  func updatePetWithFormWithResponse(
+    petId: Int64,
+    name: String? = nil,
+    status: String? = nil
+  ) async throws -> (Pet, HTTPURLResponse) {
     return try await self.updatePetWithFormWithResponse(petId: petId, name: name, status: status, options: RequestOptions())
   }
 
@@ -72,22 +82,40 @@ public extension PetAPI {
   }
 
   /// POST /pet/{petId}/uploadImage
-  func uploadFile(petId: Int64, additionalMetadata: String? = nil, body: Data) async throws -> ApiResponse {
+  func uploadFile(
+    petId: Int64,
+    additionalMetadata: String? = nil,
+    body: Data
+  ) async throws -> ApiResponse {
     return try await self.uploadFile(petId: petId, additionalMetadata: additionalMetadata, body: body, options: RequestOptions())
   }
 
   /// POST /pet/{petId}/uploadImage
-  func uploadFileWithResponse(petId: Int64, additionalMetadata: String? = nil, body: Data) async throws -> (ApiResponse, HTTPURLResponse) {
+  func uploadFileWithResponse(
+    petId: Int64,
+    additionalMetadata: String? = nil,
+    body: Data
+  ) async throws -> (ApiResponse, HTTPURLResponse) {
     return try await self.uploadFileWithResponse(petId: petId, additionalMetadata: additionalMetadata, body: body, options: RequestOptions())
   }
 
   /// POST /pet/{petId}/uploadDocument
-  func uploadPetDocument(petId: Int64, file: Data, title: String? = nil, description: String? = nil) async throws -> ApiResponse {
+  func uploadPetDocument(
+    petId: Int64,
+    file: Data,
+    title: String? = nil,
+    description: String? = nil
+  ) async throws -> ApiResponse {
     return try await self.uploadPetDocument(petId: petId, file: file, title: title, description: description, options: RequestOptions())
   }
 
   /// POST /pet/{petId}/uploadDocument
-  func uploadPetDocumentWithResponse(petId: Int64, file: Data, title: String? = nil, description: String? = nil) async throws -> (ApiResponse, HTTPURLResponse) {
+  func uploadPetDocumentWithResponse(
+    petId: Int64,
+    file: Data,
+    title: String? = nil,
+    description: String? = nil
+  ) async throws -> (ApiResponse, HTTPURLResponse) {
     return try await self.uploadPetDocumentWithResponse(petId: petId, file: file, title: title, description: description, options: RequestOptions())
   }
 
@@ -97,7 +125,9 @@ public extension PetAPI {
   }
 
   /// POST /tags
-  func submitTagsWithResponse(body: SubmitTags_Body) async throws -> (SubmitTags_Response, HTTPURLResponse) {
+  func submitTagsWithResponse(
+    body: SubmitTags_Body
+  ) async throws -> (SubmitTags_Response, HTTPURLResponse) {
     return try await self.submitTagsWithResponse(body: body, options: RequestOptions())
   }
 }

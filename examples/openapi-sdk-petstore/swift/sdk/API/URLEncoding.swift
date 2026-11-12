@@ -11,7 +11,12 @@ public final class URLEncoding {
     return [URLQueryItem(name: name, value: "\(value)")]
   }
 
-  public static func query<T>(_ name: String, values: [T]?, style: QueryStyle = .form, explode: Bool = true) -> [URLQueryItem] {
+  public static func query<T>(
+    _ name: String,
+    values: [T]?,
+    style: QueryStyle = .form,
+    explode: Bool = true
+  ) -> [URLQueryItem] {
     guard let values = values else {
       return []
     }

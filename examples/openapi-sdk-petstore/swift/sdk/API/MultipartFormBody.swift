@@ -27,7 +27,12 @@ public final class MultipartFormBody {
     }
   }
 
-  public func append(_ blob: Data, name: String, filename: String, mimeType: String = "application/octet-stream") {
+  public func append(
+    _ blob: Data,
+    name: String,
+    filename: String,
+    mimeType: String = "application/octet-stream"
+  ) {
     if let encoded = "--\(boundary)\r\n".data(using: .utf8) {
       data.append(encoded)
     }

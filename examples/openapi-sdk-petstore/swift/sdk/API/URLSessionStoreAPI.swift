@@ -8,7 +8,9 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// GET /store/inventory
-  public func getInventory(options: RequestOptions = RequestOptions()) async throws -> [String: Int32] {
+  public func getInventory(
+    options: RequestOptions = RequestOptions()
+  ) async throws -> [String: Int32] {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("inventory")
@@ -29,7 +31,9 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// GET /store/inventory
-  public func getInventoryWithResponse(options: RequestOptions = RequestOptions()) async throws -> ([String: Int32], HTTPURLResponse) {
+  public func getInventoryWithResponse(
+    options: RequestOptions = RequestOptions()
+  ) async throws -> ([String: Int32], HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("inventory")
@@ -50,7 +54,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// POST /store/order
-  public func placeOrder(body: Order, options: RequestOptions = RequestOptions()) async throws -> Order {
+  public func placeOrder(
+    body: Order,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> Order {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("order")
@@ -68,7 +75,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// POST /store/order
-  public func placeOrderWithResponse(body: Order, options: RequestOptions = RequestOptions()) async throws -> (Order, HTTPURLResponse) {
+  public func placeOrderWithResponse(
+    body: Order,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (Order, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("order")
@@ -86,7 +96,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// GET /store/order/{orderId}
-  public func getOrderById(orderId: Int64, options: RequestOptions = RequestOptions()) async throws -> Order {
+  public func getOrderById(
+    orderId: Int64,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> Order {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
@@ -102,7 +115,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// GET /store/order/{orderId}
-  public func getOrderByIdWithResponse(orderId: Int64, options: RequestOptions = RequestOptions()) async throws -> (Order, HTTPURLResponse) {
+  public func getOrderByIdWithResponse(
+    orderId: Int64,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (Order, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
@@ -134,7 +150,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// DELETE /store/order/{orderId}
-  public func deleteOrderWithResponse(orderId: Int64, options: RequestOptions = RequestOptions()) async throws -> HTTPURLResponse {
+  public func deleteOrderWithResponse(
+    orderId: Int64,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
@@ -150,7 +169,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// POST /shapes
-  public func createShape(body: Data, options: RequestOptions = RequestOptions()) async throws -> CreateShape_Response {
+  public func createShape(
+    body: Data,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> CreateShape_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("shapes")
@@ -168,7 +190,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// POST /shapes
-  public func createShapeWithResponse(body: Data, options: RequestOptions = RequestOptions()) async throws -> (CreateShape_Response, HTTPURLResponse) {
+  public func createShapeWithResponse(
+    body: Data,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (CreateShape_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("shapes")
@@ -186,7 +211,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// POST /measurements
-  public func submitMeasurement(body: SubmitMeasurement_Body, options: RequestOptions = RequestOptions()) async throws {
+  public func submitMeasurement(
+    body: SubmitMeasurement_Body,
+    options: RequestOptions = RequestOptions()
+  ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("measurements")
@@ -204,7 +232,10 @@ public final class URLSessionStoreAPI: StoreAPI {
   }
 
   /// POST /measurements
-  public func submitMeasurementWithResponse(body: SubmitMeasurement_Body, options: RequestOptions = RequestOptions()) async throws -> HTTPURLResponse {
+  public func submitMeasurementWithResponse(
+    body: SubmitMeasurement_Body,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("measurements")

@@ -8,7 +8,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// POST /user
-  public func createUser(body: User, options: RequestOptions = RequestOptions()) async throws -> User {
+  public func createUser(
+    body: User,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user")
@@ -26,7 +29,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// POST /user
-  public func createUserWithResponse(body: User, options: RequestOptions = RequestOptions()) async throws -> (User, HTTPURLResponse) {
+  public func createUserWithResponse(
+    body: User,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user")
@@ -44,7 +50,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// POST /user/createWithList
-  public func createUsersWithListInput(body: [User], options: RequestOptions = RequestOptions()) async throws -> User {
+  public func createUsersWithListInput(
+    body: [User],
+    options: RequestOptions = RequestOptions()
+  ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("createWithList")
@@ -62,7 +71,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// POST /user/createWithList
-  public func createUsersWithListInputWithResponse(body: [User], options: RequestOptions = RequestOptions()) async throws -> (User, HTTPURLResponse) {
+  public func createUsersWithListInputWithResponse(
+    body: [User],
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("createWithList")
@@ -80,7 +92,11 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// GET /user/login
-  public func loginUser(username: String? = nil, password: String? = nil, options: RequestOptions = RequestOptions()) async throws -> String {
+  public func loginUser(
+    username: String? = nil,
+    password: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> String {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("user").appendingPathComponent("login"), resolvingAgainstBaseURL: false) else {
@@ -105,7 +121,11 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// GET /user/login
-  public func loginUserWithResponse(username: String? = nil, password: String? = nil, options: RequestOptions = RequestOptions()) async throws -> (String, HTTPURLResponse) {
+  public func loginUserWithResponse(
+    username: String? = nil,
+    password: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (String, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("user").appendingPathComponent("login"), resolvingAgainstBaseURL: false) else {
@@ -146,7 +166,9 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// GET /user/logout
-  public func logoutUserWithResponse(options: RequestOptions = RequestOptions()) async throws -> HTTPURLResponse {
+  public func logoutUserWithResponse(
+    options: RequestOptions = RequestOptions()
+  ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("logout")
@@ -162,7 +184,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// GET /user/{username}
-  public func getUserByName(username: String, options: RequestOptions = RequestOptions()) async throws -> User {
+  public func getUserByName(
+    username: String,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
@@ -178,7 +203,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// GET /user/{username}
-  public func getUserByNameWithResponse(username: String, options: RequestOptions = RequestOptions()) async throws -> (User, HTTPURLResponse) {
+  public func getUserByNameWithResponse(
+    username: String,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
@@ -194,7 +222,11 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// PUT /user/{username}
-  public func updateUser(username: String, body: User, options: RequestOptions = RequestOptions()) async throws {
+  public func updateUser(
+    username: String,
+    body: User,
+    options: RequestOptions = RequestOptions()
+  ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
@@ -212,7 +244,11 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// PUT /user/{username}
-  public func updateUserWithResponse(username: String, body: User, options: RequestOptions = RequestOptions()) async throws -> HTTPURLResponse {
+  public func updateUserWithResponse(
+    username: String,
+    body: User,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
@@ -230,7 +266,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// DELETE /user/{username}
-  public func deleteUser(username: String, options: RequestOptions = RequestOptions()) async throws {
+  public func deleteUser(
+    username: String,
+    options: RequestOptions = RequestOptions()
+  ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
@@ -246,7 +285,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// DELETE /user/{username}
-  public func deleteUserWithResponse(username: String, options: RequestOptions = RequestOptions()) async throws -> HTTPURLResponse {
+  public func deleteUserWithResponse(
+    username: String,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
@@ -262,7 +304,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// POST /profile
-  public func updateProfile(body: UpdateProfile_Body, options: RequestOptions = RequestOptions()) async throws -> UpdateProfile_Response {
+  public func updateProfile(
+    body: UpdateProfile_Body,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> UpdateProfile_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("profile")
@@ -280,7 +325,10 @@ public final class URLSessionUserAPI: UserAPI {
   }
 
   /// POST /profile
-  public func updateProfileWithResponse(body: UpdateProfile_Body, options: RequestOptions = RequestOptions()) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
+  public func updateProfileWithResponse(
+    body: UpdateProfile_Body,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("profile")

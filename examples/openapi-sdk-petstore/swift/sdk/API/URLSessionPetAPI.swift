@@ -31,7 +31,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet
-  public func addPetWithResponse(body: Pet, options: RequestOptions = RequestOptions()) async throws -> (Pet, HTTPURLResponse) {
+  public func addPetWithResponse(
+    body: Pet,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet")
@@ -77,7 +80,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// PUT /pet
-  public func updatePetWithResponse(body: Pet, options: RequestOptions = RequestOptions()) async throws -> (Pet, HTTPURLResponse) {
+  public func updatePetWithResponse(
+    body: Pet,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet")
@@ -100,7 +106,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// GET /pet/findByStatus
-  public func findPetsByStatus(status: FindPetsByStatus_Param_Status, options: RequestOptions = RequestOptions()) async throws -> [Pet] {
+  public func findPetsByStatus(
+    status: FindPetsByStatus_Param_Status,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> [Pet] {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByStatus"), resolvingAgainstBaseURL: false) else {
@@ -129,7 +138,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// GET /pet/findByStatus
-  public func findPetsByStatusWithResponse(status: FindPetsByStatus_Param_Status, options: RequestOptions = RequestOptions()) async throws -> ([Pet], HTTPURLResponse) {
+  public func findPetsByStatusWithResponse(
+    status: FindPetsByStatus_Param_Status,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> ([Pet], HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByStatus"), resolvingAgainstBaseURL: false) else {
@@ -158,7 +170,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// GET /pet/findByTags
-  public func findPetsByTags(tags: [String], options: RequestOptions = RequestOptions()) async throws -> [Pet] {
+  public func findPetsByTags(
+    tags: [String],
+    options: RequestOptions = RequestOptions()
+  ) async throws -> [Pet] {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByTags"), resolvingAgainstBaseURL: false) else {
@@ -187,7 +202,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// GET /pet/findByTags
-  public func findPetsByTagsWithResponse(tags: [String], options: RequestOptions = RequestOptions()) async throws -> ([Pet], HTTPURLResponse) {
+  public func findPetsByTagsWithResponse(
+    tags: [String],
+    options: RequestOptions = RequestOptions()
+  ) async throws -> ([Pet], HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("findByTags"), resolvingAgainstBaseURL: false) else {
@@ -216,7 +234,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// GET /pet/{petId}
-  public func getPetById(petId: Int64, options: RequestOptions = RequestOptions()) async throws -> Pet {
+  public func getPetById(
+    petId: Int64,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> Pet {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
@@ -237,7 +258,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// GET /pet/{petId}
-  public func getPetByIdWithResponse(petId: Int64, options: RequestOptions = RequestOptions()) async throws -> (Pet, HTTPURLResponse) {
+  public func getPetByIdWithResponse(
+    petId: Int64,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
@@ -258,7 +282,12 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet/{petId}
-  public func updatePetWithForm(petId: Int64, name: String? = nil, status: String? = nil, options: RequestOptions = RequestOptions()) async throws -> Pet {
+  public func updatePetWithForm(
+    petId: Int64,
+    name: String? = nil,
+    status: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> Pet {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)"), resolvingAgainstBaseURL: false) else {
@@ -288,7 +317,12 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet/{petId}
-  public func updatePetWithFormWithResponse(petId: Int64, name: String? = nil, status: String? = nil, options: RequestOptions = RequestOptions()) async throws -> (Pet, HTTPURLResponse) {
+  public func updatePetWithFormWithResponse(
+    petId: Int64,
+    name: String? = nil,
+    status: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (Pet, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)"), resolvingAgainstBaseURL: false) else {
@@ -318,7 +352,11 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// DELETE /pet/{petId}
-  public func deletePet(petId: Int64, apiKey: String? = nil, options: RequestOptions = RequestOptions()) async throws {
+  public func deletePet(
+    petId: Int64,
+    apiKey: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
@@ -342,7 +380,11 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// DELETE /pet/{petId}
-  public func deletePetWithResponse(petId: Int64, apiKey: String? = nil, options: RequestOptions = RequestOptions()) async throws -> HTTPURLResponse {
+  public func deletePetWithResponse(
+    petId: Int64,
+    apiKey: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)")
@@ -366,7 +408,12 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet/{petId}/uploadImage
-  public func uploadFile(petId: Int64, additionalMetadata: String? = nil, body: Data, options: RequestOptions = RequestOptions()) async throws -> ApiResponse {
+  public func uploadFile(
+    petId: Int64,
+    additionalMetadata: String? = nil,
+    body: Data,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> ApiResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadImage"), resolvingAgainstBaseURL: false) else {
@@ -397,7 +444,12 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet/{petId}/uploadImage
-  public func uploadFileWithResponse(petId: Int64, additionalMetadata: String? = nil, body: Data, options: RequestOptions = RequestOptions()) async throws -> (ApiResponse, HTTPURLResponse) {
+  public func uploadFileWithResponse(
+    petId: Int64,
+    additionalMetadata: String? = nil,
+    body: Data,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (ApiResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadImage"), resolvingAgainstBaseURL: false) else {
@@ -428,7 +480,13 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet/{petId}/uploadDocument
-  public func uploadPetDocument(petId: Int64, file: Data, title: String? = nil, description: String? = nil, options: RequestOptions = RequestOptions()) async throws -> ApiResponse {
+  public func uploadPetDocument(
+    petId: Int64,
+    file: Data,
+    title: String? = nil,
+    description: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> ApiResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadDocument")
@@ -459,7 +517,13 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /pet/{petId}/uploadDocument
-  public func uploadPetDocumentWithResponse(petId: Int64, file: Data, title: String? = nil, description: String? = nil, options: RequestOptions = RequestOptions()) async throws -> (ApiResponse, HTTPURLResponse) {
+  public func uploadPetDocumentWithResponse(
+    petId: Int64,
+    file: Data,
+    title: String? = nil,
+    description: String? = nil,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (ApiResponse, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("pet").appendingPathComponent("\(petId)").appendingPathComponent("uploadDocument")
@@ -490,7 +554,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /tags
-  public func submitTags(body: SubmitTags_Body, options: RequestOptions = RequestOptions()) async throws -> SubmitTags_Response {
+  public func submitTags(
+    body: SubmitTags_Body,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> SubmitTags_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("tags")
@@ -508,7 +575,10 @@ public final class URLSessionPetAPI: PetAPI {
   }
 
   /// POST /tags
-  public func submitTagsWithResponse(body: SubmitTags_Body, options: RequestOptions = RequestOptions()) async throws -> (SubmitTags_Response, HTTPURLResponse) {
+  public func submitTagsWithResponse(
+    body: SubmitTags_Body,
+    options: RequestOptions = RequestOptions()
+  ) async throws -> (SubmitTags_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
     let url = baseURL.appendingPathComponent("tags")

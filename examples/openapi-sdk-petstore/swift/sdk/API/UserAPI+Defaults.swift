@@ -27,7 +27,10 @@ public extension UserAPI {
   }
 
   /// GET /user/login
-  func loginUserWithResponse(username: String? = nil, password: String? = nil) async throws -> (String, HTTPURLResponse) {
+  func loginUserWithResponse(
+    username: String? = nil,
+    password: String? = nil
+  ) async throws -> (String, HTTPURLResponse) {
     return try await self.loginUserWithResponse(username: username, password: password, options: RequestOptions())
   }
 
@@ -77,7 +80,9 @@ public extension UserAPI {
   }
 
   /// POST /profile
-  func updateProfileWithResponse(body: UpdateProfile_Body) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
+  func updateProfileWithResponse(
+    body: UpdateProfile_Body
+  ) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
     return try await self.updateProfileWithResponse(body: body, options: RequestOptions())
   }
 }
