@@ -4,12 +4,7 @@ import type { ExtractResult } from "../types.js";
 type SignatureEntry = ExtractResult["signatures"][number];
 
 import { loadFnSchemaConfig } from "./config.js";
-import {
-  baseExtractOpts,
-  collectPatterns,
-  makeListFiles,
-  resolveCwd,
-} from "./helpers.js";
+import { baseExtractOpts, listSourceFiles, resolveCwd } from "./helpers.js";
 
 export interface RunInspectOptions {
   name: string;
@@ -43,13 +38,7 @@ export async function runInspect(
   const cwd = resolveCwd(opts.cwd);
   const config = await loadFnSchemaConfig(cwd);
 
-  const patternList = collectPatterns(opts.patterns, config.files);
-  if (patternList.length === 0) {
-    throw new Error(
-      "No source patterns supplied. Pass patterns or set `files` in fn-schema.config.{ts,js,json}.",
-    );
-  }
-  const files = await makeListFiles(patternList, cwd)();
+  const files = await listSourceFiles(opts.patterns, config.files, cwd);
   if (files.length === 0) {
     return { kind: "not-found", filesScanned: 0 };
   }

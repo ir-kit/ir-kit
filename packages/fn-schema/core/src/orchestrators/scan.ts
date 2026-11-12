@@ -2,12 +2,7 @@ import { createProject } from "../project.js";
 import type { DiscoverResult, ExtractOptions } from "../types.js";
 
 import { loadFnSchemaConfig } from "./config.js";
-import {
-  baseExtractOpts,
-  collectPatterns,
-  makeListFiles,
-  resolveCwd,
-} from "./helpers.js";
+import { baseExtractOpts, listSourceFiles, resolveCwd } from "./helpers.js";
 
 export interface RunScanOptions {
   cwd?: string;
@@ -34,21 +29,14 @@ export async function runScan(opts: RunScanOptions): Promise<RunScanResult> {
   const cwd = resolveCwd(opts.cwd);
   const config = await loadFnSchemaConfig(cwd);
 
-  const patternList = collectPatterns(opts.patterns, config.files);
-  if (patternList.length === 0) {
-    throw new Error(
-      "No source patterns supplied. Pass patterns or set `files` in fn-schema.config.{ts,js,json}.",
-    );
-  }
-
-  const files = await makeListFiles(patternList, cwd)();
+  const files = await listSourceFiles(opts.patterns, config.files, cwd);
   if (files.length === 0) {
     return {
       result: {
         signatures: [],
         diagnostics: [],
-        stats: { filesScanned: 0, durationMs: 0 },
-      } as unknown as DiscoverResult,
+        stats: { filesScanned: 0, functionsFound: 0, durationMs: 0 },
+      },
       filesScanned: 0,
       errors: 0,
       warnings: 0,
