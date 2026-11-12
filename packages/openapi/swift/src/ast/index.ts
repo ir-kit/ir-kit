@@ -573,10 +573,16 @@ export function swExtension(opts: {
     kind: "extension",
     name: opts.name ?? `${opts.on}+Defaults`,
     runtime: opts.runtime,
+    // swift-format moves access off extensions onto their members.
     node: f.createExtensionDeclaration(
       named(opts.on),
-      opts.funs.map(withoutAccess),
-      access(opts.access),
+      opts.funs.map((fn) => ({
+        ...withoutAccess(fn),
+        modifiers: [
+          ...access(opts.access),
+          ...(withoutAccess(fn).modifiers ?? []),
+        ],
+      })),
     ),
   };
 }

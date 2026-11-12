@@ -4,15 +4,15 @@
  * Two consumption modes for the generated SDK:
  *
  *  1. **Drop into an existing Xcode target.** Paste `API/` + `Models/`
- *     into your app's target sources. Everything compiles into the
- *     same module — no `import` needed inside the app, no
- *     `Package.swift`. This is the default; nothing extra is emitted.
+ *   into your app's target sources. Everything compiles into the
+ *   same module — no `import` needed inside the app, no
+ *   `Package.swift`. This is the default; nothing extra is emitted.
  *
  *  2. **Standalone SwiftPM library.** Pass `package: true` (or an
- *     options object) to `generate()` and a `Package.swift` is
- *     emitted at the output root. Consumers reach for the SDK with
- *     `.package(path: "…")` (or a git URL once published) and
- *     `import <YourPackageName>`.
+ *   options object) to `generate()` and a `Package.swift` is
+ *   emitted at the output root. Consumers reach for the SDK with
+ *   `.package(path: "…")` (or a git URL once published) and
+ *   `import <YourPackageName>`.
  *
  * Mode 2 is the right choice when the SDK is shared across multiple
  * apps, lives in its own repo, or you want a clean module boundary
@@ -54,17 +54,17 @@ const DEFAULT_PLATFORMS = {
  * import PackageDescription
  *
  * let package = Package(
- *     name: "PetstoreSDK",
- *     platforms: [.iOS(.v15), .macOS(.v13)],
- *     products: [.library(name: "PetstoreSDK", targets: ["PetstoreSDK"])],
- *     targets: [
- *         .target(
- *             name: "PetstoreSDK",
- *             path: ".",
- *             exclude: ["Package.swift"],
- *             sources: ["API", "Models"]
- *         ),
- *     ]
+ *   name: "PetstoreSDK",
+ *   platforms: [.iOS(.v15), .macOS(.v13)],
+ *   products: [.library(name: "PetstoreSDK", targets: ["PetstoreSDK"])],
+ *   targets: [
+ *     .target(
+ *       name: "PetstoreSDK",
+ *       path: ".",
+ *       exclude: ["Package.swift"],
+ *       sources: ["API", "Models"]
+ *     ),
+ *   ]
  * )
  * ```
  */
@@ -80,23 +80,23 @@ export function packageSwiftFile(opts: PackageOptions): BuiltFile {
     `import PackageDescription`,
     ``,
     `let package = Package(`,
-    `    name: "${opts.name}",`,
+    `  name: "${opts.name}",`,
   ];
   if (platforms) {
-    lines.push(`    platforms: [${platforms}],`);
+    lines.push(`  platforms: [${platforms}],`);
   }
   lines.push(
-    `    products: [`,
-    `        .library(name: "${opts.name}", targets: ["${opts.name}"]),`,
-    `    ],`,
-    `    targets: [`,
-    `        .target(`,
-    `            name: "${opts.name}",`,
-    `            path: ".",`,
-    `            exclude: ["Package.swift"],`,
-    `            sources: [${sources.map((s) => `"${s}"`).join(", ")}]`,
-    `        ),`,
-    `    ]`,
+    `  products: [`,
+    `    .library(name: "${opts.name}", targets: ["${opts.name}"]),`,
+    `  ],`,
+    `  targets: [`,
+    `    .target(`,
+    `      name: "${opts.name}",`,
+    `      path: ".",`,
+    `      exclude: ["Package.swift"],`,
+    `      sources: [${sources.map((s) => `"${s}"`).join(", ")}]`,
+    `    ),`,
+    `  ]`,
     `)`,
     ``,
   );

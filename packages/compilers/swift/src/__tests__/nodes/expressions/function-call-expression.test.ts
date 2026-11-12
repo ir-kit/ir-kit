@@ -22,4 +22,35 @@ describe("function call expression", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "function-call-expression.swift");
   });
+
+  it("wraps arguments past the max line length", async () => {
+    const f = swift.factory;
+    const arg = (label: string) => ({
+      label,
+      expression: f.createMemberAccessExpression(
+        f.createIdentifier("options"),
+        label,
+      ),
+    });
+    const file = f.createSourceFile([
+      f.createFunctionDeclaration("send", [], undefined, [
+        f.createReturnStatement(
+          f.createTryExpression(
+            f.createAwaitExpression(
+              f.createFunctionCallExpression(
+                f.createIdentifier("client.execute"),
+                [
+                  { expression: f.createIdentifier("request") },
+                  arg("requestInterceptors"),
+                  arg("responseValidator"),
+                  arg("responseTransformer"),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "call-wrapped-arguments.swift");
+  });
 });

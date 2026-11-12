@@ -27,7 +27,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: [String: Int32].self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: [String: Int32].self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /store/inventory
@@ -50,7 +53,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: [String: Int32].self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: [String: Int32].self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /store/order
@@ -71,7 +77,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: Order.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: Order.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /store/order
@@ -92,7 +101,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: Order.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: Order.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /store/order/{orderId}
@@ -102,7 +114,8 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> Order {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
+    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
+      "\(orderId)")
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -111,7 +124,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: Order.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: Order.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /store/order/{orderId}
@@ -121,7 +137,8 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> (Order, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
+    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
+      "\(orderId)")
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -130,14 +147,18 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: Order.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: Order.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// DELETE /store/order/{orderId}
   public func deleteOrder(orderId: Int64, options: RequestOptions = RequestOptions()) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
+    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
+      "\(orderId)")
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -146,7 +167,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// DELETE /store/order/{orderId}
@@ -156,7 +180,8 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent("\(orderId)")
+    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
+      "\(orderId)")
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -165,7 +190,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// POST /shapes
@@ -186,7 +214,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: CreateShape_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: CreateShape_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /shapes
@@ -207,7 +238,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: CreateShape_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: CreateShape_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /measurements
@@ -228,7 +262,10 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// POST /measurements
@@ -249,6 +286,9 @@ public final class URLSessionStoreAPI: StoreAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 }

@@ -25,7 +25,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /user
@@ -46,7 +49,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /user/createWithList
@@ -67,7 +73,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /user/createWithList
@@ -88,7 +97,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/login
@@ -99,7 +111,10 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> String {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("user").appendingPathComponent("login"), resolvingAgainstBaseURL: false) else {
+    guard let urlComponents = URLComponents(
+      url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
+      resolvingAgainstBaseURL: false
+    ) else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -117,7 +132,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: String.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: String.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/login
@@ -128,7 +146,10 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (String, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(url: baseURL.appendingPathComponent("user").appendingPathComponent("login"), resolvingAgainstBaseURL: false) else {
+    guard let urlComponents = URLComponents(
+      url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
+      resolvingAgainstBaseURL: false
+    ) else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -146,7 +167,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: String.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: String.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/logout
@@ -162,7 +186,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// GET /user/logout
@@ -180,7 +207,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// GET /user/{username}
@@ -199,7 +229,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// GET /user/{username}
@@ -218,7 +251,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: User.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: User.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// PUT /user/{username}
@@ -240,7 +276,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// PUT /user/{username}
@@ -262,7 +301,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// DELETE /user/{username}
@@ -281,7 +323,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    try await client.execute(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    try await client.execute(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// DELETE /user/{username}
@@ -300,7 +345,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator)
+    return try await client.executeWithResponse(
+      request, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator
+    )
   }
 
   /// POST /profile
@@ -321,7 +369,10 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.execute(request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.execute(
+      request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 
   /// POST /profile
@@ -342,6 +393,9 @@ public final class URLSessionUserAPI: UserAPI {
     for header in options.headers {
       request.setValue(header.value, forHTTPHeaderField: header.key)
     }
-    return try await client.executeWithResponse(request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors, responseValidator: options.responseValidator, responseTransformer: options.responseTransformer)
+    return try await client.executeWithResponse(
+      request, as: UpdateProfile_Response.self, extraInterceptors: options.requestInterceptors,
+      responseValidator: options.responseValidator, responseTransformer: options.responseTransformer
+    )
   }
 }

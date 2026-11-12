@@ -28,7 +28,8 @@ public final class APIClient {
     responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil,
     responseTransformer: ((Data) async throws -> Data)? = nil
   ) async throws -> T {
-    let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
+    let (data, httpResponse) = try await sendAndDispatch(
+      request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
     }
@@ -48,7 +49,8 @@ public final class APIClient {
     extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
     responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil
   ) async throws {
-    let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
+    let (data, httpResponse) = try await sendAndDispatch(
+      request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
     }
@@ -61,7 +63,8 @@ public final class APIClient {
     responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil,
     responseTransformer: ((Data) async throws -> Data)? = nil
   ) async throws -> (T, HTTPURLResponse) {
-    let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
+    let (data, httpResponse) = try await sendAndDispatch(
+      request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
     }
@@ -82,7 +85,8 @@ public final class APIClient {
     extraInterceptors: [(URLRequest) async throws -> URLRequest] = [],
     responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil
   ) async throws -> HTTPURLResponse {
-    let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
+    let (data, httpResponse) = try await sendAndDispatch(
+      request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
     }
@@ -95,7 +99,8 @@ public final class APIClient {
     responseValidator: ((Data, HTTPURLResponse) async throws -> Void)? = nil,
     responseTransformer: ((Data) async throws -> Data)? = nil
   ) async throws -> (Data, HTTPURLResponse) {
-    let (data, httpResponse) = try await sendAndDispatch(request, extraInterceptors: extraInterceptors)
+    let (data, httpResponse) = try await sendAndDispatch(
+      request, extraInterceptors: extraInterceptors)
     if let validator = responseValidator {
       try await validator(data, httpResponse)
     }
