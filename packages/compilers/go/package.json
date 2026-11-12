@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/compiler-go",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Typed Go AST + printer. Build Go source with a TypeScript-compiler-style factory API and print gofmt-clean output. Zero runtime dependencies.",
   "keywords": [
     "codegen",

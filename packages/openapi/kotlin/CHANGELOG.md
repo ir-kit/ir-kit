@@ -1,5 +1,45 @@
 # @ir-kit/openapi-kotlin
 
+## 2.1.0
+
+### Minor Changes
+
+- cfe6d3e: The plain-data Kotlin DSL (`kt-dsl/`) is gone: the `kt*` builders in `src/ast` now return `@ir-kit/compiler-kotlin` nodes directly, and `KtDecl` is `{ kind, name, runtime?, receiver?, node }`. Imports are collected from the AST (`referencedNames` + `importsFor`) instead of regex-scanning printed source, so string literals and KDoc no longer trigger spurious imports. `ktProp`'s `inPrimary` is removed (data/enum/impl class properties always live in the primary constructor), as are the unused `ktTypeParam`, `ktClassRef`, `ktMapLit`, `ktRange`/`ktUntil` and `ktUnderscore`. `@ir-kit/compiler-kotlin` exports more node types on the `kt` namespace.
+- 0a6e8cc: Generated Kotlin SDKs compile with `kotlinc` and the kotlinx.serialization plugin on every real spec we test against (Stripe, OpenAI, DigitalOcean, Box, Slack, Spotify, Mux). CI now compiles the generated petstore SDK.
+  - Free-form schema values (`{}`, untyped `additionalProperties`, unresolvable unions) are `JsonElement` instead of `Any`, so models containing them are serializable. Callers that passed arbitrary objects now build a `JsonElement`.
+  - `@SerialName` and enum raw values are emitted as Kotlin string literals, so keys containing `$` stay compile-time constants.
+  - Serializers are resolved through type aliases (`typealias Window = Window2?` encodes with `Window2.serializer().nullable`, list and map aliases use `ListSerializer`/`MapSerializer`).
+  - Schemas named after Kotlin, library or runtime types (`Response`, `Request`, `Result`, `APIClient`, …) get a disambiguated name.
+  - Operation parameters that would shadow a local of the generated method body (`options`, `url`, `client`, …) get a `Param` suffix.
+  - Requests set their HTTP method once: with the body when the operation has one, otherwise up front with an empty body for `POST`/`PUT`/`PATCH`. Previously every request started as `.method("POST", null)`, which OkHttp rejects at runtime.
+
+- 15a585c: `@ir-kit/openapi-kotlin` now prints through `@ir-kit/compiler-kotlin`; the hand-written `kt-compiler` printer is deleted. Generated SDKs (models, APIs and runtime) are ktlint-canonical, and CI lints the petstore example and the runtime.
+  - The runtime (`APIClient.kt`, `Auth.kt`, …) ships as real Kotlin sources under `runtime/` with only the package header rewritten. Auth helpers are always included; `RuntimeOpts.hasAuth`, `hasFormUrlEncoded` and `apiClientKt` are removed.
+  - `@ir-kit/compiler-kotlin`: prints `leadingComments`, adds an `indentSize` option, implements `maxLineLength` (default 140, matching ktlint_official) by wrapping call arguments, single-parameter signatures and expression bodies, and separates annotated enum entries with a blank line.
+
+- 5591bff: Generated Kotlin is ktlint-clean on large real-world specs (Stripe, OpenAI, Box, DigitalOcean, Slack, Mux).
+  - **Breaking for generated Kotlin names:** synthesized types are PascalCase (`FindPetsByStatusParamStatus`, `SubmitJobResponse`) instead of `Owner_Property`. Enum entries that would start with a digit get a `VALUE_` prefix.
+  - API files import each referenced model explicitly instead of `models.*`.
+  - Multi-2xx sealed class names are claimed through the type namespace, so the impl and the declaration can no longer disagree.
+  - Parameter names drop characters Kotlin can't use (`filters[]` → `filters`); type and API names that start with a digit get an `X` prefix (`X1ClickApplicationsApi`) in Kotlin and Java.
+  - Object schemas without properties become a plain `class` (a `data class` needs a constructor property).
+  - `compiler-kotlin`: a multi-line call on the right of `=` starts on its own line, `when` entries get blank lines when any entry spans lines, and long parameters move annotations onto their own line and then wrap the type.
+
+### Patch Changes
+
+- 86fa954: Type names now resolve through a per-run `Namespace` keyed by semantic identity: component schemas, `$ref`s and synthesized inline types always agree on spelling, invalid source names (`properties-store`) become valid identifiers, and clashes get deterministic suffixes instead of duplicate declarations. Enum classification is total — boolean, number and mixed enums degrade to their value type instead of throwing, and clashing entry names are disambiguated. `assertNoEnumCollisions` is replaced by `uniqueEnumEntries`.
+- Updated dependencies [31e4737]
+- Updated dependencies [f869f1e]
+- Updated dependencies [cfe6d3e]
+- Updated dependencies [15a585c]
+- Updated dependencies [5591bff]
+- Updated dependencies [86fa954]
+  - @ir-kit/openapi-loader@0.3.0
+  - @ir-kit/compiler-kotlin@0.1.0
+  - @ir-kit/openapi@0.4.0
+  - @ir-kit/codegen-core@0.2.0
+  - @ir-kit/openapi-tools@0.3.1
+
 ## 2.0.0
 
 ### Minor Changes

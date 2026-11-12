@@ -1,5 +1,14 @@
 # @ir-kit/openapi-tools
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [f869f1e]
+- Updated dependencies [86fa954]
+  - @ir-kit/openapi@0.4.0
+  - @ir-kit/schema@0.3.0
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,27 @@
 # @ir-kit/openapi-go
 
+## 2.1.0
+
+### Minor Changes
+
+- 376e65c: The plain-data Go DSL (`go-dsl/`) and the DSL→AST lowering are gone: emitters now build `@ir-kit/compiler-go` nodes directly through thin builders in `src/ast` (`goStruct`, `goFuncDecl`, `goCall`, …). `GoDecl` is now `{ kind, name, file?, receiver?, node }`, `goField` tags are passed without backticks, and `goFile` / `printFile` come from the printer module. Generated output is unchanged.
+- 2d0d1f8: The Go SDK runtime (`api_client.go`, `auth.go`, `request_options.go`, …) now ships as real Go sources under `runtime/` and is copied into each generated SDK with only the package clause rewritten, instead of living as TypeScript template strings. The auth runtime is always included (no more spliced-in `Auth` field); `RuntimeOpts.hasAuth` and `apiClientGo` are removed.
+
+### Patch Changes
+
+- f869f1e: Generated Go is now printed by `@ir-kit/compiler-go` instead of the hand-written string printer: struct fields and const blocks are column-aligned, imports are grouped goimports-style, and every emitted file (runtime included) passes `gofmt` / `goimports`.
+- f869f1e: Generated Go now passes `go vet` on Stripe, Slack, Box, OpenAI and Mux: parameters can no longer shadow method-body locals or imported packages (`path`, `url`, `body`), multi-2xx methods return the response interface instead of a pointer to it, decode errors assign the named `err` result instead of shadowing it, form bodies use `url.Values{}`, and optional slice/map parameters are no longer dereferenced.
+- f869f1e: `loadOpenAPI` now gives every schema that is `$ref`'d from outside the components section (e.g. `#/paths/~1apps/get/.../properties/cors`) a home in `components.schemas` and rewrites those refs, so generators only ever see refs to declared components (`hoistForeignSchemaRefs`). Go names that would start with a digit are now `X`-prefixed so they stay exported, and struct fields that normalize to the same name are disambiguated.
+- 86fa954: Type names now resolve through a per-run `Namespace` keyed by semantic identity: component schemas, `$ref`s and synthesized inline types always agree on spelling, invalid source names (`properties-store`) become valid identifiers, and clashes get deterministic suffixes instead of duplicate declarations. Enum classification is total — boolean, number and mixed enums degrade to their value type instead of throwing, and clashing entry names are disambiguated. `assertNoEnumCollisions` is replaced by `uniqueEnumEntries`.
+- Updated dependencies [31e4737]
+- Updated dependencies [f869f1e]
+- Updated dependencies [86fa954]
+  - @ir-kit/openapi-loader@0.3.0
+  - @ir-kit/compiler-go@0.0.1
+  - @ir-kit/openapi@0.4.0
+  - @ir-kit/codegen-core@0.2.0
+  - @ir-kit/openapi-tools@0.3.1
+
 ## 2.0.0
 
 ### Minor Changes

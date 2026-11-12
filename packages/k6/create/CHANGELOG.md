@@ -1,5 +1,11 @@
 # @ir-kit/create-k6
 
+## 0.1.4
+
+### Patch Changes
+
+- @ir-kit/k6-toolkit@0.2.1
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @ir-kit/spec-loader
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [31e4737]
+- Updated dependencies [f869f1e]
+  - @ir-kit/openapi-loader@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

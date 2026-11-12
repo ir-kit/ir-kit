@@ -1,5 +1,35 @@
 # @ir-kit/cli
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [f869f1e]
+- Updated dependencies [376e65c]
+- Updated dependencies [2d0d1f8]
+- Updated dependencies [f869f1e]
+- Updated dependencies [f869f1e]
+- Updated dependencies [cfe6d3e]
+- Updated dependencies [0a6e8cc]
+- Updated dependencies [15a585c]
+- Updated dependencies [5591bff]
+- Updated dependencies [4146a79]
+- Updated dependencies [8f6e0f7]
+- Updated dependencies [746f3ad]
+- Updated dependencies [90c89aa]
+- Updated dependencies [86fa954]
+  - @ir-kit/openapi-go@2.1.0
+  - @ir-kit/openapi-kotlin@2.1.0
+  - @ir-kit/openapi-swift@2.1.0
+  - @ir-kit/schema@0.3.0
+  - @ir-kit/k6-gen@0.3.1
+  - @ir-kit/k6-toolkit@0.2.1
+  - @ir-kit/openapi-typescript@0.2.1
+  - @ir-kit/spec-loader@0.2.1
+  - @ir-kit/spec-convert@0.2.1
+  - @ir-kit/spec-diff@0.2.1
+  - @ir-kit/spec-docs@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

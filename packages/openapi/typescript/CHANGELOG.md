@@ -1,5 +1,16 @@
 # @ir-kit/openapi-typescript
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [31e4737]
+- Updated dependencies [f869f1e]
+- Updated dependencies [86fa954]
+  - @ir-kit/openapi-loader@0.3.0
+  - @ir-kit/openapi@0.4.0
+  - @ir-kit/openapi-tools@0.3.1
+
 ## 0.2.0
 
 ### Minor Changes

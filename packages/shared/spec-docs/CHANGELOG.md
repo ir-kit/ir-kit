@@ -1,5 +1,11 @@
 # @ir-kit/spec-docs
 
+## 0.2.1
+
+### Patch Changes
+
+- @ir-kit/spec-convert@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

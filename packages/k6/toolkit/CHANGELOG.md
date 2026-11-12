@@ -1,5 +1,15 @@
 # @ir-kit/k6-toolkit
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [31e4737]
+- Updated dependencies [f869f1e]
+  - @ir-kit/openapi-loader@0.3.0
+  - @ir-kit/k6-gen@0.3.1
+  - @ir-kit/openapi-tools@0.3.1
+
 ## 0.2.0
 
 ### Minor Changes

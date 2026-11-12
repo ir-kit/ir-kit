@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/compiler-java",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Typed Java AST + printer. Build Java source with a TypeScript-compiler-style factory API and print google-java-format-clean output. Zero runtime dependencies.",
   "keywords": [
     "codegen",

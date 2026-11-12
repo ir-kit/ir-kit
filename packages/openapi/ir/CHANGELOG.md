@@ -1,5 +1,18 @@
 # @ir-kit/openapi
 
+## 0.4.0
+
+### Minor Changes
+
+- f869f1e: `loadOpenAPI` now gives every schema that is `$ref`'d from outside the components section (e.g. `#/paths/~1apps/get/.../properties/cors`) a home in `components.schemas` and rewrites those refs, so generators only ever see refs to declared components (`hoistForeignSchemaRefs`). Go names that would start with a digit are now `X`-prefixed so they stay exported, and struct fields that normalize to the same name are disambiguated.
+- 86fa954: Type names now resolve through a per-run `Namespace` keyed by semantic identity: component schemas, `$ref`s and synthesized inline types always agree on spelling, invalid source names (`properties-store`) become valid identifiers, and clashes get deterministic suffixes instead of duplicate declarations. Enum classification is total — boolean, number and mixed enums degrade to their value type instead of throwing, and clashing entry names are disambiguated. `assertNoEnumCollisions` is replaced by `uniqueEnumEntries`.
+
+### Patch Changes
+
+- Updated dependencies [86fa954]
+  - @ir-kit/codegen-core@0.2.0
+  - @ir-kit/schema@0.3.0
+
 ## 0.3.0
 
 ### Minor Changes

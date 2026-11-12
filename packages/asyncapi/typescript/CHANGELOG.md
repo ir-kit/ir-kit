@@ -1,5 +1,12 @@
 # @ir-kit/asyncapi-typescript
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [86fa954]
+  - @ir-kit/codegen-core@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes

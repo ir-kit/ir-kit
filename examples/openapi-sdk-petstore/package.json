@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "One OpenAPI spec \u2192 multiple platform SDKs (Kotlin now; Swift, etc. later). Demonstrates the ir-kit native client codegen story end-to-end.",
+  "description": "One OpenAPI spec → multiple platform SDKs (Kotlin now; Swift, etc. later). Demonstrates the ir-kit native client codegen story end-to-end.",
   "scripts": {
     "gen:kotlin": "jiti kotlin/gen.ts",
     "gen:swift": "jiti swift/gen.ts",
