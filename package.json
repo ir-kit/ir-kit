@@ -26,6 +26,7 @@
     "format": "biome check --write .",
     "format:check": "biome ci .",
     "deps:check": "manypkg check",
+    "check:exports": "node scripts/check-exports.mjs",
     "deps:fix": "manypkg fix",
     "sync:readme": "node scripts/sync-readme.mjs",
     "new-package": "node scripts/new-package.mjs",
