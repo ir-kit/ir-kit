@@ -422,3 +422,65 @@ describe("openAPIToProto responses", () => {
 }`);
   });
 });
+
+describe("openAPIToProto allOf property merging", () => {
+  it("terminates on members whose shared property is recursive", () => {
+    const { root } = convert(
+      spec(
+        {},
+        {
+          Node: {
+            type: "object",
+            properties: { child: { $ref: "#/components/schemas/Node" } },
+          },
+          Tree: {
+            allOf: [
+              { $ref: "#/components/schemas/Node" },
+              {
+                type: "object",
+                properties: { child: { $ref: "#/components/schemas/Tree" } },
+              },
+            ],
+          },
+        },
+      ),
+    );
+    expect(root.lookupType("pet_store.Tree").fields.child?.type).toBe("Tree");
+  });
+
+  it("keeps the value type of a repeated map property", () => {
+    const { source } = convert(
+      spec(
+        {},
+        {
+          Base: {
+            type: "object",
+            properties: {
+              labels: {
+                type: "object",
+                additionalProperties: { type: "string" },
+              },
+            },
+          },
+          Extended: {
+            allOf: [
+              { $ref: "#/components/schemas/Base" },
+              {
+                type: "object",
+                properties: {
+                  labels: {
+                    type: "object",
+                    additionalProperties: { type: "string" },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ),
+    );
+    expect(source).toMatch(
+      /message Extended \{\n {2}map<string, string> labels = 1;/,
+    );
+  });
+});

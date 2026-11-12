@@ -55,29 +55,39 @@ export function mergeObjectAllOf(doc: Json): void {
     return { properties, required: [...required] };
   };
 
-  const isObjectSchema = (node: unknown): boolean => {
-    const target = isObject(node) ? resolve(node) : undefined;
-    return (
-      target !== undefined &&
-      (target.type === "object" ||
-        isObject(target.properties) ||
-        Array.isArray(target.allOf))
-    );
-  };
+  /** Inline object a merge can combine field by field. `$ref`s and
+   *  maps are left out: merging through a `$ref` can recurse forever,
+   *  and a map has no fields to combine. */
+  const isInlineObject = (node: unknown): node is Json =>
+    isObject(node) &&
+    node.$ref === undefined &&
+    isObject(node.properties) &&
+    (node.type === undefined || node.type === "object") &&
+    !node.allOf &&
+    !node.oneOf &&
+    !node.anyOf;
 
-  /** A property several members declare as an object keeps every
-   *  member's fields: the walk below flattens the nested `allOf`. */
+  /** A property several members declare as an inline object keeps
+   *  every member's fields; otherwise the later declaration wins. */
   function mergeProperties(into: Json, from: Json): void {
     for (const [key, schema] of Object.entries(from)) {
       const prev = into[key];
       into[key] =
-        prev !== undefined &&
-        prev !== schema &&
-        isObjectSchema(prev) &&
-        isObjectSchema(schema)
-          ? { allOf: [prev, schema] }
+        prev !== schema && isInlineObject(prev) && isInlineObject(schema)
+          ? mergeObjects(prev, schema)
           : schema;
     }
+  }
+
+  function mergeObjects(a: Json, b: Json): Json {
+    const properties: Json = { ...(a.properties as Json) };
+    mergeProperties(properties, b.properties as Json);
+    const required = new Set(
+      [a.required, b.required].flatMap((r) => (Array.isArray(r) ? r : [])),
+    );
+    const merged: Json = { ...a, ...b, properties };
+    if (required.size > 0) merged.required = [...required];
+    return merged;
   }
 
   const visited = new WeakSet<object>();
