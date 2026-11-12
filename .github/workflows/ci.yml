@@ -109,7 +109,7 @@ jobs:
         run: bash scripts/lint-kotlin.sh examples/openapi-sdk-petstore/kotlin/sdk
 
   swift-lint:
-    name: Lint Swift compiler snapshots
+    name: Lint Swift compiler snapshots and generated SDK
     runs-on: macos-latest
     permissions:
       contents: read
@@ -120,3 +120,6 @@ jobs:
 
       - name: Lint snapshots
         run: bash scripts/lint-swift.sh
+
+      - name: Lint generated example SDK
+        run: bash scripts/lint-swift.sh examples/openapi-sdk-petstore/swift/sdk
