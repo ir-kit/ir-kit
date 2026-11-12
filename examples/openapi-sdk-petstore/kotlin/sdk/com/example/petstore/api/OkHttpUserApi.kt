@@ -23,7 +23,7 @@ public class OkHttpUserApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("user")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(User.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -49,7 +49,7 @@ public class OkHttpUserApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("user")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(User.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -76,7 +76,7 @@ public class OkHttpUserApi(
         urlBuilder.addPathSegment("user")
         urlBuilder.addPathSegment("createWithList")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(ListSerializer(User.serializer()), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -103,7 +103,7 @@ public class OkHttpUserApi(
         urlBuilder.addPathSegment("user")
         urlBuilder.addPathSegment("createWithList")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(ListSerializer(User.serializer()), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -277,7 +277,7 @@ public class OkHttpUserApi(
         urlBuilder.addPathSegment("user")
         urlBuilder.addPathSegment(username)
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("PUT", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(User.serializer(), body)
         builder.method("PUT", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -303,7 +303,7 @@ public class OkHttpUserApi(
         urlBuilder.addPathSegment("user")
         urlBuilder.addPathSegment(username)
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("PUT", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(User.serializer(), body)
         builder.method("PUT", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -373,7 +373,7 @@ public class OkHttpUserApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("profile")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(UpdateProfileBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {
@@ -399,7 +399,7 @@ public class OkHttpUserApi(
         var urlBuilder = baseUrl.newBuilder()
         urlBuilder.addPathSegment("profile")
         val url = urlBuilder.build()
-        val builder = Request.Builder().url(url).method("POST", null)
+        val builder = Request.Builder().url(url)
         val payload = client.json.encodeToString(UpdateProfileBody.serializer(), body)
         builder.method("POST", payload.toRequestBody("application/json".toMediaType()))
         for (header in options.headers) {

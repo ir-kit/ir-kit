@@ -94,7 +94,84 @@ export function kotlinTypeIdent(name: string): string {
   return /^[0-9]/.test(pascal) ? `X${pascal}` : pascal || "Empty";
 }
 
+/** Operation parameter name that cannot shadow a local of the generated method body. */
+export function operationParamIdent(name: string): string {
+  const ident = paramIdent(name);
+  return OPERATION_LOCALS.has(ident) ? `${ident}Param` : ident;
+}
+
 /** Owns every top-level Kotlin type name for one generation run. */
 export function newTypeNames(): Namespace {
-  return new Namespace({ normalize: kotlinTypeIdent });
+  return new Namespace({
+    normalize: kotlinTypeIdent,
+    reserved: RESERVED_TYPE_NAMES,
+  });
 }
+
+/** Locals and names generated method bodies declare or capture. */
+const OPERATION_LOCALS: ReadonlySet<string> = new Set([
+  "auth",
+  "baseUrl",
+  "builder",
+  "client",
+  "currentUrl",
+  "data",
+  "formBuilder",
+  "header",
+  "multipart",
+  "options",
+  "payload",
+  "raw",
+  "response",
+  "scheme",
+  "url",
+  "urlBuilder",
+  "value",
+]);
+
+/** Kotlin, library and runtime type names generated files use unqualified. */
+const RESERVED_TYPE_NAMES: ReadonlySet<string> = new Set([
+  "Any",
+  "APIClient",
+  "APIError",
+  "APIInterceptors",
+  "APIKeyLocation",
+  "Auth",
+  "Boolean",
+  "ByteArray",
+  "Dispatchers",
+  "Double",
+  "Exception",
+  "Float",
+  "FormBody",
+  "HttpUrl",
+  "Instant",
+  "Int",
+  "Json",
+  "JsonElement",
+  "KSerializer",
+  "List",
+  "LocalDate",
+  "Long",
+  "Map",
+  "MediaType",
+  "MultipartBody",
+  "MultipartFormBody",
+  "Nothing",
+  "OkHttpClient",
+  "Pair",
+  "QueryStyle",
+  "Request",
+  "RequestBody",
+  "RequestOptions",
+  "Response",
+  "Result",
+  "SerialName",
+  "Serializable",
+  "Set",
+  "String",
+  "Throwable",
+  "TimeUnit",
+  "Unit",
+  "URLEncoding",
+]);

@@ -17,9 +17,9 @@ import {
   ktStr,
   ktVal,
 } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 import { setMethodWithBody } from "./request.js";
-import { serializerFor } from "./serializer.js";
+import { type SerializerAliases, serializerFor } from "./serializer.js";
 
 export interface BodyResult {
   stmts: ReadonlyArray<KtStmt>;
@@ -48,6 +48,7 @@ export function buildBodyStmts(
   body: IR.BodyObject,
   method: HttpMethod,
   bodyType: KtType,
+  aliases: SerializerAliases,
 ): BodyResult {
   const { shape, schema } = classifyBody(body);
   switch (shape.kind) {
@@ -57,7 +58,10 @@ export function buildBodyStmts(
         needsMultipart: false,
       };
     case "json-typed":
-      return { stmts: emitJsonBody(method, bodyType), needsMultipart: false };
+      return {
+        stmts: emitJsonBody(method, bodyType, aliases),
+        needsMultipart: false,
+      };
     case "multipart-object":
       return { stmts: emitMultipartBody(schema, method), needsMultipart: true };
     case "form-urlencoded-object":
@@ -84,12 +88,16 @@ function toMediaTypeCall(mt: string): KtExpr {
   return ktCall(ktMember(ktStr(mt), "toMediaType"), []);
 }
 
-function emitJsonBody(method: HttpMethod, bodyType: KtType): KtStmt[] {
+function emitJsonBody(
+  method: HttpMethod,
+  bodyType: KtType,
+  aliases: SerializerAliases,
+): KtStmt[] {
   return [
     ktVal(
       "payload",
       ktCall(ktMember(ktMember(ktIdent("client"), "json"), "encodeToString"), [
-        ktArg(serializerFor(bodyType)),
+        ktArg(serializerFor(bodyType, aliases)),
         ktArg(ktIdent("body")),
       ]),
     ),
@@ -120,7 +128,7 @@ function emitMultipartBody(schema: Schema, method: HttpMethod): KtStmt[] {
     schema.properties ?? {},
   )) {
     if (!isSchemaObject(propSchema)) continue;
-    const id = paramIdent(propName);
+    const id = operationParamIdent(propName);
     const isBinary =
       propSchema.type === "string" && propSchema.format === "binary";
     const append: KtStmt = isBinary
@@ -158,7 +166,7 @@ function emitFormUrlEncodedBody(schema: Schema, method: HttpMethod): KtStmt[] {
     ktVal("formBuilder", ktCall(ktIdent("FormBody.Builder"), [])),
   ];
   for (const propName of Object.keys(schema.properties ?? {})) {
-    const id = paramIdent(propName);
+    const id = operationParamIdent(propName);
     const append: KtStmt = ktExprStmt(
       ktCall(ktMember(ktIdent("formBuilder"), "add"), [
         ktArg(ktStr(propName)),

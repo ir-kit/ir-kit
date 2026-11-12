@@ -44,6 +44,7 @@ export const ktFloat: KtType = named("Float");
 export const ktBoolean: KtType = named("Boolean");
 export const ktUnit: KtType = named("Unit");
 export const ktAny: KtType = named("Any");
+export const ktJsonElement: KtType = named("JsonElement");
 export const ktNothing: KtType = named("Nothing");
 export const ktByteArray: KtType = named("ByteArray");
 
@@ -215,8 +216,8 @@ export interface KtFunParam {
 
 export const ktFunParam = (opts: KtFunParam): KtFunParam => ({ ...opts });
 
-export const ktAnnotation = (name: string, args?: string): KtAnnotation =>
-  f.createAnnotation(name, args === undefined ? undefined : [ktArg(raw(args))]);
+export const ktAnnotation = (name: string, arg?: KtExpr): KtAnnotation =>
+  f.createAnnotation(name, arg === undefined ? undefined : [ktArg(arg)]);
 
 export function ktProp(opts: {
   name: string;
@@ -292,12 +293,12 @@ export function ktFun(opts: {
 
 export const ktEnumEntry = (
   name: string,
-  args?: string,
+  arg?: KtExpr,
   annotations?: ReadonlyArray<KtAnnotation>,
 ): KtEnumEntry =>
   f.createEnumEntry(
     name,
-    args === undefined ? undefined : [ktArg(raw(args))],
+    arg === undefined ? undefined : [ktArg(arg)],
     undefined,
     annotations,
   );
@@ -339,6 +340,8 @@ export interface KtDecl {
     | "typeAlias"
     | "topLevelFun";
   name: string;
+  /** Target of a `typeAlias` declaration. */
+  aliasOf?: KtType;
   /** Runtime-helper types live with the API surface. */
   runtime?: boolean;
   /** Receiver type name of a top-level extension fun. */
@@ -489,6 +492,7 @@ export function ktTypeAlias(opts: {
   return {
     kind: "typeAlias",
     name: opts.name,
+    aliasOf: opts.type,
     node: f.createTypeAlias(opts.name, opts.type, [
       opts.visibility ?? "public",
     ]),

@@ -22,7 +22,7 @@ import type {
   OperationSignature,
   ResponseCase,
 } from "../operation/signature.js";
-import { serializerFor } from "./serializer.js";
+import { type SerializerAliases, serializerFor } from "./serializer.js";
 
 /**
  * Tail of an impl method body — delegate to the runtime client. Five
@@ -36,21 +36,26 @@ import { serializerFor } from "./serializer.js";
  */
 export function buildSendAndDecodeStmts(
   sig: OperationSignature,
+  aliases: SerializerAliases,
 ): ReadonlyArray<KtStmt> {
-  if (sig.responseCases.length > 0) return buildMultiResponseStmts(sig);
-  return buildSingleResponseStmts(sig.returnType);
+  if (sig.responseCases.length > 0)
+    return buildMultiResponseStmts(aliases, sig);
+  return buildSingleResponseStmts(sig.returnType, aliases);
 }
 
 // MARK: single-2xx
 
-function buildSingleResponseStmts(returnType: KtType): ReadonlyArray<KtStmt> {
+function buildSingleResponseStmts(
+  returnType: KtType,
+  aliases: SerializerAliases,
+): ReadonlyArray<KtStmt> {
   const dispatch = classifyReturn(returnType);
   const callee = ktMember(ktIdent("client"), dispatch.method);
   const args: KtCallArg[] = [
     ktArg(ktCall(ktMember(ktIdent("builder"), "build"), [])),
   ];
   if (dispatch.deserializerType) {
-    args.push(ktArg(serializerFor(dispatch.deserializerType)));
+    args.push(ktArg(serializerFor(dispatch.deserializerType, aliases)));
   }
   args.push(
     ktArg(ktMember(ktIdent("options"), "timeout"), "timeout"),
@@ -120,6 +125,7 @@ function classifyReturn(t: KtType): DispatchShape {
 // MARK: multi-2xx
 
 function buildMultiResponseStmts(
+  aliases: SerializerAliases,
   sig: OperationSignature,
 ): ReadonlyArray<KtStmt> {
   const wrapWithResponse = typeName(sig.returnType) === "Pair";
@@ -149,7 +155,7 @@ function buildMultiResponseStmts(
       sig.responseCases.map((c) =>
         ktWhenCase(
           [ktIntLit(Number(c.statusCode))],
-          caseBody(c, sealedName, wrapWithResponse),
+          caseBody(aliases, c, sealedName, wrapWithResponse),
         ),
       ),
       [
@@ -165,6 +171,7 @@ function buildMultiResponseStmts(
 }
 
 function caseBody(
+  aliases: SerializerAliases,
   c: ResponseCase,
   sealedName: string,
   wrapWithResponse: boolean,
@@ -179,7 +186,7 @@ function caseBody(
   const decoded = ktCall(
     ktMember(ktMember(ktIdent("client"), "json"), "decodeFromString"),
     [
-      ktArg(serializerFor(c.payloadType)),
+      ktArg(serializerFor(c.payloadType, aliases)),
       ktArg(ktCall(ktMember(ktIdent("data"), "decodeToString"), [])),
     ],
   );

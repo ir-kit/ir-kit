@@ -6,7 +6,7 @@ import {
 } from "@ir-kit/openapi";
 
 import { type KtFunParam, ktFunParam, ktNullable } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
@@ -30,7 +30,7 @@ export function buildNonBodyParams(
       propPath: ["param", p.name],
     });
     return ktFunParam({
-      name: paramIdent(p.name),
+      name: operationParamIdent(p.name),
       type: p.required ? t : ktNullable(t),
       default: p.required ? undefined : "null",
     });

@@ -13,7 +13,7 @@ import {
   ktNull,
   ktStr,
 } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 
 /**
  * `builder.header("<name>", "$<value>")` for each header param. Optional
@@ -27,7 +27,7 @@ export function buildHeaderStmts(
 }
 
 function buildHeaderStmt(p: IR.ParameterObject): ReadonlyArray<KtStmt> {
-  const id = paramIdent(p.name);
+  const id = operationParamIdent(p.name);
   const setStmt = ktExprStmt(
     ktCall(ktMember(ktIdent("builder"), "header"), [
       ktArg(ktStr(p.name)),

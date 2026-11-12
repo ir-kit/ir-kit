@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
 
-import { operationsToDecls, printDecl } from "../src/index.ts";
+import {
+  aliasesOf,
+  operationsToDecls,
+  printDecl,
+  schemasToDecls,
+} from "../src/index.ts";
 import { ir, securityNamesMap } from "./_helpers.ts";
 
 const getUserSpec = {
@@ -372,5 +377,78 @@ describe("operationsToDecls", () => {
     const { decls } = operationsToDecls(m.paths);
     const iface = decls.find((d) => d.kind === "interface")!;
     assert.match(printDecl(iface), /`class`: String/);
+  });
+
+  it("resolves serializers through type aliases", () => {
+    const m = ir({
+      paths: {
+        "/windows": {
+          put: {
+            tags: ["Windows"],
+            operationId: "putWindow",
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Window" },
+                },
+              },
+            },
+            responses: {
+              200: {
+                description: "ok",
+                content: {
+                  "application/json": {
+                    schema: { $ref: "#/components/schemas/Tags" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Window: { type: "object", properties: { day: { type: "string" } } },
+          Tags: { type: "array", items: { type: "string" } },
+        },
+      },
+    });
+    const { decls } = operationsToDecls(m.paths, {
+      aliases: new Map(aliasesOf(schemasToDecls(m.components?.schemas ?? {}))),
+    });
+    const out = printDecl(decls.find((d) => d.kind === "class")!);
+    assert.match(out, /encodeToString\(Window\.serializer\(\), body\)/);
+    assert.match(out, /ListSerializer\(String\.serializer\(\)\)/);
+    assert.doesNotMatch(out, /Tags\.serializer/);
+  });
+
+  it("renames parameters that would shadow method-body locals", () => {
+    const m = ir({
+      paths: {
+        "/search": {
+          get: {
+            tags: ["Search"],
+            operationId: "search",
+            parameters: [
+              {
+                name: "url",
+                in: "query",
+                required: true,
+                schema: { type: "string" },
+              },
+              { name: "options", in: "query", schema: { type: "string" } },
+            ],
+            responses: { 204: { description: "ok" } },
+          },
+        },
+      },
+    });
+    const { decls } = operationsToDecls(m.paths);
+    const out = printDecl(decls.find((d) => d.kind === "class")!);
+    assert.match(out, /urlParam: String,/);
+    assert.match(out, /optionsParam: String\?/);
+    assert.match(out, /options: RequestOptions/);
+    assert.match(out, /URLEncoding\.addScalar\(urlBuilder, "url", urlParam\)/);
   });
 });

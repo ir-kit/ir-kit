@@ -11,7 +11,7 @@ import {
   ktFunParam,
   ktNullable,
 } from "../../ast/index.js";
-import { paramIdent } from "../identifiers.js";
+import { operationParamIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
@@ -63,7 +63,7 @@ function objectBodyToFlatParams(
           ? ktByteArray
           : schemaToType(propSchema, { ...ctx, propPath: ["body", propName] });
       return ktFunParam({
-        name: paramIdent(propName),
+        name: operationParamIdent(propName),
         type: required ? t : ktNullable(t),
         default: required ? undefined : "null",
       });
