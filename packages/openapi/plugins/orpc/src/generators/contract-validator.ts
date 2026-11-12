@@ -8,7 +8,7 @@ import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { operationResponsesMap } from "@hey-api/shared";
 
-import type { ORPCPlugin } from "../types";
+import type { ORPCPlugin } from "../types.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -96,7 +96,7 @@ export function buildValidatorOutput(
     resource: "operation",
     resourceId: operationId,
     role,
-    tool: validatorName,
+    plugin: validatorName,
   });
 }
 
@@ -173,7 +173,7 @@ function buildComponentErrorMap(
     const errorSchema = plugin.querySymbol({
       resource: "definition",
       resourceId: errorResponseSchema.$ref,
-      tool: validatorName,
+      plugin: validatorName,
     });
     if (errorSchema) {
       errorMapObj = errorMapObj.prop(
@@ -233,19 +233,15 @@ function callCreateRequestSchema(
  */
 function fileSchemaExpr(plugin: Plugin, validatorName: string): any | null {
   if (validatorName === "zod") {
-    const zodPlugin = plugin.getPlugin("zod" as any);
-    const compat = (
-      zodPlugin?.config as { compatibilityVersion?: 3 | 4 | "mini" } | undefined
-    )?.compatibilityVersion;
-
-    if (compat === 4) {
-      return $(plugin.external("zod.z")).attr("file").call();
+    const zodPlugin = plugin.getPluginOrThrow("zod");
+    if (zodPlugin.config.compatibilityVersion === 4) {
+      return $(zodPlugin.imports.z).attr("file").call();
     }
-    return $(plugin.external("@orpc/zod.oz")).attr("file").call();
+    return $(plugin.imports.oz).attr("file").call();
   }
 
   if (validatorName === "valibot") {
-    return $(plugin.external("valibot.*")).attr("file").call();
+    return $(plugin.getPluginOrThrow("valibot").imports.v).attr("file").call();
   }
 
   return null;
@@ -326,7 +322,7 @@ function patchMultipartBody(
     resource: "operation",
     resourceId: operation.id!,
     role: "request-body",
-    tool: validatorName,
+    plugin: validatorName,
   });
 
   if (!bodySym) return { expr: requestSchema, useDetailedMode: true };

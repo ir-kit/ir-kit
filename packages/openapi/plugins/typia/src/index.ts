@@ -1,5 +1,5 @@
-import "./types";
+import "./types.js";
 
-export { defaultConfig, defineConfig } from "./config";
-export { typiaTypeTransformer } from "./shared/type-transformer";
-export type { TypiaPlugin } from "./types";
+export { defaultConfig, defineConfig } from "./config.js";
+export { typiaTypeTransformer } from "./shared/type-transformer.js";
+export type { TypiaPlugin } from "./types.js";

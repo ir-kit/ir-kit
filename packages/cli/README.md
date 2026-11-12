@@ -24,6 +24,7 @@ ir
 │   ├── go         Generate a Go SDK
 │   ├── kotlin     Generate a Kotlin (OkHttp + coroutines) SDK
 │   ├── swift      Generate a Swift (URLSession + Codable) SDK
+│   ├── java       Generate a Java (java.net.http + Jackson) SDK
 │   ├── typescript Generate a TypeScript SDK via @hey-api/openapi-ts
 │   ├── k6         Generate a typed k6 load-test client
 │   └── all        Run every SDK generator in one pass
@@ -62,7 +63,7 @@ ir k6 sync && ir k6 bundle ./loadtest.ts --out dist/loadtest.js
 
 ## How it works
 
-Each command is a thin schema-driven wrapper around a programmatic `runX()` API exposed by the underlying engine package (`@ir-kit/spec-convert`, `@ir-kit/spec-docs`, `@ir-kit/spec-diff`, `@ir-kit/openapi-{go,kotlin,swift,typescript}`, `@ir-kit/k6-toolkit`, `@ir-kit/fn-schema-core`, `@ir-kit/openapi-recon`). All orchestration lives in those engines — the CLI exists to expose them under one entry point with consistent flag UX.
+Each command is a thin schema-driven wrapper around a programmatic `runX()` API exposed by the underlying engine package (`@ir-kit/spec-convert`, `@ir-kit/spec-docs`, `@ir-kit/spec-diff`, `@ir-kit/openapi-{go,kotlin,swift,java,typescript}`, `@ir-kit/k6-toolkit`, `@ir-kit/fn-schema-core`, `@ir-kit/openapi-recon`). All orchestration lives in those engines — the CLI exists to expose them under one entry point with consistent flag UX.
 
 ```ts
 // Every command follows the same shape:

@@ -9,23 +9,26 @@ import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { escapeComment } from "@hey-api/shared";
 
-import type { RouterNode } from "../router-organizer";
-import { getGroupKey } from "../router-organizer";
-import { contractName as toContractName } from "../utils";
+import type { RouterNode } from "../router-organizer.js";
+import { getGroupKey } from "../router-organizer.js";
+import { contractName as toContractName } from "../utils.js";
 import {
   buildValidatorErrorMap,
   buildValidatorInput,
   buildValidatorOutput,
   classifyBody,
-} from "./contract-validator";
-import type { ContractGeneratorInput, ContractGeneratorOutput } from "./types";
+} from "./contract-validator.js";
+import type {
+  ContractGeneratorInput,
+  ContractGeneratorOutput,
+} from "./types.js";
 
 export const generateContracts = ({
   contractFile,
   plugin,
 }: ContractGeneratorInput): ContractGeneratorOutput => {
   const routerStructure = new Map<string, RouterNode[]>();
-  const oc = plugin.external("@orpc/contract.oc");
+  const oc = plugin.imports.oc;
   const { input: inputValidator, output: outputValidator } =
     plugin.config.validator;
 

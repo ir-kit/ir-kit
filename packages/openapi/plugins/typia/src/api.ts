@@ -2,13 +2,13 @@ import type { Symbol } from "@hey-api/codegen-core";
 import type { $ } from "@hey-api/openapi-ts";
 import type { IR, RequestSchemaContext } from "@hey-api/shared";
 
-import type { TypiaPlugin } from "./types";
+import type { TypiaPlugin } from "./types.js";
 import {
   createRequestSchemaV1,
   createRequestValidatorV1,
   createResponseValidatorV1,
   getJsonSchemaSymbolV1,
-} from "./v1/api";
+} from "./v1/api.js";
 
 export interface ValidatorArgs {
   operation: IR.OperationObject;

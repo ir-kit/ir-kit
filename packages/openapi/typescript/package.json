@@ -51,7 +51,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@hey-api/openapi-ts": ">=0.97.0"
+    "@hey-api/openapi-ts": ">=0.99.0"
   },
   "dependencies": {
     "@ir-kit/openapi": "workspace:*",

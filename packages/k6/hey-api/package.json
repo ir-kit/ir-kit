@@ -53,8 +53,8 @@
     "@ir-kit/k6-gen": "workspace:*"
   },
   "peerDependencies": {
-    "@hey-api/openapi-ts": ">=0.95.0",
-    "@hey-api/shared": ">=0.2.0"
+    "@hey-api/openapi-ts": ">=0.99.0",
+    "@hey-api/shared": ">=0.5.0"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "catalog:",

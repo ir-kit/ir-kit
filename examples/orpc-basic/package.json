@@ -27,7 +27,7 @@
     "typia": "12.0.2"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.96.1",
+    "@hey-api/openapi-ts": "catalog:",
     "@ir-kit/openapi-tools": "workspace:*",
     "@ir-kit/openapi-ts-orpc": "workspace:*",
     "@ir-kit/openapi-ts-paths": "workspace:*",

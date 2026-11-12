@@ -17,6 +17,17 @@ export interface LoadOpenAPIOptions {
   normalize?: boolean | NormalizeOptions;
 }
 
+/** Parse a spec file, URL or object into its raw root document without resolving refs. */
+export async function readSpecDocument(
+  input: OpenAPIInput,
+  cwd?: string,
+): Promise<Record<string, unknown>> {
+  const { schema } = await new $RefParser().parse({
+    pathOrUrlOrSchema: resolveOpenAPIInput(input, cwd),
+  });
+  return schema as Record<string, unknown>;
+}
+
 export async function loadOpenAPI(
   opts: LoadOpenAPIOptions,
 ): Promise<Record<string, unknown>> {

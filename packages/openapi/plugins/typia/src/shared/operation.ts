@@ -3,7 +3,7 @@ import { $, type MaybeTsDsl, TsDsl, type TypeTsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import ts from "typescript";
 
-import type { TypiaPlugin } from "../types";
+import type { TypiaPlugin } from "../types.js";
 
 export type RequestInputType = MaybeTsDsl<TypeTsDsl<ts.TypeNode>>;
 
@@ -69,7 +69,7 @@ export function queryDataTypeSymbol(
     resource: "operation",
     resourceId: operation.id,
     role: "data",
-    tool: "typescript",
+    plugin: "@hey-api/typescript",
   });
 }
 
@@ -82,7 +82,7 @@ export function queryResponseTypeSymbol(
     resource: "operation",
     resourceId: operation.id,
     role: "response",
-    tool: "typescript",
+    plugin: "@hey-api/typescript",
   });
 }
 
@@ -95,7 +95,7 @@ export function queryErrorsTypeSymbol(
     resource: "operation",
     resourceId: operation.id,
     role: "errors",
-    tool: "typescript",
+    plugin: "@hey-api/typescript",
   });
 }
 

@@ -12,6 +12,7 @@ import { nodeBrand, ref } from "@hey-api/codegen-core";
 export class RawTextNode implements ICoreNode<string> {
   readonly "~brand" = nodeBrand;
   readonly language = "typescript";
+  meta: unknown = undefined;
   exported?: boolean;
   root: boolean;
   scope?: NodeScope;

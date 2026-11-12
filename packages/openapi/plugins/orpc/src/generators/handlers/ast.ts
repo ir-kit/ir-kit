@@ -6,7 +6,7 @@
 
 import ts from "typescript";
 
-import type { HandlerMode, ProxyHandlerConfig } from "../../types";
+import type { HandlerMode, ProxyHandlerConfig } from "../../types.js";
 
 export type {
   PropertyInfo,

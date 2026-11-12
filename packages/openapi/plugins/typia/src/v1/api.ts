@@ -2,8 +2,8 @@ import type { Symbol } from "@hey-api/codegen-core";
 import { $ } from "@hey-api/openapi-ts";
 import type { IR, RequestSchemaContext } from "@hey-api/shared";
 
-import type { ValidatorArgs } from "../api";
-import type { TypiaPlugin } from "../types";
+import type { ValidatorArgs } from "../api.js";
+import type { TypiaPlugin } from "../types.js";
 
 export function createRequestSchemaV1(
   ctx: RequestSchemaContext<TypiaPlugin["Instance"]>,

@@ -1,8 +1,13 @@
-import { definePluginConfig } from "@hey-api/shared";
+import {
+  coerce,
+  collectDeps,
+  defineConfig as defineConfigTable,
+  definePluginConfig,
+} from "@hey-api/shared";
 
 import { DEFAULT_FORMAT_MAPPING } from "./core/hints.js";
 import { handler } from "./plugin.js";
-import type { FakerPlugin, FieldNameHints } from "./types.js";
+import type { FakerPlugin, FieldNameHints, FormatMapping } from "./types.js";
 
 export { DEFAULT_FORMAT_MAPPING };
 
@@ -21,8 +26,11 @@ const normalizeFieldNameHints = (hints?: FieldNameHints): FieldNameHints => {
 export const defaultConfig: FakerPlugin["Config"] = {
   config: {
     output: "factories.gen",
-    fieldNameHints: {},
-    formatMapping: DEFAULT_FORMAT_MAPPING,
+    fieldNameHints: coerce(normalizeFieldNameHints),
+    formatMapping: coerce((value?: FormatMapping) => ({
+      ...DEFAULT_FORMAT_MAPPING,
+      ...value,
+    })),
     generateBatchCreators: true,
     defaultBatchCount: 10,
     respectConstraints: true,
@@ -30,17 +38,36 @@ export const defaultConfig: FakerPlugin["Config"] = {
   },
   dependencies: ["@hey-api/typescript"],
   handler,
+  imports: (plugin) => ({
+    faker: plugin.symbolFactory.register("faker", {
+      external: "@faker-js/faker",
+    }),
+  }),
   name: "@ir-kit/openapi-ts-faker",
-  resolveConfig: (plugin) => {
-    plugin.config.fieldNameHints = normalizeFieldNameHints(
-      plugin.config.fieldNameHints,
-    );
-    plugin.config.formatMapping = {
-      ...DEFAULT_FORMAT_MAPPING,
-      ...plugin.config.formatMapping,
-    };
-  },
   tags: ["transformer"],
 };
 
-export const defineConfig = definePluginConfig(defaultConfig);
+/**
+ * `definePluginConfig` spreads user config over the default table, so a
+ * nested user object replaces its table (losing defaults and coercers).
+ * Resolve user config against the table here instead.
+ */
+const pluginFromDefaults = definePluginConfig(defaultConfig);
+const normalizeConfig = defineConfigTable<
+  Record<string, unknown>,
+  Record<string, unknown>
+>(defaultConfig.config as never);
+
+export const defineConfig = (
+  userConfig?: Parameters<typeof pluginFromDefaults>[0],
+) => {
+  const plugin = pluginFromDefaults();
+  const config = normalizeConfig({ ...userConfig });
+  const dependencies = new Set<string>(defaultConfig.dependencies);
+  collectDeps(defaultConfig.config as never, config, dependencies);
+  return {
+    ...plugin,
+    config: config as typeof plugin.config,
+    dependencies: [...dependencies] as typeof plugin.dependencies,
+  };
+};

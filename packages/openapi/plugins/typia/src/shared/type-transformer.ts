@@ -7,7 +7,7 @@ import {
   TYPIA_INTEGER_FORMATS,
   TYPIA_TAG_META,
   type TypiaTagName,
-} from "./typia-tags.generated";
+} from "./typia-tags.generated.js";
 
 type OpenApiTarget = "array" | "number" | "string";
 
