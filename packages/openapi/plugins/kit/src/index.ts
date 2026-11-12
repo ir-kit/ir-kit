@@ -13,12 +13,8 @@ export function identifierName(name: string, naming: NamingConfig): string {
 }
 
 /**
- * `definePluginConfig` with user config resolved against the default table.
- *
- * Hey API's `definePluginConfig` spreads user config over the defaults, so a
- * nested user object replaces its whole table and loses the defaults and
- * coercers for the keys it leaves out. This resolves user config through the
- * table instead and recollects the dependencies the resolved values imply.
+ * `definePluginConfig` that resolves nested user options against the default
+ * table, so omitted keys keep their defaults and coercers.
  */
 export function definePlugin<T extends Plugin.Types>(
   defaultConfig: Plugin.Config<T>,
