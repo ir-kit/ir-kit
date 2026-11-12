@@ -772,8 +772,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         break;
 
       default:
-        // @ts-expect-error
-        throw new Error(`Unsupported node kind: ${node.kind}`);
+        return unsupported(node);
     }
 
     if (node.trailingComments) {
@@ -798,4 +797,8 @@ export function createPrinter(options?: GoPrinterOptions) {
 
 export function printAst(node: GoNode): string {
   return JSON.stringify(node, null, 2);
+}
+
+function unsupported(node: never): never {
+  throw new Error(`Unsupported node kind: ${(node as { kind: string }).kind}`);
 }

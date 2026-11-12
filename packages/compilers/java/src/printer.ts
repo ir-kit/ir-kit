@@ -942,18 +942,11 @@ export function createPrinter(options?: JavaPrinterOptions) {
         if (node.resources && node.resources.length > 0) {
           const resources = node.resources
             .map((res) => {
-              if (
-                res &&
-                typeof res === "object" &&
-                "name" in res &&
-                "type" in res
-              ) {
-                const init = res.initializer
-                  ? ` = ${printNode(res.initializer)}`
-                  : "";
-                return `${printNode(res.type)} ${res.name}${init}`;
-              }
-              return printNode(res as any);
+              if ("kind" in res) return printNode(res);
+              const init = res.initializer
+                ? ` = ${printNode(res.initializer)}`
+                : "";
+              return `${printNode(res.type)} ${res.name}${init}`;
             })
             .join("; ");
           parts.push(
@@ -981,7 +974,7 @@ export function createPrinter(options?: JavaPrinterOptions) {
       }
 
       default:
-        throw new Error(`Unsupported node kind: ${(node as any).kind}`);
+        return unsupported(node);
     }
 
     if (node.kind === JavaNodeKind.MethodDeclaration) {
@@ -1008,4 +1001,8 @@ export function createPrinter(options?: JavaPrinterOptions) {
 
 export function printAst(node: JavaNode): string {
   return JSON.stringify(node, null, 2);
+}
+
+function unsupported(node: never): never {
+  throw new Error(`Unsupported node kind: ${(node as { kind: string }).kind}`);
 }
