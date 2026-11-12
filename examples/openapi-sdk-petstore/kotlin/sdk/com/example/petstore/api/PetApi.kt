@@ -7,61 +7,61 @@ public interface PetApi {
     /** POST /pet */
     suspend fun addPet(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet
 
     /** POST /pet */
     suspend fun addPetWithResponse(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response>
 
     /** PUT /pet */
     suspend fun updatePet(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet
 
     /** PUT /pet */
     suspend fun updatePetWithResponse(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response>
 
     /** GET /pet/findByStatus */
     suspend fun findPetsByStatus(
         status: FindPetsByStatus_Param_Status,
-        options: RequestOptions
+        options: RequestOptions,
     ): List<Pet>
 
     /** GET /pet/findByStatus */
     suspend fun findPetsByStatusWithResponse(
         status: FindPetsByStatus_Param_Status,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<List<Pet>, Response>
 
     /** GET /pet/findByTags */
     suspend fun findPetsByTags(
         tags: List<String>,
-        options: RequestOptions
+        options: RequestOptions,
     ): List<Pet>
 
     /** GET /pet/findByTags */
     suspend fun findPetsByTagsWithResponse(
         tags: List<String>,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<List<Pet>, Response>
 
     /** GET /pet/{petId} */
     suspend fun getPetById(
         petId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet
 
     /** GET /pet/{petId} */
     suspend fun getPetByIdWithResponse(
         petId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response>
 
     /** POST /pet/{petId} */
@@ -69,7 +69,7 @@ public interface PetApi {
         petId: Long,
         name: String?,
         status: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet
 
     /** POST /pet/{petId} */
@@ -77,21 +77,21 @@ public interface PetApi {
         petId: Long,
         name: String?,
         status: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response>
 
     /** DELETE /pet/{petId} */
     suspend fun deletePet(
         petId: Long,
         apiKey: String?,
-        options: RequestOptions
+        options: RequestOptions,
     )
 
     /** DELETE /pet/{petId} */
     suspend fun deletePetWithResponse(
         petId: Long,
         apiKey: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Response
 
     /** POST /pet/{petId}/uploadImage */
@@ -99,7 +99,7 @@ public interface PetApi {
         petId: Long,
         additionalMetadata: String?,
         body: ByteArray,
-        options: RequestOptions
+        options: RequestOptions,
     ): ApiResponse
 
     /** POST /pet/{petId}/uploadImage */
@@ -107,7 +107,7 @@ public interface PetApi {
         petId: Long,
         additionalMetadata: String?,
         body: ByteArray,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<ApiResponse, Response>
 
     /** POST /pet/{petId}/uploadDocument */
@@ -116,7 +116,7 @@ public interface PetApi {
         file: ByteArray,
         title: String?,
         description: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): ApiResponse
 
     /** POST /pet/{petId}/uploadDocument */
@@ -125,18 +125,18 @@ public interface PetApi {
         file: ByteArray,
         title: String?,
         description: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<ApiResponse, Response>
 
     /** POST /tags */
     suspend fun submitTags(
         body: SubmitTags_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): SubmitTags_Response
 
     /** POST /tags */
     suspend fun submitTagsWithResponse(
         body: SubmitTags_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<SubmitTags_Response, Response>
 }

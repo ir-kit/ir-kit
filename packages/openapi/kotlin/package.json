@@ -39,6 +39,7 @@
   },
   "files": [
     "dist",
+    "runtime/*.kt",
     "README.md",
     "LICENSE.md"
   ],
@@ -59,6 +60,7 @@
   },
   "dependencies": {
     "@ir-kit/codegen-core": "workspace:*",
+    "@ir-kit/compiler-kotlin": "workspace:*",
     "@ir-kit/openapi": "workspace:*",
     "@ir-kit/openapi-loader": "workspace:*"
   },

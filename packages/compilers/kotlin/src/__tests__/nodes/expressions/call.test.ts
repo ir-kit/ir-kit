@@ -50,4 +50,27 @@ describe("call expression", () => {
     );
     await assertPrintedMatchesSnapshot(file([node]), "trailing-lambda.kt");
   });
+
+  it("wraps arguments past the max line length", async () => {
+    const arg = (name: string) => ({
+      expression: f.createNavigationExpression(
+        f.createIdentifier("options"),
+        f.createIdentifier(name),
+      ),
+      name,
+    });
+    const node = f.createFunctionDeclaration("send", [], undefined, [
+      f.createReturnStatement(
+        f.createCallExpression(f.createIdentifier("client.execute"), [
+          { expression: f.createIdentifier("request") },
+          arg("timeout"),
+          arg("extraInterceptors"),
+          arg("responseValidator"),
+          arg("responseTransformer"),
+        ]),
+      ),
+      f.createReturnStatement(f.createIdentifier("Unit")),
+    ]);
+    await assertPrintedMatchesSnapshot(file([node]), "call-wrapped-args.kt");
+  });
 });

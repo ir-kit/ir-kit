@@ -13,7 +13,11 @@ import okhttp3.HttpUrl
  *    `?name=v` per element; explode=false joins per the style separator.
  */
 public object URLEncoding {
-    public fun addScalar(builder: HttpUrl.Builder, name: String, value: Any?) {
+    public fun addScalar(
+        builder: HttpUrl.Builder,
+        name: String,
+        value: Any?,
+    ) {
         if (value == null) return
         builder.addQueryParameter(name, value.toString())
     }
@@ -30,11 +34,12 @@ public object URLEncoding {
             for (v in values) builder.addQueryParameter(name, v.toString())
             return
         }
-        val sep = when (style) {
-            QueryStyle.FORM -> ","
-            QueryStyle.SPACE_DELIMITED -> " "
-            QueryStyle.PIPE_DELIMITED -> "|"
-        }
+        val sep =
+            when (style) {
+                QueryStyle.FORM -> ","
+                QueryStyle.SPACE_DELIMITED -> " "
+                QueryStyle.PIPE_DELIMITED -> "|"
+            }
         builder.addQueryParameter(name, values.joinToString(sep) { it.toString() })
     }
 }

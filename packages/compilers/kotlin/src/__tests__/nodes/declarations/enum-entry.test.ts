@@ -38,4 +38,30 @@ describe("enum entry", () => {
     );
     await assertPrintedMatchesSnapshot(file([node]), "value-arguments.kt");
   });
+
+  it("separates annotated entries with a blank line", async () => {
+    const entry = (name: string, raw: string) =>
+      f.createEnumEntry(
+        name,
+        [{ expression: f.createStringLiteral([{ text: raw }]) }],
+        undefined,
+        [
+          f.createAnnotation("SerialName", [
+            { expression: f.createStringLiteral([{ text: raw }]) },
+          ]),
+        ],
+      );
+    const node = f.createClassDeclaration(
+      "Status",
+      f.createPrimaryConstructor([
+        f.createParameter("raw", f.createUserType("String"), undefined, "val"),
+      ]),
+      undefined,
+      ["enum"],
+      undefined,
+      undefined,
+      [entry("ACTIVE", "active"), entry("PENDING", "pending")],
+    );
+    await assertPrintedMatchesSnapshot(file([node]), "annotated-entries.kt");
+  });
 });

@@ -14,7 +14,7 @@ public class OkHttpPetApi(
     /** POST /pet */
     public override suspend fun addPet(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -32,13 +32,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /pet */
     public override suspend fun addPetWithResponse(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -56,13 +63,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** PUT /pet */
     public override suspend fun updatePet(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -80,13 +94,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** PUT /pet */
     public override suspend fun updatePetWithResponse(
         body: Pet,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -104,13 +125,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /pet/findByStatus */
     public override suspend fun findPetsByStatus(
         status: FindPetsByStatus_Param_Status,
-        options: RequestOptions
+        options: RequestOptions,
     ): List<Pet> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -128,13 +156,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), ListSerializer(Pet.serializer()), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            ListSerializer(Pet.serializer()),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /pet/findByStatus */
     public override suspend fun findPetsByStatusWithResponse(
         status: FindPetsByStatus_Param_Status,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<List<Pet>, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -152,13 +187,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), ListSerializer(Pet.serializer()), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            ListSerializer(Pet.serializer()),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /pet/findByTags */
     public override suspend fun findPetsByTags(
         tags: List<String>,
-        options: RequestOptions
+        options: RequestOptions,
     ): List<Pet> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -176,13 +218,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), ListSerializer(Pet.serializer()), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            ListSerializer(Pet.serializer()),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /pet/findByTags */
     public override suspend fun findPetsByTagsWithResponse(
         tags: List<String>,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<List<Pet>, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -200,13 +249,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), ListSerializer(Pet.serializer()), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            ListSerializer(Pet.serializer()),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /pet/{petId} */
     public override suspend fun getPetById(
         petId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -223,13 +279,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /pet/{petId} */
     public override suspend fun getPetByIdWithResponse(
         petId: Long,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -246,7 +309,14 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /pet/{petId} */
@@ -254,7 +324,7 @@ public class OkHttpPetApi(
         petId: Long,
         name: String?,
         status: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pet {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -273,7 +343,14 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /pet/{petId} */
@@ -281,7 +358,7 @@ public class OkHttpPetApi(
         petId: Long,
         name: String?,
         status: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<Pet, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -300,14 +377,21 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), Pet.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            Pet.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** DELETE /pet/{petId} */
     public override suspend fun deletePet(
         petId: Long,
         apiKey: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ) {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -327,14 +411,19 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        client.executeUnit(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        client.executeUnit(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** DELETE /pet/{petId} */
     public override suspend fun deletePetWithResponse(
         petId: Long,
         apiKey: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -354,7 +443,12 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeUnitWithResponse(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        return client.executeUnitWithResponse(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** POST /pet/{petId}/uploadImage */
@@ -362,7 +456,7 @@ public class OkHttpPetApi(
         petId: Long,
         additionalMetadata: String?,
         body: ByteArray,
-        options: RequestOptions
+        options: RequestOptions,
     ): ApiResponse {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -382,7 +476,14 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), ApiResponse.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            ApiResponse.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /pet/{petId}/uploadImage */
@@ -390,7 +491,7 @@ public class OkHttpPetApi(
         petId: Long,
         additionalMetadata: String?,
         body: ByteArray,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<ApiResponse, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -410,7 +511,14 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), ApiResponse.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            ApiResponse.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /pet/{petId}/uploadDocument */
@@ -419,7 +527,7 @@ public class OkHttpPetApi(
         file: ByteArray,
         title: String?,
         description: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): ApiResponse {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -446,7 +554,14 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), ApiResponse.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            ApiResponse.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /pet/{petId}/uploadDocument */
@@ -455,7 +570,7 @@ public class OkHttpPetApi(
         file: ByteArray,
         title: String?,
         description: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<ApiResponse, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -482,13 +597,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), ApiResponse.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            ApiResponse.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /tags */
     public override suspend fun submitTags(
         body: SubmitTags_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): SubmitTags_Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -501,13 +623,20 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), SubmitTags_Response.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            SubmitTags_Response.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /tags */
     public override suspend fun submitTagsWithResponse(
         body: SubmitTags_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<SubmitTags_Response, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -520,6 +649,13 @@ public class OkHttpPetApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), SubmitTags_Response.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            SubmitTags_Response.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 }

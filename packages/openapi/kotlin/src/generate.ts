@@ -91,11 +91,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   const pkg = opts.packageName ?? "com.example.api";
   const apiSubDir = (opts.layout ?? "split") === "flat" ? "" : "api";
   const runtimeFiles = buildRuntimeFiles(
-    {
-      hasAuth: opsResult.needsAuth,
-      hasMultipart: opsResult.needsMultipart,
-      hasFormUrlEncoded: false,
-    },
+    { hasMultipart: opsResult.needsMultipart },
     runtimeSubPackage(pkg, apiSubDir),
   ).map((rf) => ({
     path: runtimePath(pkg, apiSubDir, rf.name),

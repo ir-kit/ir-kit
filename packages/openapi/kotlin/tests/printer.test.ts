@@ -79,7 +79,7 @@ public data class User(
     });
     const out = printFile(file);
     assert.match(out, /enum class Status\(\n\s+public val raw: String,\n\)/);
-    assert.match(out, /@SerialName\("active"\) ACTIVE\("active"\)/);
+    assert.match(out, /@SerialName\("active"\)\n\s+ACTIVE\("active"\)/);
   });
 
   it("emits an interface with suspend funs and no body", () => {
@@ -106,9 +106,7 @@ public data class User(
 
 public interface UsersApi {
     /** GET /users/{id} */
-    suspend fun getUser(
-        id: String
-    ): User
+    suspend fun getUser(id: String): User
 }
 `,
     );

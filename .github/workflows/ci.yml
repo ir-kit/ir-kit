@@ -84,7 +84,7 @@ jobs:
           (cd packages/openapi/go/runtime && go vet ./...)
 
   kotlin-lint:
-    name: Lint Kotlin compiler snapshots
+    name: Lint Kotlin compiler snapshots and generated SDK
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -101,6 +101,12 @@ jobs:
 
       - name: Lint snapshots
         run: bash scripts/lint-kotlin.sh
+
+      - name: Lint openapi-kotlin runtime
+        run: bash scripts/lint-kotlin.sh packages/openapi/kotlin/runtime
+
+      - name: Lint generated example SDK
+        run: bash scripts/lint-kotlin.sh examples/openapi-sdk-petstore/kotlin/sdk
 
   swift-lint:
     name: Lint Swift compiler snapshots

@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 public enum class Rect_Kind(
     public val raw: String,
 ) {
-    @SerialName("rect") RECT("rect"),
+    @SerialName("rect")
+    RECT("rect"),
 }

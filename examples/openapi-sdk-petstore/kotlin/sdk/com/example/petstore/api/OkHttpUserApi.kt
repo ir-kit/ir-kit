@@ -14,7 +14,7 @@ public class OkHttpUserApi(
     /** POST /user */
     public override suspend fun createUser(
         body: User,
-        options: RequestOptions
+        options: RequestOptions,
     ): User {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -27,13 +27,20 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), User.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            User.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /user */
     public override suspend fun createUserWithResponse(
         body: User,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<User, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -46,13 +53,20 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), User.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            User.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /user/createWithList */
     public override suspend fun createUsersWithListInput(
         body: List<User>,
-        options: RequestOptions
+        options: RequestOptions,
     ): User {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -66,13 +80,20 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), User.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            User.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /user/createWithList */
     public override suspend fun createUsersWithListInputWithResponse(
         body: List<User>,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<User, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -86,14 +107,21 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), User.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            User.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /user/login */
     public override suspend fun loginUser(
         username: String?,
         password: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): String {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -107,14 +135,21 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), String.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            String.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /user/login */
     public override suspend fun loginUserWithResponse(
         username: String?,
         password: String?,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<String, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -128,13 +163,18 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), String.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            String.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /user/logout */
-    public override suspend fun logoutUser(
-        options: RequestOptions
-    ) {
+    public override suspend fun logoutUser(options: RequestOptions) {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
@@ -145,13 +185,16 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        client.executeUnit(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        client.executeUnit(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** GET /user/logout */
-    public override suspend fun logoutUserWithResponse(
-        options: RequestOptions
-    ): Response {
+    public override suspend fun logoutUserWithResponse(options: RequestOptions): Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
         var urlBuilder = baseUrl.newBuilder()
@@ -162,13 +205,18 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeUnitWithResponse(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        return client.executeUnitWithResponse(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** GET /user/{username} */
     public override suspend fun getUserByName(
         username: String,
-        options: RequestOptions
+        options: RequestOptions,
     ): User {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -180,13 +228,20 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), User.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            User.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** GET /user/{username} */
     public override suspend fun getUserByNameWithResponse(
         username: String,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<User, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -198,14 +253,21 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), User.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            User.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** PUT /user/{username} */
     public override suspend fun updateUser(
         username: String,
         body: User,
-        options: RequestOptions
+        options: RequestOptions,
     ) {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -219,14 +281,19 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        client.executeUnit(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        client.executeUnit(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** PUT /user/{username} */
     public override suspend fun updateUserWithResponse(
         username: String,
         body: User,
-        options: RequestOptions
+        options: RequestOptions,
     ): Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -240,13 +307,18 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeUnitWithResponse(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        return client.executeUnitWithResponse(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** DELETE /user/{username} */
     public override suspend fun deleteUser(
         username: String,
-        options: RequestOptions
+        options: RequestOptions,
     ) {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -258,13 +330,18 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        client.executeUnit(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        client.executeUnit(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** DELETE /user/{username} */
     public override suspend fun deleteUserWithResponse(
         username: String,
-        options: RequestOptions
+        options: RequestOptions,
     ): Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -276,13 +353,18 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeUnitWithResponse(builder.build(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator)
+        return client.executeUnitWithResponse(
+            builder.build(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+        )
     }
 
     /** POST /profile */
     public override suspend fun updateProfile(
         body: UpdateProfile_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): UpdateProfile_Response {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -295,13 +377,20 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.execute(builder.build(), UpdateProfile_Response.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.execute(
+            builder.build(),
+            UpdateProfile_Response.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 
     /** POST /profile */
     public override suspend fun updateProfileWithResponse(
         body: UpdateProfile_Body,
-        options: RequestOptions
+        options: RequestOptions,
     ): Pair<UpdateProfile_Response, Response> {
         val client = options.client ?: this.client
         val baseUrl = options.baseUrl ?: client.baseUrl
@@ -314,6 +403,13 @@ public class OkHttpUserApi(
         for (header in options.headers) {
             builder.header(header.key, header.value)
         }
-        return client.executeWithResponse(builder.build(), UpdateProfile_Response.serializer(), timeout = options.timeout, extraInterceptors = options.requestInterceptors, responseValidator = options.responseValidator, responseTransformer = options.responseTransformer)
+        return client.executeWithResponse(
+            builder.build(),
+            UpdateProfile_Response.serializer(),
+            timeout = options.timeout,
+            extraInterceptors = options.requestInterceptors,
+            responseValidator = options.responseValidator,
+            responseTransformer = options.responseTransformer,
+        )
     }
 }
