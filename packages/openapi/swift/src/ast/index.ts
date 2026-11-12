@@ -253,6 +253,9 @@ export const swForIn = (
   source: SwExpr,
   body: ReadonlyArray<SwStmt>,
 ): SwStmt => f.createForInStatement(name, source, body);
+/** A bare `do { … }` scope. */
+export const swDo = (body: ReadonlyArray<SwStmt>): SwStmt =>
+  f.createDoStatement(body, []);
 export const swDoCatch = (
   body: ReadonlyArray<SwStmt>,
   catch_: ReadonlyArray<SwStmt>,

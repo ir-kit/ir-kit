@@ -13,10 +13,22 @@ public final class MultipartFormBody {
   }
 
   public func append(_ value: String, name: String) {
-    data.append(Data("--\(boundary)\r\n".utf8))
-    data.append(Data("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".utf8))
-    data.append(Data(value.utf8))
-    data.append(Data("\r\n".utf8))
+    do {
+      let text = "--\(boundary)\r\n"
+      data.append(Data(text.utf8))
+    }
+    do {
+      let text = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n"
+      data.append(Data(text.utf8))
+    }
+    do {
+      let text = value
+      data.append(Data(text.utf8))
+    }
+    do {
+      let text = "\r\n"
+      data.append(Data(text.utf8))
+    }
   }
 
   public func append(
@@ -25,12 +37,19 @@ public final class MultipartFormBody {
     filename: String,
     mimeType: String = "application/octet-stream"
   ) {
-    data.append(Data("--\(boundary)\r\n".utf8))
-    data.append(Data(
-      "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\nContent-Type: \(mimeType)\r\n\r\n".utf8
-    ))
+    do {
+      let text = "--\(boundary)\r\n"
+      data.append(Data(text.utf8))
+    }
+    do {
+      let text = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\nContent-Type: \(mimeType)\r\n\r\n"
+      data.append(Data(text.utf8))
+    }
     data.append(blob)
-    data.append(Data("\r\n".utf8))
+    do {
+      let text = "\r\n"
+      data.append(Data(text.utf8))
+    }
   }
 
   public func finalize() -> Data {
@@ -38,7 +57,10 @@ public final class MultipartFormBody {
       return data
     }
     finalized = true
-    data.append(Data("--\(boundary)--\r\n".utf8))
+    do {
+      let text = "--\(boundary)--\r\n"
+      data.append(Data(text.utf8))
+    }
     return data
   }
 }

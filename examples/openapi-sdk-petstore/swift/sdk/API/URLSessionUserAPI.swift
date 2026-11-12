@@ -111,10 +111,12 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> String {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(
-      url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
-      resolvingAgainstBaseURL: false
-    ) else {
+    guard
+      let urlComponents = URLComponents(
+        url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
+        resolvingAgainstBaseURL: false
+      )
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents
@@ -146,10 +148,12 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (String, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    guard let urlComponents = URLComponents(
-      url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
-      resolvingAgainstBaseURL: false
-    ) else {
+    guard
+      let urlComponents = URLComponents(
+        url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
+        resolvingAgainstBaseURL: false
+      )
+    else {
       throw APIError.transport(URLError(.badURL))
     }
     var components = urlComponents

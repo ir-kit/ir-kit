@@ -7,6 +7,7 @@ import {
   swCall,
   swClass,
   swData,
+  swDo,
   swDotCase,
   swExprStmt,
   swFun,
@@ -16,6 +17,7 @@ import {
   swIfLet,
   swInit,
   swInterp,
+  swLet,
   swMember,
   swProp,
   swRef,
@@ -169,13 +171,18 @@ function finalizeFn() {
   });
 }
 
-/** `data.append(Data(<expr>.utf8))` */
+/** `do { let text = <expr>; data.append(Data(text.utf8)) }` */
 function writeText(value: SwExpr): SwStmt {
-  return swExprStmt(
-    swCall(swMember(swIdent("data"), "append"), [
-      swArg(swCall(swIdent("Data"), [swArg(swMember(value, "utf8"))])),
-    ]),
-  );
+  return swDo([
+    swLet("text", value),
+    swExprStmt(
+      swCall(swMember(swIdent("data"), "append"), [
+        swArg(
+          swCall(swIdent("Data"), [swArg(swMember(swIdent("text"), "utf8"))]),
+        ),
+      ]),
+    ),
+  ]);
 }
 
 /** `data.append("--<boundary>\r\n".data(using: .utf8)!)` */

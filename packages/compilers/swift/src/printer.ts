@@ -131,6 +131,38 @@ export function createPrinter(options?: SwiftPrinterOptions) {
     return `case ${printNode(condition.pattern)} = ${printNode(condition.initializer)}`;
   }
 
+  function printConditions(
+    conditions: ReadonlyArray<SwiftCondition>,
+    offset: number,
+  ): string {
+    return conditions
+      .map((condition) => {
+        column = INDENT.length * indentLevel + offset;
+        return printCondition(condition);
+      })
+      .join(", ");
+  }
+
+  /** swift-format style for conditions that span lines. */
+  function printBrokenHeader(
+    keyword: string,
+    conditions: ReadonlyArray<SwiftCondition>,
+    opener: string,
+    body: ReadonlyArray<SwiftNode>,
+  ): string {
+    indentLevel += 1;
+    const printed = printLine(printConditions(conditions, 0));
+    const lines = body.map((statement) => printNode(statement));
+    indentLevel -= 1;
+    return [
+      printLine(keyword),
+      printed,
+      printLine(opener),
+      ...lines,
+      printLine("}"),
+    ].join("\n");
+  }
+
   function printBraceBlock(
     header: string,
     body: ReadonlyArray<SwiftNode>,
@@ -483,10 +515,10 @@ export function createPrinter(options?: SwiftPrinterOptions) {
       }
 
       case SwiftNodeKind.GuardStatement: {
-        const conditions = node.conditions
-          .map((condition) => printCondition(condition))
-          .join(", ");
-        return printBraceBlock(`guard ${conditions} else`, node.body);
+        const conditions = printConditions(node.conditions, "guard ".length);
+        if (!conditions.includes("\n"))
+          return printBraceBlock(`guard ${conditions} else`, node.body);
+        return printBrokenHeader("guard", node.conditions, "else {", node.body);
       }
 
       case SwiftNodeKind.Identifier:
@@ -501,9 +533,9 @@ export function createPrinter(options?: SwiftPrinterOptions) {
           : node.name;
 
       case SwiftNodeKind.IfStatement: {
-        const conditions = node.conditions
-          .map((condition) => printCondition(condition))
-          .join(", ");
+        const conditions = printConditions(node.conditions, "if ".length);
+        if (conditions.includes("\n") && !node.elseBody)
+          return printBrokenHeader("if", node.conditions, "{", node.body);
         const header = printLine(`if ${conditions} {`);
         indentLevel += 1;
         const body = node.body.map((statement) => printNode(statement));

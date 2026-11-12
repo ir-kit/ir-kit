@@ -87,7 +87,7 @@ export function packageSwiftFile(opts: PackageOptions): BuiltFile {
   }
   lines.push(
     `  products: [`,
-    `    .library(name: "${opts.name}", targets: ["${opts.name}"]),`,
+    `    .library(name: "${opts.name}", targets: ["${opts.name}"])`,
     `  ],`,
     `  targets: [`,
     `    .target(`,
@@ -95,7 +95,7 @@ export function packageSwiftFile(opts: PackageOptions): BuiltFile {
     `      path: ".",`,
     `      exclude: ["Package.swift"],`,
     `      sources: [${sources.map((s) => `"${s}"`).join(", ")}]`,
-    `    ),`,
+    `    )`,
     `  ]`,
     `)`,
     ``,

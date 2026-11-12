@@ -7,7 +7,7 @@ let package = Package(
   name: "PetstoreSDK",
   platforms: [.iOS(.v15), .macOS(.v13)],
   products: [
-    .library(name: "PetstoreSDK", targets: ["PetstoreSDK"]),
+    .library(name: "PetstoreSDK", targets: ["PetstoreSDK"])
   ],
   targets: [
     .target(
@@ -15,6 +15,6 @@ let package = Package(
       path: ".",
       exclude: ["Package.swift"],
       sources: ["API", "Models"]
-    ),
+    )
   ]
 )

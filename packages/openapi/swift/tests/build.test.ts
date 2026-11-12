@@ -217,7 +217,7 @@ describe("buildSwiftProject", () => {
       assert.match(pkg, /name: "MyAPIClient"/);
       assert.match(
         pkg,
-        /products: \[\s+\.library\(name: "MyAPIClient", targets: \["MyAPIClient"\]\),/,
+        /products: \[\s+\.library\(name: "MyAPIClient", targets: \["MyAPIClient"\]\)/,
       );
       assert.match(pkg, /sources: \["API", "Models"\]/);
       assert.match(pkg, /\.iOS\(\.v15\), \.macOS\(\.v13\)/);

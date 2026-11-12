@@ -498,7 +498,7 @@ describe("operations (IR-driven)", () => {
     // URLComponents is constructed via guard-let; force-unwrap is gone.
     assert.match(
       flat(out),
-      /guard let urlComponents = URLComponents\(url: baseURL\.appendingPathComponent\("search"\), resolvingAgainstBaseURL: false\) else/,
+      /guard\s+let urlComponents = URLComponents\(url: baseURL\.appendingPathComponent\("search"\), resolvingAgainstBaseURL: false\)\s+else/,
     );
     assert.match(flat(out), /var components = urlComponents/);
     assert.match(flat(out), /components\.queryItems = \[URLQueryItem\]\(\)/);
