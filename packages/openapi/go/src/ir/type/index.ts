@@ -1,5 +1,6 @@
+import type { Namespace } from "@ir-kit/codegen-core";
 import {
-  classifyEnumLiterals,
+  enumType,
   iterateObjectProperties,
   type Schema,
   schemaToType as sharedSchemaToType,
@@ -7,7 +8,7 @@ import {
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
 import type { GoDecl } from "../../go-dsl/decl/types.js";
-import type { GoType } from "../../go-dsl/index.js";
+import { type GoType, goRef, goTypeAlias } from "../../go-dsl/index.js";
 import { goOps } from "../type-ops.js";
 import type { TypeCtx } from "./context.js";
 
@@ -30,7 +31,7 @@ export function schemaToType(schema: Schema, ctx: TypeCtx): GoType {
 export function buildStruct(
   name: string,
   schema: Schema,
-  ctx: { emit: (d: GoDecl) => void },
+  ctx: { emit: (d: GoDecl) => void; names: Namespace },
 ): GoDecl {
   const properties = Array.from(iterateObjectProperties(schema));
   const dispatch = (s: Schema, c: TypeCtx): GoType =>
@@ -38,7 +39,7 @@ export function buildStruct(
   return goOps.buildStructDecl(
     name,
     properties,
-    { emit: ctx.emit, ownerName: name, propPath: [] },
+    { emit: ctx.emit, names: ctx.names, ownerName: name, propPath: [] },
     dispatch,
   );
 }
@@ -52,10 +53,13 @@ export function buildEnumFromIR(
   name: string,
   schema: Schema,
   emit: (d: GoDecl) => void,
+  names: Namespace,
 ): GoType {
-  const rawValues = getEnumLiterals(schema);
-  const kind = classifyEnumLiterals(rawValues, name);
-  if (kind === "integer")
-    return goOps.emitIntegerEnum(name, rawValues as number[], emit);
-  return goOps.emitStringEnum(name, rawValues as string[], emit);
+  const { type, named } = enumType(name, getEnumLiterals(schema), goOps, {
+    emit,
+    names,
+  });
+  if (named) return type;
+  emit(goTypeAlias({ name, type }));
+  return goRef(name);
 }

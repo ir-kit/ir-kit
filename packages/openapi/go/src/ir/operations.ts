@@ -1,6 +1,7 @@
 import type { IR } from "@hey-api/shared";
-import { safeIdent } from "@ir-kit/codegen-core";
+import { type Namespace, safeIdent } from "@ir-kit/codegen-core";
 import { iterOperations } from "@ir-kit/openapi";
+
 import {
   type GoDecl,
   type GoFuncResult,
@@ -13,6 +14,7 @@ import {
   goPtr,
   goRef,
 } from "../go-dsl/index.js";
+import { newTypeNames } from "./identifiers.js";
 import { buildClientStruct } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -30,6 +32,8 @@ export interface OperationsOptions {
   interfaceOnly?: boolean;
   /** Per-operation security-scheme names. See swift / kotlin generators. */
   securitySchemeNames?: ReadonlyMap<string, ReadonlyArray<string>>;
+  /** Shared type-name owner; pass the one used for `schemasToDecls`. */
+  names?: Namespace;
 }
 
 export interface OperationsResult {
@@ -62,11 +66,19 @@ export function operationsToDecls(
   const emit = (d: GoDecl) => decls.push(d);
   const byTag = new Map<string, OperationSignature[]>();
 
+  const names = opts.names ?? newTypeNames();
   for (const { pathStr, method, op, schemeNames } of iterOperations(
     paths,
     opts.securitySchemeNames,
   )) {
-    const sig = operationSignature(op, method, pathStr, emit, schemeNames);
+    const sig = operationSignature(
+      op,
+      method,
+      pathStr,
+      emit,
+      schemeNames,
+      names,
+    );
     const tag = op.tags?.[0] ?? defaultTag;
     const list = byTag.get(tag);
     if (list) list.push(sig);

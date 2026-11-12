@@ -2,9 +2,12 @@ import {
   avoidLeadingDigit,
   camel,
   escapeIfReserved,
+  Namespace,
   pascal,
   safeIdent,
 } from "@ir-kit/codegen-core";
+
+import { GO_RUNTIME_IDENTIFIERS } from "./runtime/templates.js";
 
 /**
  * Go-specific identifier transforms. Generic case helpers (`pascal`,
@@ -88,3 +91,11 @@ const GO_RESERVED_KEYWORDS: ReadonlySet<string> = new Set([
   "type",
   "var",
 ]);
+
+/** Owns every top-level Go type name for one generation run. */
+export function newTypeNames(): Namespace {
+  return new Namespace({
+    normalize: (s) => safeIdent(s) || "Empty",
+    reserved: GO_RUNTIME_IDENTIFIERS,
+  });
+}

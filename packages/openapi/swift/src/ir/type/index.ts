@@ -1,12 +1,18 @@
+import type { Namespace } from "@ir-kit/codegen-core";
 import {
-  classifyEnumLiterals,
+  enumType,
   iterateObjectProperties,
   type Schema,
   schemaToType as sharedSchemaToType,
 } from "@ir-kit/openapi";
 import { getEnumLiterals } from "@ir-kit/openapi-tools";
 
-import type { SwDecl, SwType } from "../../sw-dsl/index.js";
+import {
+  type SwDecl,
+  type SwType,
+  swRef,
+  swTypeAlias,
+} from "../../sw-dsl/index.js";
 import { swOps } from "../type-ops.js";
 import type { TypeCtx } from "./context.js";
 
@@ -24,7 +30,7 @@ export function schemaToType(schema: Schema, ctx: TypeCtx): SwType {
 export function buildStruct(
   name: string,
   schema: Schema,
-  ctx: { emit: (d: SwDecl) => void },
+  ctx: { emit: (d: SwDecl) => void; names: Namespace },
 ): SwDecl {
   const properties = Array.from(iterateObjectProperties(schema));
   const dispatch = (s: Schema, c: TypeCtx): SwType =>
@@ -32,7 +38,7 @@ export function buildStruct(
   return swOps.buildStructDecl(
     name,
     properties,
-    { emit: ctx.emit, ownerName: name, propPath: [] },
+    { emit: ctx.emit, names: ctx.names, ownerName: name, propPath: [] },
     dispatch,
   );
 }
@@ -41,10 +47,13 @@ export function buildEnumFromIR(
   name: string,
   schema: Schema,
   emit: (d: SwDecl) => void,
+  names: Namespace,
 ): SwType {
-  const rawValues = getEnumLiterals(schema);
-  const kind = classifyEnumLiterals(rawValues, name);
-  if (kind === "integer")
-    return swOps.emitIntegerEnum(name, rawValues as number[], emit);
-  return swOps.emitStringEnum(name, rawValues as string[], emit);
+  const { type, named } = enumType(name, getEnumLiterals(schema), swOps, {
+    emit,
+    names,
+  });
+  if (named) return type;
+  emit(swTypeAlias({ name, type }));
+  return swRef(name);
 }

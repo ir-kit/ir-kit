@@ -1,7 +1,9 @@
+import { Namespace } from "@ir-kit/codegen-core";
+
 import { isSchemaObject, type Schema } from "./types.js";
 
 export type EnumLiteral = string | number | boolean;
-export type EnumKind = "string" | "integer";
+export type EnumKind = "string" | "integer" | "number" | "boolean" | "mixed";
 
 /**
  * Extract enum literals from a schema. Recognises both explicit
@@ -24,23 +26,18 @@ export function extractEnumValues(
 }
 
 /**
- * Throws on mixed shapes. The `name` is woven into the error so the
- * caller doesn't have to re-wrap.
+ * The value domain of an enum's literals. `string` / `integer` become
+ * real enums; `number` / `boolean` degrade to the matching primitive;
+ * `mixed` (or empty) becomes the target's untyped fallback.
  */
-export function classifyEnumLiterals(
-  values: ReadonlyArray<unknown>,
-  name: string,
-): EnumKind {
-  const allStrings = values.every((v) => typeof v === "string");
-  const allIntegers = values.every(
-    (v) => typeof v === "number" && Number.isInteger(v),
-  );
-  if (!allStrings && !allIntegers) {
-    throw new Error(
-      `Enum ${name}: members must all be strings or all integers; got ${JSON.stringify(values)}`,
-    );
+export function classifyEnumLiterals(values: ReadonlyArray<unknown>): EnumKind {
+  if (values.length === 0) return "mixed";
+  if (values.every((v) => typeof v === "string")) return "string";
+  if (values.every((v) => typeof v === "boolean")) return "boolean";
+  if (values.every((v) => typeof v === "number")) {
+    return values.every((v) => Number.isInteger(v)) ? "integer" : "number";
   }
-  return allIntegers ? "integer" : "string";
+  return "mixed";
 }
 
 export interface EnumEntryIdent<T extends string | number> {
@@ -49,30 +46,22 @@ export interface EnumEntryIdent<T extends string | number> {
 }
 
 /**
- * Throws if two raw values normalize to the same target identifier
- * (otherwise the emitted source won't compile). `noun` preserves the
- * per-target wording — Go/Kotlin say `entry name`, Swift says `case
- * name`; tests pin the exact phrase.
+ * Assign every distinct raw value its own identifier. Duplicate raws
+ * collapse to one entry; raws whose identifiers clash (`"ASC"` / `"asc"`)
+ * get deterministic suffixes from `disambiguate`.
  */
-export function assertNoEnumCollisions<T extends string | number>(
-  schemaName: string,
-  entries: Iterable<EnumEntryIdent<T>>,
-  noun: "entry name" | "case name" = "entry name",
-): void {
-  const collisions = new Map<string, T[]>();
-  for (const { identifier, raw } of entries) {
-    const list = collisions.get(identifier) ?? [];
-    list.push(raw);
-    collisions.set(identifier, list);
+export function uniqueEnumEntries<T extends string | number>(
+  raws: ReadonlyArray<T>,
+  identifier: (raw: T) => string,
+  disambiguate?: (base: string, n: number) => string,
+): EnumEntryIdent<T>[] {
+  const ns = new Namespace({ normalize: (s) => s, disambiguate });
+  const seen = new Set<T>();
+  const out: EnumEntryIdent<T>[] = [];
+  for (const raw of raws) {
+    if (seen.has(raw)) continue;
+    seen.add(raw);
+    out.push({ raw, identifier: ns.claim(String(raw), identifier(raw)) });
   }
-  for (const [identifier, raws] of collisions) {
-    if (raws.length > 1) {
-      const formatted = raws
-        .map((r) => (typeof r === "string" ? `"${r}"` : String(r)))
-        .join(", ");
-      throw new Error(
-        `Enum ${schemaName}: ${noun} "${identifier}" collides for raw values [${formatted}]`,
-      );
-    }
-  }
+  return out;
 }

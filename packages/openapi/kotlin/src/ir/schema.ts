@@ -1,5 +1,11 @@
 import type { IR } from "@hey-api/shared";
-import { fromHeyApi, refName, type Schema } from "@ir-kit/openapi";
+import type { Namespace } from "@ir-kit/codegen-core";
+import {
+  fromHeyApi,
+  refName,
+  type Schema,
+  schemaTypeName,
+} from "@ir-kit/openapi";
 
 import {
   type KtDecl,
@@ -9,6 +15,7 @@ import {
   ktString,
   ktTypeAlias,
 } from "../kt-dsl/index.js";
+import { newTypeNames } from "./identifiers.js";
 import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
 
 /**
@@ -26,36 +33,46 @@ import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
  */
 export function schemasToDecls(
   schemas: Record<string, IR.SchemaObject>,
+  names: Namespace = newTypeNames(),
 ): KtDecl[] {
   const decls: KtDecl[] = [];
   const emit = (d: KtDecl) => decls.push(d);
 
-  for (const [name, heySchema] of Object.entries(schemas)) {
+  // Components claim their names before any synthesized inline type.
+  for (const rawName of Object.keys(schemas)) schemaTypeName(names, rawName);
+
+  for (const [rawName, heySchema] of Object.entries(schemas)) {
+    const name = schemaTypeName(names, rawName);
     const schema = fromHeyApi(heySchema);
 
     if (schema.$ref) {
-      decls.push(ktTypeAlias({ name, type: ktRef(refName(schema.$ref)) }));
+      decls.push(
+        ktTypeAlias({
+          name,
+          type: ktRef(schemaTypeName(names, refName(schema.$ref))),
+        }),
+      );
       continue;
     }
     const isEnum = Array.isArray(schema.enum) && schema.enum.length > 0;
     if (isEnum) {
-      buildEnumFromIR(name, schema, emit);
+      buildEnumFromIR(name, schema, emit, names);
       continue;
     }
     if (schema.type === "object" && schema.properties) {
-      decls.push(buildStruct(name, schema, { emit }));
+      decls.push(buildStruct(name, schema, { emit, names }));
       continue;
     }
     if (schema.type === "object") {
       const ap = schema.additionalProperties;
       const sealed = ap === false;
       if (sealed) {
-        decls.push(buildStruct(name, schema, { emit }));
+        decls.push(buildStruct(name, schema, { emit, names }));
         continue;
       }
       const valueType =
         ap && typeof ap === "object"
-          ? schemaToType(ap, { emit, ownerName: name, propPath: [] })
+          ? schemaToType(ap, { emit, names, ownerName: name, propPath: [] })
           : ktAny;
       decls.push(ktTypeAlias({ name, type: ktMap(ktString, valueType) }));
       continue;
@@ -63,7 +80,12 @@ export function schemasToDecls(
     decls.push(
       ktTypeAlias({
         name,
-        type: schemaToType(schema, { emit, ownerName: name, propPath: [] }),
+        type: schemaToType(schema, {
+          emit,
+          names,
+          ownerName: name,
+          propPath: [],
+        }),
       }),
     );
   }

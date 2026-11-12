@@ -1,8 +1,8 @@
 import { safeCaseName, synthName } from "@ir-kit/codegen-core";
 import {
-  assertNoEnumCollisions,
   type Schema,
   type SchemaToTypeOps,
+  uniqueEnumEntries,
 } from "@ir-kit/openapi";
 
 import type { SwCodingKeysEntry, SwDecl, SwType } from "../sw-dsl/index.js";
@@ -55,6 +55,7 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
         const naming = propertyName(jsonKey);
         const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
+          names: ctx.names,
           ownerName: name,
           propPath: [propPathSegment],
         });
@@ -93,9 +94,7 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
     });
   },
   emitStringEnum: (name, rawValues, emit) => {
-    const idents: Array<{ identifier: string; raw: string | number }> =
-      rawValues.map((raw) => ({ identifier: safeCaseName(raw), raw }));
-    assertNoEnumCollisions(name, idents, "case name");
+    const idents = uniqueEnumEntries(rawValues, safeCaseName);
     const cases = idents.map(({ identifier, raw }) =>
       swEnumCase(identifier, raw),
     );
@@ -110,9 +109,7 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
     return swRef(name);
   },
   emitIntegerEnum: (name, rawValues, emit) => {
-    const idents: Array<{ identifier: string; raw: string | number }> =
-      rawValues.map((raw) => ({ identifier: intCaseName(raw), raw }));
-    assertNoEnumCollisions(name, idents, "case name");
+    const idents = uniqueEnumEntries(rawValues, intCaseName);
     const cases = idents.map(({ identifier, raw }) =>
       swEnumCase(identifier, raw),
     );

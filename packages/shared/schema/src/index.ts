@@ -1,10 +1,10 @@
 export {
-  assertNoEnumCollisions,
   classifyEnumLiterals,
   type EnumEntryIdent,
   type EnumKind,
   type EnumLiteral,
   extractEnumValues,
+  uniqueEnumEntries,
 } from "./enum.js";
 export {
   classifyObject,

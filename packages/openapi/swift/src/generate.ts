@@ -8,7 +8,7 @@ import {
 } from "@ir-kit/openapi";
 import { loadOpenAPI } from "@ir-kit/openapi-loader";
 import { parseSpec } from "@ir-kit/openapi-tools/parse";
-
+import { newTypeNames } from "./ir/identifiers.js";
 import {
   type OperationsOptions,
   operationsToDecls,
@@ -71,9 +71,10 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     normalize: opts.normalize,
   });
   const ir = parseSpec(bundled);
+  const names = newTypeNames();
 
   const decls = [
-    ...schemasToDecls(ir.components?.schemas ?? {}),
+    ...schemasToDecls(ir.components?.schemas ?? {}, names),
     ...operationsToDecls(ir.paths, {
       defaultTag: opts.defaultTag,
       protocolName: opts.protocolName,
@@ -81,6 +82,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
       protocolOnly: opts.protocolOnly,
       openImpl: opts.openImpl,
       securitySchemeNames: extractSecuritySchemeNames(bundled),
+      names,
     }),
   ];
   const sdkFiles = buildSwiftProject(decls, opts);

@@ -130,7 +130,7 @@ describe("schemasToDecls", () => {
     );
   });
 
-  it("rejects enums whose normalized entry names collide", () => {
+  it("disambiguates enum entries whose normalized names collide", () => {
     const m = ir({
       components: {
         schemas: {
@@ -139,10 +139,11 @@ describe("schemasToDecls", () => {
         },
       },
     });
-    assert.throws(
-      () => schemasToDecls(m.components?.schemas ?? {}),
-      /entry name "FooUserName" collides/,
-    );
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /FooUserName Foo = "user_name"/);
+    assert.match(out, /FooUserName2 Foo = "userName"/);
   });
 
   it("emits a typed-int enum for integer-valued enum schemas", () => {
@@ -179,17 +180,65 @@ describe("schemasToDecls", () => {
     assert.match(out, /Bias1 Bias = 1/);
   });
 
-  it("rejects enums with mixed string + integer members", () => {
+  it("degrades mixed / boolean / number enums to their value type", () => {
     const m = ir({
       components: {
         schemas: {
           Mixed: { type: "string", enum: ["a", 1] },
+          Flag: { type: "boolean", enum: [true, false] },
+          Ratio: { type: "number", enum: [0.5, 1.5] },
         },
       },
     });
-    assert.throws(
-      () => schemasToDecls(m.components?.schemas ?? {}),
-      /must all be strings or all integers/,
-    );
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /type Mixed any/);
+    assert.match(out, /type Flag bool/);
+    assert.match(out, /type Ratio float64/);
+  });
+
+  it("names component schemas once and resolves $refs to the same identifier", () => {
+    const m = ir({
+      components: {
+        schemas: {
+          "properties-store": {
+            type: "object",
+            properties: { id: { type: "string" } },
+          },
+          Holder: {
+            type: "object",
+            properties: {
+              store: { $ref: "#/components/schemas/properties-store" },
+            },
+          },
+        },
+      },
+    });
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /type PropertiesStore struct/);
+    assert.match(out, /Store \*PropertiesStore `json:"store,omitempty"`/);
+  });
+
+  it("never declares the same synthesized name twice", () => {
+    const m = ir({
+      components: {
+        schemas: {
+          WebhookAssetShotsStatus: { type: "string", enum: ["a"] },
+          WebhookAssetShots: {
+            type: "object",
+            properties: { status: { type: "string", enum: ["b"] } },
+          },
+        },
+      },
+    });
+    const out = schemasToDecls(m.components?.schemas ?? {})
+      .map(printDecl)
+      .join("\n");
+    assert.match(out, /type WebhookAssetShotsStatus string/);
+    assert.match(out, /type WebhookAssetShotsStatus2 string/);
+    assert.match(out, /Status \*WebhookAssetShotsStatus2/);
   });
 });

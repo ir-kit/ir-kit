@@ -1,5 +1,5 @@
 import type { IR } from "@hey-api/shared";
-import { pascal } from "@ir-kit/codegen-core";
+import { type Namespace, pascal } from "@ir-kit/codegen-core";
 import { iterOperations } from "@ir-kit/openapi";
 
 import {
@@ -19,6 +19,7 @@ import {
   swTryAwait,
   swTupleType,
 } from "../sw-dsl/index.js";
+import { newTypeNames } from "./identifiers.js";
 import { buildClientClass } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -56,6 +57,8 @@ export interface OperationsOptions {
    * here. Empty / missing entries → no auto-auth wiring for that op.
    */
   securitySchemeNames?: ReadonlyMap<string, ReadonlyArray<string>>;
+  /** Shared type-name owner; pass the one used for `schemasToDecls`. */
+  names?: Namespace;
 }
 
 /**
@@ -78,11 +81,19 @@ export function operationsToDecls(
   const emit = (d: SwDecl) => decls.push(d);
   const byTag = new Map<string, OperationSignature[]>();
 
+  const names = opts.names ?? newTypeNames();
   for (const { pathStr, method, op, schemeNames } of iterOperations(
     paths,
     opts.securitySchemeNames,
   )) {
-    const sig = operationSignature(op, method, pathStr, emit, schemeNames);
+    const sig = operationSignature(
+      op,
+      method,
+      pathStr,
+      emit,
+      schemeNames,
+      names,
+    );
     const tag = op.tags?.[0] ?? defaultTag;
     const list = byTag.get(tag);
     if (list) list.push(sig);

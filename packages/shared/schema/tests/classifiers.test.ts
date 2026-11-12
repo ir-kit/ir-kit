@@ -10,6 +10,7 @@ import {
   primitiveTag,
   refName,
   typeList,
+  uniqueEnumEntries,
 } from "../src/index.ts";
 
 describe("typeList / isNullable", () => {
@@ -87,10 +88,24 @@ describe("extractEnumValues / classifyEnumLiterals", () => {
     expect(extractEnumValues({ type: "string" })).toBeUndefined();
   });
 
-  it("classifies all-string vs all-integer; throws on mix", () => {
-    expect(classifyEnumLiterals(["a", "b"], "X")).toBe("string");
-    expect(classifyEnumLiterals([1, 2], "X")).toBe("integer");
-    expect(() => classifyEnumLiterals(["a", 1], "X")).toThrow(/Enum X/);
+  it("classifies every literal domain without throwing", () => {
+    expect(classifyEnumLiterals(["a", "b"])).toBe("string");
+    expect(classifyEnumLiterals([1, 2])).toBe("integer");
+    expect(classifyEnumLiterals([1, 2.5])).toBe("number");
+    expect(classifyEnumLiterals([true, false])).toBe("boolean");
+    expect(classifyEnumLiterals(["a", 1])).toBe("mixed");
+    expect(classifyEnumLiterals([])).toBe("mixed");
+  });
+
+  it("uniqueEnumEntries dedupes raws and disambiguates clashing identifiers", () => {
+    const ids = uniqueEnumEntries(["ASC", "asc", "ASC", "desc"], (r) =>
+      r.toUpperCase(),
+    );
+    expect(ids).toEqual([
+      { raw: "ASC", identifier: "ASC" },
+      { raw: "asc", identifier: "ASC2" },
+      { raw: "desc", identifier: "DESC" },
+    ]);
   });
 });
 

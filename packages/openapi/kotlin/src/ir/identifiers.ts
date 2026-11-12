@@ -1,7 +1,9 @@
 import {
   avoidLeadingDigit,
   escapeIfReserved,
+  Namespace,
   softCamel,
+  typeIdent,
 } from "@ir-kit/codegen-core";
 
 /**
@@ -80,3 +82,8 @@ const KOTLIN_RESERVED_KEYWORDS: ReadonlySet<string> = new Set([
   "when",
   "while",
 ]);
+
+/** Owns every top-level Kotlin type name for one generation run. */
+export function newTypeNames(): Namespace {
+  return new Namespace({ normalize: typeIdent });
+}

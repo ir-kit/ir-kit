@@ -1,8 +1,8 @@
 import { synthName } from "@ir-kit/codegen-core";
 import {
-  assertNoEnumCollisions,
   type Schema,
   type SchemaToTypeOps,
+  uniqueEnumEntries,
 } from "@ir-kit/openapi";
 
 import type { KtDecl } from "../kt-dsl/decl/types.js";
@@ -56,6 +56,7 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
         const naming = propertyName(jsonKey);
         const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
+          names: ctx.names,
           ownerName: name,
           propPath: [propPathSegment],
         });
@@ -79,11 +80,11 @@ export const ktOps: SchemaToTypeOps<KtType, KtDecl> = {
     });
   },
   emitStringEnum: (name, rawValues, emit) => {
-    const idents = rawValues.map((raw) => ({
-      identifier: enumEntryIdent(raw),
-      raw,
-    }));
-    assertNoEnumCollisions(name, idents);
+    const idents = uniqueEnumEntries(
+      rawValues,
+      enumEntryIdent,
+      (b, n) => `${b}_${n}`,
+    );
     const entries = idents.map(({ identifier, raw }) =>
       ktEnumEntry(identifier, JSON.stringify(raw), [
         ktAnnotation("SerialName", JSON.stringify(raw)),

@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { Namespace } from "@ir-kit/codegen-core";
 import { safeIdent } from "@ir-kit/codegen-core";
 import type { HttpMethod } from "@ir-kit/openapi";
 import {
@@ -64,11 +65,12 @@ export function operationSignature(
   method: HttpMethod,
   pathStr: string,
   emit: TypeCtx["emit"],
-  schemeNames: ReadonlyArray<string> = [],
+  schemeNames: ReadonlyArray<string>,
+  names: Namespace,
 ): OperationSignature {
   const baseName = deriveBaseName(op, method, pathStr);
   const exportedName = safeIdent(baseName);
-  const ctx: TypeCtx = { emit, ownerName: exportedName, propPath: [] };
+  const ctx: TypeCtx = { emit, names, ownerName: exportedName, propPath: [] };
 
   const { params: nonBody, located } = buildNonBodyParams(op, ctx);
   const bodyParams = op.body ? buildBodyParams(op.body, ctx) : [];

@@ -1,4 +1,5 @@
 import type { IR } from "@hey-api/shared";
+import type { Namespace } from "@ir-kit/codegen-core";
 import { camel, pascal } from "@ir-kit/codegen-core";
 import type { HttpMethod } from "@ir-kit/openapi";
 import {
@@ -53,11 +54,12 @@ export function operationSignature(
   method: HttpMethod,
   pathStr: string,
   emit: TypeCtx["emit"],
-  schemeNames: ReadonlyArray<string> = [],
+  schemeNames: ReadonlyArray<string>,
+  names: Namespace,
 ): OperationSignature {
   const name = deriveBaseName(op, method, pathStr);
   const ownerName = pascal(name);
-  const ctx: TypeCtx = { emit, ownerName, propPath: [] };
+  const ctx: TypeCtx = { emit, names, ownerName, propPath: [] };
 
   const { params: nonBody, located } = buildNonBodyParams(op, ctx);
   const bodyParams = op.body ? buildBodyParams(op.body, ctx) : [];
