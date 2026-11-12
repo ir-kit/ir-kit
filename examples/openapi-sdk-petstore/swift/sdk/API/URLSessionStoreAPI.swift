@@ -13,7 +13,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> [String: Int32] {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("inventory")
+    let url = URLEncoding.path(baseURL, ["store", "inventory"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -39,7 +39,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> ([String: Int32], HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("inventory")
+    let url = URLEncoding.path(baseURL, ["store", "inventory"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -66,7 +66,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> Order {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order")
+    let url = URLEncoding.path(baseURL, ["store", "order"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -90,7 +90,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> (Order, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order")
+    let url = URLEncoding.path(baseURL, ["store", "order"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -114,8 +114,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> Order {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
-      "\(orderId)")
+    let url = URLEncoding.path(baseURL, ["store", "order", "\(orderId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -137,8 +136,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> (Order, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
-      "\(orderId)")
+    let url = URLEncoding.path(baseURL, ["store", "order", "\(orderId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -157,8 +155,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   public func deleteOrder(orderId: Int64, options: RequestOptions = RequestOptions()) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
-      "\(orderId)")
+    let url = URLEncoding.path(baseURL, ["store", "order", "\(orderId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -180,8 +177,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("store").appendingPathComponent("order").appendingPathComponent(
-      "\(orderId)")
+    let url = URLEncoding.path(baseURL, ["store", "order", "\(orderId)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -203,7 +199,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> CreateShape_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("shapes")
+    let url = URLEncoding.path(baseURL, ["shapes"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -227,7 +223,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> (CreateShape_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("shapes")
+    let url = URLEncoding.path(baseURL, ["shapes"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -251,7 +247,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("measurements")
+    let url = URLEncoding.path(baseURL, ["measurements"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -275,7 +271,7 @@ public final class URLSessionStoreAPI: StoreAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("measurements")
+    let url = URLEncoding.path(baseURL, ["measurements"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {

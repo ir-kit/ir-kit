@@ -42,7 +42,8 @@ public final class MultipartFormBody {
       data.append(Data(text.utf8))
     }
     do {
-      let text = "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\nContent-Type: \(mimeType)\r\n\r\n"
+      let text =
+        "Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\nContent-Type: \(mimeType)\r\n\r\n"
       data.append(Data(text.utf8))
     }
     data.append(blob)

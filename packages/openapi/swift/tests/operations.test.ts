@@ -321,7 +321,7 @@ describe("operations (IR-driven)", () => {
     // values are percent-encoded inside their own component.
     assert.match(
       flat(out),
-      /baseURL\.appendingPathComponent\("users"\)\.appendingPathComponent\("\\\(id\)"\)\.appendingPathComponent\("items"\)\.appendingPathComponent\("\\\(type\)"\)/,
+      /URLEncoding\.path\(baseURL, \["users", "\\\(id\)", "items", "\\\(type\)"\]\)/,
     );
   });
 
@@ -425,7 +425,7 @@ describe("operations (IR-driven)", () => {
     assert.match(flat(out), /public init\(\s*client: APIClient\s*\)/);
     assert.match(
       flat(out),
-      /let url = baseURL\.appendingPathComponent\("users"\)\.appendingPathComponent\("\\\(id\)"\)/,
+      /let url = URLEncoding\.path\(baseURL, \["users", "\\\(id\)"\]\)/,
     );
     assert.match(flat(out), /var request = URLRequest\(url: url\)/);
     assert.match(flat(out), /request\.httpMethod = "GET"/);
@@ -498,7 +498,7 @@ describe("operations (IR-driven)", () => {
     // URLComponents is constructed via guard-let; force-unwrap is gone.
     assert.match(
       flat(out),
-      /guard\s+let urlComponents = URLComponents\(url: baseURL\.appendingPathComponent\("search"\), resolvingAgainstBaseURL: false\)\s+else/,
+      /guard\s+let urlComponents = URLComponents\(url: URLEncoding\.path\(baseURL, \["search"\]\), resolvingAgainstBaseURL: false\)\s+else/,
     );
     assert.match(flat(out), /var components = urlComponents/);
     assert.match(flat(out), /components\.queryItems = \[URLQueryItem\]\(\)/);

@@ -1,8 +1,10 @@
 import type { SwDecl, SwExpr, SwType } from "../../ast/index.js";
 import {
+  type SwFun,
   swArg,
   swArray,
   swArrayLit,
+  swAssign,
   swBool,
   swCall,
   swCase,
@@ -11,6 +13,7 @@ import {
   swDotCase,
   swEnum,
   swEnumCase,
+  swForIn,
   swFun,
   swFunParam,
   swGenericParam,
@@ -27,6 +30,7 @@ import {
   swStr,
   swString,
   swSwitch,
+  swVar,
 } from "../../ast/index.js";
 
 const URL_QUERY_ITEM_ARRAY: SwType = swArray(swRef("URLQueryItem"));
@@ -69,7 +73,7 @@ function urlEncodingNamespace(): SwDecl {
     name: "URLEncoding",
     properties: [],
     inits: [swInit({ params: [], access: "private" })],
-    funs: [scalarQueryFn(), arrayQueryFn()],
+    funs: [pathFun(), scalarQueryFn(), arrayQueryFn()],
     runtime: true,
   });
 }
@@ -190,4 +194,30 @@ function stringifiedValues(): SwExpr {
     [],
     swClosure([], [swReturn(swInterp([swIdent("$0")]))]),
   );
+}
+
+/** `URLEncoding.path(base, [segments])`: one `appendingPathComponent` per segment. */
+function pathFun(): SwFun {
+  return swFun({
+    name: "path",
+    access: "public",
+    isStatic: true,
+    params: [
+      swFunParam({ name: "base", label: "_", type: swRef("URL") }),
+      swFunParam({ name: "components", label: "_", type: swArray(swString) }),
+    ],
+    returnType: swRef("URL"),
+    body: [
+      swVar("url", swIdent("base")),
+      swForIn("component", swIdent("components"), [
+        swAssign(
+          swIdent("url"),
+          swCall(swMember(swIdent("url"), "appendingPathComponent"), [
+            swArg(swIdent("component")),
+          ]),
+        ),
+      ]),
+      swReturn(swIdent("url")),
+    ],
+  });
 }

@@ -22,6 +22,7 @@ import {
   swOptChain,
   swRef,
   swStr,
+  swString,
   swThrow,
   swVar,
 } from "../../ast/index.js";
@@ -115,7 +116,7 @@ function styleCase(style: IR.ParameterObject["style"]): string {
 }
 
 /**
- * Build a chain of `.appendingPathComponent(<seg>)` calls, one per
+ * `URLEncoding.path(base, [<seg>, …])`, appending one component per
  * `/`-separated segment of the path template. Each dynamic segment
  * goes through `appendingPathComponent` separately so reserved
  * characters in the value (`/`, `?`, `#`, spaces) are percent-encoded
@@ -128,13 +129,16 @@ function buildPathChain(
   pathParams: ReadonlyArray<IR.ParameterObject>,
 ): SwExpr {
   const segments = splitPathSegments(pathStr);
-  return segments.reduce<SwExpr>(
-    (acc, seg) =>
-      swCall(swMember(acc, "appendingPathComponent"), [
-        swArg(segmentExpr(seg, pathParams)),
-      ]),
-    base,
-  );
+  if (!segments.length) return base;
+  return swCall(swMember(swIdent("URLEncoding"), "path"), [
+    swArg(base),
+    swArg(
+      swArrayLit(
+        segments.map((seg) => segmentExpr(seg, pathParams)),
+        swString,
+      ),
+    ),
+  ]);
 }
 
 function segmentExpr(

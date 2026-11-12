@@ -14,7 +14,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user")
+    let url = URLEncoding.path(baseURL, ["user"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -38,7 +38,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user")
+    let url = URLEncoding.path(baseURL, ["user"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -62,7 +62,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("createWithList")
+    let url = URLEncoding.path(baseURL, ["user", "createWithList"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -86,7 +86,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("createWithList")
+    let url = URLEncoding.path(baseURL, ["user", "createWithList"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -113,9 +113,7 @@ public final class URLSessionUserAPI: UserAPI {
     let baseURL = options.baseURL ?? client.baseURL
     guard
       let urlComponents = URLComponents(
-        url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
-        resolvingAgainstBaseURL: false
-      )
+        url: URLEncoding.path(baseURL, ["user", "login"]), resolvingAgainstBaseURL: false)
     else {
       throw APIError.transport(URLError(.badURL))
     }
@@ -150,9 +148,7 @@ public final class URLSessionUserAPI: UserAPI {
     let baseURL = options.baseURL ?? client.baseURL
     guard
       let urlComponents = URLComponents(
-        url: baseURL.appendingPathComponent("user").appendingPathComponent("login"),
-        resolvingAgainstBaseURL: false
-      )
+        url: URLEncoding.path(baseURL, ["user", "login"]), resolvingAgainstBaseURL: false)
     else {
       throw APIError.transport(URLError(.badURL))
     }
@@ -181,7 +177,7 @@ public final class URLSessionUserAPI: UserAPI {
   public func logoutUser(options: RequestOptions = RequestOptions()) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("logout")
+    let url = URLEncoding.path(baseURL, ["user", "logout"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -202,7 +198,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("logout")
+    let url = URLEncoding.path(baseURL, ["user", "logout"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -224,7 +220,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> User {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -246,7 +242,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (User, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     if let timeout = options.timeout {
@@ -269,7 +265,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "PUT"
     if let timeout = options.timeout {
@@ -294,7 +290,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "PUT"
     if let timeout = options.timeout {
@@ -318,7 +314,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -340,7 +336,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> HTTPURLResponse {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("user").appendingPathComponent("\(username)")
+    let url = URLEncoding.path(baseURL, ["user", "\(username)"])
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     if let timeout = options.timeout {
@@ -362,7 +358,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> UpdateProfile_Response {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("profile")
+    let url = URLEncoding.path(baseURL, ["profile"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {
@@ -386,7 +382,7 @@ public final class URLSessionUserAPI: UserAPI {
   ) async throws -> (UpdateProfile_Response, HTTPURLResponse) {
     let client = options.client ?? self.client
     let baseURL = options.baseURL ?? client.baseURL
-    let url = baseURL.appendingPathComponent("profile")
+    let url = URLEncoding.path(baseURL, ["profile"])
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     if let timeout = options.timeout {

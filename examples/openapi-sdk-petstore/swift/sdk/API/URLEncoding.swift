@@ -4,6 +4,14 @@ public final class URLEncoding {
   private init() {
   }
 
+  public static func path(_ base: URL, _ components: [String]) -> URL {
+    var url = base
+    for component in components {
+      url = url.appendingPathComponent(component)
+    }
+    return url
+  }
+
   public static func query<T>(_ name: String, value: T?) -> [URLQueryItem] {
     guard let value = value else {
       return []

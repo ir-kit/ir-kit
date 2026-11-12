@@ -911,9 +911,18 @@ export function createPrinter(options?: SwiftPrinterOptions) {
               INDENT.length * indentLevel +
               `${modifiers}${node.bindingSpecifier} ${binding.pattern}${type} = `
                 .length;
-            const value = binding.initializer
-              ? ` = ${printNode(binding.initializer)}`
-              : "";
+            const start = column;
+            const initializer = binding.initializer
+              ? printNode(binding.initializer)
+              : undefined;
+            const value =
+              initializer === undefined
+                ? ""
+                : maxLineLength > 0 &&
+                    !initializer.includes("\n") &&
+                    start + initializer.length > maxLineLength
+                  ? ` =\n${INDENT.repeat(indentLevel + 1)}${initializer}`
+                  : ` = ${initializer}`;
             return `${binding.pattern}${type}${value}`;
           })
           .join(", ");
