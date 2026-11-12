@@ -20,6 +20,13 @@
       "enabled": false
     },
     {
+      "groupName": "non-major dev dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "description": "Listed before the ecosystem groups so their groupName wins for matching packages."
+    },
+    {
       "description": "Plugins track Hey API's 0.x API, so its packages move together and need review.",
       "groupName": "Hey API",
       "matchPackageNames": ["@hey-api/**"]
@@ -44,12 +51,6 @@
       "description": "Native example SDK toolchains (Go, Gradle, SwiftPM).",
       "groupName": "native examples",
       "matchManagers": ["gomod", "gradle", "gradle-wrapper", "swift"]
-    },
-    {
-      "groupName": "non-major dev dependencies",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/"
     }
   ]
 }
