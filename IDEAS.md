@@ -39,7 +39,7 @@ ir-kit's thesis: **every API standard talks to every other**. One canonical hub 
 
 ### AsyncAPI track
 
-- **`@ir-kit/asyncapi-typescript`** — AsyncAPI 3.0 → TypeScript. Plugin-compose architecture; parser via `@asyncapi/parser`, JSON Schema → TS via `@asyncapi/modelina`.
+- **`@ir-kit/asyncapi-typescript`** — AsyncAPI 3.0 → TypeScript. Plugin-compose architecture; parser via `@asyncapi/parser`, JSON Schema → TS via `@hey-api/openapi-ts`.
 - **`@ir-kit/asyncapi-core`** — shared AsyncAPI primitives. AMQP binding extractors, routing-key matching.
 
 ### Reverse engineering

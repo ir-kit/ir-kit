@@ -13,7 +13,7 @@ pnpm add -D @ir-kit/asyncapi-typescript
 Peer deps (most are dev-only at consumer side):
 
 - `@asyncapi/parser` `>=3.0.0`
-- `@asyncapi/modelina` `>=5.0.0`
+- `@hey-api/openapi-ts` `>=0.99.0`
 - `@hey-api/codegen-core` `>=0.8.0`
 - `@ir-kit/asyncapi-core`, `@ir-kit/asyncapi-core`, `@ir-kit/codegen-core`
 - `typescript` `>=5.0.0`
@@ -52,7 +52,7 @@ For a full RabbitMQ run (producer + consumer end-to-end), see `examples/asyncapi
 
 | Plugin | File(s) emitted | Description |
 |---|---|---|
-| `typescript()` | `types.gen.ts` | TS interfaces from message payload schemas (via `@asyncapi/modelina`). Names taken from spec message ids. |
+| `typescript()` | `types.gen.ts` | TS types from message payload and component schemas (via `@hey-api/openapi-ts`). Names taken from spec message ids and component names. |
 | `events()` | `events.gen.ts` | `Events` const with `{type, routingKey, exchange, exchangeType, contentType}` per channel/operation, plus an `EventName` type alias |
 | `eventMap()` | `event-map.gen.ts` | `EventMap` keyed by event-type literal → message interface, `AnyMessage` union, `isMessageOfType` discriminator |
 | `dispatch()` | `dispatch.gen.ts` + `handlers.gen.ts` | Generic `Registry` runtime (with `.on(...)`, `.dispatch`, `.toCallback(...)`, `.bindings`) + spec-bound `handlers()` factory |

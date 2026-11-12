@@ -20,7 +20,7 @@ describe("typescript plugin", () => {
     await rm(outDir, { recursive: true, force: true });
   });
 
-  it("emits types.gen.ts with interfaces for each message payload", async () => {
+  it("emits types.gen.ts with a type for each message payload", async () => {
     const result = await generate({
       input: FIXTURE,
       output: outDir,
@@ -32,9 +32,7 @@ describe("typescript plugin", () => {
     const written = await readFile(join(outDir, "types.gen.ts"), "utf8");
     expect(written).toContain("AUTO-GENERATED");
 
-    // Modelina names interfaces after the message id; both fixture messages
-    // should produce some kind of TS declaration.
-    expect(written).toMatch(/(interface|type)\s/);
+    expect(written).toContain("export type UserAccountCreatedMessage = {");
     // Inner data fields from components.schemas should be present.
     expect(written).toContain("userId");
     expect(written).toContain("email");

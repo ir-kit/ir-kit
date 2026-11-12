@@ -1,7 +1,7 @@
 {
   "name": "@ir-kit/asyncapi-typescript",
   "version": "1.0.0",
-  "description": "AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture: a small core orchestrates parser → IR → registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema → TS via @asyncapi/modelina, file orchestration via @hey-api/codegen-core.",
+  "description": "AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture: a small core orchestrates parser → IR → registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema → TS via @hey-api/openapi-ts, file orchestration via @hey-api/codegen-core.",
   "keywords": [
     "asyncapi",
     "typescript",
@@ -50,9 +50,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@asyncapi/modelina": ">=5.0.0",
     "@asyncapi/parser": ">=3.0.0",
     "@hey-api/codegen-core": ">=0.8.0",
+    "@hey-api/openapi-ts": ">=0.99.0",
     "@ir-kit/asyncapi-core": ">=0.1.0",
     "@ir-kit/codegen-core": ">=0.2.0",
     "amqplib": ">=0.10.0",
@@ -64,9 +64,9 @@
     }
   },
   "devDependencies": {
-    "@asyncapi/modelina": "catalog:",
     "@asyncapi/parser": "catalog:",
     "@hey-api/codegen-core": "catalog:",
+    "@hey-api/openapi-ts": "catalog:",
     "@ir-kit/asyncapi-core": "workspace:*",
     "@ir-kit/codegen-core": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",

@@ -76,7 +76,7 @@ export interface PluginInstance<Config = unknown, Api = unknown> {
   readonly document: AsyncAPIDocumentInterface;
   /** Files emitted so far (by this and prior plugins). */
   readonly files: ReadonlyArray<GeneratedFile>;
-  /** Add a file to the output as raw text. Use for Modelina output, copied bundles, etc. */
+  /** Add a file to the output as raw text. Use for generated text and copied bundles. */
   emit(file: GeneratedFile): void;
   /**
    * Add a file to the output as a list of `ts.Statement` AST nodes; the

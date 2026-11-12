@@ -53,12 +53,12 @@ describe("full pipeline (all plugins enabled)", () => {
     ]);
   });
 
-  it("types.gen.ts names message-level interfaces from the spec id", async () => {
+  it("types.gen.ts names message-level types from the spec id", async () => {
     const types = await readGen(outDir, "types.gen.ts");
-    expect(types).toContain("export interface UserAccountCreatedMessage");
-    expect(types).toContain("export interface UserAccountDeletedMessage");
-    expect(types).toContain("export interface UserAccountCreatedData");
-    expect(types).toContain("export interface UserAccountDeletedData");
+    expect(types).toContain("export type UserAccountCreatedMessage = {");
+    expect(types).toContain("export type UserAccountDeletedMessage = {");
+    expect(types).toContain("export type UserAccountCreatedData = {");
+    expect(types).toContain("export type UserAccountDeletedData = {");
     expect(types).not.toContain("AnonymousSchema");
   });
 
@@ -74,7 +74,7 @@ describe("full pipeline (all plugins enabled)", () => {
     expect(evts).toContain("export type EventName = keyof typeof Events");
   });
 
-  it("event-map.gen.ts maps event-type literals to message interfaces", async () => {
+  it("event-map.gen.ts maps event-type literals to message types", async () => {
     const map = await readGen(outDir, "event-map.gen.ts");
     expect(map).toContain("import type {");
     expect(map).toContain("UserAccountCreatedMessage");
