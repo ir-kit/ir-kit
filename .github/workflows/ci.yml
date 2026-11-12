@@ -75,6 +75,9 @@ jobs:
       - name: Lint snapshots
         run: bash scripts/lint-go.sh
 
+      - name: Lint generated example SDK
+        run: bash scripts/lint-go.sh examples/openapi-sdk-petstore/go/sdk
+
   kotlin-lint:
     name: Lint Kotlin compiler snapshots
     runs-on: ubuntu-latest

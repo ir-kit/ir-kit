@@ -66,7 +66,11 @@ export type {
   NormalizeOptions,
   ObjectPassOptions,
 } from "./spec/normalize/index.js";
-export { normalizeSpec, SAFE_NORMALIZE } from "./spec/normalize/index.js";
+export {
+  hoistForeignSchemaRefs,
+  normalizeSpec,
+  SAFE_NORMALIZE,
+} from "./spec/normalize/index.js";
 export { isMeaningless } from "./spec/ref.js";
 export { extractSecuritySchemeNames, securityKey } from "./spec/security.js";
 export type { TypeCtx } from "./type/context.js";

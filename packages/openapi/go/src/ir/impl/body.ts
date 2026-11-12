@@ -1,6 +1,7 @@
 import type { IR } from "@hey-api/shared";
 import { classifyBody, isSchemaObject, type Schema } from "@ir-kit/openapi";
 import {
+  type GoFuncParam,
   type GoStmt,
   goAssign,
   goCall,
@@ -10,12 +11,15 @@ import {
   goIntLit,
   goNe,
   goNil,
+  goRef,
   goSelector,
   goShort,
   goStr,
+  goStructLit,
 } from "../../go-dsl/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { ErrCheckFn } from "./errors.js";
+import { paramValue } from "./param-value.js";
 
 export interface BodyResult {
   stmts: ReadonlyArray<GoStmt>;
@@ -45,6 +49,7 @@ export interface BodyResult {
 export function buildBodyStmts(
   body: IR.BodyObject,
   errCheck: ErrCheckFn,
+  params: ReadonlyArray<GoFuncParam>,
 ): BodyResult {
   const { shape, schema } = classifyBody(body);
   switch (shape.kind) {
@@ -53,9 +58,12 @@ export function buildBodyStmts(
     case "json-typed":
       return { stmts: jsonBody(errCheck), needsMultipart: false };
     case "multipart-object":
-      return { stmts: multipartBody(schema), needsMultipart: true };
+      return { stmts: multipartBody(schema, params), needsMultipart: true };
     case "form-urlencoded-object":
-      return { stmts: formUrlEncodedBody(schema), needsMultipart: false };
+      return {
+        stmts: formUrlEncodedBody(schema, params),
+        needsMultipart: false,
+      };
     case "opaque":
       return {
         stmts: rawBytesBody(
@@ -116,7 +124,10 @@ function rawBytesBody(mt: string): GoStmt[] {
   return setBodyAndContentType("body", mt);
 }
 
-function multipartBody(schema: Schema): GoStmt[] {
+function multipartBody(
+  schema: Schema,
+  params: ReadonlyArray<GoFuncParam>,
+): GoStmt[] {
   const required = new Set(schema.required ?? []);
   const stmts: GoStmt[] = [
     goShort(["multipart"], [goCall(goIdent("NewMultipartFormBody"), [])]),
@@ -129,9 +140,7 @@ function multipartBody(schema: Schema): GoStmt[] {
     const isBinary =
       propSchema.type === "string" && propSchema.format === "binary";
     const isReq = required.has(propName);
-    const ref = isReq
-      ? goIdent(id)
-      : ({ kind: "unary", op: "*", operand: goIdent(id) } as const);
+    const ref = paramValue(id, params);
     const append: GoStmt = isBinary
       ? goExprStmt(
           goCall(goSelector(goIdent("multipart"), "AppendFile"), [
@@ -187,17 +196,18 @@ function multipartBody(schema: Schema): GoStmt[] {
   return stmts;
 }
 
-function formUrlEncodedBody(schema: Schema): GoStmt[] {
+function formUrlEncodedBody(
+  schema: Schema,
+  params: ReadonlyArray<GoFuncParam>,
+): GoStmt[] {
   const required = new Set(schema.required ?? []);
   const stmts: GoStmt[] = [
-    goShort(["form"], [goCall(goIdent("url.Values"), [])]),
+    goShort(["form"], [goStructLit(goRef("url.Values"), [])]),
   ];
   for (const propName of Object.keys(schema.properties ?? {})) {
     const id = paramIdent(propName);
     const isReq = required.has(propName);
-    const ref = isReq
-      ? goIdent(id)
-      : ({ kind: "unary", op: "*", operand: goIdent(id) } as const);
+    const ref = paramValue(id, params);
     const set = goExprStmt(
       goCall(goSelector(goIdent("form"), "Set"), [
         { expr: goStr(propName) },

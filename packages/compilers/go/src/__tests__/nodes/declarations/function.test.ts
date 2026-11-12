@@ -467,4 +467,35 @@ describe("function declaration", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "grouped-parameter-names.go");
   });
+
+  it("unnamed receiver and blank lines between multi-line decls", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec("A", go.factory.createIdentifier("int")),
+      ]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec("B", go.factory.createIdentifier("string")),
+      ]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          "C",
+          go.factory.createStructType([
+            { names: ["X"], type: go.factory.createIdentifier("int") },
+          ]),
+        ),
+      ]),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec("D", go.factory.createIdentifier("int")),
+      ]),
+      go.factory.createFunctionDeclaration(
+        { name: "", type: go.factory.createIdentifier("C") },
+        "isMarker",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "unnamed-receiver.go");
+  });
 });

@@ -12,6 +12,8 @@ export interface GoField {
 
 export interface GoStruct {
   kind: "struct";
+  /** Output file (e.g. `users.go`), set by the emitter. Default: `models.go`. */
+  file?: string;
   name: string;
   fields: ReadonlyArray<GoField>;
   /** Optional doc emitted directly above the `type` line. */

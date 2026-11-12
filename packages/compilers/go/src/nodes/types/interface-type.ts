@@ -6,6 +6,7 @@ import type { GoFunctionParameter } from "./function-parameter.js";
 import type { GoFunctionReturn } from "./function-return.js";
 
 export type GoInterfaceMethod = {
+  leadingComments?: ReadonlyArray<string>;
   name: string;
   parameters: ReadonlyArray<GoFunctionParameter>;
   returnType: ReadonlyArray<GoFunctionReturn>;
@@ -13,6 +14,7 @@ export type GoInterfaceMethod = {
 
 export type GoInterfaceEmbed = {
   embed: GoExpression | GoType;
+  leadingComments?: ReadonlyArray<string>;
 };
 
 export type GoInterfaceField = GoInterfaceEmbed | GoInterfaceMethod;

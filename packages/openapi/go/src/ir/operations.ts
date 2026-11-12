@@ -14,7 +14,7 @@ import {
   goPtr,
   goRef,
 } from "../go-dsl/index.js";
-import { newTypeNames } from "./identifiers.js";
+import { exportedIdent, newTypeNames, tagFileName } from "./identifiers.js";
 import { buildClientStruct } from "./impl/index.js";
 import {
   type OperationSignature,
@@ -58,7 +58,7 @@ export function operationsToDecls(
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
   const interfaceName =
-    opts.interfaceName ?? ((tag: string) => `${safeIdent(tag)}API`);
+    opts.interfaceName ?? ((tag: string) => `${exportedIdent(tag)}API`);
   const clientStructName =
     opts.clientStructName ?? ((p: string) => `NetHTTP${p}`);
 
@@ -89,19 +89,21 @@ export function operationsToDecls(
   let needsAuth = false;
   for (const [tag, sigs] of byTag) {
     const ifaceName = interfaceName(tag);
-    decls.push(
-      goInterface({
+    const file = tagFileName(tag);
+    decls.push({
+      file,
+      ...goInterface({
         name: ifaceName,
         methods: sigs.flatMap((sig) => [
           buildInterfaceMethod(sig, /* withResponse */ false),
           buildInterfaceMethod(sig, /* withResponse */ true),
         ]),
       }),
-    );
+    });
     if (sigs.some(hasSecurity)) needsAuth = true;
     if (!opts.interfaceOnly) {
       const result = buildClientStruct(clientStructName(ifaceName), sigs);
-      for (const d of result.decls) decls.push(d);
+      for (const d of result.decls) decls.push({ ...d, file });
       if (result.needsMultipart) needsMultipart = true;
     }
   }
@@ -114,8 +116,7 @@ function buildInterfaceMethod(
 ): GoMethodSignature {
   const name = withResponse ? `${sig.name}WithResponse` : sig.name;
   const results: GoFuncResult[] = [];
-  if (sig.returnType)
-    results.push(goFuncResult(returnTypeShape(sig.returnType)));
+  if (sig.returnType) results.push(goFuncResult(sig.returnType));
   if (withResponse) results.push(goFuncResult(goPtr(goRef("http.Response"))));
   results.push(goFuncResult(goError));
   return goMethodSig(
@@ -124,10 +125,6 @@ function buildInterfaceMethod(
     results,
     sig.doc,
   );
-}
-
-function returnTypeShape(t: GoType): GoType {
-  return t.kind === "ref" ? goPtr(t) : t;
 }
 
 function hasSecurity(sig: OperationSignature): boolean {

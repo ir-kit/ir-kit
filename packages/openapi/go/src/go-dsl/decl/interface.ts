@@ -9,6 +9,8 @@ export interface GoMethodSignature {
 
 export interface GoInterface {
   kind: "interface";
+  /** Output file (e.g. `users.go`), set by the emitter. Default: `models.go`. */
+  file?: string;
   name: string;
   methods: ReadonlyArray<GoMethodSignature>;
   /** Embedded interfaces — `MyIface { OtherIface; … }`. */

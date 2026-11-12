@@ -11,6 +11,8 @@ export interface GoConstEntry {
 
 export interface GoConstBlock {
   kind: "constBlock";
+  /** Output file (e.g. `users.go`), set by the emitter. Default: `models.go`. */
+  file?: string;
   /** Optional shared type — `const ( a Foo = ...; b; c )`. */
   type?: GoType;
   entries: ReadonlyArray<GoConstEntry>;

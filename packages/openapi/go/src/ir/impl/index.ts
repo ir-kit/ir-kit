@@ -119,11 +119,11 @@ function buildMethod(
   stmts.push(...resolveOverrideStmts());
   stmts.push(...buildUrlStmts(sig.pathStr, sig.locatedParams, errCheck));
   stmts.push(...buildRequestStmts(sig.method, errCheck));
-  stmts.push(...buildHeaderStmts(sig.locatedParams));
+  stmts.push(...buildHeaderStmts(sig.locatedParams, sig.params));
 
   let needsMultipart = false;
   if (sig.op.body) {
-    const result = buildBodyStmts(sig.op.body, errCheck);
+    const result = buildBodyStmts(sig.op.body, errCheck, sig.params);
     stmts.push(...result.stmts);
     needsMultipart = result.needsMultipart;
   }
@@ -158,8 +158,7 @@ function buildResults(
   withResponse: boolean,
 ): GoFuncResult[] {
   const out: GoFuncResult[] = [];
-  if (sig.returnType)
-    out.push({ name: "result", type: returnTypeShape(sig.returnType) });
+  if (sig.returnType) out.push({ name: "result", type: sig.returnType });
   if (withResponse)
     out.push({ name: "resp", type: goPtr(goRef("http.Response")) });
   out.push({ name: "err", type: goError });
@@ -172,9 +171,6 @@ function buildResults(
  * returns `T` exactly, so the method's declared result needs to match
  * what the consumer passes as the type parameter.
  */
-function returnTypeShape(t: GoType): GoType {
-  return t.kind === "ref" ? goPtr(t) : t;
-}
 
 function resolveOverrideStmts(): GoStmt[] {
   return [

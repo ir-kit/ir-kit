@@ -3,6 +3,7 @@ import { GoNodeKind } from "../kinds.js";
 import type { GoType } from "../type.js";
 
 export type GoStructField = {
+  leadingComments?: ReadonlyArray<string>;
   names?: ReadonlyArray<string>;
   tag?: string;
   type: GoType;

@@ -5,6 +5,7 @@ import "fmt"
 type Reader interface {
 	Read(p []byte) (n int, err error)
 }
+
 type MemReader struct{}
 
 func (m MemReader) Read(p []byte) (n int, err error) {

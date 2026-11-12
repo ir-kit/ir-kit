@@ -185,4 +185,44 @@ describe("import statement", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "single-import-with-dot.go");
   });
+
+  it("sorts and groups stdlib before third-party imports", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement([
+        "net/http",
+        "github.com/google/uuid",
+        "fmt",
+      ]),
+      go.factory.createFunctionDeclaration(
+        undefined,
+        "main",
+        undefined,
+        undefined,
+        undefined,
+        [
+          go.factory.createExpressionStatement(
+            go.factory.createCallExpression(
+              go.factory.createMemberExpression(
+                go.factory.createIdentifier("fmt"),
+                go.factory.createIdentifier("Println"),
+              ),
+              [
+                go.factory.createMemberExpression(
+                  go.factory.createIdentifier("http"),
+                  go.factory.createIdentifier("MethodGet"),
+                ),
+                go.factory.createCallExpression(
+                  go.factory.createMemberExpression(
+                    go.factory.createIdentifier("uuid"),
+                    go.factory.createIdentifier("NewString"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "grouped-imports.go");
+  });
 });

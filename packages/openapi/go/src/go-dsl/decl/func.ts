@@ -27,6 +27,8 @@ export interface GoFuncReceiver {
 
 export interface GoFunc {
   kind: "func";
+  /** Output file (e.g. `users.go`), set by the emitter. Default: `models.go`. */
+  file?: string;
   name: string;
   /** Method receiver — `func (c *Client) Method(...) ...`. */
   receiver?: GoFuncReceiver;

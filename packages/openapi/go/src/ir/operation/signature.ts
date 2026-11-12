@@ -1,6 +1,5 @@
 import type { IR } from "@hey-api/shared";
 import type { Namespace } from "@ir-kit/codegen-core";
-import { safeIdent } from "@ir-kit/codegen-core";
 import type { HttpMethod } from "@ir-kit/openapi";
 import {
   deriveBaseName,
@@ -14,6 +13,7 @@ import {
   goFuncParam,
   goRef,
 } from "../../go-dsl/index.js";
+import { exportedIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { buildBodyParams } from "./body.js";
 import { buildNonBodyParams } from "./params.js";
@@ -25,8 +25,9 @@ export interface OperationSignature {
   /** Same name pre-PascalCase — used for synth naming of inline types. */
   ownerName: string;
   params: ReadonlyArray<GoFuncParam>;
-  /** `undefined` means "no return value, only error" — the function
-   *  results list is just `error`. */
+  /** Final Go result type: `*T` for a single struct/alias payload, the
+   *  bare interface for multi-2xx; `undefined` means the results
+   *  list is just `error`. */
   returnType: GoType | undefined;
   doc: string;
   locatedParams: ReadonlyArray<LocatedParam>;
@@ -69,7 +70,7 @@ export function operationSignature(
   names: Namespace,
 ): OperationSignature {
   const baseName = deriveBaseName(op, method, pathStr);
-  const exportedName = safeIdent(baseName);
+  const exportedName = exportedIdent(baseName);
   const ctx: TypeCtx = { emit, names, ownerName: exportedName, propPath: [] };
 
   const { params: nonBody, located } = buildNonBodyParams(op, ctx);

@@ -5,6 +5,7 @@ import "fmt"
 type B struct {
 	c int
 }
+
 type A struct {
 	b B
 }

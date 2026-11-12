@@ -343,7 +343,7 @@ export function createPrinter(options?: GoPrinterOptions) {
           .join(", ");
         const finalReturnType = printReturnType(node.returnType);
         const receiver = node.receiver
-          ? `(${node.receiver.name} ${printInline(node.receiver.type)})`
+          ? `(${node.receiver.name ? `${node.receiver.name} ` : ""}${printInline(node.receiver.type)})`
           : "";
         const typeParams = printTypeParameters(node.typeParameters);
         const signature = `func${receiver ? ` ${receiver}` : ""} ${node.name}${typeParams}(${parameters})${finalReturnType}`;
@@ -452,7 +452,24 @@ export function createPrinter(options?: GoPrinterOptions) {
 
         parts.push(printLine("import ("));
         indentLevel += 1;
-        parts.push(...specs.map((spec) => printLine(spec)));
+        const isStdlib = (path: string) => !path.split("/")[0]!.includes(".");
+        const byPath = [...node.paths].sort((a, b) =>
+          a.path < b.path ? -1 : a.path > b.path ? 1 : 0,
+        );
+        const groups = [
+          byPath.filter((imp) => isStdlib(imp.path)),
+          byPath.filter((imp) => !isStdlib(imp.path)),
+        ].filter((group) => group.length > 0);
+        groups.forEach((group, i) => {
+          if (i > 0) parts.push("");
+          for (const imp of group) {
+            parts.push(
+              printLine(
+                imp.alias ? `${imp.alias} "${imp.path}"` : `"${imp.path}"`,
+              ),
+            );
+          }
+        });
         indentLevel -= 1;
         parts.push(printLine(")"));
         break;
@@ -477,6 +494,9 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push("interface {");
         indentLevel += 1;
         for (const field of node.fields) {
+          if (field.leadingComments) {
+            printComments(parts, field.leadingComments);
+          }
           if ("embed" in field) {
             parts.push(printLine(printInline(field.embed)));
           } else {
@@ -600,14 +620,21 @@ export function createPrinter(options?: GoPrinterOptions) {
         parts.push(printNode(node.packageDeclaration));
         parts.push("");
 
+        // Consecutive one-line type/var/const declarations stay together;
+        // anything spanning multiple lines gets a blank line around it.
+        const printed = node.statements.map((statement) =>
+          printNode(statement),
+        );
         node.statements.forEach((curr, i) => {
           const prev = node.statements[i - 1];
           const grouped =
             prev !== undefined &&
             prev.kind === curr.kind &&
-            GROUPABLE_KINDS.has(curr.kind);
+            GROUPABLE_KINDS.has(curr.kind) &&
+            !printed[i - 1]!.includes("\n") &&
+            !printed[i]!.includes("\n");
           if (i > 0 && !grouped) parts.push("");
-          parts.push(printNode(curr));
+          parts.push(printed[i]!);
         });
         break;
       }
@@ -622,6 +649,7 @@ export function createPrinter(options?: GoPrinterOptions) {
         indentLevel += 1;
 
         const rows = node.fields.map((field) => ({
+          comments: field.leadingComments,
           name: field.names?.join(", ") ?? "",
           tag: field.tag ? `\`${field.tag}\`` : "",
           type: printNode(field.type),
@@ -636,6 +664,7 @@ export function createPrinter(options?: GoPrinterOptions) {
 
         let flatIndex = 0;
         for (const row of rows) {
+          if (row.comments) printComments(parts, row.comments);
           const prefix = row.name ? row.name.padEnd(nameWidth + 1) : "";
 
           if (!row.type.includes("\n")) {

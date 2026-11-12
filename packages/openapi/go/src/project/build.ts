@@ -1,7 +1,6 @@
-import { printDecl, printFile } from "../go-compiler/index.js";
+import { printFile } from "../go-compiler/index.js";
 import { type GoDecl, goFile } from "../go-dsl/index.js";
 import { DEFAULT_PACKAGE } from "../ir/constants.js";
-import { importsForSource } from "./imports.js";
 import { type PlacementOptions, placeDecl } from "./layout.js";
 
 export interface BuildOptions extends PlacementOptions {
@@ -22,7 +21,7 @@ export interface BuiltFile {
 /**
  * Project assembler: groups decls by output path (one file per
  * decl, but enum const blocks bundle with their type alias),
- * computes per-file imports via print-then-scan, prints. Multi-decl
+ * prints; imports come from the lowered AST. Multi-decl
  * files (e.g. multi-2xx interface + concrete structs + marker
  * methods) collapse cleanly thanks to the grouping.
  */
@@ -41,11 +40,6 @@ export function buildGoProject(
     else groups.set(path, [decl]);
   }
   return [...groups.entries()].map(([path, group]) => {
-    const body = group.map((d) => printDecl(d)).join("\n\n");
-    const imports = importsForSource(body);
-    return {
-      path,
-      content: printFile(goFile({ pkg, imports, decls: group })),
-    };
+    return { path, content: printFile(goFile({ pkg, decls: group })) };
   });
 }

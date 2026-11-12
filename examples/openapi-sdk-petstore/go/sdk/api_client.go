@@ -132,4 +132,3 @@ func sendAndDispatch(client *APIClient, req *http.Request, opts RequestOptions) 
 
 	return body, resp, nil
 }
-

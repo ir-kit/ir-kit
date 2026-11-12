@@ -1,3 +1,4 @@
+import { Namespace } from "@ir-kit/codegen-core";
 import { type Schema, type SchemaToTypeOps } from "@ir-kit/openapi";
 
 import type { GoDecl } from "../go-dsl/decl/types.js";
@@ -18,7 +19,7 @@ import {
   goStruct,
   goTypeAlias,
 } from "../go-dsl/index.js";
-import { enumEntrySuffix, synthName } from "./identifiers.js";
+import { enumEntrySuffix, exportedIdent, synthName } from "./identifiers.js";
 import { typeForPrimitive } from "./type/primitive.js";
 import { propertyName } from "./type/property-naming.js";
 
@@ -54,9 +55,11 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
   primitiveType: typeForPrimitive,
   synthName,
   buildStructDecl: (name, properties, ctx, dispatch) => {
+    const fieldNames = new Namespace({ normalize: exportedIdent });
     const fields = properties.map(
       ({ jsonKey, schema: propSchema, required, propPathSegment }) => {
         const naming = propertyName(jsonKey);
+        const goName = fieldNames.claim(jsonKey);
         const t = dispatch(propSchema as Schema, {
           emit: ctx.emit,
           names: ctx.names,
@@ -69,7 +72,7 @@ export const goOps: SchemaToTypeOps<GoType, GoDecl> = {
         const tag = optional
           ? `\`json:"${naming.jsonKey},omitempty"\``
           : `\`json:"${naming.jsonKey}"\``;
-        return goField(naming.goName, finalType, tag);
+        return goField(goName, finalType, tag);
       },
     );
     return goStruct({ name, fields });

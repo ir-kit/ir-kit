@@ -5,6 +5,7 @@ import "fmt"
 type Address struct {
 	City string `json:"city"`
 }
+
 type User struct {
 	Name    string `json:"name"`
 	Address struct {

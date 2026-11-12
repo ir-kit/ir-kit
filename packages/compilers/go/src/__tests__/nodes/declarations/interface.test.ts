@@ -461,4 +461,37 @@ describe("interface type via type declaration", () => {
     ]);
     await assertPrintedMatchesSnapshot(file, "type-set-constraint.go");
   });
+
+  it("method and embed comments", async () => {
+    const file = go.factory.createSourceFile("main", [
+      go.factory.createImportStatement("context"),
+      go.factory.createTypeDeclaration([
+        go.factory.createTypeSpec(
+          "PetAPI",
+          go.factory.createInterfaceType([
+            {
+              embed: go.factory.createIdentifier("error"),
+              leadingComments: ["Errors are values."],
+            },
+            {
+              leadingComments: ["GET /pet/{id}"],
+              name: "GetPet",
+              parameters: [
+                go.factory.createFunctionParameter(
+                  ["ctx"],
+                  go.factory.createIdentifier("context.Context"),
+                ),
+              ],
+              returnType: [
+                go.factory.createFunctionReturn(
+                  go.factory.createIdentifier("error"),
+                ),
+              ],
+            },
+          ]),
+        ),
+      ]),
+    ]);
+    await assertPrintedMatchesSnapshot(file, "method-comments.go");
+  });
 });
