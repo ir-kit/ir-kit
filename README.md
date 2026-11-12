@@ -120,6 +120,7 @@ flowchart LR
 | Package | Description |
 | --- | --- |
 | [`@ir-kit/openapi-go`](./packages/openapi/go) | Generate idiomatic Go (net/http + encoding/json + context.Context) client SDKs from an OpenAPI 3.x spec. |
+| [`@ir-kit/openapi-java`](./packages/openapi/java) | Generate idiomatic Java 17 (java.net.http + Jackson) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-kotlin`](./packages/openapi/kotlin) | Generate idiomatic Kotlin (OkHttp + kotlinx-serialization + suspend) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-swift`](./packages/openapi/swift) | Generate idiomatic Swift (Codable + URLSession + async throws) client SDKs from an OpenAPI 3.x spec. |
 | [`@ir-kit/openapi-typescript`](./packages/openapi/typescript) | Thin programmatic wrapper around @hey-api/openapi-ts that ships a `generate()` matching the shape of @ir-kit/openapi-{go,kotlin,swift}, so the same sdk-regen workflow can target TypeScript clients (types + sdk + schemas + transformers + validators + ...) via hey-api's plugin pipeline. |
@@ -184,12 +185,6 @@ flowchart LR
 | [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 | [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
-
-### Other
-
-| Package | Description |
-| --- | --- |
-| [`@ir-kit/openapi-java`](./packages/openapi/java) | Generate idiomatic Java 17 (java.net.http + Jackson) client SDKs from an OpenAPI 3.x spec. |
 
 <!-- @packages-end -->
 

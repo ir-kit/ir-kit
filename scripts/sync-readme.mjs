@@ -52,6 +52,7 @@ const CATEGORY_BY_NAME = {
   "@ir-kit/openapi-go": "Native client SDK generators",
   "@ir-kit/openapi-kotlin": "Native client SDK generators",
   "@ir-kit/openapi-swift": "Native client SDK generators",
+  "@ir-kit/openapi-java": "Native client SDK generators",
   "@ir-kit/openapi-typescript": "Native client SDK generators",
   "@ir-kit/compiler-go": "Language compilers (AST + printer)",
   "@ir-kit/compiler-kotlin": "Language compilers (AST + printer)",
