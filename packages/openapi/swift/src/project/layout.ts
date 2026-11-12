@@ -1,5 +1,5 @@
 import { posix as pathPosix } from "node:path";
-import type { SwDecl } from "../sw-dsl/index.js";
+import type { SwDecl } from "../ast/index.js";
 
 export type LayoutKind = "split" | "flat";
 

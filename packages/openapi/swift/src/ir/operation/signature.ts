@@ -7,8 +7,8 @@ import {
   type LocatedParam,
   operationDocLine,
 } from "@ir-kit/openapi";
-import type { SwFunParam, SwType } from "../../sw-dsl/index.js";
-import { swFunParam, swRef } from "../../sw-dsl/index.js";
+import type { SwFunParam, SwType } from "../../ast/index.js";
+import { swFunParam, swRef } from "../../ast/index.js";
 import type { TypeCtx } from "../type/index.js";
 import { buildBodyParams } from "./body.js";
 import { buildNonBodyParams } from "./params.js";

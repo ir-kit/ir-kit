@@ -6,10 +6,8 @@ import {
   type Schema,
   schemaTypeName,
 } from "@ir-kit/openapi";
-
-import { swTypeAlias } from "../sw-dsl/decl/typeAlias.js";
-import type { SwDecl } from "../sw-dsl/decl/types.js";
-import { swAny, swDict, swRef, swString } from "../sw-dsl/type/index.js";
+import type { SwDecl } from "../ast/index.js";
+import { swAny, swDict, swRef, swString, swTypeAlias } from "../ast/index.js";
 import { newTypeNames } from "./identifiers.js";
 import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
 

@@ -1,6 +1,6 @@
+import type { SwDecl } from "../ast/index.js";
+import { swFile } from "../ast/index.js";
 import { printFile } from "../sw-compiler/index.js";
-import type { SwDecl } from "../sw-dsl/decl/types.js";
-import { swFile } from "../sw-dsl/file.js";
 import { collectImports } from "./imports.js";
 import { type PlacementOptions, placeDecl } from "./layout.js";
 

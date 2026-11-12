@@ -5,7 +5,7 @@ import {
   uniqueEnumEntries,
 } from "@ir-kit/openapi";
 
-import type { SwCodingKeysEntry, SwDecl, SwType } from "../sw-dsl/index.js";
+import type { SwCodingKeysEntry, SwDecl, SwType } from "../ast/index.js";
 import {
   swAny,
   swArray,
@@ -21,7 +21,7 @@ import {
   swString,
   swStruct,
   swVoid,
-} from "../sw-dsl/index.js";
+} from "../ast/index.js";
 import { typeForPrimitive } from "./type/primitive.js";
 import { propertyName } from "./type/property-naming.js";
 
@@ -44,7 +44,7 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
   anyType: () => swAny,
   nullableAnyType: () => swOptional(swAny),
   wrapForUnionSingle: (inner, nullable) =>
-    nullable && inner.kind !== "optional" ? swOptional(inner) : inner,
+    nullable ? swOptional(inner) : inner,
   unionFallback: (nullable) => (nullable ? swOptional(swAny) : swAny),
   primitiveType: typeForPrimitive,
   // Swift convention: `Owner_Property` (underscore joiner).
@@ -60,7 +60,7 @@ export const swOps: SchemaToTypeOps<SwType, SwDecl> = {
           propPath: [propPathSegment],
         });
         const optional = !required;
-        const finalType = optional && t.kind !== "optional" ? swOptional(t) : t;
+        const finalType = optional ? swOptional(t) : t;
         return { naming, type: finalType, optional };
       },
     );

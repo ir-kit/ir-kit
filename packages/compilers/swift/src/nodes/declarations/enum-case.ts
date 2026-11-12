@@ -2,11 +2,13 @@ import type { SwiftNodeBase } from "../base.js";
 import type { SwiftExpression } from "../expression.js";
 import { SwiftNodeKind } from "../kinds.js";
 import type { SwiftType } from "../type.js";
+import type { SwiftTupleTypeElement } from "../types/tuple-type.js";
 import type { SwiftAttribute } from "./shared.js";
 
 export type SwiftEnumCaseElement = {
   name: string;
-  parameterClause?: ReadonlyArray<SwiftType>;
+  /** Associated values; a `{ firstName, type }` element prints labelled. */
+  parameterClause?: ReadonlyArray<SwiftType | SwiftTupleTypeElement>;
   rawValue?: SwiftExpression;
 };
 

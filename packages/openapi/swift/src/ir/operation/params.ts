@@ -5,8 +5,8 @@ import {
   type LocatedParam,
 } from "@ir-kit/openapi";
 
-import type { SwFunParam } from "../../sw-dsl/index.js";
-import { swFunParam, swOptional } from "../../sw-dsl/index.js";
+import type { SwFunParam } from "../../ast/index.js";
+import { swFunParam, swOptional } from "../../ast/index.js";
 import { paramIdent } from "../identifiers.js";
 import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";

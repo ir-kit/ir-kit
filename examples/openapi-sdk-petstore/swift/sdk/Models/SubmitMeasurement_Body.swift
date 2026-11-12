@@ -1,11 +1,9 @@
 import Foundation
 
 public struct SubmitMeasurement_Body: Codable {
-    public let value: Double
+  public let value: Double
 
-    public init(
-        value: Double
-    ) {
-        self.value = value
-    }
+  public init(value: Double) {
+    self.value = value
+  }
 }

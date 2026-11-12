@@ -1,4 +1,4 @@
-import type { SwDecl, SwExpr, SwStmt } from "../../sw-dsl/index.js";
+import type { SwDecl, SwExpr, SwStmt } from "../../ast/index.js";
 import {
   swArg,
   swArrayLit,
@@ -6,6 +6,7 @@ import {
   swAssoc,
   swCall,
   swCase,
+  swCoalesce,
   swDotCase,
   swEnum,
   swEnumCase,
@@ -24,7 +25,7 @@ import {
   swString,
   swSwitch,
   swVar,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * Emit the runtime `Auth` enum + its `apply(to:)` helper. Cases cover
@@ -132,12 +133,13 @@ function applyAPIKeyToQuery(): ReadonlyArray<SwStmt> {
           swArg(swIdent("false"), "resolvingAgainstBaseURL"),
         ]),
         [
-          swVar("items", {
-            kind: "binOp",
-            op: "??",
-            left: swMember(swIdent("components"), "queryItems"),
-            right: swArrayLit([], swRef("URLQueryItem")),
-          }),
+          swVar(
+            "items",
+            swCoalesce(
+              swMember(swIdent("components"), "queryItems"),
+              swArrayLit([], swRef("URLQueryItem")),
+            ),
+          ),
           swExprStmt(
             swCall(swMember(swIdent("items"), "append"), [
               swArg(
@@ -201,7 +203,7 @@ function basicCase() {
 function dataFromCredentialsString(): SwExpr {
   const credentials = swInterp([swIdent("username"), ":", swIdent("password")]);
   return swCall(swMember(credentials, "data"), [
-    swArg({ kind: "dotCase", name: "utf8" }, "using"),
+    swArg(swDotCase("utf8"), "using"),
   ]);
 }
 

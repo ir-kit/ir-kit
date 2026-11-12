@@ -1,6 +1,6 @@
 import { HTTP_METHOD_LITERAL, type HttpMethod } from "@ir-kit/openapi";
 
-import type { SwStmt } from "../../sw-dsl/index.js";
+import type { SwStmt } from "../../ast/index.js";
 import {
   swArg,
   swAssign,
@@ -9,7 +9,7 @@ import {
   swMember,
   swStr,
   swVar,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * `var request = URLRequest(url: url)` followed by `request.httpMethod = "GET"`.

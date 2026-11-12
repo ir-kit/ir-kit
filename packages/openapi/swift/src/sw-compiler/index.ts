@@ -1,30 +1,19 @@
-import type { SwFile } from "../sw-dsl/file.js";
-import { printDecl } from "./decl/index.js";
+import { swift } from "@ir-kit/compiler-swift";
 
-export function printFile(f: SwFile): string {
-  const out: string[] = [];
-  if (f.imports.length > 0) {
-    for (const imp of f.imports) out.push(`import ${imp}`);
-    out.push("");
-  }
-  for (let i = 0; i < f.decls.length; i++) {
-    out.push(printDecl(f.decls[i]!));
-    if (i < f.decls.length - 1) out.push("");
-  }
-  return `${out.join("\n")}\n`;
+import type { SwDecl, SwFile } from "../ast/index.js";
+
+const f = swift.factory;
+const printer = swift.createPrinter();
+const trimEnd = (s: string) => s.replace(/\n+$/, "");
+
+export function printFile(file: SwFile): string {
+  return printer.printFile(
+    f.createSourceFile([
+      ...file.imports.map((i) => f.createImportDeclaration(i)),
+      ...file.decls.map((d) => d.node),
+    ]),
+  );
 }
 
-export {
-  printClass,
-  printDecl,
-  printEnum,
-  printFun,
-  printFunParam,
-  printProp,
-  printProtocol,
-  printStruct,
-  printTypeAlias,
-} from "./decl/index.js";
-export { printExpr } from "./expr.js";
-export { printStmt } from "./stmt.js";
-export { printType } from "./type.js";
+export const printDecl = (d: SwDecl): string =>
+  trimEnd(printer.printFile(d.node));

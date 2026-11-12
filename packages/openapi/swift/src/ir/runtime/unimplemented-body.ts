@@ -1,5 +1,5 @@
-import type { SwDecl } from "../../sw-dsl/index.js";
-import { swAssoc, swEnum, swEnumCase, swString } from "../../sw-dsl/index.js";
+import type { SwDecl } from "../../ast/index.js";
+import { swAssoc, swEnum, swEnumCase, swString } from "../../ast/index.js";
 
 /**
  * Sentinel error thrown by impl methods that don't yet wire-encode their

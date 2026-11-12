@@ -39,8 +39,8 @@ describe("printer", () => {
       `import Foundation
 
 public struct User: Codable {
-    public let id: String
-    public let name: String?
+  public let id: String
+  public let name: String?
 }
 `,
     );
@@ -63,8 +63,8 @@ public struct User: Codable {
     assert.equal(
       printFile(file),
       `public enum Status: String, Codable {
-    case active = "active"
-    case pending = "pending"
+  case active = "active"
+  case pending = "pending"
 }
 `,
     );
@@ -90,10 +90,8 @@ public struct User: Codable {
     assert.equal(
       printFile(file),
       `public protocol UsersAPI {
-    /// GET /users/{id}
-    func getUser(
-        id: String
-    ) async throws -> User
+  /// GET /users/{id}
+  func getUser(id: String) async throws -> User
 }
 `,
     );

@@ -1,6 +1,6 @@
 import type { Schema } from "@ir-kit/openapi";
 
-import type { SwType } from "../../sw-dsl/index.js";
+import type { SwType } from "../../ast/index.js";
 import {
   swBool,
   swData,
@@ -11,7 +11,7 @@ import {
   swInt64,
   swRef,
   swString,
-} from "../../sw-dsl/index.js";
+} from "../../ast/index.js";
 
 /**
  * OpenAPI string `format` → Swift Foundation type. Unknown formats

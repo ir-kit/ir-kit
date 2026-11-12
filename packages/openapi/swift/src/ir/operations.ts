@@ -3,6 +3,7 @@ import { type Namespace, pascal } from "@ir-kit/codegen-core";
 import { iterOperations } from "@ir-kit/openapi";
 
 import {
+  isVoid,
   type SwDecl,
   type SwFun,
   type SwType,
@@ -18,7 +19,7 @@ import {
   swReturn,
   swTryAwait,
   swTupleType,
-} from "../sw-dsl/index.js";
+} from "../ast/index.js";
 import { newTypeNames } from "./identifiers.js";
 import { buildClientClass } from "./impl/index.js";
 import {
@@ -167,8 +168,8 @@ function withResponseSignature(sig: OperationSignature): OperationSignature {
 }
 
 function withResponseReturnType(t: SwType): SwType {
-  const isVoid = t.kind === "primitive" && t.name === "Void";
-  return isVoid
+  const voidReturn = isVoid(t);
+  return voidReturn
     ? swRef("HTTPURLResponse")
     : swTupleType([t, swRef("HTTPURLResponse")]);
 }
@@ -227,14 +228,13 @@ function signatureToConvenienceFun(sig: OperationSignature): SwFun {
   const forwarded = swTryAwait(
     swCall(swMember(swIdent("self"), sig.name), callArgs),
   );
-  const isVoid =
-    sig.returnType.kind === "primitive" && sig.returnType.name === "Void";
+  const voidReturn = isVoid(sig.returnType);
   return swFun({
     name: sig.name,
     params: baseParams,
     returnType: sig.returnType,
     effects: ["async", "throws"],
     doc: sig.doc,
-    body: [isVoid ? swExprStmt(forwarded) : swReturn(forwarded)],
+    body: [voidReturn ? swExprStmt(forwarded) : swReturn(forwarded)],
   });
 }
