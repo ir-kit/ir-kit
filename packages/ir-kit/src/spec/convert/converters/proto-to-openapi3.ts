@@ -7,12 +7,12 @@ import type { ConvertOutput } from "../types.js";
 
 type OpenAPISchema = Record<string, unknown>;
 
-/** Well-known types whose proto3 JSON form is not their message shape. */
-const WELL_KNOWN: Record<string, OpenAPISchema> = {
-  "google.protobuf.Timestamp": { type: "string", format: "date-time" },
-  "google.protobuf.Duration": { type: "string" },
-  "google.protobuf.Empty": { type: "object" },
-};
+// why: proto3 JSON writes these as strings or {}, not as their message fields.
+const WELL_KNOWN = new Map<string, OpenAPISchema>([
+  ["google.protobuf.Timestamp", { type: "string", format: "date-time" }],
+  ["google.protobuf.Duration", { type: "string" }],
+  ["google.protobuf.Empty", { type: "object" }],
+]);
 
 registerConverter({
   from: "proto",
@@ -54,7 +54,7 @@ function walkNamespace(
   if (!ns.nested) return;
   for (const child of Object.values(ns.nested)) {
     if (child instanceof protobuf.Type) {
-      if (typeName(child) in WELL_KNOWN) continue;
+      if (WELL_KNOWN.has(typeName(child))) continue;
       schemas[typeName(child)] = messageToSchema(child);
       walkNamespace(child, schemas, paths);
     } else if (child instanceof protobuf.Enum) {
@@ -170,5 +170,5 @@ function typeName(obj: protobuf.ReflectionObject): string {
 function schemaRef(type: protobuf.ReflectionObject | null): OpenAPISchema {
   if (!type) throw new Error("unresolved protobuf type");
   const name = typeName(type);
-  return WELL_KNOWN[name] ?? { $ref: `#/components/schemas/${name}` };
+  return WELL_KNOWN.get(name) ?? { $ref: `#/components/schemas/${name}` };
 }
