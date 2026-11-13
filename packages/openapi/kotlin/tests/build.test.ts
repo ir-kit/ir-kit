@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, it } from "vitest";
 
 import {
   buildKotlinProject,
+  generate,
   operationsToDecls,
   schemasToDecls,
 } from "../src/index.ts";
@@ -152,5 +156,41 @@ describe("buildKotlinProject", () => {
         }),
       /invalid output directory/,
     );
+  });
+});
+
+describe("generate with gradle", () => {
+  it("puts sources under src/main/kotlin so Gradle compiles them", async () => {
+    const out = await mkdtemp(join(tmpdir(), "openapi-kotlin-gradle-"));
+    try {
+      await generate({
+        input: {
+          openapi: "3.0.0",
+          info: { title: "t", version: "1" },
+          components: {
+            schemas: {
+              User: {
+                type: "object",
+                required: ["id"],
+                properties: { id: { type: "string" } },
+              },
+            },
+          },
+          paths: {},
+        },
+        output: out,
+        packageName: "com.example.api",
+        gradle: true,
+      });
+      const entries = await readdir(out, { recursive: true });
+      assert.ok(entries.includes("build.gradle.kts"));
+      assert.ok(entries.includes("settings.gradle.kts"));
+      assert.ok(
+        entries.includes("src/main/kotlin/com/example/api/models/User.kt"),
+      );
+      assert.ok(!entries.some((p) => p.startsWith("com/")));
+    } finally {
+      await rm(out, { recursive: true, force: true });
+    }
   });
 });
