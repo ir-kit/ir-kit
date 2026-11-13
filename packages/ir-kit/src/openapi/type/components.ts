@@ -1,6 +1,5 @@
 import type { Namespace } from "../../codegen/index.js";
 import type { IR } from "../../ir/index.js";
-import { fromHeyApi } from "../../schema/adapters/heyapi.js";
 import { refName, type Schema } from "../../schema/index.js";
 
 import { schemaTypeName } from "./dispatch.js";
@@ -33,7 +32,7 @@ export function classifyComponents(
 ): Component[] {
   for (const rawName of Object.keys(schemas)) schemaTypeName(names, rawName);
   return Object.entries(schemas).map(([rawName, heySchema]) => {
-    const schema = fromHeyApi(heySchema);
+    const schema = heySchema;
     return {
       name: schemaTypeName(names, rawName),
       schema,

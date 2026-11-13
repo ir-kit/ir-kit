@@ -7,7 +7,6 @@ import {
   collectLocatedParams,
   deriveBaseName,
   extractEnumValues,
-  fromHeyApi,
   iterateObjectProperties,
   iterOperations,
   type ObjectProperty,
@@ -64,7 +63,7 @@ export function openAPIToProto(
   const components = Object.entries(ir.components?.schemas ?? {}).map(
     ([raw, hey]) => ({
       name: schemaTypeName(state.names, raw),
-      schema: fromHeyApi(hey),
+      schema: hey,
     }),
   );
   // Classify every component before generating any of them, so forward
@@ -121,7 +120,7 @@ function buildServices(
 
     const properties: ObjectProperty[] = collectLocatedParams(op).map(
       ({ param }) => {
-        const schema = fromHeyApi(param.schema);
+        const schema = param.schema;
         return {
           jsonKey: param.name,
           schema: {

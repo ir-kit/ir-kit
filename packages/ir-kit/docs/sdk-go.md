@@ -266,7 +266,7 @@ Conventions:
 src/ast/                      go* builders returning ir-kit nodes; GoDecl
 src/go-compiler/              printFile / printDecl via ir-kit
 src/ir/
-├── type/                     IR.SchemaObject → GoType
+├── type/                     Schema → GoType
 ├── operation/                IR.OperationObject → signature shared by interface + impl
 ├── impl/                     net/http body builders (url, request, headers, body, decode)
 ├── runtime/                  Copies runtime/*.go into the SDK

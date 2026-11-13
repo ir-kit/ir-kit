@@ -65,3 +65,16 @@ export function uniqueEnumEntries<T extends string | number>(
   }
   return out;
 }
+
+/** The enum's string, number and boolean values; `null` and objects are dropped. */
+export function getEnumLiterals(schema: Schema): EnumLiteral[] {
+  return (extractEnumValues(schema) ?? []).filter(
+    (v): v is EnumLiteral =>
+      typeof v === "string" || typeof v === "number" || typeof v === "boolean",
+  );
+}
+
+/** A `string` schema whose values aren't restricted to an enum. */
+export function isPlainString(schema: Schema | undefined): boolean {
+  return schema?.type === "string" && extractEnumValues(schema) === undefined;
+}

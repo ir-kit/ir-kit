@@ -248,7 +248,7 @@ Runtime dependencies (set up by the `gradle:` option, or by the consuming module
 src/ast/                      kt* builders returning ir-kit nodes; KtDecl
 src/kt-compiler/              printFile / printDecl via ir-kit
 src/ir/
-├── type/                     IR.SchemaObject → KtType
+├── type/                     Schema → KtType
 ├── operation/                IR.OperationObject → signature shared by interface + impl
 ├── impl/                     OkHttp body builders (url, request, headers, body, decode)
 ├── runtime/                  Copies runtime/*.kt into the SDK

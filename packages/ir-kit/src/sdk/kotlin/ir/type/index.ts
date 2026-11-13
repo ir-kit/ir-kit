@@ -5,7 +5,7 @@ import {
   type Schema,
   schemaToType as sharedSchemaToType,
 } from "../../../../openapi/index.js";
-import { getEnumLiterals } from "../../../../openapi-tools/index.js";
+import { getEnumLiterals } from "../../../../schema/index.js";
 
 import type { KtDecl } from "../../ast/index.js";
 import { type KtType, ktRef, ktTypeAlias } from "../../ast/index.js";

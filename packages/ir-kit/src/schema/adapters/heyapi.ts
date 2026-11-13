@@ -1,9 +1,60 @@
-import type { IR } from "../../ir/index.js";
-
 import type { Schema, SchemaPrimitiveType } from "../types.js";
 
+type Extensions = { [key: `x-${string}`]: unknown };
+
+type SchemaType =
+  | "array"
+  | "boolean"
+  | "enum"
+  | "integer"
+  | "never"
+  | "null"
+  | "number"
+  | "object"
+  | "string"
+  | "tuple"
+  | "undefined"
+  | "unknown"
+  | "void";
+
 /**
- * Adapt `IR.Schema` (hey-api's normalized intermediate form) to
+ * JSON Schema 2020-12 plus a few normalized forms: `type: "enum"` with
+ * `items[].const`, `type: "tuple"`, and `items` + `logicalOperator` for
+ * unions and intersections.
+ */
+export interface HeyApiSchema extends Extensions {
+  $ref?: string;
+  type?: SchemaType;
+  format?: string;
+  title?: string;
+  description?: string;
+  deprecated?: boolean;
+  default?: unknown;
+  const?: unknown;
+  example?: unknown;
+  accessScope?: "read" | "write";
+  properties?: Record<string, HeyApiSchema>;
+  required?: ReadonlyArray<string>;
+  additionalProperties?: HeyApiSchema | false;
+  patternProperties?: Record<string, HeyApiSchema>;
+  propertyNames?: HeyApiSchema;
+  items?: ReadonlyArray<HeyApiSchema>;
+  logicalOperator?: "and" | "or";
+  discriminator?: { propertyName: string; mapping?: Record<string, string> };
+  omit?: ReadonlyArray<string>;
+  minimum?: number;
+  maximum?: number;
+  exclusiveMinimum?: number;
+  exclusiveMaximum?: number;
+  minLength?: number;
+  maxLength?: number;
+  minItems?: number;
+  maxItems?: number;
+  pattern?: string;
+}
+
+/**
+ * Adapt `HeyApiSchema` (hey-api's normalized intermediate form) to
  * canonical {@link Schema}.
  *
  * Normalizations:
@@ -14,7 +65,7 @@ import type { Schema, SchemaPrimitiveType } from "../types.js";
  *  - untyped + items[]                 → `oneOf` (hey-api's implicit
  *                                        union convention)
  */
-export function fromHeyApi(s: IR.Schema): Schema {
+export function fromHeyApi(s: HeyApiSchema): Schema {
   const out: Schema = {};
 
   if (s.$ref) {

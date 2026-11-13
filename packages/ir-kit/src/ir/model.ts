@@ -3,6 +3,10 @@
  * OpenAPI 2.0, 3.0 and 3.1 all lower into it (see `parseOpenAPI`).
  */
 
+import type { Schema } from "../schema/types.js";
+
+export type { Schema };
+
 type Extensions = { [key: `x-${string}`]: unknown };
 
 export interface Model {
@@ -117,55 +121,4 @@ export interface Responses {
 export interface Response {
   mediaType?: string;
   schema: Schema;
-}
-
-export type SchemaType =
-  | "array"
-  | "boolean"
-  | "enum"
-  | "integer"
-  | "never"
-  | "null"
-  | "number"
-  | "object"
-  | "string"
-  | "tuple"
-  | "undefined"
-  | "unknown"
-  | "void";
-
-/**
- * JSON Schema 2020-12 plus a few normalized forms: `type: "enum"` with
- * `items[].const`, `type: "tuple"`, and `items` + `logicalOperator` for
- * unions and intersections.
- */
-export interface Schema extends Extensions {
-  $ref?: string;
-  type?: SchemaType;
-  format?: string;
-  title?: string;
-  description?: string;
-  deprecated?: boolean;
-  default?: unknown;
-  const?: unknown;
-  example?: unknown;
-  accessScope?: "read" | "write";
-  properties?: Record<string, Schema>;
-  required?: ReadonlyArray<string>;
-  additionalProperties?: Schema | false;
-  patternProperties?: Record<string, Schema>;
-  propertyNames?: Schema;
-  items?: ReadonlyArray<Schema>;
-  logicalOperator?: "and" | "or";
-  discriminator?: { propertyName: string; mapping?: Record<string, string> };
-  omit?: ReadonlyArray<string>;
-  minimum?: number;
-  maximum?: number;
-  exclusiveMinimum?: number;
-  exclusiveMaximum?: number;
-  minLength?: number;
-  maxLength?: number;
-  minItems?: number;
-  maxItems?: number;
-  pattern?: string;
 }

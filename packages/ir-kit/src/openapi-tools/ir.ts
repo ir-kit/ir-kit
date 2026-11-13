@@ -21,12 +21,9 @@ function specToPattern(spec: string): string {
 /** Extract `Route[]` from a parsed IR — for runtime-loaded specs without codegen. */
 export function routesFromIR(ir: IR.Model): Route[] {
   const out: Route[] = [];
-  const paths =
-    (ir as { paths?: Record<string, Record<string, unknown>> }).paths ?? {};
-  for (const [spec, pathItem] of Object.entries(paths)) {
-    if (!pathItem) continue;
+  for (const [spec, pathItem] of Object.entries(ir.paths ?? {})) {
     for (const method of HTTP_METHODS) {
-      const op = pathItem[method] as { operationId?: string } | undefined;
+      const op = pathItem[method];
       if (!op) continue;
       out.push({
         spec,

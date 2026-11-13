@@ -5,7 +5,6 @@ import {
   type TypeTsDsl,
 } from "@hey-api/openapi-ts";
 import type { IR } from "../../../ir/index.js";
-import { fromHeyApi } from "../../../openapi/index.js";
 import type { TypeExpr } from "../dsl.js";
 import {
   schemaToTypeNode,
@@ -23,7 +22,7 @@ type Func = ReturnType<typeof $.func>;
 const TYPE_NAMESPACE = "T";
 
 function typed(schema: IR.Schema): TypeExpr {
-  return schemaToTypeNode(fromHeyApi(schema), {
+  return schemaToTypeNode(schema, {
     typeNamespace: TYPE_NAMESPACE,
   });
 }

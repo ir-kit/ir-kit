@@ -1,6 +1,6 @@
 # `ir-kit/schema`
 
-Canonical JSON Schema 2020-12 IR shared across the OpenAPI and AsyncAPI codegen families. Source-agnostic — adapters fold hey-api's `IR.SchemaObject`, raw JSON Schema (any draft), and OpenAPI 3.0 `nullable` quirks into one shape so every emitter (`@ir-kit/openapi-{go,kotlin,swift,typescript}`, `ir-kit/sdk/asyncapi`, `@ir-kit/k6-codegen`) reads the same model.
+Canonical JSON Schema 2020-12 IR shared across the OpenAPI and AsyncAPI codegen families. `IR.Schema` from `ir-kit/ir` is this type. Source-agnostic — adapters fold hey-api's `IR.SchemaObject`, raw JSON Schema (any draft), and OpenAPI 3.0 `nullable` quirks into one shape so every emitter (`@ir-kit/openapi-{go,kotlin,swift,typescript}`, `ir-kit/sdk/asyncapi`, `@ir-kit/k6-codegen`) reads the same model.
 
 ## Install
 

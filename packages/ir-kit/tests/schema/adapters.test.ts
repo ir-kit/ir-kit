@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { IR } from "../../src/ir/index.js";
+import type { HeyApiSchema } from "../../src/schema/adapters/heyapi.ts";
 
 import { fromHeyApi } from "../../src/schema/adapters/heyapi.ts";
 import { fromJsonSchema } from "../../src/schema/adapters/jsonschema.ts";
 
 describe("fromHeyApi", () => {
   it("translates type:enum + items[].const into enum + inferred type", () => {
-    const s: IR.Schema = {
+    const s: HeyApiSchema = {
       type: "enum",
       items: [{ const: "open" }, { const: "closed" }],
     };
@@ -16,13 +16,13 @@ describe("fromHeyApi", () => {
   });
 
   it("translates logicalOperator or → oneOf, and → allOf", () => {
-    const or: IR.Schema = {
+    const or: HeyApiSchema = {
       logicalOperator: "or",
       items: [{ type: "string" }, { type: "null" }],
     };
     expect(fromHeyApi(or).oneOf?.length).toBe(2);
 
-    const and: IR.Schema = {
+    const and: HeyApiSchema = {
       logicalOperator: "and",
       items: [{ type: "object" }, { type: "object" }],
     };
@@ -30,7 +30,7 @@ describe("fromHeyApi", () => {
   });
 
   it("flattens type:array + items:[elem] into items:elem", () => {
-    const s: IR.Schema = {
+    const s: HeyApiSchema = {
       type: "array",
       items: [{ type: "string" }],
     };
@@ -41,7 +41,7 @@ describe("fromHeyApi", () => {
   });
 
   it("preserves properties and required", () => {
-    const s: IR.Schema = {
+    const s: HeyApiSchema = {
       type: "object",
       properties: { name: { type: "string" }, age: { type: "integer" } },
       required: ["name"],
