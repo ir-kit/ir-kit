@@ -1,7 +1,7 @@
 {
   "name": "@ir-kit/k6-gen",
   "version": "0.4.1",
-  "description": "Programmatic generator: OpenAPI spec → typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required.",
+  "description": "Programmatic generator: OpenAPI spec \u2192 typed k6 client (one function per operation), TS types, and faker-backed data builders. No hey-api plugin required.",
   "keywords": [
     "k6",
     "openapi",
@@ -61,9 +61,6 @@
     "@ir-kit/openapi-loader": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*",
     "@ir-kit/openapi-ts-faker": "workspace:*"
-  },
-  "peerDependencies": {
-    "typescript": ">=5.0.0 <7"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

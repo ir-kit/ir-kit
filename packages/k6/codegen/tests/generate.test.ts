@@ -114,10 +114,10 @@ describe("@ir-kit/k6-gen", () => {
 
   it("data.ts emits typed faker builders for objects and primitives", () => {
     expect(files["data.ts"]).toMatch(
-      /Pet: \(overrides\?: Partial<T\.Pet>\): T\.Pet =>/,
+      /Pet\(overrides\?: Partial<T\.Pet>\): T\.Pet \{/,
     );
     expect(files["data.ts"]).toMatch(
-      /StatusEnum: \(overrides\?: T\.StatusEnum\): T\.StatusEnum =>/,
+      /StatusEnum\(overrides\?: T\.StatusEnum\): T\.StatusEnum \{/,
     );
   });
 

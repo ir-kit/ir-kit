@@ -54,7 +54,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@ir-kit/openapi-ts-plugin-kit": "workspace:^"
+    "@ir-kit/openapi-ts-plugin-kit": "workspace:^",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "@faker-js/faker": "^10.0.0 || ^9.0.0 || ^8.0.0",
@@ -68,8 +69,7 @@
     "@orpc/openapi-client": "^1.13",
     "@orpc/server": "^1.13",
     "@orpc/tanstack-query": "^1.13",
-    "@orpc/zod": "^1.13",
-    "typescript": ">=5.0.0 <7"
+    "@orpc/zod": "^1.13"
   },
   "peerDependenciesMeta": {
     "@ir-kit/openapi-ts-faker": {

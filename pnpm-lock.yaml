@@ -715,9 +715,6 @@ importers:
       '@ir-kit/k6-toolkit':
         specifier: workspace:*
         version: link:../toolkit
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
     devDependencies:
       '@ir-kit/tsconfig':
         specifier: workspace:*
@@ -1000,6 +997,9 @@ importers:
       '@ir-kit/openapi-ts-plugin-kit':
         specifier: workspace:^
         version: link:../kit
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.4.0
@@ -1049,9 +1049,6 @@ importers:
       ts-patch:
         specifier: ^3.3.0
         version: 3.3.0
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))

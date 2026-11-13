@@ -37,15 +37,15 @@ import type * as ${TYPE_NAMESPACE} from "./types.js";
           .as(typeRef)
       : $("overrides").or(schemaToFakerExpr(schema)).as(typeRef);
 
-    const fn = $.func()
-      .param("overrides", (p) => {
-        const t = isObject ? $.type("Partial").generic(typeRef) : typeRef;
-        return p.optional().type(t);
-      })
-      .returns(typeRef)
-      .do($.return(body));
-
-    dataObj = dataObj.prop(name, fn);
+    dataObj = dataObj.method(name, (m) =>
+      m
+        .param("overrides", (p) => {
+          const t = isObject ? $.type("Partial").generic(typeRef) : typeRef;
+          p.optional().type(t);
+        })
+        .returns(typeRef)
+        .do($.return(body)),
+    );
   }
 
   const decl = $.const("data").export().assign(dataObj);
