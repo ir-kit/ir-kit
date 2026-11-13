@@ -39,7 +39,9 @@ const SKIPPED_TAGS = [
   "Default",
   "Example",
   "Examples",
+  "Exclude",
   "JsonSchemaPlugin",
+  "Probability",
   "Sequence",
   "TagBase",
 ] as const satisfies ReadonlyArray<TypiaTagName>;

@@ -2,7 +2,7 @@
 
 End-to-end demo: **one OpenAPI spec → multiple platform SDKs**, with each language's example wired up as a real consumer project that depends on the generated SDK like an adopter would.
 
-The shared spec lives at [`../../fixtures/petstore.yaml`](../../fixtures/petstore.yaml) (also consumed by `examples/orpc-basic`). Each platform has its own `<lang>/` directory containing a `gen.ts` script that writes the SDK into `sdk/`, plus a sibling `example/` consumer module.
+The shared spec lives at [`../../fixtures/petstore.yaml`](../../fixtures/petstore.yaml). Each platform has its own `<lang>/` directory containing a `gen.ts` script that writes the SDK into `sdk/`, plus a sibling `example/` consumer module.
 
 ## Targets
 

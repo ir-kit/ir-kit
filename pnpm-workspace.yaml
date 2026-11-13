@@ -43,17 +43,3 @@ catalog:
 
 onlyBuiltDependencies:
   - lefthook
-
-patchedDependencies:
-  '@ryoppippi/unplugin-typia': patches/@ryoppippi__unplugin-typia.patch
-
-packageExtensions:
-  '@typia/core':
-    peerDependencies:
-      typescript: '>=5.0.0 <7'
-  '@typia/transform':
-    peerDependencies:
-      typescript: '>=5.0.0 <7'
-  ts-patch:
-    peerDependencies:
-      typescript: '>=5.0.0 <7'

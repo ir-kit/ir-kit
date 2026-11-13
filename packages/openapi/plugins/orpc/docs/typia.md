@@ -21,10 +21,10 @@ contract's `.input()` / `.output()` / `.errors()`.
 ```bash
 bun add -d @ir-kit/openapi-ts-typia
 bun add typia @standard-schema/spec
-bun add -d @ryoppippi/unplugin-typia
+bun add -d ttsc typescript @ttsc/unplugin
 ```
 
-Typia requires a compiler transform to work. Use `unplugin-typia` for
+Typia requires a compiler transform to work. Use `@ttsc/unplugin` for
 your bundler.
 
 `@standard-schema/spec` is already a runtime dep of typia; pnpm's strict
@@ -38,13 +38,13 @@ requires you list it as a direct install.
 ```typescript
 // tsdown.config.ts
 import { defineConfig } from 'tsdown'
-import UnpluginTypia from '@ryoppippi/unplugin-typia/rolldown'
+import ttsc from '@ttsc/unplugin/rolldown'
 
 export default defineConfig({
   entry: ['src/server.ts'],
   format: 'esm',
   outDir: 'dist',
-  plugins: [UnpluginTypia()],
+  plugins: [ttsc({ plugins: [{ transform: 'typia/lib/transform' }] })],
 })
 ```
 
@@ -52,9 +52,11 @@ export default defineConfig({
 
 ```typescript
 // vite.config.ts
-import UnpluginTypia from '@ryoppippi/unplugin-typia/vite'
+import ttsc from '@ttsc/unplugin/vite'
 
-export default { plugins: [UnpluginTypia()] }
+export default {
+  plugins: [ttsc({ plugins: [{ transform: 'typia/lib/transform' }] })],
+}
 ```
 
 ## openapi-ts config

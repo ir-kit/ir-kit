@@ -16,8 +16,8 @@ strict mode hides transitives, so generated code's
 `import type { StandardSchemaV1 } from '@standard-schema/spec'`
 requires the user to list it as a direct install.
 
-Typia's compiler transform is required at build time — install
-`@ryoppippi/unplugin-typia` for your bundler (Vite, Webpack, tsdown,
+Typia's compiler transform is required at build time. Install `ttsc`
+and `@ttsc/unplugin` for your bundler (Vite, Webpack, tsdown, Next.js,
 etc.).
 
 ## Usage
@@ -118,9 +118,9 @@ runtime. This plugin ships a generated mirror at
 pnpm sync-tags
 ```
 
-The generator walks typia's `.d.ts` files via the TypeScript compiler
-API to extract tag names + `Format.Value` + `Type<V>`'s constraint —
-no hand-maintained mapping tables.
+The generator reads typia's `.d.ts` files with `oxc-parser` to extract
+tag names + `Format.Value` + `Type<V>`'s constraint — no hand-maintained
+mapping tables.
 
 A compile-time coverage gate flags any new typia tag that isn't
 explicitly handled or skipped.
@@ -132,5 +132,4 @@ explicitly handled or skipped.
 - `@hey-api/transformers` plugin configured with
   `typeTransformers: [typiaTypeTransformer]`
 - `typia` + `@standard-schema/spec` installed at runtime
-- Typia compiler transform configured (via `@ryoppippi/unplugin-typia`
-  or equivalent)
+- Typia compiler transform configured (via `ttsc` and `@ttsc/unplugin`)

@@ -96,9 +96,7 @@
     "@orpc/server": "^1.14.0",
     "@orpc/tanstack-query": "^1.14.0",
     "@orpc/zod": "^1.13",
-    "@ryoppippi/unplugin-typia": "^2.6.5",
     "@types/node": "catalog:",
-    "ts-patch": "^3.3.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
