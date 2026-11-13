@@ -1,6 +1,8 @@
-import { existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
+
+import { findConfigFile } from "../config-file.js";
 
 import type { TargetName } from "./config.js";
 
@@ -19,18 +21,36 @@ export interface WriteConfigOptions {
   cwd?: string;
   input: string;
   targets: ReadonlyArray<TargetName>;
-  /** Replace an existing `ir.config.ts`. Default: `false`. */
+  /** Replace an existing `ir.config.*`. Default: `false`. */
   force?: boolean;
 }
 
-/** Write a starter `ir.config.ts` and return its path. */
+/**
+ * Write a starter config and return its path: `ir.config.ts` in an ES module
+ * package, otherwise `ir.config.mts`.
+ */
 export async function writeConfig(opts: WriteConfigOptions): Promise<string> {
-  const file = join(resolve(opts.cwd ?? process.cwd()), "ir.config.ts");
-  if (existsSync(file) && !opts.force) {
-    throw new Error(`${file} already exists. Pass --force to replace it.`);
+  const cwd = resolve(opts.cwd ?? process.cwd());
+  const existing = findConfigFile(cwd, "ir");
+  if (existing && !opts.force) {
+    throw new Error(`${existing} already exists. Pass --force to replace it.`);
   }
+  const file =
+    existing ??
+    join(cwd, isModulePackage(cwd) ? "ir.config.ts" : "ir.config.mts");
   await writeFile(file, renderConfig(opts.input, opts.targets));
   return file;
+}
+
+function isModulePackage(dir: string): boolean {
+  for (let at = dir; ; at = dirname(at)) {
+    try {
+      const pkg = JSON.parse(readFileSync(join(at, "package.json"), "utf8"));
+      return pkg.type === "module";
+    } catch {
+      if (dirname(at) === at) return false;
+    }
+  }
 }
 
 export function renderConfig(

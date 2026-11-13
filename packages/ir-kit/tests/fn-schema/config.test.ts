@@ -52,6 +52,8 @@ describe("fn-schema config", () => {
     const file = join(dir, "cjs.config.ts");
     await writeFile(file, "const n: number = 3;\nmodule.exports = { n };\n");
     expect(await importConfig(file)).toEqual({ n: 3 });
+    await writeFile(file, "const n: number = 4;\nmodule.exports = { n };\n");
+    expect(await importConfig(file)).toEqual({ n: 4 });
   });
 
   it("globs files and skips node_modules", async () => {

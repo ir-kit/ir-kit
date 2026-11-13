@@ -25,7 +25,7 @@ npx ir generate --check   # write nothing; fail if any target is out of date
 npx ir watch          # regenerate when the spec or config changes
 ```
 
-`--targets go,docs` runs only some targets. `--config path/to/ir.config.ts` picks another file. Relative paths in the config start at the config file's directory.
+`ir init` writes `ir.config.mts` instead when `package.json` isn't `"type": "module"`, so Node loads it as an ES module either way. `ir.config.{ts,mts,js,mjs}` are all found. `--targets go,docs` runs only some targets. `--config path/to/ir.config.ts` picks another file. Relative paths in the config start at the config file's directory.
 
 ## Targets
 

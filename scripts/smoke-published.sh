@@ -26,8 +26,8 @@ npx ir --version
 
 step "ir init"
 npx ir init --input petstore.yaml --targets typescript,go,kotlin,swift,java,k6,docs
-test -f ir.config.ts
-cat > ir.config.ts <<'TS'
+test -f ir.config.mts
+cat > ir.config.mts <<'TS'
 import { defineConfig } from "ir-kit";
 
 export default defineConfig({
