@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../ir/index.js";
 
 /**
  * One part of a parsed URL path template segment.
@@ -11,7 +11,7 @@ import type { IR } from "@hey-api/shared";
  */
 export type TemplatePart =
   | { kind: "literal"; text: string }
-  | { kind: "param"; name: string; param: IR.ParameterObject | undefined };
+  | { kind: "param"; name: string; param: IR.Parameter | undefined };
 
 /**
  * Split a single path segment containing zero or more `{name}` template
@@ -25,7 +25,7 @@ export type TemplatePart =
  */
 export function parseTemplatedSegment(
   seg: string,
-  pathParams: ReadonlyArray<IR.ParameterObject>,
+  pathParams: ReadonlyArray<IR.Parameter>,
 ): TemplatePart[] {
   const re = /\{([^}]+)\}/g;
   const parts: TemplatePart[] = [];

@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyBody,
   isSchemaObject,
@@ -51,7 +51,7 @@ export interface BodyResult {
  * dereferenced inside the guard.
  */
 export function buildBodyStmts(
-  body: IR.BodyObject,
+  body: IR.Body,
   errCheck: ErrCheckFn,
   params: ReadonlyArray<GoFuncParam>,
 ): BodyResult {

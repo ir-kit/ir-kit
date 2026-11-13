@@ -1,13 +1,13 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
 import { safeIdent } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { fromHeyApi } from "../../../openapi/index.js";
 
 import { schemaToTypeNode } from "../ir/index.js";
 import { GENERATED_HEADER, printDslNodes } from "../print.js";
 
 export function emitTypesFile(
-  schemas: Record<string, IR.SchemaObject> | undefined,
+  schemas: Record<string, IR.Schema> | undefined,
 ): string {
   const decls = Object.entries(schemas ?? {}).map(([rawName, schema]) =>
     $.type

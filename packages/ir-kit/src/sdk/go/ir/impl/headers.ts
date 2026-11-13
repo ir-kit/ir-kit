@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import { type LocatedParam, paramsAt } from "../../../../openapi/index.js";
 import {
   type GoFuncParam,
@@ -29,7 +29,7 @@ export function buildHeaderStmts(
 }
 
 function buildHeaderStmt(
-  p: IR.ParameterObject,
+  p: IR.Parameter,
   params: ReadonlyArray<GoFuncParam>,
 ): ReadonlyArray<GoStmt> {
   const id = paramIdent(p.name);

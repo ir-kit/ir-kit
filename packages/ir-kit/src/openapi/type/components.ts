@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../codegen/index.js";
+import type { IR } from "../../ir/index.js";
 import { fromHeyApi } from "../../schema/adapters/heyapi.js";
 import { refName, type Schema } from "../../schema/index.js";
 
@@ -28,7 +28,7 @@ export interface Component {
  * claimed up front so they win over synthesized inline type names.
  */
 export function classifyComponents(
-  schemas: Record<string, IR.SchemaObject>,
+  schemas: Record<string, IR.Schema>,
   names: Namespace,
 ): Component[] {
   for (const rawName of Object.keys(schemas)) schemaTypeName(names, rawName);

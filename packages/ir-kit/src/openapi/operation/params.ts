@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../ir/index.js";
 
 export type ParamLocation = "path" | "query" | "header" | "cookie";
 
@@ -10,7 +10,7 @@ export const PARAM_LOCATIONS: ReadonlyArray<ParamLocation> = [
 ];
 
 export interface LocatedParam {
-  param: IR.ParameterObject;
+  param: IR.Parameter;
   loc: ParamLocation;
 }
 
@@ -23,7 +23,7 @@ export interface LocatedParam {
  * Emitters typically further filter (e.g. Go drops cookies) and sort
  * (required-first); those decisions stay per-target.
  */
-export function collectLocatedParams(op: IR.OperationObject): LocatedParam[] {
+export function collectLocatedParams(op: IR.Operation): LocatedParam[] {
   const out: LocatedParam[] = [];
   for (const loc of PARAM_LOCATIONS) {
     const bucket = op.parameters?.[loc];
@@ -34,7 +34,7 @@ export function collectLocatedParams(op: IR.OperationObject): LocatedParam[] {
 }
 
 /**
- * Extract just the `IR.ParameterObject`s at a given location from a
+ * Extract just the `IR.Parameter`s at a given location from a
  * pre-collected `LocatedParam[]` (typically the `located` from
  * `operationSignature`'s return value). The pattern
  * `located.filter((l) => l.loc === "<loc>").map((l) => l.param)`
@@ -44,6 +44,6 @@ export function collectLocatedParams(op: IR.OperationObject): LocatedParam[] {
 export function paramsAt(
   located: ReadonlyArray<LocatedParam>,
   loc: ParamLocation,
-): IR.ParameterObject[] {
+): IR.Parameter[] {
   return located.filter((l) => l.loc === loc).map((l) => l.param);
 }

@@ -6,7 +6,7 @@ import {
   printFile,
   swFile,
 } from "../../../src/sdk/swift/index.ts";
-import { ir, securityNamesMap } from "./_helpers.ts";
+import { ir } from "./_helpers.ts";
 
 const decls = (
   paths: Record<string, unknown>,
@@ -1042,9 +1042,7 @@ describe("operations (IR-driven)", () => {
     const m = ir(fragment);
     const out = printFile(
       swFile({
-        decls: operationsToDecls(m.paths, {
-          securitySchemeNames: securityNamesMap(fragment),
-        }),
+        decls: operationsToDecls(m.paths, {}),
       }),
     );
     assert.match(flat(out), /public enum Auth \{/);
@@ -1087,9 +1085,7 @@ describe("operations (IR-driven)", () => {
     const m = ir(fragment);
     const out = printFile(
       swFile({
-        decls: operationsToDecls(m.paths, {
-          securitySchemeNames: securityNamesMap(fragment),
-        }),
+        decls: operationsToDecls(m.paths, {}),
       }),
     );
     // Header branch (existing behavior).
@@ -1134,9 +1130,7 @@ describe("operations (IR-driven)", () => {
     const m = ir(fragment);
     const out = printFile(
       swFile({
-        decls: operationsToDecls(m.paths, {
-          securitySchemeNames: securityNamesMap(fragment),
-        }),
+        decls: operationsToDecls(m.paths, {}),
       }),
     );
     // APIClient gets a name-keyed auth bag.

@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 
 import { writeOutput } from "../../codegen/index.js";
+import { parseOpenAPI } from "../../ir/index.js";
 import type { NormalizeOptions } from "../../openapi/index.js";
-import { parseForCodegen } from "../../openapi-tools/parse.js";
 import { loadOpenAPI } from "../../spec/openapi/index.js";
 import { newTypeNames } from "./ir/identifiers.js";
 import {
@@ -19,14 +19,7 @@ import {
   gomodFile,
 } from "./project/index.js";
 
-type ForwardedOperationsOptions = Omit<
-  OperationsOptions,
-  "securitySchemeNames"
->;
-
-export interface GenerateOptions
-  extends BuildOptions,
-    ForwardedOperationsOptions {
+export interface GenerateOptions extends BuildOptions, OperationsOptions {
   /**
    * The OpenAPI spec source: a filesystem path, http(s) URL, or a
    * pre-parsed object. YAML and JSON inputs both work. External
@@ -56,7 +49,7 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const { ir, securitySchemeNames } = parseForCodegen(
+  const ir = parseOpenAPI(
     await loadOpenAPI({ input: opts.input, normalize: opts.normalize }),
   );
   const names = newTypeNames();
@@ -67,7 +60,6 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     interfaceName: opts.interfaceName,
     clientStructName: opts.clientStructName,
     interfaceOnly: opts.interfaceOnly,
-    securitySchemeNames,
     names,
   });
   const decls = [...schemaDecls, ...opsResult.decls];

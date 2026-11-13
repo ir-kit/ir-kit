@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   type LocatedParam,
   paramsAt,
@@ -69,7 +69,7 @@ interface ParamPart {
 
 function segmentExpr(
   seg: string,
-  pathParams: ReadonlyArray<IR.ParameterObject>,
+  pathParams: ReadonlyArray<IR.Parameter>,
 ): KtExpr {
   const parts: Array<string | ParamPart> = parseTemplatedSegment(
     seg,
@@ -95,7 +95,7 @@ function segmentExpr(
   return ktInterp(parts.map((p) => (typeof p === "string" ? p : p.expr)));
 }
 
-function buildQueryStmt(p: IR.ParameterObject): KtStmt {
+function buildQueryStmt(p: IR.Parameter): KtStmt {
   const id = operationParamIdent(p.name);
   const isArray = p.schema.type === "array";
   const helper = isArray ? "addArray" : "addScalar";
@@ -113,7 +113,7 @@ function buildQueryStmt(p: IR.ParameterObject): KtStmt {
   return ktExprStmt(ktCall(ktMember(ktIdent("URLEncoding"), helper), args));
 }
 
-function queryStyleEntry(style: IR.ParameterObject["style"]): string {
+function queryStyleEntry(style: IR.Parameter["style"]): string {
   switch (style) {
     case "spaceDelimited":
       return "SPACE_DELIMITED";

@@ -4,7 +4,7 @@ import {
   type TsDsl,
   type TypeTsDsl,
 } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../ir/index.js";
 import { fromHeyApi } from "../../../openapi/index.js";
 import type { TypeExpr } from "../dsl.js";
 import {
@@ -22,7 +22,7 @@ type Func = ReturnType<typeof $.func>;
 /** Namespace alias for type imports — generated client emits `T.Pet`. */
 const TYPE_NAMESPACE = "T";
 
-function typed(schema: IR.SchemaObject): TypeExpr {
+function typed(schema: IR.Schema): TypeExpr {
   return schemaToTypeNode(fromHeyApi(schema), {
     typeNamespace: TYPE_NAMESPACE,
   });
@@ -43,7 +43,7 @@ export interface ClientEmitOptions {
  * for the helpers themselves.
  */
 export function emitClientFile(
-  paths: IR.PathsObject | undefined,
+  paths: IR.Paths | undefined,
   opts: ClientEmitOptions = {},
 ): string {
   const preamble = clientPreamble({

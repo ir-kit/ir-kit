@@ -7,7 +7,7 @@ import {
   printDecl,
   schemasToDecls,
 } from "../../../src/sdk/kotlin/index.ts";
-import { ir, securityNamesMap } from "./_helpers.ts";
+import { ir } from "./_helpers.ts";
 
 const getUserSpec = {
   paths: {
@@ -255,9 +255,7 @@ describe("operationsToDecls", () => {
       },
     };
     const m = ir(fragment);
-    const { decls, needsAuth } = operationsToDecls(m.paths, {
-      securitySchemeNames: securityNamesMap(fragment),
-    });
+    const { decls, needsAuth } = operationsToDecls(m.paths, {});
     assert.equal(needsAuth, true);
     const cls = decls.find((d) => d.kind === "class")!;
     const out = printDecl(cls);

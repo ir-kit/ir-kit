@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../ir/index.js";
 import { HTTP_METHOD_LITERAL, type HttpMethod } from "../spec/constants.js";
 
 /**
@@ -15,7 +15,7 @@ import { HTTP_METHOD_LITERAL, type HttpMethod } from "../spec/constants.js";
  *    be re-derived from it.
  */
 export function deriveBaseName(
-  op: IR.OperationObject,
+  op: IR.Operation,
   method: HttpMethod,
   path: string,
 ): string {

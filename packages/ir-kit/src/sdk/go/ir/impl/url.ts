@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   type LocatedParam,
   paramsAt,
@@ -75,7 +75,7 @@ export function buildUrlStmts(
 
 function segmentExpr(
   seg: string,
-  pathParams: ReadonlyArray<IR.ParameterObject>,
+  pathParams: ReadonlyArray<IR.Parameter>,
 ): GoExpr {
   const parts = parseTemplatedSegment(seg, pathParams).map((p) =>
     p.kind === "literal"
@@ -117,7 +117,7 @@ function urlPathEscape(value: GoExpr): GoExpr {
   return goCall(goSelector(goIdent("url"), "PathEscape"), [{ expr: value }]);
 }
 
-function buildQueryStmt(p: IR.ParameterObject): GoStmt {
+function buildQueryStmt(p: IR.Parameter): GoStmt {
   const id = paramIdent(p.name);
   const isArray = p.schema.type === "array";
   const helper = isArray ? "AddArray" : "AddScalar";
@@ -139,7 +139,7 @@ function buildQueryStmt(p: IR.ParameterObject): GoStmt {
   return goExprStmt(goCall(goSelector(goIdent("URLEncoding"), helper), args));
 }
 
-function queryStyleEntry(style: IR.ParameterObject["style"]): string {
+function queryStyleEntry(style: IR.Parameter["style"]): string {
   switch (style) {
     case "spaceDelimited":
       return "SpaceDelimited";

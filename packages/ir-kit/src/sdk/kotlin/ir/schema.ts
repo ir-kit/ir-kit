@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { classifyComponents } from "../../../openapi/index.js";
 
 import {
@@ -24,7 +24,7 @@ import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
  *  - everything else → typealias to the dispatcher's resolved type
  */
 export function schemasToDecls(
-  schemas: Record<string, IR.SchemaObject>,
+  schemas: Record<string, IR.Schema>,
   names: Namespace = newTypeNames(),
 ): KtDecl[] {
   const decls: KtDecl[] = [];

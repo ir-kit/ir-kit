@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import { java } from "../../../../compilers/java/index.js";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyBody,
   HTTP_METHOD_LITERAL,
@@ -218,7 +218,7 @@ function urlStmts(sig: OperationSignature): JStmt[] {
 
 function segmentExpr(
   seg: string,
-  pathParams: ReadonlyArray<IR.ParameterObject>,
+  pathParams: ReadonlyArray<IR.Parameter>,
 ): JExpr {
   const parts = parseTemplatedSegment(seg, pathParams).map((p) =>
     p.kind === "literal"
@@ -231,7 +231,7 @@ function segmentExpr(
     .reduce((acc, p) => jBinary(acc, "+", p), parts[0] as JExpr);
 }
 
-function queryStmt(p: IR.ParameterObject): JStmt {
+function queryStmt(p: IR.Parameter): JStmt {
   const args: JExpr[] = [
     ident("query"),
     str(p.name),
@@ -249,7 +249,7 @@ function queryStmt(p: IR.ParameterObject): JStmt {
   );
 }
 
-function queryStyle(style: IR.ParameterObject["style"]): string {
+function queryStyle(style: IR.Parameter["style"]): string {
   if (style === "spaceDelimited") return "SPACE_DELIMITED";
   if (style === "pipeDelimited") return "PIPE_DELIMITED";
   return "FORM";
@@ -284,7 +284,7 @@ function contentType(value: JExpr): JStmt {
 
 function bodyStmts(
   sig: OperationSignature,
-  body: IR.BodyObject,
+  body: IR.Body,
 ): { stmts: JStmt[]; multipart: boolean } {
   const { shape, schema } = classifyBody(body);
   const ofBytes = (e: JExpr) => jMethodCall(publishers(), "ofByteArray", [e]);

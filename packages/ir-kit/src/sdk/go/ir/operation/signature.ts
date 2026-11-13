@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../../../codegen/index.js";
+import type { IR } from "../../../../ir/index.js";
 import type { HttpMethod } from "../../../../openapi/index.js";
 import {
   deriveBaseName,
@@ -31,7 +31,7 @@ export interface OperationSignature {
   returnType: GoType | undefined;
   doc: string;
   locatedParams: ReadonlyArray<LocatedParam>;
-  op: IR.OperationObject;
+  op: IR.Operation;
   method: HttpMethod;
   pathStr: string;
   securitySchemeNames: ReadonlyArray<string>;
@@ -62,11 +62,10 @@ export interface ResponseCase {
  * interceptors / validators / transformers).
  */
 export function operationSignature(
-  op: IR.OperationObject,
+  op: IR.Operation,
   method: HttpMethod,
   pathStr: string,
   emit: TypeCtx["emit"],
-  schemeNames: ReadonlyArray<string>,
   names: Namespace,
 ): OperationSignature {
   const baseName = deriveBaseName(op, method, pathStr);
@@ -96,7 +95,7 @@ export function operationSignature(
     op,
     method,
     pathStr,
-    securitySchemeNames: schemeNames,
+    securitySchemeNames: op.securitySchemes,
     responseCases,
   };
 }

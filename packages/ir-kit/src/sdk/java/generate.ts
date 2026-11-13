@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 
 import { defaultProjectName, writeOutput } from "../../codegen/index.js";
+import { parseOpenAPI } from "../../ir/index.js";
 import type { NormalizeOptions } from "../../openapi/index.js";
-import { parseForCodegen } from "../../openapi-tools/parse.js";
 import { loadOpenAPI } from "../../spec/openapi/index.js";
 
 import { resolveAliases } from "./ir/aliases.js";
@@ -25,7 +25,7 @@ import {
 
 export interface GenerateOptions
   extends BuildOptions,
-    Omit<OperationsOptions, "securitySchemeNames" | "names"> {
+    Omit<OperationsOptions, "names"> {
   input: string | Record<string, unknown>;
   output: string;
   clean?: boolean;
@@ -39,7 +39,7 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const { ir, securitySchemeNames } = parseForCodegen(
+  const ir = parseOpenAPI(
     await loadOpenAPI({ input: opts.input, normalize: opts.normalize }),
   );
   const names = newTypeNames();
@@ -64,7 +64,6 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     interfaceName: opts.interfaceName,
     clientClassName: opts.clientClassName,
     interfaceOnly: opts.interfaceOnly,
-    securitySchemeNames,
     names,
   });
   const decls = resolveAliases([...schemaDecls, ...ops.decls]);

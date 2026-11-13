@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import { type Namespace, pascal } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { groupOperationsByTag } from "../../../openapi/index.js";
 
 import {
@@ -27,7 +27,6 @@ export interface OperationsOptions {
   interfaceName?: (tag: string) => string;
   clientClassName?: (interfaceName: string) => string;
   interfaceOnly?: boolean;
-  securitySchemeNames?: ReadonlyMap<string, ReadonlyArray<string>>;
   names?: Namespace;
 }
 
@@ -37,7 +36,7 @@ export interface OperationsResult {
 }
 
 export function operationsToDecls(
-  paths: IR.PathsObject | undefined,
+  paths: IR.Paths | undefined,
   opts: OperationsOptions = {},
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
@@ -50,10 +49,9 @@ export function operationsToDecls(
 
   const byTag = groupOperationsByTag(
     paths,
-    opts.securitySchemeNames,
     defaultTag,
-    ({ pathStr, method, op, schemeNames }) =>
-      operationSignature(op, method, pathStr, emit, schemeNames, names),
+    ({ pathStr, method, op }) =>
+      operationSignature(op, method, pathStr, emit, names),
   );
 
   let needsMultipart = false;

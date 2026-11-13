@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyBody,
   iterateObjectProperties,
@@ -21,7 +21,7 @@ import { schemaToType } from "../type/index.js";
 const goBytes = () => goSlice(goByte);
 
 /**
- * Resolve an `IR.BodyObject` into the function parameters for the
+ * Resolve an `IR.Body` into the function parameters for the
  * generated Go method. Always positional (Go has no named args).
  *
  *  - `application/json` (and `+json`) → single `body *T` (pointer for
@@ -34,7 +34,7 @@ const goBytes = () => goSlice(goByte);
  *  - empty / octet-stream / image / unknown → `body []byte`.
  */
 export function buildBodyParams(
-  body: IR.BodyObject,
+  body: IR.Body,
   ctx: TypeCtx,
 ): ReadonlyArray<GoFuncParam> {
   const { shape, schema } = classifyBody(body);

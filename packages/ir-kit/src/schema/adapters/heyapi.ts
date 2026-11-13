@@ -1,9 +1,9 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../ir/index.js";
 
 import type { Schema, SchemaPrimitiveType } from "../types.js";
 
 /**
- * Adapt `IR.SchemaObject` (hey-api's normalized intermediate form) to
+ * Adapt `IR.Schema` (hey-api's normalized intermediate form) to
  * canonical {@link Schema}.
  *
  * Normalizations:
@@ -14,7 +14,7 @@ import type { Schema, SchemaPrimitiveType } from "../types.js";
  *  - untyped + items[]                 → `oneOf` (hey-api's implicit
  *                                        union convention)
  */
-export function fromHeyApi(s: IR.SchemaObject): Schema {
+export function fromHeyApi(s: IR.Schema): Schema {
   const out: Schema = {};
 
   if (s.$ref) {

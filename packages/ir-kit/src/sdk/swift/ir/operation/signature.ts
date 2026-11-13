@@ -1,6 +1,6 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../../../codegen/index.js";
 import { camel, pascal } from "../../../../codegen/index.js";
+import type { IR } from "../../../../ir/index.js";
 import type { HttpMethod } from "../../../../openapi/index.js";
 import {
   deriveBaseName,
@@ -21,7 +21,7 @@ export interface OperationSignature {
   returnType: SwType;
   doc: string;
   locatedParams: ReadonlyArray<LocatedParam>;
-  op: IR.OperationObject;
+  op: IR.Operation;
   method: HttpMethod;
   pathStr: string;
   securitySchemeNames: ReadonlyArray<string>;
@@ -44,18 +44,12 @@ export interface ResponseCase {
 /**
  * One source of truth for `params + returnType + doc` so the protocol
  * declaration and the impl class share the same signature shape.
- *
- * `schemeNames` is the per-op security scheme name list pre-extracted
- * by the orchestrator — the IR drops scheme names from `op.security`,
- * so the caller resolves them from the bundled spec and threads them
- * through.
  */
 export function operationSignature(
-  op: IR.OperationObject,
+  op: IR.Operation,
   method: HttpMethod,
   pathStr: string,
   emit: TypeCtx["emit"],
-  schemeNames: ReadonlyArray<string>,
   names: Namespace,
 ): OperationSignature {
   const name = deriveBaseName(op, method, pathStr);
@@ -80,7 +74,7 @@ export function operationSignature(
     op,
     method,
     pathStr,
-    securitySchemeNames: schemeNames,
+    securitySchemeNames: op.securitySchemes,
     responseCases,
   };
 }

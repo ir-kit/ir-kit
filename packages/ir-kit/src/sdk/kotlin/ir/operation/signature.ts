@@ -1,6 +1,6 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../../../codegen/index.js";
 import { camel, pascal } from "../../../../codegen/index.js";
+import type { IR } from "../../../../ir/index.js";
 import type { HttpMethod } from "../../../../openapi/index.js";
 import {
   deriveBaseName,
@@ -25,7 +25,7 @@ export interface OperationSignature {
   returnType: KtType;
   doc: string;
   locatedParams: ReadonlyArray<LocatedParam>;
-  op: IR.OperationObject;
+  op: IR.Operation;
   method: HttpMethod;
   pathStr: string;
   securitySchemeNames: ReadonlyArray<string>;
@@ -51,11 +51,10 @@ export interface ResponseCase {
  * declaration and the impl class share the same signature shape.
  */
 export function operationSignature(
-  op: IR.OperationObject,
+  op: IR.Operation,
   method: HttpMethod,
   pathStr: string,
   emit: TypeCtx["emit"],
-  schemeNames: ReadonlyArray<string>,
   names: Namespace,
 ): OperationSignature {
   const name = deriveBaseName(op, method, pathStr);
@@ -85,7 +84,7 @@ export function operationSignature(
     op,
     method,
     pathStr,
-    securitySchemeNames: schemeNames,
+    securitySchemeNames: op.securitySchemes,
     responseCases,
   };
 }
