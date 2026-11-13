@@ -133,4 +133,33 @@ describe("loadOpenAPI YAML parsing", () => {
       "2024-06-20",
     ]);
   });
+
+  it("applies `<<` merge keys", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "openapi-loader-"));
+    const file = join(dir, "spec.yaml");
+    writeFileSync(
+      file,
+      [
+        "openapi: 3.1.0",
+        "info: { title: t, version: '1' }",
+        "paths: {}",
+        "components:",
+        "  schemas:",
+        "    Base: &base",
+        "      type: object",
+        "      properties: { id: { type: string } }",
+        "    Pet:",
+        "      <<: *base",
+        "      description: pet",
+      ].join("\n"),
+    );
+    const spec = (await loadOpenAPI({ input: file })) as {
+      components: { schemas: { Pet: Record<string, unknown> } };
+    };
+    expect(spec.components.schemas.Pet).toEqual({
+      type: "object",
+      properties: { id: { type: "string" } },
+      description: "pet",
+    });
+  });
 });

@@ -10,7 +10,7 @@ import {
   normalizeSpec,
   SAFE_NORMALIZE,
 } from "@ir-kit/openapi";
-import { CORE_SCHEMA, load } from "js-yaml";
+import { CORE_SCHEMA, load, type Type, types } from "js-yaml";
 
 export type OpenAPIInput = string | Record<string, unknown>;
 
@@ -63,16 +63,24 @@ export async function loadOpenAPI(
   return bundled;
 }
 
+declare module "js-yaml" {
+  // why: exported at runtime but missing from @types/js-yaml.
+  const types: { merge: Type };
+}
+
 // why: js-yaml's default YAML 1.1 schema turns unquoted dates such as
 // Stripe's `api_version` enum (`- 2011-01-01`) into `Date` objects, which
 // codegen then drops; the YAML 1.2 core schema keeps them as strings.
+// `<<` merge keys stay supported, as specs use them to share fields.
+const YAML_SCHEMA = CORE_SCHEMA.extend({ implicit: [types.merge] });
+
 function createParser(): $RefParser {
   const parser = new $RefParser();
   parser.options.parse.yaml.handler = (file) => {
     const data = Buffer.isBuffer(file.data) ? file.data.toString() : file.data;
     if (typeof data !== "string") return data;
     try {
-      return load(data, { schema: CORE_SCHEMA }) as JSONSchema;
+      return load(data, { schema: YAML_SCHEMA }) as JSONSchema;
     } catch (error) {
       throw new ParserError((error as Error).message, file.url);
     }
