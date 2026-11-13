@@ -98,6 +98,8 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   const out = resolve(opts.output);
 
   if (opts.gradle) {
+    const sourceRoot = "src/main/kotlin/";
+    for (const f of files) f.path = sourceRoot + f.path;
     const gradleOpts =
       typeof opts.gradle === "object" ? opts.gradle : ({} as GradleOptions);
     files.push(buildGradleFile(gradleOpts));

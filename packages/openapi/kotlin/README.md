@@ -190,7 +190,7 @@ generate({
 | Mode | Setup | When |
 |---|---|---|
 | **Drop into an existing Gradle module** | Paste the package directory (e.g. `com/example/petstore/`) into your module's `src/main/kotlin/` tree. The surrounding module must apply `kotlin("plugin.serialization")` and depend on OkHttp + kotlinx-serialization-json + kotlinx-coroutines-core + kotlinx-datetime. | Adding the SDK directly to one app or library. |
-| **Standalone Gradle module** | Pass `gradle: true` (or an options object) to `generate()`; `build.gradle.kts` + `settings.gradle.kts` are emitted alongside the source. Run `gradle build` from the output dir. | Sharing across multiple modules, publishing privately, or wanting a clean dependency boundary. |
+| **Standalone Gradle module** | Pass `gradle: true` (or an options object) to `generate()`; `build.gradle.kts` + `settings.gradle.kts` are emitted at the output root and the source moves under `src/main/kotlin/`. Run `gradle build` from the output dir. | Sharing across multiple modules, publishing privately, or wanting a clean dependency boundary. |
 
 ## Output layout
 
@@ -214,7 +214,7 @@ sdk-kotlin/
 │       ├── Pet.kt                     # @Serializable data classes
 │       ├── PetStatus.kt              # enum classes
 │       └── …
-└── (build.gradle.kts + settings.gradle.kts when `gradle:` is set)
+└── (build.gradle.kts + settings.gradle.kts when `gradle:` is set; the package tree then sits under src/main/kotlin/)
 ```
 
 ## Requirements
