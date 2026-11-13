@@ -4,7 +4,7 @@
  * complete handler file ASTs using the TypeScript compiler API.
  */
 
-import ts from "typescript";
+import { ts } from "ts-morph";
 
 import type { HandlerMode, ProxyHandlerConfig } from "../../types.js";
 

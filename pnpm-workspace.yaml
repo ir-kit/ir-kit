@@ -38,7 +38,7 @@ catalog:
   '@typespec/rest': ^0.74.0
   tinyglobby: ^0.2.10
   tsdown: ^0.22.0
-  typescript: 5.9.3
+  typescript: 7.0.2
   vitest: ^4.0.0
 
 onlyBuiltDependencies:
@@ -46,3 +46,14 @@ onlyBuiltDependencies:
 
 patchedDependencies:
   '@ryoppippi/unplugin-typia': patches/@ryoppippi__unplugin-typia.patch
+
+packageExtensions:
+  '@typia/core':
+    peerDependencies:
+      typescript: '>=5.0.0 <7'
+  '@typia/transform':
+    peerDependencies:
+      typescript: '>=5.0.0 <7'
+  ts-patch:
+    peerDependencies:
+      typescript: '>=5.0.0 <7'

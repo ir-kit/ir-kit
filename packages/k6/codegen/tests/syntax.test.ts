@@ -2,7 +2,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+import { parseSync } from "oxc-parser";
 import { describe, expect, it } from "vitest";
 
 import { generate } from "../src/index.js";
@@ -23,14 +23,8 @@ describe("@ir-kit/k6-gen output syntax", () => {
     const errors = result.files
       .filter((f) => f.path.endsWith(".ts"))
       .flatMap((f) =>
-        (
-          ts.transpileModule(f.content, {
-            fileName: f.path,
-            reportDiagnostics: true,
-          }).diagnostics ?? []
-        ).map(
-          (d) =>
-            `${f.path}: ${ts.flattenDiagnosticMessageText(d.messageText, "\n")}`,
+        parseSync(f.path, f.content).errors.map(
+          (e) => `${f.path}: ${e.message}`,
         ),
       );
     expect(errors).toEqual([]);
