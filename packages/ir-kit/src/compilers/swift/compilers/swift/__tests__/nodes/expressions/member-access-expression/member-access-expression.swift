@@ -1,1 +1,0 @@
-let example = foo.bar

@@ -1,1 +1,0 @@
-obj instanceof String;

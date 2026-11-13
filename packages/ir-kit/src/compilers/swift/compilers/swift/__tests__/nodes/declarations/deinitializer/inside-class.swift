@@ -1,5 +1,0 @@
-class Resource {
-  deinit {
-    cleanup()
-  }
-}
