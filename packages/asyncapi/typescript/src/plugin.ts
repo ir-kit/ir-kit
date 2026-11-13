@@ -95,7 +95,7 @@ export interface PluginInstance<Config = unknown, Api = unknown> {
   /**
    * Add a file built with Hey API's `$` DSL; the `TsStatementRenderer`
    * prints it at render time. Strings are printed as-is after the DSL
-   * nodes, for code the DSL can\'t build. Optional
+   * nodes, for code the DSL can't build. Optional
    * `header` prints above the imports.
    *
    * Cross-file imports go through `options.imports` (graph-driven), not
