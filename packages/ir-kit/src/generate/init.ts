@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 
 import { findConfigFile } from "../config-file.js";
@@ -35,9 +35,11 @@ export async function writeConfig(opts: WriteConfigOptions): Promise<string> {
   if (existing && !opts.force) {
     throw new Error(`${existing} already exists. Pass --force to replace it.`);
   }
-  const file =
-    existing ??
-    join(cwd, isModulePackage(cwd) ? "ir.config.ts" : "ir.config.mts");
+  const file = join(
+    cwd,
+    isModulePackage(cwd) ? "ir.config.ts" : "ir.config.mts",
+  );
+  if (existing && existing !== file) await rm(existing);
   await writeFile(file, renderConfig(opts.input, opts.targets));
   return file;
 }
