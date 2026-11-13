@@ -1,7 +1,7 @@
 {
   "name": "@ir-kit/k6-toolkit",
   "version": "0.2.3",
-  "description": "Programmatic toolkit for k6 workflows. Bundle loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from OpenAPI specs. One library covering the bundle → run → sync flow.",
+  "description": "Programmatic toolkit for k6 workflows. Bundle loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from OpenAPI specs. One library covering the bundle \u2192 run \u2192 sync flow.",
   "keywords": [
     "k6",
     "load-testing",
@@ -51,14 +51,12 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@hey-api/openapi-ts": "catalog:",
     "@ir-kit/k6-gen": "workspace:*",
     "@ir-kit/openapi-loader": "workspace:*",
     "@ir-kit/openapi-tools": "workspace:*",
     "tinyglobby": "catalog:",
     "tsdown": "catalog:"
-  },
-  "peerDependencies": {
-    "typescript": ">=5.0.0 <7"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

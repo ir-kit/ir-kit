@@ -2,6 +2,12 @@ import { $, type TsDsl } from "@hey-api/openapi-ts";
 
 import type { ModuleImport } from "../print.js";
 
+export {
+  type ModuleImport,
+  type PrintModuleInput,
+  printModule,
+} from "../print.js";
+
 export interface NamedImportSpec {
   /** Name exported by the module. */
   name: string;

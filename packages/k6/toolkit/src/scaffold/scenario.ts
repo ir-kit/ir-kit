@@ -1,10 +1,11 @@
+import { $ } from "@hey-api/openapi-ts";
 import type { WalkedOperation } from "@ir-kit/k6-gen";
 import {
   defaultExportProp,
   namespaceImport,
+  printModule,
   reExportConst,
 } from "@ir-kit/k6-gen/ast";
-import ts from "typescript";
 
 import {
   type AuthFlavor,
@@ -12,11 +13,8 @@ import {
   authVarDecl,
   k6FrameworkImport,
 } from "../loadtest-scaffold.js";
-import { printStatements } from "../print.js";
-import { objLit, varConst } from "./ast-helpers.js";
+import { type Expr, objLit, varConst } from "./ast-helpers.js";
 import { buildFlowExpression, type ChainMode } from "./chains.js";
-
-const f = ts.factory;
 
 export type PacePreset = "smoke" | "load" | "stress" | "spike" | "soak";
 
@@ -46,98 +44,59 @@ export interface ScaffoldScenarioOpts {
 export function scaffoldScenario(opts: ScaffoldScenarioOpts): string {
   const symbols = ["defineLoadTest", "flow", opts.pace];
   if (opts.chain === "batch" && opts.ops.length > 1) symbols.push("batch");
-  if (opts.auth && opts.auth.auth !== "none") symbols.push("useAuth");
+  const auth = opts.auth && opts.auth.auth !== "none" ? opts.auth : undefined;
+  if (auth) symbols.push("useAuth");
 
-  const stmts: ts.Statement[] = [
-    k6FrameworkImport(symbols),
-    namespaceImport("api", opts.clientImportPath),
-  ];
-
-  const hasAuth = opts.auth && opts.auth.auth !== "none";
-  if (hasAuth) stmts.push(authVarDecl(opts.auth!));
-
-  stmts.push(loadtestDecl(opts, hasAuth ?? false));
-  stmts.push(reExportConst("options", "lt", "options"));
-  stmts.push(defaultExportProp("lt", "default"));
-
-  return printStatements(stmts);
+  return printModule({
+    imports: [
+      k6FrameworkImport(symbols),
+      namespaceImport("api", opts.clientImportPath),
+    ],
+    nodes: [
+      ...(auth ? [authVarDecl(auth)] : []),
+      loadtestDecl(opts, !!auth),
+      reExportConst("options", "lt", "options"),
+    ],
+    footer: defaultExportProp("lt", "default"),
+  });
 }
 
-function loadtestDecl(
-  opts: ScaffoldScenarioOpts,
-  hasAuth: boolean,
-): ts.Statement {
-  const props: ts.PropertyAssignment[] = [];
-
-  if (hasAuth) {
-    props.push(
-      f.createPropertyAssignment(
-        "use",
-        f.createArrayLiteralExpression([f.createIdentifier("auth")]),
+function loadtestDecl(opts: ScaffoldScenarioOpts, hasAuth: boolean) {
+  const config = $.object().pretty();
+  if (hasAuth) config.prop("use", $.array($("auth")));
+  config
+    .prop(
+      "scenario",
+      $(opts.pace).call(
+        objLit({ duration: $.literal(opts.duration ?? "30s") }),
       ),
-    );
-  }
-
-  props.push(scenarioEntry(opts.pace, opts.duration ?? "30s"));
-  props.push(budgetsEntry(opts.budgets));
-  props.push(
-    f.createPropertyAssignment(
-      "flow",
-      buildFlowExpression(opts.ops, opts.chain),
-    ),
-  );
-
-  return varConst(
-    "lt",
-    f.createCallExpression(f.createIdentifier("defineLoadTest"), undefined, [
-      f.createObjectLiteralExpression(props, true),
-    ]),
-  );
+    )
+    .prop("budgets", budgets(opts.budgets))
+    .prop("flow", buildFlowExpression(opts.ops, opts.chain));
+  return varConst("lt", $("defineLoadTest").call(config));
 }
 
-function scenarioEntry(
-  pace: PacePreset,
-  duration: string,
-): ts.PropertyAssignment {
-  return f.createPropertyAssignment(
-    "scenario",
-    f.createCallExpression(f.createIdentifier(pace), undefined, [
-      objLit({ duration: f.createStringLiteral(duration) }),
-    ]),
-  );
-}
-
-function budgetsEntry(
-  budgets: ScaffoldScenarioOpts["budgets"],
-): ts.PropertyAssignment {
-  const top: Record<string, ts.Expression> = {
-    p95: f.createStringLiteral(budgets?.p95 ?? "500ms"),
-    errors: f.createStringLiteral(budgets?.errors ?? "1%"),
+function budgets(budgets: ScaffoldScenarioOpts["budgets"]): Expr {
+  const top: Record<string, Expr> = {
+    p95: $.literal(budgets?.p95 ?? "500ms"),
+    errors: $.literal(budgets?.errors ?? "1%"),
   };
-  if (budgets?.p99) top.p99 = f.createStringLiteral(budgets.p99);
-
+  if (budgets?.p99) top.p99 = $.literal(budgets.p99);
   const opsEntries = Object.entries(budgets?.ops ?? {});
   if (opsEntries.length > 0) {
-    top.ops = f.createObjectLiteralExpression(
-      opsEntries.map(([opId, b]) =>
-        f.createPropertyAssignment(opId, opBudgetObj(b)),
-      ),
+    top.ops = objLit(
+      Object.fromEntries(opsEntries.map(([opId, b]) => [opId, opBudget(b)])),
       true,
     );
   }
-
-  return f.createPropertyAssignment("budgets", objLit(top, true));
+  return objLit(top, true);
 }
 
-function opBudgetObj(b: {
-  p95?: string;
-  p99?: string;
-  errors?: string;
-}): ts.Expression {
-  const props: Record<string, ts.Expression> = {};
-  if (b.p95) props.p95 = f.createStringLiteral(b.p95);
-  if (b.p99) props.p99 = f.createStringLiteral(b.p99);
-  if (b.errors) props.errors = f.createStringLiteral(b.errors);
+function opBudget(b: { p95?: string; p99?: string; errors?: string }): Expr {
+  const props: Record<string, Expr> = {};
+  if (b.p95) props.p95 = $.literal(b.p95);
+  if (b.p99) props.p99 = $.literal(b.p99);
+  if (b.errors) props.errors = $.literal(b.errors);
   return objLit(props);
 }
 
