@@ -3,6 +3,8 @@ export type {
   CommandSpec,
   OutputFormat,
 } from "./command-spec.js";
+export { generateCommand, watchCommand } from "./commands/generate.js";
+export { initCommand } from "./commands/init.js";
 export { reconCommand } from "./commands/recon.js";
 export { sdkAllCommand } from "./commands/sdk-all.js";
 export {

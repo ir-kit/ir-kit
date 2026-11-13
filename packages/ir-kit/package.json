@@ -123,6 +123,10 @@
       "types": "./dist/fn-schema/unplugin/webpack.d.ts",
       "import": "./dist/fn-schema/unplugin/webpack.js"
     },
+    "./generate": {
+      "types": "./dist/generate/index.d.ts",
+      "import": "./dist/generate/index.js"
+    },
     "./k6-toolkit": {
       "types": "./dist/k6-toolkit/index.d.ts",
       "import": "./dist/k6-toolkit/index.js"

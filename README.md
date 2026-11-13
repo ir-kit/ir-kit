@@ -12,17 +12,18 @@ A federation toolchain for API specifications — every standard talks to every 
 - **Spec discovery from traffic** — reverse-engineer an OpenAPI 3.1 spec from observed HTTP, either as a library or a Chrome extension.
 - **Drop-in plugins for `@hey-api/openapi-ts`** — faker factories, oRPC clients, route maps, typia validators, and the k6 generator.
 
-All OpenAPI consumers share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`@ir-kit/openapi-{go,kotlin,swift,typescript}`, `ir-kit/sdk/k6`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/ir-kit/docs/cli.md) CLI or directly as a programmatic API per package.
+All OpenAPI consumers share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`ir-kit/sdk/{go,kotlin,swift,java,typescript,k6}`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/ir-kit/docs/cli.md) CLI or directly as a programmatic API per package.
 
 ## Pick a tool
 
 | You want to… | Reach for | Surface |
 | --- | --- | --- |
+| Regenerate SDKs, docs and k6 clients from one config, and check them in CI | [`ir generate`](./packages/ir-kit/docs/generate.md) | `ir.config.ts` + `ir generate` / `ir generate --check` |
 | Convert between any pair of spec formats (OpenAPI / AsyncAPI / TypeSpec / Protobuf / Postman / JSON Schema) | [`ir-kit/spec`](./packages/ir-kit/docs/spec-convert.md) | `convertSpec({ input, to })` or `ir spec convert` |
 | Render any spec as standalone HTML docs | [`ir-kit/spec`](./packages/ir-kit/docs/spec-docs.md) | `renderDocs({ input })` or `ir docs` |
 | Diff two specs (cross-family) with breaking-change classification | [`ir-kit/spec`](./packages/ir-kit/docs/spec-diff.md) | `diffSpecs({ before, after })` or `ir spec diff` |
 | Load any spec uniformly (auto-detect OpenAPI / AsyncAPI / TypeSpec) | [`ir-kit/spec`](./packages/ir-kit/docs/spec-load.md) | `loadSpec({ input }) → { kind, document }` |
-| Generate a Go / Kotlin / Swift / TypeScript SDK | [`@ir-kit/openapi-<lang>`](#native-client-sdk-generators) | `generate({ spec, output })` or hey-api plugin |
+| Generate one Go / Kotlin / Swift / Java / TypeScript SDK | `ir-kit/sdk/<lang>` | `generate({ spec, output })` or `ir sdk <lang>` |
 | Load-test an OpenAPI API | [`ir-kit/k6-toolkit`](./packages/ir-kit/docs/k6-toolkit.md) on top of [`@ir-kit/k6`](./packages/k6/framework) | `sync()`, `runK6()`, `bundle()` |
 | Reverse-engineer a spec from real traffic | [`@ir-kit/glean`](./apps/glean) (browser) or [`ir-kit/recon`](./packages/ir-kit/docs/recon.md) (lib) | DevTools extension / programmatic |
 | Add faker mocks, oRPC clients, route maps, typia validators | hey-api [plugins](#hey-apiopenapi-ts-plugins) | `openapi-ts.config.ts` |
@@ -112,7 +113,6 @@ flowchart LR
 
 | Package | Description |
 | --- | --- |
-| [`@ir-kit/create-k6`](./packages/k6/create) | Wizard scaffolder for the @ir-kit/k6 stack. Run `npm create @ir-kit/k6` to generate a typed client from your OpenAPI spec and a starter loadtest.ts in one shot. |
 | [`@ir-kit/k6`](./packages/k6/framework) | Framework for authoring k6 load tests in TypeScript: defineLoadTest, flow().step() chaining, pace presets, budgets, auth middleware. Compiles to standard k6. |
 
 ### Spec discovery from traffic

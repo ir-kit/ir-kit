@@ -16,6 +16,9 @@ npx ir-kit <command>
 
 ```
 ir
+├── init           Write an ir.config.ts (and a starter k6 loadtest)
+├── generate       Run every target in ir.config.ts; --check fails when output is stale
+├── watch          Run the targets again whenever the spec changes
 ├── spec
 │   ├── convert    Convert between OpenAPI 3 / AsyncAPI 3 / TypeSpec / Protobuf / Postman / JSON Schema
 │   └── diff       Cross-family diff with breaking / non-breaking classification
@@ -39,7 +42,7 @@ ir
     └── bundle     Bundle a k6 loadtest entry into a single .js file
 ```
 
-Every command supports `--help` for full flag detail.
+Every command supports `--help` for full flag detail. For a project you regenerate often, put the targets in `ir.config.ts` and use `ir generate`: see [generate.md](./generate.md).
 
 ## Examples
 

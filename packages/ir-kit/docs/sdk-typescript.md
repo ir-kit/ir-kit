@@ -1,6 +1,6 @@
 # ir-kit/sdk/typescript
 
-Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ir-kit/openapi-{go,kotlin,swift}`](https://github.com/ahmedrowaihi/ir-kit). Lets the [`sdk-regen`](https://github.com/ahmedrowaihi/ir-kit/tree/main/actions/sdk-regen) GitHub Action drive a TypeScript SDK alongside the native ones — same workflow, same inputs, four targets.
+Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ir-kit/openapi-{go,kotlin,swift}`](https://github.com/ahmedrowaihi/ir-kit). This is what the `typescript` target in `ir.config.ts` runs, next to the native ones.
 
 Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). **No new codegen** — the entire TypeScript pipeline (types, sdk, schemas, transformers, validators, query hooks, ...) is hey-api's; this package only normalises the calling convention and the result shape.
 
@@ -63,11 +63,11 @@ interface GenerateResult {
 }
 ```
 
-Matches the result shape of `ir-kit/sdk/go` / `-kotlin` / `-swift`, so downstream tooling (the [`sdk-regen`](https://github.com/ahmedrowaihi/ir-kit/tree/main/actions/sdk-regen) action, your own CI scripts) can iterate the four packages uniformly.
+Matches the result shape of `ir-kit/sdk/go` / `-kotlin` / `-swift`, so `ir generate` and your own scripts can iterate the four packages uniformly.
 
 ## Why a wrapper
 
-We don't ship our own TypeScript codegen — hey-api already does it well, and a competing TS gen would mean rebuilding their `ts-dsl` from scratch. But the `sdk-regen` action assumes a `generate({ input, output })` shape across all targets, and hey-api's `createClient(userConfig)` is shaped slightly differently and returns `Context[]` rather than `{ files, output }`. The wrapper closes that gap in ~30 lines of code.
+We don't ship our own TypeScript codegen — hey-api already does it well, and a competing TS gen would mean rebuilding their `ts-dsl` from scratch. But `ir generate` assumes a `generate({ input, output })` shape across all targets, and hey-api's `createClient(userConfig)` is shaped slightly differently and returns `Context[]` rather than `{ files, output }`. The wrapper closes that gap in ~30 lines of code.
 
 ## Limitations
 

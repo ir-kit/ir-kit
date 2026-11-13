@@ -41,6 +41,7 @@ const moved = {
   "@ir-kit/compiler-java": "ir-kit/sdk/java",
   "@ir-kit/compiler-kotlin": "ir-kit/sdk/kotlin",
   "@ir-kit/compiler-swift": "ir-kit/sdk/swift",
+  "@ir-kit/create-k6": "`npx ir-kit init` with the k6 target",
 };
 
 const dry = process.argv.includes("--dry");

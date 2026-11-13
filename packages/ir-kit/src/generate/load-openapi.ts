@@ -1,4 +1,4 @@
-import { loadSpec } from "../../spec/load/index.js";
+import { loadSpec } from "../spec/load/index.js";
 
 /**
  * Load any input (file path, URL, .tsp file, pre-parsed object) and
