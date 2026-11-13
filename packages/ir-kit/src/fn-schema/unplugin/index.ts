@@ -1,6 +1,6 @@
 import path from "node:path";
 import { createUnplugin, type UnpluginInstance } from "unplugin";
-import { globFiles, IGNORED } from "../../files.js";
+import { fileMatcher, globFiles } from "../../files.js";
 import {
   createProject,
   type ExtractOptions,
@@ -91,16 +91,10 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
       vite: {
         async configureServer(server) {
           watching = true;
-          const matches = (abs: string) => {
-            const rel = path.relative(cwd, abs).split(path.sep).join("/");
-            return (
-              patterns.some((p) => path.matchesGlob(rel, p)) &&
-              !IGNORED.some((p) => path.matchesGlob(rel, p))
-            );
-          };
-          server.watcher.add(patterns.map((p) => path.resolve(cwd, p)));
+          const matcher = fileMatcher(patterns, cwd);
+          server.watcher.add(matcher.include.map((p) => path.resolve(cwd, p)));
           const reload = (abs: string) => {
-            if (!matches(abs)) return;
+            if (!matcher.matches(abs)) return;
             project?.refresh([abs]);
             cachedSource = null;
             const mod = server.moduleGraph.getModuleById(resolvedId);
