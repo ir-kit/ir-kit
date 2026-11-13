@@ -30,12 +30,12 @@ export const eventMap = definePluginConfig<
 
     for (const ev of plugin.forEach("message")) {
       if (ev.type !== "message") continue;
-      const interfaceName = types?.messageTypeName(ev.message.id());
-      if (interfaceName) importNames.add(interfaceName);
+      const typeName = types?.messageTypeName(ev.message.id());
+      if (typeName) importNames.add(typeName);
       eventMapMembers.push(
         tn.property(
           inferEventType(ev.message),
-          interfaceName ? tn.ref(interfaceName) : tn.unknown(),
+          typeName ? tn.ref(typeName) : tn.unknown(),
         ),
       );
     }
