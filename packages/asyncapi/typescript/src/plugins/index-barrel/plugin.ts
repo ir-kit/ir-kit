@@ -1,8 +1,4 @@
-import type ts from "typescript";
-
-import { exportFromBarrel, exportTypeStarFrom } from "../../ast/ts-build.js";
-import { definePluginConfig } from "../../plugin.js";
-
+import { definePluginConfig, type EmitTsExportGroup } from "../../plugin.js";
 import { defaultConfig } from "./config.js";
 import type { IndexBarrelConfig, IndexBarrelResolvedConfig } from "./types.js";
 
@@ -27,58 +23,44 @@ export const indexBarrel = definePluginConfig<
   handler(plugin) {
     const has = (base: string) =>
       plugin.files.some((f) => f.path === `${base}.gen.ts`);
-
-    const statements: ts.Statement[] = [];
+    const named = (...names: string[]) => names.map((name) => ({ name }));
+    const exports: EmitTsExportGroup[] = [];
 
     if (has("amqp")) {
-      statements.push(
-        exportFromBarrel(
-          [
-            { name: "assertExchanges" },
-            { name: "bindAndConsume" },
-            { name: "publish" },
-          ],
-          "./amqp.gen",
-        ),
-      );
+      exports.push({
+        from: "./amqp.gen",
+        names: named("assertExchanges", "bindAndConsume", "publish"),
+      });
     }
     if (has("dispatch")) {
-      statements.push(
-        exportFromBarrel(
-          [{ name: "Registry" }, { name: "createRegistry" }],
-          "./dispatch.gen",
-        ),
-      );
+      exports.push({
+        from: "./dispatch.gen",
+        names: named("Registry", "createRegistry"),
+      });
     }
     if (has("event-map")) {
-      statements.push(
-        exportFromBarrel(
-          [
-            { name: "AnyMessage", isType: true },
-            { name: "EventMap", isType: true },
-            { name: "isMessageOfType" },
-          ],
-          "./event-map.gen",
-        ),
-      );
+      exports.push({
+        from: "./event-map.gen",
+        names: [
+          { name: "AnyMessage", isType: true },
+          { name: "EventMap", isType: true },
+          { name: "isMessageOfType" },
+        ],
+      });
     }
     if (has("events")) {
-      statements.push(
-        exportFromBarrel(
-          [{ name: "EventName", isType: true }, { name: "Events" }],
-          "./events.gen",
-        ),
-      );
+      exports.push({
+        from: "./events.gen",
+        names: [{ name: "EventName", isType: true }, { name: "Events" }],
+      });
     }
     if (has("handlers")) {
-      statements.push(
-        exportFromBarrel([{ name: "handlers" }], "./handlers.gen"),
-      );
+      exports.push({ from: "./handlers.gen", names: named("handlers") });
     }
     if (has("types")) {
-      statements.push(exportTypeStarFrom("./types.gen"));
+      exports.push({ from: "./types.gen", isType: true });
     }
 
-    plugin.emitTs("index.gen.ts", statements, { header: HEADER });
+    plugin.emitTs("index.gen.ts", [], { exports, header: HEADER });
   },
 });

@@ -35,7 +35,7 @@ describe("scaffoldScenario", () => {
   it("emits the no-auth shape — no useAuth import, no `use:` field", () => {
     const out = scaffoldScenario(baseOpts());
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke \} from "@ir-kit\/k6"/,
+      /import \{ defineLoadTest, flow, smoke \} from '@ir-kit\/k6'/,
     );
     expect(out).not.toMatch(/useAuth/);
     expect(out).not.toMatch(/^\s*use:/m);
@@ -43,7 +43,7 @@ describe("scaffoldScenario", () => {
 
   it("uses `scenario:` not `pace:` (v2 vocabulary)", () => {
     const out = scaffoldScenario(baseOpts({ duration: "1m" }));
-    expect(out).toMatch(/scenario:\s*smoke\(\{\s*duration:\s*"1m"\s*\}\)/);
+    expect(out).toMatch(/scenario:\s*smoke\(\{\s*duration:\s*'1m'\s*\}\)/);
     expect(out).not.toMatch(/^\s*pace:/m);
   });
 
@@ -56,8 +56,8 @@ describe("scaffoldScenario", () => {
         ],
       }),
     );
-    expect(out).toMatch(/\.step\("first",\s*\(\)\s*=>\s*\{[\s\S]*api\.first/);
-    expect(out).toMatch(/\.step\("second",\s*\(\)\s*=>\s*\{[\s\S]*api\.second/);
+    expect(out).toMatch(/\.step\('first',\s*\(\)\s*=>\s*\{[\s\S]*api\.first/);
+    expect(out).toMatch(/\.step\('second',\s*\(\)\s*=>\s*\{[\s\S]*api\.second/);
   });
 
   it("batch chain emits flow.batch() with api.async.<id>() values", () => {
@@ -71,9 +71,9 @@ describe("scaffoldScenario", () => {
       }),
     );
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke, batch \} from "@ir-kit\/k6"/,
+      /import \{ defineLoadTest, flow, smoke, batch \} from '@ir-kit\/k6'/,
     );
-    expect(out).toMatch(/\.batch\("fan-out",\s*\(\)\s*=>/);
+    expect(out).toMatch(/\.batch\('fan-out',\s*\(\)\s*=>/);
     expect(out).toMatch(/first:\s*api\.async\.first\(/);
     expect(out).toMatch(/second:\s*api\.async\.second\(/);
   });
@@ -81,18 +81,18 @@ describe("scaffoldScenario", () => {
   it("falls back to sequential when batch is requested with a single op", () => {
     const out = scaffoldScenario(baseOpts({ chain: "batch" }));
     expect(out).not.toMatch(/\.batch\(/);
-    expect(out).toMatch(/\.step\("getPet"/);
+    expect(out).toMatch(/\.step\('getPet'/);
   });
 
   it("emits placeholder flow when no ops are supplied", () => {
     const out = scaffoldScenario(baseOpts({ ops: [] }));
-    expect(out).toMatch(/\.step\("health",\s*\(\)\s*=>\s*\{\s*\}\)/);
+    expect(out).toMatch(/\.step\('health',\s*\(\)\s*=>\s*\{\s*\}\)/);
   });
 
   it("wires top-level budgets with sane defaults", () => {
     const out = scaffoldScenario(baseOpts());
     expect(out).toMatch(
-      /budgets:\s*\{[\s\S]*p95:\s*"500ms"[\s\S]*errors:\s*"1%"/,
+      /budgets:\s*\{[\s\S]*p95:\s*'500ms'[\s\S]*errors:\s*'1%'/,
     );
   });
 
@@ -102,7 +102,7 @@ describe("scaffoldScenario", () => {
         budgets: { p95: "300ms", ops: { getPet: { p95: "100ms" } } },
       }),
     );
-    expect(out).toMatch(/ops:\s*\{[\s\S]*getPet:\s*\{[\s\S]*p95:\s*"100ms"/);
+    expect(out).toMatch(/ops:\s*\{[\s\S]*getPet:\s*\{[\s\S]*p95:\s*'100ms'/);
   });
 
   it("emits useAuth.bearer + use:[auth] when bearer auth is set", () => {
@@ -110,10 +110,10 @@ describe("scaffoldScenario", () => {
       baseOpts({ auth: { auth: "bearer", bearerEnv: "API_TOKEN" } }),
     );
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke, useAuth \} from "@ir-kit\/k6"/,
+      /import \{ defineLoadTest, flow, smoke, useAuth \} from '@ir-kit\/k6'/,
     );
     expect(out).toMatch(
-      /const auth = useAuth\.bearer\(\{ env: "API_TOKEN" \}\);/,
+      /const auth = useAuth\.bearer\(\{ env: 'API_TOKEN' \}\);/,
     );
     expect(out).toMatch(/use:\s*\[auth\]/);
   });

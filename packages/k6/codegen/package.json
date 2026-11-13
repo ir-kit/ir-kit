@@ -62,9 +62,6 @@
     "@ir-kit/openapi-tools": "workspace:*",
     "@ir-kit/openapi-ts-faker": "workspace:*"
   },
-  "peerDependencies": {
-    "typescript": ">=5.0.0 <7"
-  },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",

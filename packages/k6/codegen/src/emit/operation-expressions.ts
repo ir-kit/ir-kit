@@ -1,9 +1,6 @@
-import { $, type TsDsl } from "@hey-api/openapi-ts";
-import type ts from "typescript";
-
+import { $ } from "@hey-api/openapi-ts";
+import type { Expr } from "../dsl.js";
 import { toIdent, type WalkedOperation } from "../ir/index.js";
-
-type Expr = TsDsl<ts.Expression>;
 
 /** OpenAPI verb → k6 `http` namespace attribute (`delete` → `del`). */
 const METHOD_TO_HTTP_ATTR: Record<string, string> = {

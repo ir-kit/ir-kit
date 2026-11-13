@@ -1,11 +1,11 @@
-import type ts from "typescript";
+import type { TsDsl } from "@hey-api/openapi-ts";
 
 import { ValueNode, type ValueNodeOptions } from "./value-node.js";
 
-/** INode wrapper around a `ts.Statement`. Mirrors hey-api's `TsDsl` base. */
-export class TsStatementNode extends ValueNode<ts.Statement> {
+/** Holds one `$` DSL node, or a string of code the DSL can't build. */
+export class TsStatementNode extends ValueNode<TsDsl | string> {
   constructor(
-    statement: ts.Statement,
+    statement: TsDsl | string,
     options: ValueNodeOptions = { name: "anon" },
   ) {
     super(statement, { ...options, scope: options.scope ?? "value" });

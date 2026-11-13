@@ -25,7 +25,7 @@ import type {
   MessageInterface,
   OperationInterface,
 } from "@asyncapi/parser";
-import type ts from "typescript";
+import type { TsDsl } from "@hey-api/openapi-ts";
 
 export interface GeneratedFile {
   /** Path relative to the configured output directory. */
@@ -49,9 +49,23 @@ export interface EmitTsImportGroup {
   isType?: boolean;
 }
 
+/** One re-export group: `export { a, type B } from "./mod"`, or `export * from "./mod"` without `names`. */
+export interface EmitTsExportGroup {
+  /** Module specifier exactly as written (e.g. `"./events.gen"`). */
+  from: string;
+  /** Names being re-exported. Omit to re-export everything. */
+  names?: ReadonlyArray<{ name: string; isType?: boolean }>;
+  /** Top-level `export type` (vs per-specifier `type`). */
+  isType?: boolean;
+}
+
 export interface EmitTsOptions {
+  /** Comment block printed above the imports. */
   header?: string;
+  /** Imports from other generated files. */
   imports?: ReadonlyArray<EmitTsImportGroup>;
+  /** Re-exports printed after the imports. */
+  exports?: ReadonlyArray<EmitTsExportGroup>;
 }
 
 export type ForEachKind = "message" | "channel" | "operation";
@@ -79,20 +93,19 @@ export interface PluginInstance<Config = unknown, Api = unknown> {
   /** Add a file to the output as raw text. Use for generated text and copied bundles. */
   emit(file: GeneratedFile): void;
   /**
-   * Add a file to the output as a list of `ts.Statement` AST nodes; the
-   * `TsStatementRenderer` prints them at render time. Optional `header`
-   * is attached as a leading comment on the first statement. Use this
-   * over `emit` for plugin output you construct via `ts.factory`.
+   * Add a file built with Hey API's `$` DSL; the `TsStatementRenderer`
+   * prints it at render time. Strings are printed as-is after the DSL
+   * nodes, for code the DSL can't build. Optional
+   * `header` prints above the imports.
    *
    * Cross-file imports go through `options.imports` (graph-driven), not
-   * inline `ts.factory.createImportDeclaration` calls — the underlying
-   * codegen-core `File.addImport` resolves source files into relative
-   * paths at print time, so imports survive file moves and rename
-   * collision resolution.
+   * inline import statements — the underlying codegen-core
+   * `File.addImport` resolves source files into relative paths at print
+   * time, so imports survive file moves and rename collision resolution.
    */
   emitTs(
     path: string,
-    statements: ReadonlyArray<ts.Statement>,
+    nodes: ReadonlyArray<TsDsl | string>,
     options?: EmitTsOptions,
   ): void;
   /** Look up another plugin's api by name. Returns `undefined` if absent. */

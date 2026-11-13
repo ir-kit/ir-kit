@@ -10,9 +10,9 @@ describe("scaffoldLoadtest", () => {
     });
 
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke \} from "@ir-kit\/k6"/,
+      /import \{ defineLoadTest, flow, smoke \} from '@ir-kit\/k6'/,
     );
-    expect(out).toContain('import * as api from "./src/gen/index.js"');
+    expect(out).toContain("import * as api from './src/gen/index.js'");
     expect(out).not.toMatch(/useAuth/);
     expect(out).not.toMatch(/^\s*use:/m);
   });
@@ -25,10 +25,10 @@ describe("scaffoldLoadtest", () => {
     });
 
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, smoke, useAuth \} from "@ir-kit\/k6"/,
+      /import \{ defineLoadTest, flow, smoke, useAuth \} from '@ir-kit\/k6'/,
     );
     expect(out).toMatch(
-      /const auth = useAuth\.bearer\(\{ env: "PETSTORE_TOKEN" \}\);/,
+      /const auth = useAuth\.bearer\(\{ env: 'PETSTORE_TOKEN' \}\);/,
     );
     expect(out).toMatch(/use:\s*\[auth\]/);
   });
@@ -40,7 +40,7 @@ describe("scaffoldLoadtest", () => {
       pace: "smoke",
       duration: "2m",
     });
-    expect(out).toMatch(/scenario:\s*smoke\(\{\s*duration:\s*"2m"\s*\}\)/);
+    expect(out).toMatch(/scenario:\s*smoke\(\{\s*duration:\s*'2m'\s*\}\)/);
   });
 
   it("imports the selected pace helper (not just `smoke`) when `pace` is set", () => {
@@ -51,7 +51,7 @@ describe("scaffoldLoadtest", () => {
       duration: "1m",
     });
     expect(out).toMatch(
-      /import \{ defineLoadTest, flow, stress \} from "@ir-kit\/k6"/,
+      /import \{ defineLoadTest, flow, stress \} from '@ir-kit\/k6'/,
     );
     expect(out).toMatch(/scenario:\s*stress\(/);
   });
@@ -71,8 +71,8 @@ describe("scaffoldLoadtest", () => {
       auth: "basic",
     });
     expect(out).toMatch(/useAuth\.basic\(/);
-    expect(out).toMatch(/env:\s*"API_USER"/);
-    expect(out).toMatch(/env:\s*"API_PASS"/);
+    expect(out).toMatch(/env:\s*'API_USER'/);
+    expect(out).toMatch(/env:\s*'API_PASS'/);
   });
 
   it("emits the apiKey shape with custom header + env", () => {
@@ -83,8 +83,8 @@ describe("scaffoldLoadtest", () => {
       apiKeyEnv: "PETSTORE_KEY",
     });
     expect(out).toMatch(/useAuth\.apiKey\(/);
-    expect(out).toMatch(/name:\s*"X-Petstore-Key"/);
-    expect(out).toMatch(/env:\s*"PETSTORE_KEY"/);
+    expect(out).toMatch(/name:\s*'X-Petstore-Key'/);
+    expect(out).toMatch(/env:\s*'PETSTORE_KEY'/);
   });
 
   it("emits the session shape with a signIn arrow function", () => {
@@ -113,7 +113,7 @@ describe("scaffoldLoadtest", () => {
       auth: "none",
       seedOperation: "listPets",
     });
-    expect(out).toMatch(/\.step\("listPets",\s*\(\)\s*=>\s*\{/);
+    expect(out).toMatch(/\.step\('listPets',\s*\(\)\s*=>\s*\{/);
     expect(out).toMatch(/api\.listPets\(\)/);
   });
 
@@ -122,6 +122,6 @@ describe("scaffoldLoadtest", () => {
       clientImportPath: "./src/gen/index.js",
       auth: "none",
     });
-    expect(out).toMatch(/\.step\("health",\s*\(\)\s*=>\s*\{\s*\}\)/);
+    expect(out).toMatch(/\.step\('health',\s*\(\)\s*=>\s*\{\s*\}\)/);
   });
 });

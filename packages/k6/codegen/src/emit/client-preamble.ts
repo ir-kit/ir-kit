@@ -1,9 +1,7 @@
-import { $ } from "@hey-api/openapi-ts";
-import ts from "typescript";
+import { $, type TsDsl } from "@hey-api/openapi-ts";
 
+import type { ModuleImport } from "../print.js";
 import { defaultImport, namedImport, namespaceImport } from "./ast.js";
-
-const f = ts.factory;
 
 export interface ClientPreambleInput {
   defaultBaseUrl: string;
@@ -11,91 +9,83 @@ export interface ClientPreambleInput {
   hasTypes: boolean;
 }
 
-export function clientPreambleStatements(
-  input: ClientPreambleInput,
-): ts.Statement[] {
-  const stmts: ts.Statement[] = [
+export interface ClientPreamble {
+  imports: ModuleImport[];
+  nodes: TsDsl[];
+}
+
+export function clientPreamble(input: ClientPreambleInput): ClientPreamble {
+  const imports = [
     namespaceImport("http", "k6/http"),
-    namedImport(
-      [{ name: "check" }, { name: "group" }, { name: "sleep" }],
-      "k6",
-    ),
-    namedImport(
-      [
-        { name: "Counter" },
-        { name: "Gauge" },
-        { name: "Rate" },
-        { name: "Trend" },
-      ],
-      "k6/metrics",
-    ),
+    namedImport(["check", "group", "sleep"], "k6"),
+    namedImport(["Counter", "Gauge", "Rate", "Trend"], "k6/metrics"),
     defaultImport("exec", "k6/execution"),
     namedImport(
       [
-        { name: "applyMiddlewareHeaders" },
-        { name: "applyMiddlewareParams" },
-        { name: "buildQuery" },
-        { name: "getBaseUrl" },
-        { name: "installK6Bridge" },
-        { name: "installMetricsFactory" },
-        { name: "mergeTags" },
-        { name: "parseJson" },
-        { name: "setExecModule" },
+        "applyMiddlewareHeaders",
+        "applyMiddlewareParams",
+        "buildQuery",
+        "getBaseUrl",
+        "installK6Bridge",
+        "installMetricsFactory",
+        "mergeTags",
+        "parseJson",
+        "setExecModule",
       ],
       "@ir-kit/k6/runtime",
     ),
   ];
-
   if (input.hasTypes) {
-    stmts.push(
+    imports.push(
       namespaceImport(input.typeNamespace, "./types.js", { typeOnly: true }),
     );
   }
 
-  stmts.push(
-    bridgeInstall(),
-    execInstall(),
-    metricsInstall(),
-    defaultBaseUrlConst(input.defaultBaseUrl).toAst() as ts.Statement,
-    callOptsTypeAlias(),
-    ...helperStatements(),
-  );
-
-  return stmts;
+  return {
+    imports,
+    nodes: [
+      $.stmt(
+        $("installK6Bridge").call(
+          $.object()
+            .prop("check", $("check"))
+            .prop("group", $("group"))
+            .prop("sleep", $("sleep")),
+        ),
+      ),
+      $.stmt($("setExecModule").call($("exec"))),
+      metricsInstall(),
+      $.const("DEFAULT_BASE_URL")
+        .type($.type("string"))
+        .assign($.literal(input.defaultBaseUrl)),
+      callOptsTypeAlias(),
+      ...helperStatements(),
+    ],
+  };
 }
 
 /**
  * Centralized per-request wiring. Each generated op is a one-line wrapper
  * around `call<T>` / `callAsync<T>` / `buildSpec`. Living here (one source of
  * truth) keeps the per-op output short and ensures any change to the request
- * shape lands in one place. Built with `ts.factory` per the codebase
- * convention — no template strings for emitted source.
+ * shape lands in one place.
  */
-function helperStatements(): ts.Statement[] {
+function helperStatements(): TsDsl[] {
   return [requestSpecTypeAlias(), buildSpecFn(), callFn(false), callFn(true)];
 }
 
+const nullableString = () => $.type.or($.type("string"), $.type.literal(null));
+
 /** `type RequestSpec = { method: string; url: string; body: string | null; params: Record<string, unknown>; };` */
-function requestSpecTypeAlias(): ts.Statement {
-  const stringT = f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
-  const bodyT = f.createUnionTypeNode([
-    stringT,
-    f.createLiteralTypeNode(f.createNull()),
-  ]);
-  const paramsT = f.createTypeReferenceNode("Record", [
-    stringT,
-    f.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
-  ]);
-  return f.createTypeAliasDeclaration(
-    undefined,
-    "RequestSpec",
-    undefined,
-    f.createTypeLiteralNode([
-      sig("method", stringT),
-      sig("url", stringT),
-      sig("body", bodyT),
-      sig("params", paramsT),
-    ]),
+function requestSpecTypeAlias() {
+  return $.type.alias("RequestSpec").type(
+    $.type
+      .object()
+      .prop("method", (p) => p.type($.type("string")))
+      .prop("url", (p) => p.type($.type("string")))
+      .prop("body", (p) => p.type(nullableString()))
+      .prop("params", (p) =>
+        p.type($.type("Record").generics($.type("string"), $.type("unknown"))),
+      ),
   );
 }
 
@@ -116,93 +106,39 @@ function requestSpecTypeAlias(): ts.Statement {
  * }
  * ```
  */
-function buildSpecFn(): ts.Statement {
-  const stringT = f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
-  const stringRecord = f.createTypeReferenceNode("Record", [stringT, stringT]);
-
-  // body !== null ? { "Content-Type": "application/json" } : {}
-  const contentTypeTernary = f.createConditionalExpression(
-    f.createBinaryExpression(
-      f.createIdentifier("body"),
-      f.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
-      f.createNull(),
-    ),
-    f.createToken(ts.SyntaxKind.QuestionToken),
-    f.createObjectLiteralExpression([
-      f.createPropertyAssignment(
-        f.createStringLiteral("Content-Type"),
-        f.createStringLiteral("application/json"),
+function buildSpecFn() {
+  const contentType = $.const("contentType")
+    .type($.type("Record").generics($.type("string"), $.type("string")))
+    .assign(
+      $.ternary($("body").neq($.literal(null)))
+        .do($.object().prop("Content-Type", $.literal("application/json")))
+        .otherwise($.object()),
+    );
+  const params = $.object()
+    .pretty()
+    .spread($("applyMiddlewareParams").call())
+    .spread($("opts"))
+    .prop(
+      "headers",
+      $("applyMiddlewareHeaders").call(
+        $.object()
+          .spread($("contentType"))
+          .spread($("opts").attr("headers").optional()),
       ),
-    ]),
-    f.createToken(ts.SyntaxKind.ColonToken),
-    f.createObjectLiteralExpression([]),
-  );
-
-  const contentTypeDecl = constDecl(
-    "contentType",
-    contentTypeTernary,
-    stringRecord,
-  );
-
-  // headers: applyMiddlewareHeaders({ ...contentType, ...opts?.headers })
-  const headersValue = f.createCallExpression(
-    f.createIdentifier("applyMiddlewareHeaders"),
-    undefined,
-    [
-      f.createObjectLiteralExpression(
-        [
-          f.createSpreadAssignment(f.createIdentifier("contentType")),
-          f.createSpreadAssignment(optsHeaders()),
-        ],
-        false,
-      ),
-    ],
-  );
-
-  // tags: mergeTags(opId, opts?.tags)
-  const tagsValue = f.createCallExpression(
-    f.createIdentifier("mergeTags"),
-    undefined,
-    [f.createIdentifier("opId"), optsTags()],
-  );
-
-  // { ...applyMiddlewareParams(), ...opts, headers, tags }
-  const paramsObj = f.createObjectLiteralExpression(
-    [
-      f.createSpreadAssignment(
-        f.createCallExpression(
-          f.createIdentifier("applyMiddlewareParams"),
-          undefined,
-          [],
-        ),
-      ),
-      f.createSpreadAssignment(f.createIdentifier("opts")),
-      f.createPropertyAssignment("headers", headersValue),
-      f.createPropertyAssignment("tags", tagsValue),
-    ],
-    true,
-  );
-
-  // { method, url, body, params }
-  const returnObj = f.createObjectLiteralExpression(
-    [
-      f.createShorthandPropertyAssignment("method"),
-      f.createShorthandPropertyAssignment("url"),
-      f.createShorthandPropertyAssignment("body"),
-      f.createPropertyAssignment("params", paramsObj),
-    ],
-    true,
-  );
-
-  return f.createFunctionDeclaration(
-    undefined,
-    undefined,
-    "buildSpec",
-    undefined,
-    callHelperParams(),
-    f.createTypeReferenceNode("RequestSpec"),
-    f.createBlock([contentTypeDecl, f.createReturnStatement(returnObj)], true),
-  );
+    )
+    .prop(
+      "tags",
+      $("mergeTags").call($("opId"), $("opts").attr("tags").optional()),
+    );
+  const spec = $.object()
+    .pretty()
+    .prop("method", $("method"))
+    .prop("url", $("url"))
+    .prop("body", $("body"))
+    .prop("params", params);
+  return callHelperParams($.func("buildSpec"))
+    .returns($.type("RequestSpec"))
+    .do(contentType, $.return(spec));
 }
 
 /**
@@ -211,168 +147,38 @@ function buildSpecFn(): ts.Statement {
  * async function callAsync<T>(method, url, opId, body, opts?): Promise<T> { ... }
  * ```
  */
-function callFn(asyncCall: boolean): ts.Statement {
-  const tRef = f.createTypeReferenceNode("T");
-  const returnType = asyncCall
-    ? f.createTypeReferenceNode("Promise", [tRef])
-    : tRef;
-  const modifiers = asyncCall
-    ? [f.createModifier(ts.SyntaxKind.AsyncKeyword)]
-    : [];
-
-  // const spec = buildSpec(method, url, opId, body, opts);
-  const specDecl = constDecl(
-    "spec",
-    f.createCallExpression(f.createIdentifier("buildSpec"), undefined, [
-      f.createIdentifier("method"),
-      f.createIdentifier("url"),
-      f.createIdentifier("opId"),
-      f.createIdentifier("body"),
-      f.createIdentifier("opts"),
-    ]),
+function callFn(asyncCall: boolean) {
+  const spec = (name: string) => $("spec").attr(name);
+  const request = $("http")
+    .attr(asyncCall ? "asyncRequest" : "request")
+    .call(spec("method"), spec("url"), spec("body"), spec("params"));
+  const buildSpec = $.const("spec").assign(
+    $("buildSpec").call($("method"), $("url"), $("opId"), $("body"), $("opts")),
   );
-
-  // http.<request|asyncRequest>(spec.method, spec.url, spec.body, spec.params)
-  const httpCall = f.createCallExpression(
-    f.createPropertyAccessExpression(
-      f.createIdentifier("http"),
-      f.createIdentifier(asyncCall ? "asyncRequest" : "request"),
-    ),
-    undefined,
-    [specProp("method"), specProp("url"), specProp("body"), specProp("params")],
+  const parsed = $.return(
+    $("parseJson")
+      .call(asyncCall ? $("res") : request)
+      .as($.type("T")),
   );
-
-  const body: ts.Statement[] = [specDecl];
-  let parseSource: ts.Expression = httpCall;
-
-  if (asyncCall) {
-    // const res = await http.asyncRequest(...);
-    body.push(constDecl("res", f.createAwaitExpression(httpCall)));
-    parseSource = f.createIdentifier("res");
-  }
-
-  // return parseJson(...) as T;
-  body.push(
-    f.createReturnStatement(
-      f.createAsExpression(
-        f.createCallExpression(f.createIdentifier("parseJson"), undefined, [
-          parseSource,
-        ]),
-        tRef,
-      ),
-    ),
-  );
-
-  return f.createFunctionDeclaration(
-    modifiers,
-    undefined,
-    asyncCall ? "callAsync" : "call",
-    [f.createTypeParameterDeclaration(undefined, "T")],
-    callHelperParams(),
-    returnType,
-    f.createBlock(body, true),
-  );
+  return callHelperParams($.func(asyncCall ? "callAsync" : "call"))
+    .async(asyncCall)
+    .generic("T")
+    .returns(asyncCall ? $.type("Promise").generic($.type("T")) : $.type("T"))
+    .do(
+      buildSpec,
+      ...(asyncCall ? [$.const("res").assign($.await(request))] : []),
+      parsed,
+    );
 }
 
 /** Parameter list shared by `buildSpec` / `call` / `callAsync`. */
-function callHelperParams(): ts.ParameterDeclaration[] {
-  const stringT = f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
-  const bodyT = f.createUnionTypeNode([
-    stringT,
-    f.createLiteralTypeNode(f.createNull()),
-  ]);
-  return [
-    paramDecl("method", stringT),
-    paramDecl("url", stringT),
-    paramDecl("opId", stringT),
-    paramDecl("body", bodyT),
-    paramDecl("opts", f.createTypeReferenceNode("CallOpts"), true),
-  ];
-}
-
-// === small factory helpers ===
-
-/** `name<?:> type;` inside a TypeLiteralNode. */
-function sig(name: string, type: ts.TypeNode): ts.PropertySignature {
-  return f.createPropertySignature(undefined, name, undefined, type);
-}
-
-/** Function/arrow parameter — optional via the question token. */
-function paramDecl(
-  name: string,
-  type: ts.TypeNode,
-  optional = false,
-): ts.ParameterDeclaration {
-  return f.createParameterDeclaration(
-    undefined,
-    undefined,
-    name,
-    optional ? f.createToken(ts.SyntaxKind.QuestionToken) : undefined,
-    type,
-  );
-}
-
-/** `const <name>[: <type>] = <init>;` */
-function constDecl(
-  name: string,
-  init: ts.Expression,
-  type?: ts.TypeNode,
-): ts.Statement {
-  return f.createVariableStatement(
-    undefined,
-    f.createVariableDeclarationList(
-      [f.createVariableDeclaration(name, undefined, type, init)],
-      ts.NodeFlags.Const,
-    ),
-  );
-}
-
-/** `spec.<name>` */
-function specProp(name: string): ts.Expression {
-  return f.createPropertyAccessExpression(f.createIdentifier("spec"), name);
-}
-
-/** `opts?.headers` */
-function optsHeaders(): ts.Expression {
-  return f.createPropertyAccessChain(
-    f.createIdentifier("opts"),
-    f.createToken(ts.SyntaxKind.QuestionDotToken),
-    f.createIdentifier("headers"),
-  );
-}
-
-/** `opts?.tags` */
-function optsTags(): ts.Expression {
-  return f.createPropertyAccessChain(
-    f.createIdentifier("opts"),
-    f.createToken(ts.SyntaxKind.QuestionDotToken),
-    f.createIdentifier("tags"),
-  );
-}
-
-/** `installK6Bridge({ check, group, sleep });` */
-function bridgeInstall(): ts.Statement {
-  return f.createExpressionStatement(
-    f.createCallExpression(f.createIdentifier("installK6Bridge"), undefined, [
-      f.createObjectLiteralExpression(
-        [
-          f.createShorthandPropertyAssignment("check"),
-          f.createShorthandPropertyAssignment("group"),
-          f.createShorthandPropertyAssignment("sleep"),
-        ],
-        false,
-      ),
-    ]),
-  );
-}
-
-/** `setExecModule(exec);` */
-function execInstall(): ts.Statement {
-  return f.createExpressionStatement(
-    f.createCallExpression(f.createIdentifier("setExecModule"), undefined, [
-      f.createIdentifier("exec"),
-    ]),
-  );
+function callHelperParams(fn: ReturnType<typeof $.func>) {
+  return fn
+    .param("method", (p) => p.type($.type("string")))
+    .param("url", (p) => p.type($.type("string")))
+    .param("opId", (p) => p.type($.type("string")))
+    .param("body", (p) => p.type(nullableString()))
+    .param("opts", (p) => p.optional().type($.type("CallOpts")));
 }
 
 /**
@@ -383,75 +189,26 @@ function execInstall(): ts.Statement {
  * );
  * ```
  */
-function metricsInstall(): ts.Statement {
-  const ctorMap = f.createObjectLiteralExpression(
-    [
-      f.createPropertyAssignment("counter", f.createIdentifier("Counter")),
-      f.createPropertyAssignment("gauge", f.createIdentifier("Gauge")),
-      f.createPropertyAssignment("rate", f.createIdentifier("Rate")),
-      f.createPropertyAssignment("trend", f.createIdentifier("Trend")),
-    ],
-    false,
+function metricsInstall() {
+  const ctors = $.object()
+    .prop("counter", $("Counter"))
+    .prop("gauge", $("Gauge"))
+    .prop("rate", $("Rate"))
+    .prop("trend", $("Trend"));
+  const kind = $.type.or(
+    $.type.literal("counter"),
+    $.type.literal("gauge"),
+    $.type.literal("rate"),
+    $.type.literal("trend"),
   );
-
-  const ctorAccess = f.createElementAccessExpression(
-    f.createParenthesizedExpression(ctorMap),
-    f.createIdentifier("kind"),
-  );
-
-  const arrowBody = f.createNewExpression(
-    f.createParenthesizedExpression(ctorAccess),
-    undefined,
-    [f.createIdentifier("name")],
-  );
-
-  const stringType = f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
-  const kindUnion = f.createUnionTypeNode([
-    f.createLiteralTypeNode(f.createStringLiteral("counter")),
-    f.createLiteralTypeNode(f.createStringLiteral("gauge")),
-    f.createLiteralTypeNode(f.createStringLiteral("rate")),
-    f.createLiteralTypeNode(f.createStringLiteral("trend")),
-  ]);
-
-  const arrow = f.createArrowFunction(
-    undefined,
-    undefined,
-    [
-      f.createParameterDeclaration(
-        undefined,
-        undefined,
-        "kind",
-        undefined,
-        kindUnion,
-        undefined,
-      ),
-      f.createParameterDeclaration(
-        undefined,
-        undefined,
-        "name",
-        undefined,
-        stringType,
-        undefined,
-      ),
-    ],
-    undefined,
-    undefined,
-    arrowBody,
-  );
-
-  return f.createExpressionStatement(
-    f.createCallExpression(
-      f.createIdentifier("installMetricsFactory"),
-      undefined,
-      [arrow],
+  return $.stmt(
+    $("installMetricsFactory").call(
+      $.func()
+        .param("kind", (p) => p.type(kind))
+        .param("name", (p) => p.type($.type("string")))
+        .do($.return($.new($.attr(ctors, "kind").computed(), $("name")))),
     ),
   );
-}
-
-function defaultBaseUrlConst(value: string) {
-  return $.const("DEFAULT_BASE_URL")
-    .type($.type("string"))
-    .assign($.literal(value));
 }
 
 /**
@@ -459,49 +216,32 @@ function defaultBaseUrlConst(value: string) {
  * timeout/redirects/compression/responseType/responseCallback pass through
  * directly to k6's request params.
  */
-function callOptsTypeAlias(): ts.Statement {
-  const stringRecord = f.createTypeReferenceNode("Record", [
-    f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-    f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-  ]);
-
-  const responseTypeUnion = f.createUnionTypeNode([
-    f.createLiteralTypeNode(f.createStringLiteral("text")),
-    f.createLiteralTypeNode(f.createStringLiteral("binary")),
-    f.createLiteralTypeNode(f.createStringLiteral("none")),
-  ]);
-
-  const timeoutUnion = f.createUnionTypeNode([
-    f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-    f.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
-  ]);
-
-  return f.createTypeAliasDeclaration(
-    [f.createModifier(ts.SyntaxKind.ExportKeyword)],
-    "CallOpts",
-    undefined,
-    f.createTypeLiteralNode([
-      optionalProp("headers", stringRecord),
-      optionalProp("tags", stringRecord),
-      optionalProp("timeout", timeoutUnion),
-      optionalProp(
-        "redirects",
-        f.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
-      ),
-      optionalProp(
-        "compression",
-        f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-      ),
-      optionalProp("responseType", responseTypeUnion),
-    ]),
-  );
-}
-
-function optionalProp(name: string, type: ts.TypeNode): ts.PropertySignature {
-  return f.createPropertySignature(
-    undefined,
-    name,
-    f.createToken(ts.SyntaxKind.QuestionToken),
-    type,
-  );
+function callOptsTypeAlias() {
+  const stringRecord = () =>
+    $.type("Record").generics($.type("string"), $.type("string"));
+  return $.type
+    .alias("CallOpts")
+    .export()
+    .type(
+      $.type
+        .object()
+        .prop("headers", (p) => p.optional().type(stringRecord()))
+        .prop("tags", (p) => p.optional().type(stringRecord()))
+        .prop("timeout", (p) =>
+          p.optional().type($.type.or($.type("string"), $.type("number"))),
+        )
+        .prop("redirects", (p) => p.optional().type($.type("number")))
+        .prop("compression", (p) => p.optional().type($.type("string")))
+        .prop("responseType", (p) =>
+          p
+            .optional()
+            .type(
+              $.type.or(
+                $.type.literal("text"),
+                $.type.literal("binary"),
+                $.type.literal("none"),
+              ),
+            ),
+        ),
+    );
 }

@@ -1,59 +1,68 @@
 import { posix } from "node:path";
 
-import type {
-  File as CodegenFile,
-  ImportModule,
-  RenderContext,
-  Renderer,
-} from "@hey-api/codegen-core";
-import ts from "typescript";
+import type { RenderContext, Renderer } from "@hey-api/codegen-core";
+import { type TsDsl, TypeScriptRenderer } from "@hey-api/openapi-ts";
+
+import type { EmitTsExportGroup } from "../plugin.js";
 
 import { RawTextNode } from "./raw-text-node.js";
 import { TsStatementNode } from "./ts-node.js";
 
-const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-const blank = ts.createSourceFile(
-  "_.ts",
-  "",
-  ts.ScriptTarget.ESNext,
-  false,
-  ts.ScriptKind.TS,
-);
-const f = ts.factory;
+type RenderArgs = Parameters<typeof TypeScriptRenderer.astToString>[0];
+type ModuleImport = NonNullable<RenderArgs["imports"]>[number][number];
+type ModuleExport = NonNullable<RenderArgs["exports"]>[number][number];
 
 /**
  * Renders TS files: optional header (passed in by the orchestrator,
  * keyed on logical path) prints first, then imports declared via
- * codegen-core's File graph (`file.imports`), then body statements
- * (`TsStatementNode`s). Plugins emit cross-file imports through
- * `plugin.emitTs({ imports })`, never inline
- * `ts.factory.createImportDeclaration`.
+ * codegen-core's File graph (`file.imports`), then re-exports, then body
+ * nodes (`TsStatementNode`s) through Hey API's TypeScript renderer.
  */
 export class TsStatementRenderer implements Renderer {
-  constructor(private readonly headers: Map<string, string>) {}
+  constructor(
+    private readonly headers: Map<string, string>,
+    private readonly reexports: Map<string, ReadonlyArray<EmitTsExportGroup>>,
+  ) {}
 
   supports(ctx: RenderContext): boolean {
     if (ctx.file.language !== "typescript") return false;
     const nodes = Array.from(ctx.file.nodes);
-    return nodes.length > 0 && nodes.every((n) => n instanceof TsStatementNode);
+    if (!nodes.every((n) => n instanceof TsStatementNode)) return false;
+    return nodes.length > 0 || this.reexports.has(ctx.file.logicalFilePath);
   }
 
   render(ctx: RenderContext): string {
-    const importStatements: ts.Statement[] = [];
-    for (const group of ctx.file.imports) {
-      const decl = importDeclarationFor(group, ctx.file);
-      if (decl) importStatements.push(decl);
+    const path = ctx.file.logicalFilePath;
+    const imports: ModuleImport[] = [];
+    for (const { from, ...group } of ctx.file.imports) {
+      if (group.kind !== "named") continue;
+      imports.push({
+        ...group,
+        modulePath: relativeModulePath(path, from.logicalFilePath),
+      });
     }
-    const bodyStatements: ts.Statement[] = [];
+    const exports = (this.reexports.get(path) ?? [])
+      .filter((group) => !group.names || group.names.length > 0)
+      .map(moduleExport);
+
+    const nodes: TsDsl[] = [];
+    const rawCode: string[] = [];
     for (const node of ctx.file.nodes) {
-      if (node instanceof TsStatementNode) bodyStatements.push(node.toAst());
+      if (!(node instanceof TsStatementNode)) continue;
+      const value = node.toAst();
+      if (typeof value === "string") rawCode.push(value);
+      else nodes.push(value);
     }
-    const printed = printer.printList(
-      ts.ListFormat.MultiLine,
-      f.createNodeArray([...importStatements, ...bodyStatements]),
-      blank,
-    );
-    const header = this.headers.get(ctx.file.logicalFilePath);
+
+    const body = TypeScriptRenderer.astToString({
+      exports: exports.length ? [exports] : undefined,
+      exportsOptions: { preferExportAll: true },
+      imports: imports.length ? [imports] : undefined,
+      nodes,
+    }).trim();
+    const printed = `${[body, ...rawCode].filter(Boolean).join("\n\n")}\n`;
+
+    const header = this.headers.get(path);
     if (!header) return printed;
     const headerText = header.endsWith("\n") ? header : `${header}\n`;
     return headerText + printed;
@@ -76,32 +85,18 @@ export class RawTextRenderer implements Renderer {
   }
 }
 
-function importDeclarationFor(
-  group: ImportModule,
-  importer: CodegenFile,
-): ts.ImportDeclaration | undefined {
-  if (group.kind !== "named") return undefined;
-  const modulePath = relativeModulePath(
-    importer.logicalFilePath,
-    group.from.logicalFilePath,
-  );
-  return f.createImportDeclaration(
-    undefined,
-    f.createImportClause(
-      group.isTypeOnly ? ts.SyntaxKind.TypeKeyword : undefined,
-      undefined,
-      f.createNamedImports(
-        group.imports.map((m) =>
-          f.createImportSpecifier(
-            m.isTypeOnly,
-            undefined,
-            f.createIdentifier(m.localName ?? m.sourceName),
-          ),
-        ),
-      ),
-    ),
-    f.createStringLiteral(modulePath),
-  );
+function moduleExport(group: EmitTsExportGroup): ModuleExport {
+  return {
+    canExportAll: !group.names,
+    exports: (group.names ?? []).map((n) => ({
+      exportedName: n.name,
+      isTypeOnly: n.isType ?? false,
+      kind: "named",
+      sourceName: n.name,
+    })),
+    isTypeOnly: group.isType ?? false,
+    modulePath: group.from,
+  };
 }
 
 /**

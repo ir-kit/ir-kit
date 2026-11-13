@@ -12,7 +12,11 @@ import { loadAsyncAPI } from "@ir-kit/asyncapi-loader";
 import { assertSafeOutputDir } from "@ir-kit/codegen-core";
 
 import { RawTextRenderer, TsStatementRenderer } from "./ast/ts-renderer.js";
-import { type AnyRegisteredPlugin, type GeneratedFile } from "./plugin.js";
+import {
+  type AnyRegisteredPlugin,
+  type EmitTsExportGroup,
+  type GeneratedFile,
+} from "./plugin.js";
 import { orderPlugins } from "./runtime/order-plugins.js";
 import { createPluginInstance } from "./runtime/plugin-instance.js";
 
@@ -34,6 +38,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
 
   // Plugin → renderer side channel; codegen-core File has no metadata slot.
   const headers = new Map<string, string>();
+  const reexports = new Map<string, ReadonlyArray<EmitTsExportGroup>>();
 
   const project = new Project({
     root: outputDir,
@@ -42,7 +47,10 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     extensions: defaultExtensions,
     moduleEntryNames: defaultModuleEntryNames,
     nameConflictResolvers: defaultNameConflictResolvers,
-    renderers: [new TsStatementRenderer(headers), new RawTextRenderer()],
+    renderers: [
+      new TsStatementRenderer(headers, reexports),
+      new RawTextRenderer(),
+    ],
   });
 
   const apiRegistry = new Map<string, unknown>();
@@ -63,6 +71,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
       files: filesEmitted,
       apiRegistry,
       headers,
+      reexports,
     });
 
     if (def.hooks?.before) await def.hooks.before(instance);

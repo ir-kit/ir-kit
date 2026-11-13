@@ -1,21 +1,14 @@
+import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { safeIdent } from "@ir-kit/codegen-core";
 import { extractEnumValues, fromHeyApi } from "@ir-kit/openapi";
-import ts from "typescript";
-
+import type { Expr } from "../dsl.js";
 import type { BuiltFile } from "../generate.js";
-import {
-  propertyKey,
-  toIdent,
-  type WalkedOperation,
-  walkOperations,
-} from "../ir/index.js";
+import { toIdent, type WalkedOperation, walkOperations } from "../ir/index.js";
 import {
   type LoadtestStubInput,
   renderLoadtestStub,
 } from "./loadtest-stub-template.js";
-
-const f = ts.factory;
 
 export interface ScaffoldStubsOptions {
   /** Path the stubs import the generated client from. Default: `../index.js`. */
@@ -55,7 +48,9 @@ function stubInput(
 ): LoadtestStubInput {
   return {
     fnName: toIdent(op.id),
-    summary: op.summary ?? `${op.method.toUpperCase()} ${op.path}`,
+    summary: (op.summary ?? `${op.method.toUpperCase()} ${op.path}`)
+      .replace(/\s+/g, " ")
+      .trim(),
     clientImport,
     dataImport,
     callArgs: callArgExpressions(op, knownSchemas),
@@ -65,70 +60,49 @@ function stubInput(
 function callArgExpressions(
   op: WalkedOperation,
   knownSchemas: ReadonlySet<string>,
-): ts.Expression[] {
-  const args: ts.Expression[] = [];
-  for (const p of op.pathParams) args.push(placeholder(p.schema));
+): Expr[] {
+  const args: Expr[] = op.pathParams.map((p) => placeholder(p.schema));
   if (op.queryParams.length) {
-    const required = op.queryParams.filter((p) => p.required);
-    args.push(
-      f.createObjectLiteralExpression(
-        required.map((p) =>
-          f.createPropertyAssignment(
-            propertyKey(p.name),
-            placeholder(p.schema),
-          ),
-        ),
-        false,
-      ),
-    );
+    const query = $.object();
+    for (const p of op.queryParams) {
+      if (p.required) query.prop(p.name, placeholder(p.schema));
+    }
+    args.push(query);
   }
   if (op.body) args.push(bodyExpression(op, knownSchemas));
   return args;
 }
 
-function placeholder(schema: IR.SchemaObject): ts.Expression {
+function placeholder(schema: IR.SchemaObject): Expr {
   const [first] = extractEnumValues(fromHeyApi(schema)) ?? [];
-  if (typeof first === "string") return f.createStringLiteral(first);
-  if (typeof first === "boolean")
-    return first ? f.createTrue() : f.createFalse();
-  if (typeof first === "number") {
-    const literal = f.createNumericLiteral(Math.abs(first));
-    return first < 0
-      ? f.createPrefixUnaryExpression(ts.SyntaxKind.MinusToken, literal)
-      : literal;
+  if (
+    typeof first === "string" ||
+    typeof first === "number" ||
+    typeof first === "boolean"
+  ) {
+    return $.literal(first);
   }
   switch (schema.type) {
     case "integer":
     case "number":
-      return f.createNumericLiteral("1");
+      return $.literal(1);
     case "boolean":
-      return f.createFalse();
+      return $.literal(false);
     case "array":
-      return f.createArrayLiteralExpression([]);
+      return $.array();
     default:
-      return f.createStringLiteral("");
+      return $.literal("");
   }
 }
 
 function bodyExpression(
   op: WalkedOperation,
   knownSchemas: ReadonlySet<string>,
-): ts.Expression {
+): Expr {
   const dataName = resolveDataBuilderName(op, knownSchemas);
-  if (dataName) {
-    return f.createCallExpression(
-      f.createPropertyAccessExpression(
-        f.createIdentifier("data"),
-        f.createIdentifier(dataName),
-      ),
-      undefined,
-      [],
-    );
-  }
-  return f.createAsExpression(
-    f.createObjectLiteralExpression([], false),
-    f.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-  );
+  return dataName
+    ? $("data").attr(dataName).call()
+    : $.object().as($.type("any"));
 }
 
 function resolveDataBuilderName(

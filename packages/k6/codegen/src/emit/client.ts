@@ -1,22 +1,23 @@
-import type { TsDsl } from "@hey-api/openapi-ts";
+import {
+  $,
+  type MaybeTsDsl,
+  type TsDsl,
+  type TypeTsDsl,
+} from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { fromHeyApi } from "@ir-kit/openapi";
-import ts from "typescript";
-
+import type { TypeExpr } from "../dsl.js";
 import {
-  propertyKey,
   schemaToTypeNode,
   toIdent,
   type WalkedOperation,
   walkOperations,
 } from "../ir/index.js";
-import { GENERATED_HEADER, printStatements } from "../print.js";
-import { clientPreambleStatements } from "./client-preamble.js";
+import { GENERATED_HEADER, printModule } from "../print.js";
+import { clientPreamble } from "./client-preamble.js";
 import { bodyArg, urlExpression } from "./operation-expressions.js";
 
-type TypeExpr = TsDsl<ts.TypeNode>;
-
-const f = ts.factory;
+type Func = ReturnType<typeof $.func>;
 
 /** Namespace alias for type imports — generated client emits `T.Pet`. */
 const TYPE_NAMESPACE = "T";
@@ -27,10 +28,8 @@ function typed(schema: IR.SchemaObject): TypeExpr {
   });
 }
 
-function typeNodeFor(op: WalkedOperation): ts.TypeNode {
-  return op.successSchema
-    ? (typed(op.successSchema).toAst() as ts.TypeNode)
-    : f.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
+function returnType(op: WalkedOperation): TypeExpr {
+  return op.successSchema ? typed(op.successSchema) : $.type("void");
 }
 
 export interface ClientEmitOptions {
@@ -47,82 +46,58 @@ export function emitClientFile(
   paths: IR.PathsObject | undefined,
   opts: ClientEmitOptions = {},
 ): string {
-  const preamble = clientPreambleStatements({
+  const preamble = clientPreamble({
     defaultBaseUrl: opts.defaultBaseUrl ?? "",
     typeNamespace: TYPE_NAMESPACE,
     hasTypes: (opts.schemaNames?.length ?? 0) > 0,
   });
-
   const operations = Array.from(walkOperations(paths));
-  const syncDecls = operations.map(syncOperationFn);
-  const asyncDecls = operations.map(asyncOperationFn);
-  const specAssignments = operations.map(emitSpecAssignment);
-  const asyncExport = asyncNamespaceExport(operations);
-
-  return printStatements(
-    [...preamble, ...syncDecls, ...asyncDecls, ...specAssignments, asyncExport],
-    GENERATED_HEADER,
-  );
+  return printModule({
+    header: GENERATED_HEADER,
+    imports: preamble.imports,
+    nodes: [
+      ...preamble.nodes,
+      ...operations.map((op) => operationFn(op, false)),
+      ...operations.map((op) => operationFn(op, true)),
+      ...operations.map(specAssignment),
+      asyncNamespaceExport(operations),
+    ],
+  });
 }
 
-/** `export function getPet(...): Pet { return call<Pet>(...); }` */
-function syncOperationFn(op: WalkedOperation): ts.Statement {
-  return operationFnDecl(op, /* async */ false, /* exported */ true);
-}
-
-/** `async function getPet_async(...): Promise<Pet> { return callAsync<Pet>(...); }` */
-function asyncOperationFn(op: WalkedOperation): ts.Statement {
-  return operationFnDecl(op, /* async */ true, /* exported */ false);
-}
-
-function operationFnDecl(
-  op: WalkedOperation,
-  asyncCall: boolean,
-  exported: boolean,
-): ts.FunctionDeclaration {
-  const returnTypeNode = typeNodeFor(op);
-  const fnReturnType = asyncCall
-    ? f.createTypeReferenceNode("Promise", [returnTypeNode])
-    : returnTypeNode;
-
-  const modifiers: ts.Modifier[] = [];
-  if (exported) modifiers.push(f.createModifier(ts.SyntaxKind.ExportKeyword));
-  if (asyncCall) modifiers.push(f.createModifier(ts.SyntaxKind.AsyncKeyword));
-
-  return f.createFunctionDeclaration(
-    modifiers,
-    undefined,
-    exported ? toIdent(op.id) : asyncInternalName(op),
-    undefined,
-    buildParamDeclarations(op),
-    fnReturnType,
-    f.createBlock(
-      [f.createReturnStatement(callExpression(op, returnTypeNode, asyncCall))],
-      true,
-    ),
-  );
+/**
+ * `export function getPet(...): Pet { return call<Pet>(...); }`, or the
+ * internal `async function getPet_async(...): Promise<Pet>` variant.
+ */
+function operationFn(op: WalkedOperation, asyncCall: boolean): TsDsl {
+  const type = returnType(op);
+  const fn = withParams(
+    $.func(asyncCall ? asyncInternalName(op) : toIdent(op.id)),
+    op,
+  )
+    .async(asyncCall)
+    .returns(asyncCall ? $.type("Promise").generic(type) : type)
+    .do(
+      $.return(requestCall(op, asyncCall ? "callAsync" : "call").generic(type)),
+    );
+  return asyncCall ? fn : fn.export();
 }
 
 function asyncInternalName(op: WalkedOperation): string {
   return `${toIdent(op.id)}_async`;
 }
 
-/** `call<Pet>("GET", url, "getPet", null, opts)` or the async variant. */
-function callExpression(
+/** `call("GET", url, "getPet", null, opts)` against one of the preamble helpers. */
+function requestCall(
   op: WalkedOperation,
-  returnType: ts.TypeNode,
-  asyncCall: boolean,
-): ts.Expression {
-  return f.createCallExpression(
-    f.createIdentifier(asyncCall ? "callAsync" : "call"),
-    [returnType],
-    [
-      f.createStringLiteral(op.method.toUpperCase()),
-      urlExpression(op).toAst() as ts.Expression,
-      f.createStringLiteral(op.id),
-      bodyArg(op).toAst() as ts.Expression,
-      f.createIdentifier("opts"),
-    ],
+  helper: "buildSpec" | "call" | "callAsync",
+) {
+  return $(helper).call(
+    $.literal(op.method.toUpperCase()),
+    urlExpression(op),
+    $.literal(op.id),
+    bodyArg(op),
+    $("opts"),
   );
 }
 
@@ -133,36 +108,13 @@ function callExpression(
  * spec.params)` with all the wiring done — keeping access to the raw Response
  * for status checks, timings, `http.batch()` composition, etc.
  */
-function emitSpecAssignment(op: WalkedOperation): ts.Statement {
-  const buildSpecCall = f.createCallExpression(
-    f.createIdentifier("buildSpec"),
-    undefined,
-    [
-      f.createStringLiteral(op.method.toUpperCase()),
-      urlExpression(op).toAst() as ts.Expression,
-      f.createStringLiteral(op.id),
-      bodyArg(op).toAst() as ts.Expression,
-      f.createIdentifier("opts"),
-    ],
-  );
-
-  const arrow = f.createArrowFunction(
-    undefined,
-    undefined,
-    buildParamDeclarations(op),
-    undefined,
-    f.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-    buildSpecCall,
-  );
-
-  return f.createExpressionStatement(
-    f.createAssignment(
-      f.createPropertyAccessExpression(
-        f.createIdentifier(toIdent(op.id)),
-        f.createIdentifier("spec"),
+function specAssignment(op: WalkedOperation): TsDsl {
+  return $.stmt(
+    $(toIdent(op.id))
+      .attr("spec")
+      .assign(
+        withParams($.func(), op).do($.return(requestCall(op, "buildSpec"))),
       ),
-      arrow,
-    ),
   );
 }
 
@@ -170,69 +122,32 @@ function emitSpecAssignment(op: WalkedOperation): ts.Statement {
  * Shared parameter list for sync/async/spec emit — all three present the same
  * signature to the user. (path params, optional query, optional body, opts).
  */
-function buildParamDeclarations(
-  op: WalkedOperation,
-): ts.ParameterDeclaration[] {
-  const out: ts.ParameterDeclaration[] = [];
-
+function withParams<F extends Func>(fn: F, op: WalkedOperation): F {
   for (const p of op.pathParams) {
-    out.push(
-      f.createParameterDeclaration(
-        undefined,
-        undefined,
-        toIdent(p.name),
-        undefined,
-        typed(p.schema).toAst() as ts.TypeNode,
-      ),
-    );
+    fn.param(toIdent(p.name), (param) => param.type(typed(p.schema)));
   }
-
   if (op.queryParams.length) {
-    const allOptional = op.queryParams.every((p) => !p.required);
-    const members = op.queryParams.map((p) =>
-      f.createPropertySignature(
-        undefined,
-        propertyKey(p.name),
-        p.required ? undefined : f.createToken(ts.SyntaxKind.QuestionToken),
-        typed(p.schema).toAst() as ts.TypeNode,
-      ),
-    );
-    out.push(
-      f.createParameterDeclaration(
-        undefined,
-        undefined,
-        "query",
-        allOptional ? f.createToken(ts.SyntaxKind.QuestionToken) : undefined,
-        f.createTypeLiteralNode(members),
-      ),
-    );
+    const query = $.type.object();
+    for (const p of op.queryParams) {
+      query.prop(p.name, (prop) => {
+        if (!p.required) prop.optional();
+        prop.type(typed(p.schema));
+      });
+    }
+    fn.param("query", (param) => {
+      if (op.queryParams.every((p) => !p.required)) param.optional();
+      param.type(query);
+    });
   }
-
-  if (op.body) {
-    out.push(
-      f.createParameterDeclaration(
-        undefined,
-        undefined,
-        "body",
-        op.body.required
-          ? undefined
-          : f.createToken(ts.SyntaxKind.QuestionToken),
-        typed(op.body.schema).toAst() as ts.TypeNode,
-      ),
-    );
+  const body = op.body;
+  if (body) {
+    fn.param("body", (param) => {
+      if (!body.required) param.optional();
+      param.type(typed(body.schema));
+    });
   }
-
-  out.push(
-    f.createParameterDeclaration(
-      undefined,
-      undefined,
-      "opts",
-      f.createToken(ts.SyntaxKind.QuestionToken),
-      f.createTypeReferenceNode("CallOpts"),
-    ),
-  );
-
-  return out;
+  fn.param("opts", (param) => param.optional().type($.type("CallOpts")));
+  return fn;
 }
 
 /**
@@ -248,21 +163,9 @@ function buildParamDeclarations(
  */
 function asyncNamespaceExport(
   operations: ReadonlyArray<WalkedOperation>,
-): ts.Statement {
-  const props = operations.map((op) =>
-    f.createPropertyAssignment(
-      toIdent(op.id),
-      f.createIdentifier(asyncInternalName(op)),
-    ),
-  );
-
-  const literal = f.createObjectLiteralExpression(props, true);
-
-  return f.createVariableStatement(
-    [f.createModifier(ts.SyntaxKind.ExportKeyword)],
-    f.createVariableDeclarationList(
-      [f.createVariableDeclaration("async", undefined, undefined, literal)],
-      ts.NodeFlags.Const,
-    ),
-  );
+): TsDsl {
+  const props = $.object().pretty();
+  for (const op of operations)
+    props.prop(toIdent(op.id), $(asyncInternalName(op)));
+  return $.const("async").export().assign(props);
 }

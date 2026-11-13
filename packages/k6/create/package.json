@@ -54,8 +54,7 @@
   },
   "dependencies": {
     "@clack/prompts": "catalog:",
-    "@ir-kit/k6-toolkit": "workspace:*",
-    "typescript": "catalog:"
+    "@ir-kit/k6-toolkit": "workspace:*"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

@@ -51,12 +51,11 @@
   },
   "peerDependencies": {
     "@asyncapi/parser": ">=3.0.0",
-    "@hey-api/codegen-core": ">=0.8.0",
-    "@hey-api/openapi-ts": ">=0.99.0",
+    "@hey-api/codegen-core": "0.0.0-next-20260930190945",
+    "@hey-api/openapi-ts": "0.0.0-next-20260930190945",
     "@ir-kit/asyncapi-core": ">=0.2.0",
     "@ir-kit/codegen-core": ">=0.3.0",
-    "amqplib": ">=0.10.0",
-    "typescript": ">=5.0.0 <7"
+    "amqplib": ">=0.10.0"
   },
   "peerDependenciesMeta": {
     "amqplib": {

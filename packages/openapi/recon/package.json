@@ -52,10 +52,10 @@
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
-    "@hey-api/spec-types": ">=0.2.0"
+    "@hey-api/spec-types": "0.0.0-next-20260930190945"
   },
   "devDependencies": {
-    "@hey-api/spec-types": "^0.2.0",
+    "@hey-api/spec-types": "0.0.0-next-20260930190945",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "vitest": "catalog:"

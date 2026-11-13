@@ -1,13 +1,12 @@
+import { $, type TsDsl } from "@hey-api/openapi-ts";
 import {
-  defaultExportProp,
+  type ModuleImport,
   namedImport,
   namespaceImport,
-  reExportConst,
+  printLoadtest,
 } from "@ir-kit/k6-gen/ast";
-import ts from "typescript";
 
-import { printStatements } from "./print.js";
-import { objLit, varConst } from "./scaffold/ast-helpers.js";
+import { type Expr, objLit } from "./scaffold/ast-helpers.js";
 
 export type AuthFlavor = "none" | "bearer" | "basic" | "apiKey" | "session";
 
@@ -40,48 +39,36 @@ export interface ScaffoldLoadtestOpts {
   seedOperation?: string;
 }
 
-const f = ts.factory;
-
 /** Render a starter `loadtest.ts` via `ts.factory` — no template strings. */
 export function scaffoldLoadtest(opts: ScaffoldLoadtestOpts): string {
   const pace = opts.pace ?? "smoke";
   const symbols = ["defineLoadTest", "flow", pace];
   if (opts.auth !== "none") symbols.push("useAuth");
 
-  const stmts: ts.Statement[] = [
-    k6FrameworkImport(symbols),
-    namespaceImport("api", opts.clientImportPath),
-  ];
-
-  if (opts.auth !== "none") stmts.push(authVarDecl(opts));
-
-  stmts.push(loadtestDecl(opts, pace));
-  stmts.push(reExportConst("options", "lt", "options"));
-  stmts.push(defaultExportProp("lt", "default"));
-
-  return printStatements(stmts);
+  return printLoadtest({
+    imports: [
+      k6FrameworkImport(symbols),
+      namespaceImport("api", opts.clientImportPath),
+    ],
+    nodes: [
+      ...(opts.auth !== "none" ? [authVarDecl(opts)] : []),
+      loadtestDecl(opts, pace),
+    ],
+  });
 }
 
-/**
- * Compose the `import { defineLoadTest, flow, smoke, useAuth, batch?, ... }
- * from "@ir-kit/k6"` line. Shared across both `scaffoldLoadtest` and
- * `scaffoldScenario`. The caller chooses which framework symbols to add.
- */
+/** `import { … } from "@ir-kit/k6";` with duplicate names removed. */
 export function k6FrameworkImport(
   symbols: ReadonlyArray<string>,
-): ts.ImportDeclaration {
-  return namedImport(
-    Array.from(new Set(symbols)).map((name) => ({ name })),
-    "@ir-kit/k6",
-  );
+): ModuleImport {
+  return namedImport(Array.from(new Set(symbols)), "@ir-kit/k6");
 }
 
-/** `const auth = useAuth.<flavor>({ … });` */
-export function authVarDecl(opts: AuthScaffoldOpts): ts.Statement {
-  return varConst("auth", authCallExpr(opts));
+/** `const auth = useAuth.<flavor>(…);` */
+export function authVarDecl(opts: AuthScaffoldOpts): TsDsl {
+  return $.const("auth").assign(authCall(opts));
 }
 
-/** Subset of opts needed to build an auth decl. */
 export interface AuthScaffoldOpts {
   auth: AuthFlavor;
   bearerEnv?: string;
@@ -89,188 +76,88 @@ export interface AuthScaffoldOpts {
   apiKeyEnv?: string;
 }
 
-function authCallExpr(opts: AuthScaffoldOpts): ts.Expression {
-  const useAuth = f.createIdentifier("useAuth");
+function authCall(opts: AuthScaffoldOpts): Expr {
+  const useAuth = (fn: string, arg: Expr) => $("useAuth").attr(fn).call(arg);
   switch (opts.auth) {
     case "bearer":
-      return useAuthCall(useAuth, "bearer", [
-        objLit({ env: f.createStringLiteral(opts.bearerEnv ?? "API_TOKEN") }),
-      ]);
+      return useAuth(
+        "bearer",
+        objLit({ env: $.literal(opts.bearerEnv ?? "API_TOKEN") }),
+      );
     case "basic":
-      return useAuthCall(useAuth, "basic", [
+      return useAuth(
+        "basic",
         objLit({
-          user: objLit({ env: f.createStringLiteral("API_USER") }),
-          pass: objLit({ env: f.createStringLiteral("API_PASS") }),
+          user: objLit({ env: $.literal("API_USER") }),
+          pass: objLit({ env: $.literal("API_PASS") }),
         }),
-      ]);
+      );
     case "apiKey":
-      return useAuthCall(useAuth, "apiKey", [
+      return useAuth(
+        "apiKey",
         objLit({
-          name: f.createStringLiteral(opts.apiKeyHeader ?? "X-API-Key"),
-          env: f.createStringLiteral(opts.apiKeyEnv ?? "API_KEY"),
+          name: $.literal(opts.apiKeyHeader ?? "X-API-Key"),
+          env: $.literal(opts.apiKeyEnv ?? "API_KEY"),
         }),
-      ]);
+      );
     case "session":
-      return useAuthCall(useAuth, "session", [
+      return useAuth(
+        "session",
         objLit({
-          signIn: f.createArrowFunction(
-            undefined,
-            undefined,
-            [],
-            undefined,
-            f.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-            f.createBlock(
-              [
-                f.createReturnStatement(
-                  f.createStringLiteral("/* obtain session cookie */"),
-                ),
-              ],
-              true,
-            ),
+          signIn: $.func().do(
+            $.return($.literal("/* obtain session cookie */")),
           ),
         }),
-      ]);
+      );
     default:
       throw new Error(`Unknown auth flavor: ${opts.auth as string}`);
   }
 }
 
-function useAuthCall(
-  useAuth: ts.Identifier,
-  fn: string,
-  args: ts.Expression[],
-): ts.Expression {
-  return f.createCallExpression(
-    f.createPropertyAccessExpression(useAuth, f.createIdentifier(fn)),
-    undefined,
-    args,
-  );
-}
-
 function loadtestDecl(
   opts: ScaffoldLoadtestOpts,
   pace: NonNullable<ScaffoldLoadtestOpts["pace"]>,
-): ts.Statement {
+) {
   const duration = opts.duration ?? "30s";
-  const props: ts.PropertyAssignment[] = [];
-
-  if (opts.auth !== "none") props.push(useEntry());
-
+  const config = $.object().pretty();
+  if (opts.auth !== "none") config.prop("use", $.array($("auth")));
   if (opts.scenarios && opts.scenarios.length > 0) {
-    props.push(
-      scenariosEntry(opts.scenarios, pace, duration, opts.seedOperation),
-    );
-  } else {
-    props.push(
-      paceEntry(pace, duration),
-      budgetsEntry(),
-      flowEntry(opts.seedOperation),
-    );
-  }
-
-  return varConst(
-    "lt",
-    f.createCallExpression(f.createIdentifier("defineLoadTest"), undefined, [
-      f.createObjectLiteralExpression(props, true),
-    ]),
-  );
-}
-
-function useEntry(): ts.PropertyAssignment {
-  return f.createPropertyAssignment(
-    "use",
-    f.createArrayLiteralExpression([f.createIdentifier("auth")], false),
-  );
-}
-
-function paceEntry(
-  pace: NonNullable<ScaffoldLoadtestOpts["pace"]>,
-  duration: string,
-): ts.PropertyAssignment {
-  return f.createPropertyAssignment(
-    "scenario",
-    f.createCallExpression(f.createIdentifier(pace), undefined, [
-      objLit({ duration: f.createStringLiteral(duration) }),
-    ]),
-  );
-}
-
-function budgetsEntry(): ts.PropertyAssignment {
-  return f.createPropertyAssignment(
-    "budgets",
-    objLit(
-      {
-        p95: f.createStringLiteral("500ms"),
-        errors: f.createStringLiteral("1%"),
-      },
-      /* multiline */ true,
-    ),
-  );
-}
-
-function flowEntry(seedOp?: string): ts.PropertyAssignment {
-  return f.createPropertyAssignment("flow", flowExpr(seedOp));
-}
-
-function flowExpr(seedOp?: string): ts.Expression {
-  const stepLabel = seedOp ?? "health";
-  return f.createCallExpression(
-    f.createPropertyAccessExpression(
-      f.createCallExpression(f.createIdentifier("flow"), undefined, []),
-      f.createIdentifier("step"),
-    ),
-    undefined,
-    [
-      f.createStringLiteral(stepLabel),
-      f.createArrowFunction(
-        undefined,
-        undefined,
-        [],
-        undefined,
-        f.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-        f.createBlock(seedOp ? [seededCallStatement(seedOp)] : [], true),
-      ),
-    ],
-  );
-}
-
-function seededCallStatement(opName: string): ts.Statement {
-  return f.createExpressionStatement(
-    f.createCallExpression(
-      f.createPropertyAccessExpression(
-        f.createIdentifier("api"),
-        f.createIdentifier(opName),
-      ),
-      undefined,
-      [],
-    ),
-  );
-}
-
-function scenariosEntry(
-  names: ReadonlyArray<string>,
-  pace: NonNullable<ScaffoldLoadtestOpts["pace"]>,
-  duration: string,
-  seedOp?: string,
-): ts.PropertyAssignment {
-  const scenarioObj = f.createObjectLiteralExpression(
-    names.map((name) =>
-      f.createPropertyAssignment(
+    const scenarios = $.object().pretty();
+    for (const name of opts.scenarios) {
+      scenarios.prop(
         name,
         objLit(
           {
-            scenario: f.createCallExpression(
-              f.createIdentifier(pace),
-              undefined,
-              [objLit({ duration: f.createStringLiteral(duration) })],
-            ),
-            flow: flowExpr(seedOp),
+            scenario: paceCall(pace, duration),
+            flow: flowExpr(opts.seedOperation),
           },
           true,
         ),
-      ),
-    ),
-    true,
-  );
-  return f.createPropertyAssignment("scenarios", scenarioObj);
+      );
+    }
+    config.prop("scenarios", scenarios);
+  } else {
+    config
+      .prop("scenario", paceCall(pace, duration))
+      .prop(
+        "budgets",
+        objLit({ p95: $.literal("500ms"), errors: $.literal("1%") }, true),
+      )
+      .prop("flow", flowExpr(opts.seedOperation));
+  }
+  return $.const("lt").assign($("defineLoadTest").call(config));
+}
+
+function paceCall(pace: string, duration: string): Expr {
+  return $(pace).call(objLit({ duration: $.literal(duration) }));
+}
+
+/** `flow().step("<seedOp|health>", () => { api.<seedOp>(); })` */
+function flowExpr(seedOp?: string): Expr {
+  const body = $.func();
+  if (seedOp) body.do($.stmt($("api").attr(seedOp).call()));
+  return $("flow")
+    .call()
+    .attr("step")
+    .call($.literal(seedOp ?? "health"), body);
 }

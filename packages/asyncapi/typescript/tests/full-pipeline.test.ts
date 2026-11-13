@@ -65,10 +65,10 @@ describe("full pipeline (all plugins enabled)", () => {
   it("events.gen.ts emits Events const with topology + EventName", async () => {
     const evts = await readGen(outDir, "events.gen.ts");
     expect(evts).toContain("userAccountCreated:");
-    expect(evts).toContain('"user.account.created.v1"');
-    expect(evts).toContain('"user.events"');
-    expect(evts).toContain('"topic"');
-    expect(evts).toContain('"application/cloudevents+json"');
+    expect(evts).toContain("'user.account.created.v1'");
+    expect(evts).toContain("'user.events'");
+    expect(evts).toContain("'topic'");
+    expect(evts).toContain("'application/cloudevents+json'");
     expect(evts).toContain("export const Events");
     expect(evts).toContain("as const;");
     expect(evts).toContain("export type EventName = keyof typeof Events");
@@ -79,14 +79,14 @@ describe("full pipeline (all plugins enabled)", () => {
     expect(map).toContain("import type {");
     expect(map).toContain("UserAccountCreatedMessage");
     expect(map).toContain("UserAccountDeletedMessage");
-    expect(map).toContain('from "./types.gen"');
+    expect(map).toContain("from './types.gen'");
     expect(map).toContain(
-      '"user.account.created.v1": UserAccountCreatedMessage',
+      "'user.account.created.v1': UserAccountCreatedMessage",
     );
     expect(map).toContain(
-      '"user.account.deleted.v1": UserAccountDeletedMessage',
+      "'user.account.deleted.v1': UserAccountDeletedMessage",
     );
-    expect(map).toContain("export interface EventMap");
+    expect(map).toContain("export type EventMap");
     expect(map).toContain("export type AnyMessage = EventMap[keyof EventMap]");
     expect(map).toContain("export function isMessageOfType");
     expect(map).toMatch(/msg is EventMap\[K\]/);
@@ -113,12 +113,12 @@ describe("full pipeline (all plugins enabled)", () => {
 
   it("index.gen.ts re-exports every plugin's surface", async () => {
     const idx = await readGen(outDir, "index.gen.ts");
-    expect(idx).toContain('from "./amqp.gen"');
-    expect(idx).toContain('from "./dispatch.gen"');
-    expect(idx).toContain('from "./event-map.gen"');
-    expect(idx).toContain('from "./events.gen"');
-    expect(idx).toContain('from "./handlers.gen"');
-    expect(idx).toContain('from "./types.gen"');
+    expect(idx).toContain("from './amqp.gen'");
+    expect(idx).toContain("from './dispatch.gen'");
+    expect(idx).toContain("from './event-map.gen'");
+    expect(idx).toContain("from './events.gen'");
+    expect(idx).toContain("from './handlers.gen'");
+    expect(idx).toContain("from './types.gen'");
   });
 });
 
@@ -165,7 +165,7 @@ describe("plugin dependency ordering", () => {
       expect(filenames).toContain("dispatch.gen.ts");
       expect(filenames).toContain("handlers.gen.ts");
       const idx = await readGen(outDir, "index.gen.ts");
-      expect(idx).toContain('from "./dispatch.gen"');
+      expect(idx).toContain("from './dispatch.gen'");
     } finally {
       await rm(outDir, { recursive: true, force: true });
     }
