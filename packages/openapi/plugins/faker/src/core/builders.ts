@@ -1,6 +1,5 @@
 import type { Symbol as CodegenSymbol } from "@hey-api/codegen-core";
-import { $, type TsDsl } from "@hey-api/openapi-ts";
-import type ts from "typescript";
+import { $, type CallArgs } from "@hey-api/openapi-ts";
 
 import { DATE_METHODS } from "./hints.js";
 import {
@@ -11,7 +10,7 @@ import {
 import type { PropertyInfo } from "./types.js";
 
 export type FakerSymbol = CodegenSymbol;
-export type FakerExpr = TsDsl<ts.Expression>;
+export type FakerExpr = NonNullable<CallArgs[number]>;
 
 export interface BuildFakerOptions extends ResolveOptions {
   /**

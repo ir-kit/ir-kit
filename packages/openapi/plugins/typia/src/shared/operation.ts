@@ -1,63 +1,30 @@
 import type { Symbol } from "@hey-api/codegen-core";
-import { $, type MaybeTsDsl, TsDsl, type TypeTsDsl } from "@hey-api/openapi-ts";
+import { $, type MaybeTsDsl, type TypeTsDsl } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
-import ts from "typescript";
 
 import type { TypiaPlugin } from "../types.js";
 
-export type RequestInputType = MaybeTsDsl<TypeTsDsl<ts.TypeNode>>;
+export type RequestInputType = MaybeTsDsl<TypeTsDsl>;
 
 /**
- * Emits `Data extends { [K]: infer V } ? [V] extends [undefined] ? unknown : V : unknown`.
+ * Emits `Data extends { [K]: unknown } ? [Data[K]] extends [undefined] ? unknown : Data[K] : unknown`.
  * Widens absent keys and `?: never` sections so HTTP adapters can pass `{}` / header bags
  * without tripping strict checks. Declared schemas fall through unchanged.
  */
-class HttpSectionFallbackTsDsl extends TsDsl<ts.ConditionalTypeNode> {
-  readonly "~dsl" = "HttpSectionFallbackTsDsl";
-
-  constructor(
-    private readonly _data: MaybeTsDsl<ts.TypeNode>,
-    private readonly _key: string,
-  ) {
-    super();
-  }
-
-  override toAst(): ts.ConditionalTypeNode {
-    const dataNode =
-      this._data instanceof TsDsl ? this._data.toAst() : this._data;
-    const inferVar = ts.factory.createTypeParameterDeclaration(undefined, "V");
-    const inferType = ts.factory.createInferTypeNode(inferVar);
-    const unknownNode = ts.factory.createKeywordTypeNode(
-      ts.SyntaxKind.UnknownKeyword,
-    );
-    const undefinedTuple = ts.factory.createTupleTypeNode([
-      ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
-    ]);
-
-    const presenceShape = ts.factory.createTypeLiteralNode([
-      ts.factory.createPropertySignature(
-        undefined,
-        ts.factory.createStringLiteral(this._key),
-        undefined,
-        inferType,
-      ),
-    ]);
-
-    const vRef = ts.factory.createTypeReferenceNode("V");
-    const innerConditional = ts.factory.createConditionalTypeNode(
-      ts.factory.createTupleTypeNode([vRef]),
-      undefinedTuple,
-      unknownNode,
-      vRef,
-    );
-
-    return ts.factory.createConditionalTypeNode(
-      dataNode,
-      presenceShape,
-      innerConditional,
-      unknownNode,
-    );
-  }
+function httpSectionFallback(data: Symbol, key: string): RequestInputType {
+  const unknown = $.type("unknown");
+  const value = $.type(data).idx($.type.literal(key));
+  return $.type
+    .ternary($.type(data))
+    .extends($.type.object().prop(key, (p) => p.type(unknown)))
+    .do(
+      $.type
+        .ternary($.type.tuple(value))
+        .extends($.type.tuple($.type("undefined")))
+        .do(unknown)
+        .otherwise(value),
+    )
+    .otherwise(unknown);
 }
 
 export function queryDataTypeSymbol(
@@ -109,8 +76,7 @@ export function buildRequestInputType(dataSymbol: Symbol): RequestInputType {
   );
   const stripped = $.type("Omit").generic($.type(dataSymbol)).generic(omitKeys);
 
-  const sectionFallback = (key: string): HttpSectionFallbackTsDsl =>
-    new HttpSectionFallbackTsDsl($.type(dataSymbol), key);
+  const sectionFallback = (key: string) => httpSectionFallback(dataSymbol, key);
 
   const overrides = $.type
     .object()

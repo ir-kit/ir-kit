@@ -1,3 +1,4 @@
+import type { Symbol } from "@hey-api/codegen-core";
 import type { PluginInstance } from "@hey-api/shared";
 
 const external = (
@@ -5,7 +6,7 @@ const external = (
   name: string,
   module: string,
   resource = `${module}.${name}`,
-) =>
+): Symbol =>
   plugin.symbolFactory.register(name, {
     external: module,
     meta: { category: "external", resource },

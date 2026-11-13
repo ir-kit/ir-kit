@@ -1,6 +1,11 @@
-import type { $ } from "@hey-api/openapi-ts";
+import type { Symbol } from "@hey-api/codegen-core";
+import {
+  $,
+  type MaybeTsDsl,
+  type TypeTransformer,
+  type TypeTsDsl,
+} from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
-import ts from "typescript";
 
 import {
   TYPIA_FORMAT_VALUES,
@@ -89,51 +94,68 @@ const TAG_PLAN: Readonly<
   return plan;
 })();
 
-/**
- * Annotates a schema's generated TypeScript type with typia constraint
- * tag intersections. Register on `@hey-api/transformers.typeTransformers`.
- */
-export function typiaTypeTransformer(ctx: {
-  $: typeof $;
-  schema: IR.SchemaObject;
-}): ts.TypeNode | undefined {
+type TypeExpr = MaybeTsDsl<TypeTsDsl>;
+type TransformerContext = Parameters<TypeTransformer>[0];
+
+const tagsSymbols = new WeakMap<object, Symbol>();
+
+function tagsSymbol(plugin: TransformerContext["plugin"]): Symbol {
+  let symbol = tagsSymbols.get(plugin);
+  if (!symbol) {
+    symbol = plugin.symbolFactory.register("tags", {
+      external: "typia",
+      meta: { category: "external", resource: "typia.tags" },
+    });
+    tagsSymbols.set(plugin, symbol);
+  }
+  return symbol;
+}
+
+function transform(ctx: TransformerContext): TypeExpr | undefined {
   const { schema } = ctx;
+  const tags = () => tagsSymbol(ctx.plugin);
 
   if (schema.type === "string") {
-    const tagNodes = collectTags(schema, "string");
+    const tagNodes = collectTags(schema, "string", tags);
     return tagNodes.length
-      ? ts.factory.createIntersectionTypeNode([stringKeyword(), ...tagNodes])
+      ? $.type.and($.type("string"), ...tagNodes)
       : undefined;
   }
 
   if (schema.type === "integer" || schema.type === "number") {
-    const tagNodes = collectTags(schema, "number");
+    const tagNodes = collectTags(schema, "number", tags);
     return tagNodes.length
-      ? ts.factory.createIntersectionTypeNode([numberKeyword(), ...tagNodes])
+      ? $.type.and($.type("number"), ...tagNodes)
       : undefined;
   }
 
   if (schema.type === "array") {
-    const tagNodes = collectTags(schema, "array");
+    const tagNodes = collectTags(schema, "array", tags);
     if (!tagNodes.length) return;
 
-    const itemTypeNode = buildArrayItemType(ctx);
-    if (!itemTypeNode) return;
+    const itemType = buildArrayItemType(ctx);
+    if (!itemType) return;
 
-    return ts.factory.createIntersectionTypeNode([
-      ts.factory.createTypeReferenceNode("Array", [itemTypeNode]),
-      ...tagNodes,
-    ]);
+    return $.type.and($.type("Array").generic(itemType), ...tagNodes);
   }
 
   return;
 }
 
+/**
+ * Annotates a schema's generated TypeScript type with typia constraint
+ * tag intersections. Register on `@hey-api/transformers.typeTransformers`.
+ */
+// why: `TypeTransformer` is typed to return a plain type reference, but the
+// typescript plugin accepts any type node, and tags need an intersection.
+export const typiaTypeTransformer = transform as unknown as TypeTransformer;
+
 function collectTags(
   schema: IR.SchemaObject,
   target: OpenApiTarget,
-): Array<ts.TypeNode> {
-  const out: Array<ts.TypeNode> = [];
+  tags: () => Symbol,
+): Array<TypeExpr> {
+  const out: Array<TypeExpr> = [];
   for (const { field, name } of TAG_PLAN[target]) {
     const value = (schema as Record<string, unknown>)[field];
     if (value == null) continue;
@@ -152,82 +174,39 @@ function collectTags(
       if (!TYPIA_FORMATS.has(value)) continue;
     } else if (name === "UniqueItems") {
       if (value !== true) continue;
-      out.push(buildTagNode("UniqueItems", null));
+      out.push($.type(tags()).attr("UniqueItems"));
       continue;
     }
 
-    out.push(buildTagNode(name, value as number | string));
+    out.push(
+      $.type(tags())
+        .attr(name)
+        .generic($.type.literal(value as number | string)),
+    );
   }
   return out;
 }
 
-function buildArrayItemType(ctx: {
-  $: typeof $;
-  schema: IR.SchemaObject;
-}): ts.TypeNode | null {
+function buildArrayItemType(ctx: TransformerContext): TypeExpr | null {
   const items = ctx.schema.items;
-  if (!items || items.length === 0) {
-    return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword);
-  }
-  if (items.length === 1) {
-    return (
-      typiaTypeTransformer({ ...ctx, schema: items[0]! }) ??
-      primitiveToTypeNode(items[0]!)
-    );
-  }
+  if (!items || items.length === 0) return $.type("unknown");
   const mapped = items.map(
-    (item) =>
-      typiaTypeTransformer({ ...ctx, schema: item }) ??
-      primitiveToTypeNode(item),
+    (item) => transform({ ...ctx, schema: item }) ?? primitiveType(item),
   );
-  return mapped.every((n) => n !== null)
-    ? ts.factory.createUnionTypeNode(mapped as Array<ts.TypeNode>)
-    : null;
+  if (!mapped.every((n) => n !== null)) return null;
+  return mapped.length === 1 ? mapped[0]! : $.type.or(...mapped);
 }
 
-function buildTagNode(
-  tagName: TypiaTagName,
-  value: number | string | null,
-): ts.TypeNode {
-  const typeArgs =
-    value === null
-      ? undefined
-      : [
-          ts.factory.createLiteralTypeNode(
-            typeof value === "number"
-              ? ts.factory.createNumericLiteral(value)
-              : ts.factory.createStringLiteral(value),
-          ),
-        ];
-  return ts.factory.createImportTypeNode(
-    ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral("typia")),
-    undefined,
-    ts.factory.createQualifiedName(
-      ts.factory.createIdentifier("tags"),
-      ts.factory.createIdentifier(tagName),
-    ),
-    typeArgs,
-  );
-}
-
-function primitiveToTypeNode(schema: IR.SchemaObject): ts.TypeNode | null {
+function primitiveType(schema: IR.SchemaObject): TypeExpr | null {
   switch (schema.type) {
     case "boolean":
-      return ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword);
+      return $.type("boolean");
     case "integer":
     case "number":
-      return numberKeyword();
+      return $.type("number");
     case "string":
-      return stringKeyword();
+      return $.type("string");
     default:
       return null;
   }
-}
-
-function stringKeyword(): ts.KeywordTypeNode {
-  return ts.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
-}
-
-function numberKeyword(): ts.KeywordTypeNode {
-  return ts.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword);
 }
