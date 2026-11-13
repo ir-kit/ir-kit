@@ -1,5 +1,12 @@
 # @ir-kit/cli
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies [e3a513e]
+  - @ir-kit/openapi-kotlin@4.0.2
+
 ## 0.3.3
 
 ### Patch Changes

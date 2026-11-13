@@ -1,5 +1,11 @@
 # @ir-kit/openapi-kotlin
 
+## 4.0.2
+
+### Patch Changes
+
+- e3a513e: With `gradle` set, the Kotlin sources now go under `src/main/kotlin/`. Before, they sat at the output root, where Gradle doesn't look, so `gradle build` passed without compiling anything.
+
 ## 4.0.1
 
 ### Patch Changes
