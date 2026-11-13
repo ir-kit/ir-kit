@@ -100,13 +100,15 @@ function moduleExport(group: EmitTsExportGroup): ModuleExport {
 }
 
 /**
- * Compute a TS-style relative module specifier between two logical (no-extension)
- * file paths. Always emits POSIX separators and a leading `./` for sibling files
- * so the output works the same on Windows hosts and resolves correctly under
- * `moduleResolution: bundler` / `nodenext`.
+ * Relative module specifier between two logical (no-extension) file paths,
+ * with POSIX separators and a `.js` extension so it resolves under Node ESM,
+ * `nodenext` and `bundler` alike.
  */
 function relativeModulePath(fromLogical: string, toLogical: string): string {
-  const fromDir = posix.dirname(fromLogical);
-  const rel = posix.relative(fromDir, toLogical);
-  return rel.startsWith(".") ? rel : `./${rel}`;
+  const rel = posix.relative(posix.dirname(fromLogical), toLogical);
+  return withJsExtension(rel.startsWith(".") ? rel : `./${rel}`);
+}
+
+function withJsExtension(specifier: string): string {
+  return specifier.startsWith(".") ? `${specifier}.js` : specifier;
 }

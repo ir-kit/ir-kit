@@ -126,9 +126,7 @@ Three `@hey-api/openapi-ts` plugins ship in lockstep via Changesets' `fixed` con
 
 | Example | Shows |
 | --- | --- |
-| [`openapi-sdk-petstore`](./examples/openapi-sdk-petstore) | Generate Go / Kotlin / Swift / TypeScript SDKs from the petstore spec. Each language has a buildable consumer app under `<lang>/example/` exercising CRUD, auth, multipart, per-call options, response headers, validators, transformers. |
-| [`k6-petstore`](./examples/k6-petstore) | End-to-end k6 track: `pnpm sync` (driving `ir-kit/k6-toolkit`'s `sync()`) generates a typed client from `petstore.yaml`, then `loadtest.ts` composes 4 scenarios (browse / write / stress / spike) with flat budgets, per-op overrides, step chaining, and `data.<Type>()` faker payloads. `pnpm run:smoke` runs against the public petstore demo. |
-| [`asyncapi-events`](./examples/asyncapi-events) | `ir-kit/sdk/asyncapi` against an AsyncAPI 3.0 spec — emits typed event constants, dispatch helpers, AMQP bindings, framework adapters. Real RabbitMQ producer/consumer demos drive the generated SDK. |
+| [`petstore`](./examples/petstore) | One `ir.config.ts` turns `petstore.yaml` into Go, Kotlin, Swift, Java, TypeScript and k6 clients, and `user-events.yaml` into AsyncAPI building blocks. Each language has a consumer app under `<lang>/example/`; `k6/loadtest.ts` and `events/` run against the petstore demo and a local RabbitMQ. CI runs `ir generate --check` on it. |
 | [`fn-schema-basic`](./examples/fn-schema-basic) | `ir fn-schema extract` (powered by `ir-kit/fn-schema`) extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |
 
 ## Contributing
