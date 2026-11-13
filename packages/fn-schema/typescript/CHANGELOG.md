@@ -1,5 +1,14 @@
 # @ir-kit/fn-schema-typescript
 
+## 0.1.4
+
+### Patch Changes
+
+- 3b8caa3: Work with TypeScript 7 installed. `@ir-kit/cli` no longer installs TypeScript 5, `@ir-kit/fn-schema-typescript` no longer asks for `typescript <7` (ts-morph and ts-json-schema-generator bring their own compiler), and the oRPC plugin parses handler files with the compiler that ships with ts-morph.
+- Updated dependencies [b7b4d52]
+- Updated dependencies [c218e3b]
+  - @ir-kit/fn-schema-core@0.2.2
+
 ## 0.1.3
 
 ### Patch Changes

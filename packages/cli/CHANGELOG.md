@@ -1,5 +1,29 @@
 # @ir-kit/cli
 
+## 0.3.3
+
+### Patch Changes
+
+- b7b4d52: `ir sdk all` now loads the spec once and gives the loaded document to every target, so `.tsp` input works for the `typescript` and `k6` targets too (they used to get the raw path and fail). All `ir sdk <target>` commands now come from one target table.
+- 3b8caa3: Work with TypeScript 7 installed. `@ir-kit/cli` no longer installs TypeScript 5, `@ir-kit/fn-schema-typescript` no longer asks for `typescript <7` (ts-morph and ts-json-schema-generator bring their own compiler), and the oRPC plugin parses handler files with the compiler that ships with ts-morph.
+- Updated dependencies [b7b4d52]
+- Updated dependencies [3b8caa3]
+- Updated dependencies [c218e3b]
+  - @ir-kit/fn-schema-core@0.2.2
+  - @ir-kit/fn-schema-typescript@0.1.4
+  - @ir-kit/openapi-go@4.0.1
+  - @ir-kit/openapi-kotlin@4.0.1
+  - @ir-kit/openapi-swift@4.0.1
+  - @ir-kit/spec-convert@0.4.1
+  - @ir-kit/k6-toolkit@0.3.1
+  - @ir-kit/openapi-typescript@0.4.1
+  - @ir-kit/k6-gen@0.5.1
+  - @ir-kit/openapi-java@2.0.1
+  - @ir-kit/schema@0.4.1
+  - @ir-kit/spec-diff@0.2.4
+  - @ir-kit/spec-docs@0.2.4
+  - @ir-kit/spec-loader@0.3.2
+
 ## 0.3.2
 
 ### Patch Changes

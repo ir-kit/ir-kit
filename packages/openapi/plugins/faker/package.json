@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-ts-faker",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Faker.js plugin for @hey-api/openapi-ts - Generate realistic mock data factories from OpenAPI specs",
   "keywords": [
     "openapi",

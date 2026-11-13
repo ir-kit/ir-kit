@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-swift",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Generate idiomatic Swift (Codable + URLSession + async throws) client SDKs from an OpenAPI 3.x spec.",
   "keywords": [
     "openapi",

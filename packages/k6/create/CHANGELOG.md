@@ -1,5 +1,12 @@
 # @ir-kit/create-k6
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [c218e3b]
+  - @ir-kit/k6-toolkit@0.3.1
+
 ## 0.1.7
 
 ### Patch Changes
