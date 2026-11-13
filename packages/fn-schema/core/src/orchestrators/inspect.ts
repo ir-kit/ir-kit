@@ -4,7 +4,13 @@ import type { ExtractResult } from "../types.js";
 type SignatureEntry = ExtractResult["signatures"][number];
 
 import { loadFnSchemaConfig } from "./config.js";
-import { baseExtractOpts, listSourceFiles, resolveCwd } from "./helpers.js";
+import {
+  baseExtractOpts,
+  listSourceFiles,
+  mergeSchema,
+  mergeSignature,
+  resolveCwd,
+} from "./helpers.js";
 
 export interface RunInspectOptions {
   name: string;
@@ -56,16 +62,8 @@ export async function runInspect(
       ...baseOpts,
       files,
       include: { name: opts.name },
-      signature: {
-        ...(config.signature ?? {}),
-        parameters: opts.params ?? config.signature?.parameters,
-        unwrapPromise: opts.unwrapPromise ?? config.signature?.unwrapPromise,
-      },
-      schema: {
-        ...(config.schema ?? {}),
-        identity: opts.identity ?? config.schema?.identity,
-        transport: opts.transport ?? config.schema?.transport,
-      },
+      signature: mergeSignature(opts, config),
+      schema: mergeSchema(opts, config),
     });
     const matches = result.signatures.filter((s) => s.name === opts.name);
     if (matches.length === 0) {

@@ -1,18 +1,11 @@
 import { join } from "node:path";
-import { generate as generateK6 } from "@ir-kit/k6-gen";
-import { generate as generateTypescript } from "@ir-kit/openapi-typescript";
 import type { Schema } from "@ir-kit/schema";
 
 import type { CommandSpec } from "../command-spec.js";
 import { loadOpenAPIForSdk } from "./_load-openapi.js";
-import { type NativeSdkTargetName, nativeSdkTargets } from "./sdk-native.js";
+import { type SdkTargetName, sdkTargets } from "./sdk-targets.js";
 
-const TARGETS = [
-  ...(Object.keys(nativeSdkTargets) as NativeSdkTargetName[]),
-  "typescript",
-  "k6",
-] as const;
-type Target = (typeof TARGETS)[number];
+const TARGETS = Object.keys(sdkTargets) as SdkTargetName[];
 
 interface Input {
   input: string;
@@ -68,36 +61,15 @@ export const sdkAllCommand: CommandSpec<Input, void> = {
         );
       }
     }
-    const targets = requested as ReadonlyArray<Target>;
-    const native = targets.some((t) => t in nativeSdkTargets)
-      ? await loadOpenAPIForSdk(input.input)
-      : undefined;
-
-    for (const target of targets) {
+    const doc = await loadOpenAPIForSdk(input.input);
+    for (const target of requested as SdkTargetName[]) {
       const out = join(input.output, target);
-      const common = {
+      await sdkTargets[target].generate(doc, {
         input: input.input,
         output: out,
         clean: input.clean,
         normalize: input.normalize,
-      };
-      if (native && target in nativeSdkTargets)
-        await nativeSdkTargets[target as NativeSdkTargetName].generate(
-          native,
-          common,
-        );
-      else if (target === "typescript")
-        await generateTypescript({
-          input: input.input,
-          output: out,
-          normalize: input.normalize,
-        });
-      else if (target === "k6")
-        await generateK6({
-          input: input.input,
-          output: out,
-          normalize: input.normalize,
-        });
+      });
       process.stdout.write(`✓ ${target} → ${out}\n`);
     }
   },

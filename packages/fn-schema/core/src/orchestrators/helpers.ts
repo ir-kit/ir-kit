@@ -1,8 +1,8 @@
 import path from "node:path";
-
 import { glob } from "tinyglobby";
-
 import type { ExcludeFilter, ExtractOptions, IncludeFilter } from "../types.js";
+import type { loadFnSchemaConfig } from "./config.js";
+import type { RunExtractOptions } from "./extract.js";
 
 export function resolveCwd(cwd: string | undefined): string {
   return path.resolve(cwd ?? process.cwd());
@@ -109,4 +109,52 @@ export function baseExtractOpts(
     include: mergeInclude(config.include, args.includeTag),
     exclude: mergeExclude(config.exclude, args.excludeName),
   };
+}
+
+type FnSchemaConfig = Awaited<ReturnType<typeof loadFnSchemaConfig>>;
+
+/** CLI flags over config for the `signature` options. */
+export function mergeSignature(
+  opts: Pick<RunExtractOptions, "params" | "unwrapPromise">,
+  config: FnSchemaConfig,
+): ExtractOptions["signature"] {
+  return {
+    ...(config.signature ?? {}),
+    parameters: opts.params ?? config.signature?.parameters,
+    unwrapPromise: opts.unwrapPromise ?? config.signature?.unwrapPromise,
+  };
+}
+
+/** CLI flags over config for the `schema` options. `""` or `"false"` turns a keyword off. */
+export function mergeSchema(
+  opts: Partial<
+    Pick<
+      RunExtractOptions,
+      "dialect" | "identity" | "transport" | "sourceLocations"
+    >
+  >,
+  config: FnSchemaConfig,
+): ExtractOptions["schema"] {
+  return {
+    ...(config.schema ?? {}),
+    dialect: opts.dialect ?? config.schema?.dialect,
+    identity: pickKey(opts.identity, config.schema?.identity),
+    transport: pickKey(opts.transport, config.schema?.transport),
+    sourceLocations: pickKey(
+      opts.sourceLocations,
+      config.schema?.sourceLocations,
+    ),
+  };
+}
+
+function pickKey(
+  cli: string | false | undefined,
+  fallback: false | string | undefined,
+): false | string {
+  if (cli === false) return false;
+  if (typeof cli === "string") {
+    if (cli === "" || cli === "false") return false;
+    return cli;
+  }
+  return fallback ?? false;
 }

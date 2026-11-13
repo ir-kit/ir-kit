@@ -4,7 +4,8 @@
  * Deviations: signature includes `format`; only the `'root'` direction
  * is supported; metadata is reconciled across hits (see `metadata.ts`).
  */
-import { preserveMetadata } from "./metadata.js";
+
+import { canonicalBase, hoistGroups, type InlineHit } from "./hoist.js";
 import type { NamingConfig } from "./name.js";
 import { applyNaming, uniqueComponentName } from "./name.js";
 import {
@@ -45,13 +46,6 @@ export function dedupeInlineEnums(
     if (signature) existingBySignature[signature] = name;
   }
 
-  interface InlineHit {
-    parent: Record<string, unknown> | unknown[];
-    key: string | number;
-    signature: string;
-    schema: unknown;
-  }
-
   const hits: InlineHit[] = [];
   const hitsBySignature = new Map<string, InlineHit[]>();
   walkSchemas(spec, ({ key, node, parent, path }) => {
@@ -73,7 +67,6 @@ export function dedupeInlineEnums(
   if (hits.length === 0) return hoisted;
 
   const nameBySignature = new Map<string, string>();
-  const schemaBySignature = new Map<string, unknown>();
   const reservedNames = new Set<string>();
 
   for (const { schema, signature, key } of hits) {
@@ -87,30 +80,15 @@ export function dedupeInlineEnums(
     const name = uniqueComponentName(base, schemas, reservedNames);
     reservedNames.add(name);
     nameBySignature.set(signature, name);
-    schemaBySignature.set(signature, schema);
   }
 
-  for (const [signature, name] of nameBySignature) {
-    if (name in schemas) continue;
-    const schema = schemaBySignature.get(signature);
-    if (schema && typeof schema === "object") {
-      const target = schema as Record<string, unknown>;
-      preserveMetadata(hitsBySignature.get(signature) ?? [], target);
-      schemas[name] = target;
-      hoisted.add(name);
-    }
-  }
-
-  for (const { parent, key, signature } of hits) {
-    const name = nameBySignature.get(signature);
-    if (!name) continue;
-    const ref = { $ref: `${pointerPrefix}${name}` };
-    if (Array.isArray(parent)) {
-      parent[key as number] = ref;
-    } else {
-      parent[key as string] = ref;
-    }
-  }
+  hoistGroups(
+    schemas,
+    pointerPrefix,
+    hitsBySignature,
+    nameBySignature,
+    hoisted,
+  );
   return hoisted;
 }
 
@@ -124,12 +102,4 @@ function enumSignature(schema: unknown): string | undefined {
     format: s.format ?? "",
     values: [...s.enum].sort(),
   });
-}
-
-function canonicalBase(schema: unknown, key: string | number): string {
-  if (schema && typeof schema === "object" && "title" in schema) {
-    const title = (schema as Record<string, unknown>).title;
-    if (typeof title === "string" && title) return title;
-  }
-  return String(key);
 }

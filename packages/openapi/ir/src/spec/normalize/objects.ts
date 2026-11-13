@@ -1,4 +1,4 @@
-import { preserveMetadata } from "./metadata.js";
+import { canonicalBase, hoistGroups, type InlineHit } from "./hoist.js";
 import type { NamingConfig } from "./name.js";
 import { applyNaming, uniqueComponentName } from "./name.js";
 import {
@@ -38,13 +38,6 @@ export function dedupeInlineObjects(
   const naming = opts.naming ?? DEFAULT_NAMING;
   const minProperties = Math.max(1, opts.minProperties ?? 3);
 
-  interface InlineHit {
-    parent: Record<string, unknown> | unknown[];
-    key: string | number;
-    signature: string;
-    schema: unknown;
-  }
-
   const groups = new Map<string, InlineHit[]>();
   walkSchemas(spec, ({ key, node, parent, path }) => {
     if (key === null || parent === null) return;
@@ -64,7 +57,6 @@ export function dedupeInlineObjects(
   if (groups.size === 0) return hoisted;
 
   const nameBySignature = new Map<string, string>();
-  const schemaBySignature = new Map<string, unknown>();
   const reservedNames = new Set<string>();
 
   for (const [signature, hits] of groups) {
@@ -77,29 +69,9 @@ export function dedupeInlineObjects(
     const name = uniqueComponentName(base, schemas, reservedNames);
     reservedNames.add(name);
     nameBySignature.set(signature, name);
-    schemaBySignature.set(signature, first.schema);
   }
 
-  for (const [signature, name] of nameBySignature) {
-    if (name in schemas) continue;
-    const schema = schemaBySignature.get(signature);
-    if (schema && typeof schema === "object") {
-      const target = schema as Record<string, unknown>;
-      preserveMetadata(groups.get(signature) ?? [], target);
-      schemas[name] = target;
-      hoisted.add(name);
-    }
-  }
-
-  for (const [signature, hits] of groups) {
-    const name = nameBySignature.get(signature);
-    if (!name) continue;
-    for (const { parent, key } of hits) {
-      const ref = { $ref: `${pointerPrefix}${name}` };
-      if (Array.isArray(parent)) parent[key as number] = ref;
-      else parent[key as string] = ref;
-    }
-  }
+  hoistGroups(schemas, pointerPrefix, groups, nameBySignature, hoisted);
   return hoisted;
 }
 
@@ -193,14 +165,6 @@ function additionalPropertiesSignature(value: unknown): string {
   if (value === false) return "false";
   if (value === true) return "true";
   return propertySignature(value);
-}
-
-function canonicalBase(schema: unknown, key: string | number): string {
-  if (schema && typeof schema === "object" && "title" in schema) {
-    const title = (schema as Record<string, unknown>).title;
-    if (typeof title === "string" && title) return title;
-  }
-  return String(key);
 }
 
 /** Reject numeric / generic keys that would yield meaningless type names like `0Object` or `DataObject`. Title overrides. */
