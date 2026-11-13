@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "openapi-ts": "openapi-ts",
-    "typia:smoke": "tspc -p tsconfig.typia.json && node .typia-smoke/typia-smoke.js",
+    "typia:smoke": "ttsc -p tsconfig.typia.json && node .typia-smoke/typia-smoke.js",
     "start": "next start"
   },
   "dependencies": {
@@ -24,7 +24,7 @@
     "next": "15.2.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "typia": "12.0.2"
+    "typia": "15.4.0"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "catalog:",
@@ -32,8 +32,8 @@
     "@ir-kit/openapi-ts-orpc": "workspace:*",
     "@ir-kit/openapi-ts-paths": "workspace:*",
     "@ir-kit/openapi-ts-typia": "workspace:*",
-    "@ryoppippi/unplugin-typia": "^2.6.5",
     "@tailwindcss/postcss": "^4.3.5",
+    "@ttsc/unplugin": "^0.37.0",
     "@types/node": "24.10.10",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -41,7 +41,8 @@
     "eslint-config-next": "15.1.6",
     "postcss": "8.4.41",
     "tailwindcss": "^4.2.4",
-    "ts-patch": "^3.3.0",
-    "typescript": "5.9.3"
+    "ttsc": "^0.37.0",
+    "typescript": "5.9.3",
+    "typescript-7": "npm:typescript@7.0.2"
   }
 }

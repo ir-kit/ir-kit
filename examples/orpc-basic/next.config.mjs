@@ -1,4 +1,7 @@
-import unTypiaNext from "@ryoppippi/unplugin-typia/next";
+import withTtsc from "@ttsc/unplugin/next";
 
 /** @type {import('next').NextConfig} */
-export default unTypiaNext({});
+export default withTtsc(
+  {},
+  { plugins: [{ transform: "typia/lib/transform" }] },
+);

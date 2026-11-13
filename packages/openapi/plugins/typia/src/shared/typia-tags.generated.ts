@@ -2,7 +2,7 @@
  * AUTO-GENERATED — do not edit.
  * Regenerate via `pnpm sync-tags` after bumping typia.
  *
- * Source: @typia/interface v12.0.2
+ * Source: @typia/interface v15.4.0
  */
 
 export const TYPIA_TAGS = [
@@ -11,6 +11,7 @@ export const TYPIA_TAGS = [
   "Default",
   "Example",
   "Examples",
+  "Exclude",
   "ExclusiveMaximum",
   "ExclusiveMinimum",
   "Format",
@@ -23,6 +24,7 @@ export const TYPIA_TAGS = [
   "Minimum",
   "MultipleOf",
   "Pattern",
+  "Probability",
   "Sequence",
   "TagBase",
   "Type",
@@ -34,7 +36,7 @@ export const TYPIA_TAG_META = {
   ContentMediaType: { kind: "contentMediaType", targets: ["string"] as const },
   Default: {
     kind: "default",
-    targets: ["boolean", "bigint", "number", "string"] as const,
+    targets: ["array", "boolean", "bigint", "number", "string"] as const,
   },
   Example: {
     kind: "example",
@@ -57,6 +59,10 @@ export const TYPIA_TAG_META = {
       "array",
       "object",
     ] as const,
+  },
+  Exclude: {
+    kind: "exclude",
+    targets: ["bigint", "number", "string"] as const,
   },
   ExclusiveMaximum: {
     kind: "exclusiveMaximum",
@@ -86,6 +92,10 @@ export const TYPIA_TAG_META = {
   Minimum: { kind: "minimum", targets: ["bigint", "number"] as const },
   MultipleOf: { kind: "multipleOf", targets: ["bigint", "number"] as const },
   Pattern: { kind: "pattern", targets: ["string"] as const },
+  Probability: {
+    kind: "probability",
+    targets: ["boolean", "string", "number"] as const,
+  },
   Sequence: {
     kind: "sequence",
     targets: [
@@ -128,6 +138,10 @@ export const TYPIA_FORMAT_VALUES = [
 ] as const;
 
 export const TYPIA_INTEGER_FORMATS = [
+  "int8",
+  "uint8",
+  "int16",
+  "uint16",
   "int32",
   "uint32",
   "int64",
