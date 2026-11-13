@@ -2,9 +2,8 @@ import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { assertSafeOutputDir } from "../../codegen/index.js";
-import type { IR } from "../../ir/index.js";
+import { type IR, parseOpenAPI } from "../../ir/index.js";
 import type { NormalizeOptions } from "../../openapi/index.js";
-import { parseSpec } from "../../openapi-tools/parse.js";
 import { loadOpenAPI } from "../../spec/openapi/index.js";
 
 import {
@@ -61,7 +60,7 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     input: opts.input,
     normalize: opts.normalize,
   });
-  const ir = parseSpec(bundled);
+  const ir = parseOpenAPI(bundled);
 
   const defaultBaseUrl = opts.defaultBaseUrl ?? ir.servers?.[0]?.url ?? "";
 

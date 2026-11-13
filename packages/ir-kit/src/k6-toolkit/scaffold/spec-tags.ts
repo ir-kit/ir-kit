@@ -1,4 +1,4 @@
-import type { IR } from "../../openapi-tools/index.js";
+import type { IR } from "../../ir/index.js";
 import { type WalkedOperation, walkOperations } from "../../sdk/k6/index.js";
 
 /** Tag-bucketed view of a spec's operations — `"_untagged"` collects ops with no tag. */

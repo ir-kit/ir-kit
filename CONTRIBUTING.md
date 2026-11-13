@@ -47,7 +47,7 @@ The TypeScript codegen layer in this repo (everything that emits `.ts` files) is
 | Need | Use |
 | --- | --- |
 | Bundle external `$ref`s in an OpenAPI spec | `$RefParser` from `@hey-api/json-schema-ref-parser` |
-| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseSpec` from `ir-kit/openapi-tools/parse` (wraps hey-api's parser) |
+| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseOpenAPI` from `ir-kit/ir` |
 | Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `ir-kit/openapi` |
 | Safe-write a generated output directory | `assertSafeOutputDir` from `ir-kit/codegen` |
 | Build TypeScript ASTs (when emitting `.ts`) | `$` DSL from `@hey-api/openapi-ts` — `$.const`, `$.func`, `$.type.*`, `$.literal`, `$().attr().call()`. Compiles to `ts.factory` underneath, so `.toAst()` returns plain TS AST when you need to print standalone. |

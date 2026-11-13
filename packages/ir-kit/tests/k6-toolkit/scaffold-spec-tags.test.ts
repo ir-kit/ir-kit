@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
+import type { IR } from "../../src/ir/index.js";
 import {
   readSpecOperations,
   UNTAGGED,
 } from "../../src/k6-toolkit/scaffold/spec-tags.ts";
-import type { IR } from "../../src/openapi-tools/index.js";
 
 function makePaths(): IR.Paths {
   return {
