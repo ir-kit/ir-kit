@@ -47,9 +47,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
-  "dependencies": {
-    "@ir-kit/fn-schema-core": "workspace:*"
-  },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",

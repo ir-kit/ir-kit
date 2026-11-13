@@ -55,8 +55,7 @@
   },
   "dependencies": {
     "@ir-kit/openapi": "workspace:*",
-    "@ir-kit/openapi-loader": "workspace:*",
-    "@ir-kit/openapi-tools": "workspace:*"
+    "@ir-kit/openapi-loader": "workspace:*"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "catalog:",

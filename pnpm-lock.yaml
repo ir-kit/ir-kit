@@ -478,10 +478,6 @@ importers:
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/fn-schema/loader:
-    dependencies:
-      '@ir-kit/fn-schema-core':
-        specifier: workspace:*
-        version: link:../core
     devDependencies:
       '@ir-kit/tsconfig':
         specifier: workspace:*
@@ -494,13 +490,6 @@ importers:
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/fn-schema/transformer:
-    dependencies:
-      '@ir-kit/fn-schema-core':
-        specifier: workspace:*
-        version: link:../core
-      '@ir-kit/fn-schema-typescript':
-        specifier: workspace:*
-        version: link:../typescript
     devDependencies:
       '@ir-kit/tsconfig':
         specifier: workspace:*
@@ -678,9 +667,6 @@ importers:
       '@ir-kit/openapi-tools':
         specifier: workspace:*
         version: link:../../openapi/tools
-      tinyglobby:
-        specifier: 'catalog:'
-        version: 0.2.16
       tsdown:
         specifier: 'catalog:'
         version: 0.22.0(tsx@4.21.0)(typescript@7.0.2)
@@ -957,9 +943,6 @@ importers:
         specifier: workspace:^
         version: link:../kit
     devDependencies:
-      '@hey-api/codegen-core':
-        specifier: 'catalog:'
-        version: 0.0.0-next-20260930190945(magicast@0.5.2)
       '@hey-api/openapi-ts':
         specifier: 'catalog:'
         version: 0.0.0-next-20260930190945(magicast@0.5.2)
@@ -1110,9 +1093,6 @@ importers:
       '@ir-kit/openapi-loader':
         specifier: workspace:*
         version: link:../loader
-      '@ir-kit/openapi-tools':
-        specifier: workspace:*
-        version: link:../tools
     devDependencies:
       '@hey-api/openapi-ts':
         specifier: 'catalog:'

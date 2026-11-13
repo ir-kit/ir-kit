@@ -51,10 +51,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
-  "dependencies": {
-    "@ir-kit/fn-schema-core": "workspace:*",
-    "@ir-kit/fn-schema-typescript": "workspace:*"
-  },
   "peerDependencies": {
     "typescript": ">=5.0.0 <7"
   },
