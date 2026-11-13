@@ -10,14 +10,14 @@ import { tCreateShapeData, tCreateShapeResponse, tDeleteOrderData, tDeleteOrderR
  * Returns a map of status codes to quantities.
  */
 export const GetInventoryContract = oc.route({
-    method: 'GET',
-    path: '/store/inventory',
-    operationId: 'getInventory',
-    summary: 'Returns pet inventories by status.',
-    description: 'Returns a map of status codes to quantities.',
-    tags: ['store'],
-    successStatus: 200,
-    successDescription: 'successful operation'
+  method: 'GET',
+  path: '/store/inventory',
+  operationId: 'getInventory',
+  summary: 'Returns pet inventories by status.',
+  description: 'Returns a map of status codes to quantities.',
+  tags: ['store'],
+  successStatus: 200,
+  successDescription: 'successful operation'
 }).output(tGetInventoryResponse);
 
 /**
@@ -26,18 +26,18 @@ export const GetInventoryContract = oc.route({
  * Place a new order in the store.
  */
 export const PlaceOrderContract = oc.route({
-    method: 'POST',
-    path: '/store/order',
-    operationId: 'placeOrder',
-    summary: 'Place an order for a pet.',
-    description: 'Place a new order in the store.',
-    tags: ['store'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/store/order',
+  operationId: 'placeOrder',
+  summary: 'Place an order for a pet.',
+  description: 'Place a new order in the store.',
+  tags: ['store'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tPlaceOrderData).output(tPlaceOrderResponse).errors({
-    400: { data: tPlaceOrderResponseError400 },
-    422: { data: tPlaceOrderResponseError422 }
+  400: { data: tPlaceOrderResponseError400 },
+  422: { data: tPlaceOrderResponseError422 }
 });
 
 /**
@@ -46,18 +46,18 @@ export const PlaceOrderContract = oc.route({
  * For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors.
  */
 export const DeleteOrderContract = oc.route({
-    method: 'DELETE',
-    path: '/store/order/{orderId}',
-    operationId: 'deleteOrder',
-    summary: 'Delete purchase order by identifier.',
-    description: 'For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors.',
-    tags: ['store'],
-    successStatus: 200,
-    successDescription: 'order deleted',
-    inputStructure: 'detailed'
+  method: 'DELETE',
+  path: '/store/order/{orderId}',
+  operationId: 'deleteOrder',
+  summary: 'Delete purchase order by identifier.',
+  description: 'For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors.',
+  tags: ['store'],
+  successStatus: 200,
+  successDescription: 'order deleted',
+  inputStructure: 'detailed'
 }).input(tDeleteOrderData).errors({
-    400: { data: tDeleteOrderResponseError400 },
-    404: { data: tDeleteOrderResponseError404 }
+  400: { data: tDeleteOrderResponseError400 },
+  404: { data: tDeleteOrderResponseError404 }
 });
 
 /**
@@ -66,18 +66,18 @@ export const DeleteOrderContract = oc.route({
  * For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
  */
 export const GetOrderByIdContract = oc.route({
-    method: 'GET',
-    path: '/store/order/{orderId}',
-    operationId: 'getOrderById',
-    summary: 'Find purchase order by ID.',
-    description: 'For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.',
-    tags: ['store'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'GET',
+  path: '/store/order/{orderId}',
+  operationId: 'getOrderById',
+  summary: 'Find purchase order by ID.',
+  description: 'For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.',
+  tags: ['store'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tGetOrderByIdData).output(tGetOrderByIdResponse).errors({
-    400: { data: tGetOrderByIdResponseError400 },
-    404: { data: tGetOrderByIdResponseError404 }
+  400: { data: tGetOrderByIdResponseError400 },
+  404: { data: tGetOrderByIdResponseError404 }
 });
 
 /**
@@ -86,15 +86,15 @@ export const GetOrderByIdContract = oc.route({
  * Exercises oneOf with a discriminator, numeric exclusiveMinimum, and minimum.
  */
 export const CreateShapeContract = oc.route({
-    method: 'POST',
-    path: '/shapes',
-    operationId: 'createShape',
-    summary: 'Submit a shape (Circle or Rect).',
-    description: 'Exercises oneOf with a discriminator, numeric exclusiveMinimum, and minimum.',
-    tags: ['store'],
-    successStatus: 200,
-    successDescription: 'OK',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/shapes',
+  operationId: 'createShape',
+  summary: 'Submit a shape (Circle or Rect).',
+  description: 'Exercises oneOf with a discriminator, numeric exclusiveMinimum, and minimum.',
+  tags: ['store'],
+  successStatus: 200,
+  successDescription: 'OK',
+  inputStructure: 'detailed'
 }).input(tCreateShapeData).output(tCreateShapeResponse);
 
 /**
@@ -103,13 +103,13 @@ export const CreateShapeContract = oc.route({
  * Exercises multipleOf on a numeric property.
  */
 export const SubmitMeasurementContract = oc.route({
-    method: 'POST',
-    path: '/measurements',
-    operationId: 'submitMeasurement',
-    summary: 'Submit a measurement with precision constraints.',
-    description: 'Exercises multipleOf on a numeric property.',
-    tags: ['store'],
-    successStatus: 200,
-    successDescription: 'OK',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/measurements',
+  operationId: 'submitMeasurement',
+  summary: 'Submit a measurement with precision constraints.',
+  description: 'Exercises multipleOf on a numeric property.',
+  tags: ['store'],
+  successStatus: 200,
+  successDescription: 'OK',
+  inputStructure: 'detailed'
 }).input(tSubmitMeasurementData);

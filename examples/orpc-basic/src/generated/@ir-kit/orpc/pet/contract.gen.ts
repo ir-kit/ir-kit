@@ -10,18 +10,18 @@ import { tAddPetData, tAddPetResponse, tAddPetResponseError400, tAddPetResponseE
  * Add a new pet to the store.
  */
 export const AddPetContract = oc.route({
-    method: 'POST',
-    path: '/pet',
-    operationId: 'addPet',
-    summary: 'Add a new pet to the store.',
-    description: 'Add a new pet to the store.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'Successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/pet',
+  operationId: 'addPet',
+  summary: 'Add a new pet to the store.',
+  description: 'Add a new pet to the store.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'Successful operation',
+  inputStructure: 'detailed'
 }).input(tAddPetData).output(tAddPetResponse).errors({
-    400: { data: tAddPetResponseError400 },
-    422: { data: tAddPetResponseError422 }
+  400: { data: tAddPetResponseError400 },
+  422: { data: tAddPetResponseError422 }
 });
 
 /**
@@ -30,19 +30,19 @@ export const AddPetContract = oc.route({
  * Update an existing pet by Id.
  */
 export const UpdatePetContract = oc.route({
-    method: 'PUT',
-    path: '/pet',
-    operationId: 'updatePet',
-    summary: 'Update an existing pet.',
-    description: 'Update an existing pet by Id.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'Successful operation',
-    inputStructure: 'detailed'
+  method: 'PUT',
+  path: '/pet',
+  operationId: 'updatePet',
+  summary: 'Update an existing pet.',
+  description: 'Update an existing pet by Id.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'Successful operation',
+  inputStructure: 'detailed'
 }).input(tUpdatePetData).output(tUpdatePetResponse).errors({
-    400: { data: tUpdatePetResponseError400 },
-    404: { data: tUpdatePetResponseError404 },
-    422: { data: tUpdatePetResponseError422 }
+  400: { data: tUpdatePetResponseError400 },
+  404: { data: tUpdatePetResponseError404 },
+  422: { data: tUpdatePetResponseError422 }
 });
 
 /**
@@ -51,17 +51,17 @@ export const UpdatePetContract = oc.route({
  * Multiple status values can be provided with comma separated strings.
  */
 export const FindPetsByStatusContract = oc.route({
-    method: 'GET',
-    path: '/pet/findByStatus',
-    operationId: 'findPetsByStatus',
-    summary: 'Finds Pets by status.',
-    description: 'Multiple status values can be provided with comma separated strings.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'GET',
+  path: '/pet/findByStatus',
+  operationId: 'findPetsByStatus',
+  summary: 'Finds Pets by status.',
+  description: 'Multiple status values can be provided with comma separated strings.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tFindPetsByStatusData).output(tFindPetsByStatusResponse).errors({
-    400: { data: tFindPetsByStatusResponseError400 }
+  400: { data: tFindPetsByStatusResponseError400 }
 });
 
 /**
@@ -70,17 +70,17 @@ export const FindPetsByStatusContract = oc.route({
  * Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
  */
 export const FindPetsByTagsContract = oc.route({
-    method: 'GET',
-    path: '/pet/findByTags',
-    operationId: 'findPetsByTags',
-    summary: 'Finds Pets by tags.',
-    description: 'Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'GET',
+  path: '/pet/findByTags',
+  operationId: 'findPetsByTags',
+  summary: 'Finds Pets by tags.',
+  description: 'Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tFindPetsByTagsData).output(tFindPetsByTagsResponse).errors({
-    400: { data: tFindPetsByTagsResponseError400 }
+  400: { data: tFindPetsByTagsResponseError400 }
 });
 
 /**
@@ -89,17 +89,17 @@ export const FindPetsByTagsContract = oc.route({
  * Delete a pet.
  */
 export const DeletePetContract = oc.route({
-    method: 'DELETE',
-    path: '/pet/{petId}',
-    operationId: 'deletePet',
-    summary: 'Deletes a pet.',
-    description: 'Delete a pet.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'Pet deleted',
-    inputStructure: 'detailed'
+  method: 'DELETE',
+  path: '/pet/{petId}',
+  operationId: 'deletePet',
+  summary: 'Deletes a pet.',
+  description: 'Delete a pet.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'Pet deleted',
+  inputStructure: 'detailed'
 }).input(tDeletePetData).errors({
-    400: { data: tDeletePetResponseError400 }
+  400: { data: tDeletePetResponseError400 }
 });
 
 /**
@@ -108,18 +108,18 @@ export const DeletePetContract = oc.route({
  * Returns a single pet.
  */
 export const GetPetByIdContract = oc.route({
-    method: 'GET',
-    path: '/pet/{petId}',
-    operationId: 'getPetById',
-    summary: 'Find pet by ID.',
-    description: 'Returns a single pet.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'GET',
+  path: '/pet/{petId}',
+  operationId: 'getPetById',
+  summary: 'Find pet by ID.',
+  description: 'Returns a single pet.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tGetPetByIdData).output(tGetPetByIdResponse).errors({
-    400: { data: tGetPetByIdResponseError400 },
-    404: { data: tGetPetByIdResponseError404 }
+  400: { data: tGetPetByIdResponseError400 },
+  404: { data: tGetPetByIdResponseError404 }
 });
 
 /**
@@ -128,17 +128,17 @@ export const GetPetByIdContract = oc.route({
  * Updates a pet resource based on the form data.
  */
 export const UpdatePetWithFormContract = oc.route({
-    method: 'POST',
-    path: '/pet/{petId}',
-    operationId: 'updatePetWithForm',
-    summary: 'Updates a pet in the store with form data.',
-    description: 'Updates a pet resource based on the form data.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/pet/{petId}',
+  operationId: 'updatePetWithForm',
+  summary: 'Updates a pet in the store with form data.',
+  description: 'Updates a pet resource based on the form data.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tUpdatePetWithFormData).output(tUpdatePetWithFormResponse).errors({
-    400: { data: tUpdatePetWithFormResponseError400 }
+  400: { data: tUpdatePetWithFormResponseError400 }
 });
 
 /**
@@ -147,18 +147,18 @@ export const UpdatePetWithFormContract = oc.route({
  * Upload image of the pet.
  */
 export const UploadFileContract = oc.route({
-    method: 'POST',
-    path: '/pet/{petId}/uploadImage',
-    operationId: 'uploadFile',
-    summary: 'Uploads an image.',
-    description: 'Upload image of the pet.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/pet/{petId}/uploadImage',
+  operationId: 'uploadFile',
+  summary: 'Uploads an image.',
+  description: 'Upload image of the pet.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tUploadFileData).output(tUploadFileResponse).errors({
-    400: { data: tUploadFileResponseError400 },
-    404: { data: tUploadFileResponseError404 }
+  400: { data: tUploadFileResponseError400 },
+  404: { data: tUploadFileResponseError404 }
 });
 
 /**
@@ -167,15 +167,15 @@ export const UploadFileContract = oc.route({
  * Upload a document (image + metadata) for a pet via multipart/form-data.
  */
 export const UploadPetDocumentContract = oc.route({
-    method: 'POST',
-    path: '/pet/{petId}/uploadDocument',
-    operationId: 'uploadPetDocument',
-    summary: 'Upload a pet document.',
-    description: 'Upload a document (image + metadata) for a pet via multipart/form-data.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/pet/{petId}/uploadDocument',
+  operationId: 'uploadPetDocument',
+  summary: 'Upload a pet document.',
+  description: 'Upload a document (image + metadata) for a pet via multipart/form-data.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tUploadPetDocumentData).output(tUploadPetDocumentResponse);
 
 /**
@@ -184,13 +184,13 @@ export const UploadPetDocumentContract = oc.route({
  * Exercises array constraints — minItems, maxItems, uniqueItems, and per-item minLength.
  */
 export const SubmitTagsContract = oc.route({
-    method: 'POST',
-    path: '/tags',
-    operationId: 'submitTags',
-    summary: 'Submit a list of unique non-empty tag names.',
-    description: 'Exercises array constraints — minItems, maxItems, uniqueItems, and per-item minLength.',
-    tags: ['pet'],
-    successStatus: 200,
-    successDescription: 'Accepted',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/tags',
+  operationId: 'submitTags',
+  summary: 'Submit a list of unique non-empty tag names.',
+  description: 'Exercises array constraints — minItems, maxItems, uniqueItems, and per-item minLength.',
+  tags: ['pet'],
+  successStatus: 200,
+  successDescription: 'Accepted',
+  inputStructure: 'detailed'
 }).input(tSubmitTagsData).output(tSubmitTagsResponse);
