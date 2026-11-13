@@ -1,10 +1,9 @@
 import path from "node:path";
-import consola from "consola";
 import { runScan } from "../../fn-schema/core/index.js";
 import { loadTypescriptExtractor } from "../../fn-schema/load-typescript.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   patterns?: string;
@@ -51,7 +50,7 @@ export const fnSchemaScanCommand: CommandSpec<Input, void> = {
   description: "List functions discoverable in source — no schemas generated",
   args,
   handler: async (input) => {
-    if (input.quiet) consola.level = 1;
+    if (input.quiet) log.setQuiet(true);
     const out = await runScan({
       cwd: input.cwd,
       patterns: input.patterns,
@@ -61,7 +60,7 @@ export const fnSchemaScanCommand: CommandSpec<Input, void> = {
       extractors: [(await loadTypescriptExtractor())()],
     });
     if (!out.ok) {
-      consola.warn("No files matched.");
+      log.warn("No files matched.");
       return;
     }
     if (input.json) {
@@ -72,7 +71,7 @@ export const fnSchemaScanCommand: CommandSpec<Input, void> = {
       out.result.signatures,
       path.resolve(input.cwd ?? process.cwd()),
     );
-    consola.box(
+    log.box(
       `${out.result.signatures.length} fn(s) across ${out.filesScanned} file(s) in ${out.durationMs}ms` +
         (out.errors + out.warnings > 0
           ? ` — ${out.errors} error(s), ${out.warnings} warning(s)`

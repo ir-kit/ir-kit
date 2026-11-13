@@ -1,10 +1,9 @@
-import consola from "consola";
-
 import { loadIrConfig } from "../../generate/load-config.js";
 import { generate, type TargetResult } from "../../generate/run.js";
 import { watch } from "../../generate/watch.js";
 import type { Schema } from "../../schema/index.js";
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   config?: string;
@@ -31,7 +30,7 @@ const splitTargets = (value: string | undefined) =>
 
 const report = (results: TargetResult[]) => {
   for (const { target, output } of results) {
-    consola.success(`${target} → ${output}`);
+    log.success(`${target} → ${output}`);
   }
 };
 
@@ -63,7 +62,7 @@ export const generateCommand: CommandSpec<Input, void> = {
 
     const stale = results.filter((result) => result.stale.length > 0);
     if (stale.length === 0) {
-      consola.success(`${results.length} target(s) up to date`);
+      log.success(`${results.length} target(s) up to date`);
       return;
     }
     const lines = stale.flatMap(({ target, output, stale: files }) => [
@@ -86,14 +85,14 @@ export const watchCommand: CommandSpec<Omit<Input, "check">, void> = {
   handler: async (input) => {
     const controller = new AbortController();
     process.once("SIGINT", () => controller.abort());
-    consola.info("Watching for changes. Press Ctrl+C to stop.");
+    log.info("Watching for changes. Press Ctrl+C to stop.");
     await watch({
       configFile: input.config,
       only: splitTargets(input.targets),
       signal: controller.signal,
       onRun: report,
       onError: (error) =>
-        consola.error(error instanceof Error ? error.message : String(error)),
+        log.error(error instanceof Error ? error.message : String(error)),
     });
   },
 };

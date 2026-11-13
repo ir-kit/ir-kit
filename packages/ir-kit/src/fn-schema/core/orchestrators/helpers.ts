@@ -1,5 +1,5 @@
 import path from "node:path";
-import { glob } from "tinyglobby";
+import { globFiles } from "../../../files.js";
 import type { ExcludeFilter, ExtractOptions, IncludeFilter } from "../types.js";
 import type { loadFnSchemaConfig } from "./config.js";
 import type { RunExtractOptions } from "./extract.js";
@@ -29,17 +29,7 @@ export function makeListFiles(
   patternList: ReadonlyArray<string>,
   cwd: string,
 ): () => Promise<string[]> {
-  return () =>
-    glob([...patternList], {
-      cwd,
-      absolute: true,
-      onlyFiles: true,
-      ignore: [
-        "**/node_modules/**",
-        "**/dist/**",
-        "**/__fn_schema_virtual__/**",
-      ],
-    });
+  return () => globFiles(patternList, cwd);
 }
 
 /** Glob the source files named by `fromArg`, falling back to the config's `files`. */

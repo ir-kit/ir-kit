@@ -1,7 +1,6 @@
 import path from "node:path";
-import chokidar from "chokidar";
-import { glob } from "tinyglobby";
 import { createUnplugin, type UnpluginInstance } from "unplugin";
+import { globFiles, IGNORED } from "../../files.js";
 import {
   createProject,
   type ExtractOptions,
@@ -52,7 +51,7 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
 
     let project: Project | null = null;
     let cachedSource: string | null = null;
-    let watcher: ReturnType<typeof chokidar.watch> | null = null;
+    let watching = false;
 
     const ensureProject = (): Project => {
       if (project) return project;
@@ -65,16 +64,7 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
     };
 
     const generate = async (): Promise<string> => {
-      const files = await glob(patterns, {
-        cwd,
-        absolute: true,
-        onlyFiles: true,
-        ignore: [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/__fn_schema_virtual__/**",
-        ],
-      });
+      const files = await globFiles(patterns, cwd);
       const result = await ensureProject().extract({ ...options, files });
       const bundle = buildBundle(result);
       return `export default ${JSON.stringify(bundle)};`;
@@ -93,24 +83,24 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
         return cachedSource;
       },
       async buildEnd() {
-        if (!watcher) {
+        if (!watching) {
           project?.dispose();
           project = null;
         }
       },
       vite: {
         async configureServer(server) {
-          watcher = chokidar.watch(patterns, {
-            cwd,
-            ignoreInitial: true,
-            ignored: [
-              "**/node_modules/**",
-              "**/dist/**",
-              "**/__fn_schema_virtual__/**",
-            ],
-          });
-          const reload = async (relPath: string) => {
-            const abs = path.resolve(cwd, relPath);
+          watching = true;
+          const matches = (abs: string) => {
+            const rel = path.relative(cwd, abs).split(path.sep).join("/");
+            return (
+              patterns.some((p) => path.matchesGlob(rel, p)) &&
+              !IGNORED.some((p) => path.matchesGlob(rel, p))
+            );
+          };
+          server.watcher.add(patterns.map((p) => path.resolve(cwd, p)));
+          const reload = (abs: string) => {
+            if (!matches(abs)) return;
             project?.refresh([abs]);
             cachedSource = null;
             const mod = server.moduleGraph.getModuleById(resolvedId);
@@ -119,12 +109,11 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
               server.ws.send({ type: "full-reload" });
             }
           };
-          watcher.on("change", reload);
-          watcher.on("add", reload);
-          watcher.on("unlink", reload);
+          server.watcher.on("change", reload);
+          server.watcher.on("add", reload);
+          server.watcher.on("unlink", reload);
           server.httpServer?.once("close", () => {
-            void watcher?.close();
-            watcher = null;
+            watching = false;
             project?.dispose();
             project = null;
           });

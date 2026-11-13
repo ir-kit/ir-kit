@@ -1,8 +1,7 @@
-import consola from "consola";
 import { bundle } from "../../k6-toolkit/index.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   input: string;
@@ -44,6 +43,6 @@ export const k6BundleCommand: CommandSpec<Input, void> = {
       minify: input.minify,
       sourcemap: input.sourcemap,
     } as Parameters<typeof bundle>[0]);
-    consola.success(`Bundled to ${result.outfile}`);
+    log.success(`Bundled to ${result.outfile}`);
   },
 };

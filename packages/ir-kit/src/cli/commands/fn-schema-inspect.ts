@@ -1,10 +1,9 @@
 import path from "node:path";
-import consola from "consola";
 import { runInspect } from "../../fn-schema/core/index.js";
 import { loadTypescriptExtractor } from "../../fn-schema/load-typescript.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   name: string;
@@ -66,7 +65,7 @@ export const fnSchemaInspectCommand: CommandSpec<Input, void> = {
     "Print the resolved input + output JSON Schema for a single function",
   args,
   handler: async (input) => {
-    if (input.quiet) consola.level = 1;
+    if (input.quiet) log.setQuiet(true);
     const out = await runInspect({
       name: input.name,
       cwd: input.cwd,
@@ -80,17 +79,17 @@ export const fnSchemaInspectCommand: CommandSpec<Input, void> = {
     });
 
     if (out.kind === "not-found") {
-      consola.error(`Function "${input.name}" not found.`);
+      log.error(`Function "${input.name}" not found.`);
       process.exitCode = 1;
       return;
     }
     if (out.kind === "ambiguous") {
       const cwd = path.resolve(input.cwd ?? process.cwd());
-      consola.error(
+      log.error(
         `Function "${input.name}" matched ${out.matches.length} signatures. Narrow the patterns:`,
       );
       for (const m of out.matches) {
-        consola.error(
+        log.error(
           `  ${path.relative(cwd, m.file)}:${m.location.line}:${m.location.column}`,
         );
       }

@@ -1,8 +1,7 @@
-import consola from "consola";
 import { runDiff } from "../../fn-schema/core/index.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   from: string;
@@ -52,7 +51,7 @@ export const fnSchemaDiffCommand: CommandSpec<Input, void> = {
           d.kind === "added" ? "+" : d.kind === "removed" ? "-" : "~";
         process.stdout.write(`${marker} def ${d.name}  (${d.kind})\n`);
       }
-      consola.box(
+      log.box(
         `${out.changes.length} signature change(s), ${out.definitionChanges.length} definition change(s) — ${out.breaking} breaking, ${out.additive} additive`,
       );
     }
