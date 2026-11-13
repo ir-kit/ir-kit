@@ -1,5 +1,12 @@
 # @ir-kit/spec-diff
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [c218e3b]
+  - @ir-kit/spec-convert@0.4.1
+
 ## 0.2.3
 
 ### Patch Changes

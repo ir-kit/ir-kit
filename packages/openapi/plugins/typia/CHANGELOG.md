@@ -1,5 +1,15 @@
 # @ir-kit/openapi-ts-typia
 
+## 2.1.0
+
+### Minor Changes
+
+- a2f85a6: Support typia 15. The peer range is now `^12.0.0 || ^15.0.0`, and the tag list knows typia 15's new `Exclude` and `Probability` tags. The docs now set up typia's compiler transform with `ttsc` and `@ttsc/unplugin` instead of `@ryoppippi/unplugin-typia`.
+
+### Patch Changes
+
+- bea1e4d: Validate optional request sections. An operation with an optional `body`, `query` or `headers` (for example `body?: Blob | File`) got `unknown` for that section, so its validator accepted anything. Optional sections now keep their type and also accept `undefined`.
+
 ## 2.0.0
 
 ### Major Changes

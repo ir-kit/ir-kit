@@ -1,5 +1,13 @@
 # @ir-kit/openapi
 
+## 0.6.1
+
+### Patch Changes
+
+- Updated dependencies [c218e3b]
+  - @ir-kit/codegen-core@0.4.0
+  - @ir-kit/schema@0.4.1
+
 ## 0.6.0
 
 ### Minor Changes

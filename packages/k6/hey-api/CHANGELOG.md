@@ -1,5 +1,11 @@
 # @ir-kit/openapi-ts-k6
 
+## 0.3.1
+
+### Patch Changes
+
+- @ir-kit/k6-gen@0.5.1
+
 ## 0.3.0
 
 ### Minor Changes

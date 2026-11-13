@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/spec-docs",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Render any API spec as standalone HTML documentation via Scalar API Reference. Programmatic + CLI.",
   "keywords": [
     "openapi",

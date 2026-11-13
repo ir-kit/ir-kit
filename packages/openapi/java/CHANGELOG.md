@@ -1,5 +1,14 @@
 # @ir-kit/openapi-java
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [c218e3b]
+  - @ir-kit/codegen-core@0.4.0
+  - @ir-kit/openapi@0.6.1
+  - @ir-kit/openapi-loader@0.4.2
+
 ## 2.0.0
 
 ### Major Changes

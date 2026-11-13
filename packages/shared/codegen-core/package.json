@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/codegen-core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Spec-agnostic codegen primitives shared by OpenAPI and AsyncAPI generator families — identifier transforms (pascal/camel/safeIdent), filesystem safety, project-name derivation. Pure functions, no spec dependencies.",
   "keywords": [
     "codegen",

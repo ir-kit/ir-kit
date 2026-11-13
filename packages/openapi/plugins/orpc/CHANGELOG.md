@@ -1,5 +1,12 @@
 # @ir-kit/openapi-ts-orpc
 
+## 2.1.0
+
+### Patch Changes
+
+- aaeab45: Handler files are now built with Hey API's TypeScript DSL and existing ones are read with `oxc-parser`, so the plugin no longer installs ts-morph and its copy of TypeScript. New handler files use single quotes and 2-space indentation like the rest of the generated code. When adding handlers to an existing file, a missing comma after the last handler is now added instead of producing a syntax error.
+- 3b8caa3: Work with TypeScript 7 installed. `@ir-kit/cli` no longer installs TypeScript 5, `@ir-kit/fn-schema-typescript` no longer asks for `typescript <7` (ts-morph and ts-json-schema-generator bring their own compiler), and the oRPC plugin parses handler files with the compiler that ships with ts-morph.
+
 ## 2.0.0
 
 ### Major Changes
