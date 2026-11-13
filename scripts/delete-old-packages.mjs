@@ -48,15 +48,13 @@ const old = [
 ].map((n) => `@ir-kit/${n}`);
 
 const npm = (...args) =>
-  execFileSync("npm", args, {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "ignore"],
-  });
+  execFileSync("npm", args, { encoding: "utf8", stdio: "pipe" });
 const view = (spec, ...fields) => {
   try {
     return JSON.parse(npm("view", spec, ...fields, "--json") || "null");
-  } catch {
-    return null;
+  } catch (error) {
+    if (String(error.stderr).includes("E404")) return null;
+    throw error;
   }
 };
 
