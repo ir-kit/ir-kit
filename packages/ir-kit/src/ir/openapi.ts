@@ -75,5 +75,6 @@ function resolve(
     const key = part.replaceAll("~1", "/").replaceAll("~0", "~");
     target = (target as Record<string, unknown> | undefined)?.[key];
   }
-  return resolve(spec, target);
+  const { $ref: _, ...siblings } = value as Record<string, unknown>;
+  return { ...resolve(spec, target), ...siblings };
 }

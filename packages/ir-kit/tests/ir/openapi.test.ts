@@ -44,7 +44,15 @@ describe("parseOpenAPI", () => {
   it("follows path item $refs", () => {
     const model = parseOpenAPI(
       doc({
-        paths: { "/a": { $ref: "#/components/pathItems/A" } },
+        paths: {
+          "/a": {
+            $ref: "#/components/pathItems/A",
+            post: {
+              security: [{ key: [] }],
+              responses: { 200: { description: "ok" } },
+            },
+          },
+        },
         components: {
           securitySchemes: { key: { type: "apiKey", in: "header", name: "K" } },
           pathItems: {
@@ -59,6 +67,7 @@ describe("parseOpenAPI", () => {
       }),
     );
     expect(model.paths?.["/a"]?.get?.securitySchemes).toEqual(["key"]);
+    expect(model.paths?.["/a"]?.post?.securitySchemes).toEqual(["key"]);
   });
 
   it("reads Swagger 2.0 documents", () => {
