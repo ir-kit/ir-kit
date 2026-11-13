@@ -18,7 +18,6 @@
     "@ir-kit/example-fn-schema-basic",
     "@ir-kit/example-k6-petstore",
     "@ir-kit/example-openapi-sdk-petstore",
-    "@ir-kit/example-orpc-basic",
     "@ir-kit/glean",
     "@ir-kit/tsconfig"
   ]
