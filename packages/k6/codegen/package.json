@@ -65,6 +65,7 @@
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "oxc-parser": "^0.158.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
