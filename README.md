@@ -157,6 +157,7 @@ flowchart LR
 | [`@ir-kit/openapi-ts-k6`](./packages/k6/hey-api) | Thin @hey-api/openapi-ts plugin that delegates to @ir-kit/k6-gen. Use if you already drive codegen through openapi-ts.config.ts; otherwise reach for @ir-kit/k6-toolkit. |
 | [`@ir-kit/openapi-ts-orpc`](./packages/openapi/plugins/orpc) | oRPC plugin for @hey-api/openapi-ts - Generate type-safe RPC clients and servers from OpenAPI specs |
 | [`@ir-kit/openapi-ts-paths`](./packages/openapi/plugins/paths) | Plugin for @hey-api/openapi-ts — emit per-operation route consts (spec template, URLPattern, method, operationId) for tree-shakable runtime routing and matching |
+| [`@ir-kit/openapi-ts-plugin-kit`](./packages/openapi/plugins/kit) | Helpers shared by the ir-kit plugins for @hey-api/openapi-ts |
 | [`@ir-kit/openapi-ts-typia`](./packages/openapi/plugins/typia) | Typia plugin for @hey-api/openapi-ts — generate compile-time Standard Schema validators from OpenAPI specs |
 
 ### Spec discovery from traffic
@@ -185,12 +186,6 @@ flowchart LR
 | [`@ir-kit/openapi`](./packages/openapi/ir) | Language-agnostic OpenAPI IR-walking primitives shared by the native-SDK generators. Each helper consumes @hey-api/shared's IR and returns target-neutral data — parameter locations, response categories, body media-type classifications — so per-language emitters can stay focused on rendering. |
 | [`@ir-kit/openapi-tools`](./packages/openapi/tools) | OpenAPI utilities — request matching, spec diffing, parsing. Tree-shakable, pure functions, works on frontend or backend |
 | [`@ir-kit/schema`](./packages/shared/schema) | Canonical JSON Schema 2020-12 IR shared across OpenAPI and AsyncAPI codegen families. Source-agnostic schema model + adapters from hey-api's IR.SchemaObject and @asyncapi/parser schemas. |
-
-### Other
-
-| Package | Description |
-| --- | --- |
-| [`@ir-kit/openapi-ts-plugin-kit`](./packages/openapi/plugins/kit) | Helpers shared by the ir-kit plugins for @hey-api/openapi-ts |
 
 <!-- @packages-end -->
 
