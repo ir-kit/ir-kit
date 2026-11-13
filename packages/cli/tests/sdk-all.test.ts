@@ -9,7 +9,7 @@ import {
   sdkJavaCommand,
   sdkKotlinCommand,
   sdkSwiftCommand,
-} from "../src/commands/sdk-native.js";
+} from "../src/commands/sdk-targets.js";
 
 const fixture = join(
   import.meta.dirname,
@@ -41,6 +41,19 @@ describe("sdk commands", () => {
     expect(
       (await listFiles(join(out, "java"))).some((f) => f.endsWith(".java")),
     ).toBe(true);
+  });
+
+  it("sdk all feeds TypeSpec input to the typescript and k6 targets", async () => {
+    out = await mkdtemp(join(tmpdir(), "ir-sdk-all-ts-"));
+    await sdkAllCommand.handler({
+      input: fixture,
+      output: out,
+      targets: "typescript,k6",
+    });
+    expect(
+      (await listFiles(join(out, "typescript"))).some((f) => f.endsWith(".ts")),
+    ).toBe(true);
+    expect(await listFiles(join(out, "k6"))).toContain("client.ts");
   });
 
   it("sdk all rejects unknown targets", async () => {

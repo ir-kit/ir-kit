@@ -10,6 +10,8 @@ import {
   listSourceFiles,
   mergeExclude,
   mergeInclude,
+  mergeSchema,
+  mergeSignature,
   resolveCwd,
 } from "./helpers.js";
 
@@ -75,21 +77,8 @@ export async function runExtract(
     tsConfigPath: opts.tsconfig ?? config.tsConfigPath,
     include: mergeInclude(config.include, opts.includeTag),
     exclude: mergeExclude(config.exclude, opts.excludeName),
-    signature: {
-      ...(config.signature ?? {}),
-      parameters: opts.params ?? config.signature?.parameters,
-      unwrapPromise: opts.unwrapPromise ?? config.signature?.unwrapPromise,
-    },
-    schema: {
-      ...(config.schema ?? {}),
-      dialect: opts.dialect ?? config.schema?.dialect,
-      identity: pickKey(opts.identity, config.schema?.identity),
-      transport: pickKey(opts.transport, config.schema?.transport),
-      sourceLocations: pickKey(
-        opts.sourceLocations,
-        config.schema?.sourceLocations,
-      ),
-    },
+    signature: mergeSignature(opts, config),
+    schema: mergeSchema(opts, config),
     naming: opts.naming ?? config.naming,
   };
 
@@ -128,18 +117,6 @@ function emptyResult(start: number): RunExtractResult {
     durationMs: Date.now() - start,
     ok: false,
   };
-}
-
-function pickKey(
-  cli: string | false | undefined,
-  fallback: false | string | undefined,
-): false | string {
-  if (cli === false) return false;
-  if (typeof cli === "string") {
-    if (cli === "" || cli === "false") return false;
-    return cli;
-  }
-  return fallback ?? false;
 }
 
 async function emitOutputs(

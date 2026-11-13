@@ -10,14 +10,7 @@ import { k6BundleCommand } from "./commands/k6-bundle.js";
 import { k6SyncCommand } from "./commands/k6-sync.js";
 import { reconCommand } from "./commands/recon.js";
 import { sdkAllCommand } from "./commands/sdk-all.js";
-import { sdkK6Command } from "./commands/sdk-k6.js";
-import {
-  sdkGoCommand,
-  sdkJavaCommand,
-  sdkKotlinCommand,
-  sdkSwiftCommand,
-} from "./commands/sdk-native.js";
-import { sdkTypescriptCommand } from "./commands/sdk-typescript.js";
+import { sdkCommands } from "./commands/sdk-targets.js";
 import { specConvertCommand } from "./commands/spec-convert.js";
 import { specDiffCommand } from "./commands/spec-diff.js";
 import { runCli } from "./runtime.js";
@@ -35,12 +28,7 @@ await runCli({
     specConvertCommand,
     specDiffCommand,
     docsCommand,
-    sdkGoCommand,
-    sdkKotlinCommand,
-    sdkSwiftCommand,
-    sdkJavaCommand,
-    sdkTypescriptCommand,
-    sdkK6Command,
+    ...sdkCommands,
     sdkAllCommand,
     reconCommand,
     fnSchemaExtractCommand,
