@@ -35,7 +35,7 @@ Emits four files under `output`:
 Internally:
 1. `@hey-api/json-schema-ref-parser` bundles external refs.
 2. `ir-kit/openapi`'s `normalizeSpec` runs (optional, on by default).
-3. `ir-kit/openapi-tools/parse` returns hey-api's normalized IR.
+3. `parseOpenAPI` from `ir-kit/ir` reads it into ir-kit's model.
 4. Operation + schema walkers emit `ts.factory` AST → printed with `ts.createPrinter`.
 
 That's it — no hey-api plugin runner is loaded, no `$` DSL is touched.

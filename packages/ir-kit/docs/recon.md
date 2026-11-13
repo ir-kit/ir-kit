@@ -71,7 +71,7 @@ createRecon({
 ## Pairing
 
 - **[`@ir-kit/glean`](../../apps/glean)** — Chrome DevTools panel that wires this up to the network panel and emits a live, click-to-copy spec.
-- **[`ir-kit/openapi-tools/diff`](../openapi-tools)** — diff a freshly recon'd spec against a committed one to spot drift between docs and reality.
+- **[`ir spec diff`](./spec-diff.md)** — diff a freshly recon'd spec against a committed one to spot drift between docs and reality.
 
 ## License
 

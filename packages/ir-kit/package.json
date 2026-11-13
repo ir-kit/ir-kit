@@ -143,10 +143,6 @@
       "types": "./dist/openapi-tools/index.d.ts",
       "import": "./dist/openapi-tools/index.js"
     },
-    "./openapi-tools/diff": {
-      "types": "./dist/openapi-tools/diff.d.ts",
-      "import": "./dist/openapi-tools/diff.js"
-    },
     "./openapi-tools/ir": {
       "types": "./dist/openapi-tools/ir.d.ts",
       "import": "./dist/openapi-tools/ir.js"
@@ -158,10 +154,6 @@
     "./openapi-tools/merge": {
       "types": "./dist/openapi-tools/merge.d.ts",
       "import": "./dist/openapi-tools/merge.js"
-    },
-    "./openapi-tools/parse": {
-      "types": "./dist/openapi-tools/parse.d.ts",
-      "import": "./dist/openapi-tools/parse.js"
     },
     "./openapi-tools/route": {
       "types": "./dist/openapi-tools/route.d.ts",

@@ -1,4 +1,5 @@
 import { pascal } from "../../../../codegen/index.js";
+import { parseOpenAPI } from "../../../../ir/index.js";
 import {
   classifyBody,
   classifyEnumLiterals,
@@ -14,7 +15,6 @@ import {
   type Schema,
   schemaTypeName,
 } from "../../../../openapi/index.js";
-import { parseSpec } from "../../../../openapi-tools/index.js";
 import { mergeObjectAllOf } from "./allof.js";
 import {
   isMessageType,
@@ -44,7 +44,7 @@ export function openAPIToProto(
 ): string {
   const doc = structuredClone(document);
   mergeObjectAllOf(doc);
-  const ir = parseSpec(doc);
+  const ir = parseOpenAPI(doc);
   const info = isRecord(doc.info) ? doc.info : {};
   const title = typeof info.title === "string" ? info.title : undefined;
   const pkg = options.package ?? packageIdent(title);

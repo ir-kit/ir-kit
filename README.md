@@ -12,7 +12,7 @@ A federation toolchain for API specifications — every standard talks to every 
 - **Spec discovery from traffic** — reverse-engineer an OpenAPI 3.1 spec from observed HTTP, either as a library or a Chrome extension.
 - **Drop-in plugins for `@hey-api/openapi-ts`** — faker factories, oRPC clients, route maps, typia validators, and the k6 generator.
 
-All OpenAPI consumers share one normalization layer ([`@hey-api`](https://github.com/hey-api/openapi-ts)'s IR), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`ir-kit/sdk/{go,kotlin,swift,java,typescript,k6}`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/ir-kit/docs/cli.md) CLI or directly as a programmatic API per package.
+All native generators read one model, [`ir-kit/ir`](./packages/ir-kit/docs/ir.md), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`ir-kit/sdk/{go,kotlin,swift,java,typescript,k6}`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/ir-kit/docs/cli.md) CLI or directly as a programmatic API per package.
 
 ## Pick a tool
 

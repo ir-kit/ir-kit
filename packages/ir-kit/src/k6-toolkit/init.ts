@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
-import type { IR } from "../openapi-tools/index.js";
+import type { IR } from "../ir/index.js";
 import type { GenerateOptions, GenerateResult } from "../sdk/k6/index.js";
 
 import {

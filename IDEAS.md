@@ -92,7 +92,7 @@ ir-kit's thesis: **every API standard talks to every other**. One canonical hub 
 
 ## Considered, declined
 
-- **`openapi-drift`** — was queued (compare committed spec vs runtime-observed via recon). Declined because `ir-kit/openapi-tools/diff` + `ir-kit/spec` cover the comparison; the wrapper would mostly be plumbing. Revisit only if there's clear demand for the CI ergonomics.
+- **`openapi-drift`** — was queued (compare committed spec vs runtime-observed via recon). Declined because `ir spec diff` covers the comparison; the wrapper would mostly be plumbing. Revisit only if there's clear demand for the CI ergonomics.
 - **API gateway / aggregator** — crowded space (Kong, Apollo Federation, tRPC). No clear differentiation without going much bigger than this monorepo's scope.
 - **Spec registry / hosted SaaS** — out of scope; needs infra and ongoing ops.
 - **Generic API testing** — surface too broad; many existing tools.

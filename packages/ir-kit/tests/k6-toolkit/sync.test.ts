@@ -2,10 +2,10 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import type { IR } from "../../src/ir/index.js";
 import { extractOperationMap } from "../../src/k6-toolkit/operation-map.ts";
 import { diffOperationIds } from "../../src/k6-toolkit/rename-report.ts";
 import { loadSnapshotOps } from "../../src/k6-toolkit/snapshot.ts";
-import type { IR } from "../../src/openapi-tools/index.js";
 
 const prev = new Map([
   ["GET /pets", "listPets"],
