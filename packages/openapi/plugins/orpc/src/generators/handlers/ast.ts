@@ -272,12 +272,13 @@ export function analyzeHandlerFile(
     }
 
     const last = init.properties.at(-1);
-    const needsComma =
-      !!last &&
-      !source
-        .slice(last.end, init.end - 1)
-        .trimStart()
-        .startsWith(",");
+    // Only whitespace, comments and an optional comma can follow the last property.
+    const afterLast = last
+      ? source
+          .slice(last.end, init.end - 1)
+          .replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "")
+      : "";
+    const needsComma = !!last && !afterLast.includes(",");
     return {
       existingNames,
       closingBracePos: init.end - 1,

@@ -102,6 +102,17 @@ export default pet;
     );
   });
 
+  it("does not add a second comma after a commented last property", () => {
+    const source = `const pet = {\n  addPet: 1 /* a, b */, // c, d\n};\n`;
+    expect(patchFile(source, { ...base, mode: "faker" }, ["getPet"])).toBe(
+      `const pet = {\n  addPet: 1 /* a, b */, // c, d\n\n  getPet: os.pet.getPet.handler(async () => mockGetPet()),\n};\n`,
+    );
+    const noComma = `const pet = {\n  addPet: 1 // c, d\n};\n`;
+    expect(patchFile(noComma, { ...base, mode: "faker" }, ["getPet"])).toBe(
+      `const pet = {\n  addPet: 1, // c, d\n\n  getPet: os.pet.getPet.handler(async () => mockGetPet()),\n};\n`,
+    );
+  });
+
   it("leaves files without the handler object alone", () => {
     expect(patchFile("export {};\n", base, ["getPet"])).toBe("export {};\n");
   });
