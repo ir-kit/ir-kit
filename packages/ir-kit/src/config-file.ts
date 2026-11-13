@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { registerHooks } from "node:module";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -19,19 +19,18 @@ export function findConfigFile(cwd: string, name: string): string | undefined {
  */
 export async function importConfig<T>(file: string): Promise<T> {
   const url = pathToFileURL(resolve(file));
-  if (url.pathname.endsWith(".ts")) loadAsModule(url.href);
+  if (file.endsWith(".ts") && ESM_SYNTAX.test(readFileSync(file, "utf8"))) {
+    loadAsModule(url.href);
+  }
   url.searchParams.set("t", `${Date.now()}-${++loads}`);
   const mod = (await import(url.href)) as { default?: T };
   return (mod.default ?? mod) as T;
 }
 
+const ESM_SYNTAX = /^\s*(import|export)\b/m;
 const moduleConfigs = new Set<string>();
 
-/**
- * Load `<name>.config.ts` as an ES module even when the nearest package.json
- * has no `"type": "module"`, so `ir init` works in a fresh `npm init` folder
- * without Node's reparse warning.
- */
+// why: without "type": "module" Node parses an ESM .ts config twice and warns.
 function loadAsModule(href: string): void {
   if (moduleConfigs.size === 0) {
     registerHooks({
