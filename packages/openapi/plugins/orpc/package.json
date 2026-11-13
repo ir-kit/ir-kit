@@ -68,7 +68,8 @@
     "@orpc/openapi-client": "^1.13",
     "@orpc/server": "^1.13",
     "@orpc/tanstack-query": "^1.13",
-    "@orpc/zod": "^1.13"
+    "@orpc/zod": "^1.13",
+    "typescript": ">=5.0.0 <7"
   },
   "peerDependenciesMeta": {
     "@ir-kit/openapi-ts-faker": {
@@ -98,6 +99,7 @@
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@types/node": "catalog:",
     "ts-patch": "^3.3.0",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {

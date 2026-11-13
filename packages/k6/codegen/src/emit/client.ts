@@ -4,6 +4,7 @@ import { fromHeyApi } from "@ir-kit/openapi";
 import ts from "typescript";
 
 import {
+  propertyKey,
   schemaToTypeNode,
   toIdent,
   type WalkedOperation,
@@ -191,7 +192,7 @@ function buildParamDeclarations(
     const members = op.queryParams.map((p) =>
       f.createPropertySignature(
         undefined,
-        p.name,
+        propertyKey(p.name),
         p.required ? undefined : f.createToken(ts.SyntaxKind.QuestionToken),
         typed(p.schema).toAst() as ts.TypeNode,
       ),

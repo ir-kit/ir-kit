@@ -57,9 +57,13 @@
     "tinyglobby": "catalog:",
     "tsdown": "catalog:"
   },
+  "peerDependencies": {
+    "typescript": ">=5.0.0 <7"
+  },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {

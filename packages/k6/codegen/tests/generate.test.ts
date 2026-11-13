@@ -1,4 +1,4 @@
-import { mkdtemp, readdir, rm } from "node:fs/promises";
+import { mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -179,5 +179,39 @@ describe("@ir-kit/k6-gen — empty schemas", () => {
     const { files } = await generateEmpty();
     const types = files.find((f) => f.path === "types.ts")!.content;
     expect(types).toMatch(/export \{\};/);
+  });
+  it("quotes non-identifier query keys and fills required params in stubs", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "k6-gen-query-"));
+    const spec = join(dir, "spec.yaml");
+    await writeFile(
+      spec,
+      [
+        "openapi: 3.1.0",
+        "info: { title: t, version: '1' }",
+        "paths:",
+        "  /items/{kind}:",
+        "    get:",
+        "      operationId: listItems",
+        "      parameters:",
+        "        - { name: kind, in: path, required: true, schema: { type: string, enum: [a, b] } }",
+        "        - { name: 'page[size]', in: query, required: true, schema: { type: integer } }",
+        "        - { name: offset, in: query, required: true, schema: { type: integer, enum: [-1, 0] } }",
+        "        - { name: sort, in: query, schema: { type: string } }",
+        "      responses: { '200': { description: ok } }",
+      ].join("\n"),
+    );
+    const result = await generate({
+      input: spec,
+      output: join(dir, "out"),
+      scaffold: true,
+    });
+    const out = Object.fromEntries(
+      result.files.map((f) => [f.path, f.content]),
+    );
+    expect(out["client.ts"]).toContain('"page[size]": number;');
+    expect(out["loadtests/listItems.ts"]).toContain(
+      'api.listItems("a", { "page[size]": 1, offset: -1 });',
+    );
+    await rm(dir, { recursive: true, force: true });
   });
 });

@@ -68,6 +68,7 @@
     "@orpc/contract": ">=1.13.0",
     "@orpc/openapi": ">=1.13.0",
     "@standard-schema/spec": "^1.0.0",
+    "typescript": ">=5.0.0 <7",
     "typia": "^12.0.0"
   },
   "peerDependenciesMeta": {
@@ -88,6 +89,7 @@
     "@standard-schema/spec": "^1.1.0",
     "@types/node": "catalog:",
     "jiti": "^2.6.1",
+    "typescript": "catalog:",
     "typia": "12.0.2",
     "vitest": "catalog:"
   },

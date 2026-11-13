@@ -1,8 +1,15 @@
+import type { IR } from "@hey-api/shared";
 import { safeIdent } from "@ir-kit/codegen-core";
+import { extractEnumValues, fromHeyApi } from "@ir-kit/openapi";
 import ts from "typescript";
 
 import type { BuiltFile } from "../generate.js";
-import { toIdent, type WalkedOperation, walkOperations } from "../ir/index.js";
+import {
+  propertyKey,
+  toIdent,
+  type WalkedOperation,
+  walkOperations,
+} from "../ir/index.js";
 import {
   type LoadtestStubInput,
   renderLoadtestStub,
@@ -60,22 +67,44 @@ function callArgExpressions(
   knownSchemas: ReadonlySet<string>,
 ): ts.Expression[] {
   const args: ts.Expression[] = [];
-  for (const p of op.pathParams) args.push(pathParamPlaceholder(p));
-  if (op.queryParams.length)
-    args.push(f.createObjectLiteralExpression([], false));
+  for (const p of op.pathParams) args.push(placeholder(p.schema));
+  if (op.queryParams.length) {
+    const required = op.queryParams.filter((p) => p.required);
+    args.push(
+      f.createObjectLiteralExpression(
+        required.map((p) =>
+          f.createPropertyAssignment(
+            propertyKey(p.name),
+            placeholder(p.schema),
+          ),
+        ),
+        false,
+      ),
+    );
+  }
   if (op.body) args.push(bodyExpression(op, knownSchemas));
   return args;
 }
 
-function pathParamPlaceholder(p: {
-  schema?: { type?: string };
-}): ts.Expression {
-  switch (p.schema?.type) {
+function placeholder(schema: IR.SchemaObject): ts.Expression {
+  const [first] = extractEnumValues(fromHeyApi(schema)) ?? [];
+  if (typeof first === "string") return f.createStringLiteral(first);
+  if (typeof first === "boolean")
+    return first ? f.createTrue() : f.createFalse();
+  if (typeof first === "number") {
+    const literal = f.createNumericLiteral(Math.abs(first));
+    return first < 0
+      ? f.createPrefixUnaryExpression(ts.SyntaxKind.MinusToken, literal)
+      : literal;
+  }
+  switch (schema.type) {
     case "integer":
     case "number":
       return f.createNumericLiteral("1");
     case "boolean":
       return f.createFalse();
+    case "array":
+      return f.createArrayLiteralExpression([]);
     default:
       return f.createStringLiteral("");
   }

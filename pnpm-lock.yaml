@@ -495,6 +495,9 @@ importers:
       consola:
         specifier: 'catalog:'
         version: 3.4.2
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
     devDependencies:
       '@ir-kit/tsconfig':
         specifier: workspace:*
@@ -712,6 +715,9 @@ importers:
       '@ir-kit/k6-toolkit':
         specifier: workspace:*
         version: link:../toolkit
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
     devDependencies:
       '@ir-kit/tsconfig':
         specifier: workspace:*
@@ -784,6 +790,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.17
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
@@ -1037,6 +1046,9 @@ importers:
       ts-patch:
         specifier: ^3.3.0
         version: 3.3.0
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.5(@opentelemetry/api@1.9.0)(@types/node@22.19.17)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
@@ -1099,6 +1111,9 @@ importers:
       jiti:
         specifier: ^2.6.1
         version: 2.6.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
       typia:
         specifier: 12.0.2
         version: 12.0.2(@types/node@22.19.17)(typescript@5.9.3)

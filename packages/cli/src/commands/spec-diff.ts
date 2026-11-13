@@ -55,7 +55,7 @@ export const specDiffCommand: CommandSpec<Input, void> = {
     ];
     for (const diff of diffs) {
       lines.push(
-        `  [${diff.type}] ${diff.action} /${diff.path.join("/")}${
+        `  [${diff.type}] ${diff.action} ${toJsonPointer(diff.path)}${
           diff.description ? ` — ${diff.description}` : ""
         }`,
       );
@@ -71,3 +71,12 @@ export const specDiffCommand: CommandSpec<Input, void> = {
     }
   },
 };
+
+function toJsonPointer(path: ReadonlyArray<string | number>): string {
+  return path
+    .map(
+      (segment) =>
+        `/${String(segment).replaceAll("~", "~0").replaceAll("/", "~1")}`,
+    )
+    .join("");
+}
