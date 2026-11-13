@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createRequire } from "node:module";
 import { docsCommand } from "./commands/docs.js";
 import { fnSchemaDiffCommand } from "./commands/fn-schema-diff.js";
 import { fnSchemaExtractCommand } from "./commands/fn-schema-extract.js";
@@ -21,9 +22,13 @@ import { specConvertCommand } from "./commands/spec-convert.js";
 import { specDiffCommand } from "./commands/spec-diff.js";
 import { runCli } from "./runtime.js";
 
+const { version } = createRequire(import.meta.url)("../package.json") as {
+  version: string;
+};
+
 await runCli({
   name: "ir",
-  version: "0.1.0",
+  version,
   description:
     "Universal API toolkit — load, convert, generate across every spec standard.",
   commands: [

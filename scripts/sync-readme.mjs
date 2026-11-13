@@ -67,6 +67,7 @@ const CATEGORY_BY_NAME = {
   "@ir-kit/openapi-ts-k6": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-orpc": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-paths": "`@hey-api/openapi-ts` plugins",
+  "@ir-kit/openapi-ts-plugin-kit": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-ts-typia": "`@hey-api/openapi-ts` plugins",
   "@ir-kit/openapi-recon": "Spec discovery from traffic",
   "@ir-kit/glean": "Spec discovery from traffic",
