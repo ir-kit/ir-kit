@@ -38,6 +38,5 @@ jobs:
         run: |
           pnpm dlx pkg-pr-new publish \
             './packages/ir-kit' \
-            './packages/k6/create' \
             './packages/k6/framework' \
             --pnpm

@@ -61,7 +61,6 @@ const CATEGORY_BY_NAME = {
   "@ir-kit/k6": "Load testing (k6)",
   "ir-kit/sdk/k6": "Load testing (k6)",
   "ir-kit/k6-toolkit": "Load testing (k6)",
-  "@ir-kit/create-k6": "Load testing (k6)",
   "ir-kit/sdk/asyncapi": "Spec → AsyncAPI targets",
   "ir-kit/openapi-ts/faker": "`@hey-api/openapi-ts` plugins",
   "ir-kit/openapi-ts/k6": "`@hey-api/openapi-ts` plugins",

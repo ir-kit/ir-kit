@@ -1,9 +1,8 @@
 import { join } from "node:path";
+import { loadOpenAPIForSdk } from "../../generate/load-openapi.js";
+import { type SdkTargetName, sdkTargets } from "../../generate/sdk-targets.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
-import { loadOpenAPIForSdk } from "./_load-openapi.js";
-import { type SdkTargetName, sdkTargets } from "./sdk-targets.js";
 
 const TARGETS = Object.keys(sdkTargets) as SdkTargetName[];
 

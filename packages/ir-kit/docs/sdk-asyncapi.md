@@ -119,6 +119,6 @@ asyncapi.yaml
 
 ## Related
 
-- [`actions/asyncapi-regen`](../../actions/asyncapi-regen) — GitHub Action wrapping this generator
+- [`ir generate`](./generate.md): the `asyncapi` target runs this generator from `ir.config.ts`
 - [`ir-kit/sdk/typescript`](../openapi-typescript) — sister generator for OpenAPI 3.x specs
 - [`fixtures/user-events.yaml`](../../fixtures/user-events.yaml) — minimal AsyncAPI 3.0 spec used by tests

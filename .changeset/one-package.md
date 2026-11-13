@@ -1,6 +1,5 @@
 ---
 "ir-kit": major
-"@ir-kit/create-k6": patch
 ---
 
 Every tool now ships in one package, `ir-kit`. Install it once and import what you need from a subpath:

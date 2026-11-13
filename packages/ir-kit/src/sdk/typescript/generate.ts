@@ -60,8 +60,8 @@ export interface GenerateResult {
 /**
  * Run hey-api's TypeScript codegen against `input`, writing the result
  * to `output`. Thin wrapper around `createClient` that matches the
- * `generate()` shape of `@ir-kit/openapi-{go,kotlin,swift}` so
- * the same `sdk-regen` workflow drives all four targets uniformly.
+ * `generate()` shape of `ir-kit/sdk/{go,kotlin,swift,java}`, so
+ * `ir generate` drives every target the same way.
  */
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   const out = resolve(process.cwd(), opts.output);

@@ -24,7 +24,7 @@ Skip this skill for: framework-agnostic k6 scripting, JS-based unit tests, non-H
 | `ir-kit/sdk/k6` | Codegen — OpenAPI spec → typed client (`client.ts`, `types.ts`, `data.ts`). Emits sync + `async` namespace per op. |
 | `ir-kit/k6-toolkit` | Programmatic API the user calls from scripts. Re-exports `generate` from k6-gen. Also ships the `k6-ts` CLI. |
 
-For a brand-new project, the cowpath is **`npm create @ir-kit/k6`** — interactive wizard that runs `init()`.
+For a brand-new project, run **`npx ir-kit init`** and pick the `k6` target. It writes `ir.config.ts`, generates the client and a starter `loadtest/loadtest.ts`; `ir generate` refreshes the client after the spec changes.
 
 ## End-to-end pipeline: HAR → typed loadtest
 
@@ -131,7 +131,7 @@ Generated files have placeholder args (`api.getPet(petId)`, `api.addPet({})`) �
 ## First-run quick start (new project)
 
 ```bash
-npm create @ir-kit/k6
+npx ir-kit init --input openapi.yaml --targets k6
 ```
 
 The wizard asks for:
@@ -331,7 +331,7 @@ See [references/scenarios-pattern.md](references/scenarios-pattern.md) for budge
 
 ## How AI agents should use this
 
-1. If the user is starting fresh → suggest `npm create @ir-kit/k6`.
+1. If the user is starting fresh → suggest `npx ir-kit init`.
 2. If the user is writing a perf-harness script → use the programmatic `init/sync/runK6`.
 3. If the user is hand-editing `loadtest.ts` → show the `defineLoadTest` + `flow()` shape, with the v2 `scenario:` field name.
 4. If the user wants parallel HTTP / fan-out → show `flow().batch()` or `Promise.all([api.async.*])`.
