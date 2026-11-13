@@ -10,15 +10,15 @@ import { router } from './router.gen';
 export type RpcLinkClientConfig = ConstructorParameters<typeof RPCLink>[0];
 
 export const createRpcLinkClient = (config: RpcLinkClientConfig): ContractRouterClient<typeof router> => {
-    const link = new RPCLink(config);
-    return createORPCClient(link);
+  const link = new RPCLink(config);
+  return createORPCClient(link);
 };
 
 export type OpenApiLinkClientConfig = ConstructorParameters<typeof OpenAPILink>[1];
 
 export const createOpenApiClient = (config: OpenApiLinkClientConfig): ContractRouterClient<typeof router> => {
-    const link = new OpenAPILink(router, config);
-    return createORPCClient(link);
+  const link = new OpenAPILink(router, config);
+  return createORPCClient(link);
 };
 
 export type Client = ContractRouterClient<typeof router>;

@@ -6,626 +6,626 @@ import { createValidate, type IValidation, json } from 'typia';
 import type { AddPetData, AddPetErrors, AddPetResponse, CreateShapeData, CreateShapeResponse, CreateUserData, CreateUserResponse, CreateUsersWithListInputData, CreateUsersWithListInputResponse, DeleteOrderData, DeleteOrderErrors, DeletePetData, DeletePetErrors, DeleteUserData, DeleteUserErrors, FindPetsByStatusData, FindPetsByStatusErrors, FindPetsByStatusResponse, FindPetsByTagsData, FindPetsByTagsErrors, FindPetsByTagsResponse, GetInventoryData, GetInventoryResponse, GetOrderByIdData, GetOrderByIdErrors, GetOrderByIdResponse, GetPetByIdData, GetPetByIdErrors, GetPetByIdResponse, GetUserByNameData, GetUserByNameErrors, GetUserByNameResponse, LoginUserData, LoginUserErrors, LoginUserResponse, LogoutUserData, PlaceOrderData, PlaceOrderErrors, PlaceOrderResponse, SubmitMeasurementData, SubmitTagsData, SubmitTagsResponse, UpdatePetData, UpdatePetErrors, UpdatePetResponse, UpdatePetWithFormData, UpdatePetWithFormErrors, UpdatePetWithFormResponse, UpdateProfileData, UpdateProfileResponse, UpdateUserData, UpdateUserErrors, UploadFileData, UploadFileErrors, UploadFileResponse, UploadPetDocumentData, UploadPetDocumentResponse } from '../types.gen';
 
 export const typiaSchemas = json.schemas<[
-    Omit<AddPetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: AddPetData['path'];
-        body: AddPetData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: AddPetData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: AddPetData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    AddPetResponse,
-    AddPetErrors[400],
-    AddPetErrors[422],
-    Omit<UpdatePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: UpdatePetData['path'];
-        body: UpdatePetData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: UpdatePetData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: UpdatePetData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    UpdatePetResponse,
-    UpdatePetErrors[400],
-    UpdatePetErrors[404],
-    UpdatePetErrors[422],
-    Omit<FindPetsByStatusData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: FindPetsByStatusData['path'];
-        body: FindPetsByStatusData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: FindPetsByStatusData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: FindPetsByStatusData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    FindPetsByStatusResponse,
-    FindPetsByStatusErrors[400],
-    Omit<FindPetsByTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: FindPetsByTagsData['path'];
-        body: FindPetsByTagsData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: FindPetsByTagsData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: FindPetsByTagsData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    FindPetsByTagsResponse,
-    FindPetsByTagsErrors[400],
-    Omit<DeletePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: DeletePetData['path'];
-        body: DeletePetData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: DeletePetData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: DeletePetData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    DeletePetErrors[400],
-    Omit<GetPetByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: GetPetByIdData['path'];
-        body: GetPetByIdData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: GetPetByIdData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: GetPetByIdData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    GetPetByIdResponse,
-    GetPetByIdErrors[400],
-    GetPetByIdErrors[404],
-    Omit<UpdatePetWithFormData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: UpdatePetWithFormData['path'];
-        body: UpdatePetWithFormData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: UpdatePetWithFormData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: UpdatePetWithFormData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    UpdatePetWithFormResponse,
-    UpdatePetWithFormErrors[400],
-    Omit<UploadFileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: UploadFileData['path'];
-        body: UploadFileData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: UploadFileData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: UploadFileData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    UploadFileResponse,
-    UploadFileErrors[400],
-    UploadFileErrors[404],
-    Omit<UploadPetDocumentData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: UploadPetDocumentData['path'];
-        body: UploadPetDocumentData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: UploadPetDocumentData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: UploadPetDocumentData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    UploadPetDocumentResponse,
-    Omit<GetInventoryData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: GetInventoryData['path'];
-        body: GetInventoryData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: GetInventoryData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: GetInventoryData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    GetInventoryResponse,
-    Omit<PlaceOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: PlaceOrderData['path'];
-        body: PlaceOrderData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: PlaceOrderData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: PlaceOrderData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    PlaceOrderResponse,
-    PlaceOrderErrors[400],
-    PlaceOrderErrors[422],
-    Omit<DeleteOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: DeleteOrderData['path'];
-        body: DeleteOrderData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: DeleteOrderData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: DeleteOrderData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    DeleteOrderErrors[400],
-    DeleteOrderErrors[404],
-    Omit<GetOrderByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: GetOrderByIdData['path'];
-        body: GetOrderByIdData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: GetOrderByIdData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: GetOrderByIdData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    GetOrderByIdResponse,
-    GetOrderByIdErrors[400],
-    GetOrderByIdErrors[404],
-    Omit<CreateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: CreateUserData['path'];
-        body: CreateUserData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: CreateUserData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: CreateUserData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    CreateUserResponse,
-    Omit<CreateUsersWithListInputData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: CreateUsersWithListInputData['path'];
-        body: CreateUsersWithListInputData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: CreateUsersWithListInputData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: CreateUsersWithListInputData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    CreateUsersWithListInputResponse,
-    Omit<LoginUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: LoginUserData['path'];
-        body: LoginUserData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: LoginUserData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: LoginUserData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    LoginUserResponse,
-    LoginUserErrors[400],
-    Omit<LogoutUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: LogoutUserData['path'];
-        body: LogoutUserData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: LogoutUserData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: LogoutUserData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    Omit<DeleteUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: DeleteUserData['path'];
-        body: DeleteUserData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: DeleteUserData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: DeleteUserData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    DeleteUserErrors[400],
-    DeleteUserErrors[404],
-    Omit<GetUserByNameData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: GetUserByNameData['path'];
-        body: GetUserByNameData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: GetUserByNameData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: GetUserByNameData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    GetUserByNameResponse,
-    GetUserByNameErrors[400],
-    GetUserByNameErrors[404],
-    Omit<UpdateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: UpdateUserData['path'];
-        body: UpdateUserData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: UpdateUserData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: UpdateUserData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    UpdateUserErrors[400],
-    UpdateUserErrors[404],
-    Omit<SubmitTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: SubmitTagsData['path'];
-        body: SubmitTagsData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: SubmitTagsData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: SubmitTagsData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    SubmitTagsResponse,
-    Omit<UpdateProfileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: UpdateProfileData['path'];
-        body: UpdateProfileData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: UpdateProfileData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: UpdateProfileData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    UpdateProfileResponse,
-    Omit<CreateShapeData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: CreateShapeData['path'];
-        body: CreateShapeData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: CreateShapeData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: CreateShapeData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    },
-    CreateShapeResponse,
-    Omit<SubmitMeasurementData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-        params: SubmitMeasurementData['path'];
-        body: SubmitMeasurementData extends {
-            "body": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        query: SubmitMeasurementData extends {
-            "query": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-        headers: SubmitMeasurementData extends {
-            "headers": infer V;
-        } ? [
-            V
-        ] extends [
-            undefined
-        ] ? unknown : V : unknown;
-    }
+  Omit<AddPetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: AddPetData['path'];
+    body: AddPetData extends {
+      body?: unknown;
+    } ? [
+      AddPetData['body']
+    ] extends [
+      undefined
+    ] ? unknown : AddPetData['body'] : unknown;
+    query: AddPetData extends {
+      query?: unknown;
+    } ? [
+      AddPetData['query']
+    ] extends [
+      undefined
+    ] ? unknown : AddPetData['query'] : unknown;
+    headers: AddPetData extends {
+      headers?: unknown;
+    } ? [
+      AddPetData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : AddPetData['headers'] : unknown;
+  },
+  AddPetResponse,
+  AddPetErrors[400],
+  AddPetErrors[422],
+  Omit<UpdatePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: UpdatePetData['path'];
+    body: UpdatePetData extends {
+      body?: unknown;
+    } ? [
+      UpdatePetData['body']
+    ] extends [
+      undefined
+    ] ? unknown : UpdatePetData['body'] : unknown;
+    query: UpdatePetData extends {
+      query?: unknown;
+    } ? [
+      UpdatePetData['query']
+    ] extends [
+      undefined
+    ] ? unknown : UpdatePetData['query'] : unknown;
+    headers: UpdatePetData extends {
+      headers?: unknown;
+    } ? [
+      UpdatePetData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : UpdatePetData['headers'] : unknown;
+  },
+  UpdatePetResponse,
+  UpdatePetErrors[400],
+  UpdatePetErrors[404],
+  UpdatePetErrors[422],
+  Omit<FindPetsByStatusData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: FindPetsByStatusData['path'];
+    body: FindPetsByStatusData extends {
+      body?: unknown;
+    } ? [
+      FindPetsByStatusData['body']
+    ] extends [
+      undefined
+    ] ? unknown : FindPetsByStatusData['body'] : unknown;
+    query: FindPetsByStatusData extends {
+      query?: unknown;
+    } ? [
+      FindPetsByStatusData['query']
+    ] extends [
+      undefined
+    ] ? unknown : FindPetsByStatusData['query'] : unknown;
+    headers: FindPetsByStatusData extends {
+      headers?: unknown;
+    } ? [
+      FindPetsByStatusData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : FindPetsByStatusData['headers'] : unknown;
+  },
+  FindPetsByStatusResponse,
+  FindPetsByStatusErrors[400],
+  Omit<FindPetsByTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: FindPetsByTagsData['path'];
+    body: FindPetsByTagsData extends {
+      body?: unknown;
+    } ? [
+      FindPetsByTagsData['body']
+    ] extends [
+      undefined
+    ] ? unknown : FindPetsByTagsData['body'] : unknown;
+    query: FindPetsByTagsData extends {
+      query?: unknown;
+    } ? [
+      FindPetsByTagsData['query']
+    ] extends [
+      undefined
+    ] ? unknown : FindPetsByTagsData['query'] : unknown;
+    headers: FindPetsByTagsData extends {
+      headers?: unknown;
+    } ? [
+      FindPetsByTagsData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : FindPetsByTagsData['headers'] : unknown;
+  },
+  FindPetsByTagsResponse,
+  FindPetsByTagsErrors[400],
+  Omit<DeletePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: DeletePetData['path'];
+    body: DeletePetData extends {
+      body?: unknown;
+    } ? [
+      DeletePetData['body']
+    ] extends [
+      undefined
+    ] ? unknown : DeletePetData['body'] : unknown;
+    query: DeletePetData extends {
+      query?: unknown;
+    } ? [
+      DeletePetData['query']
+    ] extends [
+      undefined
+    ] ? unknown : DeletePetData['query'] : unknown;
+    headers: DeletePetData extends {
+      headers?: unknown;
+    } ? [
+      DeletePetData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : DeletePetData['headers'] : unknown;
+  },
+  DeletePetErrors[400],
+  Omit<GetPetByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: GetPetByIdData['path'];
+    body: GetPetByIdData extends {
+      body?: unknown;
+    } ? [
+      GetPetByIdData['body']
+    ] extends [
+      undefined
+    ] ? unknown : GetPetByIdData['body'] : unknown;
+    query: GetPetByIdData extends {
+      query?: unknown;
+    } ? [
+      GetPetByIdData['query']
+    ] extends [
+      undefined
+    ] ? unknown : GetPetByIdData['query'] : unknown;
+    headers: GetPetByIdData extends {
+      headers?: unknown;
+    } ? [
+      GetPetByIdData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : GetPetByIdData['headers'] : unknown;
+  },
+  GetPetByIdResponse,
+  GetPetByIdErrors[400],
+  GetPetByIdErrors[404],
+  Omit<UpdatePetWithFormData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: UpdatePetWithFormData['path'];
+    body: UpdatePetWithFormData extends {
+      body?: unknown;
+    } ? [
+      UpdatePetWithFormData['body']
+    ] extends [
+      undefined
+    ] ? unknown : UpdatePetWithFormData['body'] : unknown;
+    query: UpdatePetWithFormData extends {
+      query?: unknown;
+    } ? [
+      UpdatePetWithFormData['query']
+    ] extends [
+      undefined
+    ] ? unknown : UpdatePetWithFormData['query'] : unknown;
+    headers: UpdatePetWithFormData extends {
+      headers?: unknown;
+    } ? [
+      UpdatePetWithFormData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : UpdatePetWithFormData['headers'] : unknown;
+  },
+  UpdatePetWithFormResponse,
+  UpdatePetWithFormErrors[400],
+  Omit<UploadFileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: UploadFileData['path'];
+    body: UploadFileData extends {
+      body?: unknown;
+    } ? [
+      UploadFileData['body']
+    ] extends [
+      undefined
+    ] ? unknown : UploadFileData['body'] : unknown;
+    query: UploadFileData extends {
+      query?: unknown;
+    } ? [
+      UploadFileData['query']
+    ] extends [
+      undefined
+    ] ? unknown : UploadFileData['query'] : unknown;
+    headers: UploadFileData extends {
+      headers?: unknown;
+    } ? [
+      UploadFileData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : UploadFileData['headers'] : unknown;
+  },
+  UploadFileResponse,
+  UploadFileErrors[400],
+  UploadFileErrors[404],
+  Omit<UploadPetDocumentData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: UploadPetDocumentData['path'];
+    body: UploadPetDocumentData extends {
+      body?: unknown;
+    } ? [
+      UploadPetDocumentData['body']
+    ] extends [
+      undefined
+    ] ? unknown : UploadPetDocumentData['body'] : unknown;
+    query: UploadPetDocumentData extends {
+      query?: unknown;
+    } ? [
+      UploadPetDocumentData['query']
+    ] extends [
+      undefined
+    ] ? unknown : UploadPetDocumentData['query'] : unknown;
+    headers: UploadPetDocumentData extends {
+      headers?: unknown;
+    } ? [
+      UploadPetDocumentData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : UploadPetDocumentData['headers'] : unknown;
+  },
+  UploadPetDocumentResponse,
+  Omit<GetInventoryData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: GetInventoryData['path'];
+    body: GetInventoryData extends {
+      body?: unknown;
+    } ? [
+      GetInventoryData['body']
+    ] extends [
+      undefined
+    ] ? unknown : GetInventoryData['body'] : unknown;
+    query: GetInventoryData extends {
+      query?: unknown;
+    } ? [
+      GetInventoryData['query']
+    ] extends [
+      undefined
+    ] ? unknown : GetInventoryData['query'] : unknown;
+    headers: GetInventoryData extends {
+      headers?: unknown;
+    } ? [
+      GetInventoryData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : GetInventoryData['headers'] : unknown;
+  },
+  GetInventoryResponse,
+  Omit<PlaceOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: PlaceOrderData['path'];
+    body: PlaceOrderData extends {
+      body?: unknown;
+    } ? [
+      PlaceOrderData['body']
+    ] extends [
+      undefined
+    ] ? unknown : PlaceOrderData['body'] : unknown;
+    query: PlaceOrderData extends {
+      query?: unknown;
+    } ? [
+      PlaceOrderData['query']
+    ] extends [
+      undefined
+    ] ? unknown : PlaceOrderData['query'] : unknown;
+    headers: PlaceOrderData extends {
+      headers?: unknown;
+    } ? [
+      PlaceOrderData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : PlaceOrderData['headers'] : unknown;
+  },
+  PlaceOrderResponse,
+  PlaceOrderErrors[400],
+  PlaceOrderErrors[422],
+  Omit<DeleteOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: DeleteOrderData['path'];
+    body: DeleteOrderData extends {
+      body?: unknown;
+    } ? [
+      DeleteOrderData['body']
+    ] extends [
+      undefined
+    ] ? unknown : DeleteOrderData['body'] : unknown;
+    query: DeleteOrderData extends {
+      query?: unknown;
+    } ? [
+      DeleteOrderData['query']
+    ] extends [
+      undefined
+    ] ? unknown : DeleteOrderData['query'] : unknown;
+    headers: DeleteOrderData extends {
+      headers?: unknown;
+    } ? [
+      DeleteOrderData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : DeleteOrderData['headers'] : unknown;
+  },
+  DeleteOrderErrors[400],
+  DeleteOrderErrors[404],
+  Omit<GetOrderByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: GetOrderByIdData['path'];
+    body: GetOrderByIdData extends {
+      body?: unknown;
+    } ? [
+      GetOrderByIdData['body']
+    ] extends [
+      undefined
+    ] ? unknown : GetOrderByIdData['body'] : unknown;
+    query: GetOrderByIdData extends {
+      query?: unknown;
+    } ? [
+      GetOrderByIdData['query']
+    ] extends [
+      undefined
+    ] ? unknown : GetOrderByIdData['query'] : unknown;
+    headers: GetOrderByIdData extends {
+      headers?: unknown;
+    } ? [
+      GetOrderByIdData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : GetOrderByIdData['headers'] : unknown;
+  },
+  GetOrderByIdResponse,
+  GetOrderByIdErrors[400],
+  GetOrderByIdErrors[404],
+  Omit<CreateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: CreateUserData['path'];
+    body: CreateUserData extends {
+      body?: unknown;
+    } ? [
+      CreateUserData['body']
+    ] extends [
+      undefined
+    ] ? unknown : CreateUserData['body'] : unknown;
+    query: CreateUserData extends {
+      query?: unknown;
+    } ? [
+      CreateUserData['query']
+    ] extends [
+      undefined
+    ] ? unknown : CreateUserData['query'] : unknown;
+    headers: CreateUserData extends {
+      headers?: unknown;
+    } ? [
+      CreateUserData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : CreateUserData['headers'] : unknown;
+  },
+  CreateUserResponse,
+  Omit<CreateUsersWithListInputData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: CreateUsersWithListInputData['path'];
+    body: CreateUsersWithListInputData extends {
+      body?: unknown;
+    } ? [
+      CreateUsersWithListInputData['body']
+    ] extends [
+      undefined
+    ] ? unknown : CreateUsersWithListInputData['body'] : unknown;
+    query: CreateUsersWithListInputData extends {
+      query?: unknown;
+    } ? [
+      CreateUsersWithListInputData['query']
+    ] extends [
+      undefined
+    ] ? unknown : CreateUsersWithListInputData['query'] : unknown;
+    headers: CreateUsersWithListInputData extends {
+      headers?: unknown;
+    } ? [
+      CreateUsersWithListInputData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : CreateUsersWithListInputData['headers'] : unknown;
+  },
+  CreateUsersWithListInputResponse,
+  Omit<LoginUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: LoginUserData['path'];
+    body: LoginUserData extends {
+      body?: unknown;
+    } ? [
+      LoginUserData['body']
+    ] extends [
+      undefined
+    ] ? unknown : LoginUserData['body'] : unknown;
+    query: LoginUserData extends {
+      query?: unknown;
+    } ? [
+      LoginUserData['query']
+    ] extends [
+      undefined
+    ] ? unknown : LoginUserData['query'] : unknown;
+    headers: LoginUserData extends {
+      headers?: unknown;
+    } ? [
+      LoginUserData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : LoginUserData['headers'] : unknown;
+  },
+  LoginUserResponse,
+  LoginUserErrors[400],
+  Omit<LogoutUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: LogoutUserData['path'];
+    body: LogoutUserData extends {
+      body?: unknown;
+    } ? [
+      LogoutUserData['body']
+    ] extends [
+      undefined
+    ] ? unknown : LogoutUserData['body'] : unknown;
+    query: LogoutUserData extends {
+      query?: unknown;
+    } ? [
+      LogoutUserData['query']
+    ] extends [
+      undefined
+    ] ? unknown : LogoutUserData['query'] : unknown;
+    headers: LogoutUserData extends {
+      headers?: unknown;
+    } ? [
+      LogoutUserData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : LogoutUserData['headers'] : unknown;
+  },
+  Omit<DeleteUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: DeleteUserData['path'];
+    body: DeleteUserData extends {
+      body?: unknown;
+    } ? [
+      DeleteUserData['body']
+    ] extends [
+      undefined
+    ] ? unknown : DeleteUserData['body'] : unknown;
+    query: DeleteUserData extends {
+      query?: unknown;
+    } ? [
+      DeleteUserData['query']
+    ] extends [
+      undefined
+    ] ? unknown : DeleteUserData['query'] : unknown;
+    headers: DeleteUserData extends {
+      headers?: unknown;
+    } ? [
+      DeleteUserData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : DeleteUserData['headers'] : unknown;
+  },
+  DeleteUserErrors[400],
+  DeleteUserErrors[404],
+  Omit<GetUserByNameData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: GetUserByNameData['path'];
+    body: GetUserByNameData extends {
+      body?: unknown;
+    } ? [
+      GetUserByNameData['body']
+    ] extends [
+      undefined
+    ] ? unknown : GetUserByNameData['body'] : unknown;
+    query: GetUserByNameData extends {
+      query?: unknown;
+    } ? [
+      GetUserByNameData['query']
+    ] extends [
+      undefined
+    ] ? unknown : GetUserByNameData['query'] : unknown;
+    headers: GetUserByNameData extends {
+      headers?: unknown;
+    } ? [
+      GetUserByNameData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : GetUserByNameData['headers'] : unknown;
+  },
+  GetUserByNameResponse,
+  GetUserByNameErrors[400],
+  GetUserByNameErrors[404],
+  Omit<UpdateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: UpdateUserData['path'];
+    body: UpdateUserData extends {
+      body?: unknown;
+    } ? [
+      UpdateUserData['body']
+    ] extends [
+      undefined
+    ] ? unknown : UpdateUserData['body'] : unknown;
+    query: UpdateUserData extends {
+      query?: unknown;
+    } ? [
+      UpdateUserData['query']
+    ] extends [
+      undefined
+    ] ? unknown : UpdateUserData['query'] : unknown;
+    headers: UpdateUserData extends {
+      headers?: unknown;
+    } ? [
+      UpdateUserData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : UpdateUserData['headers'] : unknown;
+  },
+  UpdateUserErrors[400],
+  UpdateUserErrors[404],
+  Omit<SubmitTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: SubmitTagsData['path'];
+    body: SubmitTagsData extends {
+      body?: unknown;
+    } ? [
+      SubmitTagsData['body']
+    ] extends [
+      undefined
+    ] ? unknown : SubmitTagsData['body'] : unknown;
+    query: SubmitTagsData extends {
+      query?: unknown;
+    } ? [
+      SubmitTagsData['query']
+    ] extends [
+      undefined
+    ] ? unknown : SubmitTagsData['query'] : unknown;
+    headers: SubmitTagsData extends {
+      headers?: unknown;
+    } ? [
+      SubmitTagsData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : SubmitTagsData['headers'] : unknown;
+  },
+  SubmitTagsResponse,
+  Omit<UpdateProfileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: UpdateProfileData['path'];
+    body: UpdateProfileData extends {
+      body?: unknown;
+    } ? [
+      UpdateProfileData['body']
+    ] extends [
+      undefined
+    ] ? unknown : UpdateProfileData['body'] : unknown;
+    query: UpdateProfileData extends {
+      query?: unknown;
+    } ? [
+      UpdateProfileData['query']
+    ] extends [
+      undefined
+    ] ? unknown : UpdateProfileData['query'] : unknown;
+    headers: UpdateProfileData extends {
+      headers?: unknown;
+    } ? [
+      UpdateProfileData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : UpdateProfileData['headers'] : unknown;
+  },
+  UpdateProfileResponse,
+  Omit<CreateShapeData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: CreateShapeData['path'];
+    body: CreateShapeData extends {
+      body?: unknown;
+    } ? [
+      CreateShapeData['body']
+    ] extends [
+      undefined
+    ] ? unknown : CreateShapeData['body'] : unknown;
+    query: CreateShapeData extends {
+      query?: unknown;
+    } ? [
+      CreateShapeData['query']
+    ] extends [
+      undefined
+    ] ? unknown : CreateShapeData['query'] : unknown;
+    headers: CreateShapeData extends {
+      headers?: unknown;
+    } ? [
+      CreateShapeData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : CreateShapeData['headers'] : unknown;
+  },
+  CreateShapeResponse,
+  Omit<SubmitMeasurementData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
+    params: SubmitMeasurementData['path'];
+    body: SubmitMeasurementData extends {
+      body?: unknown;
+    } ? [
+      SubmitMeasurementData['body']
+    ] extends [
+      undefined
+    ] ? unknown : SubmitMeasurementData['body'] : unknown;
+    query: SubmitMeasurementData extends {
+      query?: unknown;
+    } ? [
+      SubmitMeasurementData['query']
+    ] extends [
+      undefined
+    ] ? unknown : SubmitMeasurementData['query'] : unknown;
+    headers: SubmitMeasurementData extends {
+      headers?: unknown;
+    } ? [
+      SubmitMeasurementData['headers']
+    ] extends [
+      undefined
+    ] ? unknown : SubmitMeasurementData['headers'] : unknown;
+  }
 ]>();
 
 export const typiaJsonComponents = typiaSchemas.components;
@@ -636,97 +636,97 @@ export const typiaJsonComponents = typiaSchemas.components;
  * Add a new pet to the store.
  */
 export const tAddPetData: StandardSchemaV1<Omit<AddPetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: AddPetData['path'];
-    body: AddPetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: AddPetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: AddPetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: AddPetData['path'];
+  body: AddPetData extends {
+    body?: unknown;
+  } ? [
+    AddPetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['body'] : unknown;
+  query: AddPetData extends {
+    query?: unknown;
+  } ? [
+    AddPetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['query'] : unknown;
+  headers: AddPetData extends {
+    headers?: unknown;
+  } ? [
+    AddPetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['headers'] : unknown;
 }, Omit<AddPetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: AddPetData['path'];
-    body: AddPetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: AddPetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: AddPetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: AddPetData['path'];
+  body: AddPetData extends {
+    body?: unknown;
+  } ? [
+    AddPetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['body'] : unknown;
+  query: AddPetData extends {
+    query?: unknown;
+  } ? [
+    AddPetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['query'] : unknown;
+  headers: AddPetData extends {
+    headers?: unknown;
+  } ? [
+    AddPetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<AddPetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: AddPetData['path'];
-    body: AddPetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: AddPetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: AddPetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: AddPetData['path'];
+  body: AddPetData extends {
+    body?: unknown;
+  } ? [
+    AddPetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['body'] : unknown;
+  query: AddPetData extends {
+    query?: unknown;
+  } ? [
+    AddPetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['query'] : unknown;
+  headers: AddPetData extends {
+    headers?: unknown;
+  } ? [
+    AddPetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['headers'] : unknown;
 }>) = createValidate<Omit<AddPetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: AddPetData['path'];
-    body: AddPetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: AddPetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: AddPetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: AddPetData['path'];
+  body: AddPetData extends {
+    body?: unknown;
+  } ? [
+    AddPetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['body'] : unknown;
+  query: AddPetData extends {
+    query?: unknown;
+  } ? [
+    AddPetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['query'] : unknown;
+  headers: AddPetData extends {
+    headers?: unknown;
+  } ? [
+    AddPetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : AddPetData['headers'] : unknown;
 }>();
 
 export const tAddPetDataJsonSchema = typiaSchemas.schemas[0];
@@ -749,97 +749,97 @@ export const tAddPetResponseError422JsonSchema = typiaSchemas.schemas[3];
  * Update an existing pet by Id.
  */
 export const tUpdatePetData: StandardSchemaV1<Omit<UpdatePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetData['path'];
-    body: UpdatePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetData['path'];
+  body: UpdatePetData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['body'] : unknown;
+  query: UpdatePetData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['query'] : unknown;
+  headers: UpdatePetData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['headers'] : unknown;
 }, Omit<UpdatePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetData['path'];
-    body: UpdatePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetData['path'];
+  body: UpdatePetData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['body'] : unknown;
+  query: UpdatePetData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['query'] : unknown;
+  headers: UpdatePetData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<UpdatePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetData['path'];
-    body: UpdatePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetData['path'];
+  body: UpdatePetData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['body'] : unknown;
+  query: UpdatePetData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['query'] : unknown;
+  headers: UpdatePetData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['headers'] : unknown;
 }>) = createValidate<Omit<UpdatePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetData['path'];
-    body: UpdatePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetData['path'];
+  body: UpdatePetData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['body'] : unknown;
+  query: UpdatePetData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['query'] : unknown;
+  headers: UpdatePetData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetData['headers'] : unknown;
 }>();
 
 export const tUpdatePetDataJsonSchema = typiaSchemas.schemas[4];
@@ -866,97 +866,97 @@ export const tUpdatePetResponseError422JsonSchema = typiaSchemas.schemas[8];
  * Multiple status values can be provided with comma separated strings.
  */
 export const tFindPetsByStatusData: StandardSchemaV1<Omit<FindPetsByStatusData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByStatusData['path'];
-    body: FindPetsByStatusData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByStatusData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByStatusData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByStatusData['path'];
+  body: FindPetsByStatusData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByStatusData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['body'] : unknown;
+  query: FindPetsByStatusData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByStatusData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['query'] : unknown;
+  headers: FindPetsByStatusData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByStatusData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['headers'] : unknown;
 }, Omit<FindPetsByStatusData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByStatusData['path'];
-    body: FindPetsByStatusData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByStatusData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByStatusData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByStatusData['path'];
+  body: FindPetsByStatusData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByStatusData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['body'] : unknown;
+  query: FindPetsByStatusData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByStatusData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['query'] : unknown;
+  headers: FindPetsByStatusData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByStatusData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<FindPetsByStatusData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByStatusData['path'];
-    body: FindPetsByStatusData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByStatusData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByStatusData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByStatusData['path'];
+  body: FindPetsByStatusData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByStatusData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['body'] : unknown;
+  query: FindPetsByStatusData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByStatusData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['query'] : unknown;
+  headers: FindPetsByStatusData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByStatusData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['headers'] : unknown;
 }>) = createValidate<Omit<FindPetsByStatusData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByStatusData['path'];
-    body: FindPetsByStatusData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByStatusData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByStatusData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByStatusData['path'];
+  body: FindPetsByStatusData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByStatusData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['body'] : unknown;
+  query: FindPetsByStatusData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByStatusData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['query'] : unknown;
+  headers: FindPetsByStatusData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByStatusData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByStatusData['headers'] : unknown;
 }>();
 
 export const tFindPetsByStatusDataJsonSchema = typiaSchemas.schemas[9];
@@ -975,97 +975,97 @@ export const tFindPetsByStatusResponseError400JsonSchema = typiaSchemas.schemas[
  * Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
  */
 export const tFindPetsByTagsData: StandardSchemaV1<Omit<FindPetsByTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByTagsData['path'];
-    body: FindPetsByTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByTagsData['path'];
+  body: FindPetsByTagsData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['body'] : unknown;
+  query: FindPetsByTagsData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['query'] : unknown;
+  headers: FindPetsByTagsData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['headers'] : unknown;
 }, Omit<FindPetsByTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByTagsData['path'];
-    body: FindPetsByTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByTagsData['path'];
+  body: FindPetsByTagsData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['body'] : unknown;
+  query: FindPetsByTagsData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['query'] : unknown;
+  headers: FindPetsByTagsData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<FindPetsByTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByTagsData['path'];
-    body: FindPetsByTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByTagsData['path'];
+  body: FindPetsByTagsData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['body'] : unknown;
+  query: FindPetsByTagsData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['query'] : unknown;
+  headers: FindPetsByTagsData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['headers'] : unknown;
 }>) = createValidate<Omit<FindPetsByTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: FindPetsByTagsData['path'];
-    body: FindPetsByTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: FindPetsByTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: FindPetsByTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: FindPetsByTagsData['path'];
+  body: FindPetsByTagsData extends {
+    body?: unknown;
+  } ? [
+    FindPetsByTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['body'] : unknown;
+  query: FindPetsByTagsData extends {
+    query?: unknown;
+  } ? [
+    FindPetsByTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['query'] : unknown;
+  headers: FindPetsByTagsData extends {
+    headers?: unknown;
+  } ? [
+    FindPetsByTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : FindPetsByTagsData['headers'] : unknown;
 }>();
 
 export const tFindPetsByTagsDataJsonSchema = typiaSchemas.schemas[12];
@@ -1084,97 +1084,97 @@ export const tFindPetsByTagsResponseError400JsonSchema = typiaSchemas.schemas[14
  * Delete a pet.
  */
 export const tDeletePetData: StandardSchemaV1<Omit<DeletePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeletePetData['path'];
-    body: DeletePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeletePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeletePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeletePetData['path'];
+  body: DeletePetData extends {
+    body?: unknown;
+  } ? [
+    DeletePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['body'] : unknown;
+  query: DeletePetData extends {
+    query?: unknown;
+  } ? [
+    DeletePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['query'] : unknown;
+  headers: DeletePetData extends {
+    headers?: unknown;
+  } ? [
+    DeletePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['headers'] : unknown;
 }, Omit<DeletePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeletePetData['path'];
-    body: DeletePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeletePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeletePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeletePetData['path'];
+  body: DeletePetData extends {
+    body?: unknown;
+  } ? [
+    DeletePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['body'] : unknown;
+  query: DeletePetData extends {
+    query?: unknown;
+  } ? [
+    DeletePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['query'] : unknown;
+  headers: DeletePetData extends {
+    headers?: unknown;
+  } ? [
+    DeletePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<DeletePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeletePetData['path'];
-    body: DeletePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeletePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeletePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeletePetData['path'];
+  body: DeletePetData extends {
+    body?: unknown;
+  } ? [
+    DeletePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['body'] : unknown;
+  query: DeletePetData extends {
+    query?: unknown;
+  } ? [
+    DeletePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['query'] : unknown;
+  headers: DeletePetData extends {
+    headers?: unknown;
+  } ? [
+    DeletePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['headers'] : unknown;
 }>) = createValidate<Omit<DeletePetData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeletePetData['path'];
-    body: DeletePetData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeletePetData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeletePetData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeletePetData['path'];
+  body: DeletePetData extends {
+    body?: unknown;
+  } ? [
+    DeletePetData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['body'] : unknown;
+  query: DeletePetData extends {
+    query?: unknown;
+  } ? [
+    DeletePetData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['query'] : unknown;
+  headers: DeletePetData extends {
+    headers?: unknown;
+  } ? [
+    DeletePetData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeletePetData['headers'] : unknown;
 }>();
 
 export const tDeletePetDataJsonSchema = typiaSchemas.schemas[15];
@@ -1189,97 +1189,97 @@ export const tDeletePetResponseError400JsonSchema = typiaSchemas.schemas[16];
  * Returns a single pet.
  */
 export const tGetPetByIdData: StandardSchemaV1<Omit<GetPetByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetPetByIdData['path'];
-    body: GetPetByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetPetByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetPetByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetPetByIdData['path'];
+  body: GetPetByIdData extends {
+    body?: unknown;
+  } ? [
+    GetPetByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['body'] : unknown;
+  query: GetPetByIdData extends {
+    query?: unknown;
+  } ? [
+    GetPetByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['query'] : unknown;
+  headers: GetPetByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetPetByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['headers'] : unknown;
 }, Omit<GetPetByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetPetByIdData['path'];
-    body: GetPetByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetPetByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetPetByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetPetByIdData['path'];
+  body: GetPetByIdData extends {
+    body?: unknown;
+  } ? [
+    GetPetByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['body'] : unknown;
+  query: GetPetByIdData extends {
+    query?: unknown;
+  } ? [
+    GetPetByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['query'] : unknown;
+  headers: GetPetByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetPetByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<GetPetByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetPetByIdData['path'];
-    body: GetPetByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetPetByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetPetByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetPetByIdData['path'];
+  body: GetPetByIdData extends {
+    body?: unknown;
+  } ? [
+    GetPetByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['body'] : unknown;
+  query: GetPetByIdData extends {
+    query?: unknown;
+  } ? [
+    GetPetByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['query'] : unknown;
+  headers: GetPetByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetPetByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['headers'] : unknown;
 }>) = createValidate<Omit<GetPetByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetPetByIdData['path'];
-    body: GetPetByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetPetByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetPetByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetPetByIdData['path'];
+  body: GetPetByIdData extends {
+    body?: unknown;
+  } ? [
+    GetPetByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['body'] : unknown;
+  query: GetPetByIdData extends {
+    query?: unknown;
+  } ? [
+    GetPetByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['query'] : unknown;
+  headers: GetPetByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetPetByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetPetByIdData['headers'] : unknown;
 }>();
 
 export const tGetPetByIdDataJsonSchema = typiaSchemas.schemas[17];
@@ -1302,97 +1302,97 @@ export const tGetPetByIdResponseError404JsonSchema = typiaSchemas.schemas[20];
  * Updates a pet resource based on the form data.
  */
 export const tUpdatePetWithFormData: StandardSchemaV1<Omit<UpdatePetWithFormData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetWithFormData['path'];
-    body: UpdatePetWithFormData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetWithFormData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetWithFormData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetWithFormData['path'];
+  body: UpdatePetWithFormData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetWithFormData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['body'] : unknown;
+  query: UpdatePetWithFormData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetWithFormData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['query'] : unknown;
+  headers: UpdatePetWithFormData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetWithFormData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['headers'] : unknown;
 }, Omit<UpdatePetWithFormData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetWithFormData['path'];
-    body: UpdatePetWithFormData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetWithFormData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetWithFormData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetWithFormData['path'];
+  body: UpdatePetWithFormData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetWithFormData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['body'] : unknown;
+  query: UpdatePetWithFormData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetWithFormData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['query'] : unknown;
+  headers: UpdatePetWithFormData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetWithFormData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<UpdatePetWithFormData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetWithFormData['path'];
-    body: UpdatePetWithFormData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetWithFormData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetWithFormData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetWithFormData['path'];
+  body: UpdatePetWithFormData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetWithFormData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['body'] : unknown;
+  query: UpdatePetWithFormData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetWithFormData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['query'] : unknown;
+  headers: UpdatePetWithFormData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetWithFormData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['headers'] : unknown;
 }>) = createValidate<Omit<UpdatePetWithFormData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdatePetWithFormData['path'];
-    body: UpdatePetWithFormData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdatePetWithFormData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdatePetWithFormData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdatePetWithFormData['path'];
+  body: UpdatePetWithFormData extends {
+    body?: unknown;
+  } ? [
+    UpdatePetWithFormData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['body'] : unknown;
+  query: UpdatePetWithFormData extends {
+    query?: unknown;
+  } ? [
+    UpdatePetWithFormData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['query'] : unknown;
+  headers: UpdatePetWithFormData extends {
+    headers?: unknown;
+  } ? [
+    UpdatePetWithFormData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdatePetWithFormData['headers'] : unknown;
 }>();
 
 export const tUpdatePetWithFormDataJsonSchema = typiaSchemas.schemas[21];
@@ -1411,97 +1411,97 @@ export const tUpdatePetWithFormResponseError400JsonSchema = typiaSchemas.schemas
  * Upload image of the pet.
  */
 export const tUploadFileData: StandardSchemaV1<Omit<UploadFileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadFileData['path'];
-    body: UploadFileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadFileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadFileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadFileData['path'];
+  body: UploadFileData extends {
+    body?: unknown;
+  } ? [
+    UploadFileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['body'] : unknown;
+  query: UploadFileData extends {
+    query?: unknown;
+  } ? [
+    UploadFileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['query'] : unknown;
+  headers: UploadFileData extends {
+    headers?: unknown;
+  } ? [
+    UploadFileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['headers'] : unknown;
 }, Omit<UploadFileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadFileData['path'];
-    body: UploadFileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadFileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadFileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadFileData['path'];
+  body: UploadFileData extends {
+    body?: unknown;
+  } ? [
+    UploadFileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['body'] : unknown;
+  query: UploadFileData extends {
+    query?: unknown;
+  } ? [
+    UploadFileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['query'] : unknown;
+  headers: UploadFileData extends {
+    headers?: unknown;
+  } ? [
+    UploadFileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<UploadFileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadFileData['path'];
-    body: UploadFileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadFileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadFileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadFileData['path'];
+  body: UploadFileData extends {
+    body?: unknown;
+  } ? [
+    UploadFileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['body'] : unknown;
+  query: UploadFileData extends {
+    query?: unknown;
+  } ? [
+    UploadFileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['query'] : unknown;
+  headers: UploadFileData extends {
+    headers?: unknown;
+  } ? [
+    UploadFileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['headers'] : unknown;
 }>) = createValidate<Omit<UploadFileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadFileData['path'];
-    body: UploadFileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadFileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadFileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadFileData['path'];
+  body: UploadFileData extends {
+    body?: unknown;
+  } ? [
+    UploadFileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['body'] : unknown;
+  query: UploadFileData extends {
+    query?: unknown;
+  } ? [
+    UploadFileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['query'] : unknown;
+  headers: UploadFileData extends {
+    headers?: unknown;
+  } ? [
+    UploadFileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadFileData['headers'] : unknown;
 }>();
 
 export const tUploadFileDataJsonSchema = typiaSchemas.schemas[24];
@@ -1524,97 +1524,97 @@ export const tUploadFileResponseError404JsonSchema = typiaSchemas.schemas[27];
  * Upload a document (image + metadata) for a pet via multipart/form-data.
  */
 export const tUploadPetDocumentData: StandardSchemaV1<Omit<UploadPetDocumentData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadPetDocumentData['path'];
-    body: UploadPetDocumentData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadPetDocumentData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadPetDocumentData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadPetDocumentData['path'];
+  body: UploadPetDocumentData extends {
+    body?: unknown;
+  } ? [
+    UploadPetDocumentData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['body'] : unknown;
+  query: UploadPetDocumentData extends {
+    query?: unknown;
+  } ? [
+    UploadPetDocumentData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['query'] : unknown;
+  headers: UploadPetDocumentData extends {
+    headers?: unknown;
+  } ? [
+    UploadPetDocumentData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['headers'] : unknown;
 }, Omit<UploadPetDocumentData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadPetDocumentData['path'];
-    body: UploadPetDocumentData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadPetDocumentData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadPetDocumentData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadPetDocumentData['path'];
+  body: UploadPetDocumentData extends {
+    body?: unknown;
+  } ? [
+    UploadPetDocumentData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['body'] : unknown;
+  query: UploadPetDocumentData extends {
+    query?: unknown;
+  } ? [
+    UploadPetDocumentData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['query'] : unknown;
+  headers: UploadPetDocumentData extends {
+    headers?: unknown;
+  } ? [
+    UploadPetDocumentData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<UploadPetDocumentData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadPetDocumentData['path'];
-    body: UploadPetDocumentData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadPetDocumentData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadPetDocumentData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadPetDocumentData['path'];
+  body: UploadPetDocumentData extends {
+    body?: unknown;
+  } ? [
+    UploadPetDocumentData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['body'] : unknown;
+  query: UploadPetDocumentData extends {
+    query?: unknown;
+  } ? [
+    UploadPetDocumentData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['query'] : unknown;
+  headers: UploadPetDocumentData extends {
+    headers?: unknown;
+  } ? [
+    UploadPetDocumentData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['headers'] : unknown;
 }>) = createValidate<Omit<UploadPetDocumentData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UploadPetDocumentData['path'];
-    body: UploadPetDocumentData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UploadPetDocumentData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UploadPetDocumentData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UploadPetDocumentData['path'];
+  body: UploadPetDocumentData extends {
+    body?: unknown;
+  } ? [
+    UploadPetDocumentData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['body'] : unknown;
+  query: UploadPetDocumentData extends {
+    query?: unknown;
+  } ? [
+    UploadPetDocumentData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['query'] : unknown;
+  headers: UploadPetDocumentData extends {
+    headers?: unknown;
+  } ? [
+    UploadPetDocumentData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UploadPetDocumentData['headers'] : unknown;
 }>();
 
 export const tUploadPetDocumentDataJsonSchema = typiaSchemas.schemas[28];
@@ -1629,97 +1629,97 @@ export const tUploadPetDocumentResponseJsonSchema = typiaSchemas.schemas[29];
  * Returns a map of status codes to quantities.
  */
 export const tGetInventoryData: StandardSchemaV1<Omit<GetInventoryData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetInventoryData['path'];
-    body: GetInventoryData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetInventoryData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetInventoryData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetInventoryData['path'];
+  body: GetInventoryData extends {
+    body?: unknown;
+  } ? [
+    GetInventoryData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['body'] : unknown;
+  query: GetInventoryData extends {
+    query?: unknown;
+  } ? [
+    GetInventoryData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['query'] : unknown;
+  headers: GetInventoryData extends {
+    headers?: unknown;
+  } ? [
+    GetInventoryData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['headers'] : unknown;
 }, Omit<GetInventoryData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetInventoryData['path'];
-    body: GetInventoryData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetInventoryData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetInventoryData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetInventoryData['path'];
+  body: GetInventoryData extends {
+    body?: unknown;
+  } ? [
+    GetInventoryData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['body'] : unknown;
+  query: GetInventoryData extends {
+    query?: unknown;
+  } ? [
+    GetInventoryData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['query'] : unknown;
+  headers: GetInventoryData extends {
+    headers?: unknown;
+  } ? [
+    GetInventoryData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<GetInventoryData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetInventoryData['path'];
-    body: GetInventoryData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetInventoryData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetInventoryData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetInventoryData['path'];
+  body: GetInventoryData extends {
+    body?: unknown;
+  } ? [
+    GetInventoryData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['body'] : unknown;
+  query: GetInventoryData extends {
+    query?: unknown;
+  } ? [
+    GetInventoryData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['query'] : unknown;
+  headers: GetInventoryData extends {
+    headers?: unknown;
+  } ? [
+    GetInventoryData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['headers'] : unknown;
 }>) = createValidate<Omit<GetInventoryData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetInventoryData['path'];
-    body: GetInventoryData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetInventoryData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetInventoryData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetInventoryData['path'];
+  body: GetInventoryData extends {
+    body?: unknown;
+  } ? [
+    GetInventoryData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['body'] : unknown;
+  query: GetInventoryData extends {
+    query?: unknown;
+  } ? [
+    GetInventoryData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['query'] : unknown;
+  headers: GetInventoryData extends {
+    headers?: unknown;
+  } ? [
+    GetInventoryData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetInventoryData['headers'] : unknown;
 }>();
 
 export const tGetInventoryDataJsonSchema = typiaSchemas.schemas[30];
@@ -1734,97 +1734,97 @@ export const tGetInventoryResponseJsonSchema = typiaSchemas.schemas[31];
  * Place a new order in the store.
  */
 export const tPlaceOrderData: StandardSchemaV1<Omit<PlaceOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: PlaceOrderData['path'];
-    body: PlaceOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: PlaceOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: PlaceOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: PlaceOrderData['path'];
+  body: PlaceOrderData extends {
+    body?: unknown;
+  } ? [
+    PlaceOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['body'] : unknown;
+  query: PlaceOrderData extends {
+    query?: unknown;
+  } ? [
+    PlaceOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['query'] : unknown;
+  headers: PlaceOrderData extends {
+    headers?: unknown;
+  } ? [
+    PlaceOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['headers'] : unknown;
 }, Omit<PlaceOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: PlaceOrderData['path'];
-    body: PlaceOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: PlaceOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: PlaceOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: PlaceOrderData['path'];
+  body: PlaceOrderData extends {
+    body?: unknown;
+  } ? [
+    PlaceOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['body'] : unknown;
+  query: PlaceOrderData extends {
+    query?: unknown;
+  } ? [
+    PlaceOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['query'] : unknown;
+  headers: PlaceOrderData extends {
+    headers?: unknown;
+  } ? [
+    PlaceOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<PlaceOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: PlaceOrderData['path'];
-    body: PlaceOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: PlaceOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: PlaceOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: PlaceOrderData['path'];
+  body: PlaceOrderData extends {
+    body?: unknown;
+  } ? [
+    PlaceOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['body'] : unknown;
+  query: PlaceOrderData extends {
+    query?: unknown;
+  } ? [
+    PlaceOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['query'] : unknown;
+  headers: PlaceOrderData extends {
+    headers?: unknown;
+  } ? [
+    PlaceOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['headers'] : unknown;
 }>) = createValidate<Omit<PlaceOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: PlaceOrderData['path'];
-    body: PlaceOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: PlaceOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: PlaceOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: PlaceOrderData['path'];
+  body: PlaceOrderData extends {
+    body?: unknown;
+  } ? [
+    PlaceOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['body'] : unknown;
+  query: PlaceOrderData extends {
+    query?: unknown;
+  } ? [
+    PlaceOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['query'] : unknown;
+  headers: PlaceOrderData extends {
+    headers?: unknown;
+  } ? [
+    PlaceOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : PlaceOrderData['headers'] : unknown;
 }>();
 
 export const tPlaceOrderDataJsonSchema = typiaSchemas.schemas[32];
@@ -1847,97 +1847,97 @@ export const tPlaceOrderResponseError422JsonSchema = typiaSchemas.schemas[35];
  * For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors.
  */
 export const tDeleteOrderData: StandardSchemaV1<Omit<DeleteOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteOrderData['path'];
-    body: DeleteOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteOrderData['path'];
+  body: DeleteOrderData extends {
+    body?: unknown;
+  } ? [
+    DeleteOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['body'] : unknown;
+  query: DeleteOrderData extends {
+    query?: unknown;
+  } ? [
+    DeleteOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['query'] : unknown;
+  headers: DeleteOrderData extends {
+    headers?: unknown;
+  } ? [
+    DeleteOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['headers'] : unknown;
 }, Omit<DeleteOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteOrderData['path'];
-    body: DeleteOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteOrderData['path'];
+  body: DeleteOrderData extends {
+    body?: unknown;
+  } ? [
+    DeleteOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['body'] : unknown;
+  query: DeleteOrderData extends {
+    query?: unknown;
+  } ? [
+    DeleteOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['query'] : unknown;
+  headers: DeleteOrderData extends {
+    headers?: unknown;
+  } ? [
+    DeleteOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<DeleteOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteOrderData['path'];
-    body: DeleteOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteOrderData['path'];
+  body: DeleteOrderData extends {
+    body?: unknown;
+  } ? [
+    DeleteOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['body'] : unknown;
+  query: DeleteOrderData extends {
+    query?: unknown;
+  } ? [
+    DeleteOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['query'] : unknown;
+  headers: DeleteOrderData extends {
+    headers?: unknown;
+  } ? [
+    DeleteOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['headers'] : unknown;
 }>) = createValidate<Omit<DeleteOrderData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteOrderData['path'];
-    body: DeleteOrderData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteOrderData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteOrderData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteOrderData['path'];
+  body: DeleteOrderData extends {
+    body?: unknown;
+  } ? [
+    DeleteOrderData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['body'] : unknown;
+  query: DeleteOrderData extends {
+    query?: unknown;
+  } ? [
+    DeleteOrderData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['query'] : unknown;
+  headers: DeleteOrderData extends {
+    headers?: unknown;
+  } ? [
+    DeleteOrderData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteOrderData['headers'] : unknown;
 }>();
 
 export const tDeleteOrderDataJsonSchema = typiaSchemas.schemas[36];
@@ -1956,97 +1956,97 @@ export const tDeleteOrderResponseError404JsonSchema = typiaSchemas.schemas[38];
  * For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
  */
 export const tGetOrderByIdData: StandardSchemaV1<Omit<GetOrderByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetOrderByIdData['path'];
-    body: GetOrderByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetOrderByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetOrderByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetOrderByIdData['path'];
+  body: GetOrderByIdData extends {
+    body?: unknown;
+  } ? [
+    GetOrderByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['body'] : unknown;
+  query: GetOrderByIdData extends {
+    query?: unknown;
+  } ? [
+    GetOrderByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['query'] : unknown;
+  headers: GetOrderByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetOrderByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['headers'] : unknown;
 }, Omit<GetOrderByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetOrderByIdData['path'];
-    body: GetOrderByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetOrderByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetOrderByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetOrderByIdData['path'];
+  body: GetOrderByIdData extends {
+    body?: unknown;
+  } ? [
+    GetOrderByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['body'] : unknown;
+  query: GetOrderByIdData extends {
+    query?: unknown;
+  } ? [
+    GetOrderByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['query'] : unknown;
+  headers: GetOrderByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetOrderByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<GetOrderByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetOrderByIdData['path'];
-    body: GetOrderByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetOrderByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetOrderByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetOrderByIdData['path'];
+  body: GetOrderByIdData extends {
+    body?: unknown;
+  } ? [
+    GetOrderByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['body'] : unknown;
+  query: GetOrderByIdData extends {
+    query?: unknown;
+  } ? [
+    GetOrderByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['query'] : unknown;
+  headers: GetOrderByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetOrderByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['headers'] : unknown;
 }>) = createValidate<Omit<GetOrderByIdData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetOrderByIdData['path'];
-    body: GetOrderByIdData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetOrderByIdData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetOrderByIdData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetOrderByIdData['path'];
+  body: GetOrderByIdData extends {
+    body?: unknown;
+  } ? [
+    GetOrderByIdData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['body'] : unknown;
+  query: GetOrderByIdData extends {
+    query?: unknown;
+  } ? [
+    GetOrderByIdData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['query'] : unknown;
+  headers: GetOrderByIdData extends {
+    headers?: unknown;
+  } ? [
+    GetOrderByIdData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetOrderByIdData['headers'] : unknown;
 }>();
 
 export const tGetOrderByIdDataJsonSchema = typiaSchemas.schemas[39];
@@ -2069,97 +2069,97 @@ export const tGetOrderByIdResponseError404JsonSchema = typiaSchemas.schemas[42];
  * This can only be done by the logged in user.
  */
 export const tCreateUserData: StandardSchemaV1<Omit<CreateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUserData['path'];
-    body: CreateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUserData['path'];
+  body: CreateUserData extends {
+    body?: unknown;
+  } ? [
+    CreateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['body'] : unknown;
+  query: CreateUserData extends {
+    query?: unknown;
+  } ? [
+    CreateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['query'] : unknown;
+  headers: CreateUserData extends {
+    headers?: unknown;
+  } ? [
+    CreateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['headers'] : unknown;
 }, Omit<CreateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUserData['path'];
-    body: CreateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUserData['path'];
+  body: CreateUserData extends {
+    body?: unknown;
+  } ? [
+    CreateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['body'] : unknown;
+  query: CreateUserData extends {
+    query?: unknown;
+  } ? [
+    CreateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['query'] : unknown;
+  headers: CreateUserData extends {
+    headers?: unknown;
+  } ? [
+    CreateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<CreateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUserData['path'];
-    body: CreateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUserData['path'];
+  body: CreateUserData extends {
+    body?: unknown;
+  } ? [
+    CreateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['body'] : unknown;
+  query: CreateUserData extends {
+    query?: unknown;
+  } ? [
+    CreateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['query'] : unknown;
+  headers: CreateUserData extends {
+    headers?: unknown;
+  } ? [
+    CreateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['headers'] : unknown;
 }>) = createValidate<Omit<CreateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUserData['path'];
-    body: CreateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUserData['path'];
+  body: CreateUserData extends {
+    body?: unknown;
+  } ? [
+    CreateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['body'] : unknown;
+  query: CreateUserData extends {
+    query?: unknown;
+  } ? [
+    CreateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['query'] : unknown;
+  headers: CreateUserData extends {
+    headers?: unknown;
+  } ? [
+    CreateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUserData['headers'] : unknown;
 }>();
 
 export const tCreateUserDataJsonSchema = typiaSchemas.schemas[43];
@@ -2174,97 +2174,97 @@ export const tCreateUserResponseJsonSchema = typiaSchemas.schemas[44];
  * Creates list of users with given input array.
  */
 export const tCreateUsersWithListInputData: StandardSchemaV1<Omit<CreateUsersWithListInputData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUsersWithListInputData['path'];
-    body: CreateUsersWithListInputData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUsersWithListInputData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUsersWithListInputData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUsersWithListInputData['path'];
+  body: CreateUsersWithListInputData extends {
+    body?: unknown;
+  } ? [
+    CreateUsersWithListInputData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['body'] : unknown;
+  query: CreateUsersWithListInputData extends {
+    query?: unknown;
+  } ? [
+    CreateUsersWithListInputData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['query'] : unknown;
+  headers: CreateUsersWithListInputData extends {
+    headers?: unknown;
+  } ? [
+    CreateUsersWithListInputData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['headers'] : unknown;
 }, Omit<CreateUsersWithListInputData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUsersWithListInputData['path'];
-    body: CreateUsersWithListInputData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUsersWithListInputData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUsersWithListInputData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUsersWithListInputData['path'];
+  body: CreateUsersWithListInputData extends {
+    body?: unknown;
+  } ? [
+    CreateUsersWithListInputData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['body'] : unknown;
+  query: CreateUsersWithListInputData extends {
+    query?: unknown;
+  } ? [
+    CreateUsersWithListInputData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['query'] : unknown;
+  headers: CreateUsersWithListInputData extends {
+    headers?: unknown;
+  } ? [
+    CreateUsersWithListInputData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<CreateUsersWithListInputData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUsersWithListInputData['path'];
-    body: CreateUsersWithListInputData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUsersWithListInputData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUsersWithListInputData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUsersWithListInputData['path'];
+  body: CreateUsersWithListInputData extends {
+    body?: unknown;
+  } ? [
+    CreateUsersWithListInputData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['body'] : unknown;
+  query: CreateUsersWithListInputData extends {
+    query?: unknown;
+  } ? [
+    CreateUsersWithListInputData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['query'] : unknown;
+  headers: CreateUsersWithListInputData extends {
+    headers?: unknown;
+  } ? [
+    CreateUsersWithListInputData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['headers'] : unknown;
 }>) = createValidate<Omit<CreateUsersWithListInputData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateUsersWithListInputData['path'];
-    body: CreateUsersWithListInputData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateUsersWithListInputData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateUsersWithListInputData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateUsersWithListInputData['path'];
+  body: CreateUsersWithListInputData extends {
+    body?: unknown;
+  } ? [
+    CreateUsersWithListInputData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['body'] : unknown;
+  query: CreateUsersWithListInputData extends {
+    query?: unknown;
+  } ? [
+    CreateUsersWithListInputData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['query'] : unknown;
+  headers: CreateUsersWithListInputData extends {
+    headers?: unknown;
+  } ? [
+    CreateUsersWithListInputData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateUsersWithListInputData['headers'] : unknown;
 }>();
 
 export const tCreateUsersWithListInputDataJsonSchema = typiaSchemas.schemas[45];
@@ -2279,97 +2279,97 @@ export const tCreateUsersWithListInputResponseJsonSchema = typiaSchemas.schemas[
  * Log into the system.
  */
 export const tLoginUserData: StandardSchemaV1<Omit<LoginUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LoginUserData['path'];
-    body: LoginUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LoginUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LoginUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LoginUserData['path'];
+  body: LoginUserData extends {
+    body?: unknown;
+  } ? [
+    LoginUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['body'] : unknown;
+  query: LoginUserData extends {
+    query?: unknown;
+  } ? [
+    LoginUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['query'] : unknown;
+  headers: LoginUserData extends {
+    headers?: unknown;
+  } ? [
+    LoginUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['headers'] : unknown;
 }, Omit<LoginUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LoginUserData['path'];
-    body: LoginUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LoginUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LoginUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LoginUserData['path'];
+  body: LoginUserData extends {
+    body?: unknown;
+  } ? [
+    LoginUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['body'] : unknown;
+  query: LoginUserData extends {
+    query?: unknown;
+  } ? [
+    LoginUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['query'] : unknown;
+  headers: LoginUserData extends {
+    headers?: unknown;
+  } ? [
+    LoginUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<LoginUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LoginUserData['path'];
-    body: LoginUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LoginUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LoginUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LoginUserData['path'];
+  body: LoginUserData extends {
+    body?: unknown;
+  } ? [
+    LoginUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['body'] : unknown;
+  query: LoginUserData extends {
+    query?: unknown;
+  } ? [
+    LoginUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['query'] : unknown;
+  headers: LoginUserData extends {
+    headers?: unknown;
+  } ? [
+    LoginUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['headers'] : unknown;
 }>) = createValidate<Omit<LoginUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LoginUserData['path'];
-    body: LoginUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LoginUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LoginUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LoginUserData['path'];
+  body: LoginUserData extends {
+    body?: unknown;
+  } ? [
+    LoginUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['body'] : unknown;
+  query: LoginUserData extends {
+    query?: unknown;
+  } ? [
+    LoginUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['query'] : unknown;
+  headers: LoginUserData extends {
+    headers?: unknown;
+  } ? [
+    LoginUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LoginUserData['headers'] : unknown;
 }>();
 
 export const tLoginUserDataJsonSchema = typiaSchemas.schemas[47];
@@ -2388,97 +2388,97 @@ export const tLoginUserResponseError400JsonSchema = typiaSchemas.schemas[49];
  * Log user out of the system.
  */
 export const tLogoutUserData: StandardSchemaV1<Omit<LogoutUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LogoutUserData['path'];
-    body: LogoutUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LogoutUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LogoutUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LogoutUserData['path'];
+  body: LogoutUserData extends {
+    body?: unknown;
+  } ? [
+    LogoutUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['body'] : unknown;
+  query: LogoutUserData extends {
+    query?: unknown;
+  } ? [
+    LogoutUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['query'] : unknown;
+  headers: LogoutUserData extends {
+    headers?: unknown;
+  } ? [
+    LogoutUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['headers'] : unknown;
 }, Omit<LogoutUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LogoutUserData['path'];
-    body: LogoutUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LogoutUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LogoutUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LogoutUserData['path'];
+  body: LogoutUserData extends {
+    body?: unknown;
+  } ? [
+    LogoutUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['body'] : unknown;
+  query: LogoutUserData extends {
+    query?: unknown;
+  } ? [
+    LogoutUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['query'] : unknown;
+  headers: LogoutUserData extends {
+    headers?: unknown;
+  } ? [
+    LogoutUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<LogoutUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LogoutUserData['path'];
-    body: LogoutUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LogoutUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LogoutUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LogoutUserData['path'];
+  body: LogoutUserData extends {
+    body?: unknown;
+  } ? [
+    LogoutUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['body'] : unknown;
+  query: LogoutUserData extends {
+    query?: unknown;
+  } ? [
+    LogoutUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['query'] : unknown;
+  headers: LogoutUserData extends {
+    headers?: unknown;
+  } ? [
+    LogoutUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['headers'] : unknown;
 }>) = createValidate<Omit<LogoutUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: LogoutUserData['path'];
-    body: LogoutUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: LogoutUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: LogoutUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: LogoutUserData['path'];
+  body: LogoutUserData extends {
+    body?: unknown;
+  } ? [
+    LogoutUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['body'] : unknown;
+  query: LogoutUserData extends {
+    query?: unknown;
+  } ? [
+    LogoutUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['query'] : unknown;
+  headers: LogoutUserData extends {
+    headers?: unknown;
+  } ? [
+    LogoutUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : LogoutUserData['headers'] : unknown;
 }>();
 
 export const tLogoutUserDataJsonSchema = typiaSchemas.schemas[50];
@@ -2489,97 +2489,97 @@ export const tLogoutUserDataJsonSchema = typiaSchemas.schemas[50];
  * This can only be done by the logged in user.
  */
 export const tDeleteUserData: StandardSchemaV1<Omit<DeleteUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteUserData['path'];
-    body: DeleteUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteUserData['path'];
+  body: DeleteUserData extends {
+    body?: unknown;
+  } ? [
+    DeleteUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['body'] : unknown;
+  query: DeleteUserData extends {
+    query?: unknown;
+  } ? [
+    DeleteUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['query'] : unknown;
+  headers: DeleteUserData extends {
+    headers?: unknown;
+  } ? [
+    DeleteUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['headers'] : unknown;
 }, Omit<DeleteUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteUserData['path'];
-    body: DeleteUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteUserData['path'];
+  body: DeleteUserData extends {
+    body?: unknown;
+  } ? [
+    DeleteUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['body'] : unknown;
+  query: DeleteUserData extends {
+    query?: unknown;
+  } ? [
+    DeleteUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['query'] : unknown;
+  headers: DeleteUserData extends {
+    headers?: unknown;
+  } ? [
+    DeleteUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<DeleteUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteUserData['path'];
-    body: DeleteUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteUserData['path'];
+  body: DeleteUserData extends {
+    body?: unknown;
+  } ? [
+    DeleteUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['body'] : unknown;
+  query: DeleteUserData extends {
+    query?: unknown;
+  } ? [
+    DeleteUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['query'] : unknown;
+  headers: DeleteUserData extends {
+    headers?: unknown;
+  } ? [
+    DeleteUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['headers'] : unknown;
 }>) = createValidate<Omit<DeleteUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: DeleteUserData['path'];
-    body: DeleteUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: DeleteUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: DeleteUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: DeleteUserData['path'];
+  body: DeleteUserData extends {
+    body?: unknown;
+  } ? [
+    DeleteUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['body'] : unknown;
+  query: DeleteUserData extends {
+    query?: unknown;
+  } ? [
+    DeleteUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['query'] : unknown;
+  headers: DeleteUserData extends {
+    headers?: unknown;
+  } ? [
+    DeleteUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : DeleteUserData['headers'] : unknown;
 }>();
 
 export const tDeleteUserDataJsonSchema = typiaSchemas.schemas[51];
@@ -2598,97 +2598,97 @@ export const tDeleteUserResponseError404JsonSchema = typiaSchemas.schemas[53];
  * Get user detail based on username.
  */
 export const tGetUserByNameData: StandardSchemaV1<Omit<GetUserByNameData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetUserByNameData['path'];
-    body: GetUserByNameData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetUserByNameData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetUserByNameData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetUserByNameData['path'];
+  body: GetUserByNameData extends {
+    body?: unknown;
+  } ? [
+    GetUserByNameData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['body'] : unknown;
+  query: GetUserByNameData extends {
+    query?: unknown;
+  } ? [
+    GetUserByNameData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['query'] : unknown;
+  headers: GetUserByNameData extends {
+    headers?: unknown;
+  } ? [
+    GetUserByNameData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['headers'] : unknown;
 }, Omit<GetUserByNameData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetUserByNameData['path'];
-    body: GetUserByNameData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetUserByNameData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetUserByNameData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetUserByNameData['path'];
+  body: GetUserByNameData extends {
+    body?: unknown;
+  } ? [
+    GetUserByNameData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['body'] : unknown;
+  query: GetUserByNameData extends {
+    query?: unknown;
+  } ? [
+    GetUserByNameData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['query'] : unknown;
+  headers: GetUserByNameData extends {
+    headers?: unknown;
+  } ? [
+    GetUserByNameData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<GetUserByNameData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetUserByNameData['path'];
-    body: GetUserByNameData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetUserByNameData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetUserByNameData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetUserByNameData['path'];
+  body: GetUserByNameData extends {
+    body?: unknown;
+  } ? [
+    GetUserByNameData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['body'] : unknown;
+  query: GetUserByNameData extends {
+    query?: unknown;
+  } ? [
+    GetUserByNameData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['query'] : unknown;
+  headers: GetUserByNameData extends {
+    headers?: unknown;
+  } ? [
+    GetUserByNameData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['headers'] : unknown;
 }>) = createValidate<Omit<GetUserByNameData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: GetUserByNameData['path'];
-    body: GetUserByNameData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: GetUserByNameData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: GetUserByNameData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: GetUserByNameData['path'];
+  body: GetUserByNameData extends {
+    body?: unknown;
+  } ? [
+    GetUserByNameData['body']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['body'] : unknown;
+  query: GetUserByNameData extends {
+    query?: unknown;
+  } ? [
+    GetUserByNameData['query']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['query'] : unknown;
+  headers: GetUserByNameData extends {
+    headers?: unknown;
+  } ? [
+    GetUserByNameData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : GetUserByNameData['headers'] : unknown;
 }>();
 
 export const tGetUserByNameDataJsonSchema = typiaSchemas.schemas[54];
@@ -2711,97 +2711,97 @@ export const tGetUserByNameResponseError404JsonSchema = typiaSchemas.schemas[57]
  * This can only be done by the logged in user.
  */
 export const tUpdateUserData: StandardSchemaV1<Omit<UpdateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateUserData['path'];
-    body: UpdateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateUserData['path'];
+  body: UpdateUserData extends {
+    body?: unknown;
+  } ? [
+    UpdateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['body'] : unknown;
+  query: UpdateUserData extends {
+    query?: unknown;
+  } ? [
+    UpdateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['query'] : unknown;
+  headers: UpdateUserData extends {
+    headers?: unknown;
+  } ? [
+    UpdateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['headers'] : unknown;
 }, Omit<UpdateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateUserData['path'];
-    body: UpdateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateUserData['path'];
+  body: UpdateUserData extends {
+    body?: unknown;
+  } ? [
+    UpdateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['body'] : unknown;
+  query: UpdateUserData extends {
+    query?: unknown;
+  } ? [
+    UpdateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['query'] : unknown;
+  headers: UpdateUserData extends {
+    headers?: unknown;
+  } ? [
+    UpdateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<UpdateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateUserData['path'];
-    body: UpdateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateUserData['path'];
+  body: UpdateUserData extends {
+    body?: unknown;
+  } ? [
+    UpdateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['body'] : unknown;
+  query: UpdateUserData extends {
+    query?: unknown;
+  } ? [
+    UpdateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['query'] : unknown;
+  headers: UpdateUserData extends {
+    headers?: unknown;
+  } ? [
+    UpdateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['headers'] : unknown;
 }>) = createValidate<Omit<UpdateUserData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateUserData['path'];
-    body: UpdateUserData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateUserData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateUserData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateUserData['path'];
+  body: UpdateUserData extends {
+    body?: unknown;
+  } ? [
+    UpdateUserData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['body'] : unknown;
+  query: UpdateUserData extends {
+    query?: unknown;
+  } ? [
+    UpdateUserData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['query'] : unknown;
+  headers: UpdateUserData extends {
+    headers?: unknown;
+  } ? [
+    UpdateUserData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateUserData['headers'] : unknown;
 }>();
 
 export const tUpdateUserDataJsonSchema = typiaSchemas.schemas[58];
@@ -2820,97 +2820,97 @@ export const tUpdateUserResponseError404JsonSchema = typiaSchemas.schemas[60];
  * Exercises array constraints — minItems, maxItems, uniqueItems, and per-item minLength.
  */
 export const tSubmitTagsData: StandardSchemaV1<Omit<SubmitTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitTagsData['path'];
-    body: SubmitTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitTagsData['path'];
+  body: SubmitTagsData extends {
+    body?: unknown;
+  } ? [
+    SubmitTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['body'] : unknown;
+  query: SubmitTagsData extends {
+    query?: unknown;
+  } ? [
+    SubmitTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['query'] : unknown;
+  headers: SubmitTagsData extends {
+    headers?: unknown;
+  } ? [
+    SubmitTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['headers'] : unknown;
 }, Omit<SubmitTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitTagsData['path'];
-    body: SubmitTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitTagsData['path'];
+  body: SubmitTagsData extends {
+    body?: unknown;
+  } ? [
+    SubmitTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['body'] : unknown;
+  query: SubmitTagsData extends {
+    query?: unknown;
+  } ? [
+    SubmitTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['query'] : unknown;
+  headers: SubmitTagsData extends {
+    headers?: unknown;
+  } ? [
+    SubmitTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<SubmitTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitTagsData['path'];
-    body: SubmitTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitTagsData['path'];
+  body: SubmitTagsData extends {
+    body?: unknown;
+  } ? [
+    SubmitTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['body'] : unknown;
+  query: SubmitTagsData extends {
+    query?: unknown;
+  } ? [
+    SubmitTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['query'] : unknown;
+  headers: SubmitTagsData extends {
+    headers?: unknown;
+  } ? [
+    SubmitTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['headers'] : unknown;
 }>) = createValidate<Omit<SubmitTagsData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitTagsData['path'];
-    body: SubmitTagsData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitTagsData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitTagsData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitTagsData['path'];
+  body: SubmitTagsData extends {
+    body?: unknown;
+  } ? [
+    SubmitTagsData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['body'] : unknown;
+  query: SubmitTagsData extends {
+    query?: unknown;
+  } ? [
+    SubmitTagsData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['query'] : unknown;
+  headers: SubmitTagsData extends {
+    headers?: unknown;
+  } ? [
+    SubmitTagsData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitTagsData['headers'] : unknown;
 }>();
 
 export const tSubmitTagsDataJsonSchema = typiaSchemas.schemas[61];
@@ -2925,97 +2925,97 @@ export const tSubmitTagsResponseJsonSchema = typiaSchemas.schemas[62];
  * Exercises nullable string types.
  */
 export const tUpdateProfileData: StandardSchemaV1<Omit<UpdateProfileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateProfileData['path'];
-    body: UpdateProfileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateProfileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateProfileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateProfileData['path'];
+  body: UpdateProfileData extends {
+    body?: unknown;
+  } ? [
+    UpdateProfileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['body'] : unknown;
+  query: UpdateProfileData extends {
+    query?: unknown;
+  } ? [
+    UpdateProfileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['query'] : unknown;
+  headers: UpdateProfileData extends {
+    headers?: unknown;
+  } ? [
+    UpdateProfileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['headers'] : unknown;
 }, Omit<UpdateProfileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateProfileData['path'];
-    body: UpdateProfileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateProfileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateProfileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateProfileData['path'];
+  body: UpdateProfileData extends {
+    body?: unknown;
+  } ? [
+    UpdateProfileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['body'] : unknown;
+  query: UpdateProfileData extends {
+    query?: unknown;
+  } ? [
+    UpdateProfileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['query'] : unknown;
+  headers: UpdateProfileData extends {
+    headers?: unknown;
+  } ? [
+    UpdateProfileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<UpdateProfileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateProfileData['path'];
-    body: UpdateProfileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateProfileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateProfileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateProfileData['path'];
+  body: UpdateProfileData extends {
+    body?: unknown;
+  } ? [
+    UpdateProfileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['body'] : unknown;
+  query: UpdateProfileData extends {
+    query?: unknown;
+  } ? [
+    UpdateProfileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['query'] : unknown;
+  headers: UpdateProfileData extends {
+    headers?: unknown;
+  } ? [
+    UpdateProfileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['headers'] : unknown;
 }>) = createValidate<Omit<UpdateProfileData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: UpdateProfileData['path'];
-    body: UpdateProfileData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: UpdateProfileData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: UpdateProfileData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: UpdateProfileData['path'];
+  body: UpdateProfileData extends {
+    body?: unknown;
+  } ? [
+    UpdateProfileData['body']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['body'] : unknown;
+  query: UpdateProfileData extends {
+    query?: unknown;
+  } ? [
+    UpdateProfileData['query']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['query'] : unknown;
+  headers: UpdateProfileData extends {
+    headers?: unknown;
+  } ? [
+    UpdateProfileData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : UpdateProfileData['headers'] : unknown;
 }>();
 
 export const tUpdateProfileDataJsonSchema = typiaSchemas.schemas[63];
@@ -3030,97 +3030,97 @@ export const tUpdateProfileResponseJsonSchema = typiaSchemas.schemas[64];
  * Exercises oneOf with a discriminator, numeric exclusiveMinimum, and minimum.
  */
 export const tCreateShapeData: StandardSchemaV1<Omit<CreateShapeData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateShapeData['path'];
-    body: CreateShapeData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateShapeData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateShapeData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateShapeData['path'];
+  body: CreateShapeData extends {
+    body?: unknown;
+  } ? [
+    CreateShapeData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['body'] : unknown;
+  query: CreateShapeData extends {
+    query?: unknown;
+  } ? [
+    CreateShapeData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['query'] : unknown;
+  headers: CreateShapeData extends {
+    headers?: unknown;
+  } ? [
+    CreateShapeData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['headers'] : unknown;
 }, Omit<CreateShapeData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateShapeData['path'];
-    body: CreateShapeData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateShapeData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateShapeData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateShapeData['path'];
+  body: CreateShapeData extends {
+    body?: unknown;
+  } ? [
+    CreateShapeData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['body'] : unknown;
+  query: CreateShapeData extends {
+    query?: unknown;
+  } ? [
+    CreateShapeData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['query'] : unknown;
+  headers: CreateShapeData extends {
+    headers?: unknown;
+  } ? [
+    CreateShapeData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<CreateShapeData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateShapeData['path'];
-    body: CreateShapeData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateShapeData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateShapeData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateShapeData['path'];
+  body: CreateShapeData extends {
+    body?: unknown;
+  } ? [
+    CreateShapeData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['body'] : unknown;
+  query: CreateShapeData extends {
+    query?: unknown;
+  } ? [
+    CreateShapeData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['query'] : unknown;
+  headers: CreateShapeData extends {
+    headers?: unknown;
+  } ? [
+    CreateShapeData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['headers'] : unknown;
 }>) = createValidate<Omit<CreateShapeData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: CreateShapeData['path'];
-    body: CreateShapeData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: CreateShapeData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: CreateShapeData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: CreateShapeData['path'];
+  body: CreateShapeData extends {
+    body?: unknown;
+  } ? [
+    CreateShapeData['body']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['body'] : unknown;
+  query: CreateShapeData extends {
+    query?: unknown;
+  } ? [
+    CreateShapeData['query']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['query'] : unknown;
+  headers: CreateShapeData extends {
+    headers?: unknown;
+  } ? [
+    CreateShapeData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : CreateShapeData['headers'] : unknown;
 }>();
 
 export const tCreateShapeDataJsonSchema = typiaSchemas.schemas[65];
@@ -3135,97 +3135,97 @@ export const tCreateShapeResponseJsonSchema = typiaSchemas.schemas[66];
  * Exercises multipleOf on a numeric property.
  */
 export const tSubmitMeasurementData: StandardSchemaV1<Omit<SubmitMeasurementData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitMeasurementData['path'];
-    body: SubmitMeasurementData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitMeasurementData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitMeasurementData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitMeasurementData['path'];
+  body: SubmitMeasurementData extends {
+    body?: unknown;
+  } ? [
+    SubmitMeasurementData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['body'] : unknown;
+  query: SubmitMeasurementData extends {
+    query?: unknown;
+  } ? [
+    SubmitMeasurementData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['query'] : unknown;
+  headers: SubmitMeasurementData extends {
+    headers?: unknown;
+  } ? [
+    SubmitMeasurementData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['headers'] : unknown;
 }, Omit<SubmitMeasurementData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitMeasurementData['path'];
-    body: SubmitMeasurementData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitMeasurementData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitMeasurementData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitMeasurementData['path'];
+  body: SubmitMeasurementData extends {
+    body?: unknown;
+  } ? [
+    SubmitMeasurementData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['body'] : unknown;
+  query: SubmitMeasurementData extends {
+    query?: unknown;
+  } ? [
+    SubmitMeasurementData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['query'] : unknown;
+  headers: SubmitMeasurementData extends {
+    headers?: unknown;
+  } ? [
+    SubmitMeasurementData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['headers'] : unknown;
 }> & ((input: unknown) => IValidation<Omit<SubmitMeasurementData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitMeasurementData['path'];
-    body: SubmitMeasurementData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitMeasurementData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitMeasurementData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitMeasurementData['path'];
+  body: SubmitMeasurementData extends {
+    body?: unknown;
+  } ? [
+    SubmitMeasurementData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['body'] : unknown;
+  query: SubmitMeasurementData extends {
+    query?: unknown;
+  } ? [
+    SubmitMeasurementData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['query'] : unknown;
+  headers: SubmitMeasurementData extends {
+    headers?: unknown;
+  } ? [
+    SubmitMeasurementData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['headers'] : unknown;
 }>) = createValidate<Omit<SubmitMeasurementData, 'url' | 'path' | 'body' | 'query' | 'headers'> & {
-    params: SubmitMeasurementData['path'];
-    body: SubmitMeasurementData extends {
-        "body": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    query: SubmitMeasurementData extends {
-        "query": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
-    headers: SubmitMeasurementData extends {
-        "headers": infer V;
-    } ? [
-        V
-    ] extends [
-        undefined
-    ] ? unknown : V : unknown;
+  params: SubmitMeasurementData['path'];
+  body: SubmitMeasurementData extends {
+    body?: unknown;
+  } ? [
+    SubmitMeasurementData['body']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['body'] : unknown;
+  query: SubmitMeasurementData extends {
+    query?: unknown;
+  } ? [
+    SubmitMeasurementData['query']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['query'] : unknown;
+  headers: SubmitMeasurementData extends {
+    headers?: unknown;
+  } ? [
+    SubmitMeasurementData['headers']
+  ] extends [
+    undefined
+  ] ? unknown : SubmitMeasurementData['headers'] : unknown;
 }>();
 
 export const tSubmitMeasurementDataJsonSchema = typiaSchemas.schemas[67];

@@ -5,34 +5,34 @@ import { CreateShapeContract, DeleteOrderContract, GetInventoryContract, GetOrde
 import { CreateUserContract, CreateUsersWithListInputContract, DeleteUserContract, GetUserByNameContract, LoginUserContract, LogoutUserContract, UpdateProfileContract, UpdateUserContract } from './user/contract.gen';
 
 export const router = {
-    pet: {
-        addPet: AddPetContract,
-        updatePet: UpdatePetContract,
-        findPetsByStatus: FindPetsByStatusContract,
-        findPetsByTags: FindPetsByTagsContract,
-        deletePet: DeletePetContract,
-        getPetById: GetPetByIdContract,
-        updatePetWithForm: UpdatePetWithFormContract,
-        uploadFile: UploadFileContract,
-        uploadPetDocument: UploadPetDocumentContract,
-        submitTags: SubmitTagsContract
-    },
-    store: {
-        getInventory: GetInventoryContract,
-        placeOrder: PlaceOrderContract,
-        deleteOrder: DeleteOrderContract,
-        getOrderById: GetOrderByIdContract,
-        createShape: CreateShapeContract,
-        submitMeasurement: SubmitMeasurementContract
-    },
-    user: {
-        createUser: CreateUserContract,
-        createUsersWithListInput: CreateUsersWithListInputContract,
-        loginUser: LoginUserContract,
-        logoutUser: LogoutUserContract,
-        deleteUser: DeleteUserContract,
-        getUserByName: GetUserByNameContract,
-        updateUser: UpdateUserContract,
-        updateProfile: UpdateProfileContract
-    }
+  pet: {
+    addPet: AddPetContract,
+    updatePet: UpdatePetContract,
+    findPetsByStatus: FindPetsByStatusContract,
+    findPetsByTags: FindPetsByTagsContract,
+    deletePet: DeletePetContract,
+    getPetById: GetPetByIdContract,
+    updatePetWithForm: UpdatePetWithFormContract,
+    uploadFile: UploadFileContract,
+    uploadPetDocument: UploadPetDocumentContract,
+    submitTags: SubmitTagsContract
+  },
+  store: {
+    getInventory: GetInventoryContract,
+    placeOrder: PlaceOrderContract,
+    deleteOrder: DeleteOrderContract,
+    getOrderById: GetOrderByIdContract,
+    createShape: CreateShapeContract,
+    submitMeasurement: SubmitMeasurementContract
+  },
+  user: {
+    createUser: CreateUserContract,
+    createUsersWithListInput: CreateUsersWithListInputContract,
+    loginUser: LoginUserContract,
+    logoutUser: LogoutUserContract,
+    deleteUser: DeleteUserContract,
+    getUserByName: GetUserByNameContract,
+    updateUser: UpdateUserContract,
+    updateProfile: UpdateProfileContract
+  }
 };

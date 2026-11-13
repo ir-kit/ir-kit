@@ -10,15 +10,15 @@ import { tCreateUserData, tCreateUserResponse, tCreateUsersWithListInputData, tC
  * This can only be done by the logged in user.
  */
 export const CreateUserContract = oc.route({
-    method: 'POST',
-    path: '/user',
-    operationId: 'createUser',
-    summary: 'Create user.',
-    description: 'This can only be done by the logged in user.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/user',
+  operationId: 'createUser',
+  summary: 'Create user.',
+  description: 'This can only be done by the logged in user.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tCreateUserData).output(tCreateUserResponse);
 
 /**
@@ -27,15 +27,15 @@ export const CreateUserContract = oc.route({
  * Creates list of users with given input array.
  */
 export const CreateUsersWithListInputContract = oc.route({
-    method: 'POST',
-    path: '/user/createWithList',
-    operationId: 'createUsersWithListInput',
-    summary: 'Creates list of users with given input array.',
-    description: 'Creates list of users with given input array.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'Successful operation',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/user/createWithList',
+  operationId: 'createUsersWithListInput',
+  summary: 'Creates list of users with given input array.',
+  description: 'Creates list of users with given input array.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'Successful operation',
+  inputStructure: 'detailed'
 }).input(tCreateUsersWithListInputData).output(tCreateUsersWithListInputResponse);
 
 /**
@@ -44,17 +44,17 @@ export const CreateUsersWithListInputContract = oc.route({
  * Log into the system.
  */
 export const LoginUserContract = oc.route({
-    method: 'GET',
-    path: '/user/login',
-    operationId: 'loginUser',
-    summary: 'Logs user into the system.',
-    description: 'Log into the system.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'GET',
+  path: '/user/login',
+  operationId: 'loginUser',
+  summary: 'Logs user into the system.',
+  description: 'Log into the system.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tLoginUserData).output(tLoginUserResponse).errors({
-    400: { data: tLoginUserResponseError400 }
+  400: { data: tLoginUserResponseError400 }
 });
 
 /**
@@ -63,14 +63,14 @@ export const LoginUserContract = oc.route({
  * Log user out of the system.
  */
 export const LogoutUserContract = oc.route({
-    method: 'GET',
-    path: '/user/logout',
-    operationId: 'logoutUser',
-    summary: 'Logs out current logged in user session.',
-    description: 'Log user out of the system.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'successful operation'
+  method: 'GET',
+  path: '/user/logout',
+  operationId: 'logoutUser',
+  summary: 'Logs out current logged in user session.',
+  description: 'Log user out of the system.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'successful operation'
 });
 
 /**
@@ -79,18 +79,18 @@ export const LogoutUserContract = oc.route({
  * This can only be done by the logged in user.
  */
 export const DeleteUserContract = oc.route({
-    method: 'DELETE',
-    path: '/user/{username}',
-    operationId: 'deleteUser',
-    summary: 'Delete user resource.',
-    description: 'This can only be done by the logged in user.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'User deleted',
-    inputStructure: 'detailed'
+  method: 'DELETE',
+  path: '/user/{username}',
+  operationId: 'deleteUser',
+  summary: 'Delete user resource.',
+  description: 'This can only be done by the logged in user.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'User deleted',
+  inputStructure: 'detailed'
 }).input(tDeleteUserData).errors({
-    400: { data: tDeleteUserResponseError400 },
-    404: { data: tDeleteUserResponseError404 }
+  400: { data: tDeleteUserResponseError400 },
+  404: { data: tDeleteUserResponseError404 }
 });
 
 /**
@@ -99,18 +99,18 @@ export const DeleteUserContract = oc.route({
  * Get user detail based on username.
  */
 export const GetUserByNameContract = oc.route({
-    method: 'GET',
-    path: '/user/{username}',
-    operationId: 'getUserByName',
-    summary: 'Get user by user name.',
-    description: 'Get user detail based on username.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'GET',
+  path: '/user/{username}',
+  operationId: 'getUserByName',
+  summary: 'Get user by user name.',
+  description: 'Get user detail based on username.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tGetUserByNameData).output(tGetUserByNameResponse).errors({
-    400: { data: tGetUserByNameResponseError400 },
-    404: { data: tGetUserByNameResponseError404 }
+  400: { data: tGetUserByNameResponseError400 },
+  404: { data: tGetUserByNameResponseError404 }
 });
 
 /**
@@ -119,18 +119,18 @@ export const GetUserByNameContract = oc.route({
  * This can only be done by the logged in user.
  */
 export const UpdateUserContract = oc.route({
-    method: 'PUT',
-    path: '/user/{username}',
-    operationId: 'updateUser',
-    summary: 'Update user resource.',
-    description: 'This can only be done by the logged in user.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'successful operation',
-    inputStructure: 'detailed'
+  method: 'PUT',
+  path: '/user/{username}',
+  operationId: 'updateUser',
+  summary: 'Update user resource.',
+  description: 'This can only be done by the logged in user.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'successful operation',
+  inputStructure: 'detailed'
 }).input(tUpdateUserData).errors({
-    400: { data: tUpdateUserResponseError400 },
-    404: { data: tUpdateUserResponseError404 }
+  400: { data: tUpdateUserResponseError400 },
+  404: { data: tUpdateUserResponseError404 }
 });
 
 /**
@@ -139,13 +139,13 @@ export const UpdateUserContract = oc.route({
  * Exercises nullable string types.
  */
 export const UpdateProfileContract = oc.route({
-    method: 'POST',
-    path: '/profile',
-    operationId: 'updateProfile',
-    summary: 'Update a user profile with a nullable nickname.',
-    description: 'Exercises nullable string types.',
-    tags: ['user'],
-    successStatus: 200,
-    successDescription: 'OK',
-    inputStructure: 'detailed'
+  method: 'POST',
+  path: '/profile',
+  operationId: 'updateProfile',
+  summary: 'Update a user profile with a nullable nickname.',
+  description: 'Exercises nullable string types.',
+  tags: ['user'],
+  successStatus: 200,
+  successDescription: 'OK',
+  inputStructure: 'detailed'
 }).input(tUpdateProfileData).output(tUpdateProfileResponse);
