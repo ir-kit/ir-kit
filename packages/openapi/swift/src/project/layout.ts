@@ -1,4 +1,5 @@
-import { posix as pathPosix } from "node:path";
+import { safeRelativeDir } from "@ir-kit/codegen-core";
+
 import type { SwDecl } from "../ast/index.js";
 
 export type LayoutKind = "split" | "flat";
@@ -33,23 +34,6 @@ export function placeDecl(decl: SwDecl, opts: PlacementOptions): PlacedDecl {
   if (layout === "flat") return { decl, dir: "." };
   if (isApiDecl(decl)) return { decl, dir: "API" };
   return { decl, dir: "Models" };
-}
-
-/**
- * Reject absolute paths and any normalized form that escapes the SDK
- * root via `..`. Generators write into the override dir; an unguarded
- * `../..` could clobber files outside the output tree.
- */
-function safeRelativeDir(dir: string): string {
-  const normalized = pathPosix.normalize(dir || ".");
-  if (
-    pathPosix.isAbsolute(normalized) ||
-    normalized === ".." ||
-    normalized.startsWith("../")
-  ) {
-    throw new Error(`fileLocation: invalid output directory: ${dir}`);
-  }
-  return normalized;
 }
 
 function isApiDecl(decl: SwDecl): boolean {

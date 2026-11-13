@@ -87,6 +87,11 @@ export class FlowBuilder<TLast, VuState = unknown> {
     this.ops = ops;
   }
 
+  /** @internal */
+  describeOps(): ReadonlyArray<Op> {
+    return this.ops;
+  }
+
   /** Append a step. Receives previous output as input; return becomes next input. */
   step<TNext>(fn: StepFn<TLast, TNext, VuState>): FlowBuilder<TNext, VuState>;
   step<TNext>(
@@ -246,19 +251,6 @@ async function runOps(
   }
   return value;
 }
-
-declare module "./flow.js" {
-  interface FlowBuilder<TLast, VuState> {
-    /** @internal */
-    describeOps(): ReadonlyArray<Op>;
-  }
-}
-
-FlowBuilder.prototype.describeOps = function describeOps(
-  this: FlowBuilder<unknown, unknown>,
-) {
-  return (this as unknown as { ops: ReadonlyArray<Op> }).ops;
-};
 
 export class FlowExpectError extends Error {
   readonly name = "FlowExpectError";

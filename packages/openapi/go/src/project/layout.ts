@@ -1,4 +1,5 @@
-import { posix as pathPosix } from "node:path";
+import { safeRelativeDir } from "@ir-kit/codegen-core";
+
 import type { GoDecl } from "../ast/index.js";
 
 export interface PlacementOptions {
@@ -15,24 +16,11 @@ export interface PlacedDecl {
 
 export function placeDecl(decl: GoDecl, opts: PlacementOptions): PlacedDecl {
   const override = opts.fileLocation?.(decl);
-  if (override?.dir) safeRelativeDir(override.dir);
   return {
     decl,
-    dir: override?.dir ?? ".",
+    dir: override?.dir ? safeRelativeDir(override.dir) : ".",
     fileName: override?.file ?? declFileName(decl),
   };
-}
-
-function safeRelativeDir(dir: string): string {
-  const normalized = pathPosix.normalize(dir || ".");
-  if (
-    pathPosix.isAbsolute(normalized) ||
-    normalized === ".." ||
-    normalized.startsWith("../")
-  ) {
-    throw new Error(`fileLocation: invalid output directory: ${dir}`);
-  }
-  return normalized;
 }
 
 /**

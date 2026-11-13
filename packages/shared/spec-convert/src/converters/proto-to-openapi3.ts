@@ -3,25 +3,16 @@ import { readFile } from "node:fs/promises";
 import protobuf from "protobufjs";
 
 import { registerConverter } from "../registry.js";
-import type { ConvertOutput, SpecDocument } from "../types.js";
+import type { ConvertOutput } from "../types.js";
 
 type OpenAPISchema = Record<string, unknown>;
 
 registerConverter({
   from: "proto",
   to: "openapi3",
-  handler: async (document: SpecDocument): Promise<ConvertOutput> => {
-    const path =
-      typeof document.__path === "string" ? document.__path : undefined;
-    const source =
-      typeof document.__source === "string" ? document.__source : undefined;
-    if (!path && !source) {
-      throw new Error(
-        "proto→openapi3 requires a `__path` or `__source` marker on the input document",
-      );
-    }
-
-    const text = source ?? (await readFile(path!, "utf8"));
+  input: "file",
+  handler: async (path: string): Promise<ConvertOutput> => {
+    const text = await readFile(path, "utf8");
     const root = new protobuf.Root();
     const parsed = protobuf.parse(text, root, { keepCase: true });
     const pkg = parsed.package ?? "default";
