@@ -1,5 +1,12 @@
 # @ir-kit/fn-schema-unplugin
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [c8bb71b]
+  - @ir-kit/fn-schema-typescript@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
