@@ -72,8 +72,7 @@
     "@ir-kit/spec-loader": "workspace:*",
     "chokidar": "catalog:",
     "citty": "catalog:",
-    "consola": "catalog:",
-    "typescript": "catalog:"
+    "consola": "catalog:"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

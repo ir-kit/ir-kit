@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@ir-kit/openapi-ts-plugin-kit": "workspace:^",
-    "typescript": "catalog:"
+    "ts-morph": "^28.0.0"
   },
   "peerDependencies": {
     "@faker-js/faker": "^10.0.0 || ^9.0.0 || ^8.0.0",
@@ -99,6 +99,7 @@
     "@ryoppippi/unplugin-typia": "^2.6.5",
     "@types/node": "catalog:",
     "ts-patch": "^3.3.0",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {
