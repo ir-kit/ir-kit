@@ -27,19 +27,19 @@ export const indexBarrel = definePluginConfig<
 
     if (has("amqp")) {
       exports.push({
-        from: "./amqp.gen",
+        from: "./amqp.gen.js",
         names: named("assertExchanges", "bindAndConsume", "publish"),
       });
     }
     if (has("dispatch")) {
       exports.push({
-        from: "./dispatch.gen",
+        from: "./dispatch.gen.js",
         names: named("Registry", "createRegistry"),
       });
     }
     if (has("event-map")) {
       exports.push({
-        from: "./event-map.gen",
+        from: "./event-map.gen.js",
         names: [
           { name: "AnyMessage", isType: true },
           { name: "EventMap", isType: true },
@@ -49,15 +49,15 @@ export const indexBarrel = definePluginConfig<
     }
     if (has("events")) {
       exports.push({
-        from: "./events.gen",
+        from: "./events.gen.js",
         names: [{ name: "EventName", isType: true }, { name: "Events" }],
       });
     }
     if (has("handlers")) {
-      exports.push({ from: "./handlers.gen", names: named("handlers") });
+      exports.push({ from: "./handlers.gen.js", names: named("handlers") });
     }
     if (has("types")) {
-      exports.push({ from: "./types.gen", isType: true });
+      exports.push({ from: "./types.gen.js", isType: true });
     }
 
     plugin.emitTs("index.gen.ts", [], { exports, header: HEADER });

@@ -51,7 +51,7 @@ export interface EmitTsImportGroup {
 
 /** One re-export group: `export { a, type B } from "./mod"`, or `export * from "./mod"` without `names`. */
 export interface EmitTsExportGroup {
-  /** Module specifier exactly as written (e.g. `"./events.gen"`). */
+  /** Module specifier exactly as written (e.g. `"./events.gen.js"`). */
   from: string;
   /** Names being re-exported. Omit to re-export everything. */
   names?: ReadonlyArray<{ name: string; isType?: boolean }>;

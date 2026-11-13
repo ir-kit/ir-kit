@@ -95,7 +95,7 @@ function moduleExport(group: EmitTsExportGroup): ModuleExport {
       sourceName: n.name,
     })),
     isTypeOnly: group.isType ?? false,
-    modulePath: withJsExtension(group.from),
+    modulePath: group.from,
   };
 }
 
