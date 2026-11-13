@@ -1,5 +1,31 @@
 # @ir-kit/openapi-swift
 
+## 3.0.0
+
+### Patch Changes
+
+- 0aa2094: Add `createTypeExpression` to the Go and Swift compilers and `createImplicitMemberExpression` to Swift, so generators place types in expression position without casting type nodes or printing them into identifier text.
+- 238d15f: Add `parseForCodegen` to `@ir-kit/openapi-tools/parse`, returning the IR with each operation's security scheme names, so the native generators stop pairing `parseSpec` and `extractSecuritySchemeNames` by hand.
+- 238d15f: Build the four `APIClient.execute` / `executeWithResponse` overloads from one function and derive the default package name with the shared `pascal` helper.
+- 0aa2094: Export `java.BinaryOperator` and `java.Modifier` so the Java generator's AST helpers take typed operators and modifiers instead of casting strings, and narrow struct declarations by node kind in Swift's value-cycle boxing instead of casting.
+- 41c770f: `@ir-kit/openapi` exports `classifyComponents`, which claims component type names and decides whether each component is a ref, enum, struct, map or plain alias, and the Go, Java, Kotlin and Swift generators build their declarations from it instead of each repeating that logic.
+- 41c770f: `@ir-kit/openapi` exports `groupOperationsByTag`, and the Go, Java, Kotlin and Swift generators use it instead of each grouping operations by tag themselves.
+- 41c770f: The Swift runtime's `execute` variants build their per-call hook parameters from one helper instead of three copies.
+- 41c770f: `codegen-core` exports `writeOutput(out, files, { clean })`, and the Go, Java, Kotlin and Swift generators write their output through it instead of each repeating the clean-and-write loop.
+- Updated dependencies [0aa2094]
+- Updated dependencies [238d15f]
+- Updated dependencies [700a292]
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [c9bd617]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/compiler-swift@0.2.0
+  - @ir-kit/openapi-tools@0.4.0
+  - @ir-kit/openapi-loader@0.4.0
+  - @ir-kit/openapi@0.5.0
+  - @ir-kit/codegen-core@0.3.0
+
 ## 2.1.0
 
 ### Minor Changes

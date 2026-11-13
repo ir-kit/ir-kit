@@ -1,5 +1,11 @@
 # @ir-kit/compiler-swift
 
+## 0.2.0
+
+### Minor Changes
+
+- 0aa2094: Add `createTypeExpression` to the Go and Swift compilers and `createImplicitMemberExpression` to Swift, so generators place types in expression position without casting type nodes or printing them into identifier text.
+
 ## 0.1.0
 
 ### Minor Changes

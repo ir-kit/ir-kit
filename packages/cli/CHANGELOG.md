@@ -1,5 +1,47 @@
 # @ir-kit/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- c6699da: Add `ir sdk java`, add `java` to `ir sdk all`, and make `ir sdk all` accept TypeSpec input for the native targets like the per-language commands do.
+
+### Patch Changes
+
+- 41c770f: The `sdk go`, `sdk kotlin`, `sdk swift` and `sdk java` commands and `sdk all` now come from one table of native SDK targets, so adding a target is a single entry.
+- Updated dependencies [0aa2094]
+- Updated dependencies [236f15d]
+- Updated dependencies [efb6fb5]
+- Updated dependencies [0aa2094]
+- Updated dependencies [238d15f]
+- Updated dependencies [700a292]
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [039b040]
+- Updated dependencies [c9bd617]
+- Updated dependencies [238d15f]
+- Updated dependencies [0aa2094]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/openapi-go@3.0.0
+  - @ir-kit/openapi-swift@3.0.0
+  - @ir-kit/openapi-typescript@0.3.0
+  - @ir-kit/openapi-kotlin@3.0.0
+  - @ir-kit/openapi-java@1.0.0
+  - @ir-kit/spec-convert@0.3.0
+  - @ir-kit/openapi-recon@0.3.0
+  - @ir-kit/spec-loader@0.3.0
+  - @ir-kit/fn-schema-core@0.2.1
+  - @ir-kit/k6-gen@0.4.0
+  - @ir-kit/k6-toolkit@0.2.2
+  - @ir-kit/spec-diff@0.2.2
+  - @ir-kit/spec-docs@0.2.2
+  - @ir-kit/fn-schema-typescript@0.1.2
+  - @ir-kit/schema@0.3.1
+
 ## 0.2.1
 
 ### Patch Changes

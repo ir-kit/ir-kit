@@ -1,5 +1,31 @@
 # @ir-kit/spec-convert
 
+## 0.3.0
+
+### Minor Changes
+
+- 2a7c7cf: - `convertSpec` converts OpenAPI to proto3 directly, building a message or enum per component schema and a gRPC service per operation tag, with request messages from parameters and bodies and responses from the 2xx schemas.
+  - `SchemaToTypeOps` accepts an optional `multiUnion` hook so targets with a native sum type can build it instead of falling back to an untyped value.
+- c9bd617: - Spec detection parses the document and reads its root `openapi`, `swagger` or `asyncapi` field instead of regex-scanning the first 2 KB, and rejects files that are none of these instead of treating them as OpenAPI.
+  - `spec-loader` exports `classifySpecDocument()` and `readSpecDocument()`, and `openapi-loader` exports `readSpecDocument()`.
+  - `convertSpec` detects Postman collections by content rather than only by the `.postman_collection.json` file name.
+  - `convertSpec` no longer routes OpenAPI to proto through generated TypeSpec, which always failed to compile, and reports that no converter path exists instead.
+
+### Patch Changes
+
+- Updated dependencies [238d15f]
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [c9bd617]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/openapi-tools@0.4.0
+  - @ir-kit/openapi@0.5.0
+  - @ir-kit/spec-loader@0.3.0
+  - @ir-kit/typespec-loader@0.2.1
+  - @ir-kit/codegen-core@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,29 @@
 # @ir-kit/openapi-typescript
 
+## 0.3.0
+
+### Minor Changes
+
+- 236f15d: Support `@hey-api/openapi-ts` 0.99, `@hey-api/shared` 0.5 and `@hey-api/codegen-core` 0.9, which the peer ranges now require.
+  - External imports (`@orpc/*`, `@faker-js/faker`, `typia`, `@standard-schema/spec`) are declared through the plugin `imports` API instead of `plugin.external()`.
+  - `defineConfig()` resolves user options against the defaults, so a partial nested object such as `server: { handlers: { mode: "faker" } }` keeps the defaults for the keys it leaves out.
+  - The typia plugin finds `@hey-api/typescript` types again; under 0.99 it generated nothing.
+  - The oRPC WebSocket and MessagePort clients import `RPCLink` instead of the nonexistent `RPCLinkWebSocket` and `RPCLinkMessagePort` exports.
+  - The orpc, paths and typia packages load under plain Node ESM, since their compiled relative imports now carry `.js` extensions.
+
+### Patch Changes
+
+- 700a292: Keep unquoted YAML dates (such as Stripe's `api_version` enum) as strings instead of `Date` objects, which code generation dropped. The TypeScript target now loads specs with `@ir-kit/openapi-loader` like the native targets, so relative paths such as `specs/api.yaml` are no longer read as Hey API registry shorthands, external `$ref`s inside `x-` extensions are ignored, and specs that crashed Hey API's own loader (DigitalOcean) generate.
+- Updated dependencies [238d15f]
+- Updated dependencies [700a292]
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [c9bd617]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/openapi-tools@0.4.0
+  - @ir-kit/openapi-loader@0.4.0
+  - @ir-kit/openapi@0.5.0
+
 ## 0.2.1
 
 ### Patch Changes

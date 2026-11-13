@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/compiler-kotlin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Typed Kotlin AST + printer. Build Kotlin source with a TypeScript-compiler-style factory API and print ktlint-clean output. Zero runtime dependencies.",
   "keywords": [
     "codegen",

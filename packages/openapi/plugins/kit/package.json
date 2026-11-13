@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/openapi-ts-plugin-kit",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Helpers shared by the ir-kit plugins for @hey-api/openapi-ts",
   "keywords": [
     "openapi",

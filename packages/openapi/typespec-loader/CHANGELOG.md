@@ -1,5 +1,11 @@
 # @ir-kit/typespec-loader
 
+## 0.2.1
+
+### Patch Changes
+
+- 41c770f: `compileTypespec` and `compileTypespecCapture` share one compile step for writing inline source, checking diagnostics and cleaning up, instead of two copies.
+
 ## 0.2.0
 
 ### Minor Changes

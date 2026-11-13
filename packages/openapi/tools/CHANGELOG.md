@@ -1,5 +1,19 @@
 # @ir-kit/openapi-tools
 
+## 0.4.0
+
+### Minor Changes
+
+- 238d15f: Add `parseForCodegen` to `@ir-kit/openapi-tools/parse`, returning the IR with each operation's security scheme names, so the native generators stop pairing `parseSpec` and `extractSecuritySchemeNames` by hand.
+
+### Patch Changes
+
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/openapi@0.5.0
+  - @ir-kit/schema@0.3.1
+
 ## 0.3.1
 
 ### Patch Changes

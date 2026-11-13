@@ -1,5 +1,34 @@
 # @ir-kit/asyncapi-typescript
 
+## 2.0.0
+
+### Major Changes
+
+- 002b3e6: Generate `types.gen.ts` with `@hey-api/openapi-ts` instead of `@asyncapi/modelina`. Component schemas keep their spec names and `allOf` stays an intersection, instead of Modelina's invented names like `OneOf_0AllOf_1Subscription`. Free-form objects become `{ [key: string]: unknown }` instead of `Map<string, any>`, enums become string-literal unions, and schema descriptions carry over as doc comments. The output now passes `isolatedModules` / `verbatimModuleSyntax`. Breaking: declarations are `type` aliases instead of `interface`/`enum`, nested anonymous objects are inlined, and the peer dependency `@asyncapi/modelina` is replaced by `@hey-api/openapi-ts >=0.99.0`. The `event-map` plugin's `messageSuffix` option, already ignored, is removed; set it on the `typescript` plugin.
+
+### Minor Changes
+
+- 1c180ae: - `event-map.gen.ts` imports the interface name the `typescript` plugin actually generated, so camelCase message ids such as `turnOn` no longer produce imports of nonexistent `turnOnMessage` types.
+  - Messages without a payload map to `unknown` in `EventMap` instead of importing a type that was never generated.
+  - The `typescript` plugin exposes `messageTypeName(messageId)` through `getApi("typescript")`, and the event-map `messageSuffix` option is deprecated and ignored.
+  - The `typescript` plugin generates interfaces for multi-format payloads such as Avro instead of `any`, and escapes string enum values like `"\r\n"`.
+
+### Patch Changes
+
+- 236f15d: Support `@hey-api/openapi-ts` 0.99, `@hey-api/shared` 0.5 and `@hey-api/codegen-core` 0.9, which the peer ranges now require.
+  - External imports (`@orpc/*`, `@faker-js/faker`, `typia`, `@standard-schema/spec`) are declared through the plugin `imports` API instead of `plugin.external()`.
+  - `defineConfig()` resolves user options against the defaults, so a partial nested object such as `server: { handlers: { mode: "faker" } }` keeps the defaults for the keys it leaves out.
+  - The typia plugin finds `@hey-api/typescript` types again; under 0.99 it generated nothing.
+  - The oRPC WebSocket and MessagePort clients import `RPCLink` instead of the nonexistent `RPCLinkWebSocket` and `RPCLinkMessagePort` exports.
+  - The orpc, paths and typia packages load under plain Node ESM, since their compiled relative imports now carry `.js` extensions.
+
+- 41c770f: `TsStatementNode` and `RawTextNode` now share one `ValueNode` base instead of two copies of the codegen-core node boilerplate.
+- Updated dependencies [1c180ae]
+- Updated dependencies [41c770f]
+  - @ir-kit/asyncapi-core@0.2.0
+  - @ir-kit/codegen-core@0.3.0
+  - @ir-kit/asyncapi-loader@0.2.1
+
 ## 1.0.0
 
 ### Patch Changes

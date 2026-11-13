@@ -1,5 +1,15 @@
 # @ir-kit/compiler-go
 
+## 0.1.0
+
+### Minor Changes
+
+- 0aa2094: Add `createTypeExpression` to the Go and Swift compilers and `createImplicitMemberExpression` to Swift, so generators place types in expression position without casting type nodes or printing them into identifier text.
+
+### Patch Changes
+
+- 0aa2094: Type try-with-resources declarations as `JavaTryResource` and make the Go and Java printers fail to compile when a node kind has no case.
+
 ## 0.0.1
 
 ### Patch Changes

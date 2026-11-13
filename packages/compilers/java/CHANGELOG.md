@@ -1,5 +1,12 @@
 # @ir-kit/compiler-java
 
+## 0.1.1
+
+### Patch Changes
+
+- 0aa2094: Type try-with-resources declarations as `JavaTryResource` and make the Go and Java printers fail to compile when a node kind has no case.
+- 0aa2094: Export `java.BinaryOperator` and `java.Modifier` so the Java generator's AST helpers take typed operators and modifiers instead of casting strings, and narrow struct declarations by node kind in Swift's value-cycle boxing instead of casting.
+
 ## 0.1.0
 
 ### Minor Changes

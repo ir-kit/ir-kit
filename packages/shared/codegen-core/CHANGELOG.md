@@ -1,5 +1,11 @@
 # @ir-kit/codegen-core
 
+## 0.3.0
+
+### Minor Changes
+
+- 41c770f: `codegen-core` exports `writeOutput(out, files, { clean })`, and the Go, Java, Kotlin and Swift generators write their output through it instead of each repeating the clean-and-write loop.
+
 ## 0.2.0
 
 ### Minor Changes
