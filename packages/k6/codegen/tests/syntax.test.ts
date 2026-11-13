@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,6 +34,37 @@ describe("@ir-kit/k6-gen output syntax", () => {
         ),
       );
     expect(errors).toEqual([]);
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it("keeps multi-line summaries inside the stub header comment", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "k6-gen-summary-"));
+    const spec = join(dir, "spec.yaml");
+    await writeFile(
+      spec,
+      [
+        "openapi: 3.1.0",
+        "info: { title: t, version: '1' }",
+        "paths:",
+        "  /queue:",
+        "    post:",
+        "      operationId: addToQueue",
+        "      summary: |",
+        "        Add Item to",
+        "        Playback Queue",
+        "      responses: { '204': { description: ok } }",
+      ].join("\n"),
+    );
+    const result = await generate({
+      input: spec,
+      output: join(dir, "out"),
+      scaffold: true,
+      dryRun: true,
+    });
+    const stub = result.files.find((f) => f.path === "loadtests/addToQueue.ts");
+    expect(stub?.content).toContain(
+      "// Stub loadtest for `addToQueue` — Add Item to Playback Queue.",
+    );
     await rm(dir, { recursive: true, force: true });
   });
 });

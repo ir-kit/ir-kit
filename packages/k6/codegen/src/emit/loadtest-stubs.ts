@@ -50,7 +50,9 @@ function stubInput(
 ): LoadtestStubInput {
   return {
     fnName: toIdent(op.id),
-    summary: op.summary ?? `${op.method.toUpperCase()} ${op.path}`,
+    summary: (op.summary ?? `${op.method.toUpperCase()} ${op.path}`)
+      .replace(/\s+/g, " ")
+      .trim(),
     clientImport,
     dataImport,
     callArgs: callArgExpressions(op, knownSchemas),
