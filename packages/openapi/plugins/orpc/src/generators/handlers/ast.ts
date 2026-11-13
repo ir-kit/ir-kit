@@ -1,10 +1,11 @@
 /**
- * TypeScript AST builders for handler file generation.
- * Constructs import declarations, handler property assignments, and
- * complete handler file ASTs using the TypeScript compiler API.
+ * Handler file generation and patching.
+ * New code is built with Hey API's TypeScript DSL; existing handler files
+ * are read with oxc-parser so user code is never reprinted.
  */
 
-import { ts } from "ts-morph";
+import { $, type TsDsl, TypeScriptRenderer } from "@hey-api/openapi-ts";
+import { parseSync } from "oxc-parser";
 
 import type { HandlerMode, ProxyHandlerConfig } from "../../types.js";
 
@@ -86,97 +87,35 @@ export function safeVarName(tag: string): string {
   return JS_RESERVED.has(tag) ? `${tag}Handlers` : tag;
 }
 
-const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+type ModuleImport = NonNullable<
+  Parameters<typeof TypeScriptRenderer.astToString>[0]["imports"]
+>[number][number];
 
-/**
- * Empty source file used as printer context when printing individual nodes.
- * `updateSourceFile` returns a new node — this one is never mutated.
- */
-const emptySourceFile = ts.createSourceFile(
-  "_.ts",
-  "",
-  ts.ScriptTarget.Latest,
-  false,
-  ts.ScriptKind.TS,
-);
+function makeImport(names: string[], from: string): ModuleImport {
+  return {
+    imports: names.map((name) => ({
+      isTypeOnly: false,
+      localName: name,
+      sourceName: name,
+    })),
+    isTypeOnly: false,
+    kind: "named",
+    modulePath: from,
+  };
+}
 
-// ============================================================================
-// AST node builders
-// ============================================================================
-
-export function makeImport(
-  names: string[],
-  from: string,
-): ts.ImportDeclaration {
-  return ts.factory.createImportDeclaration(
-    undefined,
-    ts.factory.createImportClause(
-      false,
-      undefined,
-      ts.factory.createNamedImports(
-        names.map((n) =>
-          ts.factory.createImportSpecifier(
-            false,
-            undefined,
-            ts.factory.createIdentifier(n),
-          ),
-        ),
-      ),
-    ),
-    ts.factory.createStringLiteral(from),
-    undefined,
-  );
+function print(nodes: ReadonlyArray<TsDsl>, imports?: ModuleImport[]): string {
+  return TypeScriptRenderer.astToString({
+    imports: imports?.length ? [imports] : undefined,
+    nodes,
+  }).trim();
 }
 
 // ============================================================================
-// Handler body builders — one per mode
+// Handler builders
 // ============================================================================
 
-/** Stub mode: `async () => { throw new ORPCError('NOT_IMPLEMENTED'); }` */
-function makeStubBody(): ts.ConciseBody {
-  const throwStmt = ts.factory.createThrowStatement(
-    ts.factory.createNewExpression(
-      ts.factory.createIdentifier("ORPCError"),
-      undefined,
-      [ts.factory.createStringLiteral("NOT_IMPLEMENTED")],
-    ),
-  );
-  return ts.factory.createBlock([throwStmt], true);
-}
-
-/** Faker mode: `async () => mockProcedure()` */
-function makeFakerBody(factoryName: string): ts.ConciseBody {
-  return ts.factory.createCallExpression(
-    ts.factory.createIdentifier(factoryName),
-    undefined,
-    [],
-  );
-}
-
-/** Proxy mode: `async ({ input }) => client.tag.procedure(input)` */
-function makeProxyBody(
-  tag: string,
-  procedure: string,
-  clientName: string,
-): ts.ConciseBody {
-  return ts.factory.createCallExpression(
-    ts.factory.createPropertyAccessExpression(
-      ts.factory.createPropertyAccessExpression(
-        ts.factory.createIdentifier(clientName),
-        ts.factory.createIdentifier(tag),
-      ),
-      ts.factory.createIdentifier(procedure),
-    ),
-    undefined,
-    [ts.factory.createIdentifier("input")],
-  );
-}
-
-// ============================================================================
-// Handler property builder (unified for all modes)
-// ============================================================================
-
-interface HandlerPropertyOpts {
+interface HandlerOpts {
   tag: string;
   procedure: string;
   implementerName: string;
@@ -185,88 +124,67 @@ interface HandlerPropertyOpts {
   factoryName?: string;
 }
 
-export function makeHandlerProperty({
+/**
+ * `os.tag.procedure.handler(async … => …)`, with the body chosen by mode:
+ * - stub: `async () => { throw new ORPCError('NOT_IMPLEMENTED'); }`
+ * - faker: `async () => mockProcedure()`
+ * - proxy: `async ({ input }) => client.tag.procedure(input)`
+ */
+function makeHandler({
   tag,
   procedure,
   implementerName,
   mode,
   clientName,
   factoryName,
-}: HandlerPropertyOpts): ts.PropertyAssignment {
-  let body: ts.ConciseBody;
-  let params: ts.ParameterDeclaration[];
-
+}: HandlerOpts) {
+  const fn = $.func().async();
   switch (mode) {
     case "faker":
-      body = makeFakerBody(
-        factoryName ??
-          `mock${procedure.charAt(0).toUpperCase()}${procedure.slice(1)}`,
+      fn.do(
+        $.return(
+          $(
+            factoryName ??
+              `mock${procedure.charAt(0).toUpperCase()}${procedure.slice(1)}`,
+          ).call(),
+        ),
       );
-      params = [];
       break;
     case "proxy":
-      body = makeProxyBody(tag, procedure, clientName);
-      params = [
-        ts.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          ts.factory.createObjectBindingPattern([
-            ts.factory.createBindingElement(
-              undefined,
-              undefined,
-              ts.factory.createIdentifier("input"),
-            ),
-          ]),
-        ),
-      ];
+      fn.param((p) => p.object("input")).do(
+        $.return($(clientName).attr(tag).attr(procedure).call("input")),
+      );
       break;
-    default: // stub
-      body = makeStubBody();
-      params = [];
+    default:
+      fn.do($.throw($.new("ORPCError", $.literal("NOT_IMPLEMENTED")), false));
       break;
   }
-
-  const asyncArrow = ts.factory.createArrowFunction(
-    [ts.factory.createModifier(ts.SyntaxKind.AsyncKeyword)],
-    undefined,
-    params,
-    undefined,
-    ts.factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-    body,
-  );
-
-  const handlerCall = ts.factory.createCallExpression(
-    ts.factory.createPropertyAccessExpression(
-      ts.factory.createPropertyAccessExpression(
-        ts.factory.createPropertyAccessExpression(
-          ts.factory.createIdentifier(implementerName),
-          ts.factory.createIdentifier(tag),
-        ),
-        ts.factory.createIdentifier(procedure),
-      ),
-      ts.factory.createIdentifier("handler"),
-    ),
-    undefined,
-    [asyncArrow],
-  );
-
-  return ts.factory.createPropertyAssignment(
-    ts.factory.createIdentifier(procedure),
-    handlerCall,
-  );
+  return $(implementerName).attr(tag).attr(procedure).attr("handler").call(fn);
 }
 
-// ============================================================================
-// Import builder
-// ============================================================================
+function handlerOpts(ctx: FileGenContext, procedure: string): HandlerOpts {
+  return {
+    tag: ctx.tag,
+    procedure,
+    implementerName: ctx.implementer.name,
+    mode: ctx.mode,
+    clientName: ctx.clientName,
+    factoryName: ctx.fakerFactoryNames?.get(procedure),
+  };
+}
 
-export function getImports(ctx: FileGenContext): ts.ImportDeclaration[] {
-  const imports: ts.ImportDeclaration[] = [];
+function handlerObject(ctx: FileGenContext, procedures: string[]) {
+  const obj = $.object().pretty();
+  for (const p of procedures) obj.prop(p, makeHandler(handlerOpts(ctx, p)));
+  return obj;
+}
+
+function getImports(ctx: FileGenContext): ModuleImport[] {
+  const imports: ModuleImport[] = [];
 
   switch (ctx.mode) {
     case "stub":
       imports.push(makeImport(["ORPCError"], "@orpc/server"));
-      imports.push(makeImport([ctx.implementer.name], ctx.implementer.from));
       break;
     case "faker": {
       const factoryNames = ctx.procedures
@@ -275,7 +193,6 @@ export function getImports(ctx: FileGenContext): ts.ImportDeclaration[] {
       if (factoryNames.length > 0 && ctx.fakerGenImport) {
         imports.push(makeImport(factoryNames, ctx.fakerGenImport));
       }
-      imports.push(makeImport([ctx.implementer.name], ctx.implementer.from));
       break;
     }
     case "proxy": {
@@ -283,10 +200,10 @@ export function getImports(ctx: FileGenContext): ts.ImportDeclaration[] {
       if (clientImport) {
         imports.push(makeImport([clientImport.name], clientImport.from));
       }
-      imports.push(makeImport([ctx.implementer.name], ctx.implementer.from));
       break;
     }
   }
+  imports.push(makeImport([ctx.implementer.name], ctx.implementer.from));
 
   return imports;
 }
@@ -295,50 +212,14 @@ export function getImports(ctx: FileGenContext): ts.ImportDeclaration[] {
 // File builders
 // ============================================================================
 
-/**
- * Generates a complete handler file.
- * The full source file is constructed as a TypeScript AST and printed with
- * `ts.createPrinter` — no template strings involved.
- */
+/** Generates a complete handler file. */
 export function buildFile(ctx: FileGenContext): string {
   const varName = safeVarName(ctx.tag);
-  const statements: ts.Statement[] = [
-    ...getImports(ctx),
-    ts.factory.createVariableStatement(
-      undefined,
-      ts.factory.createVariableDeclarationList(
-        [
-          ts.factory.createVariableDeclaration(
-            ts.factory.createIdentifier(varName),
-            undefined,
-            undefined,
-            ts.factory.createObjectLiteralExpression(
-              ctx.procedures.map((p) =>
-                makeHandlerProperty({
-                  tag: ctx.tag,
-                  procedure: p,
-                  implementerName: ctx.implementer.name,
-                  mode: ctx.mode,
-                  clientName: ctx.clientName,
-                  factoryName: ctx.fakerFactoryNames?.get(p),
-                }),
-              ),
-              /* multiLine */ true,
-            ),
-          ),
-        ],
-        ts.NodeFlags.Const,
-      ),
-    ),
-    ts.factory.createExportAssignment(
-      undefined,
-      /* isExportEquals */ false,
-      ts.factory.createIdentifier(varName),
-    ),
-  ];
-
-  const sf = ts.factory.updateSourceFile(emptySourceFile, statements);
-  return printer.printFile(sf);
+  const body = print(
+    [$.const(varName).assign(handlerObject(ctx, ctx.procedures))],
+    getImports(ctx),
+  );
+  return `${body}\n\nexport default ${varName};\n`;
 }
 
 // ============================================================================
@@ -353,6 +234,10 @@ export interface HandlerObjectInfo {
    * New properties are inserted just before this position.
    */
   closingBracePos: number;
+  /** True when the last existing property has no trailing comma. */
+  needsComma: boolean;
+  /** End of the last existing property, where a missing comma goes. */
+  lastPropEnd: number;
 }
 
 /**
@@ -364,32 +249,41 @@ export function analyzeHandlerFile(
   source: string,
   varName: string,
 ): HandlerObjectInfo | null {
-  const sf = ts.createSourceFile(
-    "handler.ts",
-    source,
-    ts.ScriptTarget.Latest,
-    true,
-  );
+  const { program } = parseSync("handler.ts", source);
 
-  for (const stmt of sf.statements) {
-    if (!ts.isVariableStatement(stmt)) continue;
-    const decl = stmt.declarationList.declarations[0];
-    if (!decl || !ts.isIdentifier(decl.name) || decl.name.text !== varName)
-      continue;
-    const init = decl.initializer;
-    if (!init || !ts.isObjectLiteralExpression(init)) continue;
+  for (const node of program.body) {
+    const stmt =
+      node.type === "ExportNamedDeclaration" ? node.declaration : node;
+    if (stmt?.type !== "VariableDeclaration") continue;
+    const decl = stmt.declarations[0];
+    if (decl?.id.type !== "Identifier" || decl.id.name !== varName) continue;
+    const init = decl.init;
+    if (init?.type !== "ObjectExpression") continue;
 
     const existingNames = new Set<string>();
     for (const prop of init.properties) {
-      if (ts.isPropertyAssignment(prop) || ts.isMethodDeclaration(prop)) {
-        const name = prop.name;
-        if (ts.isIdentifier(name) || ts.isStringLiteral(name)) {
-          existingNames.add(name.text);
-        }
-      }
+      if (prop.type !== "Property" || prop.computed) continue;
+      if (prop.key.type === "Identifier") existingNames.add(prop.key.name);
+      else if (
+        prop.key.type === "Literal" &&
+        typeof prop.key.value === "string"
+      )
+        existingNames.add(prop.key.value);
     }
 
-    return { existingNames, closingBracePos: init.getEnd() - 1 };
+    const last = init.properties.at(-1);
+    const needsComma =
+      !!last &&
+      !source
+        .slice(last.end, init.end - 1)
+        .trimStart()
+        .startsWith(",");
+    return {
+      existingNames,
+      closingBracePos: init.end - 1,
+      needsComma,
+      lastPropEnd: last?.end ?? 0,
+    };
   }
 
   return null;
@@ -405,49 +299,29 @@ function detectIndent(source: string): string {
 }
 
 /**
- * Prints a single handler property assignment, re-indented to match the
- * surrounding file's style.
- *
- * `ts.createPrinter` uses 4-space indentation internally.  This function
- * converts that to the file's detected indent unit, then prepends the outer
- * indent (one level) to every line.
+ * Prints the handler properties for `procedures`, re-indented from the
+ * printer's two spaces to the file's own indent unit.
  */
-function printProperty(
+function printProperties(
   ctx: FileGenContext,
-  procedure: string,
+  procedures: string[],
   indent: string,
 ): string {
-  const node = makeHandlerProperty({
-    tag: ctx.tag,
-    procedure,
-    implementerName: ctx.implementer.name,
-    mode: ctx.mode,
-    clientName: ctx.clientName,
-    factoryName: ctx.fakerFactoryNames?.get(procedure),
-  });
-  const raw = printer.printNode(ts.EmitHint.Unspecified, node, emptySourceFile);
-
-  const normalized = raw
+  const lines = print([$.const("_").assign(handlerObject(ctx, procedures))])
     .split("\n")
+    .slice(1, -1);
+  return lines
     .map((line) => {
-      if (!line) return line;
-      // Count leading 4-space groups emitted by the printer.
-      const leading = line.match(/^( {4})+/)?.[0] ?? "";
-      const depth = leading.length / 4;
-      return indent + indent.repeat(depth) + line.slice(leading.length);
+      const leading = line.match(/^( {2})*/)?.[0] ?? "";
+      return indent.repeat(leading.length / 2) + line.slice(leading.length);
     })
     .join("\n");
-
-  return normalized + ",";
 }
 
 /**
  * Inserts missing procedure stubs into an existing handler file.
- *
- * Detection is AST-based (TypeScript compiler API) — property names are
- * extracted from the parsed object literal, not by string search.
- * The original file content is preserved for all existing code; only the
- * new stubs are spliced in at the exact character position of the closing `}`.
+ * Existing code is left as written; the new properties are spliced in
+ * just before the handler object's closing `}`.
  */
 export function patchFile(
   source: string,
@@ -457,13 +331,11 @@ export function patchFile(
   const info = analyzeHandlerFile(source, safeVarName(ctx.tag));
   if (!info) return source; // can't locate the object — leave the file untouched
 
-  const indent = detectIndent(source);
-  const insertion =
-    missing.map((p) => `\n${printProperty(ctx, p, indent)}`).join("\n") + "\n";
+  const insertion = `\n${printProperties(ctx, missing, detectIndent(source))},\n`;
 
-  return (
-    source.slice(0, info.closingBracePos) +
-    insertion +
-    source.slice(info.closingBracePos)
-  );
+  const { closingBracePos, lastPropEnd, needsComma } = info;
+  const head = needsComma
+    ? `${source.slice(0, lastPropEnd)},${source.slice(lastPropEnd, closingBracePos)}`
+    : source.slice(0, closingBracePos);
+  return head + insertion + source.slice(closingBracePos);
 }

@@ -9,7 +9,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ts } from "ts-morph";
+import { parseSync, type Statement, type TSType } from "oxc-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,167 +32,130 @@ interface TagMetadata {
   targets: ReadonlyArray<string>;
 }
 
-function parseFile(file: string): ts.SourceFile {
-  return ts.createSourceFile(
-    file,
-    fs.readFileSync(file, "utf8"),
-    ts.ScriptTarget.Latest,
-    true,
+function parseFile(file: string): ReadonlyArray<Statement> {
+  const { program, errors } = parseSync(file, fs.readFileSync(file, "utf8"));
+  if (errors.length > 0) {
+    throw new Error(`Could not parse ${file}: ${errors[0]!.message}`);
+  }
+  return program.body.map((stmt) =>
+    stmt.type === "ExportNamedDeclaration" && stmt.declaration
+      ? stmt.declaration
+      : stmt,
   );
+}
+
+function findTypeAlias(
+  statements: ReadonlyArray<Statement>,
+  name: string,
+): Extract<Statement, { type: "TSTypeAliasDeclaration" }> | null {
+  for (const stmt of statements) {
+    if (stmt.type === "TSTypeAliasDeclaration" && stmt.id.name === name) {
+      return stmt;
+    }
+  }
+  return null;
+}
+
+function stringLiteral(node: TSType): string | null {
+  if (node.type !== "TSLiteralType" || node.literal.type !== "Literal") {
+    return null;
+  }
+  return typeof node.literal.value === "string" ? node.literal.value : null;
 }
 
 /** Tag names come from the barrel's `export * from './<TagName>'` filenames. */
 function readTagNames(): ReadonlyArray<string> {
-  const src = parseFile(path.join(tagsDir, "index.d.ts"));
   const names: Array<string> = [];
-  for (const stmt of src.statements) {
-    if (!ts.isExportDeclaration(stmt) || !stmt.moduleSpecifier) continue;
-    if (!ts.isStringLiteral(stmt.moduleSpecifier)) continue;
-    const basename = path.basename(stmt.moduleSpecifier.text);
+  for (const stmt of parseFile(path.join(tagsDir, "index.d.ts"))) {
+    if (stmt.type !== "ExportAllDeclaration") continue;
+    const basename = path.basename(stmt.source.value);
     if (basename === "index") continue;
     names.push(basename);
   }
   return names.sort();
 }
 
+type TypeLiteral = Extract<TSType, { type: "TSTypeLiteral" }>;
+
 /** Extracts `{ kind, targets }` from `TagBase<{...}>`; empty when shape doesn't match. */
 function readTagMetadata(tagName: string): TagMetadata {
-  const src = parseFile(path.join(tagsDir, `${tagName}.d.ts`));
+  const alias = findTypeAlias(
+    parseFile(path.join(tagsDir, `${tagName}.d.ts`)),
+    tagName,
+  );
+  const body = alias ? extractTagBaseArgument(alias.typeAnnotation) : null;
+  if (!body) return { kind: null, targets: [] };
 
-  let tagTypeBody: ts.TypeLiteralNode | null = null;
-  for (const stmt of src.statements) {
-    if (!ts.isTypeAliasDeclaration(stmt) || stmt.name.text !== tagName)
-      continue;
-    const body = extractTagBaseArgument(stmt.type);
-    if (body) tagTypeBody = body;
-    break;
-  }
+  const kindType = findPropertyType(body, "kind");
+  const kind = kindType ? stringLiteral(kindType) : null;
+  const targetType = findPropertyType(body, "target");
+  const targets = new Set<string>();
+  if (targetType) collectLiteralLeaves(targetType, targets);
 
-  if (!tagTypeBody) return { kind: null, targets: [] };
-
-  const kind = extractPropertyLiteral(tagTypeBody, "kind");
-  const targetMember = findPropertyType(tagTypeBody, "target");
-  const targets = targetMember ? extractTargetMembers(targetMember) : [];
-
-  return { kind, targets };
+  return { kind, targets: [...targets] };
 }
 
-function extractTagBaseArgument(node: ts.TypeNode): ts.TypeLiteralNode | null {
-  if (!ts.isTypeReferenceNode(node)) return null;
-  if (!ts.isIdentifier(node.typeName) || node.typeName.text !== "TagBase")
+function extractTagBaseArgument(node: TSType): TypeLiteral | null {
+  if (node.type !== "TSTypeReference") return null;
+  if (node.typeName.type !== "Identifier" || node.typeName.name !== "TagBase")
     return null;
-  const arg = node.typeArguments?.[0];
-  if (!arg || !ts.isTypeLiteralNode(arg)) return null;
-  return arg;
+  const arg = node.typeArguments?.params[0];
+  return arg?.type === "TSTypeLiteral" ? arg : null;
 }
 
-function findPropertyType(
-  literal: ts.TypeLiteralNode,
-  name: string,
-): ts.TypeNode | null {
+function findPropertyType(literal: TypeLiteral, name: string): TSType | null {
   for (const member of literal.members) {
-    if (!ts.isPropertySignature(member)) continue;
-    if (!member.name || !ts.isIdentifier(member.name)) continue;
-    if (member.name.text !== name) continue;
-    return member.type ?? null;
+    if (member.type !== "TSPropertySignature") continue;
+    if (member.key.type !== "Identifier" || member.key.name !== name) continue;
+    return member.typeAnnotation?.typeAnnotation ?? null;
   }
   return null;
 }
 
-function extractPropertyLiteral(
-  literal: ts.TypeLiteralNode,
-  name: string,
-): string | null {
-  const type = findPropertyType(literal, name);
-  if (!type) return null;
-  if (!ts.isLiteralTypeNode(type) || !ts.isStringLiteral(type.literal))
-    return null;
-  return type.literal.text;
-}
-
-function extractTargetMembers(node: ts.TypeNode): ReadonlyArray<string> {
-  const out = new Set<string>();
-  collectLiteralLeaves(node, out);
-  return [...out];
-}
-
 /** Collects string-literal leaves from literal/union/conditional type nodes. */
-function collectLiteralLeaves(node: ts.TypeNode, out: Set<string>): void {
-  if (ts.isLiteralTypeNode(node) && ts.isStringLiteral(node.literal)) {
-    out.add(node.literal.text);
-    return;
-  }
-  if (ts.isUnionTypeNode(node)) {
+function collectLiteralLeaves(node: TSType, out: Set<string>): void {
+  const literal = stringLiteral(node);
+  if (literal !== null) {
+    out.add(literal);
+  } else if (node.type === "TSUnionType") {
     for (const member of node.types) collectLiteralLeaves(member, out);
-    return;
-  }
-  if (ts.isConditionalTypeNode(node)) {
+  } else if (node.type === "TSConditionalType") {
     collectLiteralLeaves(node.trueType, out);
     collectLiteralLeaves(node.falseType, out);
-    return;
   }
 }
 
 function readFormatValues(): ReadonlyArray<string> {
-  return readLiteralUnionFromNamespaceTypeAlias({
-    file: path.join(tagsDir, "Format.d.ts"),
-    namespace: "Format",
-    typeAlias: "Value",
-  });
+  const file = path.join(tagsDir, "Format.d.ts");
+  for (const stmt of parseFile(file)) {
+    if (stmt.type !== "TSModuleDeclaration") continue;
+    if (stmt.id.type !== "Identifier" || stmt.id.name !== "Format") continue;
+    if (stmt.body?.type !== "TSModuleBlock") continue;
+    const value = findTypeAlias(stmt.body.body, "Value");
+    if (value) return extractLiteralUnion(value.typeAnnotation);
+  }
+  throw new Error(`Could not extract Format.Value from ${file}`);
 }
 
 function readIntegerFormats(): ReadonlyArray<string> {
-  const src = parseFile(path.join(tagsDir, "Type.d.ts"));
-  for (const stmt of src.statements) {
-    if (!ts.isTypeAliasDeclaration(stmt) || stmt.name.text !== "Type") continue;
-    const constraint = stmt.typeParameters?.[0]?.constraint;
-    if (!constraint) continue;
-    return extractLiteralUnion(constraint);
-  }
-  throw new Error("Could not extract Type<V> constraint");
+  const alias = findTypeAlias(
+    parseFile(path.join(tagsDir, "Type.d.ts")),
+    "Type",
+  );
+  const constraint = alias?.typeParameters?.params[0]?.constraint;
+  if (!constraint) throw new Error("Could not extract Type<V> constraint");
+  return extractLiteralUnion(constraint);
 }
 
-function readLiteralUnionFromNamespaceTypeAlias({
-  file,
-  namespace,
-  typeAlias,
-}: {
-  file: string;
-  namespace: string;
-  typeAlias: string;
-}): ReadonlyArray<string> {
-  const src = parseFile(file);
-  for (const stmt of src.statements) {
-    if (!ts.isModuleDeclaration(stmt) || stmt.name.text !== namespace) continue;
-    const body = stmt.body;
-    if (!body || !ts.isModuleBlock(body)) continue;
-    for (const inner of body.statements) {
-      if (!ts.isTypeAliasDeclaration(inner) || inner.name.text !== typeAlias) {
-        continue;
-      }
-      return extractLiteralUnion(inner.type);
+function extractLiteralUnion(node: TSType): ReadonlyArray<string> {
+  const members = node.type === "TSUnionType" ? node.types : [node];
+  return members.map((member) => {
+    const literal = stringLiteral(member);
+    if (literal === null) {
+      throw new Error(`Expected a string literal, got ${member.type}`);
     }
-  }
-  throw new Error(`Could not extract ${namespace}.${typeAlias} from ${file}`);
-}
-
-function extractLiteralUnion(node: ts.TypeNode): ReadonlyArray<string> {
-  if (ts.isLiteralTypeNode(node) && ts.isStringLiteral(node.literal)) {
-    return [node.literal.text];
-  }
-  if (!ts.isUnionTypeNode(node)) {
-    throw new Error(
-      `Expected literal or union, got ${ts.SyntaxKind[node.kind]}`,
-    );
-  }
-  const out: Array<string> = [];
-  for (const member of node.types) {
-    if (!ts.isLiteralTypeNode(member) || !ts.isStringLiteral(member.literal)) {
-      throw new Error(`Non-literal member: ${ts.SyntaxKind[member.kind]}`);
-    }
-    out.push(member.literal.text);
-  }
-  return out;
+    return literal;
+  });
 }
 
 function emitArray(name: string, values: ReadonlyArray<string>): string {
