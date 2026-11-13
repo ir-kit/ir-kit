@@ -37,19 +37,17 @@ function parseFile(file: string): ReadonlyArray<Statement> {
   if (errors.length > 0) {
     throw new Error(`Could not parse ${file}: ${errors[0]!.message}`);
   }
-  return program.body.map((stmt) =>
-    stmt.type === "ExportNamedDeclaration" && stmt.declaration
-      ? stmt.declaration
-      : stmt,
-  );
+  return program.body;
 }
 
 function findTypeAlias(
   statements: ReadonlyArray<Statement>,
   name: string,
 ): Extract<Statement, { type: "TSTypeAliasDeclaration" }> | null {
-  for (const stmt of statements) {
-    if (stmt.type === "TSTypeAliasDeclaration" && stmt.id.name === name) {
+  for (const node of statements) {
+    const stmt =
+      node.type === "ExportNamedDeclaration" ? node.declaration : node;
+    if (stmt?.type === "TSTypeAliasDeclaration" && stmt.id.name === name) {
       return stmt;
     }
   }
@@ -127,8 +125,10 @@ function collectLiteralLeaves(node: TSType, out: Set<string>): void {
 
 function readFormatValues(): ReadonlyArray<string> {
   const file = path.join(tagsDir, "Format.d.ts");
-  for (const stmt of parseFile(file)) {
-    if (stmt.type !== "TSModuleDeclaration") continue;
+  for (const node of parseFile(file)) {
+    const stmt =
+      node.type === "ExportNamedDeclaration" ? node.declaration : node;
+    if (stmt?.type !== "TSModuleDeclaration") continue;
     if (stmt.id.type !== "Identifier" || stmt.id.name !== "Format") continue;
     if (stmt.body?.type !== "TSModuleBlock") continue;
     const value = findTypeAlias(stmt.body.body, "Value");
