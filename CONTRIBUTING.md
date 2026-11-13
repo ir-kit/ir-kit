@@ -7,7 +7,7 @@ The fastest way to ship a change here is to copy a sibling package, but the sibl
 ```bash
 pnpm install        # links workspace deps via pnpm-workspace.yaml
 pnpm build          # builds every workspace package in dependency order
-pnpm typecheck      # all packages (glean reads ir-kit's built types, so build first)
+pnpm typecheck      # all packages (glean reads @ir-kit/kit's built types, so build first)
 pnpm test           # all packages (uses --passWithNoTests, so missing tests aren't failures)
 ```
 
@@ -47,12 +47,12 @@ The TypeScript codegen layer in this repo (everything that emits `.ts` files) is
 | Need | Use |
 | --- | --- |
 | Bundle external `$ref`s in an OpenAPI spec | `$RefParser` from `@hey-api/json-schema-ref-parser` |
-| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseOpenAPI` from `ir-kit/ir` |
-| Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `ir-kit/openapi` |
-| Safe-write a generated output directory | `assertSafeOutputDir` from `ir-kit/codegen` |
+| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseOpenAPI` from `@ir-kit/kit/ir` |
+| Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `@ir-kit/kit/openapi` |
+| Safe-write a generated output directory | `assertSafeOutputDir` from `@ir-kit/kit/codegen` |
 | Build TypeScript ASTs (when emitting `.ts`) | `$` DSL from `@hey-api/openapi-ts` — `$.const`, `$.func`, `$.type.*`, `$.literal`, `$().attr().call()`. Compiles to `ts.factory` underneath, so `.toAst()` returns plain TS AST when you need to print standalone. |
-| Faker heuristics (format → faker method, field-name hints) | `resolveFakerCall`, `DEFAULT_FORMAT_MAPPING`, `DATE_METHODS` from `ir-kit/openapi-ts/faker/core` |
-| Spec server / security walking | helpers in `ir-kit/openapi` |
+| Faker heuristics (format → faker method, field-name hints) | `resolveFakerCall`, `DEFAULT_FORMAT_MAPPING`, `DATE_METHODS` from `@ir-kit/kit/openapi-ts/faker/core` |
+| Spec server / security walking | helpers in `@ir-kit/kit/openapi` |
 
 For **non-TypeScript codegen** (Swift / Go / Kotlin native generators), keep your own DSL — hey-api's `$` DSL is TypeScript-targeting. See `openapi-swift/src/sw-dsl/` for the established shape: per-language IR + DSL + compiler + project layers.
 
@@ -94,4 +94,4 @@ In CI, pushing a `.changeset/*.md` to `main` opens a "Version Packages" PR; merg
 
 ## Golden tests
 
-`packages/ir-kit/tests/golden` generates every target from real specs (Spotify and the AsyncAPI spec repo's examples) and compares the files written plus each top-level declaration with `tests/golden/__snapshots__`. When a generator change is intended, update them with `pnpm --filter ir-kit exec vitest run tests/golden -u` and review the diff: a renamed type, a new `Foo2` or a missing file shows up there.
+`packages/ir-kit/tests/golden` generates every target from real specs (Spotify and the AsyncAPI spec repo's examples) and compares the files written plus each top-level declaration with `tests/golden/__snapshots__`. When a generator change is intended, update them with `pnpm --filter @ir-kit/kit exec vitest run tests/golden -u` and review the diff: a renamed type, a new `Foo2` or a missing file shows up there.

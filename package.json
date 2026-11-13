@@ -19,7 +19,7 @@
   "scripts": {
     "prepare": "lefthook install",
     "build": "pnpm -r --filter '!./examples/*' run build",
-    "dev": "pnpm --filter ir-kit run dev",
+    "dev": "pnpm --filter @ir-kit/kit run dev",
     "typecheck": "pnpm -r --filter '!./examples/*' run typecheck",
     "test": "pnpm -r --filter '!./examples/*' run test",
     "format": "biome check --write .",

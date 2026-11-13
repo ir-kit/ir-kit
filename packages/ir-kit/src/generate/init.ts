@@ -64,7 +64,7 @@ export function renderConfig(
       `    ${name}: { output: ${JSON.stringify(DEFAULT_OUTPUTS[name])} },`,
   );
   return [
-    'import { defineConfig } from "ir-kit";',
+    'import { defineConfig } from "@ir-kit/kit";',
     "",
     "export default defineConfig({",
     `  input: ${JSON.stringify(input)},`,

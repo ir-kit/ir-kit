@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 
 /** typespec-loader's package dir hosts the @typespec/* peer deps the
  *  TypeSpec compiler needs to resolve when chaining converters. */
-const typespecLoaderDir = dirname(require.resolve("ir-kit/package.json"));
+const typespecLoaderDir = dirname(require.resolve("@ir-kit/kit/package.json"));
 
 import "./converters/openapi3-to-json-schema.js";
 import "./converters/openapi3-to-postman.js";
@@ -58,7 +58,7 @@ export interface ConvertSpecResult {
 
 /**
  * Convert between API spec formats. Detects the input format via
- * `ir-kit/spec` (override with `from`). Uses a direct
+ * `@ir-kit/kit/spec` (override with `from`). Uses a direct
  * `(from → to)` converter when one is registered; otherwise BFS-routes
  * through intermediate formats (chains like `proto → openapi3 → postman`
  * are discovered automatically). Returns either a parsed document, a

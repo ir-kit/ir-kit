@@ -1,4 +1,4 @@
-# ir-kit/openapi-ts/typia
+# @ir-kit/kit/openapi-ts/typia
 
 Typia plugin for [@hey-api/openapi-ts](https://heyapi.dev/). Emits
 [typia](https://typia.io/) Standard Schema validators + JSON Schema
@@ -7,7 +7,7 @@ companions for OpenAPI operations.
 ## Install
 
 ```bash
-pnpm add -d ir-kit @hey-api/openapi-ts
+pnpm add -d @ir-kit/kit @hey-api/openapi-ts
 pnpm add typia @standard-schema/spec
 ```
 
@@ -27,7 +27,7 @@ import { defineConfig } from '@hey-api/openapi-ts';
 import {
   defineConfig as defineTypiaConfig,
   typiaTypeTransformer,
-} from 'ir-kit/openapi-ts/typia';
+} from '@ir-kit/kit/openapi-ts/typia';
 
 export default defineConfig({
   input: 'openapi.json',

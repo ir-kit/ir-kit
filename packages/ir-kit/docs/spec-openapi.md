@@ -1,19 +1,19 @@
-# `ir-kit/spec/openapi`
+# `@ir-kit/kit/spec/openapi`
 
 Load an OpenAPI 3.x spec from a file path, URL, or pre-parsed object. Bundles `$ref`s via `@hey-api/json-schema-ref-parser` and runs optional hey-api-aware normalization.
 
-Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`ir-kit/spec`](../../shared/spec-loader) instead.
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`@ir-kit/kit/spec`](../../shared/spec-loader) instead.
 
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 ## Usage
 
 ```ts
-import { loadOpenAPI } from "ir-kit/spec/openapi";
+import { loadOpenAPI } from "@ir-kit/kit/spec/openapi";
 
 const spec = await loadOpenAPI({
   input: "./petstore.yaml", // path, URL, or pre-parsed object
@@ -29,4 +29,4 @@ const spec = await loadOpenAPI({
 | `resolveOpenAPIInput(input, cwd?)`   | Resolve a string input to an absolute path / URL passthrough |
 | `OpenAPIInput`, `LoadOpenAPIOptions` | Public types                                                 |
 
-`normalize: true` applies the safe preset (`SAFE_NORMALIZE` from `ir-kit/openapi`). Pass a `NormalizeOptions` object to customize.
+`normalize: true` applies the safe preset (`SAFE_NORMALIZE` from `@ir-kit/kit/openapi`). Pass a `NormalizeOptions` object to customize.

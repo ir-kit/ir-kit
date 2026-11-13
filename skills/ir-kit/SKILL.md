@@ -1,14 +1,14 @@
 ---
 name: ir-kit
-description: Generate SDKs (Go, Kotlin, Swift, Java, TypeScript), k6 load tests, AsyncAPI event code and HTML docs from an OpenAPI, AsyncAPI, TypeSpec, Protobuf or Postman spec with the `ir-kit` package and its `ir` CLI; convert and diff specs; infer OpenAPI from HTTP traffic; extract JSON Schema from TypeScript functions; write Hey API plugins; migrate from the old `@ir-kit/*` packages. Triggers on "ir-kit", "ir generate", "ir.config.ts", "SDK from OpenAPI", "Go/Kotlin/Swift/Java client from spec", "k6 load test from OpenAPI", "AsyncAPI types", "RabbitMQ/AMQP from spec", "convert proto/TypeSpec/Postman to OpenAPI", "breaking changes between specs", "OpenAPI from HAR", "JSON Schema from TypeScript function", "hey-api plugin", "@ir-kit/". Do NOT use for hand-writing API clients without a spec.
+description: Generate SDKs (Go, Kotlin, Swift, Java, TypeScript), k6 load tests, AsyncAPI event code and HTML docs from an OpenAPI, AsyncAPI, TypeSpec, Protobuf or Postman spec with the `@ir-kit/kit` package and its `ir` CLI; convert and diff specs; infer OpenAPI from HTTP traffic; extract JSON Schema from TypeScript functions; write Hey API plugins; migrate from the old `@ir-kit/*` packages. Triggers on "ir-kit", "ir generate", "ir.config.ts", "SDK from OpenAPI", "Go/Kotlin/Swift/Java client from spec", "k6 load test from OpenAPI", "AsyncAPI types", "RabbitMQ/AMQP from spec", "convert proto/TypeSpec/Postman to OpenAPI", "breaking changes between specs", "OpenAPI from HAR", "JSON Schema from TypeScript function", "hey-api plugin", "@ir-kit/". Do NOT use for hand-writing API clients without a spec.
 ---
 
 # ir-kit
 
-One package, `ir-kit`, with the `ir` CLI and every API under subpaths. The only other package is `@ir-kit/k6`, the runtime that runs inside k6. Requires Node 24.
+One package, `@ir-kit/kit`, with the `ir` CLI and every API under subpaths. The only other package is `@ir-kit/k6`, the runtime that runs inside k6. Requires Node 24.
 
 ```sh
-npm i -D ir-kit
+npm i -D @ir-kit/kit
 ```
 
 Heavy, format-specific libraries are optional peers. When one is missing, the command fails with the exact `npm i -D …` line to run; run it and retry.
@@ -25,7 +25,7 @@ npx ir watch               # regenerate on spec or config change
 ```
 
 ```ts
-import { defineConfig } from "ir-kit";
+import { defineConfig } from "@ir-kit/kit";
 
 export default defineConfig({
   input: "api/openapi.yaml", // OpenAPI 2/3.0/3.1, AsyncAPI, .tsp, .proto, Postman; path or URL
@@ -48,7 +48,7 @@ export default defineConfig({
 - Given an AsyncAPI file, `go`/`kotlin`/`swift`/`java`/`typescript` write one model per message payload. The `asyncapi` target writes TypeScript types, an `Events` const, typed dispatch and amqplib publish/consume helpers.
 - Commit the generated output and add `npx ir generate --check` to CI.
 
-From code: `import { generate, loadIrConfig } from "ir-kit/generate"`.
+From code: `import { generate, loadIrConfig } from "@ir-kit/kit/generate"`.
 
 ## Other commands
 
@@ -58,11 +58,11 @@ From code: `import { generate, loadIrConfig } from "ir-kit/generate"`.
 | Convert formats | `ir spec convert <spec> --to openapi3\|typespec\|proto\|json-schema\|postman --out <path>` |
 | Breaking-change diff | `ir spec diff <before> --after <after> --failOnBreaking` |
 | HTML docs (Scalar) | `ir docs <spec> --out docs.html` |
-| OpenAPI from traffic | `ir recon <capture.har> --out openapi.json`; in code `ir-kit/recon` takes `Request`/`Response` pairs. The `@ir-kit/glean` DevTools extension captures interactively |
+| OpenAPI from traffic | `ir recon <capture.har> --out openapi.json`; in code `@ir-kit/kit/recon` takes `Request`/`Response` pairs. The `@ir-kit/glean` DevTools extension captures interactively |
 | JSON Schema from TS functions | `ir fn-schema extract --patterns "src/**/*.ts" --bundle schemas.json`; also `scan`, `inspect`, `diff` |
 | k6 client + loadtests | `ir k6 sync <spec> --output k6 --scaffold`, then `ir k6 bundle k6/loadtests/<op>.ts --output dist` and `k6 run dist/<op>.mjs` |
 
-`ir <command> --help` lists every flag. Each command wraps an exported function with the same options (`ir-kit/sdk/go` → `generate({ input, output })`, `ir-kit/spec` → `convertSpec`, `diffSpecs`, …).
+`ir <command> --help` lists every flag. Each command wraps an exported function with the same options (`@ir-kit/kit/sdk/go` → `generate({ input, output })`, `@ir-kit/kit/spec` → `convertSpec`, `diffSpecs`, …).
 
 ## k6 load tests
 
@@ -86,35 +86,35 @@ export const options = lt.options;
 export default lt.default;
 ```
 
-API details: `packages/k6/framework/README.md`. Programmatic bundling and running: `ir-kit/k6-toolkit` (`bundle`, `runK6`).
+API details: `packages/k6/framework/README.md`. Programmatic bundling and running: `@ir-kit/kit/k6-toolkit` (`bundle`, `runK6`).
 
 ## Hey API plugins (TypeScript target)
 
 `typescript.plugins` accepts Hey API's own plugins and ir-kit's: `faker` (mock factories), `orpc` (oRPC contract and router), `paths` (per-operation route consts), `typia` (validators; typia 12 or 15, transformed with `ttsc`), `k6`. Their options are in `packages/ir-kit/docs/openapi-ts-*.md`.
 
-To write a new plugin, start from `ir-kit/openapi-ts/kit` (`definePluginConfig`) and copy the closest of `packages/ir-kit/src/openapi-ts/{faker,orpc,paths,typia}`. Plugins emit code with Hey API's `$` TypeScript DSL from `@hey-api/openapi-ts`, not `ts.factory`.
+To write a new plugin, start from `@ir-kit/kit/openapi-ts/kit` (`definePluginConfig`) and copy the closest of `packages/ir-kit/src/openapi-ts/{faker,orpc,paths,typia}`. Plugins emit code with Hey API's `$` TypeScript DSL from `@hey-api/openapi-ts`, not `ts.factory`.
 
 ## fn-schema
 
-Reads real TypeScript through the type checker (ts-morph), so generics, aliases and imported types resolve. Besides the CLI: `ir-kit/fn-schema` (`runExtract`), `ir-kit/fn-schema/unplugin` (Vite/webpack/Rollup/esbuild plugin) and `ir-kit/fn-schema/transformer` (replaces `schemaOf(fn)` calls at build time). Config file: `fn-schema.config.ts`.
+Reads real TypeScript through the type checker (ts-morph), so generics, aliases and imported types resolve. Besides the CLI: `@ir-kit/kit/fn-schema` (`runExtract`), `@ir-kit/kit/fn-schema/unplugin` (Vite/webpack/Rollup/esbuild plugin) and `@ir-kit/kit/fn-schema/transformer` (replaces `schemaOf(fn)` calls at build time). Config file: `fn-schema.config.ts`.
 
 ## Migrating from `@ir-kit/*` packages
 
-Every old package is now a subpath of `ir-kit`. Replace the dependency with `ir-kit` and rewrite imports:
+Every old package is now a subpath of `@ir-kit/kit`. Replace the dependency with `@ir-kit/kit` and rewrite imports:
 
 | Old | New |
 | --- | --- |
-| `@ir-kit/cli` | `ir-kit` (same `ir` binary) |
-| `@ir-kit/openapi-{go,java,kotlin,swift,typescript}`, `@ir-kit/compiler-*` | `ir-kit/sdk/{go,java,kotlin,swift,typescript}` |
-| `@ir-kit/k6-gen` / `@ir-kit/k6-toolkit` | `ir-kit/sdk/k6` / `ir-kit/k6-toolkit` |
-| `@ir-kit/asyncapi-typescript` / `@ir-kit/asyncapi-core` | `ir-kit/sdk/asyncapi` / `ir-kit/asyncapi` |
-| `@ir-kit/spec-{loader,convert,diff,docs}` | `ir-kit/spec` |
-| `@ir-kit/{openapi,asyncapi,typespec}-loader` | `ir-kit/spec/{openapi,asyncapi,typespec}` |
-| `@ir-kit/openapi-ts-{faker,orpc,paths,typia,k6}`, `-plugin-kit` | `ir-kit/openapi-ts/{faker,orpc,paths,typia,k6,kit}` |
-| `@ir-kit/fn-schema-core` | `ir-kit/fn-schema` |
-| `@ir-kit/fn-schema-{loader,transformer,typescript,unplugin}` | `ir-kit/fn-schema/{loader,transformer,typescript,unplugin}` |
-| `@ir-kit/openapi-recon` | `ir-kit/recon` |
-| `@ir-kit/{codegen-core,schema,openapi,openapi-tools}` | `ir-kit/{codegen,schema,openapi,openapi-tools}` |
+| `@ir-kit/cli` | `@ir-kit/kit` (same `ir` binary) |
+| `@ir-kit/openapi-{go,java,kotlin,swift,typescript}`, `@ir-kit/compiler-*` | `@ir-kit/kit/sdk/{go,java,kotlin,swift,typescript}` |
+| `@ir-kit/k6-gen` / `@ir-kit/k6-toolkit` | `@ir-kit/kit/sdk/k6` / `@ir-kit/kit/k6-toolkit` |
+| `@ir-kit/asyncapi-typescript` / `@ir-kit/asyncapi-core` | `@ir-kit/kit/sdk/asyncapi` / `@ir-kit/kit/asyncapi` |
+| `@ir-kit/spec-{loader,convert,diff,docs}` | `@ir-kit/kit/spec` |
+| `@ir-kit/{openapi,asyncapi,typespec}-loader` | `@ir-kit/kit/spec/{openapi,asyncapi,typespec}` |
+| `@ir-kit/openapi-ts-{faker,orpc,paths,typia,k6}`, `-plugin-kit` | `@ir-kit/kit/openapi-ts/{faker,orpc,paths,typia,k6,kit}` |
+| `@ir-kit/fn-schema-core` | `@ir-kit/kit/fn-schema` |
+| `@ir-kit/fn-schema-{loader,transformer,typescript,unplugin}` | `@ir-kit/kit/fn-schema/{loader,transformer,typescript,unplugin}` |
+| `@ir-kit/openapi-recon` | `@ir-kit/kit/recon` |
+| `@ir-kit/{codegen-core,schema,openapi,openapi-tools}` | `@ir-kit/kit/{codegen,schema,openapi,openapi-tools}` |
 | `@ir-kit/create-k6` | `npx ir init --targets k6` |
 | `@ahmedrowaihi/*` (older scope) | same table, after dropping the scope |
 

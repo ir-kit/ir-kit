@@ -1,4 +1,4 @@
-# ir-kit/sdk/java
+# @ir-kit/kit/sdk/java
 
 Generate a Java 17 client SDK from an OpenAPI 3.x spec.
 
@@ -8,7 +8,7 @@ Generate a Java 17 client SDK from an OpenAPI 3.x spec.
 - The runtime (`ApiClient`, `RequestOptions`, `Auth`, …) ships as plain Java sources under `runtime/`.
 
 ```ts
-import { generate } from "ir-kit/sdk/java";
+import { generate } from "@ir-kit/kit/sdk/java";
 
 await generate({
   input: "petstore.yaml",

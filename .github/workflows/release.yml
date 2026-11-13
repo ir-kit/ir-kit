@@ -61,6 +61,6 @@ jobs:
         env:
           PUBLISHED: ${{ steps.changesets.outputs.publishedPackages }}
         run: |
-          version=$(jq -r '.[] | select(.name == "ir-kit") | .version' <<<"$PUBLISHED")
+          version=$(jq -r '.[] | select(.name == "@ir-kit/kit") | .version' <<<"$PUBLISHED")
           [ -n "$version" ] || exit 0
-          SMOKE_LANGS="" bash scripts/smoke-published.sh "ir-kit@$version"
+          SMOKE_LANGS="" bash scripts/smoke-published.sh "@ir-kit/kit@$version"

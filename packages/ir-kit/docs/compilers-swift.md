@@ -9,7 +9,7 @@ Originally developed in [typescript-compilers](https://github.com/ahmedrowaihi/t
 ## Usage
 
 ```ts
-import { swift } from "ir-kit";
+import { swift } from "@ir-kit/kit";
 
 const file = swift.factory.createSourceFile(/* ... */);
 const source = swift.createPrinter().printFile(file);

@@ -1,4 +1,4 @@
-# `ir-kit/spec/typespec`
+# `@ir-kit/kit/spec/typespec`
 
 Compile a [TypeSpec](https://typespec.io) file or inline source to an OpenAPI 3 document in memory. Thin wrapper over `@typespec/compiler` + `@typespec/openapi3` — plugs into any ir-kit OpenAPI generator at the spec-loading boundary.
 
@@ -7,7 +7,7 @@ Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 # Peer deps (install whichever emitters you'll use):
 npm install @typespec/compiler @typespec/openapi3 @typespec/json-schema @typespec/protobuf
 ```
@@ -15,7 +15,7 @@ npm install @typespec/compiler @typespec/openapi3 @typespec/json-schema @typespe
 ## Usage
 
 ```ts
-import { compileTypespec } from "ir-kit/spec/typespec";
+import { compileTypespec } from "@ir-kit/kit/spec/typespec";
 
 // From a file path
 const { document } = await compileTypespec({ path: "./api.tsp" });
@@ -40,7 +40,7 @@ No disk artifacts survive the call — compilation runs against a temp dir that'
 For emitters that don't expose a `getX()` programmatic API (e.g. `@typespec/json-schema`, `@typespec/protobuf`), use `compileTypespecCapture` — it wraps the compiler host and intercepts `writeFile` calls so the emitted files come back as an in-memory `{ path → content }` map.
 
 ```ts
-import { compileTypespecCapture } from "ir-kit/spec/typespec";
+import { compileTypespecCapture } from "@ir-kit/kit/spec/typespec";
 
 const { files } = await compileTypespecCapture(
   { path: "./api.tsp" },

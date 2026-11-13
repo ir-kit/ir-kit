@@ -1,20 +1,20 @@
-# `ir-kit/spec`
+# `@ir-kit/kit/spec`
 
-Render any supported API spec as a standalone HTML documentation page via [Scalar API Reference](https://github.com/scalar/scalar). Converts the input to OpenAPI 3 first (using `ir-kit/spec`), then delegates HTML emission to `@scalar/core`'s `getHtmlDocument` — the same renderer the official Express / Hono / Fastify integrations use.
+Render any supported API spec as a standalone HTML documentation page via [Scalar API Reference](https://github.com/scalar/scalar). Converts the input to OpenAPI 3 first (using `@ir-kit/kit/spec`), then delegates HTML emission to `@scalar/core`'s `getHtmlDocument` — the same renderer the official Express / Hono / Fastify integrations use.
 
 Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 ## Usage
 
 ```ts
 import { writeFile } from "node:fs/promises";
-import { renderDocs } from "ir-kit/spec";
+import { renderDocs } from "@ir-kit/kit/spec";
 
 const { html } = await renderDocs({
   input: "./api.yaml", // postman / proto / typespec / openapi3 / asyncapi3
@@ -33,7 +33,7 @@ The output is a self-contained HTML page that loads Scalar from CDN — no bundl
 | `renderDocs(opts)`                                   | Convert spec to OpenAPI 3 if needed, return `{ html, openapi, from }` |
 | `RenderDocsOptions`, `RenderDocsResult`, `DocsTheme` | Public types                                                          |
 
-Any input format supported by [`ir-kit/spec`](../spec-convert) works (currently: openapi3, postman, proto, typespec, asyncapi3, json-schema).
+Any input format supported by [`@ir-kit/kit/spec`](../spec-convert) works (currently: openapi3, postman, proto, typespec, asyncapi3, json-schema).
 
 ## CLI
 

@@ -1,11 +1,11 @@
-# ir-kit/openapi-ts/orpc
+# @ir-kit/kit/openapi-ts/orpc
 
 Generates type-safe [oRPC](https://orpc.unnoq.com/) contracts, routers, server skeletons, clients, and mock factories from OpenAPI specifications. Plugin for [@hey-api/openapi-ts](https://heyapi.dev/).
 
 ## Installation
 
 ```bash
-bun add -d ir-kit @hey-api/openapi-ts
+bun add -d @ir-kit/kit @hey-api/openapi-ts
 bun add @orpc/contract @orpc/server @orpc/client zod
 ```
 
@@ -27,7 +27,7 @@ bun add @orpc/contract @orpc/server @orpc/client zod
 
 ```typescript
 import { defineConfig } from "@hey-api/openapi-ts";
-import { defineConfig as defineORPCConfig } from "ir-kit/openapi-ts/orpc";
+import { defineConfig as defineORPCConfig } from "@ir-kit/kit/openapi-ts/orpc";
 
 export default defineConfig({
   input: "openapi.json",

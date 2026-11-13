@@ -3,7 +3,7 @@
 One package for working with API specs. Load, convert, diff and document OpenAPI, AsyncAPI, TypeSpec, protobuf and Postman specs, and generate SDKs, Hey API plugin output and k6 load tests from them.
 
 ```sh
-npm i -D ir-kit
+npm i -D @ir-kit/kit
 npx ir sdk go openapi.yaml --output sdk/go
 ```
 
@@ -11,17 +11,17 @@ npx ir sdk go openapi.yaml --output sdk/go
 
 | Import | What it does | Docs |
 | --- | --- | --- |
-| `ir-kit` / `ir-kit/spec` | `loadSpec`, `convertSpec`, `diffSpec`, `renderDocs` | [load](./docs/spec-load.md), [convert](./docs/spec-convert.md), [diff](./docs/spec-diff.md), [docs](./docs/spec-docs.md) |
-| `ir-kit/spec/openapi`, `/asyncapi`, `/typespec` | format-specific loaders | [openapi](./docs/spec-openapi.md), [asyncapi](./docs/spec-asyncapi.md), [typespec](./docs/spec-typespec.md) |
-| `ir-kit/sdk/go`, `/java`, `/kotlin`, `/swift`, `/typescript` | SDK generators, each with `generate({ spec, output })` | [go](./docs/sdk-go.md), [java](./docs/sdk-java.md), [kotlin](./docs/sdk-kotlin.md), [swift](./docs/sdk-swift.md), [typescript](./docs/sdk-typescript.md) |
-| `ir-kit/sdk/k6` | typed k6 client generator | [k6](./docs/sdk-k6.md) |
-| `ir-kit/sdk/asyncapi` | TypeScript output for AsyncAPI specs | [asyncapi](./docs/sdk-asyncapi.md) |
-| `ir-kit/openapi-ts/faker`, `/orpc`, `/paths`, `/typia`, `/k6` | Hey API plugins | [faker](./docs/openapi-ts-faker.md), [orpc](./docs/openapi-ts-orpc.md), [paths](./docs/openapi-ts-paths.md), [typia](./docs/openapi-ts-typia.md), [k6](./docs/openapi-ts-k6.md) |
-| `ir-kit/fn-schema` | JSON Schema from TypeScript function signatures | [fn-schema](./docs/fn-schema-core.md) |
-| `ir-kit/fn-schema/unplugin/vite` (and `/webpack`, `/rollup`, ...) | fn-schema bundler plugins | [unplugin](./docs/fn-schema-unplugin.md) |
-| `ir-kit/recon` | build an OpenAPI spec from recorded traffic | [recon](./docs/recon.md) |
-| `ir-kit/k6-toolkit` | k6 project scaffold, sync and bundle | [k6-toolkit](./docs/k6-toolkit.md) |
-| `ir-kit/cli` | the `ir` command's specs, to embed it in your own tooling | [cli](./docs/cli.md) |
+| `@ir-kit/kit` / `@ir-kit/kit/spec` | `loadSpec`, `convertSpec`, `diffSpec`, `renderDocs` | [load](./docs/spec-load.md), [convert](./docs/spec-convert.md), [diff](./docs/spec-diff.md), [docs](./docs/spec-docs.md) |
+| `@ir-kit/kit/spec/openapi`, `/asyncapi`, `/typespec` | format-specific loaders | [openapi](./docs/spec-openapi.md), [asyncapi](./docs/spec-asyncapi.md), [typespec](./docs/spec-typespec.md) |
+| `@ir-kit/kit/sdk/go`, `/java`, `/kotlin`, `/swift`, `/typescript` | SDK generators, each with `generate({ spec, output })` | [go](./docs/sdk-go.md), [java](./docs/sdk-java.md), [kotlin](./docs/sdk-kotlin.md), [swift](./docs/sdk-swift.md), [typescript](./docs/sdk-typescript.md) |
+| `@ir-kit/kit/sdk/k6` | typed k6 client generator | [k6](./docs/sdk-k6.md) |
+| `@ir-kit/kit/sdk/asyncapi` | TypeScript output for AsyncAPI specs | [asyncapi](./docs/sdk-asyncapi.md) |
+| `@ir-kit/kit/openapi-ts/faker`, `/orpc`, `/paths`, `/typia`, `/k6` | Hey API plugins | [faker](./docs/openapi-ts-faker.md), [orpc](./docs/openapi-ts-orpc.md), [paths](./docs/openapi-ts-paths.md), [typia](./docs/openapi-ts-typia.md), [k6](./docs/openapi-ts-k6.md) |
+| `@ir-kit/kit/fn-schema` | JSON Schema from TypeScript function signatures | [fn-schema](./docs/fn-schema-core.md) |
+| `@ir-kit/kit/fn-schema/unplugin/vite` (and `/webpack`, `/rollup`, ...) | fn-schema bundler plugins | [unplugin](./docs/fn-schema-unplugin.md) |
+| `@ir-kit/kit/recon` | build an OpenAPI spec from recorded traffic | [recon](./docs/recon.md) |
+| `@ir-kit/kit/k6-toolkit` | k6 project scaffold, sync and bundle | [k6-toolkit](./docs/k6-toolkit.md) |
+| `@ir-kit/kit/cli` | the `ir` command's specs, to embed it in your own tooling | [cli](./docs/cli.md) |
 
 ## Optional dependencies
 

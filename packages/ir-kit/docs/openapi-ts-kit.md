@@ -1,4 +1,4 @@
-# ir-kit/openapi-ts/kit
+# @ir-kit/kit/openapi-ts/kit
 
 Helpers shared by the ir-kit plugins for [`@hey-api/openapi-ts`](https://github.com/hey-api/openapi-ts).
 

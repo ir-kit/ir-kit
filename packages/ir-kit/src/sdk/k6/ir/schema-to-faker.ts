@@ -18,7 +18,7 @@ import type { Expr } from "../dsl.js";
  * Build a faker-backed expression that, when called, produces a value
  * matching the schema. Refs resolve to `data.<Type>()` so cycles stay
  * lazy. Format / field-name heuristics route through
- * `ir-kit/openapi-ts/faker/core` so the source-of-truth stays shared
+ * `@ir-kit/kit/openapi-ts/faker/core` so the source-of-truth stays shared
  * with the faker plugin.
  */
 export function schemaToFakerExpr(schema: Schema, propName?: string): Expr {

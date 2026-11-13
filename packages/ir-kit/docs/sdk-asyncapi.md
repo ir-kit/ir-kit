@@ -1,4 +1,4 @@
-# ir-kit/sdk/asyncapi
+# @ir-kit/kit/sdk/asyncapi
 
 AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture.
 
@@ -7,7 +7,7 @@ Each plugin emits one slice of generated code (types, Events const, dispatch hel
 ## Install
 
 ```sh
-pnpm add -D ir-kit
+pnpm add -D @ir-kit/kit
 ```
 
 Peer deps (most are dev-only at consumer side):
@@ -15,7 +15,7 @@ Peer deps (most are dev-only at consumer side):
 - `@asyncapi/parser` `>=3.0.0`
 - `@hey-api/openapi-ts` `>=0.99.0`
 - `@hey-api/codegen-core` `>=0.8.0`
-- `ir-kit/asyncapi`, `ir-kit/asyncapi`, `ir-kit/codegen`
+- `@ir-kit/kit/asyncapi`, `@ir-kit/kit/asyncapi`, `@ir-kit/kit/codegen`
 - `typescript` `>=5.0.0`
 - `amqplib` `>=0.10.0` *(optional — only if you enable the `amqplib` plugin)*
 
@@ -30,7 +30,7 @@ import {
   generate,
   indexBarrel,
   typescript,
-} from "ir-kit/sdk/asyncapi";
+} from "@ir-kit/kit/sdk/asyncapi";
 
 await generate({
   input: "./asyncapi.yaml",
@@ -64,7 +64,7 @@ Plugins compose freely. Each plugin's `dependsOn` ensures correct ordering even 
 ## Authoring custom plugins
 
 ```ts
-import { definePluginConfig } from "ir-kit/sdk/asyncapi";
+import { definePluginConfig } from "@ir-kit/kit/sdk/asyncapi";
 
 export const myPlugin = definePluginConfig<
   "my-plugin",
@@ -120,5 +120,5 @@ asyncapi.yaml
 ## Related
 
 - [`ir generate`](./generate.md): the `asyncapi` target runs this generator from `ir.config.ts`
-- [`ir-kit/sdk/typescript`](../openapi-typescript) — sister generator for OpenAPI 3.x specs
+- [`@ir-kit/kit/sdk/typescript`](../openapi-typescript) — sister generator for OpenAPI 3.x specs
 - [`fixtures/user-events.yaml`](../../fixtures/user-events.yaml) — minimal AsyncAPI 3.0 spec used by tests

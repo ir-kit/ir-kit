@@ -1,14 +1,14 @@
-# `ir-kit/openapi`
+# `@ir-kit/kit/openapi`
 
 Language-agnostic IR-walking primitives for OpenAPI codegen. This package owns all the **pre-work** every native-SDK emitter needs (parsing the spec into shape, classifying schemas / responses / bodies, iterating paths × methods, deriving canonical names, walking template strings). Per-language emitters (`@ir-kit/openapi-{go,kotlin,swift}`) consume these primitives + provide their own **render** layer, never re-walking the spec themselves.
 
 The shape of the consolidation:
 
 ```
-                 IR.Model from ir-kit/ir (schemas are JSON Schema 2020-12)
+                 IR.Model from @ir-kit/kit/ir (schemas are JSON Schema 2020-12)
                                     │
                                     ▼
-                       ir-kit/openapi (this package)
+                       @ir-kit/kit/openapi (this package)
                        ┌────────────────────────────┐
                        │ pure walks:                │
                        │   iterOperations           │
@@ -32,7 +32,7 @@ The shape of the consolidation:
                                     │ ops: SchemaToTypeOps<T, D>
               ┌─────────────────────┼─────────────────────┐
               ▼                     ▼                     ▼
-     ir-kit/sdk/go    ir-kit/sdk/kotlin   ir-kit/sdk/swift
+     @ir-kit/kit/sdk/go    @ir-kit/kit/sdk/kotlin   @ir-kit/kit/sdk/swift
      ┌──────────────────┐  ┌──────────────────┐    ┌──────────────────┐
      │ goOps (renders): │  │ ktOps (renders): │    │ swOps (renders): │
      │  • goPtr/goSlice │  │  • ktNullable    │    │  • swOptional    │
@@ -46,7 +46,7 @@ The shape of the consolidation:
 
 Before this package existed, each of the three native emitters had a full copy of `schemaToType`, `unionToType`, `inlineObjectType`, `buildEnumFromIR`, `typeForPrimitive` — plus their own walks over the spec. About 900 LOC of nearly-identical control flow per emitter (~2.7k total) drifted constantly: one emitter would gain a fix the others missed; one would use `pascal(jsonKey)` and another would use `safeIdent(jsonKey)` for the same role.
 
-Consolidating into `ir-kit/openapi` + a per-emitter `SchemaToTypeOps<T, D>` record means:
+Consolidating into `@ir-kit/kit/openapi` + a per-emitter `SchemaToTypeOps<T, D>` record means:
 
 - **One source of truth for spec walks.** Adding a new OpenAPI feature (e.g. handling `discriminator`) lands in one file; all emitters pick it up.
 - **Per-target rendering stays per-target.** Go's pointer-wrap is in `goOps.wrapForUnionSingle`; Kotlin's nullable wrap is in `ktOps.wrapForUnionSingle`. Neither leaks into the other; the dispatcher doesn't care which one is "right".
@@ -111,7 +111,7 @@ If you're picking up this package for the first time:
 
 - **Walks are generators, not arrays.** `iterOperations`, `iterateObjectProperties`. Lets callers short-circuit or filter without paying for a full list build. Callers that need an array do `Array.from(...)`.
 
-- **No target imports.** This package depends on `@hey-api/shared` (for IR types) and `ir-kit/codegen` (for `pascal`, `synthName`). Spec-level primitives (ref / security / constants / normalize) live under `src/spec/` and are re-exported. The package does NOT depend on any go-dsl / kt-dsl / sw-dsl module.
+- **No target imports.** This package depends on `@hey-api/shared` (for IR types) and `@ir-kit/kit/codegen` (for `pascal`, `synthName`). Spec-level primitives (ref / security / constants / normalize) live under `src/spec/` and are re-exported. The package does NOT depend on any go-dsl / kt-dsl / sw-dsl module.
 
 ## Adding a new shared walk
 
@@ -126,6 +126,6 @@ If the duplication is in render — different code paths producing structurally-
 
 ## Status
 
-`0.1.0` ships the dispatcher + ~16 pre-work helpers + the `SchemaToTypeOps` interface. The three native SDK emitters (`@ir-kit/openapi-{go,kotlin,swift}`) consume it; the TypeScript emitter (`ir-kit/sdk/typescript`) wraps `@hey-api/openapi-ts` and bypasses the dispatcher entirely (hey-api owns its own IR walk).
+`0.1.0` ships the dispatcher + ~16 pre-work helpers + the `SchemaToTypeOps` interface. The three native SDK emitters (`@ir-kit/openapi-{go,kotlin,swift}`) consume it; the TypeScript emitter (`@ir-kit/kit/sdk/typescript`) wraps `@hey-api/openapi-ts` and bypasses the dispatcher entirely (hey-api owns its own IR walk).
 
 Petstore SDK output for go + swift is byte-identical pre- and post-consolidation across all dispatcher migrations — this is the regression bar.

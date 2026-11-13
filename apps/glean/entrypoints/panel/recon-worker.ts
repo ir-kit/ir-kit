@@ -1,13 +1,13 @@
 /// <reference lib="webworker" />
 /// <reference types="chrome" />
 
+import { createRecon, type Recon } from "@ir-kit/kit/recon";
 import {
   type Adapter,
   defineProxy,
   type OnMessage,
   type SendMessage,
 } from "comctx";
-import { createRecon, type Recon } from "ir-kit/recon";
 import type { SerializedObservation } from "./network";
 import {
   type OriginStats,

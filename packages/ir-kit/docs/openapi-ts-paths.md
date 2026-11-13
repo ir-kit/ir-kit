@@ -1,18 +1,18 @@
-# ir-kit/openapi-ts/paths
+# @ir-kit/kit/openapi-ts/paths
 
 Per-operation route consts emitted from an OpenAPI spec — spec template, URLPattern-style pattern, method, and operationId, ready for tree-shakable runtime routing and matching. Plugin for [`@hey-api/openapi-ts`](https://heyapi.dev).
 
 ## Install
 
 ```bash
-npm install -D ir-kit @hey-api/openapi-ts
+npm install -D @ir-kit/kit @hey-api/openapi-ts
 ```
 
 ## Use
 
 ```ts
 import { defineConfig } from "@hey-api/openapi-ts";
-import { defineConfig as definePathsConfig } from "ir-kit/openapi-ts/paths";
+import { defineConfig as definePathsConfig } from "@ir-kit/kit/openapi-ts/paths";
 
 export default defineConfig({
   input: "openapi.yaml",
@@ -49,10 +49,10 @@ export const getPetByIdRoute = {
 
 ## Why route consts (instead of runtime routing)
 
-Tree-shakable: only the routes you import end up in the bundle. Pair with the matchers in [`ir-kit/openapi-tools`](../../openapi-tools) for client-side dispatch:
+Tree-shakable: only the routes you import end up in the bundle. Pair with the matchers in [`@ir-kit/kit/openapi-tools`](../../openapi-tools) for client-side dispatch:
 
 ```ts
-import { match } from "ir-kit/openapi-tools/match";
+import { match } from "@ir-kit/kit/openapi-tools/match";
 import { getPetByIdRoute } from "./generated/paths";
 
 const params = match(getPetByIdRoute.pattern, "/pets/42"); // { id: "42" }

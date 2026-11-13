@@ -1,4 +1,4 @@
-# `ir-kit/spec`
+# `@ir-kit/kit/spec`
 
 Universal spec loader for OpenAPI, AsyncAPI, and TypeSpec. Detects format by extension + content sniff and dispatches to the matching per-format loader, returning a discriminated `{ kind, document }` result.
 
@@ -7,13 +7,13 @@ Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 ## Usage
 
 ```ts
-import { loadSpec } from "ir-kit/spec";
+import { loadSpec } from "@ir-kit/kit/spec";
 
 const result = await loadSpec({ input: "./api.yaml" });
 //   result.kind:     "openapi" | "asyncapi"
@@ -31,7 +31,7 @@ TypeSpec input (`.tsp`) compiles to OpenAPI 3 in-memory and returns as `{ kind: 
 | `resolveOpenAPIInput`, `isTypespecPath`                      | Utility helpers                                 |
 | `SpecKind`, `SpecInput`, `LoadSpecOptions`, `LoadSpecResult` | Public types                                    |
 
-Per-format loaders ship as separate packages — `ir-kit/spec/openapi`, `ir-kit/spec/asyncapi`, `ir-kit/spec/typespec` — if you want a smaller dependency footprint and only need one format.
+Per-format loaders ship as separate packages — `@ir-kit/kit/spec/openapi`, `@ir-kit/kit/spec/asyncapi`, `@ir-kit/kit/spec/typespec` — if you want a smaller dependency footprint and only need one format.
 
 ## Why a wrapper
 

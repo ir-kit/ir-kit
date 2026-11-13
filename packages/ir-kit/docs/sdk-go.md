@@ -1,21 +1,21 @@
-# ir-kit/sdk/go
+# @ir-kit/kit/sdk/go
 
 Generate idiomatic Go client SDKs from an OpenAPI 3.x spec — `encoding/json` structs, typed-string enums, per-tag interfaces with `context.Context` first-arg + `*WithResponse` companions, and a `net/http`-backed impl struct. Per-call `RequestOptions`, composable interceptors, typed `APIError`, multipart + form-urlencoded wire encoding, multi-2xx sealed-style returns, and per-op security auto-wiring all included. Zero runtime dependencies — stdlib only.
 
-Specs are loaded with `@hey-api/json-schema-ref-parser` and read through ir-kit's own model (`ir-kit/ir`). 2.0 / 3.0 / 3.1 inputs all produce the same output. Through `ir sdk go` or `ir generate`, an AsyncAPI file gives one model type per message.
+Specs are loaded with `@hey-api/json-schema-ref-parser` and read through ir-kit's own model (`@ir-kit/kit/ir`). 2.0 / 3.0 / 3.1 inputs all produce the same output. Through `ir sdk go` or `ir generate`, an AsyncAPI file gives one model type per message.
 
-Sibling package to [`ir-kit/sdk/kotlin`](../openapi-kotlin) and [`ir-kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
+Sibling package to [`@ir-kit/kit/sdk/kotlin`](../openapi-kotlin) and [`@ir-kit/kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
 
 ## Install
 
 ```bash
-pnpm add ir-kit @hey-api/shared @hey-api/spec-types
+pnpm add @ir-kit/kit @hey-api/shared @hey-api/spec-types
 ```
 
 ## Usage
 
 ```ts
-import { generate } from "ir-kit/sdk/go";
+import { generate } from "@ir-kit/kit/sdk/go";
 
 await generate({
   input: "https://api.example.com/openapi.json",
@@ -274,4 +274,4 @@ src/ir/
 └── operations.ts             paths → interfaces + impl structs (orchestrator)
 ```
 
-Per-method bodies are built as `ir-kit` nodes; imports are collected from those nodes. Runtime helpers (the same Go every time) are real, vetted sources in `runtime/` and are copied with the package clause rewritten.
+Per-method bodies are built as `@ir-kit/kit/codegen` nodes; imports are collected from those nodes. Runtime helpers (the same Go every time) are real, vetted sources in `runtime/` and are copied with the package clause rewritten.

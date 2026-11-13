@@ -1,19 +1,19 @@
-# `ir-kit/spec`
+# `@ir-kit/kit/spec`
 
-Cross-family API spec diff. Normalizes both inputs to OpenAPI 3 via `ir-kit/spec`, then delegates classification to [`api-smart-diff`](https://github.com/udamir/api-smart-diff) — community-standard breaking / non-breaking / annotation / unclassified / deprecated buckets.
+Cross-family API spec diff. Normalizes both inputs to OpenAPI 3 via `@ir-kit/kit/spec`, then delegates classification to [`api-smart-diff`](https://github.com/udamir/api-smart-diff) — community-standard breaking / non-breaking / annotation / unclassified / deprecated buckets.
 
 Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 ## Usage
 
 ```ts
-import { diffSpecs } from "ir-kit/spec";
+import { diffSpecs } from "@ir-kit/kit/spec";
 
 const result = await diffSpecs({
   before: "./prod.yaml",

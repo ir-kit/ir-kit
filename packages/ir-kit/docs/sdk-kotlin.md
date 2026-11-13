@@ -1,21 +1,21 @@
-# ir-kit/sdk/kotlin
+# @ir-kit/kit/sdk/kotlin
 
 Generate idiomatic Android / JVM Kotlin client SDKs from an OpenAPI 3.x spec — `@Serializable` data classes, `String`-raw enums, per-tag interfaces with `suspend` functions, and an OkHttp + kotlinx-serialization impl class. Per-call `RequestOptions`, composable interceptors, typed `APIError`, multipart + form-urlencoded wire encoding, multi-2xx sum-type returns, and per-op security auto-wiring all included.
 
 Built on the [`@hey-api`](https://github.com/hey-api/openapi-ts) toolchain (`@hey-api/json-schema-ref-parser` for spec loading, `@hey-api/shared` IR for normalization). 2.0 / 3.0 / 3.1 inputs all produce the same output.
 
-Sibling package to [`ir-kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
+Sibling package to [`@ir-kit/kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
 
 ## Install
 
 ```bash
-pnpm add ir-kit @hey-api/shared @hey-api/spec-types
+pnpm add @ir-kit/kit @hey-api/shared @hey-api/spec-types
 ```
 
 ## Usage
 
 ```ts
-import { generate } from "ir-kit/sdk/kotlin";
+import { generate } from "@ir-kit/kit/sdk/kotlin";
 
 await generate({
   input: "https://api.example.com/openapi.json",
@@ -256,4 +256,4 @@ src/ir/
 └── operations.ts             paths → interfaces + impl classes (orchestrator)
 ```
 
-Per-method bodies are built as `ir-kit` nodes; imports are collected from those nodes. Runtime helpers (the same Kotlin every time) are real, ktlint-checked sources in `runtime/` and are copied with the package header rewritten.
+Per-method bodies are built as `@ir-kit/kit/codegen` nodes; imports are collected from those nodes. Runtime helpers (the same Kotlin every time) are real, ktlint-checked sources in `runtime/` and are copied with the package header rewritten.

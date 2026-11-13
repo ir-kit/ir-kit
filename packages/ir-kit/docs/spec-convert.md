@@ -1,4 +1,4 @@
-# `ir-kit/spec`
+# `@ir-kit/kit/spec`
 
 Convert between API specification formats — OpenAPI 3, AsyncAPI 3, TypeSpec, Protobuf, Postman, JSON Schema. Graph-routed dispatcher: registered `(from → to)` converters compose automatically, so any new edge unlocks every other format combinatorially.
 
@@ -7,13 +7,13 @@ Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 ## Usage
 
 ```ts
-import { convertSpec } from "ir-kit/spec";
+import { convertSpec } from "@ir-kit/kit/spec";
 
 const result = await convertSpec({
   input: "./petstore.yaml",
@@ -77,9 +77,9 @@ ir spec convert ./input.yaml --to openapi3
 ir spec convert ./api.proto --to postman
 ```
 
-See [`ir-kit/cli`](../../cli) for full flags.
+See [`@ir-kit/kit/cli`](../../cli) for full flags.
 
 ## Limitations
 
 - `typespec → proto` only accepts TypeSpec written for `@typespec/protobuf`, so no route passes through it; `openapi3 → proto` uses its own converter.
-- AsyncAPI 3 outputs are not yet registered — `asyncapi3` works as a load target via `ir-kit/spec`, but not yet as a convert target.
+- AsyncAPI 3 outputs are not yet registered — `asyncapi3` works as a load target via `@ir-kit/kit/spec`, but not yet as a convert target.
