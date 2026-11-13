@@ -1,4 +1,4 @@
-import { $, type TypeTsDsl } from "@hey-api/openapi-ts";
+import { $ } from "@hey-api/openapi-ts";
 import {
   classifyUnion,
   extractEnumValues,
@@ -7,8 +7,7 @@ import {
   refName,
   type Schema,
 } from "@ir-kit/openapi";
-
-type TypeExpr = TypeTsDsl;
+import type { TypeExpr } from "../dsl.js";
 
 export interface SchemaToTypeOpts {
   /** Namespace prefix for named refs (e.g. "T" → `T.Pet`). */

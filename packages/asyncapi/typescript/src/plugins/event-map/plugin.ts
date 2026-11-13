@@ -1,7 +1,6 @@
-import type { MessageInterface } from "@asyncapi/parser";
 import { $ } from "@hey-api/openapi-ts";
-
 import { definePluginConfig } from "../../plugin.js";
+import { inferEventType } from "../event-type.js";
 import type { TypescriptApi } from "../typescript/types.js";
 
 import { defaultConfig } from "./config.js";
@@ -72,11 +71,3 @@ export const eventMap = definePluginConfig<
     );
   },
 });
-
-function inferEventType(message: MessageInterface): string {
-  const title = message.title?.();
-  if (title) return title;
-  const name = message.name?.();
-  if (name) return name;
-  return message.id();
-}

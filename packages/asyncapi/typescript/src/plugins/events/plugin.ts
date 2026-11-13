@@ -1,12 +1,11 @@
-import type { MessageInterface } from "@asyncapi/parser";
 import { $ } from "@hey-api/openapi-ts";
 import {
   getAmqpChannelBinding,
   getAmqpExchange,
 } from "@ir-kit/asyncapi-core/bindings";
 import { camel } from "@ir-kit/codegen-core";
-
 import { definePluginConfig } from "../../plugin.js";
+import { inferEventType } from "../event-type.js";
 
 import { defaultConfig } from "./config.js";
 import type { EventsPluginConfig, EventsResolvedConfig } from "./types.js";
@@ -67,11 +66,3 @@ export const events = definePluginConfig<
     );
   },
 });
-
-function inferEventType(message: MessageInterface): string {
-  const title = message.title?.();
-  if (title) return title;
-  const name = message.name?.();
-  if (name) return name;
-  return message.id();
-}

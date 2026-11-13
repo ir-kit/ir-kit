@@ -1,11 +1,6 @@
 import { $ } from "@hey-api/openapi-ts";
 import type { WalkedOperation } from "@ir-kit/k6-gen";
-import {
-  defaultExportProp,
-  namespaceImport,
-  printModule,
-  reExportConst,
-} from "@ir-kit/k6-gen/ast";
+import { namespaceImport, printLoadtest } from "@ir-kit/k6-gen/ast";
 
 import {
   type AuthFlavor,
@@ -13,7 +8,7 @@ import {
   authVarDecl,
   k6FrameworkImport,
 } from "../loadtest-scaffold.js";
-import { type Expr, objLit, varConst } from "./ast-helpers.js";
+import { type Expr, objLit } from "./ast-helpers.js";
 import { buildFlowExpression, type ChainMode } from "./chains.js";
 
 export type PacePreset = "smoke" | "load" | "stress" | "spike" | "soak";
@@ -47,17 +42,12 @@ export function scaffoldScenario(opts: ScaffoldScenarioOpts): string {
   const auth = opts.auth && opts.auth.auth !== "none" ? opts.auth : undefined;
   if (auth) symbols.push("useAuth");
 
-  return printModule({
+  return printLoadtest({
     imports: [
       k6FrameworkImport(symbols),
       namespaceImport("api", opts.clientImportPath),
     ],
-    nodes: [
-      ...(auth ? [authVarDecl(auth)] : []),
-      loadtestDecl(opts, !!auth),
-      reExportConst("options", "lt", "options"),
-    ],
-    footer: defaultExportProp("lt", "default"),
+    nodes: [...(auth ? [authVarDecl(auth)] : []), loadtestDecl(opts, !!auth)],
   });
 }
 
@@ -73,7 +63,7 @@ function loadtestDecl(opts: ScaffoldScenarioOpts, hasAuth: boolean) {
     )
     .prop("budgets", budgets(opts.budgets))
     .prop("flow", buildFlowExpression(opts.ops, opts.chain));
-  return varConst("lt", $("defineLoadTest").call(config));
+  return $.const("lt").assign($("defineLoadTest").call(config));
 }
 
 function budgets(budgets: ScaffoldScenarioOpts["budgets"]): Expr {

@@ -1,8 +1,6 @@
-import { $, type CallArgs } from "@hey-api/openapi-ts";
-
+import { $ } from "@hey-api/openapi-ts";
+import type { Expr } from "../dsl.js";
 import { toIdent, type WalkedOperation } from "../ir/index.js";
-
-type Expr = NonNullable<CallArgs[number]>;
 
 /** OpenAPI verb → k6 `http` namespace attribute (`delete` → `del`). */
 const METHOD_TO_HTTP_ATTR: Record<string, string> = {

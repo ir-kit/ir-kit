@@ -1,6 +1,8 @@
 import { $, type TsDsl } from "@hey-api/openapi-ts";
 
-import type { ModuleImport } from "../print.js";
+import { type ModuleImport, printModule } from "../print.js";
+
+export type { Expr, TypeExpr } from "../dsl.js";
 
 export {
   type ModuleImport,
@@ -64,19 +66,21 @@ export function defaultImport(name: string, modulePath: string): ModuleImport {
   };
 }
 
-/** `export const <localName> = <sourceVar>.<sourceProp>;` */
-export function reExportConst(
-  localName: string,
-  sourceVar: string,
-  sourceProp: string,
-): TsDsl {
-  return $.const(localName).export().assign($(sourceVar).attr(sourceProp));
-}
-
-/** `export default <sourceVar>.<sourceProp>;` as a string, since the DSL can't build `export default`. */
-export function defaultExportProp(
-  sourceVar: string,
-  sourceProp: string,
-): string {
-  return `export default ${sourceVar}.${sourceProp};`;
+/**
+ * Print a loadtest file. `nodes` must declare `const lt = defineLoadTest(…)`;
+ * `options` and the default export are re-exported from it.
+ */
+export function printLoadtest(input: {
+  header?: string;
+  imports: ReadonlyArray<ModuleImport>;
+  nodes: ReadonlyArray<TsDsl>;
+}): string {
+  return printModule({
+    ...input,
+    nodes: [
+      ...input.nodes,
+      $.const("options").export().assign($("lt").attr("options")),
+    ],
+    footer: "export default lt.default;",
+  });
 }

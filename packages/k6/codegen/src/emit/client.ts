@@ -6,7 +6,7 @@ import {
 } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { fromHeyApi } from "@ir-kit/openapi";
-
+import type { TypeExpr } from "../dsl.js";
 import {
   schemaToTypeNode,
   toIdent,
@@ -17,7 +17,6 @@ import { GENERATED_HEADER, printModule } from "../print.js";
 import { clientPreamble } from "./client-preamble.js";
 import { bodyArg, urlExpression } from "./operation-expressions.js";
 
-type TypeExpr = TypeTsDsl;
 type Func = ReturnType<typeof $.func>;
 
 /** Namespace alias for type imports — generated client emits `T.Pet`. */

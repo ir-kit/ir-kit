@@ -1,14 +1,12 @@
 import { $, type TsDsl } from "@hey-api/openapi-ts";
 import {
-  defaultExportProp,
   type ModuleImport,
   namedImport,
   namespaceImport,
-  printModule,
-  reExportConst,
+  printLoadtest,
 } from "@ir-kit/k6-gen/ast";
 
-import { type Expr, objLit, varConst } from "./scaffold/ast-helpers.js";
+import { type Expr, objLit } from "./scaffold/ast-helpers.js";
 
 export type AuthFlavor = "none" | "bearer" | "basic" | "apiKey" | "session";
 
@@ -47,7 +45,7 @@ export function scaffoldLoadtest(opts: ScaffoldLoadtestOpts): string {
   const symbols = ["defineLoadTest", "flow", pace];
   if (opts.auth !== "none") symbols.push("useAuth");
 
-  return printModule({
+  return printLoadtest({
     imports: [
       k6FrameworkImport(symbols),
       namespaceImport("api", opts.clientImportPath),
@@ -55,9 +53,7 @@ export function scaffoldLoadtest(opts: ScaffoldLoadtestOpts): string {
     nodes: [
       ...(opts.auth !== "none" ? [authVarDecl(opts)] : []),
       loadtestDecl(opts, pace),
-      reExportConst("options", "lt", "options"),
     ],
-    footer: defaultExportProp("lt", "default"),
   });
 }
 
@@ -70,7 +66,7 @@ export function k6FrameworkImport(
 
 /** `const auth = useAuth.<flavor>(…);` */
 export function authVarDecl(opts: AuthScaffoldOpts): TsDsl {
-  return varConst("auth", authCall(opts));
+  return $.const("auth").assign(authCall(opts));
 }
 
 export interface AuthScaffoldOpts {
@@ -149,7 +145,7 @@ function loadtestDecl(
       )
       .prop("flow", flowExpr(opts.seedOperation));
   }
-  return varConst("lt", $("defineLoadTest").call(config));
+  return $.const("lt").assign($("defineLoadTest").call(config));
 }
 
 function paceCall(pace: string, duration: string): Expr {

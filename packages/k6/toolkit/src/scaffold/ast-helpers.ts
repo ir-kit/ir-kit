@@ -1,10 +1,7 @@
-import { $, type TsDsl } from "@hey-api/openapi-ts";
+import { $ } from "@hey-api/openapi-ts";
+import type { Expr } from "@ir-kit/k6-gen/ast";
 
-/** A value the DSL accepts both as an object property and as an initializer. */
-export type Expr = Extract<
-  NonNullable<Parameters<ReturnType<typeof $.object>["prop"]>[1]>,
-  Parameters<ReturnType<typeof $.const>["assign"]>[0]
->;
+export type { Expr };
 
 /** `{ k: v, … }` — multiline optional. Shared by loadtest scaffolders. */
 export function objLit(props: Record<string, Expr>, multiline = false): Expr {
@@ -12,9 +9,4 @@ export function objLit(props: Record<string, Expr>, multiline = false): Expr {
   if (multiline) obj.pretty();
   for (const [key, value] of Object.entries(props)) obj.prop(key, value);
   return obj;
-}
-
-/** `const <name> = <init>;` */
-export function varConst(name: string, init: Expr): TsDsl {
-  return $.const(name).assign(init);
 }

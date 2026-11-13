@@ -1,36 +1,29 @@
-import { $, type CallArgs } from "@hey-api/openapi-ts";
+import { $ } from "@hey-api/openapi-ts";
 
-import { GENERATED_HEADER, printModule } from "../print.js";
-import {
-  defaultExportProp,
-  namedImport,
-  namespaceImport,
-  reExportConst,
-} from "./ast.js";
+import type { Expr } from "../dsl.js";
+
+import { GENERATED_HEADER } from "../print.js";
+import { namedImport, namespaceImport, printLoadtest } from "./ast.js";
 
 export interface LoadtestStubInput {
   fnName: string;
   summary: string;
   clientImport: string;
   dataImport: string;
-  callArgs: ReadonlyArray<NonNullable<CallArgs[number]>>;
+  callArgs: ReadonlyArray<Expr>;
 }
 
 export function renderLoadtestStub(input: LoadtestStubInput): string {
   const header = `${GENERATED_HEADER}\n//\n// Stub loadtest for \`${input.fnName}\` — ${input.summary}.\n// Fill in pace, budgets, and assertions. Safe to edit.`;
 
-  return printModule({
+  return printLoadtest({
     header,
     imports: [
       namedImport(["defineLoadTest", "flow", "smoke"], "@ir-kit/k6"),
       namespaceImport("api", input.clientImport),
       namedImport(["data"], input.dataImport),
     ],
-    nodes: [
-      defineLoadTestConst(input),
-      reExportConst("options", "lt", "options"),
-    ],
-    footer: defaultExportProp("lt", "default"),
+    nodes: [defineLoadTestConst(input)],
   });
 }
 

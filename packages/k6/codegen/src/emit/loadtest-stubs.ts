@@ -1,16 +1,14 @@
-import { $, type CallArgs } from "@hey-api/openapi-ts";
+import { $ } from "@hey-api/openapi-ts";
 import type { IR } from "@hey-api/shared";
 import { safeIdent } from "@ir-kit/codegen-core";
 import { extractEnumValues, fromHeyApi } from "@ir-kit/openapi";
-
+import type { Expr } from "../dsl.js";
 import type { BuiltFile } from "../generate.js";
 import { toIdent, type WalkedOperation, walkOperations } from "../ir/index.js";
 import {
   type LoadtestStubInput,
   renderLoadtestStub,
 } from "./loadtest-stub-template.js";
-
-type Expr = NonNullable<CallArgs[number]>;
 
 export interface ScaffoldStubsOptions {
   /** Path the stubs import the generated client from. Default: `../index.js`. */

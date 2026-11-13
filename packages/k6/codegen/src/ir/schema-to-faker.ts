@@ -1,4 +1,4 @@
-import { $, type CallArgs } from "@hey-api/openapi-ts";
+import { $ } from "@hey-api/openapi-ts";
 import {
   extractEnumValues,
   isSchemaObject,
@@ -12,11 +12,7 @@ import {
   type PropertyInfo,
   resolveFakerCall,
 } from "@ir-kit/openapi-ts-faker/core";
-
-type Expr = Extract<
-  Parameters<typeof $.array>[number],
-  NonNullable<CallArgs[number]>
->;
+import type { Expr } from "../dsl.js";
 
 /**
  * Build a faker-backed expression that, when called, produces a value
