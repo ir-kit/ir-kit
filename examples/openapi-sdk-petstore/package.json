@@ -13,13 +13,9 @@
     "gen:java": "jiti java/gen.ts"
   },
   "devDependencies": {
-    "@ir-kit/openapi-go": "workspace:*",
-    "@ir-kit/openapi-java": "workspace:*",
-    "@ir-kit/openapi-kotlin": "workspace:*",
-    "@ir-kit/openapi-swift": "workspace:*",
-    "@ir-kit/openapi-typescript": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "ir-kit": "workspace:*",
     "jiti": "^2.6.1"
   }
 }

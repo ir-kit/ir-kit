@@ -9,7 +9,7 @@ import {
   generate,
   indexBarrel,
   typescript,
-} from "@ir-kit/asyncapi-typescript";
+} from "ir-kit/sdk/asyncapi";
 
 const here = dirname(fileURLToPath(import.meta.url));
 

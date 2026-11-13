@@ -1,6 +1,6 @@
 ---
 name: fn-schema
-description: Extract JSON Schema (Draft 2020-12) for TypeScript function inputs and outputs from real source code, using `@ir-kit/fn-schema-cli` or its underlying lib `@ir-kit/fn-schema-core`. Use when the user wants `schemaOf(fn)` at build time, JSON Schemas derived from existing TS function signatures (without rewriting types to Zod/Yup/etc), per-function schema files, a bundled schemas.json, or OpenAPI 3.1 `components.schemas` fragments. Pairs with the `@ir-kit/fn-schema-transformer` TS compiler-API transformer for inline-at-emit replacement of `schemaOf(myFn)` calls. Triggers on "JSON Schema from TypeScript", "function signature to schema", "schemaOf", "extract schema from TS function", "schemas from existing code", "schemas without rewriting types", "fn-schema". Do NOT use for OpenAPI codegen (see openapi-sdk) or schema authoring (see hey-api plugins / typia).
+description: Extract JSON Schema (Draft 2020-12) for TypeScript function inputs and outputs from real source code, using `@ir-kit/fn-schema-cli` or its underlying lib `ir-kit/fn-schema`. Use when the user wants `schemaOf(fn)` at build time, JSON Schemas derived from existing TS function signatures (without rewriting types to Zod/Yup/etc), per-function schema files, a bundled schemas.json, or OpenAPI 3.1 `components.schemas` fragments. Pairs with the `ir-kit/fn-schema/transformer` TS compiler-API transformer for inline-at-emit replacement of `schemaOf(myFn)` calls. Triggers on "JSON Schema from TypeScript", "function signature to schema", "schemaOf", "extract schema from TS function", "schemas from existing code", "schemas without rewriting types", "fn-schema". Do NOT use for OpenAPI codegen (see openapi-sdk) or schema authoring (see hey-api plugins / typia).
 ---
 
 # fn-schema — JSON Schema from TS function signatures
@@ -57,8 +57,8 @@ Keeps a warm `Project` between rebuilds → tens-of-milliseconds re-extract on f
 ## Programmatic use
 
 ```ts
-import { extract } from "@ir-kit/fn-schema-typescript";
-import { emitBundle, emitFiles, emitOpenAPI } from "@ir-kit/fn-schema-core";
+import { extract } from "ir-kit/fn-schema/typescript";
+import { emitBundle, emitFiles, emitOpenAPI } from "ir-kit/fn-schema";
 
 const result = await extract({
   patterns: ["src/**/*.ts"],
@@ -75,7 +75,7 @@ await emitOpenAPI(result, { outFile: "openapi.json" });
 
 ## The transformer (compile-time inlining)
 
-`@ir-kit/fn-schema-transformer` is a TypeScript compiler-API transformer that replaces `schemaOf(myFunction)` calls with the literal JSON Schema at build time. Eliminates the runtime extraction cost.
+`ir-kit/fn-schema/transformer` is a TypeScript compiler-API transformer that replaces `schemaOf(myFunction)` calls with the literal JSON Schema at build time. Eliminates the runtime extraction cost.
 
 ```ts
 // Before transformer:
@@ -85,7 +85,7 @@ const schema = schemaOf(createUser);    // → throws at runtime (no impl)
 const schema = { type: "object", properties: { name: { type: "string" }, ... } };
 ```
 
-Plug into ts-patch, swc, esbuild, or any tool that accepts a custom TS transformer. See `@ir-kit/fn-schema-transformer`'s README for build-chain wiring.
+Plug into ts-patch, swc, esbuild, or any tool that accepts a custom TS transformer. See `ir-kit/fn-schema/transformer`'s README for build-chain wiring.
 
 ## Vendor-extension keywords (advanced)
 

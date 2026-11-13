@@ -1,7 +1,7 @@
 root = true
 
-# @ir-kit/compiler-kotlin snapshots use 2-space indentation; generated SDKs
-# and the openapi-kotlin runtime follow the Kotlin default (4).
-[packages/compilers/kotlin/**.{kt,kts}]
+# Kotlin compiler snapshots use 2-space indentation; generated SDKs
+# and the Kotlin SDK runtime follow the Kotlin default (4).
+[packages/ir-kit/src/compilers/kotlin/**.{kt,kts}]
 indent_size = 2
 indent_style = space

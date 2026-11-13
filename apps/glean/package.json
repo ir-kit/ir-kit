@@ -18,9 +18,9 @@
     "icons": "for s in 16 32 48 96 128; do rsvg-convert -w $s -h $s branding/icon.svg -o public/icon/$s.png; done"
   },
   "dependencies": {
-    "@ir-kit/openapi-recon": "workspace:*",
     "@scalar/api-reference-react": "^0.9.29",
     "comctx": "^1.6.1",
+    "ir-kit": "workspace:*",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

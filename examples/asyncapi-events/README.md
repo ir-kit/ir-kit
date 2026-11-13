@@ -1,6 +1,6 @@
 # asyncapi-events
 
-End-to-end demo for `@ir-kit/asyncapi-typescript`: `pnpm gen` emits the SDK from `fixtures/user-events.yaml`; producer/consumer demos drive it against a local RabbitMQ broker.
+End-to-end demo for `ir-kit/sdk/asyncapi`: `pnpm gen` emits the SDK from `fixtures/user-events.yaml`; producer/consumer demos drive it against a local RabbitMQ broker.
 
 The generator emits **building blocks only** — types, topology consts, an event map, dispatch helpers, AMQP bindings. **No runtime, no `Client`, no `publish` / `subscribe` functions.** The caller wires amqplib (or NestJS / Effect / anything) themselves.
 

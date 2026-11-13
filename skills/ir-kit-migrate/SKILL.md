@@ -11,7 +11,7 @@ The `@ahmedrowaihi/*` npm scope is being deprecated. All packages have moved to 
 
 | Old | New |
 |---|---|
-| `@ahmedrowaihi/openapi-core` | `@ir-kit/openapi` *(absorbed; see below)* |
+| `@ahmedrowaihi/openapi-core` | `ir-kit/openapi` *(absorbed; see below)* |
 | `@ahmedrowaihi/openapi-{go,kotlin,swift,typescript,tools,recon}` | `@ir-kit/openapi-{go,kotlin,swift,typescript,tools,recon}` |
 | `@ahmedrowaihi/openapi-ts-{orpc,faker,typia,paths,k6}` | `@ir-kit/openapi-ts-{orpc,faker,typia,paths,k6}` |
 | `@ahmedrowaihi/asyncapi-{core,typescript}` | `@ir-kit/asyncapi-{core,typescript}` |
@@ -19,9 +19,9 @@ The `@ahmedrowaihi/*` npm scope is being deprecated. All packages have moved to 
 | `@ahmedrowaihi/k6` | `@ir-kit/k6` |
 | `@ahmedrowaihi/k6-{gen,toolkit}` | `@ir-kit/k6-{gen,toolkit}` |
 | `@ahmedrowaihi/create-k6` | `@ir-kit/create-k6` |
-| `@ahmedrowaihi/codegen-core` | `@ir-kit/codegen-core` |
+| `@ahmedrowaihi/codegen-core` | `ir-kit/codegen` |
 
-Almost every entry is a pure scope substitution. The one exception is `openapi-core`: its content was absorbed into `@ir-kit/openapi` in 0.2.0 of that package, and `@ir-kit/openapi-core` is now deprecated. Handle this name change BEFORE the bulk scope swap (step 2 below).
+Almost every entry is a pure scope substitution. The one exception is `openapi-core`: its content was absorbed into `ir-kit/openapi` in 0.2.0 of that package, and `@ir-kit/openapi-core` is now deprecated. Handle this name change BEFORE the bulk scope swap (step 2 below).
 
 ## What the skill does
 
@@ -41,12 +41,12 @@ Report the count and (optionally) list the files. If the count is zero, stop —
 
 Two passes — the special-case rename first, then the bulk scope swap.
 
-**Pass 2a — handle the `openapi-core` → `openapi` rename.** Every `@ahmedrowaihi/openapi-core` and `@ir-kit/openapi-core` reference becomes `@ir-kit/openapi`. Must run BEFORE the bulk swap or step 2b would turn the old name into the deprecated `@ir-kit/openapi-core`.
+**Pass 2a — handle the `openapi-core` → `openapi` rename.** Every `@ahmedrowaihi/openapi-core` and `@ir-kit/openapi-core` reference becomes `ir-kit/openapi`. Must run BEFORE the bulk swap or step 2b would turn the old name into the deprecated `@ir-kit/openapi-core`.
 
 ```bash
 rg -l "@(ahmedrowaihi|ir-kit)/openapi-core" --hidden \
   -g '!node_modules' -g '!.git' -g '!pnpm-lock.yaml' -g '!package-lock.json' -g '!yarn.lock' \
-  | xargs sed -i '' -E 's|@(ahmedrowaihi\|ir-kit)/openapi-core|@ir-kit/openapi|g'
+  | xargs sed -i '' -E 's|@(ahmedrowaihi\|ir-kit)/openapi-core|ir-kit/openapi|g'
 ```
 
 On Linux, drop the `''` argument after `-i`.
@@ -79,7 +79,7 @@ Loop over every `package.json` in the project (except `node_modules`):
 for f in $(find . -name "package.json" -not -path "./node_modules/*" -not -path "*/node_modules/*"); do
   jq '
     def renamed: if . == "@ahmedrowaihi/openapi-core" or . == "@ir-kit/openapi-core"
-                 then "@ir-kit/openapi"
+                 then "ir-kit/openapi"
                  elif startswith("@ahmedrowaihi/")
                  then "@ir-kit/" + (sub("@ahmedrowaihi/"; ""))
                  else . end;
@@ -94,7 +94,7 @@ for f in $(find . -name "package.json" -not -path "./node_modules/*" -not -path 
 done
 ```
 
-If the consumer pins exact versions for a reason (lockfile-only workflow, vendored binaries), surface that decision rather than blanket-applying `^0.1.0`. For `@ir-kit/openapi`, pin `^0.2.0` (the version that absorbed `openapi-core`) rather than `^0.1.0`.
+If the consumer pins exact versions for a reason (lockfile-only workflow, vendored binaries), surface that decision rather than blanket-applying `^0.1.0`. For `ir-kit/openapi`, pin `^0.2.0` (the version that absorbed `openapi-core`) rather than `^0.1.0`.
 
 ### 4. Wipe the lockfile + reinstall
 
@@ -113,7 +113,7 @@ rm -f yarn.lock && yarn install
 
 ### 5. Verify
 
-Run the project's typecheck / build / test scripts. If anything fails, the most likely cause is an API change introduced alongside the scope rename — the `@ir-kit/openapi-{go,kotlin,swift}` packages got a major architecture refactor in their `0.1.0` cut (the per-language type dispatcher is now a thin wrapper over a shared dispatcher in `@ir-kit/openapi`). The PUBLIC API of `generate({ input, output })` is unchanged, but if the consumer was reaching into internals (`type/object.ts`, `type/union.ts`, etc.), those files were deleted — re-route to the public entry point.
+Run the project's typecheck / build / test scripts. If anything fails, the most likely cause is an API change introduced alongside the scope rename — the `@ir-kit/openapi-{go,kotlin,swift}` packages got a major architecture refactor in their `0.1.0` cut (the per-language type dispatcher is now a thin wrapper over a shared dispatcher in `ir-kit/openapi`). The PUBLIC API of `generate({ input, output })` is unchanged, but if the consumer was reaching into internals (`type/object.ts`, `type/union.ts`, etc.), those files were deleted — re-route to the public entry point.
 
 ## Edge cases
 

@@ -15,10 +15,10 @@
     "amqplib": "^0.10.4"
   },
   "devDependencies": {
-    "@ir-kit/asyncapi-typescript": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/amqplib": "^0.10.5",
     "@types/node": "catalog:",
+    "ir-kit": "workspace:*",
     "jiti": "^2.6.1"
   }
 }

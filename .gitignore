@@ -47,4 +47,4 @@ coverage
 .env.*.local
 
 # compiler snapshot scratch
-packages/compilers/*/src/.tmp
+packages/ir-kit/src/compilers/*/.tmp

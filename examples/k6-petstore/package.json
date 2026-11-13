@@ -16,10 +16,10 @@
     "@ir-kit/k6": "workspace:*"
   },
   "devDependencies": {
-    "@ir-kit/k6-toolkit": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/k6": "^1.7.0",
     "@types/node": "catalog:",
+    "ir-kit": "workspace:*",
     "typescript": "catalog:"
   }
 }

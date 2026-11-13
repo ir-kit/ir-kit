@@ -1,9 +1,0 @@
-{
-  "extends": "@ir-kit/tsconfig/lib.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "types": ["node", "vitest/globals"]
-  },
-  "include": ["src/**/*.ts", "vitest.config.ts", "vitest.setup.ts"],
-  "exclude": ["node_modules", "dist"]
-}

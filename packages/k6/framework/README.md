@@ -86,6 +86,6 @@ Per-op budgets resolve because the generated client tags every request with `{ o
 
 ## See also
 
-- [@ir-kit/k6-gen](../gen) — typed client generator
+- [ir-kit/sdk/k6](../gen) — typed client generator
 - [@ir-kit/k6-tools](../tools) — CLI
 - [examples/k6-petstore](../../../examples/k6-petstore/) — end-to-end demo

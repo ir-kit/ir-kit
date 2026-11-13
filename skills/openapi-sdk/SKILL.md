@@ -11,17 +11,17 @@ One programmatic interface across four target languages. All four expose `genera
 
 | Language | Package | Output style |
 |---|---|---|
-| Go | `@ir-kit/openapi-go` | `net/http` + `encoding/json` + `context.Context`. Optional `go.mod`. |
-| Kotlin | `@ir-kit/openapi-kotlin` | OkHttp + kotlinx-serialization + `suspend` functions. Optional Gradle wrapper. |
-| Swift | `@ir-kit/openapi-swift` | Codable + URLSession + `async throws`. Optional `Package.swift`. |
-| TypeScript | `@ir-kit/openapi-typescript` | Thin wrapper over `@hey-api/openapi-ts` (default plugins: `client-fetch` + `typescript` + `sdk`). Plug in any hey-api plugin. |
+| Go | `ir-kit/sdk/go` | `net/http` + `encoding/json` + `context.Context`. Optional `go.mod`. |
+| Kotlin | `ir-kit/sdk/kotlin` | OkHttp + kotlinx-serialization + `suspend` functions. Optional Gradle wrapper. |
+| Swift | `ir-kit/sdk/swift` | Codable + URLSession + `async throws`. Optional `Package.swift`. |
+| TypeScript | `ir-kit/sdk/typescript` | Thin wrapper over `@hey-api/openapi-ts` (default plugins: `client-fetch` + `typescript` + `sdk`). Plug in any hey-api plugin. |
 
 If the user wants **multiple languages at once**, call `generate` on each in parallel — they're independent.
 
 ## Universal shape (Go / Kotlin / Swift)
 
 ```ts
-import { generate } from "@ir-kit/openapi-go"; // or -kotlin, -swift
+import { generate } from "ir-kit/sdk/go"; // or -kotlin, -swift
 
 await generate({
   input: "./openapi.yaml",       // path, URL, or pre-parsed object
@@ -39,7 +39,7 @@ The result is `{ files: BuiltFile[], output: string }` — file list relative to
 Wraps `@hey-api/openapi-ts`'s `createClient` so the same workflow targets TS clients via hey-api's full plugin ecosystem (Faker, TanStack Query, oRPC, validators, …):
 
 ```ts
-import { generate } from "@ir-kit/openapi-typescript";
+import { generate } from "ir-kit/sdk/typescript";
 
 await generate({
   input: "./openapi.yaml",
@@ -50,7 +50,7 @@ await generate({
     "@hey-api/typescript",
     "@hey-api/sdk",
     "@tanstack/react-query",          // hey-api plugin
-    "@ir-kit/openapi-ts-faker", // ir-kit plugin
+    "ir-kit/openapi-ts/faker", // ir-kit plugin
   ],
   heyApi: {                            // pass-through for any hey-api UserConfig field
     parser: { transforms: { enums: "root" } },
@@ -60,7 +60,7 @@ await generate({
 
 ## Spec input — all three shapes work everywhere
 
-`@ir-kit/openapi-tools` ships a `loadSpec()` that every generator calls. Inputs accepted:
+`ir-kit/openapi-tools` ships a `loadSpec()` that every generator calls. Inputs accepted:
 
 - **File path** — `./openapi.yaml`, `./openapi.json`, absolute or relative (resolved against `cwd` if you pass that option).
 - **URL** — `https://api.example.com/openapi.yaml` or `http://localhost:8080/spec.json`.
@@ -73,10 +73,10 @@ The loader auto-detects scheme and routes through `@hey-api/json-schema-ref-pars
 A script that generates all four SDKs into one output tree:
 
 ```ts
-import { generate as go } from "@ir-kit/openapi-go";
-import { generate as kotlin } from "@ir-kit/openapi-kotlin";
-import { generate as swift } from "@ir-kit/openapi-swift";
-import { generate as ts } from "@ir-kit/openapi-typescript";
+import { generate as go } from "ir-kit/sdk/go";
+import { generate as kotlin } from "ir-kit/sdk/kotlin";
+import { generate as swift } from "ir-kit/sdk/swift";
+import { generate as ts } from "ir-kit/sdk/typescript";
 
 const input = "./openapi.yaml";
 

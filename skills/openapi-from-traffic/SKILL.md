@@ -1,9 +1,9 @@
 ---
 name: openapi-from-traffic
-description: Reverse-engineer an OpenAPI 3.1 spec from observed HTTP traffic. Use `@ir-kit/openapi-recon` (a runtime-agnostic lib that accepts standard Web Fetch `Request` / `Response` pairs and folds them into a JSON Schema 2020-12 document) when the user has live traffic but no spec, wants to discover a third-party API's shape, capture an internal API from real usage, or generate a starting `openapi.yaml` from a HAR/proxy log. Ships a `fromHAR()` helper that one-lines HAR-file ingestion — works with HARs exported from k6 Studio Recorder, browser DevTools, mitmproxy, Charles, Postman, anything. For interactive capture from a browser, point them at `@ir-kit/glean` (the Chrome DevTools extension built on `openapi-recon`). Triggers on "reverse engineer API", "discover spec from traffic", "OpenAPI from HAR", "k6 Studio HAR to spec", "capture API in DevTools", "mitmproxy to OpenAPI", "infer schema from requests", "spec from observed HTTP", "generate spec from network tab", `fromHAR`. Do NOT use when the user already has an OpenAPI spec — see openapi-sdk or k6-loadtest instead.
+description: Reverse-engineer an OpenAPI 3.1 spec from observed HTTP traffic. Use `ir-kit/recon` (a runtime-agnostic lib that accepts standard Web Fetch `Request` / `Response` pairs and folds them into a JSON Schema 2020-12 document) when the user has live traffic but no spec, wants to discover a third-party API's shape, capture an internal API from real usage, or generate a starting `openapi.yaml` from a HAR/proxy log. Ships a `fromHAR()` helper that one-lines HAR-file ingestion — works with HARs exported from k6 Studio Recorder, browser DevTools, mitmproxy, Charles, Postman, anything. For interactive capture from a browser, point them at `@ir-kit/glean` (the Chrome DevTools extension built on `openapi-recon`). Triggers on "reverse engineer API", "discover spec from traffic", "OpenAPI from HAR", "k6 Studio HAR to spec", "capture API in DevTools", "mitmproxy to OpenAPI", "infer schema from requests", "spec from observed HTTP", "generate spec from network tab", `fromHAR`. Do NOT use when the user already has an OpenAPI spec — see openapi-sdk or k6-loadtest instead.
 ---
 
-# OpenAPI from observed HTTP — `@ir-kit/openapi-recon`
+# OpenAPI from observed HTTP — `ir-kit/recon`
 
 Programmatic spec inference from real traffic. Feed standard Web Fetch `Request` / `Response` pairs, get back an `OpenAPIV3_1.Document` with templated paths, JSON Schema 2020-12 bodies, per-status response schemas, and detected auth schemes.
 
@@ -21,7 +21,7 @@ For interactive browser-tab capture, suggest the **Chrome DevTools extension** `
 ## Library use (Node / browser / Workers)
 
 ```ts
-import { createRecon } from "@ir-kit/openapi-recon";
+import { createRecon } from "ir-kit/recon";
 
 const recon = createRecon({
   title: "Petstore",
@@ -62,7 +62,7 @@ const justBackend = recon.toOpenAPI({ origin: "https://api.example.com" });
 ### Fetch wrapper (intercept at the call site)
 
 ```ts
-import { createRecon } from "@ir-kit/openapi-recon";
+import { createRecon } from "ir-kit/recon";
 
 const recon = createRecon({ title: "MyAPI" });
 
@@ -111,7 +111,7 @@ Flags: `--out`, `--title`, `--version`, `--origin`, `--max-examples`, `--no-path
 
 ```ts
 import { readFile } from "node:fs/promises";
-import { fromHAR } from "@ir-kit/openapi-recon";
+import { fromHAR } from "ir-kit/recon";
 
 // HAR JSON content (any runtime). For Node, read the file yourself:
 const recon = await fromHAR(
@@ -125,7 +125,7 @@ const document = recon.toOpenAPI();
 Pre-parsed `HarFile` objects also work — useful when traffic comes from a tool that already deserialized:
 
 ```ts
-import { fromHAR, type HarFile } from "@ir-kit/openapi-recon";
+import { fromHAR, type HarFile } from "ir-kit/recon";
 
 const har: HarFile = /* … from k6 Studio Recorder, browser DevTools, mitmproxy, etc. */;
 const recon = await fromHAR(har, { title: "Studio capture" });
@@ -162,8 +162,8 @@ That's why this package doesn't ship "k6 Studio integration" or "DevTools plugin
 Recon emits a spec; pair with one of the SDK generators to round-trip:
 
 ```ts
-import { createRecon } from "@ir-kit/openapi-recon";
-import { generate } from "@ir-kit/openapi-typescript";
+import { createRecon } from "ir-kit/recon";
+import { generate } from "ir-kit/sdk/typescript";
 
 // ... feed traffic, then:
 const spec = recon.toOpenAPI();
