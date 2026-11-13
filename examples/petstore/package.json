@@ -1,0 +1,32 @@
+{
+  "name": "@ir-kit/example-petstore",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One ir.config.ts that turns the petstore spec into Go, Kotlin, Swift, Java, TypeScript and k6 clients, and user-events.yaml into AsyncAPI building blocks.",
+  "scripts": {
+    "generate": "ir generate",
+    "check": "ir generate --check && tsc -p . && tsc -p k6",
+    "k6": "node k6/run.mjs",
+    "k6:load": "K6_STAGES=1m:50,2m:50,30s:0 node k6/run.mjs",
+    "k6:stress": "K6_STAGES=1m:50,1m:100,1m:150,1m:200,30s:0 node k6/run.mjs",
+    "k6:spike": "K6_STAGES=30s:10,30s:200,1m:10 node k6/run.mjs",
+    "broker:up": "docker compose -f events/docker-compose.yml up -d",
+    "broker:down": "docker compose -f events/docker-compose.yml down",
+    "producer": "tsc -p events && node events/dist/producer.js",
+    "consumer": "tsc -p events && node events/dist/consumer.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "@ir-kit/k6": "workspace:*",
+    "amqplib": "^0.10.4"
+  },
+  "devDependencies": {
+    "@ir-kit/tsconfig": "workspace:*",
+    "@types/amqplib": "^0.10.5",
+    "@types/k6": "^1.7.0",
+    "@types/node": "catalog:",
+    "ir-kit": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

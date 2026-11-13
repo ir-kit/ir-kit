@@ -1,8 +1,0 @@
-{
-  "extends": "@ir-kit/tsconfig/lib.json",
-  "compilerOptions": {
-    "noEmit": true
-  },
-  "include": ["*.ts"],
-  "exclude": ["node_modules", "sdk-kotlin"]
-}

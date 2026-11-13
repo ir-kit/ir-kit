@@ -35,8 +35,8 @@
   "type": "module",
   "sideEffects": false,
   "bin": {
-    "ir": "./dist/cli/bin.js",
-    "ir-kit": "./dist/cli/bin.js"
+    "ir": "./bin/ir.js",
+    "ir-kit": "./bin/ir.js"
   },
   "exports": {
     ".": {
@@ -262,6 +262,7 @@
     "./package.json": "./package.json"
   },
   "files": [
+    "bin",
     "docs",
     "dist",
     "runtime",

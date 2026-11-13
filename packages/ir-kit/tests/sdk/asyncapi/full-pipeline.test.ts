@@ -79,7 +79,7 @@ describe("full pipeline (all plugins enabled)", () => {
     expect(map).toContain("import type {");
     expect(map).toContain("UserAccountCreatedMessage");
     expect(map).toContain("UserAccountDeletedMessage");
-    expect(map).toContain("from './types.gen'");
+    expect(map).toContain("from './types.gen.js'");
     expect(map).toContain(
       "'user.account.created.v1': UserAccountCreatedMessage",
     );
@@ -113,12 +113,12 @@ describe("full pipeline (all plugins enabled)", () => {
 
   it("index.gen.ts re-exports every plugin's surface", async () => {
     const idx = await readGen(outDir, "index.gen.ts");
-    expect(idx).toContain("from './amqp.gen'");
-    expect(idx).toContain("from './dispatch.gen'");
-    expect(idx).toContain("from './event-map.gen'");
-    expect(idx).toContain("from './events.gen'");
-    expect(idx).toContain("from './handlers.gen'");
-    expect(idx).toContain("from './types.gen'");
+    expect(idx).toContain("from './amqp.gen.js'");
+    expect(idx).toContain("from './dispatch.gen.js'");
+    expect(idx).toContain("from './event-map.gen.js'");
+    expect(idx).toContain("from './events.gen.js'");
+    expect(idx).toContain("from './handlers.gen.js'");
+    expect(idx).toContain("from './types.gen.js'");
   });
 });
 
@@ -165,7 +165,7 @@ describe("plugin dependency ordering", () => {
       expect(filenames).toContain("dispatch.gen.ts");
       expect(filenames).toContain("handlers.gen.ts");
       const idx = await readGen(outDir, "index.gen.ts");
-      expect(idx).toContain("from './dispatch.gen'");
+      expect(idx).toContain("from './dispatch.gen.js'");
     } finally {
       await rm(outDir, { recursive: true, force: true });
     }

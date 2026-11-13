@@ -5,6 +5,7 @@ pre-commit:
       exclude:
         - "examples/**/sdk/**"
         - "examples/**/generated/**"
+        - "examples/**/k6/gen/**"
       run: pnpm exec biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
 

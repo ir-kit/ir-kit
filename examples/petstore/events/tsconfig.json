@@ -1,0 +1,13 @@
+{
+  "extends": "@ir-kit/tsconfig/lib.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": ["*.ts", "generated/**/*.ts"],
+  "exclude": ["dist"]
+}
