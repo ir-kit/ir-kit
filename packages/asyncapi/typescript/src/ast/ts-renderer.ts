@@ -41,7 +41,9 @@ export class TsStatementRenderer implements Renderer {
         modulePath: relativeModulePath(path, from.logicalFilePath),
       });
     }
-    const exports = (this.reexports.get(path) ?? []).map(moduleExport);
+    const exports = (this.reexports.get(path) ?? [])
+      .filter((group) => !group.names || group.names.length > 0)
+      .map(moduleExport);
 
     const nodes: TsDsl[] = [];
     const rawCode: string[] = [];
