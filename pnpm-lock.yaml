@@ -89,15 +89,15 @@ importers:
 
   apps/glean:
     dependencies:
+      '@ir-kit/kit':
+        specifier: workspace:*
+        version: link:../../packages/ir-kit
       '@scalar/api-reference-react':
         specifier: ^0.9.29
         version: 0.9.29(@vue/compiler-sfc@3.5.33)(change-case@5.4.4)(react@19.2.5)(tailwindcss@4.2.4)(typescript@7.0.2)
       comctx:
         specifier: ^1.6.1
         version: 1.6.1
-      ir-kit:
-        specifier: workspace:*
-        version: link:../../packages/ir-kit
       react:
         specifier: ^19.2.4
         version: 19.2.5
@@ -129,7 +129,7 @@ importers:
 
   examples/fn-schema-basic:
     dependencies:
-      ir-kit:
+      '@ir-kit/kit':
         specifier: workspace:*
         version: link:../../packages/ir-kit
     devDependencies:
@@ -158,6 +158,9 @@ importers:
         specifier: ^0.10.4
         version: 0.10.9
     devDependencies:
+      '@ir-kit/kit':
+        specifier: workspace:*
+        version: link:../../packages/ir-kit
       '@ir-kit/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
@@ -170,9 +173,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.10.10
-      ir-kit:
-        specifier: workspace:*
-        version: link:../../packages/ir-kit
       typescript:
         specifier: 'catalog:'
         version: 7.0.2

@@ -79,7 +79,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Pack ir-kit
-        run: pnpm build && pnpm --filter ir-kit pack --pack-destination "$RUNNER_TEMP"
+        run: pnpm build && pnpm --filter @ir-kit/kit pack --pack-destination "$RUNNER_TEMP"
 
       # Java, Kotlin and Swift output is already linted and built by the jobs below.
       - name: Smoke test

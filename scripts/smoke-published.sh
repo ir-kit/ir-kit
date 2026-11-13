@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Installs ir-kit into an empty folder and runs every CLI command against
 # fixtures/petstore.yaml, as a new user would.
-#   scripts/smoke-published.sh                    # ir-kit@latest from npm
-#   scripts/smoke-published.sh ir-kit@1.0.0
+#   scripts/smoke-published.sh                    # @ir-kit/kit@latest from npm
+#   scripts/smoke-published.sh @ir-kit/kit@1.0.0
 #   scripts/smoke-published.sh ./ir-kit-1.0.0.tgz # a `pnpm pack` tarball
 #   SMOKE_LANGS=go scripts/smoke-published.sh     # skip the Java/Kotlin/Swift lints
 set -euo pipefail
@@ -28,7 +28,7 @@ step "ir init"
 npx ir init --input petstore.yaml --targets typescript,go,kotlin,swift,java,k6,docs
 test -f ir.config.mts
 cat > ir.config.mts <<'TS'
-import { defineConfig } from "ir-kit";
+import { defineConfig } from "@ir-kit/kit";
 
 export default defineConfig({
   input: "petstore.yaml",

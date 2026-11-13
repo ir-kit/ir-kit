@@ -9,7 +9,7 @@ Originally developed in [typescript-compilers](https://github.com/ahmedrowaihi/t
 ## Usage
 
 ```ts
-import { go } from "ir-kit";
+import { go } from "@ir-kit/kit";
 
 const file = go.factory.createSourceFile(/* ... */);
 const source = go.createPrinter().printFile(file);

@@ -1,21 +1,21 @@
-# ir-kit/sdk/swift
+# @ir-kit/kit/sdk/swift
 
 Generate idiomatic iOS Swift client SDKs from an OpenAPI 3.x spec — `Codable` structs, `String`-raw enums, per-tag protocols with `async throws` requirements, and a default `URLSession`-backed impl class. Per-call `RequestOptions`, composable interceptors, typed `APIError`, multipart + form-urlencoded wire encoding, multi-2xx sum-type returns, and per-op security auto-wiring all included.
 
 Built on the [`@hey-api`](https://github.com/hey-api/openapi-ts) toolchain (`@hey-api/json-schema-ref-parser` for spec loading, `@hey-api/shared` IR for normalization). 2.0 / 3.0 / 3.1 inputs all produce the same output.
 
-Sibling package to [`ir-kit/sdk/kotlin`](../openapi-kotlin). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
+Sibling package to [`@ir-kit/kit/sdk/kotlin`](../openapi-kotlin). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
 
 ## Install
 
 ```bash
-pnpm add ir-kit @hey-api/shared @hey-api/spec-types
+pnpm add @ir-kit/kit @hey-api/shared @hey-api/spec-types
 ```
 
 ## Usage
 
 ```ts
-import { generate } from "ir-kit/sdk/swift";
+import { generate } from "@ir-kit/kit/sdk/swift";
 
 await generate({
   input: "https://api.example.com/openapi.json",
@@ -260,4 +260,4 @@ src/ir/
 └── operations.ts             paths → protocols + impl classes (orchestrator)
 ```
 
-Everything — per-method bodies and runtime helpers — is built as `ir-kit` nodes; no string templating.
+Everything — per-method bodies and runtime helpers — is built as `@ir-kit/kit/codegen` nodes; no string templating.

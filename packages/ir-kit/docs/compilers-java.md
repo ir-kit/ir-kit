@@ -9,7 +9,7 @@ Originally developed in [typescript-compilers](https://github.com/ahmedrowaihi/t
 ## Usage
 
 ```ts
-import { java } from "ir-kit";
+import { java } from "@ir-kit/kit";
 
 const file = java.factory.createSourceFile(/* ... */);
 const source = java.createPrinter().printFile(file);

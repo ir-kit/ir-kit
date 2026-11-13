@@ -12,28 +12,28 @@ A federation toolchain for API specifications — every standard talks to every 
 - **Spec discovery from traffic** — reverse-engineer an OpenAPI 3.1 spec from observed HTTP, either as a library or a Chrome extension.
 - **Drop-in plugins for `@hey-api/openapi-ts`** — faker factories, oRPC clients, route maps, typia validators, and the k6 generator.
 
-All native generators read one model, [`ir-kit/ir`](./packages/ir-kit/docs/ir.md), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`ir-kit/sdk/{go,kotlin,swift,java,typescript,k6}`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/ir-kit/docs/cli.md) CLI or directly as a programmatic API per package.
+All native generators read one model, [`@ir-kit/kit/ir`](./packages/ir-kit/docs/ir.md), so 2.0 / 3.0 / 3.1 inputs land in the same shape. Per-target generators (`@ir-kit/kit/sdk/{go,kotlin,swift,java,typescript,k6}`) expose a pure `generate({ spec, output })` and don't require a hey-api plugin runner at the call site. Everything is reachable through the unified [`ir`](./packages/ir-kit/docs/cli.md) CLI or directly as a programmatic API per package.
 
 ## Pick a tool
 
 | You want to… | Reach for | Surface |
 | --- | --- | --- |
 | Regenerate SDKs, docs and k6 clients from one config, and check them in CI | [`ir generate`](./packages/ir-kit/docs/generate.md) | `ir.config.ts` + `ir generate` / `ir generate --check` |
-| Convert between any pair of spec formats (OpenAPI / AsyncAPI / TypeSpec / Protobuf / Postman / JSON Schema) | [`ir-kit/spec`](./packages/ir-kit/docs/spec-convert.md) | `convertSpec({ input, to })` or `ir spec convert` |
-| Render any spec as standalone HTML docs | [`ir-kit/spec`](./packages/ir-kit/docs/spec-docs.md) | `renderDocs({ input })` or `ir docs` |
-| Diff two specs (cross-family) with breaking-change classification | [`ir-kit/spec`](./packages/ir-kit/docs/spec-diff.md) | `diffSpecs({ before, after })` or `ir spec diff` |
-| Load any spec uniformly (auto-detect OpenAPI / AsyncAPI / TypeSpec) | [`ir-kit/spec`](./packages/ir-kit/docs/spec-load.md) | `loadSpec({ input }) → { kind, document }` |
-| Generate one Go / Kotlin / Swift / Java / TypeScript SDK, or AsyncAPI message models in those languages | `ir-kit/sdk/<lang>` | `generate({ spec, output })` or `ir sdk <lang>` |
-| Load-test an OpenAPI API | [`ir-kit/k6-toolkit`](./packages/ir-kit/docs/k6-toolkit.md) on top of [`@ir-kit/k6`](./packages/k6/framework) | `sync()`, `runK6()`, `bundle()` |
-| Reverse-engineer a spec from real traffic | [`@ir-kit/glean`](./apps/glean) (browser) or [`ir-kit/recon`](./packages/ir-kit/docs/recon.md) (lib) | DevTools extension / programmatic |
+| Convert between any pair of spec formats (OpenAPI / AsyncAPI / TypeSpec / Protobuf / Postman / JSON Schema) | [`@ir-kit/kit/spec`](./packages/ir-kit/docs/spec-convert.md) | `convertSpec({ input, to })` or `ir spec convert` |
+| Render any spec as standalone HTML docs | [`@ir-kit/kit/spec`](./packages/ir-kit/docs/spec-docs.md) | `renderDocs({ input })` or `ir docs` |
+| Diff two specs (cross-family) with breaking-change classification | [`@ir-kit/kit/spec`](./packages/ir-kit/docs/spec-diff.md) | `diffSpecs({ before, after })` or `ir spec diff` |
+| Load any spec uniformly (auto-detect OpenAPI / AsyncAPI / TypeSpec) | [`@ir-kit/kit/spec`](./packages/ir-kit/docs/spec-load.md) | `loadSpec({ input }) → { kind, document }` |
+| Generate one Go / Kotlin / Swift / Java / TypeScript SDK, or AsyncAPI message models in those languages | `@ir-kit/kit/sdk/<lang>` | `generate({ spec, output })` or `ir sdk <lang>` |
+| Load-test an OpenAPI API | [`@ir-kit/kit/k6-toolkit`](./packages/ir-kit/docs/k6-toolkit.md) on top of [`@ir-kit/k6`](./packages/k6/framework) | `sync()`, `runK6()`, `bundle()` |
+| Reverse-engineer a spec from real traffic | [`@ir-kit/glean`](./apps/glean) (browser) or [`@ir-kit/kit/recon`](./packages/ir-kit/docs/recon.md) (lib) | DevTools extension / programmatic |
 | Add faker mocks, oRPC clients, route maps, typia validators | hey-api [plugins](#hey-apiopenapi-ts-plugins) | `openapi-ts.config.ts` |
-| Emit AsyncAPI 3.0 → TypeScript | [`ir-kit/sdk/asyncapi`](./packages/ir-kit/docs/sdk-asyncapi.md) | `generate({ spec, output })` |
-| Extract JSON Schema from TS function signatures | [`ir-kit/fn-schema`](./packages/ir-kit/docs/fn-schema-core.md) | `runExtract()` or `ir fn-schema extract` |
-| Do any of the above from one terminal entry point | [`ir-kit/cli`](./packages/ir-kit/docs/cli.md) | `ir <command>` |
+| Emit AsyncAPI 3.0 → TypeScript | [`@ir-kit/kit/sdk/asyncapi`](./packages/ir-kit/docs/sdk-asyncapi.md) | `generate({ spec, output })` |
+| Extract JSON Schema from TS function signatures | [`@ir-kit/kit/fn-schema`](./packages/ir-kit/docs/fn-schema-core.md) | `runExtract()` or `ir fn-schema extract` |
+| Do any of the above from one terminal entry point | [`@ir-kit/kit/cli`](./packages/ir-kit/docs/cli.md) | `ir <command>` |
 
 ## Use with AI coding agents
 
-ir-kit ships one Agent Skill, [`skills/ir-kit`](./skills/ir-kit/SKILL.md), that teaches AI coding agents (Claude Code, Cursor, Copilot, Codex and others) how to drive `ir-kit`: the `ir.config.ts` workflow, every `ir` command, k6 loadtests, Hey API plugins, and migrating from the old `@ir-kit/*` packages.
+ir-kit ships one Agent Skill, [`skills/ir-kit`](./skills/ir-kit/SKILL.md), that teaches AI coding agents (Claude Code, Cursor, Copilot, Codex and others) how to drive `@ir-kit/kit`: the `ir.config.ts` workflow, every `ir` command, k6 loadtests, Hey API plugins, and migrating from the old `@ir-kit/*` packages.
 
 ```bash
 npx skills add ahmedrowaihi/ir-kit        # this project
@@ -65,7 +65,7 @@ flowchart LR
   aspec --> asyncts["asyncapi-typescript"]
 ```
 
-`ir-kit/spec` graph-routes between every supported format — register a single `(X → openapi3)` and `(openapi3 → X)` edge and every other pair becomes reachable automatically. Internal building blocks (`codegen-core`, `openapi`, `openapi-tools`, `asyncapi-core`, `schema`) are listed under **Shared primitives** below — you usually consume one of the higher-level packages instead.
+`@ir-kit/kit/spec` graph-routes between every supported format — register a single `(X → openapi3)` and `(openapi3 → X)` edge and every other pair becomes reachable automatically. Internal building blocks (`codegen-core`, `openapi`, `openapi-tools`, `asyncapi-core`, `schema`) are listed under **Shared primitives** below — you usually consume one of the higher-level packages instead.
 
 ## Packages
 
@@ -73,7 +73,7 @@ flowchart LR
 
 | Package | Description |
 | --- | --- |
-| [`ir-kit`](./packages/ir-kit) | API spec toolchain: load, convert, diff and document any API spec, and generate SDKs, mocks, validators and k6 load tests from it. |
+| [`@ir-kit/kit`](./packages/ir-kit) | API spec toolchain: load, convert, diff and document any API spec, and generate SDKs, mocks, validators and k6 load tests from it. |
 
 ### Load testing (k6)
 
@@ -95,7 +95,7 @@ Three `@hey-api/openapi-ts` plugins ship in lockstep via Changesets' `fixed` con
 | Example | Shows |
 | --- | --- |
 | [`petstore`](./examples/petstore) | One `ir.config.ts` turns `petstore.yaml` into Go, Kotlin, Swift, Java, TypeScript and k6 clients, and `user-events.yaml` into AsyncAPI building blocks. Each language has a consumer app under `<lang>/example/`; `k6/loadtest.ts` and `events/` run against the petstore demo and a local RabbitMQ. CI runs `ir generate --check` on it. |
-| [`fn-schema-basic`](./examples/fn-schema-basic) | `ir fn-schema extract` (powered by `ir-kit/fn-schema`) extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |
+| [`fn-schema-basic`](./examples/fn-schema-basic) | `ir fn-schema extract` (powered by `@ir-kit/kit/fn-schema`) extracts JSON Schemas for function inputs/outputs from TypeScript source; emit as files, bundle, or OpenAPI fragments. |
 
 ## Contributing
 

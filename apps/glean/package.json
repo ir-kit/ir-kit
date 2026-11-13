@@ -20,7 +20,7 @@
   "dependencies": {
     "@scalar/api-reference-react": "^0.9.29",
     "comctx": "^1.6.1",
-    "ir-kit": "workspace:*",
+    "@ir-kit/kit": "workspace:*",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

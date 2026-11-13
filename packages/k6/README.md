@@ -7,7 +7,7 @@ Four packages that together give you typed, spec-driven [k6](https://k6.io) load
                            pace presets, budgets, useAuth middleware.
                            This is the only package you import from your loadtest.ts.
 
-ir-kit/sdk/k6       Standalone generator — spec in, typed client + data
+@ir-kit/kit/sdk/k6       Standalone generator — spec in, typed client + data
                            builders out. Mirrors openapi/swift, openapi/go, openapi/kotlin.
                            Has no hey-api dependency at the call site.
 
@@ -15,7 +15,7 @@ ir-kit/sdk/k6       Standalone generator — spec in, typed client + data
                            bundles loadtest.ts via esbuild, shells out to the real
                            k6 binary.
 
-ir-kit/openapi-ts/k6  Optional thin @hey-api/openapi-ts plugin wrapping the
+@ir-kit/kit/openapi-ts/k6  Optional thin @hey-api/openapi-ts plugin wrapping the
                              generator. Use only if you already drive codegen
                              through openapi-ts.config.ts.
 ```

@@ -1,4 +1,4 @@
-# `ir-kit/cli`
+# `@ir-kit/kit/cli`
 
 The unified `ir` CLI — one entry point for every ir-kit operation across every supported API standard. Commands are JSON-Schema-defined; the runtime auto-derives flags, prompts, help, and validation from the schema.
 
@@ -7,9 +7,9 @@ Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 ## Install
 
 ```sh
-npm install -g ir-kit
+npm install -g @ir-kit/kit
 # or run ad-hoc:
-npx ir-kit <command>
+npx @ir-kit/kit <command>
 ```
 
 ## Commands
@@ -66,7 +66,7 @@ ir k6 sync && ir k6 bundle ./loadtest.ts --out dist/loadtest.js
 
 ## How it works
 
-Each command is a thin schema-driven wrapper around a programmatic `runX()` API exposed by the underlying engine package (`ir-kit/spec`, `ir-kit/spec`, `ir-kit/spec`, `@ir-kit/openapi-{go,kotlin,swift,java,typescript}`, `ir-kit/k6-toolkit`, `ir-kit/fn-schema`, `ir-kit/recon`). All orchestration lives in those engines — the CLI exists to expose them under one entry point with consistent flag UX.
+Each command is a thin schema-driven wrapper around a programmatic `runX()` API exposed by the underlying engine package (`@ir-kit/kit/spec`, `@ir-kit/kit/spec`, `@ir-kit/kit/spec`, `@ir-kit/openapi-{go,kotlin,swift,java,typescript}`, `@ir-kit/kit/k6-toolkit`, `@ir-kit/kit/fn-schema`, `@ir-kit/kit/recon`). All orchestration lives in those engines — the CLI exists to expose them under one entry point with consistent flag UX.
 
 ```ts
 // Every command follows the same shape:

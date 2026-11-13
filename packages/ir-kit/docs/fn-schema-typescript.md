@@ -1,4 +1,4 @@
-# ir-kit/fn-schema/typescript
+# @ir-kit/kit/fn-schema/typescript
 
 TypeScript extractor for fn-schema. The default TS implementation of the `Extractor` contract from `core`.
 
@@ -7,13 +7,13 @@ Most users don't import this directly — they use the [`cli`](../cli/README.md)
 ## Install
 
 ```bash
-pnpm add ir-kit
+pnpm add @ir-kit/kit
 ```
 
 ## Quick start
 
 ```ts
-import { extract } from "ir-kit/fn-schema/typescript"
+import { extract } from "@ir-kit/kit/fn-schema/typescript"
 
 const result = await extract({
   files: ["src/api/handlers.ts"],

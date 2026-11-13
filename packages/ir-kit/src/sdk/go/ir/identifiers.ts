@@ -11,7 +11,7 @@ import { GO_RUNTIME_IDENTIFIERS } from "./runtime/templates.js";
 
 /**
  * Go-specific identifier transforms. Generic case helpers (`pascal`,
- * `camel`, `safeIdent`, `safeCaseName`) live in `ir-kit/codegen`
+ * `camel`, `safeIdent`, `safeCaseName`) live in `@ir-kit/kit/codegen`
  * and are used directly by Go-targeted code. The exports here cover
  * what's actually unique to Go:
  *

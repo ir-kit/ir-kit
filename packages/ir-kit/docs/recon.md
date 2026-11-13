@@ -1,4 +1,4 @@
-# ir-kit/recon
+# @ir-kit/kit/recon
 
 Reverse-engineer an OpenAPI 3.1 document from observed HTTP traffic. Feed it standard Web Fetch `Request` / `Response` pairs and it folds them into a JSON Schema 2020-12 document with templated paths, per-status response schemas, detected auth schemes, and per-origin grouping.
 
@@ -9,13 +9,13 @@ Powers [`@ir-kit/glean`](../../apps/glean), the Chrome DevTools extension that e
 ## Install
 
 ```bash
-pnpm add ir-kit
+pnpm add @ir-kit/kit
 ```
 
 ## Use
 
 ```ts
-import { createRecon } from "ir-kit/recon";
+import { createRecon } from "@ir-kit/kit/recon";
 
 const recon = createRecon({
   title: "Petstore",

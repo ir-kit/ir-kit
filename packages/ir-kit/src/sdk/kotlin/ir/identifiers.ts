@@ -10,7 +10,7 @@ import {
  * Kotlin-specific identifier transforms. Generic case helpers
  * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`,
  * `softCamel`, `escapeIfReserved`, `avoidLeadingDigit`) live in
- * `ir-kit/codegen`. The exports here cover what's unique to
+ * `@ir-kit/kit/codegen`. The exports here cover what's unique to
  * Kotlin: reserved-keyword backtick-escaping and SCREAMING_SNAKE
  * enum entry names.
  */

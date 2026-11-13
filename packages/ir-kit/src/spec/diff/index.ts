@@ -41,7 +41,7 @@ export interface DiffSpecsResult {
 
 /**
  * Cross-family API spec diff. Converts both inputs to OpenAPI 3 via
- * `ir-kit/spec`, then runs `api-smart-diff`'s `compareOpenApi`.
+ * `@ir-kit/kit/spec`, then runs `api-smart-diff`'s `compareOpenApi`.
  * Returns the raw diff list plus a breaking/non-breaking summary.
  */
 export async function diffSpecs(

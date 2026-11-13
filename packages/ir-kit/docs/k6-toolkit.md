@@ -1,11 +1,11 @@
-# `ir-kit/k6-toolkit`
+# `@ir-kit/kit/k6-toolkit`
 
 Programmatic toolkit for k6 workflows. One library covering the **bundle → run → sync** flow: bundle TypeScript loadtests (tsdown passthrough), spawn the k6 binary, sync the typed client from an OpenAPI spec.
 
 ## Install
 
 ```sh
-npm install -D ir-kit
+npm install -D @ir-kit/kit
 ```
 
 ## API
@@ -15,7 +15,7 @@ npm install -D ir-kit
 Bundles a `.ts` / `.tsx` loadtest into the single ES module k6 expects.
 
 ```ts
-import { bundle } from "ir-kit/k6-toolkit";
+import { bundle } from "@ir-kit/kit/k6-toolkit";
 
 await bundle({ entry: "loadtests/smoke.ts", out: ".k6/smoke.js" });
 ```
@@ -25,17 +25,17 @@ await bundle({ entry: "loadtests/smoke.ts", out: ".k6/smoke.js" });
 Spawns the k6 binary with sensible defaults + structured output.
 
 ```ts
-import { runK6 } from "ir-kit/k6-toolkit";
+import { runK6 } from "@ir-kit/kit/k6-toolkit";
 
 await runK6({ entry: ".k6/smoke.js", env: { BASE_URL: "https://api.example.com" } });
 ```
 
 ### `sync(opts)`
 
-Regenerates the typed client from an OpenAPI spec — same logic as the standalone `ir-kit/sdk/k6` package, surfaced for in-process invocation.
+Regenerates the typed client from an OpenAPI spec — same logic as the standalone `@ir-kit/kit/sdk/k6` package, surfaced for in-process invocation.
 
 ```ts
-import { sync } from "ir-kit/k6-toolkit";
+import { sync } from "@ir-kit/kit/k6-toolkit";
 
 await sync({ spec: "./openapi.yaml", output: "./src/gen" });
 ```
@@ -51,7 +51,7 @@ k6-ts sync ./openapi.yaml --output ./src/gen
 k6-ts scaffold --spec ./openapi.yaml --tags pets --output-dir loadtests/
 ```
 
-`k6-ts sync` also accepts `-` to read the spec from stdin, so it composes cleanly with [`ir-kit/recon`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/ir-kit/docs/recon.md) (HAR → spec) and similar pipes.
+`k6-ts sync` also accepts `-` to read the spec from stdin, so it composes cleanly with [`@ir-kit/kit/recon`](https://github.com/ahmedrowaihi/ir-kit/tree/main/packages/ir-kit/docs/recon.md) (HAR → spec) and similar pipes.
 
 ## Status
 

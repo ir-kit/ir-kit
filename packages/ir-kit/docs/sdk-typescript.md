@@ -1,4 +1,4 @@
-# ir-kit/sdk/typescript
+# @ir-kit/kit/sdk/typescript
 
 Thin programmatic wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts) that exposes the same `generate()` shape as [`@ir-kit/openapi-{go,kotlin,swift}`](https://github.com/ahmedrowaihi/ir-kit). This is what the `typescript` target in `ir.config.ts` runs, next to the native ones.
 
@@ -7,7 +7,7 @@ Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). **No new codegen** —
 ## Install
 
 ```bash
-pnpm add -D ir-kit @hey-api/openapi-ts
+pnpm add -D @ir-kit/kit @hey-api/openapi-ts
 ```
 
 `@hey-api/openapi-ts` is a peer dep so you can pin its version (and the plugins it ships) without depending on what we happen to bundle.
@@ -15,7 +15,7 @@ pnpm add -D ir-kit @hey-api/openapi-ts
 ## Usage
 
 ```ts
-import { generate } from "ir-kit/sdk/typescript";
+import { generate } from "@ir-kit/kit/sdk/typescript";
 
 await generate({
   input: "openapi.yaml",
@@ -63,7 +63,7 @@ interface GenerateResult {
 }
 ```
 
-Matches the result shape of `ir-kit/sdk/go` / `-kotlin` / `-swift`, so `ir generate` and your own scripts can iterate the four packages uniformly.
+Matches the result shape of `@ir-kit/kit/sdk/go` / `-kotlin` / `-swift`, so `ir generate` and your own scripts can iterate the four packages uniformly.
 
 ## Why a wrapper
 

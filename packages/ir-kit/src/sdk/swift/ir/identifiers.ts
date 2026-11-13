@@ -12,7 +12,7 @@ import {
  * Swift-specific identifier transforms. Generic case helpers
  * (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `synthName`,
  * `softCamel`, `escapeIfReserved`, `avoidLeadingDigit`) live in
- * `ir-kit/codegen`. The export here covers what's unique to
+ * `@ir-kit/kit/codegen`. The export here covers what's unique to
  * Swift: backtick-escaping for the reserved-keyword set.
  */
 export function paramIdent(name: string): string {

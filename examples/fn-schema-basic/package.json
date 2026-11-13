@@ -11,7 +11,7 @@
     "extract": "ir fn-schema extract --patterns \"src/**/*.ts\" --out generated/cli --pretty --naming file-function"
   },
   "dependencies": {
-    "ir-kit": "workspace:*"
+    "@ir-kit/kit": "workspace:*"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",

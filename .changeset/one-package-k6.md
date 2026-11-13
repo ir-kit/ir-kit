@@ -1,5 +1,5 @@
 ---
-"ir-kit": major
+"@ir-kit/kit": major
 ---
 
-`@ir-kit/k6` stays a separate package because it runs inside k6, and the old package names are deprecated in favor of `ir-kit`.
+`@ir-kit/k6` stays a separate package because it runs inside k6, and the old `@ir-kit/*` packages are removed from npm.

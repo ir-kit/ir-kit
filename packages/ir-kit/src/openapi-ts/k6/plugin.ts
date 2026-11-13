@@ -5,7 +5,7 @@ import { generate } from "../../sdk/k6/index.js";
 import type { K6HeyApiPlugin } from "./types.js";
 
 /**
- * Plugin handler — defers all real work to `ir-kit/sdk/k6`'s
+ * Plugin handler — defers all real work to `@ir-kit/kit/sdk/k6`'s
  * standalone `generate()`. The hey-api context already $ref-bundled and
  * normalized the spec, so we pass that through and disable our own
  * normalize step.

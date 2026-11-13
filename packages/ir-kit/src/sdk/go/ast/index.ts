@@ -1,5 +1,5 @@
 /**
- * Thin, typed sugar over `ir-kit`'s factory. Every builder
+ * Thin, typed sugar over `@ir-kit/kit/codegen`'s factory. Every builder
  * returns a real compiler-go AST node; there is no intermediate model.
  */
 import { go } from "../../../compilers/go/index.js";

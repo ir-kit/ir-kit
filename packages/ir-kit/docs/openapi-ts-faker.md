@@ -1,11 +1,11 @@
-# ir-kit/openapi-ts/faker
+# @ir-kit/kit/openapi-ts/faker
 
 Faker.js mock-data factories from an OpenAPI spec. Plugin for [`@hey-api/openapi-ts`](https://heyapi.dev).
 
 ## Install
 
 ```bash
-npm install -D ir-kit @hey-api/openapi-ts
+npm install -D @ir-kit/kit @hey-api/openapi-ts
 npm install @faker-js/faker
 ```
 
@@ -13,7 +13,7 @@ npm install @faker-js/faker
 
 ```ts
 import { defineConfig } from "@hey-api/openapi-ts";
-import { defineConfig as defineFakerConfig } from "ir-kit/openapi-ts/faker";
+import { defineConfig as defineFakerConfig } from "@ir-kit/kit/openapi-ts/faker";
 
 export default defineConfig({
   input: "openapi.yaml",

@@ -1,17 +1,17 @@
-# ir-kit/sdk/k6
+# @ir-kit/kit/sdk/k6
 
-Standalone programmatic generator: OpenAPI 3.x spec → typed [k6](https://k6.io) client + TS types + faker-backed data builders. Same shape as `ir-kit/sdk/swift`, `ir-kit/sdk/go`, `ir-kit/sdk/kotlin` — pure `generate({ spec, output })`, no hey-api plugin runner required at the call site.
+Standalone programmatic generator: OpenAPI 3.x spec → typed [k6](https://k6.io) client + TS types + faker-backed data builders. Same shape as `@ir-kit/kit/sdk/swift`, `@ir-kit/kit/sdk/go`, `@ir-kit/kit/sdk/kotlin` — pure `generate({ spec, output })`, no hey-api plugin runner required at the call site.
 
 ## Use cases
 
 - The [@ir-kit/k6-tools](../tools) CLI uses this internally for `k6-tools sync` and `k6-tools init`.
 - Embedding in your own tooling (MCP servers, internal CLIs, custom generators).
-- The [ir-kit/openapi-ts/k6](../hey-api) hey-api plugin wraps this when you prefer the `openapi-ts.config.ts` workflow.
+- The [@ir-kit/kit/openapi-ts/k6](../hey-api) hey-api plugin wraps this when you prefer the `openapi-ts.config.ts` workflow.
 
 ## Usage
 
 ```ts
-import { generate } from "ir-kit/sdk/k6";
+import { generate } from "@ir-kit/kit/sdk/k6";
 
 await generate({
   input: "./openapi.yaml",         // path | URL | parsed spec object
@@ -34,8 +34,8 @@ Emits four files under `output`:
 
 Internally:
 1. `@hey-api/json-schema-ref-parser` bundles external refs.
-2. `ir-kit/openapi`'s `normalizeSpec` runs (optional, on by default).
-3. `parseOpenAPI` from `ir-kit/ir` reads it into ir-kit's model.
+2. `@ir-kit/kit/openapi`'s `normalizeSpec` runs (optional, on by default).
+3. `parseOpenAPI` from `@ir-kit/kit/ir` reads it into ir-kit's model.
 4. Operation + schema walkers emit `ts.factory` AST → printed with `ts.createPrinter`.
 
 That's it — no hey-api plugin runner is loaded, no `$` DSL is touched.

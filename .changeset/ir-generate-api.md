@@ -1,5 +1,5 @@
 ---
-"ir-kit": minor
+"@ir-kit/kit": minor
 ---
 
-`defineConfig` is exported from `ir-kit`, and `generate`, `loadIrConfig` and `watch` from `ir-kit/generate`.
+`defineConfig` is exported from `@ir-kit/kit`, and `generate`, `loadIrConfig` and `watch` from `@ir-kit/kit/generate`.

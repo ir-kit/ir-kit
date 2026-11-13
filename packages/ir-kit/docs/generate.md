@@ -4,7 +4,7 @@ List the spec and everything you want from it in one `ir.config.ts`, then run on
 
 ```ts
 // ir.config.ts
-import { defineConfig } from "ir-kit";
+import { defineConfig } from "@ir-kit/kit";
 
 export default defineConfig({
   input: "api/openapi.yaml",
@@ -19,7 +19,7 @@ export default defineConfig({
 ```
 
 ```sh
-npx ir-kit init       # write a starter ir.config.ts
+npx @ir-kit/kit init       # write a starter ir.config.ts
 npx ir generate       # write every target
 npx ir generate --check   # write nothing; fail if any target is out of date
 npx ir watch          # regenerate when the spec or config changes
@@ -54,7 +54,7 @@ The options are the same ones `ir sdk <target>` takes as flags.
 ## From code
 
 ```ts
-import { generate, loadIrConfig, watch } from "ir-kit/generate";
+import { generate, loadIrConfig, watch } from "@ir-kit/kit/generate";
 
 const { config, cwd } = await loadIrConfig();
 const results = await generate(config, { cwd, check: true });

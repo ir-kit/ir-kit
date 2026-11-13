@@ -1,5 +1,5 @@
 /**
- * Plugin contract for `ir-kit/sdk/asyncapi`.
+ * Plugin contract for `@ir-kit/kit/sdk/asyncapi`.
  *
  * Shape mirrors `@hey-api/openapi-ts`'s `definePluginConfig` / plugin
  * instance pattern, adapted to AsyncAPI primitives. Plugins are

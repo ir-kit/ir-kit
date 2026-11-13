@@ -9,7 +9,7 @@ Originally developed in [typescript-compilers](https://github.com/ahmedrowaihi/t
 ## Usage
 
 ```ts
-import { kotlin } from "ir-kit";
+import { kotlin } from "@ir-kit/kit";
 
 const file = kotlin.factory.createSourceFile(/* ... */);
 const source = kotlin.createPrinter().printFile(file);

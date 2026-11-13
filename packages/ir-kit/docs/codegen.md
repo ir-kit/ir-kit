@@ -1,11 +1,11 @@
-# `ir-kit/codegen`
+# `@ir-kit/kit/codegen`
 
 Spec-agnostic codegen primitives shared by every native-SDK generator family — identifier transforms (`pascal`, `camel`, `safeIdent`, `safeCaseName`, `softCamel`, `synthName`, `avoidLeadingDigit`, `escapeIfReserved`), filesystem safety (`assertSafeOutputDir`), and project-name derivation (`defaultProjectName`). Pure functions, no spec dependencies.
 
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 Zero runtime dependencies.
@@ -22,7 +22,7 @@ import {
   safeIdent,
   softCamel,
   synthName,
-} from "ir-kit/codegen";
+} from "@ir-kit/kit/codegen";
 
 pascal("first_name");     // "FirstName"
 camel("first_name");      // "firstName"
@@ -39,7 +39,7 @@ escapeIfReserved("class", new Set(["class"]), (s) => `\`${s}\``);  // "`class`"
 ## Filesystem helpers
 
 ```ts
-import { assertSafeOutputDir, defaultProjectName } from "ir-kit/codegen";
+import { assertSafeOutputDir, defaultProjectName } from "@ir-kit/kit/codegen";
 
 assertSafeOutputDir("./out/sdk");           // throws if outside CWD or in . / ..
 defaultProjectName("./out/petstore-sdk");   // "petstore-sdk"

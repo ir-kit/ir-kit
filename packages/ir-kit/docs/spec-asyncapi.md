@@ -1,19 +1,19 @@
-# `ir-kit/spec/asyncapi`
+# `@ir-kit/kit/spec/asyncapi`
 
-Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `ir-kit/asyncapi`'s `parseSpec` for unified input dispatch.
+Load and validate an AsyncAPI 3.x document from a file path, URL, string, or pre-parsed `AsyncAPIDocumentInterface`. Wraps `@ir-kit/kit/asyncapi`'s `parseSpec` for unified input dispatch.
 
-Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`ir-kit/spec`](../../shared/spec-loader) instead.
+Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). For multi-format input (OpenAPI + AsyncAPI + TypeSpec under one API), reach for [`@ir-kit/kit/spec`](../../shared/spec-loader) instead.
 
 ## Install
 
 ```sh
-npm install ir-kit
+npm install @ir-kit/kit
 ```
 
 ## Usage
 
 ```ts
-import { loadAsyncAPI } from "ir-kit/spec/asyncapi";
+import { loadAsyncAPI } from "@ir-kit/kit/spec/asyncapi";
 
 const doc = await loadAsyncAPI({
   input: "./events.yaml", // path, URL, or pre-parsed AsyncAPIDocumentInterface

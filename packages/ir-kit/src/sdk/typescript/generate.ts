@@ -21,7 +21,7 @@ const DEFAULT_PLUGINS: ReadonlyArray<string> = [
 export interface GenerateOptions {
   /**
    * Path, URL, or pre-parsed OpenAPI 3.x spec. Loaded and bundled with
-   * `ir-kit/spec/openapi`, like the native targets, before hey-api
+   * `@ir-kit/kit/spec/openapi`, like the native targets, before hey-api
    * sees it.
    */
   input: string | Record<string, unknown>;
@@ -60,7 +60,7 @@ export interface GenerateResult {
 /**
  * Run hey-api's TypeScript codegen against `input`, writing the result
  * to `output`. Thin wrapper around `createClient` that matches the
- * `generate()` shape of `ir-kit/sdk/{go,kotlin,swift,java}`, so
+ * `generate()` shape of `@ir-kit/kit/sdk/{go,kotlin,swift,java}`, so
  * `ir generate` drives every target the same way.
  */
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
