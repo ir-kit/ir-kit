@@ -1,0 +1,458 @@
+# albums.go
+type AlbumsAPI interface {
+type NetHTTPAlbumsAPI struct {
+func NewNetHTTPAlbumsAPI(client *APIClient) *NetHTTPAlbumsAPI {
+func (a *NetHTTPAlbumsAPI) GetMultipleAlbums(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleAlbumsResponse, err error) {
+func (a *NetHTTPAlbumsAPI) GetMultipleAlbumsWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleAlbumsResponse, resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) GetAnAlbum(ctx context.Context, id string, market *string, opts RequestOptions) (result *AlbumObject, err error) {
+func (a *NetHTTPAlbumsAPI) GetAnAlbumWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *AlbumObject, resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) GetAnAlbumsTracks(ctx context.Context, id string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedTrackObject, err error) {
+func (a *NetHTTPAlbumsAPI) GetAnAlbumsTracksWithResponse(ctx context.Context, id string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedTrackObject, resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) GetNewReleases(ctx context.Context, country *string, limit *int, offset *int, opts RequestOptions) (result *GetNewReleasesResponse, err error) {
+func (a *NetHTTPAlbumsAPI) GetNewReleasesWithResponse(ctx context.Context, country *string, limit *int, offset *int, opts RequestOptions) (result *GetNewReleasesResponse, resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) GetUsersSavedAlbums(ctx context.Context, limit *int, offset *int, market *string, opts RequestOptions) (result *PagingSavedAlbumObject, err error) {
+func (a *NetHTTPAlbumsAPI) GetUsersSavedAlbumsWithResponse(ctx context.Context, limit *int, offset *int, market *string, opts RequestOptions) (result *PagingSavedAlbumObject, resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) SaveAlbumsUser(ctx context.Context, ids string, body *SaveAlbumsUserBody, opts RequestOptions) (err error) {
+func (a *NetHTTPAlbumsAPI) SaveAlbumsUserWithResponse(ctx context.Context, ids string, body *SaveAlbumsUserBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) RemoveAlbumsUser(ctx context.Context, ids string, body *RemoveAlbumsUserBody, opts RequestOptions) (err error) {
+func (a *NetHTTPAlbumsAPI) RemoveAlbumsUserWithResponse(ctx context.Context, ids string, body *RemoveAlbumsUserBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPAlbumsAPI) CheckUsersSavedAlbums(ctx context.Context, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPAlbumsAPI) CheckUsersSavedAlbumsWithResponse(ctx context.Context, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+# api_client.go
+type APIClient struct {
+func NewAPIClient(baseURL string) *APIClient {
+func Execute[T any](client *APIClient, req *http.Request, opts RequestOptions) (T, error) {
+func ExecuteWithResponse[T any](client *APIClient, req *http.Request, opts RequestOptions) (T, *http.Response, error) {
+func ExecuteUnit(client *APIClient, req *http.Request, opts RequestOptions) error {
+func ExecuteUnitWithResponse(client *APIClient, req *http.Request, opts RequestOptions) (*http.Response, error) {
+func ExecuteRaw(client *APIClient, req *http.Request, opts RequestOptions) ([]byte, *http.Response, error) {
+func sendAndDispatch(client *APIClient, req *http.Request, opts RequestOptions) ([]byte, *http.Response, error) {
+# api_error.go
+type APIErrorKind int
+const (
+func (k APIErrorKind) String() string {
+type APIError struct {
+func (e *APIError) Error() string {
+func (e *APIError) Unwrap() error { return e.Cause }
+func Wrap(kind APIErrorKind, cause error) *APIError {
+func HTTPError(statusCode int, body []byte) *APIError {
+func Unexpected(statusCode int, body []byte) *APIError {
+# api_key_location.go
+type APIKeyLocation int
+const (
+# artists.go
+type ArtistsAPI interface {
+type NetHTTPArtistsAPI struct {
+func NewNetHTTPArtistsAPI(client *APIClient) *NetHTTPArtistsAPI {
+func (a *NetHTTPArtistsAPI) GetMultipleArtists(ctx context.Context, ids string, opts RequestOptions) (result *GetMultipleArtistsResponse, err error) {
+func (a *NetHTTPArtistsAPI) GetMultipleArtistsWithResponse(ctx context.Context, ids string, opts RequestOptions) (result *GetMultipleArtistsResponse, resp *http.Response, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtist(ctx context.Context, id string, opts RequestOptions) (result *ArtistObject, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistWithResponse(ctx context.Context, id string, opts RequestOptions) (result *ArtistObject, resp *http.Response, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistsAlbums(ctx context.Context, id string, includeGroups *string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedAlbumObject, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistsAlbumsWithResponse(ctx context.Context, id string, includeGroups *string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedAlbumObject, resp *http.Response, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistsRelatedArtists(ctx context.Context, id string, opts RequestOptions) (result *GetAnArtistsRelatedArtistsResponse, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistsRelatedArtistsWithResponse(ctx context.Context, id string, opts RequestOptions) (result *GetAnArtistsRelatedArtistsResponse, resp *http.Response, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistsTopTracks(ctx context.Context, id string, market *string, opts RequestOptions) (result *GetAnArtistsTopTracksResponse, err error) {
+func (a *NetHTTPArtistsAPI) GetAnArtistsTopTracksWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *GetAnArtistsTopTracksResponse, resp *http.Response, err error) {
+# audiobooks.go
+type AudiobooksAPI interface {
+type NetHTTPAudiobooksAPI struct {
+func NewNetHTTPAudiobooksAPI(client *APIClient) *NetHTTPAudiobooksAPI {
+func (a *NetHTTPAudiobooksAPI) GetMultipleAudiobooks(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleAudiobooksResponse, err error) {
+func (a *NetHTTPAudiobooksAPI) GetMultipleAudiobooksWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleAudiobooksResponse, resp *http.Response, err error) {
+func (a *NetHTTPAudiobooksAPI) GetAnAudiobook(ctx context.Context, id string, market *string, opts RequestOptions) (result *AudiobookObject, err error) {
+func (a *NetHTTPAudiobooksAPI) GetAnAudiobookWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *AudiobookObject, resp *http.Response, err error) {
+func (a *NetHTTPAudiobooksAPI) GetAudiobookChapters(ctx context.Context, id string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedChapterObject, err error) {
+func (a *NetHTTPAudiobooksAPI) GetAudiobookChaptersWithResponse(ctx context.Context, id string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedChapterObject, resp *http.Response, err error) {
+func (a *NetHTTPAudiobooksAPI) GetUsersSavedAudiobooks(ctx context.Context, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedAudiobookObject, err error) {
+func (a *NetHTTPAudiobooksAPI) GetUsersSavedAudiobooksWithResponse(ctx context.Context, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedAudiobookObject, resp *http.Response, err error) {
+func (a *NetHTTPAudiobooksAPI) SaveAudiobooksUser(ctx context.Context, ids string, opts RequestOptions) (err error) {
+func (a *NetHTTPAudiobooksAPI) SaveAudiobooksUserWithResponse(ctx context.Context, ids string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPAudiobooksAPI) RemoveAudiobooksUser(ctx context.Context, ids string, opts RequestOptions) (err error) {
+func (a *NetHTTPAudiobooksAPI) RemoveAudiobooksUserWithResponse(ctx context.Context, ids string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPAudiobooksAPI) CheckUsersSavedAudiobooks(ctx context.Context, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPAudiobooksAPI) CheckUsersSavedAudiobooksWithResponse(ctx context.Context, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+# auth.go
+type Auth interface {
+type BearerAuth struct{ Token string }
+func (a BearerAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+type APIKeyAuth struct {
+func (a APIKeyAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+type BasicAuth struct{ Username, Password string }
+func (a BasicAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+# categories.go
+type CategoriesAPI interface {
+type NetHTTPCategoriesAPI struct {
+func NewNetHTTPCategoriesAPI(client *APIClient) *NetHTTPCategoriesAPI {
+func (a *NetHTTPCategoriesAPI) GetCategories(ctx context.Context, country *string, locale *string, limit *int, offset *int, opts RequestOptions) (result *GetCategoriesResponse, err error) {
+func (a *NetHTTPCategoriesAPI) GetCategoriesWithResponse(ctx context.Context, country *string, locale *string, limit *int, offset *int, opts RequestOptions) (result *GetCategoriesResponse, resp *http.Response, err error) {
+func (a *NetHTTPCategoriesAPI) GetACategory(ctx context.Context, categoryId string, country *string, locale *string, opts RequestOptions) (result *CategoryObject, err error) {
+func (a *NetHTTPCategoriesAPI) GetACategoryWithResponse(ctx context.Context, categoryId string, country *string, locale *string, opts RequestOptions) (result *CategoryObject, resp *http.Response, err error) {
+# chapters.go
+type ChaptersAPI interface {
+type NetHTTPChaptersAPI struct {
+func NewNetHTTPChaptersAPI(client *APIClient) *NetHTTPChaptersAPI {
+func (a *NetHTTPChaptersAPI) GetSeveralChapters(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetSeveralChaptersResponse, err error) {
+func (a *NetHTTPChaptersAPI) GetSeveralChaptersWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetSeveralChaptersResponse, resp *http.Response, err error) {
+func (a *NetHTTPChaptersAPI) GetAChapter(ctx context.Context, id string, market *string, opts RequestOptions) (result *ChapterObject, err error) {
+func (a *NetHTTPChaptersAPI) GetAChapterWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *ChapterObject, resp *http.Response, err error) {
+# episodes.go
+type EpisodesAPI interface {
+type NetHTTPEpisodesAPI struct {
+func NewNetHTTPEpisodesAPI(client *APIClient) *NetHTTPEpisodesAPI {
+func (a *NetHTTPEpisodesAPI) GetMultipleEpisodes(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleEpisodesResponse, err error) {
+func (a *NetHTTPEpisodesAPI) GetMultipleEpisodesWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleEpisodesResponse, resp *http.Response, err error) {
+func (a *NetHTTPEpisodesAPI) GetAnEpisode(ctx context.Context, id string, market *string, opts RequestOptions) (result *EpisodeObject, err error) {
+func (a *NetHTTPEpisodesAPI) GetAnEpisodeWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *EpisodeObject, resp *http.Response, err error) {
+func (a *NetHTTPEpisodesAPI) GetUsersSavedEpisodes(ctx context.Context, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSavedEpisodeObject, err error) {
+func (a *NetHTTPEpisodesAPI) GetUsersSavedEpisodesWithResponse(ctx context.Context, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSavedEpisodeObject, resp *http.Response, err error) {
+func (a *NetHTTPEpisodesAPI) SaveEpisodesUser(ctx context.Context, ids string, body *SaveEpisodesUserBody, opts RequestOptions) (err error) {
+func (a *NetHTTPEpisodesAPI) SaveEpisodesUserWithResponse(ctx context.Context, ids string, body *SaveEpisodesUserBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPEpisodesAPI) RemoveEpisodesUser(ctx context.Context, ids string, body *RemoveEpisodesUserBody, opts RequestOptions) (err error) {
+func (a *NetHTTPEpisodesAPI) RemoveEpisodesUserWithResponse(ctx context.Context, ids string, body *RemoveEpisodesUserBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPEpisodesAPI) CheckUsersSavedEpisodes(ctx context.Context, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPEpisodesAPI) CheckUsersSavedEpisodesWithResponse(ctx context.Context, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+# genres.go
+type GenresAPI interface {
+type NetHTTPGenresAPI struct {
+func NewNetHTTPGenresAPI(client *APIClient) *NetHTTPGenresAPI {
+func (a *NetHTTPGenresAPI) GetRecommendationGenres(ctx context.Context, opts RequestOptions) (result *GetRecommendationGenresResponse, err error) {
+func (a *NetHTTPGenresAPI) GetRecommendationGenresWithResponse(ctx context.Context, opts RequestOptions) (result *GetRecommendationGenresResponse, resp *http.Response, err error) {
+# markets.go
+type MarketsAPI interface {
+type NetHTTPMarketsAPI struct {
+func NewNetHTTPMarketsAPI(client *APIClient) *NetHTTPMarketsAPI {
+func (a *NetHTTPMarketsAPI) GetAvailableMarkets(ctx context.Context, opts RequestOptions) (result *GetAvailableMarketsResponse, err error) {
+func (a *NetHTTPMarketsAPI) GetAvailableMarketsWithResponse(ctx context.Context, opts RequestOptions) (result *GetAvailableMarketsResponse, resp *http.Response, err error) {
+# models.go
+type AlbumBaseAlbumType string
+const (
+type AlbumBaseReleaseDatePrecision string
+const (
+type AlbumBaseType string
+const AlbumBaseTypeAlbum AlbumBaseType = "album"
+type AlbumBase struct {
+type AlbumObject any
+type AlbumRestrictionObjectReason string
+const (
+type AlbumRestrictionObject struct {
+type ArtistObjectType string
+const ArtistObjectTypeArtist ArtistObjectType = "artist"
+type ArtistObject struct {
+type AudioAnalysisObjectMeta struct {
+type AudioAnalysisObjectTrack struct {
+type AudioAnalysisObject struct {
+type AudioFeaturesObjectType string
+const AudioFeaturesObjectTypeAudioFeatures AudioFeaturesObjectType = "audio_features"
+type AudioFeaturesObject struct {
+type AudiobookBaseType string
+const AudiobookBaseTypeAudiobook AudiobookBaseType = "audiobook"
+type AudiobookBase struct {
+type AudiobookObject any
+type AuthorObject struct {
+type CategoryObject struct {
+type ChapterBaseReleaseDatePrecision string
+const (
+type ChapterBaseType string
+const ChapterBaseTypeEpisode ChapterBaseType = "episode"
+type ChapterBase struct {
+type ChapterObject any
+type ChapterRestrictionObject struct {
+type ContextObject struct {
+type CopyrightObject struct {
+type CurrentlyPlayingContextObject struct {
+type CurrentlyPlayingObject struct {
+type CursorObject struct {
+type CursorPagingObject struct {
+type CursorPagingPlayHistoryObject any
+type CursorPagingSimplifiedArtistObject any
+type DeviceObject struct {
+type DevicesObject struct {
+type DisallowsObject struct {
+type EpisodeBaseReleaseDatePrecision string
+const (
+type EpisodeBaseType string
+const EpisodeBaseTypeEpisode EpisodeBaseType = "episode"
+type EpisodeBase struct {
+type EpisodeObject any
+type EpisodeRestrictionObject struct {
+type ErrorObject struct {
+type ExplicitContentSettingsObject struct {
+type ExternalIdObject struct {
+type ExternalUrlObject struct {
+type FollowersObject struct {
+type ImageObject struct {
+type Key int
+type LinkedTrackObject struct {
+type Loudness float32
+type Mode int
+type NarratorObject struct {
+type PagingArtistObject any
+type PagingFeaturedPlaylistObject struct {
+type PagingObject struct {
+type PagingPlaylistObject any
+type PagingPlaylistTrackObject any
+type PagingSavedAlbumObject any
+type PagingSavedEpisodeObject any
+type PagingSavedShowObject any
+type PagingSavedTrackObject any
+type PagingSimplifiedAlbumObject any
+type PagingSimplifiedArtistObject any
+type PagingSimplifiedAudiobookObject any
+type PagingSimplifiedChapterObject any
+type PagingSimplifiedEpisodeObject any
+type PagingSimplifiedShowObject any
+type PagingSimplifiedTrackObject any
+type PagingTrackObject any
+type PlayHistoryObject struct {
+type PlayerErrorObject struct {
+type PlayerErrorReasons string
+const (
+type PlaylistObject struct {
+type PlaylistOwnerObject any
+type PlaylistTrackObject struct {
+type PlaylistTracksRefObject struct {
+type PlaylistUserObjectType string
+const PlaylistUserObjectTypeUser PlaylistUserObjectType = "user"
+type PlaylistUserObject struct {
+type PrivateUserObject struct {
+type PublicUserObjectType string
+const PublicUserObjectTypeUser PublicUserObjectType = "user"
+type PublicUserObject struct {
+type QueueObject struct {
+type RecommendationSeedObject struct {
+type RecommendationsObject struct {
+type ResumePointObject struct {
+type SavedAlbumObject struct {
+type SavedEpisodeObject struct {
+type SavedShowObject struct {
+type SavedTrackObject struct {
+type SectionObjectMode int
+const (
+type SectionObject struct {
+type SegmentObject struct {
+type ShowBaseType string
+const ShowBaseTypeShow ShowBaseType = "show"
+type ShowBase struct {
+type ShowObject any
+type SimplifiedAlbumObject any
+type SimplifiedArtistObjectType string
+const SimplifiedArtistObjectTypeArtist SimplifiedArtistObjectType = "artist"
+type SimplifiedArtistObject struct {
+type SimplifiedAudiobookObject any
+type SimplifiedChapterObject any
+type SimplifiedEpisodeObject any
+type SimplifiedPlaylistObject struct {
+type SimplifiedShowObject any
+type SimplifiedTrackObject struct {
+type Tempo float32
+type TimeIntervalObject struct {
+type TimeSignature int
+type TrackObjectType string
+const TrackObjectTypeTrack TrackObjectType = "track"
+type TrackObject struct {
+type TrackRestrictionObject struct {
+type TuneableTrackObject struct {
+type GetMultipleAlbumsResponse struct {
+type GetMultipleArtistsResponse struct {
+type GetAnArtistsRelatedArtistsResponse struct {
+type GetAnArtistsTopTracksResponse struct {
+type GetSeveralAudioFeaturesResponse struct {
+type GetMultipleAudiobooksResponse struct {
+type GetCategoriesResponse struct {
+type GetNewReleasesResponse struct {
+type GetSeveralChaptersResponse struct {
+type GetMultipleEpisodesResponse struct {
+type GetAvailableMarketsResponse struct {
+type SaveAlbumsUserBody struct {
+type RemoveAlbumsUserBody struct {
+type SaveEpisodesUserBody struct {
+type RemoveEpisodesUserBody struct {
+type GetFollowedParamType string
+const GetFollowedParamTypeArtist GetFollowedParamType = "artist"
+type GetFollowedResponse struct {
+type FollowArtistsUsersParamType string
+const (
+type FollowArtistsUsersBody struct {
+type UnfollowArtistsUsersParamType string
+const (
+type UnfollowArtistsUsersBody struct {
+type CheckCurrentUserFollowsParamType string
+const (
+type GetInformationAboutTheUsersCurrentPlaybackResponse interface {
+type GetInformationAboutTheUsersCurrentPlaybackResponseStatus200 struct {
+func (GetInformationAboutTheUsersCurrentPlaybackResponseStatus200) isGetInformationAboutTheUsersCurrentPlaybackResponse() {
+type GetInformationAboutTheUsersCurrentPlaybackResponseStatus204 struct{}
+func (GetInformationAboutTheUsersCurrentPlaybackResponseStatus204) isGetInformationAboutTheUsersCurrentPlaybackResponse() {
+type TransferAUsersPlaybackBody struct {
+type GetAUsersAvailableDevicesResponse struct {
+type StartAUsersPlaybackBody struct {
+type GetUsersTopArtistsAndTracksParamType string
+const (
+type SaveTracksUserBody struct {
+type RemoveTracksUserBody struct {
+type ChangePlaylistDetailsBody struct {
+type FollowPlaylistBody struct {
+type AddTracksToPlaylistBody struct {
+type AddTracksToPlaylistResponse struct {
+type ReorderOrReplacePlaylistsTracksBody struct {
+type ReorderOrReplacePlaylistsTracksResponse struct {
+type RemoveTracksPlaylistBodyTracks struct {
+type RemoveTracksPlaylistBody struct {
+type RemoveTracksPlaylistResponse struct {
+type GetRecommendationGenresResponse struct {
+type SearchParamType string
+const (
+type SearchParamIncludeExternal string
+const SearchParamIncludeExternalAudio SearchParamIncludeExternal = "audio"
+type SearchResponse struct {
+type GetMultipleShowsResponse struct {
+type GetSeveralTracksResponse struct {
+type CreatePlaylistBody struct {
+# player.go
+type PlayerAPI interface {
+type NetHTTPPlayerAPI struct {
+func NewNetHTTPPlayerAPI(client *APIClient) *NetHTTPPlayerAPI {
+func (a *NetHTTPPlayerAPI) GetInformationAboutTheUsersCurrentPlayback(ctx context.Context, market *string, additionalTypes *string, opts RequestOptions) (result GetInformationAboutTheUsersCurrentPlaybackResponse, err error) {
+func (a *NetHTTPPlayerAPI) GetInformationAboutTheUsersCurrentPlaybackWithResponse(ctx context.Context, market *string, additionalTypes *string, opts RequestOptions) (result GetInformationAboutTheUsersCurrentPlaybackResponse, resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) TransferAUsersPlayback(ctx context.Context, body *TransferAUsersPlaybackBody, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) TransferAUsersPlaybackWithResponse(ctx context.Context, body *TransferAUsersPlaybackBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) GetTheUsersCurrentlyPlayingTrack(ctx context.Context, market *string, additionalTypes *string, opts RequestOptions) (result *CurrentlyPlayingContextObject, err error) {
+func (a *NetHTTPPlayerAPI) GetTheUsersCurrentlyPlayingTrackWithResponse(ctx context.Context, market *string, additionalTypes *string, opts RequestOptions) (result *CurrentlyPlayingContextObject, resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) GetAUsersAvailableDevices(ctx context.Context, opts RequestOptions) (result *GetAUsersAvailableDevicesResponse, err error) {
+func (a *NetHTTPPlayerAPI) GetAUsersAvailableDevicesWithResponse(ctx context.Context, opts RequestOptions) (result *GetAUsersAvailableDevicesResponse, resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) SkipUsersPlaybackToNextTrack(ctx context.Context, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) SkipUsersPlaybackToNextTrackWithResponse(ctx context.Context, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) PauseAUsersPlayback(ctx context.Context, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) PauseAUsersPlaybackWithResponse(ctx context.Context, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) StartAUsersPlayback(ctx context.Context, deviceId *string, body *StartAUsersPlaybackBody, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) StartAUsersPlaybackWithResponse(ctx context.Context, deviceId *string, body *StartAUsersPlaybackBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) SkipUsersPlaybackToPreviousTrack(ctx context.Context, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) SkipUsersPlaybackToPreviousTrackWithResponse(ctx context.Context, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) GetQueue(ctx context.Context, opts RequestOptions) (result *QueueObject, err error) {
+func (a *NetHTTPPlayerAPI) GetQueueWithResponse(ctx context.Context, opts RequestOptions) (result *QueueObject, resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) AddToQueue(ctx context.Context, uri string, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) AddToQueueWithResponse(ctx context.Context, uri string, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) GetRecentlyPlayed(ctx context.Context, limit *int, after *int, before *int, opts RequestOptions) (result *CursorPagingPlayHistoryObject, err error) {
+func (a *NetHTTPPlayerAPI) GetRecentlyPlayedWithResponse(ctx context.Context, limit *int, after *int, before *int, opts RequestOptions) (result *CursorPagingPlayHistoryObject, resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) SetRepeatModeOnUsersPlayback(ctx context.Context, state string, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) SetRepeatModeOnUsersPlaybackWithResponse(ctx context.Context, state string, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) SeekToPositionInCurrentlyPlayingTrack(ctx context.Context, positionMs int, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) SeekToPositionInCurrentlyPlayingTrackWithResponse(ctx context.Context, positionMs int, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) ToggleShuffleForUsersPlayback(ctx context.Context, state bool, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) ToggleShuffleForUsersPlaybackWithResponse(ctx context.Context, state bool, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlayerAPI) SetVolumeForUsersPlayback(ctx context.Context, volumePercent int, deviceId *string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlayerAPI) SetVolumeForUsersPlaybackWithResponse(ctx context.Context, volumePercent int, deviceId *string, opts RequestOptions) (resp *http.Response, err error) {
+# playlists.go
+type PlaylistsAPI interface {
+type NetHTTPPlaylistsAPI struct {
+func NewNetHTTPPlaylistsAPI(client *APIClient) *NetHTTPPlaylistsAPI {
+func (a *NetHTTPPlaylistsAPI) GetACategoriesPlaylists(ctx context.Context, categoryId string, country *string, limit *int, offset *int, opts RequestOptions) (result *PagingFeaturedPlaylistObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetACategoriesPlaylistsWithResponse(ctx context.Context, categoryId string, country *string, limit *int, offset *int, opts RequestOptions) (result *PagingFeaturedPlaylistObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) GetFeaturedPlaylists(ctx context.Context, country *string, locale *string, timestamp *string, limit *int, offset *int, opts RequestOptions) (result *PagingFeaturedPlaylistObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetFeaturedPlaylistsWithResponse(ctx context.Context, country *string, locale *string, timestamp *string, limit *int, offset *int, opts RequestOptions) (result *PagingFeaturedPlaylistObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) GetAListOfCurrentUsersPlaylists(ctx context.Context, limit *int, offset *int, opts RequestOptions) (result *PagingPlaylistObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetAListOfCurrentUsersPlaylistsWithResponse(ctx context.Context, limit *int, offset *int, opts RequestOptions) (result *PagingPlaylistObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) GetPlaylist(ctx context.Context, playlistId string, market *string, fields *string, additionalTypes *string, opts RequestOptions) (result *PlaylistObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetPlaylistWithResponse(ctx context.Context, playlistId string, market *string, fields *string, additionalTypes *string, opts RequestOptions) (result *PlaylistObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) ChangePlaylistDetails(ctx context.Context, playlistId string, body *ChangePlaylistDetailsBody, opts RequestOptions) (err error) {
+func (a *NetHTTPPlaylistsAPI) ChangePlaylistDetailsWithResponse(ctx context.Context, playlistId string, body *ChangePlaylistDetailsBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) GetPlaylistCover(ctx context.Context, playlistId string, opts RequestOptions) (result []ImageObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetPlaylistCoverWithResponse(ctx context.Context, playlistId string, opts RequestOptions) (result []ImageObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) UploadCustomPlaylistCover(ctx context.Context, playlistId string, opts RequestOptions) (err error) {
+func (a *NetHTTPPlaylistsAPI) UploadCustomPlaylistCoverWithResponse(ctx context.Context, playlistId string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) GetPlaylistsTracks(ctx context.Context, playlistId string, market *string, fields *string, limit *int, offset *int, additionalTypes *string, opts RequestOptions) (result *PagingPlaylistTrackObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetPlaylistsTracksWithResponse(ctx context.Context, playlistId string, market *string, fields *string, limit *int, offset *int, additionalTypes *string, opts RequestOptions) (result *PagingPlaylistTrackObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) AddTracksToPlaylist(ctx context.Context, playlistId string, position *int, uris *string, body *AddTracksToPlaylistBody, opts RequestOptions) (result *AddTracksToPlaylistResponse, err error) {
+func (a *NetHTTPPlaylistsAPI) AddTracksToPlaylistWithResponse(ctx context.Context, playlistId string, position *int, uris *string, body *AddTracksToPlaylistBody, opts RequestOptions) (result *AddTracksToPlaylistResponse, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) ReorderOrReplacePlaylistsTracks(ctx context.Context, playlistId string, uris *string, body *ReorderOrReplacePlaylistsTracksBody, opts RequestOptions) (result *ReorderOrReplacePlaylistsTracksResponse, err error) {
+func (a *NetHTTPPlaylistsAPI) ReorderOrReplacePlaylistsTracksWithResponse(ctx context.Context, playlistId string, uris *string, body *ReorderOrReplacePlaylistsTracksBody, opts RequestOptions) (result *ReorderOrReplacePlaylistsTracksResponse, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) RemoveTracksPlaylist(ctx context.Context, playlistId string, body *RemoveTracksPlaylistBody, opts RequestOptions) (result *RemoveTracksPlaylistResponse, err error) {
+func (a *NetHTTPPlaylistsAPI) RemoveTracksPlaylistWithResponse(ctx context.Context, playlistId string, body *RemoveTracksPlaylistBody, opts RequestOptions) (result *RemoveTracksPlaylistResponse, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) GetListUsersPlaylists(ctx context.Context, userId string, limit *int, offset *int, opts RequestOptions) (result *PagingPlaylistObject, err error) {
+func (a *NetHTTPPlaylistsAPI) GetListUsersPlaylistsWithResponse(ctx context.Context, userId string, limit *int, offset *int, opts RequestOptions) (result *PagingPlaylistObject, resp *http.Response, err error) {
+func (a *NetHTTPPlaylistsAPI) CreatePlaylist(ctx context.Context, userId string, body *CreatePlaylistBody, opts RequestOptions) (result *PlaylistObject, err error) {
+func (a *NetHTTPPlaylistsAPI) CreatePlaylistWithResponse(ctx context.Context, userId string, body *CreatePlaylistBody, opts RequestOptions) (result *PlaylistObject, resp *http.Response, err error) {
+# query_style.go
+type QueryStyle int
+const (
+# request_options.go
+type RequestOptions struct {
+func (opts RequestOptions) applyTimeout(ctx context.Context) (context.Context, context.CancelFunc) {
+# search.go
+type SearchAPI interface {
+type NetHTTPSearchAPI struct {
+func NewNetHTTPSearchAPI(client *APIClient) *NetHTTPSearchAPI {
+func (a *NetHTTPSearchAPI) Search(ctx context.Context, q_ string, type_ []SearchParamType, market *string, limit *int, offset *int, includeExternal *SearchParamIncludeExternal, opts RequestOptions) (result *SearchResponse, err error) {
+func (a *NetHTTPSearchAPI) SearchWithResponse(ctx context.Context, q_ string, type_ []SearchParamType, market *string, limit *int, offset *int, includeExternal *SearchParamIncludeExternal, opts RequestOptions) (result *SearchResponse, resp *http.Response, err error) {
+# shows.go
+type ShowsAPI interface {
+type NetHTTPShowsAPI struct {
+func NewNetHTTPShowsAPI(client *APIClient) *NetHTTPShowsAPI {
+func (a *NetHTTPShowsAPI) GetUsersSavedShows(ctx context.Context, limit *int, offset *int, opts RequestOptions) (result *PagingSavedShowObject, err error) {
+func (a *NetHTTPShowsAPI) GetUsersSavedShowsWithResponse(ctx context.Context, limit *int, offset *int, opts RequestOptions) (result *PagingSavedShowObject, resp *http.Response, err error) {
+func (a *NetHTTPShowsAPI) SaveShowsUser(ctx context.Context, ids string, opts RequestOptions) (err error) {
+func (a *NetHTTPShowsAPI) SaveShowsUserWithResponse(ctx context.Context, ids string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPShowsAPI) RemoveShowsUser(ctx context.Context, ids string, market *string, opts RequestOptions) (err error) {
+func (a *NetHTTPShowsAPI) RemoveShowsUserWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPShowsAPI) CheckUsersSavedShows(ctx context.Context, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPShowsAPI) CheckUsersSavedShowsWithResponse(ctx context.Context, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+func (a *NetHTTPShowsAPI) GetMultipleShows(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleShowsResponse, err error) {
+func (a *NetHTTPShowsAPI) GetMultipleShowsWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetMultipleShowsResponse, resp *http.Response, err error) {
+func (a *NetHTTPShowsAPI) GetAShow(ctx context.Context, id string, market *string, opts RequestOptions) (result *ShowObject, err error) {
+func (a *NetHTTPShowsAPI) GetAShowWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *ShowObject, resp *http.Response, err error) {
+func (a *NetHTTPShowsAPI) GetAShowsEpisodes(ctx context.Context, id string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedEpisodeObject, err error) {
+func (a *NetHTTPShowsAPI) GetAShowsEpisodesWithResponse(ctx context.Context, id string, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSimplifiedEpisodeObject, resp *http.Response, err error) {
+# tracks.go
+type TracksAPI interface {
+type NetHTTPTracksAPI struct {
+func NewNetHTTPTracksAPI(client *APIClient) *NetHTTPTracksAPI {
+func (a *NetHTTPTracksAPI) GetAudioAnalysis(ctx context.Context, id string, opts RequestOptions) (result *AudioAnalysisObject, err error) {
+func (a *NetHTTPTracksAPI) GetAudioAnalysisWithResponse(ctx context.Context, id string, opts RequestOptions) (result *AudioAnalysisObject, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) GetSeveralAudioFeatures(ctx context.Context, ids string, opts RequestOptions) (result *GetSeveralAudioFeaturesResponse, err error) {
+func (a *NetHTTPTracksAPI) GetSeveralAudioFeaturesWithResponse(ctx context.Context, ids string, opts RequestOptions) (result *GetSeveralAudioFeaturesResponse, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) GetAudioFeatures(ctx context.Context, id string, opts RequestOptions) (result *AudioFeaturesObject, err error) {
+func (a *NetHTTPTracksAPI) GetAudioFeaturesWithResponse(ctx context.Context, id string, opts RequestOptions) (result *AudioFeaturesObject, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) GetUsersSavedTracks(ctx context.Context, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSavedTrackObject, err error) {
+func (a *NetHTTPTracksAPI) GetUsersSavedTracksWithResponse(ctx context.Context, market *string, limit *int, offset *int, opts RequestOptions) (result *PagingSavedTrackObject, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) SaveTracksUser(ctx context.Context, ids string, body *SaveTracksUserBody, opts RequestOptions) (err error) {
+func (a *NetHTTPTracksAPI) SaveTracksUserWithResponse(ctx context.Context, ids string, body *SaveTracksUserBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) RemoveTracksUser(ctx context.Context, ids string, body *RemoveTracksUserBody, opts RequestOptions) (err error) {
+func (a *NetHTTPTracksAPI) RemoveTracksUserWithResponse(ctx context.Context, ids string, body *RemoveTracksUserBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) CheckUsersSavedTracks(ctx context.Context, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPTracksAPI) CheckUsersSavedTracksWithResponse(ctx context.Context, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) GetRecommendations(ctx context.Context, seedArtists string, seedGenres string, seedTracks string, limit *int, market *string, minAcousticness *float64, maxAcousticness *float64, targetAcousticness *float64, minDanceability *float64, maxDanceability *float64, targetDanceability *float64, minDurationMs *int, maxDurationMs *int, targetDurationMs *int, minEnergy *float64, maxEnergy *float64, targetEnergy *float64, minInstrumentalness *float64, maxInstrumentalness *float64, targetInstrumentalness *float64, minKey *int, maxKey *int, targetKey *int, minLiveness *float64, maxLiveness *float64, targetLiveness *float64, minLoudness *float64, maxLoudness *float64, targetLoudness *float64, minMode *int, maxMode *int, targetMode *int, minPopularity *int, maxPopularity *int, targetPopularity *int, minSpeechiness *float64, maxSpeechiness *float64, targetSpeechiness *float64, minTempo *float64, maxTempo *float64, targetTempo *float64, minTimeSignature *int, maxTimeSignature *int, targetTimeSignature *int, minValence *float64, maxValence *float64, targetValence *float64, opts RequestOptions) (result *RecommendationsObject, err error) {
+func (a *NetHTTPTracksAPI) GetRecommendationsWithResponse(ctx context.Context, seedArtists string, seedGenres string, seedTracks string, limit *int, market *string, minAcousticness *float64, maxAcousticness *float64, targetAcousticness *float64, minDanceability *float64, maxDanceability *float64, targetDanceability *float64, minDurationMs *int, maxDurationMs *int, targetDurationMs *int, minEnergy *float64, maxEnergy *float64, targetEnergy *float64, minInstrumentalness *float64, maxInstrumentalness *float64, targetInstrumentalness *float64, minKey *int, maxKey *int, targetKey *int, minLiveness *float64, maxLiveness *float64, targetLiveness *float64, minLoudness *float64, maxLoudness *float64, targetLoudness *float64, minMode *int, maxMode *int, targetMode *int, minPopularity *int, maxPopularity *int, targetPopularity *int, minSpeechiness *float64, maxSpeechiness *float64, targetSpeechiness *float64, minTempo *float64, maxTempo *float64, targetTempo *float64, minTimeSignature *int, maxTimeSignature *int, targetTimeSignature *int, minValence *float64, maxValence *float64, targetValence *float64, opts RequestOptions) (result *RecommendationsObject, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) GetSeveralTracks(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetSeveralTracksResponse, err error) {
+func (a *NetHTTPTracksAPI) GetSeveralTracksWithResponse(ctx context.Context, ids string, market *string, opts RequestOptions) (result *GetSeveralTracksResponse, resp *http.Response, err error) {
+func (a *NetHTTPTracksAPI) GetTrack(ctx context.Context, id string, market *string, opts RequestOptions) (result *TrackObject, err error) {
+func (a *NetHTTPTracksAPI) GetTrackWithResponse(ctx context.Context, id string, market *string, opts RequestOptions) (result *TrackObject, resp *http.Response, err error) {
+# url_encoding.go
+var URLEncoding = urlEncoding{}
+type urlEncoding struct{}
+func (urlEncoding) AddScalar(q url.Values, name string, value any) {
+func (urlEncoding) AddArray(q url.Values, name string, values any, style QueryStyle, explode bool) {
+# users.go
+type UsersAPI interface {
+type NetHTTPUsersAPI struct {
+func NewNetHTTPUsersAPI(client *APIClient) *NetHTTPUsersAPI {
+func (a *NetHTTPUsersAPI) GetCurrentUsersProfile(ctx context.Context, opts RequestOptions) (result *PrivateUserObject, err error) {
+func (a *NetHTTPUsersAPI) GetCurrentUsersProfileWithResponse(ctx context.Context, opts RequestOptions) (result *PrivateUserObject, resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) GetFollowed(ctx context.Context, type_ GetFollowedParamType, after *string, limit *int, opts RequestOptions) (result *GetFollowedResponse, err error) {
+func (a *NetHTTPUsersAPI) GetFollowedWithResponse(ctx context.Context, type_ GetFollowedParamType, after *string, limit *int, opts RequestOptions) (result *GetFollowedResponse, resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) FollowArtistsUsers(ctx context.Context, type_ FollowArtistsUsersParamType, ids string, body *FollowArtistsUsersBody, opts RequestOptions) (err error) {
+func (a *NetHTTPUsersAPI) FollowArtistsUsersWithResponse(ctx context.Context, type_ FollowArtistsUsersParamType, ids string, body *FollowArtistsUsersBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) UnfollowArtistsUsers(ctx context.Context, type_ UnfollowArtistsUsersParamType, ids string, body *UnfollowArtistsUsersBody, opts RequestOptions) (err error) {
+func (a *NetHTTPUsersAPI) UnfollowArtistsUsersWithResponse(ctx context.Context, type_ UnfollowArtistsUsersParamType, ids string, body *UnfollowArtistsUsersBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) CheckCurrentUserFollows(ctx context.Context, type_ CheckCurrentUserFollowsParamType, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPUsersAPI) CheckCurrentUserFollowsWithResponse(ctx context.Context, type_ CheckCurrentUserFollowsParamType, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) GetUsersTopArtistsAndTracks(ctx context.Context, type_ GetUsersTopArtistsAndTracksParamType, timeRange *string, limit *int, offset *int, opts RequestOptions) (result any, err error) {
+func (a *NetHTTPUsersAPI) GetUsersTopArtistsAndTracksWithResponse(ctx context.Context, type_ GetUsersTopArtistsAndTracksParamType, timeRange *string, limit *int, offset *int, opts RequestOptions) (result any, resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) FollowPlaylist(ctx context.Context, playlistId string, body *FollowPlaylistBody, opts RequestOptions) (err error) {
+func (a *NetHTTPUsersAPI) FollowPlaylistWithResponse(ctx context.Context, playlistId string, body *FollowPlaylistBody, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) UnfollowPlaylist(ctx context.Context, playlistId string, opts RequestOptions) (err error) {
+func (a *NetHTTPUsersAPI) UnfollowPlaylistWithResponse(ctx context.Context, playlistId string, opts RequestOptions) (resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) CheckIfUserFollowsPlaylist(ctx context.Context, playlistId string, ids string, opts RequestOptions) (result []bool, err error) {
+func (a *NetHTTPUsersAPI) CheckIfUserFollowsPlaylistWithResponse(ctx context.Context, playlistId string, ids string, opts RequestOptions) (result []bool, resp *http.Response, err error) {
+func (a *NetHTTPUsersAPI) GetUsersProfile(ctx context.Context, userId string, opts RequestOptions) (result *PublicUserObject, err error) {
+func (a *NetHTTPUsersAPI) GetUsersProfileWithResponse(ctx context.Context, userId string, opts RequestOptions) (result *PublicUserObject, resp *http.Response, err error) {

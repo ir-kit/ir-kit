@@ -1,0 +1,504 @@
+# API/APIClient.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class APIClient {
+# API/APIError.swift
+public enum APIError: Error {
+# API/APIInterceptors.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class APIInterceptors {
+# API/APIKeyLocation.swift
+public enum APIKeyLocation {
+# API/AlbumsAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension AlbumsAPI {
+# API/AlbumsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol AlbumsAPI {
+# API/ArtistsAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension ArtistsAPI {
+# API/ArtistsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol ArtistsAPI {
+# API/AudiobooksAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension AudiobooksAPI {
+# API/AudiobooksAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol AudiobooksAPI {
+# API/Auth.swift
+#if canImport(FoundationNetworking)
+#endif
+public enum Auth {
+# API/CategoriesAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension CategoriesAPI {
+# API/CategoriesAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol CategoriesAPI {
+# API/ChaptersAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension ChaptersAPI {
+# API/ChaptersAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol ChaptersAPI {
+# API/EpisodesAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension EpisodesAPI {
+# API/EpisodesAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol EpisodesAPI {
+# API/GenresAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension GenresAPI {
+# API/GenresAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol GenresAPI {
+# API/MarketsAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension MarketsAPI {
+# API/MarketsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol MarketsAPI {
+# API/PlayerAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension PlayerAPI {
+# API/PlayerAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol PlayerAPI {
+# API/PlaylistsAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension PlaylistsAPI {
+# API/PlaylistsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol PlaylistsAPI {
+# API/QueryStyle.swift
+public enum QueryStyle {
+# API/RequestOptions.swift
+#if canImport(FoundationNetworking)
+#endif
+public struct RequestOptions {
+# API/SearchAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension SearchAPI {
+# API/SearchAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol SearchAPI {
+# API/ShowsAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension ShowsAPI {
+# API/ShowsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol ShowsAPI {
+# API/TracksAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension TracksAPI {
+# API/TracksAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol TracksAPI {
+# API/URLEncoding.swift
+public final class URLEncoding {
+# API/URLSessionAlbumsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionAlbumsAPI: AlbumsAPI {
+# API/URLSessionArtistsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionArtistsAPI: ArtistsAPI {
+# API/URLSessionAudiobooksAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionAudiobooksAPI: AudiobooksAPI {
+# API/URLSessionCategoriesAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionCategoriesAPI: CategoriesAPI {
+# API/URLSessionChaptersAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionChaptersAPI: ChaptersAPI {
+# API/URLSessionEpisodesAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionEpisodesAPI: EpisodesAPI {
+# API/URLSessionGenresAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionGenresAPI: GenresAPI {
+# API/URLSessionMarketsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionMarketsAPI: MarketsAPI {
+# API/URLSessionPlayerAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionPlayerAPI: PlayerAPI {
+# API/URLSessionPlaylistsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionPlaylistsAPI: PlaylistsAPI {
+# API/URLSessionSearchAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionSearchAPI: SearchAPI {
+# API/URLSessionShowsAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionShowsAPI: ShowsAPI {
+# API/URLSessionTracksAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionTracksAPI: TracksAPI {
+# API/URLSessionUsersAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public final class URLSessionUsersAPI: UsersAPI {
+# API/UsersAPI+Defaults.swift
+#if canImport(FoundationNetworking)
+#endif
+extension UsersAPI {
+# API/UsersAPI.swift
+#if canImport(FoundationNetworking)
+#endif
+public protocol UsersAPI {
+# Models/AddTracksToPlaylistBody.swift
+public struct AddTracksToPlaylistBody: Codable {
+# Models/AddTracksToPlaylistResponse.swift
+public struct AddTracksToPlaylistResponse: Codable {
+# Models/AlbumBase.swift
+public struct AlbumBase: Codable {
+# Models/AlbumBaseAlbumType.swift
+public enum AlbumBaseAlbumType: String, Codable {
+# Models/AlbumBaseReleaseDatePrecision.swift
+public enum AlbumBaseReleaseDatePrecision: String, Codable {
+# Models/AlbumBaseType.swift
+public enum AlbumBaseType: String, Codable {
+# Models/AlbumObject.swift
+public typealias AlbumObject = JSONValue
+# Models/AlbumRestrictionObject.swift
+public struct AlbumRestrictionObject: Codable {
+# Models/AlbumRestrictionObjectReason.swift
+public enum AlbumRestrictionObjectReason: String, Codable {
+# Models/ArtistObject.swift
+public struct ArtistObject: Codable {
+# Models/ArtistObjectType.swift
+public enum ArtistObjectType: String, Codable {
+# Models/AudioAnalysisObject.swift
+public struct AudioAnalysisObject: Codable {
+# Models/AudioAnalysisObjectMeta.swift
+public struct AudioAnalysisObjectMeta: Codable {
+# Models/AudioAnalysisObjectTrack.swift
+public struct AudioAnalysisObjectTrack: Codable {
+# Models/AudioFeaturesObject.swift
+public struct AudioFeaturesObject: Codable {
+# Models/AudioFeaturesObjectType.swift
+public enum AudioFeaturesObjectType: String, Codable {
+# Models/AudiobookBase.swift
+public struct AudiobookBase: Codable {
+# Models/AudiobookBaseType.swift
+public enum AudiobookBaseType: String, Codable {
+# Models/AudiobookObject.swift
+public typealias AudiobookObject = JSONValue
+# Models/AuthorObject.swift
+public struct AuthorObject: Codable {
+# Models/CategoryObject.swift
+public struct CategoryObject: Codable {
+# Models/ChangePlaylistDetailsBody.swift
+public struct ChangePlaylistDetailsBody: Codable {
+# Models/ChapterBase.swift
+public struct ChapterBase: Codable {
+# Models/ChapterBaseReleaseDatePrecision.swift
+public enum ChapterBaseReleaseDatePrecision: String, Codable {
+# Models/ChapterBaseType.swift
+public enum ChapterBaseType: String, Codable {
+# Models/ChapterObject.swift
+public typealias ChapterObject = JSONValue
+# Models/ChapterRestrictionObject.swift
+public struct ChapterRestrictionObject: Codable {
+# Models/CheckCurrentUserFollowsParamType.swift
+public enum CheckCurrentUserFollowsParamType: String, Codable {
+# Models/ContextObject.swift
+public struct ContextObject: Codable {
+# Models/CopyrightObject.swift
+public struct CopyrightObject: Codable {
+# Models/CreatePlaylistBody.swift
+public struct CreatePlaylistBody: Codable {
+# Models/CurrentlyPlayingContextObject.swift
+public struct CurrentlyPlayingContextObject: Codable {
+# Models/CurrentlyPlayingObject.swift
+public struct CurrentlyPlayingObject: Codable {
+# Models/CursorObject.swift
+public struct CursorObject: Codable {
+# Models/CursorPagingObject.swift
+public struct CursorPagingObject: Codable {
+# Models/CursorPagingPlayHistoryObject.swift
+public typealias CursorPagingPlayHistoryObject = JSONValue
+# Models/CursorPagingSimplifiedArtistObject.swift
+public typealias CursorPagingSimplifiedArtistObject = JSONValue
+# Models/DeviceObject.swift
+public struct DeviceObject: Codable {
+# Models/DevicesObject.swift
+public struct DevicesObject: Codable {
+# Models/DisallowsObject.swift
+public struct DisallowsObject: Codable {
+# Models/EpisodeBase.swift
+public struct EpisodeBase: Codable {
+# Models/EpisodeBaseReleaseDatePrecision.swift
+public enum EpisodeBaseReleaseDatePrecision: String, Codable {
+# Models/EpisodeBaseType.swift
+public enum EpisodeBaseType: String, Codable {
+# Models/EpisodeObject.swift
+public typealias EpisodeObject = JSONValue
+# Models/EpisodeRestrictionObject.swift
+public struct EpisodeRestrictionObject: Codable {
+# Models/ErrorObject.swift
+public struct ErrorObject: Codable {
+# Models/ExplicitContentSettingsObject.swift
+public struct ExplicitContentSettingsObject: Codable {
+# Models/ExternalIdObject.swift
+public struct ExternalIdObject: Codable {
+# Models/ExternalUrlObject.swift
+public struct ExternalUrlObject: Codable {
+# Models/FollowArtistsUsersBody.swift
+public struct FollowArtistsUsersBody: Codable {
+# Models/FollowArtistsUsersParamType.swift
+public enum FollowArtistsUsersParamType: String, Codable {
+# Models/FollowPlaylistBody.swift
+public struct FollowPlaylistBody: Codable {
+# Models/FollowersObject.swift
+public struct FollowersObject: Codable {
+# Models/GetAUsersAvailableDevicesResponse.swift
+public struct GetAUsersAvailableDevicesResponse: Codable {
+# Models/GetAnArtistsRelatedArtistsResponse.swift
+public struct GetAnArtistsRelatedArtistsResponse: Codable {
+# Models/GetAnArtistsTopTracksResponse.swift
+public struct GetAnArtistsTopTracksResponse: Codable {
+# Models/GetAvailableMarketsResponse.swift
+public struct GetAvailableMarketsResponse: Codable {
+# Models/GetCategoriesResponse.swift
+public struct GetCategoriesResponse: Codable {
+# Models/GetFollowedParamType.swift
+public enum GetFollowedParamType: String, Codable {
+# Models/GetFollowedResponse.swift
+public struct GetFollowedResponse: Codable {
+# Models/GetInformationAboutTheUsersCurrentPlaybackResponse.swift
+public enum GetInformationAboutTheUsersCurrentPlaybackResponse {
+# Models/GetMultipleAlbumsResponse.swift
+public struct GetMultipleAlbumsResponse: Codable {
+# Models/GetMultipleArtistsResponse.swift
+public struct GetMultipleArtistsResponse: Codable {
+# Models/GetMultipleAudiobooksResponse.swift
+public struct GetMultipleAudiobooksResponse: Codable {
+# Models/GetMultipleEpisodesResponse.swift
+public struct GetMultipleEpisodesResponse: Codable {
+# Models/GetMultipleShowsResponse.swift
+public struct GetMultipleShowsResponse: Codable {
+# Models/GetNewReleasesResponse.swift
+public struct GetNewReleasesResponse: Codable {
+# Models/GetRecommendationGenresResponse.swift
+public struct GetRecommendationGenresResponse: Codable {
+# Models/GetSeveralAudioFeaturesResponse.swift
+public struct GetSeveralAudioFeaturesResponse: Codable {
+# Models/GetSeveralChaptersResponse.swift
+public struct GetSeveralChaptersResponse: Codable {
+# Models/GetSeveralTracksResponse.swift
+public struct GetSeveralTracksResponse: Codable {
+# Models/GetUsersTopArtistsAndTracksParamType.swift
+public enum GetUsersTopArtistsAndTracksParamType: String, Codable {
+# Models/ImageObject.swift
+public struct ImageObject: Codable {
+# Models/JSONValue.swift
+public enum JSONValue: Codable, Equatable {
+# Models/Key.swift
+public typealias Key = Int
+# Models/LinkedTrackObject.swift
+public struct LinkedTrackObject: Codable {
+# Models/Loudness.swift
+public typealias Loudness = Float
+# Models/Mode.swift
+public typealias Mode = Int
+# Models/NarratorObject.swift
+public struct NarratorObject: Codable {
+# Models/PagingArtistObject.swift
+public typealias PagingArtistObject = JSONValue
+# Models/PagingFeaturedPlaylistObject.swift
+public struct PagingFeaturedPlaylistObject: Codable {
+# Models/PagingObject.swift
+public struct PagingObject: Codable {
+# Models/PagingPlaylistObject.swift
+public typealias PagingPlaylistObject = JSONValue
+# Models/PagingPlaylistTrackObject.swift
+public typealias PagingPlaylistTrackObject = JSONValue
+# Models/PagingSavedAlbumObject.swift
+public typealias PagingSavedAlbumObject = JSONValue
+# Models/PagingSavedEpisodeObject.swift
+public typealias PagingSavedEpisodeObject = JSONValue
+# Models/PagingSavedShowObject.swift
+public typealias PagingSavedShowObject = JSONValue
+# Models/PagingSavedTrackObject.swift
+public typealias PagingSavedTrackObject = JSONValue
+# Models/PagingSimplifiedAlbumObject.swift
+public typealias PagingSimplifiedAlbumObject = JSONValue
+# Models/PagingSimplifiedArtistObject.swift
+public typealias PagingSimplifiedArtistObject = JSONValue
+# Models/PagingSimplifiedAudiobookObject.swift
+public typealias PagingSimplifiedAudiobookObject = JSONValue
+# Models/PagingSimplifiedChapterObject.swift
+public typealias PagingSimplifiedChapterObject = JSONValue
+# Models/PagingSimplifiedEpisodeObject.swift
+public typealias PagingSimplifiedEpisodeObject = JSONValue
+# Models/PagingSimplifiedShowObject.swift
+public typealias PagingSimplifiedShowObject = JSONValue
+# Models/PagingSimplifiedTrackObject.swift
+public typealias PagingSimplifiedTrackObject = JSONValue
+# Models/PagingTrackObject.swift
+public typealias PagingTrackObject = JSONValue
+# Models/PlayHistoryObject.swift
+public struct PlayHistoryObject: Codable {
+# Models/PlayerErrorObject.swift
+public struct PlayerErrorObject: Codable {
+# Models/PlayerErrorReasons.swift
+public enum PlayerErrorReasons: String, Codable {
+# Models/PlaylistObject.swift
+public struct PlaylistObject: Codable {
+# Models/PlaylistOwnerObject.swift
+public typealias PlaylistOwnerObject = JSONValue
+# Models/PlaylistTrackObject.swift
+public struct PlaylistTrackObject: Codable {
+# Models/PlaylistTracksRefObject.swift
+public struct PlaylistTracksRefObject: Codable {
+# Models/PlaylistUserObject.swift
+public struct PlaylistUserObject: Codable {
+# Models/PlaylistUserObjectType.swift
+public enum PlaylistUserObjectType: String, Codable {
+# Models/PrivateUserObject.swift
+public struct PrivateUserObject: Codable {
+# Models/PublicUserObject.swift
+public struct PublicUserObject: Codable {
+# Models/PublicUserObjectType.swift
+public enum PublicUserObjectType: String, Codable {
+# Models/QueueObject.swift
+public struct QueueObject: Codable {
+# Models/RecommendationSeedObject.swift
+public struct RecommendationSeedObject: Codable {
+# Models/RecommendationsObject.swift
+public struct RecommendationsObject: Codable {
+# Models/RemoveAlbumsUserBody.swift
+public struct RemoveAlbumsUserBody: Codable {
+# Models/RemoveEpisodesUserBody.swift
+public struct RemoveEpisodesUserBody: Codable {
+# Models/RemoveTracksPlaylistBody.swift
+public struct RemoveTracksPlaylistBody: Codable {
+# Models/RemoveTracksPlaylistBodyTracks.swift
+public struct RemoveTracksPlaylistBodyTracks: Codable {
+# Models/RemoveTracksPlaylistResponse.swift
+public struct RemoveTracksPlaylistResponse: Codable {
+# Models/RemoveTracksUserBody.swift
+public struct RemoveTracksUserBody: Codable {
+# Models/ReorderOrReplacePlaylistsTracksBody.swift
+public struct ReorderOrReplacePlaylistsTracksBody: Codable {
+# Models/ReorderOrReplacePlaylistsTracksResponse.swift
+public struct ReorderOrReplacePlaylistsTracksResponse: Codable {
+# Models/ResumePointObject.swift
+public struct ResumePointObject: Codable {
+# Models/SaveAlbumsUserBody.swift
+public struct SaveAlbumsUserBody: Codable {
+# Models/SaveEpisodesUserBody.swift
+public struct SaveEpisodesUserBody: Codable {
+# Models/SaveTracksUserBody.swift
+public struct SaveTracksUserBody: Codable {
+# Models/SavedAlbumObject.swift
+public struct SavedAlbumObject: Codable {
+# Models/SavedEpisodeObject.swift
+public struct SavedEpisodeObject: Codable {
+# Models/SavedShowObject.swift
+public struct SavedShowObject: Codable {
+# Models/SavedTrackObject.swift
+public struct SavedTrackObject: Codable {
+# Models/SearchParamIncludeExternal.swift
+public enum SearchParamIncludeExternal: String, Codable {
+# Models/SearchParamType.swift
+public enum SearchParamType: String, Codable {
+# Models/SearchResponse.swift
+public struct SearchResponse: Codable {
+# Models/SectionObject.swift
+public struct SectionObject: Codable {
+# Models/SectionObjectMode.swift
+public enum SectionObjectMode: Int, Codable {
+# Models/SegmentObject.swift
+public struct SegmentObject: Codable {
+# Models/ShowBase.swift
+public struct ShowBase: Codable {
+# Models/ShowBaseType.swift
+public enum ShowBaseType: String, Codable {
+# Models/ShowObject.swift
+public typealias ShowObject = JSONValue
+# Models/SimplifiedAlbumObject.swift
+public typealias SimplifiedAlbumObject = JSONValue
+# Models/SimplifiedArtistObject.swift
+public struct SimplifiedArtistObject: Codable {
+# Models/SimplifiedArtistObjectType.swift
+public enum SimplifiedArtistObjectType: String, Codable {
+# Models/SimplifiedAudiobookObject.swift
+public typealias SimplifiedAudiobookObject = JSONValue
+# Models/SimplifiedChapterObject.swift
+public typealias SimplifiedChapterObject = JSONValue
+# Models/SimplifiedEpisodeObject.swift
+public typealias SimplifiedEpisodeObject = JSONValue
+# Models/SimplifiedPlaylistObject.swift
+public struct SimplifiedPlaylistObject: Codable {
+# Models/SimplifiedShowObject.swift
+public typealias SimplifiedShowObject = JSONValue
+# Models/SimplifiedTrackObject.swift
+public struct SimplifiedTrackObject: Codable {
+# Models/StartAUsersPlaybackBody.swift
+public struct StartAUsersPlaybackBody: Codable {
+# Models/Tempo.swift
+public typealias Tempo = Float
+# Models/TimeIntervalObject.swift
+public struct TimeIntervalObject: Codable {
+# Models/TimeSignature.swift
+public typealias TimeSignature = Int
+# Models/TrackObject.swift
+public struct TrackObject: Codable {
+# Models/TrackObjectType.swift
+public enum TrackObjectType: String, Codable {
+# Models/TrackRestrictionObject.swift
+public struct TrackRestrictionObject: Codable {
+# Models/TransferAUsersPlaybackBody.swift
+public struct TransferAUsersPlaybackBody: Codable {
+# Models/TuneableTrackObject.swift
+public struct TuneableTrackObject: Codable {
+# Models/UnfollowArtistsUsersBody.swift
+public struct UnfollowArtistsUsersBody: Codable {
+# Models/UnfollowArtistsUsersParamType.swift
+public enum UnfollowArtistsUsersParamType: String, Codable {

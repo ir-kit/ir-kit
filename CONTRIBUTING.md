@@ -91,3 +91,7 @@ pnpm release             # build + publish via changeset publish
 ```
 
 In CI, pushing a `.changeset/*.md` to `main` opens a "Version Packages" PR; merging that PR publishes to npm.
+
+## Golden tests
+
+`packages/ir-kit/tests/golden` generates every target from real specs (Spotify and the AsyncAPI spec repo's examples) and compares the files written plus each top-level declaration with `tests/golden/__snapshots__`. When a generator change is intended, update them with `pnpm --filter ir-kit exec vitest run tests/golden -u` and review the diff: a renamed type, a new `Foo2` or a missing file shows up there.

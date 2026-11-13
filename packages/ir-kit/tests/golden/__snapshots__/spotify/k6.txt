@@ -1,0 +1,390 @@
+# client.ts
+installK6Bridge({
+setExecModule(exec);
+installMetricsFactory((kind: 'counter' | 'gauge' | 'rate' | 'trend', name: string) => new {
+const DEFAULT_BASE_URL: string = 'https://api.spotify.com/v1';
+export type CallOpts = {
+type RequestSpec = {
+function buildSpec(method: string, url: string, opId: string, body: string | null, opts?: CallOpts): RequestSpec {
+function call<T>(method: string, url: string, opId: string, body: string | null, opts?: CallOpts): T {
+async function callAsync<T>(method: string, url: string, opId: string, body: string | null, opts?: CallOpts): Promise<T> {
+export function getMultipleAlbums(query: {
+export function getAnAlbum(id: string, query?: {
+export function getAnAlbumsTracks(id: string, query?: {
+export function getMultipleArtists(query: {
+export function getAnArtist(id: string, opts?: CallOpts): T.ArtistObject {
+export function getAnArtistsAlbums(id: string, query?: {
+export function getAnArtistsRelatedArtists(id: string, opts?: CallOpts): {
+export function getAnArtistsTopTracks(id: string, query?: {
+export function getAudioAnalysis(id: string, opts?: CallOpts): T.AudioAnalysisObject {
+export function getSeveralAudioFeatures(query: {
+export function getAudioFeatures(id: string, opts?: CallOpts): T.AudioFeaturesObject {
+export function getMultipleAudiobooks(query: {
+export function getAnAudiobook(id: string, query?: {
+export function getAudiobookChapters(id: string, query?: {
+export function getCategories(query?: {
+export function getACategory(category_id: string, query?: {
+export function getACategoriesPlaylists(category_id: string, query?: {
+export function getFeaturedPlaylists(query?: {
+export function getNewReleases(query?: {
+export function getSeveralChapters(query: {
+export function getAChapter(id: string, query?: {
+export function getMultipleEpisodes(query: {
+export function getAnEpisode(id: string, query?: {
+export function getAvailableMarkets(opts?: CallOpts): {
+export function getCurrentUsersProfile(opts?: CallOpts): T.PrivateUserObject {
+export function getUsersSavedAlbums(query?: {
+export function saveAlbumsUser(query: {
+export function removeAlbumsUser(query: {
+export function checkUsersSavedAlbums(query: {
+export function getUsersSavedAudiobooks(query?: {
+export function saveAudiobooksUser(query: {
+export function removeAudiobooksUser(query: {
+export function checkUsersSavedAudiobooks(query: {
+export function getUsersSavedEpisodes(query?: {
+export function saveEpisodesUser(query: {
+export function removeEpisodesUser(query: {
+export function checkUsersSavedEpisodes(query: {
+export function getFollowed(query: {
+export function followArtistsUsers(query: {
+export function unfollowArtistsUsers(query: {
+export function checkCurrentUserFollows(query: {
+export function getInformationAboutTheUsersCurrentPlayback(query?: {
+export function transferAUsersPlayback(body?: {
+export function getTheUsersCurrentlyPlayingTrack(query?: {
+export function getAUsersAvailableDevices(opts?: CallOpts): {
+export function skipUsersPlaybackToNextTrack(query?: {
+export function pauseAUsersPlayback(query?: {
+export function startAUsersPlayback(query?: {
+export function skipUsersPlaybackToPreviousTrack(query?: {
+export function getQueue(opts?: CallOpts): T.QueueObject {
+export function addToQueue(query: {
+export function getRecentlyPlayed(query?: {
+export function setRepeatModeOnUsersPlayback(query: {
+export function seekToPositionInCurrentlyPlayingTrack(query: {
+export function toggleShuffleForUsersPlayback(query: {
+export function setVolumeForUsersPlayback(query: {
+export function getAListOfCurrentUsersPlaylists(query?: {
+export function getUsersSavedShows(query?: {
+export function saveShowsUser(query: {
+export function removeShowsUser(query: {
+export function checkUsersSavedShows(query: {
+export function getUsersTopArtistsAndTracks(type: T.TypeEnum, query?: {
+export function getUsersSavedTracks(query?: {
+export function saveTracksUser(query: {
+export function removeTracksUser(query: {
+export function checkUsersSavedTracks(query: {
+export function getPlaylist(playlist_id: string, query?: {
+export function changePlaylistDetails(playlist_id: string, body?: {
+export function followPlaylist(playlist_id: string, body?: {
+export function unfollowPlaylist(playlist_id: string, opts?: CallOpts): unknown {
+export function checkIfUserFollowsPlaylist(playlist_id: string, query: {
+export function getPlaylistCover(playlist_id: string, opts?: CallOpts): Array<T.ImageObject> {
+export function uploadCustomPlaylistCover(playlist_id: string, opts?: CallOpts): unknown {
+export function getPlaylistsTracks(playlist_id: string, query?: {
+export function addTracksToPlaylist(playlist_id: string, query?: {
+export function reorderOrReplacePlaylistsTracks(playlist_id: string, query?: {
+export function removeTracksPlaylist(playlist_id: string, body?: {
+export function getRecommendations(query: {
+export function getRecommendationGenres(opts?: CallOpts): {
+export function search(query: {
+export function getMultipleShows(query: {
+export function getAShow(id: string, query?: {
+export function getAShowsEpisodes(id: string, query?: {
+export function getSeveralTracks(query: {
+export function getTrack(id: string, query?: {
+export function getUsersProfile(user_id: string, opts?: CallOpts): T.PublicUserObject {
+export function getListUsersPlaylists(user_id: string, query?: {
+export function createPlaylist(user_id: string, body?: {
+async function getMultipleAlbums_async(query: {
+async function getAnAlbum_async(id: string, query?: {
+async function getAnAlbumsTracks_async(id: string, query?: {
+async function getMultipleArtists_async(query: {
+async function getAnArtist_async(id: string, opts?: CallOpts): Promise<T.ArtistObject> {
+async function getAnArtistsAlbums_async(id: string, query?: {
+async function getAnArtistsRelatedArtists_async(id: string, opts?: CallOpts): Promise<{
+async function getAnArtistsTopTracks_async(id: string, query?: {
+async function getAudioAnalysis_async(id: string, opts?: CallOpts): Promise<T.AudioAnalysisObject> {
+async function getSeveralAudioFeatures_async(query: {
+async function getAudioFeatures_async(id: string, opts?: CallOpts): Promise<T.AudioFeaturesObject> {
+async function getMultipleAudiobooks_async(query: {
+async function getAnAudiobook_async(id: string, query?: {
+async function getAudiobookChapters_async(id: string, query?: {
+async function getCategories_async(query?: {
+async function getACategory_async(category_id: string, query?: {
+async function getACategoriesPlaylists_async(category_id: string, query?: {
+async function getFeaturedPlaylists_async(query?: {
+async function getNewReleases_async(query?: {
+async function getSeveralChapters_async(query: {
+async function getAChapter_async(id: string, query?: {
+async function getMultipleEpisodes_async(query: {
+async function getAnEpisode_async(id: string, query?: {
+async function getAvailableMarkets_async(opts?: CallOpts): Promise<{
+async function getCurrentUsersProfile_async(opts?: CallOpts): Promise<T.PrivateUserObject> {
+async function getUsersSavedAlbums_async(query?: {
+async function saveAlbumsUser_async(query: {
+async function removeAlbumsUser_async(query: {
+async function checkUsersSavedAlbums_async(query: {
+async function getUsersSavedAudiobooks_async(query?: {
+async function saveAudiobooksUser_async(query: {
+async function removeAudiobooksUser_async(query: {
+async function checkUsersSavedAudiobooks_async(query: {
+async function getUsersSavedEpisodes_async(query?: {
+async function saveEpisodesUser_async(query: {
+async function removeEpisodesUser_async(query: {
+async function checkUsersSavedEpisodes_async(query: {
+async function getFollowed_async(query: {
+async function followArtistsUsers_async(query: {
+async function unfollowArtistsUsers_async(query: {
+async function checkCurrentUserFollows_async(query: {
+async function getInformationAboutTheUsersCurrentPlayback_async(query?: {
+async function transferAUsersPlayback_async(body?: {
+async function getTheUsersCurrentlyPlayingTrack_async(query?: {
+async function getAUsersAvailableDevices_async(opts?: CallOpts): Promise<{
+async function skipUsersPlaybackToNextTrack_async(query?: {
+async function pauseAUsersPlayback_async(query?: {
+async function startAUsersPlayback_async(query?: {
+async function skipUsersPlaybackToPreviousTrack_async(query?: {
+async function getQueue_async(opts?: CallOpts): Promise<T.QueueObject> {
+async function addToQueue_async(query: {
+async function getRecentlyPlayed_async(query?: {
+async function setRepeatModeOnUsersPlayback_async(query: {
+async function seekToPositionInCurrentlyPlayingTrack_async(query: {
+async function toggleShuffleForUsersPlayback_async(query: {
+async function setVolumeForUsersPlayback_async(query: {
+async function getAListOfCurrentUsersPlaylists_async(query?: {
+async function getUsersSavedShows_async(query?: {
+async function saveShowsUser_async(query: {
+async function removeShowsUser_async(query: {
+async function checkUsersSavedShows_async(query: {
+async function getUsersTopArtistsAndTracks_async(type: T.TypeEnum, query?: {
+async function getUsersSavedTracks_async(query?: {
+async function saveTracksUser_async(query: {
+async function removeTracksUser_async(query: {
+async function checkUsersSavedTracks_async(query: {
+async function getPlaylist_async(playlist_id: string, query?: {
+async function changePlaylistDetails_async(playlist_id: string, body?: {
+async function followPlaylist_async(playlist_id: string, body?: {
+async function unfollowPlaylist_async(playlist_id: string, opts?: CallOpts): Promise<unknown> {
+async function checkIfUserFollowsPlaylist_async(playlist_id: string, query: {
+async function getPlaylistCover_async(playlist_id: string, opts?: CallOpts): Promise<Array<T.ImageObject>> {
+async function uploadCustomPlaylistCover_async(playlist_id: string, opts?: CallOpts): Promise<unknown> {
+async function getPlaylistsTracks_async(playlist_id: string, query?: {
+async function addTracksToPlaylist_async(playlist_id: string, query?: {
+async function reorderOrReplacePlaylistsTracks_async(playlist_id: string, query?: {
+async function removeTracksPlaylist_async(playlist_id: string, body?: {
+async function getRecommendations_async(query: {
+async function getRecommendationGenres_async(opts?: CallOpts): Promise<{
+async function search_async(query: {
+async function getMultipleShows_async(query: {
+async function getAShow_async(id: string, query?: {
+async function getAShowsEpisodes_async(id: string, query?: {
+async function getSeveralTracks_async(query: {
+async function getTrack_async(id: string, query?: {
+async function getUsersProfile_async(user_id: string, opts?: CallOpts): Promise<T.PublicUserObject> {
+async function getListUsersPlaylists_async(user_id: string, query?: {
+async function createPlaylist_async(user_id: string, body?: {
+getMultipleAlbums.spec = (query: {
+getAnAlbum.spec = (id: string, query?: {
+getAnAlbumsTracks.spec = (id: string, query?: {
+getMultipleArtists.spec = (query: {
+getAnArtist.spec = (id: string, opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/artists/' + id, 'getAnArtist', null, opts);
+getAnArtistsAlbums.spec = (id: string, query?: {
+getAnArtistsRelatedArtists.spec = (id: string, opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/artists/' + id + '/related-artists', 'getAnArtistsRelatedArtists', null, opts);
+getAnArtistsTopTracks.spec = (id: string, query?: {
+getAudioAnalysis.spec = (id: string, opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/audio-analysis/' + id, 'getAudioAnalysis', null, opts);
+getSeveralAudioFeatures.spec = (query: {
+getAudioFeatures.spec = (id: string, opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/audio-features/' + id, 'getAudioFeatures', null, opts);
+getMultipleAudiobooks.spec = (query: {
+getAnAudiobook.spec = (id: string, query?: {
+getAudiobookChapters.spec = (id: string, query?: {
+getCategories.spec = (query?: {
+getACategory.spec = (category_id: string, query?: {
+getACategoriesPlaylists.spec = (category_id: string, query?: {
+getFeaturedPlaylists.spec = (query?: {
+getNewReleases.spec = (query?: {
+getSeveralChapters.spec = (query: {
+getAChapter.spec = (id: string, query?: {
+getMultipleEpisodes.spec = (query: {
+getAnEpisode.spec = (id: string, query?: {
+getAvailableMarkets.spec = (opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/markets', 'getAvailableMarkets', null, opts);
+getCurrentUsersProfile.spec = (opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/me', 'getCurrentUsersProfile', null, opts);
+getUsersSavedAlbums.spec = (query?: {
+saveAlbumsUser.spec = (query: {
+removeAlbumsUser.spec = (query: {
+checkUsersSavedAlbums.spec = (query: {
+getUsersSavedAudiobooks.spec = (query?: {
+saveAudiobooksUser.spec = (query: {
+removeAudiobooksUser.spec = (query: {
+checkUsersSavedAudiobooks.spec = (query: {
+getUsersSavedEpisodes.spec = (query?: {
+saveEpisodesUser.spec = (query: {
+removeEpisodesUser.spec = (query: {
+checkUsersSavedEpisodes.spec = (query: {
+getFollowed.spec = (query: {
+followArtistsUsers.spec = (query: {
+unfollowArtistsUsers.spec = (query: {
+checkCurrentUserFollows.spec = (query: {
+getInformationAboutTheUsersCurrentPlayback.spec = (query?: {
+transferAUsersPlayback.spec = (body?: {
+getTheUsersCurrentlyPlayingTrack.spec = (query?: {
+getAUsersAvailableDevices.spec = (opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/me/player/devices', 'getAUsersAvailableDevices', null, opts);
+skipUsersPlaybackToNextTrack.spec = (query?: {
+pauseAUsersPlayback.spec = (query?: {
+startAUsersPlayback.spec = (query?: {
+skipUsersPlaybackToPreviousTrack.spec = (query?: {
+getQueue.spec = (opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/me/player/queue', 'getQueue', null, opts);
+addToQueue.spec = (query: {
+getRecentlyPlayed.spec = (query?: {
+setRepeatModeOnUsersPlayback.spec = (query: {
+seekToPositionInCurrentlyPlayingTrack.spec = (query: {
+toggleShuffleForUsersPlayback.spec = (query: {
+setVolumeForUsersPlayback.spec = (query: {
+getAListOfCurrentUsersPlaylists.spec = (query?: {
+getUsersSavedShows.spec = (query?: {
+saveShowsUser.spec = (query: {
+removeShowsUser.spec = (query: {
+checkUsersSavedShows.spec = (query: {
+getUsersTopArtistsAndTracks.spec = (type: T.TypeEnum, query?: {
+getUsersSavedTracks.spec = (query?: {
+saveTracksUser.spec = (query: {
+removeTracksUser.spec = (query: {
+checkUsersSavedTracks.spec = (query: {
+getPlaylist.spec = (playlist_id: string, query?: {
+changePlaylistDetails.spec = (playlist_id: string, body?: {
+followPlaylist.spec = (playlist_id: string, body?: {
+unfollowPlaylist.spec = (playlist_id: string, opts?: CallOpts) => buildSpec('DELETE', getBaseUrl(DEFAULT_BASE_URL) + '/playlists/' + playlist_id + '/followers', 'unfollowPlaylist', null, opts);
+checkIfUserFollowsPlaylist.spec = (playlist_id: string, query: {
+getPlaylistCover.spec = (playlist_id: string, opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/playlists/' + playlist_id + '/images', 'getPlaylistCover', null, opts);
+uploadCustomPlaylistCover.spec = (playlist_id: string, opts?: CallOpts) => buildSpec('PUT', getBaseUrl(DEFAULT_BASE_URL) + '/playlists/' + playlist_id + '/images', 'uploadCustomPlaylistCover', null, opts);
+getPlaylistsTracks.spec = (playlist_id: string, query?: {
+addTracksToPlaylist.spec = (playlist_id: string, query?: {
+reorderOrReplacePlaylistsTracks.spec = (playlist_id: string, query?: {
+removeTracksPlaylist.spec = (playlist_id: string, body?: {
+getRecommendations.spec = (query: {
+getRecommendationGenres.spec = (opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/recommendations/available-genre-seeds', 'getRecommendationGenres', null, opts);
+search.spec = (query: {
+getMultipleShows.spec = (query: {
+getAShow.spec = (id: string, query?: {
+getAShowsEpisodes.spec = (id: string, query?: {
+getSeveralTracks.spec = (query: {
+getTrack.spec = (id: string, query?: {
+getUsersProfile.spec = (user_id: string, opts?: CallOpts) => buildSpec('GET', getBaseUrl(DEFAULT_BASE_URL) + '/users/' + user_id, 'getUsersProfile', null, opts);
+getListUsersPlaylists.spec = (user_id: string, query?: {
+createPlaylist.spec = (user_id: string, body?: {
+export const async = {
+# data.ts
+export const data = {
+# index.ts
+export * from "./client.js";
+export * as types from "./types.js";
+export { data } from "./data.js";
+# types.ts
+export type AlbumBase = {
+export type AlbumObject = unknown;
+export type AlbumRestrictionObject = {
+export type ArtistObject = {
+export type AudioAnalysisObject = {
+export type AudioFeaturesObject = {
+export type AudiobookBase = {
+export type AudiobookObject = unknown;
+export type AuthorObject = {
+export type CategoryObject = {
+export type ChapterBase = {
+export type ChapterObject = unknown;
+export type ChapterRestrictionObject = {
+export type ContextObject = {
+export type CopyrightObject = {
+export type CurrentlyPlayingContextObject = {
+export type CurrentlyPlayingObject = {
+export type CursorObject = {
+export type CursorPagingObject = {
+export type CursorPagingPlayHistoryObject = unknown;
+export type CursorPagingSimplifiedArtistObject = unknown;
+export type DeviceObject = {
+export type DevicesObject = {
+export type DisallowsObject = {
+export type EpisodeBase = {
+export type EpisodeObject = unknown;
+export type EpisodeRestrictionObject = {
+export type ErrorObject = {
+export type ExplicitContentSettingsObject = {
+export type ExternalIdObject = {
+export type ExternalUrlObject = {
+export type FollowersObject = {
+export type ImageObject = {
+export type Key = number;
+export type LinkedTrackObject = {
+export type Loudness = number;
+export type Mode = number;
+export type NarratorObject = {
+export type PagingArtistObject = unknown;
+export type PagingFeaturedPlaylistObject = {
+export type PagingObject = {
+export type PagingPlaylistObject = unknown;
+export type PagingPlaylistTrackObject = unknown;
+export type PagingSavedAlbumObject = unknown;
+export type PagingSavedEpisodeObject = unknown;
+export type PagingSavedShowObject = unknown;
+export type PagingSavedTrackObject = unknown;
+export type PagingSimplifiedAlbumObject = unknown;
+export type PagingSimplifiedArtistObject = unknown;
+export type PagingSimplifiedAudiobookObject = unknown;
+export type PagingSimplifiedChapterObject = unknown;
+export type PagingSimplifiedEpisodeObject = unknown;
+export type PagingSimplifiedShowObject = unknown;
+export type PagingSimplifiedTrackObject = unknown;
+export type PagingTrackObject = unknown;
+export type PlayHistoryObject = {
+export type PlayerErrorObject = {
+export type PlayerErrorReasons = 'NO_PREV_TRACK' | 'NO_NEXT_TRACK' | 'NO_SPECIFIC_TRACK' | 'ALREADY_PAUSED' | 'NOT_PAUSED' | 'NOT_PLAYING_LOCALLY' | 'NOT_PLAYING_TRACK' | 'NOT_PLAYING_CONTEXT' | 'ENDLESS_CONTEXT' | 'CONTEXT_DISALLOW' | 'ALREADY_PLAYING' | 'RATE_LIMITED' | 'REMOTE_CONTROL_DISALLOW' | 'DEVICE_NOT_CONTROLLABLE' | 'VOLUME_CONTROL_DISALLOW' | 'NO_ACTIVE_DEVICE' | 'PREMIUM_REQUIRED' | 'UNKNOWN';
+export type PlaylistObject = {
+export type PlaylistOwnerObject = unknown;
+export type PlaylistTrackObject = {
+export type PlaylistTracksRefObject = {
+export type PlaylistUserObject = {
+export type PrivateUserObject = {
+export type PublicUserObject = {
+export type QueueObject = {
+export type RecommendationSeedObject = {
+export type RecommendationsObject = {
+export type ResumePointObject = {
+export type SavedAlbumObject = {
+export type SavedEpisodeObject = {
+export type SavedShowObject = {
+export type SavedTrackObject = {
+export type SectionObject = {
+export type SegmentObject = {
+export type ShowBase = {
+export type ShowObject = unknown;
+export type SimplifiedAlbumObject = unknown;
+export type SimplifiedArtistObject = {
+export type SimplifiedAudiobookObject = unknown;
+export type SimplifiedChapterObject = unknown;
+export type SimplifiedEpisodeObject = unknown;
+export type SimplifiedPlaylistObject = {
+export type SimplifiedShowObject = unknown;
+export type SimplifiedTrackObject = {
+export type Tempo = number;
+export type TimeIntervalObject = {
+export type TimeSignature = number;
+export type TrackObject = {
+export type TrackRestrictionObject = {
+export type TuneableTrackObject = {
+export type ItemTypeEnum = 'artist' | 'user';
+export type ItemTypeEnum2 = 'artist';
+export type TypeEnum = 'artists' | 'tracks';
+export type ItemsEnum = 'album' | 'artist' | 'playlist' | 'track' | 'show' | 'episode' | 'audiobook';
+export type IncludeExternalEnum = 'audio';
+export type AlbumTypeEnum = 'album' | 'single' | 'compilation';
+export type ReleaseDatePrecisionEnum = 'year' | 'month' | 'day';
+export type TypeEnum2 = 'album';
+export type ReasonEnum = 'market' | 'product' | 'explicit';
+export type TypeEnum3 = 'audio_features';
+export type TypeEnum4 = 'audiobook';
+export type TypeEnum5 = 'episode';
+export type TypeEnum6 = 'user';
+export type ModeEnum = -1 | 0 | 1;
+export type TypeEnum7 = 'show';
+export type AlbumGroupEnum = 'album' | 'single' | 'compilation' | 'appears_on';
+export type TypeEnum8 = 'track';

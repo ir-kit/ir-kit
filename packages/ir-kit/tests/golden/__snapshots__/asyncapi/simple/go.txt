@@ -1,0 +1,43 @@
+# api_client.go
+type APIClient struct {
+func NewAPIClient(baseURL string) *APIClient {
+func Execute[T any](client *APIClient, req *http.Request, opts RequestOptions) (T, error) {
+func ExecuteWithResponse[T any](client *APIClient, req *http.Request, opts RequestOptions) (T, *http.Response, error) {
+func ExecuteUnit(client *APIClient, req *http.Request, opts RequestOptions) error {
+func ExecuteUnitWithResponse(client *APIClient, req *http.Request, opts RequestOptions) (*http.Response, error) {
+func ExecuteRaw(client *APIClient, req *http.Request, opts RequestOptions) ([]byte, *http.Response, error) {
+func sendAndDispatch(client *APIClient, req *http.Request, opts RequestOptions) ([]byte, *http.Response, error) {
+# api_error.go
+type APIErrorKind int
+const (
+func (k APIErrorKind) String() string {
+type APIError struct {
+func (e *APIError) Error() string {
+func (e *APIError) Unwrap() error { return e.Cause }
+func Wrap(kind APIErrorKind, cause error) *APIError {
+func HTTPError(statusCode int, body []byte) *APIError {
+func Unexpected(statusCode int, body []byte) *APIError {
+# api_key_location.go
+type APIKeyLocation int
+const (
+# auth.go
+type Auth interface {
+type BearerAuth struct{ Token string }
+func (a BearerAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+type APIKeyAuth struct {
+func (a APIKeyAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+type BasicAuth struct{ Username, Password string }
+func (a BasicAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+# models.go
+type UserSignedUpMessage struct {
+# query_style.go
+type QueryStyle int
+const (
+# request_options.go
+type RequestOptions struct {
+func (opts RequestOptions) applyTimeout(ctx context.Context) (context.Context, context.CancelFunc) {
+# url_encoding.go
+var URLEncoding = urlEncoding{}
+type urlEncoding struct{}
+func (urlEncoding) AddScalar(q url.Values, name string, value any) {
+func (urlEncoding) AddArray(q url.Values, name string, values any, style QueryStyle, explode bool) {

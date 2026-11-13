@@ -1,0 +1,322 @@
+# com/example/api/api/AlbumsApi.java
+public interface AlbumsApi {
+# com/example/api/api/ArtistsApi.java
+public interface ArtistsApi {
+# com/example/api/api/AudiobooksApi.java
+public interface AudiobooksApi {
+# com/example/api/api/CategoriesApi.java
+public interface CategoriesApi {
+# com/example/api/api/ChaptersApi.java
+public interface ChaptersApi {
+# com/example/api/api/EpisodesApi.java
+public interface EpisodesApi {
+# com/example/api/api/GenresApi.java
+public interface GenresApi {
+# com/example/api/api/HttpAlbumsApi.java
+public class HttpAlbumsApi implements AlbumsApi {
+# com/example/api/api/HttpArtistsApi.java
+public class HttpArtistsApi implements ArtistsApi {
+# com/example/api/api/HttpAudiobooksApi.java
+public class HttpAudiobooksApi implements AudiobooksApi {
+# com/example/api/api/HttpCategoriesApi.java
+public class HttpCategoriesApi implements CategoriesApi {
+# com/example/api/api/HttpChaptersApi.java
+public class HttpChaptersApi implements ChaptersApi {
+# com/example/api/api/HttpEpisodesApi.java
+public class HttpEpisodesApi implements EpisodesApi {
+# com/example/api/api/HttpGenresApi.java
+public class HttpGenresApi implements GenresApi {
+# com/example/api/api/HttpMarketsApi.java
+public class HttpMarketsApi implements MarketsApi {
+# com/example/api/api/HttpPlayerApi.java
+public class HttpPlayerApi implements PlayerApi {
+# com/example/api/api/HttpPlaylistsApi.java
+public class HttpPlaylistsApi implements PlaylistsApi {
+# com/example/api/api/HttpSearchApi.java
+public class HttpSearchApi implements SearchApi {
+# com/example/api/api/HttpShowsApi.java
+public class HttpShowsApi implements ShowsApi {
+# com/example/api/api/HttpTracksApi.java
+public class HttpTracksApi implements TracksApi {
+# com/example/api/api/HttpUsersApi.java
+public class HttpUsersApi implements UsersApi {
+# com/example/api/api/MarketsApi.java
+public interface MarketsApi {
+# com/example/api/api/PlayerApi.java
+public interface PlayerApi {
+# com/example/api/api/PlaylistsApi.java
+public interface PlaylistsApi {
+# com/example/api/api/SearchApi.java
+public interface SearchApi {
+# com/example/api/api/ShowsApi.java
+public interface ShowsApi {
+# com/example/api/api/TracksApi.java
+public interface TracksApi {
+# com/example/api/api/UsersApi.java
+public interface UsersApi {
+# com/example/api/model/AddTracksToPlaylistBody.java
+public record AddTracksToPlaylistBody(Integer position, List<String> uris) {}
+# com/example/api/model/AddTracksToPlaylistResponse.java
+public record AddTracksToPlaylistResponse(@JsonProperty("snapshot_id") String snapshotId) {}
+# com/example/api/model/AlbumBase.java
+public record AlbumBase(
+# com/example/api/model/AlbumBaseAlbumType.java
+public enum AlbumBaseAlbumType {
+# com/example/api/model/AlbumBaseReleaseDatePrecision.java
+public enum AlbumBaseReleaseDatePrecision {
+# com/example/api/model/AlbumBaseType.java
+public enum AlbumBaseType {
+# com/example/api/model/AlbumRestrictionObject.java
+public record AlbumRestrictionObject(AlbumRestrictionObjectReason reason) {}
+# com/example/api/model/AlbumRestrictionObjectReason.java
+public enum AlbumRestrictionObjectReason {
+# com/example/api/model/ArtistObject.java
+public record ArtistObject(
+# com/example/api/model/ArtistObjectType.java
+public enum ArtistObjectType {
+# com/example/api/model/AudioAnalysisObject.java
+public record AudioAnalysisObject(
+# com/example/api/model/AudioAnalysisObjectMeta.java
+public record AudioAnalysisObjectMeta(
+# com/example/api/model/AudioAnalysisObjectTrack.java
+public record AudioAnalysisObjectTrack(
+# com/example/api/model/AudioFeaturesObject.java
+public record AudioFeaturesObject(
+# com/example/api/model/AudioFeaturesObjectType.java
+public enum AudioFeaturesObjectType {
+# com/example/api/model/AudiobookBase.java
+public record AudiobookBase(
+# com/example/api/model/AudiobookBaseType.java
+public enum AudiobookBaseType {
+# com/example/api/model/AuthorObject.java
+public record AuthorObject(String name) {}
+# com/example/api/model/CategoryObject.java
+public record CategoryObject(String href, List<ImageObject> icons, String id, String name) {}
+# com/example/api/model/ChangePlaylistDetailsBody.java
+public record ChangePlaylistDetailsBody(
+# com/example/api/model/ChapterBase.java
+public record ChapterBase(
+# com/example/api/model/ChapterBaseReleaseDatePrecision.java
+public enum ChapterBaseReleaseDatePrecision {
+# com/example/api/model/ChapterBaseType.java
+public enum ChapterBaseType {
+# com/example/api/model/ChapterRestrictionObject.java
+public record ChapterRestrictionObject(String reason) {}
+# com/example/api/model/CheckCurrentUserFollowsParamType.java
+public enum CheckCurrentUserFollowsParamType {
+# com/example/api/model/ContextObject.java
+public record ContextObject(
+# com/example/api/model/CopyrightObject.java
+public record CopyrightObject(String text, String type) {}
+# com/example/api/model/CreatePlaylistBody.java
+public record CreatePlaylistBody(
+# com/example/api/model/CurrentlyPlayingContextObject.java
+public record CurrentlyPlayingContextObject(
+# com/example/api/model/CurrentlyPlayingObject.java
+public record CurrentlyPlayingObject(
+# com/example/api/model/CursorObject.java
+public record CursorObject(String after, String before) {}
+# com/example/api/model/CursorPagingObject.java
+public record CursorPagingObject(
+# com/example/api/model/DeviceObject.java
+public record DeviceObject(
+# com/example/api/model/DevicesObject.java
+public record DevicesObject(List<DeviceObject> devices) {}
+# com/example/api/model/DisallowsObject.java
+public record DisallowsObject(
+# com/example/api/model/EpisodeBase.java
+public record EpisodeBase(
+# com/example/api/model/EpisodeBaseReleaseDatePrecision.java
+public enum EpisodeBaseReleaseDatePrecision {
+# com/example/api/model/EpisodeBaseType.java
+public enum EpisodeBaseType {
+# com/example/api/model/EpisodeRestrictionObject.java
+public record EpisodeRestrictionObject(String reason) {}
+# com/example/api/model/ErrorObject.java
+public record ErrorObject(String message, Integer status) {}
+# com/example/api/model/ExplicitContentSettingsObject.java
+public record ExplicitContentSettingsObject(
+# com/example/api/model/ExternalIdObject.java
+public record ExternalIdObject(String ean, String isrc, String upc) {}
+# com/example/api/model/ExternalUrlObject.java
+public record ExternalUrlObject(String spotify) {}
+# com/example/api/model/FollowArtistsUsersBody.java
+public record FollowArtistsUsersBody(List<String> ids) {}
+# com/example/api/model/FollowArtistsUsersParamType.java
+public enum FollowArtistsUsersParamType {
+# com/example/api/model/FollowPlaylistBody.java
+public record FollowPlaylistBody(@JsonProperty("public") Boolean public_) {}
+# com/example/api/model/FollowersObject.java
+public record FollowersObject(String href, Integer total) {}
+# com/example/api/model/GetAUsersAvailableDevicesResponse.java
+public record GetAUsersAvailableDevicesResponse(List<DeviceObject> devices) {}
+# com/example/api/model/GetAnArtistsRelatedArtistsResponse.java
+public record GetAnArtistsRelatedArtistsResponse(List<ArtistObject> artists) {}
+# com/example/api/model/GetAnArtistsTopTracksResponse.java
+public record GetAnArtistsTopTracksResponse(List<TrackObject> tracks) {}
+# com/example/api/model/GetAvailableMarketsResponse.java
+public record GetAvailableMarketsResponse(List<String> markets) {}
+# com/example/api/model/GetCategoriesResponse.java
+public record GetCategoriesResponse(PagingObject categories) {}
+# com/example/api/model/GetFollowedParamType.java
+public enum GetFollowedParamType {
+# com/example/api/model/GetFollowedResponse.java
+public record GetFollowedResponse(Object artists) {}
+# com/example/api/model/GetInformationAboutTheUsersCurrentPlaybackResponse.java
+public sealed interface GetInformationAboutTheUsersCurrentPlaybackResponse
+# com/example/api/model/GetInformationAboutTheUsersCurrentPlaybackResponseStatus200.java
+public record GetInformationAboutTheUsersCurrentPlaybackResponseStatus200(
+# com/example/api/model/GetInformationAboutTheUsersCurrentPlaybackResponseStatus204.java
+public record GetInformationAboutTheUsersCurrentPlaybackResponseStatus204()
+# com/example/api/model/GetMultipleAlbumsResponse.java
+public record GetMultipleAlbumsResponse(List<Object> albums) {}
+# com/example/api/model/GetMultipleArtistsResponse.java
+public record GetMultipleArtistsResponse(List<ArtistObject> artists) {}
+# com/example/api/model/GetMultipleAudiobooksResponse.java
+public record GetMultipleAudiobooksResponse(List<Object> audiobooks) {}
+# com/example/api/model/GetMultipleEpisodesResponse.java
+public record GetMultipleEpisodesResponse(List<Object> episodes) {}
+# com/example/api/model/GetMultipleShowsResponse.java
+public record GetMultipleShowsResponse(List<Object> shows) {}
+# com/example/api/model/GetNewReleasesResponse.java
+public record GetNewReleasesResponse(Object albums) {}
+# com/example/api/model/GetRecommendationGenresResponse.java
+public record GetRecommendationGenresResponse(List<String> genres) {}
+# com/example/api/model/GetSeveralAudioFeaturesResponse.java
+public record GetSeveralAudioFeaturesResponse(
+# com/example/api/model/GetSeveralChaptersResponse.java
+public record GetSeveralChaptersResponse(List<Object> chapters) {}
+# com/example/api/model/GetSeveralTracksResponse.java
+public record GetSeveralTracksResponse(List<TrackObject> tracks) {}
+# com/example/api/model/GetUsersTopArtistsAndTracksParamType.java
+public enum GetUsersTopArtistsAndTracksParamType {
+# com/example/api/model/ImageObject.java
+public record ImageObject(Integer height, String url, Integer width) {}
+# com/example/api/model/LinkedTrackObject.java
+public record LinkedTrackObject(
+# com/example/api/model/NarratorObject.java
+public record NarratorObject(String name) {}
+# com/example/api/model/PagingFeaturedPlaylistObject.java
+public record PagingFeaturedPlaylistObject(String message, Object playlists) {}
+# com/example/api/model/PagingObject.java
+public record PagingObject(
+# com/example/api/model/PlayHistoryObject.java
+public record PlayHistoryObject(
+# com/example/api/model/PlayerErrorObject.java
+public record PlayerErrorObject(String message, PlayerErrorReasons reason, Integer status) {}
+# com/example/api/model/PlayerErrorReasons.java
+public enum PlayerErrorReasons {
+# com/example/api/model/PlaylistObject.java
+public record PlaylistObject(
+# com/example/api/model/PlaylistTrackObject.java
+public record PlaylistTrackObject(
+# com/example/api/model/PlaylistTracksRefObject.java
+public record PlaylistTracksRefObject(String href, Integer total) {}
+# com/example/api/model/PlaylistUserObject.java
+public record PlaylistUserObject(
+# com/example/api/model/PlaylistUserObjectType.java
+public enum PlaylistUserObjectType {
+# com/example/api/model/PrivateUserObject.java
+public record PrivateUserObject(
+# com/example/api/model/PublicUserObject.java
+public record PublicUserObject(
+# com/example/api/model/PublicUserObjectType.java
+public enum PublicUserObjectType {
+# com/example/api/model/QueueObject.java
+public record QueueObject(
+# com/example/api/model/RecommendationSeedObject.java
+public record RecommendationSeedObject(
+# com/example/api/model/RecommendationsObject.java
+public record RecommendationsObject(
+# com/example/api/model/RemoveAlbumsUserBody.java
+public record RemoveAlbumsUserBody(List<String> ids) {}
+# com/example/api/model/RemoveEpisodesUserBody.java
+public record RemoveEpisodesUserBody(List<String> ids) {}
+# com/example/api/model/RemoveTracksPlaylistBody.java
+public record RemoveTracksPlaylistBody(
+# com/example/api/model/RemoveTracksPlaylistBodyTracks.java
+public record RemoveTracksPlaylistBodyTracks(String uri) {}
+# com/example/api/model/RemoveTracksPlaylistResponse.java
+public record RemoveTracksPlaylistResponse(@JsonProperty("snapshot_id") String snapshotId) {}
+# com/example/api/model/RemoveTracksUserBody.java
+public record RemoveTracksUserBody(List<String> ids) {}
+# com/example/api/model/ReorderOrReplacePlaylistsTracksBody.java
+public record ReorderOrReplacePlaylistsTracksBody(
+# com/example/api/model/ReorderOrReplacePlaylistsTracksResponse.java
+public record ReorderOrReplacePlaylistsTracksResponse(
+# com/example/api/model/ResumePointObject.java
+public record ResumePointObject(
+# com/example/api/model/SaveAlbumsUserBody.java
+public record SaveAlbumsUserBody(List<String> ids) {}
+# com/example/api/model/SaveEpisodesUserBody.java
+public record SaveEpisodesUserBody(List<String> ids) {}
+# com/example/api/model/SaveTracksUserBody.java
+public record SaveTracksUserBody(List<String> ids) {}
+# com/example/api/model/SavedAlbumObject.java
+public record SavedAlbumObject(@JsonProperty("added_at") OffsetDateTime addedAt, Object album) {}
+# com/example/api/model/SavedEpisodeObject.java
+public record SavedEpisodeObject(
+# com/example/api/model/SavedShowObject.java
+public record SavedShowObject(@JsonProperty("added_at") OffsetDateTime addedAt, Object show) {}
+# com/example/api/model/SavedTrackObject.java
+public record SavedTrackObject(
+# com/example/api/model/SearchParamIncludeExternal.java
+public enum SearchParamIncludeExternal {
+# com/example/api/model/SearchParamType.java
+public enum SearchParamType {
+# com/example/api/model/SearchResponse.java
+public record SearchResponse(
+# com/example/api/model/SectionObject.java
+public record SectionObject(
+# com/example/api/model/SectionObjectMode.java
+public enum SectionObjectMode {
+# com/example/api/model/SegmentObject.java
+public record SegmentObject(
+# com/example/api/model/ShowBase.java
+public record ShowBase(
+# com/example/api/model/ShowBaseType.java
+public enum ShowBaseType {
+# com/example/api/model/SimplifiedArtistObject.java
+public record SimplifiedArtistObject(
+# com/example/api/model/SimplifiedArtistObjectType.java
+public enum SimplifiedArtistObjectType {
+# com/example/api/model/SimplifiedPlaylistObject.java
+public record SimplifiedPlaylistObject(
+# com/example/api/model/SimplifiedTrackObject.java
+public record SimplifiedTrackObject(
+# com/example/api/model/StartAUsersPlaybackBody.java
+public record StartAUsersPlaybackBody(
+# com/example/api/model/TimeIntervalObject.java
+public record TimeIntervalObject(Double confidence, Double duration, Double start) {}
+# com/example/api/model/TrackObject.java
+public record TrackObject(
+# com/example/api/model/TrackObjectType.java
+public enum TrackObjectType {
+# com/example/api/model/TrackRestrictionObject.java
+public record TrackRestrictionObject(String reason) {}
+# com/example/api/model/TransferAUsersPlaybackBody.java
+public record TransferAUsersPlaybackBody(
+# com/example/api/model/TuneableTrackObject.java
+public record TuneableTrackObject(
+# com/example/api/model/UnfollowArtistsUsersBody.java
+public record UnfollowArtistsUsersBody(List<String> ids) {}
+# com/example/api/model/UnfollowArtistsUsersParamType.java
+public enum UnfollowArtistsUsersParamType {
+# com/example/api/runtime/ApiClient.java
+public final class ApiClient {
+# com/example/api/runtime/ApiException.java
+public class ApiException extends RuntimeException {
+# com/example/api/runtime/ApiInterceptors.java
+public final class ApiInterceptors {
+# com/example/api/runtime/ApiKeyLocation.java
+public enum ApiKeyLocation {
+# com/example/api/runtime/ApiResult.java
+public record ApiResult<T>(T body, HttpResponse<byte[]> response) {}
+# com/example/api/runtime/Auth.java
+public sealed interface Auth permits Auth.Bearer, Auth.ApiKey, Auth.Basic {
+# com/example/api/runtime/QueryStyle.java
+public enum QueryStyle {
+# com/example/api/runtime/RequestOptions.java
+public record RequestOptions(
+# com/example/api/runtime/UrlEncoding.java
+public final class UrlEncoding {

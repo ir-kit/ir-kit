@@ -1,0 +1,69 @@
+# amqp.gen.ts
+export interface EventDescriptor {
+export interface ConsumerLike {
+export interface AssertExchangesOptions {
+export async function assertExchanges(
+export interface BindAndConsumeOptions {
+export async function bindAndConsume(
+export type SerializeFn = <T>(payload: T) => Buffer;
+const defaultSerialize: SerializeFn = (payload) =>
+export interface PublishOptions {
+export function publish<T>(
+# dispatch.gen.ts
+export type Handler<T> = (msg: T, raw: ConsumeMessage) => Promise<void> | void;
+export interface EventMeta {
+export type ParseFn = (buf: Buffer) => unknown;
+const defaultParse: ParseFn = (buf) => JSON.parse(buf.toString("utf8"));
+export interface RegistryOptions {
+export class Registry<
+> {
+export function createRegistry<
+>(
+function matchRoutingKey(pattern: string, key: string): boolean {
+function matchSegments(
+# event-map.gen.ts
+export type EventMap = {
+export type AnyMessage = EventMap[keyof EventMap];
+export function isMessageOfType<K extends keyof EventMap>(msg: AnyMessage, type: K): msg is EventMap[K] {
+# events.gen.ts
+export const Events = {} as const;
+export type EventName = keyof typeof Events;
+# handlers.gen.ts
+export const handlers = (opts?: RegistryOptions) => createRegistry<EventMap>(Events, opts);
+# index.gen.ts
+export { assertExchanges, bindAndConsume, publish } from './amqp.gen';
+export { Registry, createRegistry } from './dispatch.gen';
+export { type AnyMessage, type EventMap, isMessageOfType } from './event-map.gen';
+export { type EventName, Events } from './events.gen';
+export { handlers } from './handlers.gen';
+export type * from './types.gen';
+# types.gen.ts
+export type ClientOptions = {
+export type Ping = {
+export type Heartbeat = {
+export type Pong = {
+export type SystemStatus = {
+export type Status = 'online' | 'maintenance' | 'cancel_only' | 'limit_only' | 'post_only';
+export type Subscribe = {
+export type Unsubscribe = {
+export type SubscriptionStatus = SubscriptionStatusError | SubscriptionStatusSuccess;
+export type SubscriptionStatusError = {
+export type SubscriptionStatusSuccess = {
+export type SubscriptionStatusCommon = {
+export type Interval = 1 | 5 | 15 | 30 | 60 | 240 | 1440 | 10080 | 21600;
+export type Name = 'book' | 'ohlc' | 'openOrders' | 'ownTrades' | 'spread' | 'ticker' | 'trade';
+export type Token = string;
+export type Depth = 10 | 25 | 100 | 500 | 1000;
+export type Maxratecount = number;
+export type Ratecounter = boolean;
+export type Snapshot = boolean;
+export type Reqid = number;
+export type Pair = Array<string>;
+export type PingMessage = Ping;
+export type PongMessage = Pong;
+export type HeartbeatMessage = Heartbeat;
+export type SystemStatusMessage = SystemStatus;
+export type SubscriptionStatusMessage = SubscriptionStatus;
+export type SubscribeMessage = Subscribe;
+export type UnsubscribeMessage = Unsubscribe;
+export type DummyCurrencyInfoMessage = {
