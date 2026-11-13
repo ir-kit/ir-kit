@@ -120,3 +120,25 @@ describe("ir generate", () => {
     ).rejects.toThrow("already exists");
   });
 });
+
+describe("ir generate --check with heyApi.output", () => {
+  it("writes to its temp directory, not to heyApi.output", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "ir-generate-"));
+    try {
+      const config = defineConfig({
+        input: petstore,
+        targets: {
+          typescript: {
+            output: "sdk/ts",
+            heyApi: { output: { path: "elsewhere", clean: true } },
+          },
+        },
+      });
+      await generate(config, { cwd: dir, check: true });
+      expect(existsSync(join(dir, "elsewhere"))).toBe(false);
+      expect(existsSync(join(dir, "sdk/ts"))).toBe(false);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});

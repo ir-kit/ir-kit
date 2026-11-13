@@ -65,6 +65,10 @@ export const targets: Record<TargetName, Target> = {
         ...options,
         heyApi: {
           ...heyApi,
+          output:
+            heyApi?.output && typeof heyApi.output === "object"
+              ? { ...heyApi.output, path: output }
+              : output,
           logs: { level: "silent", ...(heyApi?.logs as object) },
         },
         input,
