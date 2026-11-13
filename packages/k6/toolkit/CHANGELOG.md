@@ -1,5 +1,18 @@
 # @ir-kit/k6-toolkit
 
+## 0.2.2
+
+### Patch Changes
+
+- 41c770f: `k6-gen` exports its TypeScript AST helpers from `@ir-kit/k6-gen/ast`, and `k6-toolkit` uses them instead of keeping its own copies.
+- Updated dependencies [238d15f]
+- Updated dependencies [700a292]
+- Updated dependencies [c9bd617]
+- Updated dependencies [41c770f]
+  - @ir-kit/openapi-tools@0.4.0
+  - @ir-kit/openapi-loader@0.4.0
+  - @ir-kit/k6-gen@0.4.0
+
 ## 0.2.1
 
 ### Patch Changes

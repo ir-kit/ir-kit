@@ -1,5 +1,11 @@
 # @ir-kit/compiler-kotlin
 
+## 0.1.1
+
+### Patch Changes
+
+- 0aa2094: Print `${name}` instead of `$name` when the following template text would extend the identifier, and make `createNullableType` return an already nullable type unchanged, so generators no longer guard either case themselves.
+
 ## 0.1.0
 
 ### Minor Changes

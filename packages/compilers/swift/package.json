@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/compiler-swift",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Typed Swift AST + printer. Build Swift source with a TypeScript-compiler-style factory API and print swift-format-clean output. Zero runtime dependencies.",
   "keywords": [
     "codegen",

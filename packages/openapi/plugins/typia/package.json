@@ -1,7 +1,7 @@
 {
   "name": "@ir-kit/openapi-ts-typia",
-  "version": "0.1.0",
-  "description": "Typia plugin for @hey-api/openapi-ts \u2014 generate compile-time Standard Schema validators from OpenAPI specs",
+  "version": "1.0.0",
+  "description": "Typia plugin for @hey-api/openapi-ts — generate compile-time Standard Schema validators from OpenAPI specs",
   "keywords": [
     "openapi",
     "openapi-ts",

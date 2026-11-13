@@ -1,5 +1,20 @@
 # @ir-kit/openapi
 
+## 0.5.0
+
+### Minor Changes
+
+- 2a7c7cf: - `convertSpec` converts OpenAPI to proto3 directly, building a message or enum per component schema and a gRPC service per operation tag, with request messages from parameters and bodies and responses from the 2xx schemas.
+  - `SchemaToTypeOps` accepts an optional `multiUnion` hook so targets with a native sum type can build it instead of falling back to an untyped value.
+- 41c770f: `@ir-kit/openapi` exports `classifyComponents`, which claims component type names and decides whether each component is a ref, enum, struct, map or plain alias, and the Go, Java, Kotlin and Swift generators build their declarations from it instead of each repeating that logic.
+- 41c770f: `@ir-kit/openapi` exports `groupOperationsByTag`, and the Go, Java, Kotlin and Swift generators use it instead of each grouping operations by tag themselves.
+
+### Patch Changes
+
+- Updated dependencies [41c770f]
+  - @ir-kit/codegen-core@0.3.0
+  - @ir-kit/schema@0.3.1
+
 ## 0.4.0
 
 ### Minor Changes

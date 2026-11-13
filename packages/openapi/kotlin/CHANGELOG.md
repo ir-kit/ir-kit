@@ -1,5 +1,29 @@
 # @ir-kit/openapi-kotlin
 
+## 3.0.0
+
+### Patch Changes
+
+- efb6fb5: Build multipart and form-urlencoded request bodies through one shared field-body emitter.
+- 0aa2094: Print `${name}` instead of `$name` when the following template text would extend the identifier, and make `createNullableType` return an already nullable type unchanged, so generators no longer guard either case themselves.
+- 238d15f: Add `parseForCodegen` to `@ir-kit/openapi-tools/parse`, returning the IR with each operation's security scheme names, so the native generators stop pairing `parseSpec` and `extractSecuritySchemeNames` by hand.
+- 41c770f: `@ir-kit/openapi` exports `classifyComponents`, which claims component type names and decides whether each component is a ref, enum, struct, map or plain alias, and the Go, Java, Kotlin and Swift generators build their declarations from it instead of each repeating that logic.
+- 41c770f: `@ir-kit/openapi` exports `groupOperationsByTag`, and the Go, Java, Kotlin and Swift generators use it instead of each grouping operations by tag themselves.
+- 41c770f: `codegen-core` exports `writeOutput(out, files, { clean })`, and the Go, Java, Kotlin and Swift generators write their output through it instead of each repeating the clean-and-write loop.
+- Updated dependencies [0aa2094]
+- Updated dependencies [238d15f]
+- Updated dependencies [700a292]
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [c9bd617]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/compiler-kotlin@0.1.1
+  - @ir-kit/openapi-tools@0.4.0
+  - @ir-kit/openapi-loader@0.4.0
+  - @ir-kit/openapi@0.5.0
+  - @ir-kit/codegen-core@0.3.0
+
 ## 2.1.0
 
 ### Minor Changes

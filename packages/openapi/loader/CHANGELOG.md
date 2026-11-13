@@ -1,5 +1,22 @@
 # @ir-kit/openapi-loader
 
+## 0.4.0
+
+### Minor Changes
+
+- c9bd617: - Spec detection parses the document and reads its root `openapi`, `swagger` or `asyncapi` field instead of regex-scanning the first 2 KB, and rejects files that are none of these instead of treating them as OpenAPI.
+  - `spec-loader` exports `classifySpecDocument()` and `readSpecDocument()`, and `openapi-loader` exports `readSpecDocument()`.
+  - `convertSpec` detects Postman collections by content rather than only by the `.postman_collection.json` file name.
+  - `convertSpec` no longer routes OpenAPI to proto through generated TypeSpec, which always failed to compile, and reports that no converter path exists instead.
+
+### Patch Changes
+
+- 700a292: Keep unquoted YAML dates (such as Stripe's `api_version` enum) as strings instead of `Date` objects, which code generation dropped. The TypeScript target now loads specs with `@ir-kit/openapi-loader` like the native targets, so relative paths such as `specs/api.yaml` are no longer read as Hey API registry shorthands, external `$ref`s inside `x-` extensions are ignored, and specs that crashed Hey API's own loader (DigitalOcean) generate.
+- Updated dependencies [2a7c7cf]
+- Updated dependencies [41c770f]
+- Updated dependencies [41c770f]
+  - @ir-kit/openapi@0.5.0
+
 ## 0.3.0
 
 ### Minor Changes
