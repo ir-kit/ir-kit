@@ -20,9 +20,9 @@ const DEFAULT_PLUGINS: ReadonlyArray<string> = [
 
 export interface GenerateOptions {
   /**
-   * Path, URL, or pre-parsed OpenAPI 3.x spec. Forwarded to hey-api
-   * which delegates to `@hey-api/json-schema-ref-parser` for strings
-   * and accepts objects directly.
+   * Path, URL, or pre-parsed OpenAPI 3.x spec. Loaded and bundled with
+   * `@ir-kit/openapi-loader`, like the native targets, before hey-api
+   * sees it.
    */
   input: string | Record<string, unknown>;
   /** Directory the SDK is written to (created if missing). */
@@ -41,11 +41,7 @@ export interface GenerateOptions {
    * wins over the defaults set here.
    */
   heyApi?: Partial<UserConfig>;
-  /**
-   * Pre-codegen spec normalization. When enabled, the spec is bundled
-   * + normalized before being handed to hey-api as a parsed object,
-   * so all four targets share the same normalization logic.
-   */
+  /** Pre-codegen spec normalization, shared with the native targets. */
   normalize?: boolean | NormalizeOptions;
 }
 
@@ -69,9 +65,10 @@ export interface GenerateResult {
  */
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
   const out = resolve(process.cwd(), opts.output);
-  const input = opts.normalize
-    ? await loadOpenAPI({ input: opts.input, normalize: opts.normalize })
-    : opts.input;
+  const input = await loadOpenAPI({
+    input: opts.input,
+    normalize: opts.normalize,
+  });
   const config: UserConfig = {
     input,
     output: out,

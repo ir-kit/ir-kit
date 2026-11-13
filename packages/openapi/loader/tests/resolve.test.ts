@@ -105,3 +105,61 @@ describe("extension refs", () => {
     });
   });
 });
+
+describe("loadOpenAPI YAML parsing", () => {
+  it("keeps unquoted dates as strings", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "openapi-loader-"));
+    const file = join(dir, "spec.yaml");
+    writeFileSync(
+      file,
+      [
+        "openapi: 3.1.0",
+        "info: { title: t, version: '1' }",
+        "paths: {}",
+        "components:",
+        "  schemas:",
+        "    ApiVersion:",
+        "      type: string",
+        "      enum:",
+        "        - 2011-01-01",
+        "        - 2024-06-20",
+      ].join("\n"),
+    );
+    const spec = (await loadOpenAPI({ input: file })) as {
+      components: { schemas: { ApiVersion: { enum: unknown[] } } };
+    };
+    expect(spec.components.schemas.ApiVersion.enum).toEqual([
+      "2011-01-01",
+      "2024-06-20",
+    ]);
+  });
+
+  it("applies `<<` merge keys", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "openapi-loader-"));
+    const file = join(dir, "spec.yaml");
+    writeFileSync(
+      file,
+      [
+        "openapi: 3.1.0",
+        "info: { title: t, version: '1' }",
+        "paths: {}",
+        "components:",
+        "  schemas:",
+        "    Base: &base",
+        "      type: object",
+        "      properties: { id: { type: string } }",
+        "    Pet:",
+        "      <<: *base",
+        "      description: pet",
+      ].join("\n"),
+    );
+    const spec = (await loadOpenAPI({ input: file })) as {
+      components: { schemas: { Pet: Record<string, unknown> } };
+    };
+    expect(spec.components.schemas.Pet).toEqual({
+      type: "object",
+      properties: { id: { type: "string" } },
+      description: "pet",
+    });
+  });
+});
