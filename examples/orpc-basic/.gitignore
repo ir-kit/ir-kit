@@ -23,4 +23,5 @@ logs/
 
 # TypeScript
 *.tsbuildinfo
-.typia*.ttsc/
+.typia*
+.ttsc/
