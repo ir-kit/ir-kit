@@ -1,5 +1,17 @@
 # @ir-kit/openapi-ts-typia
 
+## 2.0.0
+
+### Major Changes
+
+- 253ace2: Require the `@hey-api/*` `0.0.0-next-20260930190945` snapshot. Hey API's `next` line builds TypeScript with its own compiler instead of the `typescript` package, so generation now works when TypeScript 7 is installed. Install the same snapshot of `@hey-api/openapi-ts`, `@hey-api/shared`, `@hey-api/codegen-core` and `@hey-api/spec-types` alongside these packages.
+- 253ace2: `typiaTypeTransformer` now emits `tags.Format<'uuid'>` with an `import type { tags } from 'typia'` instead of inline `import("typia").tags.Format<"uuid">` types, and the `typescript` peer dependency is gone.
+
+### Patch Changes
+
+- Updated dependencies [253ace2]
+  - @ir-kit/openapi-ts-plugin-kit@0.2.0
+
 ## 1.0.1
 
 ### Patch Changes

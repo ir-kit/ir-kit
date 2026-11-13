@@ -1,5 +1,14 @@
 # @ir-kit/create-k6
 
+## 0.1.7
+
+### Patch Changes
+
+- 253ace2: Require the `@hey-api/*` `0.0.0-next-20260930190945` snapshot. Hey API's `next` line builds TypeScript with its own compiler instead of the `typescript` package, so generation now works when TypeScript 7 is installed. Install the same snapshot of `@hey-api/openapi-ts`, `@hey-api/shared`, `@hey-api/codegen-core` and `@hey-api/spec-types` alongside these packages.
+- Updated dependencies [253ace2]
+- Updated dependencies [253ace2]
+  - @ir-kit/k6-toolkit@0.3.0
+
 ## 0.1.6
 
 ### Patch Changes
