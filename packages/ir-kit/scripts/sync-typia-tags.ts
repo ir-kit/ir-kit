@@ -1,4 +1,4 @@
-#!/usr/bin/env jiti
+#!/usr/bin/env node
 /**
  * Regenerates `src/shared/typia-tags.generated.ts` from `@typia/interface`.
  * Run via `pnpm sync-tags` after bumping typia. Output is committed.
@@ -15,7 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
-const interfacePkgJson = require.resolve("@typia/interface/package.json");
+const typiaRequire = createRequire(require.resolve("typia"));
+const interfacePkgJson = typiaRequire.resolve("@typia/interface/package.json");
 const interfaceRoot = path.dirname(interfacePkgJson);
 const tagsDir = path.join(interfaceRoot, "lib", "tags");
 

@@ -101,9 +101,7 @@ flowchart LR
 
 ## Packages
 
-<!-- @packages-start -->
-
-### Language compilers (AST + printer)
+### Toolkit
 
 | Package | Description |
 | --- | --- |
@@ -121,9 +119,6 @@ flowchart LR
 | --- | --- |
 | [`@ir-kit/glean`](./apps/glean) | Glean — reverse-engineer OpenAPI 3.1 specs from traffic observed in your DevTools. |
 
-<!-- @packages-end -->
-
-> The package list above is auto-generated from each `package.json`'s `description` field, with categories driven by [`scripts/sync-readme.mjs`](./scripts/sync-readme.mjs). The lefthook pre-commit hook keeps it current; run `pnpm sync:readme` manually if needed.
 
 Three `@hey-api/openapi-ts` plugins ship in lockstep via Changesets' `fixed` config (`openapi-ts-faker`, `openapi-ts-orpc`, `openapi-ts-typia`) — bumping one bumps all three. `openapi-ts-paths` and `openapi-ts-k6` version independently, as does everything else.
 

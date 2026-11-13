@@ -4,7 +4,6 @@ packages:
   - apps/*
   - examples/*
   - tooling/*
-  - '!tooling/template/**'
 
 catalog:
   '@asyncapi/avro-schema-parser': ^3.0.24
