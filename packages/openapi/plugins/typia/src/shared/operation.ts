@@ -7,16 +7,16 @@ import type { TypiaPlugin } from "../types.js";
 export type RequestInputType = MaybeTsDsl<TypeTsDsl>;
 
 /**
- * Emits `Data extends { [K]: unknown } ? [Data[K]] extends [undefined] ? unknown : Data[K] : unknown`.
+ * Emits `Data extends { [K]?: unknown } ? [Data[K]] extends [undefined] ? unknown : Data[K] : unknown`.
  * Widens absent keys and `?: never` sections so HTTP adapters can pass `{}` / header bags
- * without tripping strict checks. Declared schemas fall through unchanged.
+ * without tripping strict checks. Declared sections, optional or not, keep their type.
  */
 function httpSectionFallback(data: Symbol, key: string): RequestInputType {
   const unknown = $.type("unknown");
   const value = $.type(data).idx($.type.literal(key));
   return $.type
     .ternary($.type(data))
-    .extends($.type.object().prop(key, (p) => p.type(unknown)))
+    .extends($.type.object().prop(key, (p) => p.optional().type(unknown)))
     .do(
       $.type
         .ternary($.type.tuple(value))

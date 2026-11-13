@@ -13,7 +13,6 @@ export default defineConfig({
   },
   output: {
     path: "./src/generated",
-    postProcess: ["oxfmt", "eslint"],
   },
   plugins: [
     {
