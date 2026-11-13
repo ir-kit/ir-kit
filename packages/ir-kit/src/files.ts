@@ -11,6 +11,8 @@ export const IGNORED = [
 export interface FileMatcher {
   include: string[];
   exclude: string[];
+  /** The fixed directory each include pattern starts from, for watchers that take paths. */
+  roots: string[];
   matches(file: string): boolean;
 }
 
@@ -36,13 +38,20 @@ export function fileMatcher(
       !isGlob(p) &&
       statSync(resolve(cwd, p), { throwIfNoEntry: false })?.isDirectory()
     ) {
-      p = `${p.replace(/\/+$/, "")}/**`;
+      const dir = p.replace(/\/+$/, "");
+      p = dir && dir !== "." ? `${dir}/**` : "**";
     }
     (negated ? exclude : include).push(p);
   }
+  const roots = include.map((p) => {
+    const parts = p.split("/");
+    const glob = parts.findIndex(isGlob);
+    return resolve(cwd, ...(glob < 0 ? parts : parts.slice(0, glob)));
+  });
   return {
     include,
     exclude,
+    roots,
     matches(file) {
       const rel = toPosix(relative(cwd, resolve(cwd, file)));
       return (

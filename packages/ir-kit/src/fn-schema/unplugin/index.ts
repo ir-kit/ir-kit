@@ -92,7 +92,7 @@ export const fnSchema: UnpluginInstance<FnSchemaPluginOptions, false> =
         async configureServer(server) {
           watching = true;
           const matcher = fileMatcher(patterns, cwd);
-          server.watcher.add(matcher.include.map((p) => path.resolve(cwd, p)));
+          server.watcher.add(matcher.roots);
           const reload = (abs: string) => {
             if (!matcher.matches(abs)) return;
             project?.refresh([abs]);

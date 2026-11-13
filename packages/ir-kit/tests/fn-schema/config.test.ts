@@ -106,5 +106,16 @@ describe("file patterns", () => {
     const m = fileMatcher([pattern, "!**/*.test.ts"], dir);
     expect(m.matches(join(dir, "src/api/a.ts"))).toBe(true);
     expect(m.matches(join(dir, "src/api/a.test.ts"))).toBe(false);
+    expect(m.roots).toEqual([join(dir, "src/api")]);
+  });
+
+  it("treats cwd itself as everything under cwd", async () => {
+    for (const p of [dir, ".", "./"]) {
+      expect(fileMatcher([p], dir).include).toEqual(["**"]);
+    }
+    expect(await globFiles([dir, "!**/*.test.ts"], dir)).toEqual([
+      join(dir, "src/api/a.ts"),
+      join(dir, "src/link.ts"),
+    ]);
   });
 });
