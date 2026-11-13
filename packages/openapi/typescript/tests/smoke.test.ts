@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -65,5 +65,36 @@ describe("generate (plugin override)", () => {
       !paths.some((p) => p.endsWith("sdk.gen.ts")),
       "expected sdk.gen.ts to be skipped when sdk plugin is dropped",
     );
+  });
+});
+
+describe("generate (spec loading)", () => {
+  let dir: string;
+
+  beforeAll(async () => {
+    dir = await mkdtemp(join(tmpdir(), "openapi-ts-wrapper-"));
+  });
+
+  afterAll(async () => {
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it("loads the spec like the native targets, ignoring external refs in x- extensions", async () => {
+    const spec = join(dir, "spec.yaml");
+    await writeFile(
+      spec,
+      [
+        "openapi: 3.1.0",
+        "info: { title: t, version: '1' }",
+        "paths:",
+        "  /me:",
+        "    get:",
+        "      x-policy: { $ref: ../missing.yaml }",
+        "      responses:",
+        "        '200': { description: ok }",
+      ].join("\n"),
+    );
+    const result = await generate({ input: spec, output: join(dir, "out") });
+    assert.ok(result.files.some((f) => f.path.endsWith("sdk.gen.ts")));
   });
 });

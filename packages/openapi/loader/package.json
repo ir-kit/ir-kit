@@ -51,10 +51,12 @@
   },
   "dependencies": {
     "@hey-api/json-schema-ref-parser": "catalog:",
-    "@ir-kit/openapi": "workspace:*"
+    "@ir-kit/openapi": "workspace:*",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@ir-kit/tsconfig": "workspace:*",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "catalog:",
     "vitest": "catalog:"
   },
