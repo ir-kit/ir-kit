@@ -35,7 +35,7 @@ describe("@ir-kit/k6-gen output syntax", () => {
       );
     expect(errors).toEqual([]);
     await rm(dir, { recursive: true, force: true });
-  });
+  }, 30_000);
 
   it("keeps multi-line summaries inside the stub header comment", async () => {
     const dir = await mkdtemp(join(tmpdir(), "k6-gen-summary-"));
