@@ -18,7 +18,7 @@ Heavy, format-specific libraries are optional peers. When one is missing, the co
 Prefer this over one-off `ir sdk` commands whenever the user wants generated code kept in a repo.
 
 ```sh
-npx ir init --input api/openapi.yaml --targets typescript,go,k6   # writes ir.config.ts
+npx ir init --input api/openapi.yaml --targets typescript,go,k6   # writes ir.config.ts (.mts unless package.json is "type": "module")
 npx ir generate            # write every target
 npx ir generate --check    # CI: write nothing, fail listing changed/missing/extra files
 npx ir watch               # regenerate on spec or config change
