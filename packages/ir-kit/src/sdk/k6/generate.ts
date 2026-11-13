@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-import type { IR } from "@hey-api/shared";
 import { assertSafeOutputDir } from "../../codegen/index.js";
+import type { IR } from "../../ir/index.js";
 import type { NormalizeOptions } from "../../openapi/index.js";
 import { parseSpec } from "../../openapi-tools/parse.js";
 import { loadOpenAPI } from "../../spec/openapi/index.js";

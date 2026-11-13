@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   type LocatedParam,
   paramsAt,
@@ -79,7 +79,7 @@ function throwBadURL(): SwStmt {
   );
 }
 
-function appendQueryItemsCall(p: IR.ParameterObject): SwStmt {
+function appendQueryItemsCall(p: IR.Parameter): SwStmt {
   return swExprStmt(
     swCall(
       swOptChain(swMember(swIdent("components"), "queryItems"), "append"),
@@ -88,7 +88,7 @@ function appendQueryItemsCall(p: IR.ParameterObject): SwStmt {
   );
 }
 
-function urlEncodingQueryCall(p: IR.ParameterObject): SwExpr {
+function urlEncodingQueryCall(p: IR.Parameter): SwExpr {
   const id = paramIdent(p.name);
   const isArray = p.schema.type === "array";
   const args: SwCallArg[] = [
@@ -102,7 +102,7 @@ function urlEncodingQueryCall(p: IR.ParameterObject): SwExpr {
   return swCall(swMember(swIdent("URLEncoding"), "query"), args);
 }
 
-function styleCase(style: IR.ParameterObject["style"]): string {
+function styleCase(style: IR.Parameter["style"]): string {
   switch (style) {
     case "spaceDelimited":
       return "spaceDelimited";
@@ -126,7 +126,7 @@ function styleCase(style: IR.ParameterObject["style"]): string {
 function buildPathChain(
   base: SwExpr,
   pathStr: string,
-  pathParams: ReadonlyArray<IR.ParameterObject>,
+  pathParams: ReadonlyArray<IR.Parameter>,
 ): SwExpr {
   const segments = splitPathSegments(pathStr);
   if (!segments.length) return base;
@@ -143,7 +143,7 @@ function buildPathChain(
 
 function segmentExpr(
   seg: string,
-  pathParams: ReadonlyArray<IR.ParameterObject>,
+  pathParams: ReadonlyArray<IR.Parameter>,
 ): SwExpr {
   const parts: Array<string | SwExpr> = parseTemplatedSegment(
     seg,

@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../ir/index.js";
 import { HTTP_METHODS, type HttpMethod } from "../../../openapi/index.js";
 
 export interface WalkedOperation {
@@ -8,11 +8,11 @@ export interface WalkedOperation {
   summary?: string;
   description?: string;
   tags: ReadonlyArray<string>;
-  pathParams: ReadonlyArray<IR.ParameterObject>;
-  queryParams: ReadonlyArray<IR.ParameterObject>;
-  headerParams: ReadonlyArray<IR.ParameterObject>;
-  body?: IR.BodyObject;
-  successSchema?: IR.SchemaObject;
+  pathParams: ReadonlyArray<IR.Parameter>;
+  queryParams: ReadonlyArray<IR.Parameter>;
+  headerParams: ReadonlyArray<IR.Parameter>;
+  body?: IR.Body;
+  successSchema?: IR.Schema;
   successStatus?: number;
 }
 
@@ -22,13 +22,13 @@ export interface WalkedOperation {
  * dropped because k6's `http` namespace doesn't expose it.
  */
 export function* walkOperations(
-  paths: IR.PathsObject | undefined,
+  paths: IR.Paths | undefined,
 ): Iterable<WalkedOperation> {
   for (const [pathStr, pathItem] of Object.entries(paths ?? {})) {
     if (!pathItem) continue;
     for (const method of HTTP_METHODS) {
       if (method === "trace") continue;
-      const op = pathItem[method] as IR.OperationObject | undefined;
+      const op = pathItem[method] as IR.Operation | undefined;
       if (!op || !op.id) continue;
 
       const params = op.parameters ?? {};
@@ -53,8 +53,8 @@ export function* walkOperations(
 }
 
 function pickSuccessResponse(
-  responses: IR.ResponsesObject | undefined,
-): { status: number; response: IR.ResponseObject } | undefined {
+  responses: IR.Responses | undefined,
+): { status: number; response: IR.Response } | undefined {
   if (!responses) return undefined;
   // Prefer the lowest 2xx with a JSON-ish body.
   const codes = Object.keys(responses)

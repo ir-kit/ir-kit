@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../ir/index.js";
 
 import type { Route } from "./route.js";
 

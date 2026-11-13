@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   collectLocatedParams,
   fromHeyApi,
@@ -26,7 +26,7 @@ import { schemaToType } from "../type/index.js";
  * list short.
  */
 export function buildNonBodyParams(
-  op: IR.OperationObject,
+  op: IR.Operation,
   ctx: TypeCtx,
 ): { params: GoFuncParam[]; located: LocatedParam[] } {
   const located = collectLocatedParams(op).filter((l) => l.loc !== "cookie");

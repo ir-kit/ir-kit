@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyBody,
   isSchemaObject,
@@ -56,7 +56,7 @@ export interface BodyResult {
  *    the property pairs and set the body as percent-encoded `Data`.
  *  - octet-stream / image / etc. → `request.httpBody = body` (raw `Data`).
  */
-export function buildBodyStmts(body: IR.BodyObject): BodyResult {
+export function buildBodyStmts(body: IR.Body): BodyResult {
   const { shape, schema } = classifyBody(body);
   switch (shape.kind) {
     case "json-opaque":

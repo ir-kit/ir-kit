@@ -135,6 +135,10 @@
       "types": "./dist/openapi/index.d.ts",
       "import": "./dist/openapi/index.js"
     },
+    "./ir": {
+      "types": "./dist/ir/index.d.ts",
+      "import": "./dist/ir/index.js"
+    },
     "./openapi-tools": {
       "types": "./dist/openapi-tools/index.d.ts",
       "import": "./dist/openapi-tools/index.js"

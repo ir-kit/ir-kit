@@ -5,7 +5,7 @@ import {
 } from "../../src/k6-toolkit/scaffold/spec-tags.ts";
 import type { IR } from "../../src/openapi-tools/index.js";
 
-function makePaths(): IR.PathsObject {
+function makePaths(): IR.Paths {
   return {
     "/pets": {
       get: {
@@ -41,7 +41,7 @@ function makePaths(): IR.PathsObject {
         responses: { 200: {} },
       },
     },
-  } as unknown as IR.PathsObject;
+  } as unknown as IR.Paths;
 }
 
 describe("readSpecOperations", () => {
@@ -93,7 +93,7 @@ describe("readSpecOperations", () => {
           responses: { 200: {} },
         },
       },
-    } as unknown as IR.PathsObject;
+    } as unknown as IR.Paths;
     const spec = readSpecOperations(multi);
     expect(spec.byTag.get("pet")?.map((o) => o.id)).toEqual(["crossOp"]);
     expect(spec.byTag.get("user")?.map((o) => o.id)).toEqual(["crossOp"]);

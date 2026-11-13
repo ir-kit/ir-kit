@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import type { HttpMethod, Schema } from "../../../../openapi/index.js";
 import { classifyBody, isSchemaObject } from "../../../../openapi/index.js";
 import type { KtType } from "../../ast/index.js";
@@ -45,7 +45,7 @@ export interface BodyResult {
  * Optional fields are wrapped in `if (<id> != null)`.
  */
 export function buildBodyStmts(
-  body: IR.BodyObject,
+  body: IR.Body,
   method: HttpMethod,
   bodyType: KtType,
   aliases: SerializerAliases,

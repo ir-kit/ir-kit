@@ -72,7 +72,6 @@ export {
   SAFE_NORMALIZE,
 } from "./spec/normalize/index.js";
 export { isMeaningless } from "./spec/ref.js";
-export { extractSecuritySchemeNames, securityKey } from "./spec/security.js";
 export {
   type Component,
   type ComponentShape,

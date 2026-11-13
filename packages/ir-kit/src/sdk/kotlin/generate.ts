@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 
 import { defaultProjectName, writeOutput } from "../../codegen/index.js";
+import { parseOpenAPI } from "../../ir/index.js";
 import type { NormalizeOptions } from "../../openapi/index.js";
-import { parseForCodegen } from "../../openapi-tools/parse.js";
 import { loadOpenAPI } from "../../spec/openapi/index.js";
 import { newTypeNames } from "./ir/identifiers.js";
 import {
@@ -21,19 +21,7 @@ import {
   settingsGradleFile,
 } from "./project/index.js";
 
-/**
- * Operations options the consumer can pass through `generate()`. The
- * orchestrator owns `securitySchemeNames` (extracted from the bundled
- * spec), so it's stripped from the public surface.
- */
-type ForwardedOperationsOptions = Omit<
-  OperationsOptions,
-  "securitySchemeNames"
->;
-
-export interface GenerateOptions
-  extends BuildOptions,
-    ForwardedOperationsOptions {
+export interface GenerateOptions extends BuildOptions, OperationsOptions {
   /**
    * The OpenAPI spec source: a filesystem path, http(s) URL, or a
    * pre-parsed object. YAML and JSON inputs both work. External
@@ -65,7 +53,7 @@ export interface GenerateResult {
 }
 
 export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
-  const { ir, securitySchemeNames } = parseForCodegen(
+  const ir = parseOpenAPI(
     await loadOpenAPI({ input: opts.input, normalize: opts.normalize }),
   );
   const names = newTypeNames();
@@ -77,7 +65,6 @@ export async function generate(opts: GenerateOptions): Promise<GenerateResult> {
     clientClassName: opts.clientClassName,
     interfaceOnly: opts.interfaceOnly,
     openImpl: opts.openImpl,
-    securitySchemeNames,
     names,
     aliases: new Map(aliasesOf(schemaDecls)),
   });

@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import { type LocatedParam, paramsAt } from "../../../../openapi/index.js";
 import {
   type KtStmt,
@@ -26,7 +26,7 @@ export function buildHeaderStmts(
   return headers.flatMap(buildHeaderStmt);
 }
 
-function buildHeaderStmt(p: IR.ParameterObject): ReadonlyArray<KtStmt> {
+function buildHeaderStmt(p: IR.Parameter): ReadonlyArray<KtStmt> {
   const id = operationParamIdent(p.name);
   const setStmt = ktExprStmt(
     ktCall(ktMember(ktIdent("builder"), "header"), [

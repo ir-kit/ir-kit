@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../ir/index.js";
 import { fromHeyApi } from "../../schema/adapters/heyapi.js";
 import type { Schema } from "../../schema/index.js";
 
@@ -11,12 +11,12 @@ export const isSuccessStatus = (code: string): boolean => /^2\d\d$/.test(code);
  * code for stable per-target emission order.
  */
 export function successResponses(
-  op: IR.OperationObject,
-): Array<readonly [string, IR.ResponseObject]> {
+  op: IR.Operation,
+): Array<readonly [string, IR.Response]> {
   return Object.entries(op.responses ?? {})
     .filter(([k]) => isSuccessStatus(k))
     .sort(([a], [b]) => a.localeCompare(b)) as Array<
-    readonly [string, IR.ResponseObject]
+    readonly [string, IR.Response]
   >;
 }
 
@@ -42,7 +42,7 @@ export type ReturnShape =
   /** Multiple 2xx — emitter renders a sum type. */
   | { kind: "multi"; cases: ReadonlyArray<ResponseCase> };
 
-export function classifyReturnShape(op: IR.OperationObject): ReturnShape {
+export function classifyReturnShape(op: IR.Operation): ReturnShape {
   const success = successResponses(op);
   if (success.length === 0) return { kind: "void" };
   if (success.length === 1) {

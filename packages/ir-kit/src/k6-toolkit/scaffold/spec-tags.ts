@@ -14,7 +14,7 @@ export interface SpecOperations {
 const UNTAGGED = "_untagged";
 
 export function readSpecOperations(
-  paths: IR.PathsObject | undefined,
+  paths: IR.Paths | undefined,
 ): SpecOperations {
   const byTag = new Map<string, WalkedOperation[]>();
   const byId = new Map<string, WalkedOperation>();

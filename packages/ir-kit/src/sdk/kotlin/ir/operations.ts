@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import { type Namespace, pascal } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { groupOperationsByTag } from "../../../openapi/index.js";
 
 import {
@@ -39,13 +39,6 @@ export interface OperationsOptions {
    * subclass and override individual methods. Default: `false`.
    */
   openImpl?: boolean;
-  /**
-   * Per-operation security-scheme names, keyed by `${pathStr}|${method}`.
-   * The IR drops scheme names from `op.security`, so the caller (usually
-   * `generate()`) resolves them from the raw spec and threads the map
-   * here. Empty / missing entries → no auto-auth wiring for that op.
-   */
-  securitySchemeNames?: ReadonlyMap<string, ReadonlyArray<string>>;
   /** Shared type-name owner; pass the one used for `schemasToDecls`. */
   names?: Namespace;
   /** Type aliases declared outside these operations (component schemas). */
@@ -71,7 +64,7 @@ export interface OperationsResult {
  * in the same output array.
  */
 export function operationsToDecls(
-  paths: IR.PathsObject | undefined,
+  paths: IR.Paths | undefined,
   opts: OperationsOptions = {},
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
@@ -84,10 +77,9 @@ export function operationsToDecls(
   const names = opts.names ?? newTypeNames();
   const byTag = groupOperationsByTag(
     paths,
-    opts.securitySchemeNames,
     defaultTag,
-    ({ pathStr, method, op, schemeNames }) =>
-      operationSignature(op, method, pathStr, emit, schemeNames, names),
+    ({ pathStr, method, op }) =>
+      operationSignature(op, method, pathStr, emit, names),
   );
 
   let needsMultipart = false;

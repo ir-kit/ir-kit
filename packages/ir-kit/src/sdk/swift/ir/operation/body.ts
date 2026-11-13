@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyBody,
   iterateObjectProperties,
@@ -12,7 +12,7 @@ import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
 /**
- * Resolve an `IR.BodyObject` into the function parameters for both
+ * Resolve an `IR.Body` into the function parameters for both
  * protocol signature and impl method:
  *
  *  - `application/json` (and `+json`) → `body: T`. Opaque schemas
@@ -23,7 +23,7 @@ import { schemaToType } from "../type/index.js";
  *  - empty / octet-stream / image / unknown → `body: Data`.
  */
 export function buildBodyParams(
-  body: IR.BodyObject,
+  body: IR.Body,
   ctx: TypeCtx,
 ): ReadonlyArray<SwFunParam> {
   const { shape, schema } = classifyBody(body);

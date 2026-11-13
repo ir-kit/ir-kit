@@ -1,5 +1,4 @@
-import type { IR } from "@hey-api/shared";
-import { securityKey } from "../../../src/openapi/index.js";
+import type { IR } from "../../../src/ir/index.js";
 import { parseSpec } from "../../../src/openapi-tools/parse.js";
 
 type Fragment = {
@@ -25,28 +24,3 @@ export function ir(
  * drops scheme names from `op.security`, so tests building from a
  * fragment with security need to thread this through explicitly.
  */
-export function securityNamesMap(
-  fragment: Fragment,
-): Map<string, ReadonlyArray<string>> {
-  const map = new Map<string, ReadonlyArray<string>>();
-  const paths = (fragment.paths ?? {}) as Record<string, unknown>;
-  for (const [pathStr, pathItem] of Object.entries(paths)) {
-    if (!pathItem || typeof pathItem !== "object") continue;
-    for (const [method, op] of Object.entries(
-      pathItem as Record<string, unknown>,
-    )) {
-      const security = (op as { security?: unknown })?.security;
-      if (!Array.isArray(security)) continue;
-      const names = new Set<string>();
-      for (const requirement of security) {
-        if (requirement && typeof requirement === "object") {
-          for (const name of Object.keys(requirement)) names.add(name);
-        }
-      }
-      if (names.size > 0) {
-        map.set(securityKey(pathStr, method), [...names]);
-      }
-    }
-  }
-  return map;
-}

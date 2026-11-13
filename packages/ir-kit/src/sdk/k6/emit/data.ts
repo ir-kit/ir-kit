@@ -1,6 +1,6 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
 import { safeIdent } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { fromHeyApi } from "../../../openapi/index.js";
 
 import { schemaToFakerExpr } from "../ir/index.js";
@@ -10,7 +10,7 @@ import { GENERATED_HEADER, printDslNodes } from "../print.js";
 const TYPE_NAMESPACE = "T";
 
 export function emitDataFile(
-  schemas: Record<string, IR.SchemaObject> | undefined,
+  schemas: Record<string, IR.Schema> | undefined,
 ): string {
   const entries = Object.entries(schemas ?? {});
 

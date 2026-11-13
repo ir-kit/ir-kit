@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import { type LocatedParam, paramsAt } from "../../../../openapi/index.js";
 import type { SwExpr, SwStmt } from "../../ast/index.js";
 import {
@@ -24,7 +24,7 @@ export function buildHeaderStmts(
   return headers.flatMap(buildHeaderStmt);
 }
 
-function buildHeaderStmt(p: IR.ParameterObject): ReadonlyArray<SwStmt> {
+function buildHeaderStmt(p: IR.Parameter): ReadonlyArray<SwStmt> {
   const id = paramIdent(p.name);
   const setValue = (ref: SwExpr): SwStmt =>
     swExprStmt(

@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyReturnShape,
   synthTypeName,
@@ -57,10 +57,7 @@ export interface ResolvedReturn {
  * func (SubmitJobResponseStatus204) isSubmitJobResponse() {}
  * ```
  */
-export function returnTypeFor(
-  op: IR.OperationObject,
-  ctx: TypeCtx,
-): ResolvedReturn {
+export function returnTypeFor(op: IR.Operation, ctx: TypeCtx): ResolvedReturn {
   const shape = classifyReturnShape(op);
   switch (shape.kind) {
     case "void":

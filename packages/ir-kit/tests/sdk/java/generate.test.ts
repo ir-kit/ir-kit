@@ -4,7 +4,7 @@ import { newTypeNames } from "../../../src/sdk/java/ir/identifiers.js";
 import { operationsToDecls } from "../../../src/sdk/java/ir/operations.js";
 import { schemasToDecls } from "../../../src/sdk/java/ir/schema.js";
 import { buildJavaProject } from "../../../src/sdk/java/project/build.js";
-import { ir, securityNamesMap } from "./_helpers.js";
+import { ir } from "./_helpers.js";
 
 function build(fragment: Parameters<typeof ir>[0]) {
   const model = ir(fragment);
@@ -12,7 +12,6 @@ function build(fragment: Parameters<typeof ir>[0]) {
   const schemas = schemasToDecls(model.components?.schemas ?? {}, names);
   const ops = operationsToDecls(model.paths, {
     names,
-    securitySchemeNames: securityNamesMap(fragment),
   });
   const files = buildJavaProject(resolveAliases([...schemas, ...ops.decls]), {
     packageName: "com.acme",

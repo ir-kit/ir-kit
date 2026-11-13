@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../ir/index.js";
 import { fromHeyApi } from "../../schema/adapters/heyapi.js";
 import { type Schema } from "../../schema/index.js";
 
@@ -42,7 +42,7 @@ export interface ClassifiedBody {
  * pre-converted to canonical form so each emitter can dispatch on
  * `shape.kind` without re-converting.
  */
-export function classifyBody(body: IR.BodyObject): ClassifiedBody {
+export function classifyBody(body: IR.Body): ClassifiedBody {
   const mt = (body.mediaType ?? "").toLowerCase();
   const schema = fromHeyApi(body.schema);
   const isObject = schema.type === "object" && Boolean(schema.properties);

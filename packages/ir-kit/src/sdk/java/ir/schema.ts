@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { classifyComponents } from "../../../openapi/index.js";
 
 import { type JEmitted, jMap, jObject, jRef } from "../ast/index.js";
@@ -7,7 +7,7 @@ import { newTypeNames } from "./identifiers.js";
 import { buildEnumFromIR, buildStruct, schemaToType } from "./type/index.js";
 
 export function schemasToDecls(
-  schemas: Record<string, IR.SchemaObject>,
+  schemas: Record<string, IR.Schema>,
   names: Namespace = newTypeNames(),
 ): JEmitted[] {
   const decls: JEmitted[] = [];

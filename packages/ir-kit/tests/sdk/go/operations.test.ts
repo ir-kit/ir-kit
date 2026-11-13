@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "vitest";
 
 import { operationsToDecls, printDecl } from "../../../src/sdk/go/index.ts";
-import { ir, securityNamesMap } from "./_helpers.ts";
+import { ir } from "./_helpers.ts";
 
 const getUserSpec = {
   paths: {
@@ -195,9 +195,7 @@ describe("operationsToDecls", () => {
       },
     };
     const m = ir(fragment);
-    const { decls, needsAuth } = operationsToDecls(m.paths, {
-      securitySchemeNames: securityNamesMap(fragment),
-    });
+    const { decls, needsAuth } = operationsToDecls(m.paths, {});
     assert.equal(needsAuth, true);
     const method = decls.find((d) => d.kind === "func" && d.name === "Me")!;
     const out = printDecl(method);

@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import { synthName } from "../../../../codegen/index.js";
+import type { IR } from "../../../../ir/index.js";
 import { classifyReturnShape } from "../../../../openapi/index.js";
 
 import {
@@ -27,10 +27,7 @@ export interface ResolvedReturn {
   sealedName?: string;
 }
 
-export function returnTypeFor(
-  op: IR.OperationObject,
-  ctx: TypeCtx,
-): ResolvedReturn {
+export function returnTypeFor(op: IR.Operation, ctx: TypeCtx): ResolvedReturn {
   const shape = classifyReturnShape(op);
   switch (shape.kind) {
     case "void":

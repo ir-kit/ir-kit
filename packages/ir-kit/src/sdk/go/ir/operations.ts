@@ -1,5 +1,5 @@
-import type { IR } from "@hey-api/shared";
 import { type Namespace, safeIdent } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { groupOperationsByTag } from "../../../openapi/index.js";
 
 import {
@@ -30,8 +30,6 @@ export interface OperationsOptions {
   clientStructName?: (interfaceName: string) => string;
   /** Skip emitting the impl struct. Default: `false`. */
   interfaceOnly?: boolean;
-  /** Per-operation security-scheme names. See swift / kotlin generators. */
-  securitySchemeNames?: ReadonlyMap<string, ReadonlyArray<string>>;
   /** Shared type-name owner; pass the one used for `schemasToDecls`. */
   names?: Namespace;
 }
@@ -53,7 +51,7 @@ export interface OperationsResult {
  * named methods.
  */
 export function operationsToDecls(
-  paths: IR.PathsObject | undefined,
+  paths: IR.Paths | undefined,
   opts: OperationsOptions = {},
 ): OperationsResult {
   const defaultTag = opts.defaultTag ?? "Default";
@@ -67,10 +65,9 @@ export function operationsToDecls(
   const names = opts.names ?? newTypeNames();
   const byTag = groupOperationsByTag(
     paths,
-    opts.securitySchemeNames,
     defaultTag,
-    ({ pathStr, method, op, schemeNames }) =>
-      operationSignature(op, method, pathStr, emit, schemeNames, names),
+    ({ pathStr, method, op }) =>
+      operationSignature(op, method, pathStr, emit, names),
   );
 
   let needsMultipart = false;

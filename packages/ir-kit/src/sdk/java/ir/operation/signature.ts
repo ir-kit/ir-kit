@@ -1,6 +1,6 @@
-import type { IR } from "@hey-api/shared";
 import type { Namespace } from "../../../../codegen/index.js";
 import { camel, pascal } from "../../../../codegen/index.js";
+import type { IR } from "../../../../ir/index.js";
 import {
   deriveBaseName,
   type HttpMethod,
@@ -22,7 +22,7 @@ export interface OperationSignature {
   returnType: JType;
   doc: string;
   locatedParams: ReadonlyArray<LocatedParam>;
-  op: IR.OperationObject;
+  op: IR.Operation;
   method: HttpMethod;
   pathStr: string;
   securitySchemeNames: ReadonlyArray<string>;
@@ -39,11 +39,10 @@ export const optionsParam = (): JParam =>
   jParam("options", jRef("RequestOptions"));
 
 export function operationSignature(
-  op: IR.OperationObject,
+  op: IR.Operation,
   method: HttpMethod,
   pathStr: string,
   emit: TypeCtx["emit"],
-  schemeNames: ReadonlyArray<string>,
   names: Namespace,
 ): OperationSignature {
   const name = deriveBaseName(op, method, pathStr);
@@ -65,7 +64,7 @@ export function operationSignature(
     op,
     method,
     pathStr,
-    securitySchemeNames: schemeNames,
+    securitySchemeNames: op.securitySchemes,
     responseCases,
   };
 }

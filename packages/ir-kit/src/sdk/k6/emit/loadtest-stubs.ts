@@ -1,6 +1,6 @@
 import { $ } from "@hey-api/openapi-ts";
-import type { IR } from "@hey-api/shared";
 import { safeIdent } from "../../../codegen/index.js";
+import type { IR } from "../../../ir/index.js";
 import { extractEnumValues, fromHeyApi } from "../../../openapi/index.js";
 import type { Expr } from "../dsl.js";
 import type { BuiltFile } from "../generate.js";
@@ -73,7 +73,7 @@ function callArgExpressions(
   return args;
 }
 
-function placeholder(schema: IR.SchemaObject): Expr {
+function placeholder(schema: IR.Schema): Expr {
   const [first] = extractEnumValues(fromHeyApi(schema)) ?? [];
   if (
     typeof first === "string" ||
@@ -112,11 +112,6 @@ function resolveDataBuilderName(
   const ref = op.body?.schema?.$ref;
   if (ref) {
     const name = safeIdent(ref.split("/").pop() ?? "");
-    if (knownSchemas.has(name)) return name;
-  }
-  const sym = op.body?.schema?.symbolRef?.name;
-  if (sym) {
-    const name = safeIdent(sym);
     if (knownSchemas.has(name)) return name;
   }
   return undefined;

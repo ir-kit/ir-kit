@@ -1,4 +1,4 @@
-import type { IR } from "@hey-api/shared";
+import type { IR } from "../../../../ir/index.js";
 import {
   classifyBody,
   iterateObjectProperties,
@@ -11,7 +11,7 @@ import type { TypeCtx } from "../type/index.js";
 import { schemaToType } from "../type/index.js";
 
 export function buildBodyParams(
-  body: IR.BodyObject,
+  body: IR.Body,
   ctx: TypeCtx,
 ): ReadonlyArray<JParam> {
   const { shape, schema } = classifyBody(body);
