@@ -21,8 +21,8 @@ Skip this skill for: framework-agnostic k6 scripting, JS-based unit tests, non-H
 | Package | Role |
 |---|---|
 | `@ir-kit/k6` | Runtime framework — `defineLoadTest`, `flow`, `useAuth`, pace presets, async `Ctx`. Imported by the user-written `loadtest.ts`. |
-| `@ir-kit/k6-gen` | Codegen — OpenAPI spec → typed client (`client.ts`, `types.ts`, `data.ts`). Emits sync + `async` namespace per op. |
-| `@ir-kit/k6-toolkit` | Programmatic API the user calls from scripts. Re-exports `generate` from k6-gen. Also ships the `k6-ts` CLI. |
+| `ir-kit/sdk/k6` | Codegen — OpenAPI spec → typed client (`client.ts`, `types.ts`, `data.ts`). Emits sync + `async` namespace per op. |
+| `ir-kit/k6-toolkit` | Programmatic API the user calls from scripts. Re-exports `generate` from k6-gen. Also ships the `k6-ts` CLI. |
 
 For a brand-new project, the cowpath is **`npm create @ir-kit/k6`** — interactive wizard that runs `init()`.
 
@@ -54,7 +54,7 @@ Each step works standalone — pick the entry that matches what you have (HAR, s
 
 ## The `k6-ts` CLI — drop-in `k6` replacement for TypeScript entries
 
-Installed with `@ir-kit/k6-toolkit`. Behaves exactly like `k6` from the terminal except it bundles `.ts` entries on the fly (tsdown, `k6`/`k6/*` external, `.k6-ts-cache/` for output). cwd is preserved so `open("./fixtures/data.csv")` resolves as expected. SIGINT/SIGTERM forwarded to k6; signal-killed runs return `128+signum`.
+Installed with `ir-kit/k6-toolkit`. Behaves exactly like `k6` from the terminal except it bundles `.ts` entries on the fly (tsdown, `k6`/`k6/*` external, `.k6-ts-cache/` for output). cwd is preserved so `open("./fixtures/data.csv")` resolves as expected. SIGINT/SIGTERM forwarded to k6; signal-killed runs return `128+signum`.
 
 ```bash
 # Runs k6 against the bundled output of loadtest.ts
@@ -144,7 +144,7 @@ The wizard asks for:
 ## Programmatic equivalent (in a script)
 
 ```ts
-import { init, sync, runK6 } from "@ir-kit/k6-toolkit";
+import { init, sync, runK6 } from "ir-kit/k6-toolkit";
 
 await init({
   input: "./openapi.yaml",      // path, URL, or pre-parsed spec object

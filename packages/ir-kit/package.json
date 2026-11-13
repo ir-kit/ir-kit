@@ -1,0 +1,453 @@
+{
+  "name": "ir-kit",
+  "version": "0.0.0",
+  "description": "API spec toolchain: load, convert, diff and document any API spec, and generate SDKs, mocks, validators and k6 load tests from it.",
+  "keywords": [
+    "openapi",
+    "asyncapi",
+    "typespec",
+    "protobuf",
+    "postman",
+    "sdk",
+    "codegen",
+    "go",
+    "kotlin",
+    "swift",
+    "java",
+    "typescript",
+    "k6",
+    "hey-api"
+  ],
+  "homepage": "https://github.com/ahmedrowaihi/ir-kit#readme",
+  "bugs": {
+    "url": "https://github.com/ahmedrowaihi/ir-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedrowaihi/ir-kit.git",
+    "directory": "packages/ir-kit"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Ahmed Rowaihi",
+    "email": "ahmedrowaihi@gmail.com"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "bin": {
+    "ir": "./dist/cli/bin.js",
+    "ir-kit": "./dist/cli/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./asyncapi": {
+      "types": "./dist/asyncapi/index.d.ts",
+      "import": "./dist/asyncapi/index.js"
+    },
+    "./asyncapi/bindings": {
+      "types": "./dist/asyncapi/bindings.d.ts",
+      "import": "./dist/asyncapi/bindings.js"
+    },
+    "./asyncapi/match": {
+      "types": "./dist/asyncapi/match.d.ts",
+      "import": "./dist/asyncapi/match.js"
+    },
+    "./asyncapi/parse": {
+      "types": "./dist/asyncapi/parse.d.ts",
+      "import": "./dist/asyncapi/parse.js"
+    },
+    "./cli": {
+      "types": "./dist/cli/index.d.ts",
+      "import": "./dist/cli/index.js"
+    },
+    "./codegen": {
+      "types": "./dist/codegen/index.d.ts",
+      "import": "./dist/codegen/index.js"
+    },
+    "./fn-schema": {
+      "types": "./dist/fn-schema/core/index.d.ts",
+      "import": "./dist/fn-schema/core/index.js"
+    },
+    "./fn-schema/emit": {
+      "types": "./dist/fn-schema/core/emit/index.d.ts",
+      "import": "./dist/fn-schema/core/emit/index.js"
+    },
+    "./fn-schema/loader": {
+      "types": "./dist/fn-schema/loader/index.d.ts",
+      "import": "./dist/fn-schema/loader/index.js"
+    },
+    "./fn-schema/transformer": {
+      "types": "./dist/fn-schema/transformer/index.d.ts",
+      "import": "./dist/fn-schema/transformer/index.js"
+    },
+    "./fn-schema/transformer/runtime": {
+      "types": "./dist/fn-schema/transformer/runtime.d.ts",
+      "import": "./dist/fn-schema/transformer/runtime.js"
+    },
+    "./fn-schema/typescript": {
+      "types": "./dist/fn-schema/typescript/index.d.ts",
+      "import": "./dist/fn-schema/typescript/index.js"
+    },
+    "./fn-schema/unplugin": {
+      "types": "./dist/fn-schema/unplugin/index.d.ts",
+      "import": "./dist/fn-schema/unplugin/index.js"
+    },
+    "./fn-schema/unplugin/esbuild": {
+      "types": "./dist/fn-schema/unplugin/esbuild.d.ts",
+      "import": "./dist/fn-schema/unplugin/esbuild.js"
+    },
+    "./fn-schema/unplugin/farm": {
+      "types": "./dist/fn-schema/unplugin/farm.d.ts",
+      "import": "./dist/fn-schema/unplugin/farm.js"
+    },
+    "./fn-schema/unplugin/rolldown": {
+      "types": "./dist/fn-schema/unplugin/rolldown.d.ts",
+      "import": "./dist/fn-schema/unplugin/rolldown.js"
+    },
+    "./fn-schema/unplugin/rollup": {
+      "types": "./dist/fn-schema/unplugin/rollup.d.ts",
+      "import": "./dist/fn-schema/unplugin/rollup.js"
+    },
+    "./fn-schema/unplugin/rspack": {
+      "types": "./dist/fn-schema/unplugin/rspack.d.ts",
+      "import": "./dist/fn-schema/unplugin/rspack.js"
+    },
+    "./fn-schema/unplugin/vite": {
+      "types": "./dist/fn-schema/unplugin/vite.d.ts",
+      "import": "./dist/fn-schema/unplugin/vite.js"
+    },
+    "./fn-schema/unplugin/webpack": {
+      "types": "./dist/fn-schema/unplugin/webpack.d.ts",
+      "import": "./dist/fn-schema/unplugin/webpack.js"
+    },
+    "./k6-toolkit": {
+      "types": "./dist/k6-toolkit/index.d.ts",
+      "import": "./dist/k6-toolkit/index.js"
+    },
+    "./openapi": {
+      "types": "./dist/openapi/index.d.ts",
+      "import": "./dist/openapi/index.js"
+    },
+    "./openapi-tools": {
+      "types": "./dist/openapi-tools/index.d.ts",
+      "import": "./dist/openapi-tools/index.js"
+    },
+    "./openapi-tools/diff": {
+      "types": "./dist/openapi-tools/diff.d.ts",
+      "import": "./dist/openapi-tools/diff.js"
+    },
+    "./openapi-tools/ir": {
+      "types": "./dist/openapi-tools/ir.d.ts",
+      "import": "./dist/openapi-tools/ir.js"
+    },
+    "./openapi-tools/match": {
+      "types": "./dist/openapi-tools/match.d.ts",
+      "import": "./dist/openapi-tools/match.js"
+    },
+    "./openapi-tools/merge": {
+      "types": "./dist/openapi-tools/merge.d.ts",
+      "import": "./dist/openapi-tools/merge.js"
+    },
+    "./openapi-tools/parse": {
+      "types": "./dist/openapi-tools/parse.d.ts",
+      "import": "./dist/openapi-tools/parse.js"
+    },
+    "./openapi-tools/route": {
+      "types": "./dist/openapi-tools/route.d.ts",
+      "import": "./dist/openapi-tools/route.js"
+    },
+    "./openapi-tools/router": {
+      "types": "./dist/openapi-tools/router.d.ts",
+      "import": "./dist/openapi-tools/router.js"
+    },
+    "./openapi-ts/faker": {
+      "types": "./dist/openapi-ts/faker/index.d.ts",
+      "import": "./dist/openapi-ts/faker/index.js"
+    },
+    "./openapi-ts/faker/core": {
+      "types": "./dist/openapi-ts/faker/core/index.d.ts",
+      "import": "./dist/openapi-ts/faker/core/index.js"
+    },
+    "./openapi-ts/k6": {
+      "types": "./dist/openapi-ts/k6/index.d.ts",
+      "import": "./dist/openapi-ts/k6/index.js"
+    },
+    "./openapi-ts/kit": {
+      "types": "./dist/openapi-ts/kit/index.d.ts",
+      "import": "./dist/openapi-ts/kit/index.js"
+    },
+    "./openapi-ts/orpc": {
+      "types": "./dist/openapi-ts/orpc/index.d.ts",
+      "import": "./dist/openapi-ts/orpc/index.js"
+    },
+    "./openapi-ts/paths": {
+      "types": "./dist/openapi-ts/paths/index.d.ts",
+      "import": "./dist/openapi-ts/paths/index.js"
+    },
+    "./openapi-ts/typia": {
+      "types": "./dist/openapi-ts/typia/index.d.ts",
+      "import": "./dist/openapi-ts/typia/index.js"
+    },
+    "./openapi-ts/typia/orpc": {
+      "types": "./dist/openapi-ts/typia/orpc/index.d.ts",
+      "import": "./dist/openapi-ts/typia/orpc/index.js"
+    },
+    "./recon": {
+      "types": "./dist/recon/index.d.ts",
+      "import": "./dist/recon/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js"
+    },
+    "./schema/adapters/heyapi": {
+      "types": "./dist/schema/adapters/heyapi.d.ts",
+      "import": "./dist/schema/adapters/heyapi.js"
+    },
+    "./schema/adapters/jsonschema": {
+      "types": "./dist/schema/adapters/jsonschema.d.ts",
+      "import": "./dist/schema/adapters/jsonschema.js"
+    },
+    "./sdk/asyncapi": {
+      "types": "./dist/sdk/asyncapi/index.d.ts",
+      "import": "./dist/sdk/asyncapi/index.js"
+    },
+    "./sdk/go": {
+      "types": "./dist/sdk/go/index.d.ts",
+      "import": "./dist/sdk/go/index.js"
+    },
+    "./sdk/java": {
+      "types": "./dist/sdk/java/index.d.ts",
+      "import": "./dist/sdk/java/index.js"
+    },
+    "./sdk/k6": {
+      "types": "./dist/sdk/k6/index.d.ts",
+      "import": "./dist/sdk/k6/index.js"
+    },
+    "./sdk/k6/ast": {
+      "types": "./dist/sdk/k6/emit/ast.d.ts",
+      "import": "./dist/sdk/k6/emit/ast.js"
+    },
+    "./sdk/kotlin": {
+      "types": "./dist/sdk/kotlin/index.d.ts",
+      "import": "./dist/sdk/kotlin/index.js"
+    },
+    "./sdk/swift": {
+      "types": "./dist/sdk/swift/index.d.ts",
+      "import": "./dist/sdk/swift/index.js"
+    },
+    "./sdk/typescript": {
+      "types": "./dist/sdk/typescript/index.d.ts",
+      "import": "./dist/sdk/typescript/index.js"
+    },
+    "./spec": {
+      "types": "./dist/spec/index.d.ts",
+      "import": "./dist/spec/index.js"
+    },
+    "./spec/asyncapi": {
+      "types": "./dist/spec/asyncapi/index.d.ts",
+      "import": "./dist/spec/asyncapi/index.js"
+    },
+    "./spec/openapi": {
+      "types": "./dist/spec/openapi/index.d.ts",
+      "import": "./dist/spec/openapi/index.js"
+    },
+    "./spec/typespec": {
+      "types": "./dist/spec/typespec/index.d.ts",
+      "import": "./dist/spec/typespec/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "docs",
+    "dist",
+    "runtime",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "sync-typia-tags": "jiti scripts/sync-typia-tags.ts"
+  },
+  "dependencies": {
+    "@clack/prompts": "catalog:",
+    "@hey-api/json-schema-ref-parser": "catalog:",
+    "@scalar/core": "^0.5.9",
+    "@types/json-schema": "^7.0.15",
+    "api-smart-diff": "^1.0.6",
+    "c12": "catalog:",
+    "chokidar": "catalog:",
+    "citty": "catalog:",
+    "consola": "catalog:",
+    "js-yaml": "^4.1.0",
+    "json-schema-typed": "catalog:",
+    "oxc-parser": "^0.158.0",
+    "protobufjs": "^7.4.0",
+    "tinyglobby": "catalog:",
+    "urlpattern-polyfill": "^10.1.0"
+  },
+  "peerDependencies": {
+    "@asyncapi/avro-schema-parser": ">=3.0.0",
+    "@asyncapi/openapi-schema-parser": ">=3.0.0",
+    "@asyncapi/parser": ">=3.0.0",
+    "@faker-js/faker": "^10.0.0 || ^9.0.0 || ^8.0.0",
+    "@hey-api/codegen-core": "0.0.0-next-20260930190945",
+    "@hey-api/openapi-ts": "0.0.0-next-20260930190945",
+    "@hey-api/shared": "0.0.0-next-20260930190945",
+    "@hey-api/spec-types": "0.0.0-next-20260930190945",
+    "@orpc/client": "^1.13",
+    "@orpc/contract": ">=1.13.0",
+    "@orpc/openapi": ">=1.13.0",
+    "@orpc/openapi-client": "^1.13",
+    "@orpc/server": "^1.13",
+    "@orpc/tanstack-query": "^1.13",
+    "@orpc/zod": "^1.13",
+    "@readme/postman-to-openapi": "^4.1.0",
+    "@standard-schema/spec": "^1.0.0",
+    "@typespec/compiler": ">=1.0.0",
+    "@typespec/json-schema": ">=1.0.0",
+    "@typespec/openapi3": ">=1.0.0",
+    "@typespec/protobuf": ">=0.80.0",
+    "amqplib": ">=0.10.0",
+    "openapi-to-postmanv2": "^6.0.1",
+    "ts-json-schema-generator": "^2.9.0",
+    "ts-morph": "^28.0.0",
+    "tsdown": "^0.22.0",
+    "typescript": ">=5.0.0",
+    "typia": "^12.0.0 || ^15.0.0",
+    "unplugin": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@asyncapi/avro-schema-parser": {
+      "optional": true
+    },
+    "@asyncapi/openapi-schema-parser": {
+      "optional": true
+    },
+    "@asyncapi/parser": {
+      "optional": true
+    },
+    "@faker-js/faker": {
+      "optional": true
+    },
+    "@orpc/client": {
+      "optional": true
+    },
+    "@orpc/contract": {
+      "optional": true
+    },
+    "@orpc/openapi": {
+      "optional": true
+    },
+    "@orpc/openapi-client": {
+      "optional": true
+    },
+    "@orpc/server": {
+      "optional": true
+    },
+    "@orpc/tanstack-query": {
+      "optional": true
+    },
+    "@orpc/zod": {
+      "optional": true
+    },
+    "@readme/postman-to-openapi": {
+      "optional": true
+    },
+    "@standard-schema/spec": {
+      "optional": true
+    },
+    "@typespec/compiler": {
+      "optional": true
+    },
+    "@typespec/json-schema": {
+      "optional": true
+    },
+    "@typespec/openapi3": {
+      "optional": true
+    },
+    "@typespec/protobuf": {
+      "optional": true
+    },
+    "amqplib": {
+      "optional": true
+    },
+    "openapi-to-postmanv2": {
+      "optional": true
+    },
+    "ts-json-schema-generator": {
+      "optional": true
+    },
+    "ts-morph": {
+      "optional": true
+    },
+    "tsdown": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    },
+    "typia": {
+      "optional": true
+    },
+    "unplugin": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@asyncapi/avro-schema-parser": "catalog:",
+    "@asyncapi/openapi-schema-parser": "catalog:",
+    "@asyncapi/parser": "catalog:",
+    "@faker-js/faker": "^10.4.0",
+    "@hey-api/codegen-core": "catalog:",
+    "@hey-api/openapi-ts": "catalog:",
+    "@hey-api/shared": "catalog:",
+    "@hey-api/spec-types": "catalog:",
+    "@ir-kit/tsconfig": "workspace:*",
+    "@orpc/client": "^1.14.0",
+    "@orpc/contract": "^1.13.14",
+    "@orpc/openapi": "^1.13.14",
+    "@orpc/openapi-client": "^1.14.0",
+    "@orpc/server": "^1.14.0",
+    "@orpc/tanstack-query": "^1.14.0",
+    "@orpc/zod": "^1.13",
+    "@readme/postman-to-openapi": "^4.1.0",
+    "@standard-schema/spec": "^1.1.0",
+    "@testcontainers/rabbitmq": "^11.14.0",
+    "@types/amqplib": "^0.10.5",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "catalog:",
+    "@typespec/compiler": "catalog:",
+    "@typespec/http": "catalog:",
+    "@typespec/json-schema": "catalog:",
+    "@typespec/openapi": "catalog:",
+    "@typespec/openapi3": "catalog:",
+    "@typespec/protobuf": "catalog:",
+    "@typespec/rest": "catalog:",
+    "amqplib": "^0.10.4",
+    "jiti": "^2.6.1",
+    "openapi-to-postmanv2": "^6.0.1",
+    "oxc-parser": "^0.158.0",
+    "testcontainers": "^11.14.0",
+    "ts-json-schema-generator": "^2.9.0",
+    "ts-morph": "^28.0.0",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "typescript5": "npm:typescript@5.9.3",
+    "typia": "15.4.0",
+    "unplugin": "^3.0.0",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

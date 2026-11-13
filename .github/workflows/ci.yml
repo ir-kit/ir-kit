@@ -83,8 +83,8 @@ jobs:
 
       - name: Vet Go SDK runtime
         run: |
-          bash scripts/lint-go.sh packages/openapi/go/runtime
-          (cd packages/openapi/go/runtime && go vet ./...)
+          bash scripts/lint-go.sh packages/ir-kit/runtime/go
+          (cd packages/ir-kit/runtime/go && go vet ./...)
 
   kotlin-lint:
     name: Lint Kotlin compiler snapshots and generated SDK
@@ -106,7 +106,7 @@ jobs:
         run: bash scripts/lint-kotlin.sh
 
       - name: Lint openapi-kotlin runtime
-        run: bash scripts/lint-kotlin.sh packages/openapi/kotlin/runtime
+        run: bash scripts/lint-kotlin.sh packages/ir-kit/runtime/kotlin
 
       - name: Lint generated example SDK
         run: bash scripts/lint-kotlin.sh examples/openapi-sdk-petstore/kotlin/sdk
@@ -158,4 +158,4 @@ jobs:
         run: bash scripts/lint-java.sh examples/openapi-sdk-petstore/java/sdk
 
       - name: Lint SDK runtime
-        run: bash scripts/lint-java.sh packages/openapi/java/runtime
+        run: bash scripts/lint-java.sh packages/ir-kit/runtime/java

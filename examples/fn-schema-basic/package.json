@@ -11,12 +11,9 @@
     "extract": "ir fn-schema extract --patterns \"src/**/*.ts\" --out generated/cli --pretty --naming file-function"
   },
   "dependencies": {
-    "@ir-kit/fn-schema-core": "workspace:*",
-    "@ir-kit/fn-schema-loader": "workspace:*",
-    "@ir-kit/fn-schema-typescript": "workspace:*"
+    "ir-kit": "workspace:*"
   },
   "devDependencies": {
-    "@ir-kit/cli": "workspace:*",
     "@ir-kit/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "5.9.3",

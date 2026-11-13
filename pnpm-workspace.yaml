@@ -1,11 +1,5 @@
 packages:
-  - packages/cli
-  - packages/shared/*
-  - packages/compilers/*
-  - packages/openapi/*
-  - packages/openapi/plugins/*
-  - packages/asyncapi/*
-  - packages/fn-schema/*
+  - packages/ir-kit
   - packages/k6/*
   - apps/*
   - examples/*

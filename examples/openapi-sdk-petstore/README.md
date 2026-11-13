@@ -8,10 +8,10 @@ The shared spec lives at [`../../fixtures/petstore.yaml`](../../fixtures/petstor
 
 | Target | Status | Generator | Stack |
 |---|---|---|---|
-| Kotlin (Android / JVM) | ✓ | [`@ir-kit/openapi-kotlin`](../../packages/openapi/kotlin) | OkHttp + kotlinx-serialization + suspend |
-| Swift (iOS / macOS) | ✓ | [`@ir-kit/openapi-swift`](../../packages/openapi/swift) | URLSession + `Codable` + async throws |
-| Go | ✓ | [`@ir-kit/openapi-go`](../../packages/openapi/go) | net/http + encoding/json + context.Context |
-| TypeScript | ✓ | [`@ir-kit/openapi-typescript`](../../packages/openapi/typescript) (wraps [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) | fetch + `@hey-api/client-fetch` + per-op functions |
+| Kotlin (Android / JVM) | ✓ | [`ir-kit/sdk/kotlin`](../../packages/ir-kit/docs/sdk-kotlin.md) | OkHttp + kotlinx-serialization + suspend |
+| Swift (iOS / macOS) | ✓ | [`ir-kit/sdk/swift`](../../packages/ir-kit/docs/sdk-swift.md) | URLSession + `Codable` + async throws |
+| Go | ✓ | [`ir-kit/sdk/go`](../../packages/ir-kit/docs/sdk-go.md) | net/http + encoding/json + context.Context |
+| TypeScript | ✓ | [`ir-kit/sdk/typescript`](../../packages/ir-kit/docs/sdk-typescript.md) (wraps [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) | fetch + `@hey-api/client-fetch` + per-op functions |
 
 ## Run
 
@@ -20,10 +20,10 @@ Generate the SDKs:
 ```bash
 # from repo root
 pnpm install
-pnpm --filter @ir-kit/openapi-kotlin build
-pnpm --filter @ir-kit/openapi-swift build
-pnpm --filter @ir-kit/openapi-go build
-pnpm --filter @ir-kit/openapi-typescript build
+pnpm --filter ir-kit/sdk/kotlin build
+pnpm --filter ir-kit/sdk/swift build
+pnpm --filter ir-kit/sdk/go build
+pnpm --filter ir-kit/sdk/typescript build
 pnpm --filter @ir-kit/example-openapi-sdk-petstore gen        # all targets
 # or one at a time:
 pnpm --filter @ir-kit/example-openapi-sdk-petstore gen:kotlin
@@ -111,6 +111,6 @@ See:
 
 Each `<lang>/gen.ts` is a thin wrapper over the generator's `generate(...)`. See the per-package READMEs for the full options table:
 
-- [`@ir-kit/openapi-kotlin`](../../packages/openapi/kotlin/README.md)
-- [`@ir-kit/openapi-swift`](../../packages/openapi/swift/README.md)
-- [`@ir-kit/openapi-go`](../../packages/openapi/go/README.md)
+- [`ir-kit/sdk/kotlin`](../../packages/ir-kit)
+- [`ir-kit/sdk/swift`](../../packages/ir-kit)
+- [`ir-kit/sdk/go`](../../packages/ir-kit)

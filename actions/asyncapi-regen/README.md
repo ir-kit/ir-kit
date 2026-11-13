@@ -2,7 +2,7 @@
 
 Regenerate a TypeScript event SDK from an AsyncAPI 3.0 spec on every push or PR — and either commit the result back or open a PR with the diff. Drops in next to a committed SDK to keep it in sync with its source spec without manual `pnpm gen` invocations.
 
-Powered by [`@ir-kit/asyncapi-typescript`](https://www.npmjs.com/package/@ir-kit/asyncapi-typescript). Plugin-compose: pick which plugins emit (types, events const, event-map, dispatcher runtime, amqplib helpers, barrel).
+Powered by [`ir-kit/sdk/asyncapi`](https://www.npmjs.com/package/ir-kit/sdk/asyncapi). Plugin-compose: pick which plugins emit (types, events const, event-map, dispatcher runtime, amqplib helpers, barrel).
 
 Sister to [`actions/sdk-regen`](../sdk-regen) (the OpenAPI version) — same overall shape, different generator.
 
@@ -77,7 +77,7 @@ Default emits the full set (`typescript,events,event-map,dispatch,amqplib,index`
 | `input` | yes | — | Path or URL to the AsyncAPI 3.0 spec |
 | `output` | yes | — | Directory the generated SDK is written to |
 | `plugins` | no | all | Comma-separated plugin list. `typescript`, `events`, `event-map`, `dispatch`, `amqplib`, `index` |
-| `generator-version` | no | `latest` | Pinned semver of `@ir-kit/asyncapi-typescript` |
+| `generator-version` | no | `latest` | Pinned semver of `ir-kit/sdk/asyncapi` |
 | `commit-strategy` | no | `pull-request` | `pull-request` \| `commit-back` \| `none` |
 | `commit-message` | no | `chore: regenerate AsyncAPI SDK` | |
 | `pr-title` | no | `chore: regenerate AsyncAPI SDK` | only `pull-request` |

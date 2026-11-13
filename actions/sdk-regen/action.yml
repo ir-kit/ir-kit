@@ -135,13 +135,13 @@ runs:
             # oas-core / openapi-tools / spec-types since the wrapper
             # doesn't walk the IR itself.
             npm install --silent --no-audit --no-fund \
-              "@ir-kit/openapi-typescript@${VERSION}" \
+              "ir-kit/sdk/typescript@${VERSION}" \
               "@hey-api/openapi-ts" \
               "typescript"
           else
             npm install --silent --no-audit --no-fund \
               "@ir-kit/openapi-${TARGET}@${VERSION}" \
-              "@ir-kit/openapi-tools" \
+              "ir-kit/openapi-tools" \
               "@hey-api/shared" \
               "@hey-api/spec-types"
           fi

@@ -47,22 +47,22 @@ The TypeScript codegen layer in this repo (everything that emits `.ts` files) is
 | Need | Use |
 | --- | --- |
 | Bundle external `$ref`s in an OpenAPI spec | `$RefParser` from `@hey-api/json-schema-ref-parser` |
-| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseSpec` from `@ir-kit/openapi-tools/parse` (wraps hey-api's parser) |
-| Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `@ir-kit/openapi` |
-| Safe-write a generated output directory | `assertSafeOutputDir` from `@ir-kit/codegen-core` |
+| Normalize 2.0 / 3.0 / 3.1 specs into one IR shape | `parseSpec` from `ir-kit/openapi-tools/parse` (wraps hey-api's parser) |
+| Normalize spec keys/identifiers (`safe-normalize`) | `normalizeSpec` + `SAFE_NORMALIZE` from `ir-kit/openapi` |
+| Safe-write a generated output directory | `assertSafeOutputDir` from `ir-kit/codegen` |
 | Build TypeScript ASTs (when emitting `.ts`) | `$` DSL from `@hey-api/openapi-ts` — `$.const`, `$.func`, `$.type.*`, `$.literal`, `$().attr().call()`. Compiles to `ts.factory` underneath, so `.toAst()` returns plain TS AST when you need to print standalone. |
-| Faker heuristics (format → faker method, field-name hints) | `resolveFakerCall`, `DEFAULT_FORMAT_MAPPING`, `DATE_METHODS` from `@ir-kit/openapi-ts-faker/core` |
-| Spec server / security walking | helpers in `@ir-kit/openapi` |
+| Faker heuristics (format → faker method, field-name hints) | `resolveFakerCall`, `DEFAULT_FORMAT_MAPPING`, `DATE_METHODS` from `ir-kit/openapi-ts/faker/core` |
+| Spec server / security walking | helpers in `ir-kit/openapi` |
 
 For **non-TypeScript codegen** (Swift / Go / Kotlin native generators), keep your own DSL — hey-api's `$` DSL is TypeScript-targeting. See `openapi-swift/src/sw-dsl/` for the established shape: per-language IR + DSL + compiler + project layers.
 
-When in doubt: read `packages/openapi/swift/src/generate.ts` for the standalone generator pattern, or `packages/openapi/plugins/faker/src/plugin.ts` for the hey-api-plugin pattern.
+When in doubt: read `packages/ir-kit` for the standalone generator pattern, or `packages/ir-kit` for the hey-api-plugin pattern.
 
 ### Standalone generator vs hey-api plugin
 
 Two shapes coexist, and most "new generator" work should ship both:
 
-- **Standalone** lives under `packages/<track>/<lang>/` (e.g. `packages/openapi/swift`). Exposes `generate({ input, output })`. No hey-api plugin runner required at the call site.
+- **Standalone** lives under `packages/<track>/<lang>/` (e.g. `packages/ir-kit/docs/sdk-swift.md`). Exposes `generate({ input, output })`. No hey-api plugin runner required at the call site.
 - **hey-api plugin wrapper** lives under `packages/<track>/plugins/<name>/` or `packages/<track>/hey-api/`. Thin layer that reads the bundled spec from `plugin.context.spec` and delegates to the standalone generator.
 
 CLIs (`fn-schema-cli`, `k6-tools`, etc.) should drive the standalone path. The hey-api plugin variant is for users already on `openapi-ts.config.ts`.
@@ -78,7 +78,7 @@ See [`.changeset/README.md`](./.changeset/README.md) — one sentence per change
 
 ### `gen` as a path component
 
-CodeRabbit's path filter `!**/gen/**` skips reviews on directories named `gen` (intended for generated example output). Don't name a source-code directory `gen` — use `codegen/`, `generator/`, or anything else. Example: the k6 codegen package lives at `packages/k6/codegen`, not `packages/k6/gen`.
+CodeRabbit's path filter `!**/gen/**` skips reviews on directories named `gen` (intended for generated example output). Don't name a source-code directory `gen` — use `codegen/`, `generator/`, or anything else. Example: the k6 codegen package lives at `packages/ir-kit/docs/sdk-k6.md`, not `packages/k6/gen`.
 
 ## Scaffolding a new package
 

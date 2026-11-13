@@ -20,7 +20,7 @@ It writes:
 
 - `src/gen/` — typed k6 client + types + faker data builders
 - `loadtests/` (optional) — one starter file per OpenAPI tag
-- `package.json` with the right `@ir-kit/k6` + `@ir-kit/k6-toolkit` deps
+- `package.json` with the right `@ir-kit/k6` + `ir-kit/k6-toolkit` deps
 
 ## What you get
 

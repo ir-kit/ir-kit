@@ -1,6 +1,6 @@
 # Plugin anatomy — annotated walkthrough
 
-Using `@ir-kit/openapi-ts-paths` as the reference (simplest plugin in ir-kit, ~150 LoC total). Copy this layout for any new plugin.
+Using `ir-kit/openapi-ts/paths` as the reference (simplest plugin in ir-kit, ~150 LoC total). Copy this layout for any new plugin.
 
 ## File 1: `types.ts` — the contract
 
@@ -14,7 +14,7 @@ export type UserConfig = Plugin.Hooks &      // hey-api hooks (transform, etc)
   Plugin.UserExports & {                      // hey-api's standard export controls
     name: "@ir-kit/paths";              // plugin identifier — MUST be a string literal
     //                                        // (this can differ from the npm package name —
-    //                                        //  npm: `@ir-kit/openapi-ts-paths`,
+    //                                        //  npm: `ir-kit/openapi-ts/paths`,
     //                                        //  plugin: `@ir-kit/paths`. The literal here
     //                                        //  must match the module-augmentation key + any
     //                                        //  `dependencies: ["@ir-kit/paths"]` strings.)
@@ -82,7 +82,7 @@ export const defineConfig = definePluginConfig(defaultConfig);
 `definePluginConfig` wraps your defaults and returns a factory the user calls in their `openapi-ts.config.ts`:
 
 ```ts
-import { defineConfig as paths } from "@ir-kit/openapi-ts-paths";
+import { defineConfig as paths } from "ir-kit/openapi-ts/paths";
 
 await createClient({
   // ...
@@ -200,6 +200,6 @@ Two tsconfigs: `tsconfig.json` for IDE/typecheck (`noEmit`, includes `tests/`), 
 
 ## When to add a plugin to the ir-kit repo
 
-If your plugin is useful to other ir-kit consumers and tracks the workspace's quality bar (manypkg-aligned versions, biome formatting, vitest coverage), open a PR adding it under `packages/openapi/plugins/<name>/`. Maintainer will route it.
+If your plugin is useful to other ir-kit consumers and tracks the workspace's quality bar (manypkg-aligned versions, biome formatting, vitest coverage), open a PR adding it under `packages/ir-kit/<name>/`. Maintainer will route it.
 
 If it's domain-specific to your team, ship it from your own repo with the four-file shape above. It composes with ir-kit plugins without modification.

@@ -2,7 +2,7 @@
 
 Regenerate a Go / Kotlin / Swift / TypeScript client SDK from an OpenAPI 3.x spec on every push or PR — and either commit the result back or open a PR with the diff. Drops in next to a committed SDK to keep it in sync with its source spec without manual `pnpm gen` invocations.
 
-Powered by [`@ir-kit/openapi-go`](https://www.npmjs.com/package/@ir-kit/openapi-go) / [`-kotlin`](https://www.npmjs.com/package/@ir-kit/openapi-kotlin) / [`-swift`](https://www.npmjs.com/package/@ir-kit/openapi-swift) for native targets, and [`-typescript`](https://www.npmjs.com/package/@ir-kit/openapi-typescript) (a thin wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) for the TS target. Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
+Powered by [`ir-kit/sdk/go`](https://www.npmjs.com/package/ir-kit/sdk/go) / [`-kotlin`](https://www.npmjs.com/package/ir-kit/sdk/kotlin) / [`-swift`](https://www.npmjs.com/package/ir-kit/sdk/swift) for native targets, and [`-typescript`](https://www.npmjs.com/package/ir-kit/sdk/typescript) (a thin wrapper around [`@hey-api/openapi-ts`](https://www.npmjs.com/package/@hey-api/openapi-ts)) for the TS target. Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit).
 
 ## Usage
 

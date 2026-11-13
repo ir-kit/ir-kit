@@ -1,7 +1,7 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { generate } from "@ir-kit/openapi-java";
+import { generate } from "ir-kit/sdk/java";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
