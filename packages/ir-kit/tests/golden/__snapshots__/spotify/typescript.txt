@@ -1,0 +1,758 @@
+# client.gen.ts
+export type CreateClientConfig<T extends ClientOptions = ClientOptions2> = (override?: Config<ClientOptions & T>) => Config<Required<ClientOptions> & T>;
+export const client: Client = createClient(createConfig<ClientOptions2>({ baseUrl: 'https://api.spotify.com/v1' }));
+# client/client.gen.ts
+type ReqInit = Omit<RequestInit, 'body' | 'headers'> & {
+export const createClient = (config: Config = {}): Client => {
+# client/index.ts
+export type { Auth } from '../core/auth.gen';
+export type { QuerySerializerOptions } from '../core/bodySerializer.gen';
+export {
+export { buildClientParams } from '../core/params.gen';
+export { serializeQueryKeyValue } from '../core/queryKeySerializer.gen';
+export type { ServerSentEventsResult } from '../core/serverSentEvents.gen';
+export type { ClientMeta } from '../core/types.gen';
+export { createClient } from './client.gen';
+export type {
+export { createConfig, mergeHeaders } from './utils.gen';
+# client/types.gen.ts
+export type ResponseStyle = 'data' | 'fields';
+export interface Config<T extends ClientOptions = ClientOptions>
+export interface RequestOptions<
+>
+export interface ResolvedRequestOptions<
+> extends RequestOptions<unknown, TResponseStyle, ThrowOnError, Url> {
+export type RequestResult<
+> = ThrowOnError extends true
+export interface ClientOptions {
+type MethodFn = <
+>(
+type SseFn = <
+>(
+type RequestFn = <
+>(
+type BuildUrlFn = <
+>(
+export type Client = CoreClient<RequestFn, Config, MethodFn, BuildUrlFn, SseFn> & {
+export type CreateClientConfig<T extends ClientOptions = ClientOptions> = (
+export interface TDataShape {
+type OmitKeys<T, K> = Pick<T, Exclude<keyof T, K>>;
+export type Options<
+> = OmitKeys<
+> &
+# client/utils.gen.ts
+export const createQuerySerializer = <T = unknown>({
+export const getParseAs = (contentType: string | null): Exclude<Config['parseAs'], 'auto'> => {
+const checkForExistence = (
+export async function setAuthParams(
+export const buildUrl: Client['buildUrl'] = (options) =>
+export const mergeConfigs = (a: Config, b: Config): Config => {
+const headersEntries = (headers: Headers): Array<[string, string]> => {
+export const mergeHeaders = (
+type ErrInterceptor<Err, Res, Req, Options> = (
+type ReqInterceptor<Req, Options> = (request: Req, options: Options) => Req | Promise<Req>;
+type ResInterceptor<Res, Req, Options> = (
+class Interceptors<Interceptor> {
+export interface Middleware<Req, Res, Err, Options> {
+export const createInterceptors = <Req, Res, Err, Options>(): Middleware<
+> => ({
+const defaultQuerySerializer = createQuerySerializer({
+const defaultHeaders = {
+export const createConfig = <T extends ClientOptions = ClientOptions>(
+# core/auth.gen.ts
+export type AuthToken = string | undefined;
+export interface Auth {
+export const getAuthToken = async (
+# core/bodySerializer.gen.ts
+export type QuerySerializer = (query: Record<string, unknown>) => string;
+export type BodySerializer = (body: unknown) => unknown;
+type QuerySerializerOptionsObject = {
+export type QuerySerializerOptions = QuerySerializerOptionsObject & {
+const serializeFormDataPair = (data: FormData, key: string, value: unknown): void => {
+const serializeUrlSearchParamsPair = (data: URLSearchParams, key: string, value: unknown): void => {
+export const formDataBodySerializer = {
+export const jsonBodySerializer = {
+export const urlSearchParamsBodySerializer = {
+# core/params.gen.ts
+type Slot = 'body' | 'headers' | 'path' | 'query';
+export type Field =
+export interface Fields {
+export type FieldsConfig = ReadonlyArray<Field | Fields>;
+const extraPrefixesMap: Record<string, Slot> = {
+const extraPrefixes = Object.entries(extraPrefixesMap);
+type KeyMap = Map<
+>;
+function buildKeyMap(fields: FieldsConfig, map?: KeyMap): KeyMap {
+interface Params {
+function stripEmptySlots(params: Params): void {
+export function buildClientParams(args: ReadonlyArray<unknown>, fields: FieldsConfig): Params {
+# core/pathSerializer.gen.ts
+interface SerializeOptions<T> extends SerializePrimitiveOptions, SerializerOptions<T> {}
+interface SerializePrimitiveOptions {
+export interface SerializerOptions<T> {
+export type ArrayStyle = 'form' | 'spaceDelimited' | 'pipeDelimited';
+export type ArraySeparatorStyle = ArrayStyle | MatrixStyle;
+type MatrixStyle = 'label' | 'matrix' | 'simple';
+export type ObjectStyle = 'form' | 'deepObject';
+type ObjectSeparatorStyle = ObjectStyle | MatrixStyle;
+interface SerializePrimitiveParam extends SerializePrimitiveOptions {
+export const separatorArrayExplode = (style: ArraySeparatorStyle): '.' | ';' | ',' | '&' => {
+export const separatorArrayNoExplode = (style: ArraySeparatorStyle): ',' | '|' | '%20' => {
+export const separatorObjectExplode = (style: ObjectSeparatorStyle): '.' | ';' | ',' | '&' => {
+export const serializeArrayParam = ({
+export const serializePrimitiveParam = ({
+export const serializeObjectParam = ({
+# core/queryKeySerializer.gen.ts
+export type JsonValue =
+export const queryKeyJsonReplacer = (_key: string, value: unknown): unknown | undefined => {
+export const stringifyToJsonValue = (input: unknown): JsonValue | undefined => {
+const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+const serializeSearchParams = (params: URLSearchParams): JsonValue => {
+export const serializeQueryKeyValue = (value: unknown): JsonValue | undefined => {
+# core/serverSentEvents.gen.ts
+export type ServerSentEventsOptions<TData = unknown> = Omit<RequestInit, 'method'> &
+export interface StreamEvent<TData = unknown> {
+export type ServerSentEventsResult<TData = unknown, TReturn = void, TNext = unknown> = {
+export function createSseClient<TData = unknown>({
+# core/types.gen.ts
+export type HttpMethod =
+export type Client<
+> = {
+export interface Config {
+export interface ClientMeta {}
+type IsExactlyNeverOrNeverUndefined<T> = [T] extends [never]
+export type OmitNever<T extends Record<string, unknown>> = {
+# core/utils.gen.ts
+export interface PathSerializer {
+export const PATH_PARAM_RE: RegExp = /\{[^{}]+\}/g;
+export const defaultPathSerializer = ({ path, url: _url }: PathSerializer): string => {
+export const getUrl = ({
+export function getValidRequestBody(options: {
+# index.ts
+export { addToQueue, addTracksToPlaylist, changePlaylistDetails, checkCurrentUserFollows, checkIfUserFollowsPlaylist, checkUsersSavedAlbums, checkUsersSavedAudiobooks, checkUsersSavedEpisodes, checkUsersSavedShows, checkUsersSavedTracks, createPlaylist, followArtistsUsers, followPlaylist, getACategoriesPlaylists, getACategory, getAChapter, getAListOfCurrentUsersPlaylists, getAnAlbum, getAnAlbumsTracks, getAnArtist, getAnArtistsAlbums, getAnArtistsRelatedArtists, getAnArtistsTopTracks, getAnAudiobook, getAnEpisode, getAShow, getAShowsEpisodes, getAudioAnalysis, getAudiobookChapters, getAudioFeatures, getAUsersAvailableDevices, getAvailableMarkets, getCategories, getCurrentUsersProfile, getFeaturedPlaylists, getFollowed, getInformationAboutTheUsersCurrentPlayback, getListUsersPlaylists, getMultipleAlbums, getMultipleArtists, getMultipleAudiobooks, getMultipleEpisodes, getMultipleShows, getNewReleases, getPlaylist, getPlaylistCover, getPlaylistsTracks, getQueue, getRecentlyPlayed, getRecommendationGenres, getRecommendations, getSeveralAudioFeatures, getSeveralChapters, getSeveralTracks, getTheUsersCurrentlyPlayingTrack, getTrack, getUsersProfile, getUsersSavedAlbums, getUsersSavedAudiobooks, getUsersSavedEpisodes, getUsersSavedShows, getUsersSavedTracks, getUsersTopArtistsAndTracks, type Options, pauseAUsersPlayback, removeAlbumsUser, removeAudiobooksUser, removeEpisodesUser, removeShowsUser, removeTracksPlaylist, removeTracksUser, reorderOrReplacePlaylistsTracks, saveAlbumsUser, saveAudiobooksUser, saveEpisodesUser, saveShowsUser, saveTracksUser, search, seekToPositionInCurrentlyPlayingTrack, setRepeatModeOnUsersPlayback, setVolumeForUsersPlayback, skipUsersPlaybackToNextTrack, skipUsersPlaybackToPreviousTrack, startAUsersPlayback, toggleShuffleForUsersPlayback, transferAUsersPlayback, unfollowArtistsUsers, unfollowPlaylist, uploadCustomPlaylistCover } from './sdk.gen';
+export type { AddToQueueData, AddToQueueError, AddToQueueErrors, AddToQueueResponse, AddToQueueResponses, AddTracksToPlaylistData, AddTracksToPlaylistError, AddTracksToPlaylistErrors, AddTracksToPlaylistResponse, AddTracksToPlaylistResponses, AlbumBase, AlbumObject, AlbumRestrictionObject, ArtistObject, AudioAnalysisObject, AudiobookBase, AudiobookObject, AudioFeaturesObject, AuthorObject, CategoryObject, ChangePlaylistDetailsData, ChangePlaylistDetailsError, ChangePlaylistDetailsErrors, ChangePlaylistDetailsResponses, ChapterBase, ChapterObject, ChapterRestrictionObject, CheckCurrentUserFollowsData, CheckCurrentUserFollowsError, CheckCurrentUserFollowsErrors, CheckCurrentUserFollowsResponse, CheckCurrentUserFollowsResponses, CheckIfUserFollowsPlaylistData, CheckIfUserFollowsPlaylistError, CheckIfUserFollowsPlaylistErrors, CheckIfUserFollowsPlaylistResponse, CheckIfUserFollowsPlaylistResponses, CheckUsersSavedAlbumsData, CheckUsersSavedAlbumsError, CheckUsersSavedAlbumsErrors, CheckUsersSavedAlbumsResponse, CheckUsersSavedAlbumsResponses, CheckUsersSavedAudiobooksData, CheckUsersSavedAudiobooksError, CheckUsersSavedAudiobooksErrors, CheckUsersSavedAudiobooksResponse, CheckUsersSavedAudiobooksResponses, CheckUsersSavedEpisodesData, CheckUsersSavedEpisodesError, CheckUsersSavedEpisodesErrors, CheckUsersSavedEpisodesResponse, CheckUsersSavedEpisodesResponses, CheckUsersSavedShowsData, CheckUsersSavedShowsError, CheckUsersSavedShowsErrors, CheckUsersSavedShowsResponse, CheckUsersSavedShowsResponses, CheckUsersSavedTracksData, CheckUsersSavedTracksError, CheckUsersSavedTracksErrors, CheckUsersSavedTracksResponse, CheckUsersSavedTracksResponses, ClientOptions, ContextObject, CopyrightObject, CreatePlaylistData, CreatePlaylistError, CreatePlaylistErrors, CreatePlaylistResponse, CreatePlaylistResponses, CurrentlyPlayingContextObject, CurrentlyPlayingObject, CursorObject, CursorPagingObject, CursorPagingPlayHistoryObject, CursorPagingSimplifiedArtistObject, DeviceObject, DevicesObject, DisallowsObject, EpisodeBase, EpisodeObject, EpisodeRestrictionObject, ErrorObject, ExplicitContentSettingsObject, ExternalIdObject, ExternalUrlObject, FollowArtistsUsersData, FollowArtistsUsersError, FollowArtistsUsersErrors, FollowArtistsUsersResponse, FollowArtistsUsersResponses, FollowersObject, FollowPlaylistData, FollowPlaylistError, FollowPlaylistErrors, FollowPlaylistResponses, GetACategoriesPlaylistsData, GetACategoriesPlaylistsError, GetACategoriesPlaylistsErrors, GetACategoriesPlaylistsResponse, GetACategoriesPlaylistsResponses, GetACategoryData, GetACategoryError, GetACategoryErrors, GetACategoryResponse, GetACategoryResponses, GetAChapterData, GetAChapterError, GetAChapterErrors, GetAChapterResponse, GetAChapterResponses, GetAListOfCurrentUsersPlaylistsData, GetAListOfCurrentUsersPlaylistsError, GetAListOfCurrentUsersPlaylistsErrors, GetAListOfCurrentUsersPlaylistsResponse, GetAListOfCurrentUsersPlaylistsResponses, GetAnAlbumData, GetAnAlbumError, GetAnAlbumErrors, GetAnAlbumResponse, GetAnAlbumResponses, GetAnAlbumsTracksData, GetAnAlbumsTracksError, GetAnAlbumsTracksErrors, GetAnAlbumsTracksResponse, GetAnAlbumsTracksResponses, GetAnArtistData, GetAnArtistError, GetAnArtistErrors, GetAnArtistResponse, GetAnArtistResponses, GetAnArtistsAlbumsData, GetAnArtistsAlbumsError, GetAnArtistsAlbumsErrors, GetAnArtistsAlbumsResponse, GetAnArtistsAlbumsResponses, GetAnArtistsRelatedArtistsData, GetAnArtistsRelatedArtistsError, GetAnArtistsRelatedArtistsErrors, GetAnArtistsRelatedArtistsResponse, GetAnArtistsRelatedArtistsResponses, GetAnArtistsTopTracksData, GetAnArtistsTopTracksError, GetAnArtistsTopTracksErrors, GetAnArtistsTopTracksResponse, GetAnArtistsTopTracksResponses, GetAnAudiobookData, GetAnAudiobookError, GetAnAudiobookErrors, GetAnAudiobookResponse, GetAnAudiobookResponses, GetAnEpisodeData, GetAnEpisodeError, GetAnEpisodeErrors, GetAnEpisodeResponse, GetAnEpisodeResponses, GetAShowData, GetAShowError, GetAShowErrors, GetAShowResponse, GetAShowResponses, GetAShowsEpisodesData, GetAShowsEpisodesError, GetAShowsEpisodesErrors, GetAShowsEpisodesResponse, GetAShowsEpisodesResponses, GetAudioAnalysisData, GetAudioAnalysisError, GetAudioAnalysisErrors, GetAudioAnalysisResponse, GetAudioAnalysisResponses, GetAudiobookChaptersData, GetAudiobookChaptersError, GetAudiobookChaptersErrors, GetAudiobookChaptersResponse, GetAudiobookChaptersResponses, GetAudioFeaturesData, GetAudioFeaturesError, GetAudioFeaturesErrors, GetAudioFeaturesResponse, GetAudioFeaturesResponses, GetAusersAvailableDevicesData, GetAusersAvailableDevicesError, GetAusersAvailableDevicesErrors, GetAusersAvailableDevicesResponse, GetAusersAvailableDevicesResponses, GetAvailableMarketsData, GetAvailableMarketsError, GetAvailableMarketsErrors, GetAvailableMarketsResponse, GetAvailableMarketsResponses, GetCategoriesData, GetCategoriesError, GetCategoriesErrors, GetCategoriesResponse, GetCategoriesResponses, GetCurrentUsersProfileData, GetCurrentUsersProfileError, GetCurrentUsersProfileErrors, GetCurrentUsersProfileResponse, GetCurrentUsersProfileResponses, GetFeaturedPlaylistsData, GetFeaturedPlaylistsError, GetFeaturedPlaylistsErrors, GetFeaturedPlaylistsResponse, GetFeaturedPlaylistsResponses, GetFollowedData, GetFollowedError, GetFollowedErrors, GetFollowedResponse, GetFollowedResponses, GetInformationAboutTheUsersCurrentPlaybackData, GetInformationAboutTheUsersCurrentPlaybackError, GetInformationAboutTheUsersCurrentPlaybackErrors, GetInformationAboutTheUsersCurrentPlaybackResponse, GetInformationAboutTheUsersCurrentPlaybackResponses, GetListUsersPlaylistsData, GetListUsersPlaylistsError, GetListUsersPlaylistsErrors, GetListUsersPlaylistsResponse, GetListUsersPlaylistsResponses, GetMultipleAlbumsData, GetMultipleAlbumsError, GetMultipleAlbumsErrors, GetMultipleAlbumsResponse, GetMultipleAlbumsResponses, GetMultipleArtistsData, GetMultipleArtistsError, GetMultipleArtistsErrors, GetMultipleArtistsResponse, GetMultipleArtistsResponses, GetMultipleAudiobooksData, GetMultipleAudiobooksError, GetMultipleAudiobooksErrors, GetMultipleAudiobooksResponse, GetMultipleAudiobooksResponses, GetMultipleEpisodesData, GetMultipleEpisodesError, GetMultipleEpisodesErrors, GetMultipleEpisodesResponse, GetMultipleEpisodesResponses, GetMultipleShowsData, GetMultipleShowsError, GetMultipleShowsErrors, GetMultipleShowsResponse, GetMultipleShowsResponses, GetNewReleasesData, GetNewReleasesError, GetNewReleasesErrors, GetNewReleasesResponse, GetNewReleasesResponses, GetPlaylistCoverData, GetPlaylistCoverError, GetPlaylistCoverErrors, GetPlaylistCoverResponse, GetPlaylistCoverResponses, GetPlaylistData, GetPlaylistError, GetPlaylistErrors, GetPlaylistResponse, GetPlaylistResponses, GetPlaylistsTracksData, GetPlaylistsTracksError, GetPlaylistsTracksErrors, GetPlaylistsTracksResponse, GetPlaylistsTracksResponses, GetQueueData, GetQueueError, GetQueueErrors, GetQueueResponse, GetQueueResponses, GetRecentlyPlayedData, GetRecentlyPlayedError, GetRecentlyPlayedErrors, GetRecentlyPlayedResponse, GetRecentlyPlayedResponses, GetRecommendationGenresData, GetRecommendationGenresError, GetRecommendationGenresErrors, GetRecommendationGenresResponse, GetRecommendationGenresResponses, GetRecommendationsData, GetRecommendationsError, GetRecommendationsErrors, GetRecommendationsResponse, GetRecommendationsResponses, GetSeveralAudioFeaturesData, GetSeveralAudioFeaturesError, GetSeveralAudioFeaturesErrors, GetSeveralAudioFeaturesResponse, GetSeveralAudioFeaturesResponses, GetSeveralChaptersData, GetSeveralChaptersError, GetSeveralChaptersErrors, GetSeveralChaptersResponse, GetSeveralChaptersResponses, GetSeveralTracksData, GetSeveralTracksError, GetSeveralTracksErrors, GetSeveralTracksResponse, GetSeveralTracksResponses, GetTheUsersCurrentlyPlayingTrackData, GetTheUsersCurrentlyPlayingTrackError, GetTheUsersCurrentlyPlayingTrackErrors, GetTheUsersCurrentlyPlayingTrackResponse, GetTheUsersCurrentlyPlayingTrackResponses, GetTrackData, GetTrackError, GetTrackErrors, GetTrackResponse, GetTrackResponses, GetUsersProfileData, GetUsersProfileError, GetUsersProfileErrors, GetUsersProfileResponse, GetUsersProfileResponses, GetUsersSavedAlbumsData, GetUsersSavedAlbumsError, GetUsersSavedAlbumsErrors, GetUsersSavedAlbumsResponse, GetUsersSavedAlbumsResponses, GetUsersSavedAudiobooksData, GetUsersSavedAudiobooksError, GetUsersSavedAudiobooksErrors, GetUsersSavedAudiobooksResponse, GetUsersSavedAudiobooksResponses, GetUsersSavedEpisodesData, GetUsersSavedEpisodesError, GetUsersSavedEpisodesErrors, GetUsersSavedEpisodesResponse, GetUsersSavedEpisodesResponses, GetUsersSavedShowsData, GetUsersSavedShowsError, GetUsersSavedShowsErrors, GetUsersSavedShowsResponse, GetUsersSavedShowsResponses, GetUsersSavedTracksData, GetUsersSavedTracksError, GetUsersSavedTracksErrors, GetUsersSavedTracksResponse, GetUsersSavedTracksResponses, GetUsersTopArtistsAndTracksData, GetUsersTopArtistsAndTracksError, GetUsersTopArtistsAndTracksErrors, GetUsersTopArtistsAndTracksResponse, GetUsersTopArtistsAndTracksResponses, ImageObject, Key, LinkedTrackObject, Loudness, Mode, NarratorObject, PagingArtistObject, PagingFeaturedPlaylistObject, PagingObject, PagingPlaylistObject, PagingPlaylistTrackObject, PagingSavedAlbumObject, PagingSavedEpisodeObject, PagingSavedShowObject, PagingSavedTrackObject, PagingSimplifiedAlbumObject, PagingSimplifiedArtistObject, PagingSimplifiedAudiobookObject, PagingSimplifiedChapterObject, PagingSimplifiedEpisodeObject, PagingSimplifiedShowObject, PagingSimplifiedTrackObject, PagingTrackObject, PathAlbumId, PathArtistId, PathAudiobookId, PathChapterId, PathPlaylistId, PathShowId, PathUserId, PauseAusersPlaybackData, PauseAusersPlaybackError, PauseAusersPlaybackErrors, PauseAusersPlaybackResponse, PauseAusersPlaybackResponses, PlayerErrorObject, PlayerErrorReasons, PlayHistoryObject, PlaylistObject, PlaylistOwnerObject, PlaylistTrackObject, PlaylistTracksRefObject, PlaylistUserObject, PrivateUserObject, PublicUserObject, QueryAdditionalTypes, QueryAlbumIds, QueryAudiobookIds, QueryChapterIds, QueryIncludeGroups, QueryLimit, QueryMarket, QueryOffset, QueryShowIds, QueryTrackIds, QueueObject, RecommendationSeedObject, RecommendationsObject, RemoveAlbumsUserData, RemoveAlbumsUserError, RemoveAlbumsUserErrors, RemoveAlbumsUserResponses, RemoveAudiobooksUserData, RemoveAudiobooksUserError, RemoveAudiobooksUserErrors, RemoveAudiobooksUserResponses, RemoveEpisodesUserData, RemoveEpisodesUserError, RemoveEpisodesUserErrors, RemoveEpisodesUserResponses, RemoveShowsUserData, RemoveShowsUserError, RemoveShowsUserErrors, RemoveShowsUserResponses, RemoveTracksPlaylistData, RemoveTracksPlaylistError, RemoveTracksPlaylistErrors, RemoveTracksPlaylistResponse, RemoveTracksPlaylistResponses, RemoveTracksUserData, RemoveTracksUserError, RemoveTracksUserErrors, RemoveTracksUserResponses, ReorderOrReplacePlaylistsTracksData, ReorderOrReplacePlaylistsTracksError, ReorderOrReplacePlaylistsTracksErrors, ReorderOrReplacePlaylistsTracksResponse, ReorderOrReplacePlaylistsTracksResponses, ResumePointObject, SaveAlbumsUserData, SaveAlbumsUserError, SaveAlbumsUserErrors, SaveAlbumsUserResponses, SaveAudiobooksUserData, SaveAudiobooksUserError, SaveAudiobooksUserErrors, SaveAudiobooksUserResponses, SavedAlbumObject, SavedEpisodeObject, SavedShowObject, SavedTrackObject, SaveEpisodesUserData, SaveEpisodesUserError, SaveEpisodesUserErrors, SaveEpisodesUserResponses, SaveShowsUserData, SaveShowsUserError, SaveShowsUserErrors, SaveShowsUserResponses, SaveTracksUserData, SaveTracksUserError, SaveTracksUserErrors, SaveTracksUserResponses, SearchData, SearchError, SearchErrors, SearchResponse, SearchResponses, SectionObject, SeekToPositionInCurrentlyPlayingTrackData, SeekToPositionInCurrentlyPlayingTrackError, SeekToPositionInCurrentlyPlayingTrackErrors, SeekToPositionInCurrentlyPlayingTrackResponse, SeekToPositionInCurrentlyPlayingTrackResponses, SegmentObject, SetRepeatModeOnUsersPlaybackData, SetRepeatModeOnUsersPlaybackError, SetRepeatModeOnUsersPlaybackErrors, SetRepeatModeOnUsersPlaybackResponse, SetRepeatModeOnUsersPlaybackResponses, SetVolumeForUsersPlaybackData, SetVolumeForUsersPlaybackError, SetVolumeForUsersPlaybackErrors, SetVolumeForUsersPlaybackResponse, SetVolumeForUsersPlaybackResponses, ShowBase, ShowObject, SimplifiedAlbumObject, SimplifiedArtistObject, SimplifiedAudiobookObject, SimplifiedChapterObject, SimplifiedEpisodeObject, SimplifiedPlaylistObject, SimplifiedShowObject, SimplifiedTrackObject, SkipUsersPlaybackToNextTrackData, SkipUsersPlaybackToNextTrackError, SkipUsersPlaybackToNextTrackErrors, SkipUsersPlaybackToNextTrackResponse, SkipUsersPlaybackToNextTrackResponses, SkipUsersPlaybackToPreviousTrackData, SkipUsersPlaybackToPreviousTrackError, SkipUsersPlaybackToPreviousTrackErrors, SkipUsersPlaybackToPreviousTrackResponse, SkipUsersPlaybackToPreviousTrackResponses, StartAusersPlaybackData, StartAusersPlaybackError, StartAusersPlaybackErrors, StartAusersPlaybackResponse, StartAusersPlaybackResponses, Tempo, TimeIntervalObject, TimeSignature, ToggleShuffleForUsersPlaybackData, ToggleShuffleForUsersPlaybackError, ToggleShuffleForUsersPlaybackErrors, ToggleShuffleForUsersPlaybackResponse, ToggleShuffleForUsersPlaybackResponses, TrackObject, TrackRestrictionObject, TransferAusersPlaybackData, TransferAusersPlaybackError, TransferAusersPlaybackErrors, TransferAusersPlaybackResponse, TransferAusersPlaybackResponses, TuneableTrackObject, UnfollowArtistsUsersData, UnfollowArtistsUsersError, UnfollowArtistsUsersErrors, UnfollowArtistsUsersResponses, UnfollowPlaylistData, UnfollowPlaylistError, UnfollowPlaylistErrors, UnfollowPlaylistResponses, UploadCustomPlaylistCoverData, UploadCustomPlaylistCoverError, UploadCustomPlaylistCoverErrors, UploadCustomPlaylistCoverResponses } from './types.gen';
+# sdk.gen.ts
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
+export const getMultipleAlbums = <ThrowOnError extends boolean = false>(options: Options<GetMultipleAlbumsData, ThrowOnError>): RequestResult<GetMultipleAlbumsResponses, GetMultipleAlbumsErrors, ThrowOnError> => (options.client ?? client).get<GetMultipleAlbumsResponses, GetMultipleAlbumsErrors, ThrowOnError>({
+export const getAnAlbum = <ThrowOnError extends boolean = false>(options: Options<GetAnAlbumData, ThrowOnError>): RequestResult<GetAnAlbumResponses, GetAnAlbumErrors, ThrowOnError> => (options.client ?? client).get<GetAnAlbumResponses, GetAnAlbumErrors, ThrowOnError>({
+export const getAnAlbumsTracks = <ThrowOnError extends boolean = false>(options: Options<GetAnAlbumsTracksData, ThrowOnError>): RequestResult<GetAnAlbumsTracksResponses, GetAnAlbumsTracksErrors, ThrowOnError> => (options.client ?? client).get<GetAnAlbumsTracksResponses, GetAnAlbumsTracksErrors, ThrowOnError>({
+export const getMultipleArtists = <ThrowOnError extends boolean = false>(options: Options<GetMultipleArtistsData, ThrowOnError>): RequestResult<GetMultipleArtistsResponses, GetMultipleArtistsErrors, ThrowOnError> => (options.client ?? client).get<GetMultipleArtistsResponses, GetMultipleArtistsErrors, ThrowOnError>({
+export const getAnArtist = <ThrowOnError extends boolean = false>(options: Options<GetAnArtistData, ThrowOnError>): RequestResult<GetAnArtistResponses, GetAnArtistErrors, ThrowOnError> => (options.client ?? client).get<GetAnArtistResponses, GetAnArtistErrors, ThrowOnError>({
+export const getAnArtistsAlbums = <ThrowOnError extends boolean = false>(options: Options<GetAnArtistsAlbumsData, ThrowOnError>): RequestResult<GetAnArtistsAlbumsResponses, GetAnArtistsAlbumsErrors, ThrowOnError> => (options.client ?? client).get<GetAnArtistsAlbumsResponses, GetAnArtistsAlbumsErrors, ThrowOnError>({
+export const getAnArtistsRelatedArtists = <ThrowOnError extends boolean = false>(options: Options<GetAnArtistsRelatedArtistsData, ThrowOnError>): RequestResult<GetAnArtistsRelatedArtistsResponses, GetAnArtistsRelatedArtistsErrors, ThrowOnError> => (options.client ?? client).get<GetAnArtistsRelatedArtistsResponses, GetAnArtistsRelatedArtistsErrors, ThrowOnError>({
+export const getAnArtistsTopTracks = <ThrowOnError extends boolean = false>(options: Options<GetAnArtistsTopTracksData, ThrowOnError>): RequestResult<GetAnArtistsTopTracksResponses, GetAnArtistsTopTracksErrors, ThrowOnError> => (options.client ?? client).get<GetAnArtistsTopTracksResponses, GetAnArtistsTopTracksErrors, ThrowOnError>({
+export const getAudioAnalysis = <ThrowOnError extends boolean = false>(options: Options<GetAudioAnalysisData, ThrowOnError>): RequestResult<GetAudioAnalysisResponses, GetAudioAnalysisErrors, ThrowOnError> => (options.client ?? client).get<GetAudioAnalysisResponses, GetAudioAnalysisErrors, ThrowOnError>({
+export const getSeveralAudioFeatures = <ThrowOnError extends boolean = false>(options: Options<GetSeveralAudioFeaturesData, ThrowOnError>): RequestResult<GetSeveralAudioFeaturesResponses, GetSeveralAudioFeaturesErrors, ThrowOnError> => (options.client ?? client).get<GetSeveralAudioFeaturesResponses, GetSeveralAudioFeaturesErrors, ThrowOnError>({
+export const getAudioFeatures = <ThrowOnError extends boolean = false>(options: Options<GetAudioFeaturesData, ThrowOnError>): RequestResult<GetAudioFeaturesResponses, GetAudioFeaturesErrors, ThrowOnError> => (options.client ?? client).get<GetAudioFeaturesResponses, GetAudioFeaturesErrors, ThrowOnError>({
+export const getMultipleAudiobooks = <ThrowOnError extends boolean = false>(options: Options<GetMultipleAudiobooksData, ThrowOnError>): RequestResult<GetMultipleAudiobooksResponses, GetMultipleAudiobooksErrors, ThrowOnError> => (options.client ?? client).get<GetMultipleAudiobooksResponses, GetMultipleAudiobooksErrors, ThrowOnError>({
+export const getAnAudiobook = <ThrowOnError extends boolean = false>(options: Options<GetAnAudiobookData, ThrowOnError>): RequestResult<GetAnAudiobookResponses, GetAnAudiobookErrors, ThrowOnError> => (options.client ?? client).get<GetAnAudiobookResponses, GetAnAudiobookErrors, ThrowOnError>({
+export const getAudiobookChapters = <ThrowOnError extends boolean = false>(options: Options<GetAudiobookChaptersData, ThrowOnError>): RequestResult<GetAudiobookChaptersResponses, GetAudiobookChaptersErrors, ThrowOnError> => (options.client ?? client).get<GetAudiobookChaptersResponses, GetAudiobookChaptersErrors, ThrowOnError>({
+export const getCategories = <ThrowOnError extends boolean = false>(options?: Options<GetCategoriesData, ThrowOnError>): RequestResult<GetCategoriesResponses, GetCategoriesErrors, ThrowOnError> => (options?.client ?? client).get<GetCategoriesResponses, GetCategoriesErrors, ThrowOnError>({
+export const getACategory = <ThrowOnError extends boolean = false>(options: Options<GetACategoryData, ThrowOnError>): RequestResult<GetACategoryResponses, GetACategoryErrors, ThrowOnError> => (options.client ?? client).get<GetACategoryResponses, GetACategoryErrors, ThrowOnError>({
+export const getACategoriesPlaylists = <ThrowOnError extends boolean = false>(options: Options<GetACategoriesPlaylistsData, ThrowOnError>): RequestResult<GetACategoriesPlaylistsResponses, GetACategoriesPlaylistsErrors, ThrowOnError> => (options.client ?? client).get<GetACategoriesPlaylistsResponses, GetACategoriesPlaylistsErrors, ThrowOnError>({
+export const getFeaturedPlaylists = <ThrowOnError extends boolean = false>(options?: Options<GetFeaturedPlaylistsData, ThrowOnError>): RequestResult<GetFeaturedPlaylistsResponses, GetFeaturedPlaylistsErrors, ThrowOnError> => (options?.client ?? client).get<GetFeaturedPlaylistsResponses, GetFeaturedPlaylistsErrors, ThrowOnError>({
+export const getNewReleases = <ThrowOnError extends boolean = false>(options?: Options<GetNewReleasesData, ThrowOnError>): RequestResult<GetNewReleasesResponses, GetNewReleasesErrors, ThrowOnError> => (options?.client ?? client).get<GetNewReleasesResponses, GetNewReleasesErrors, ThrowOnError>({
+export const getSeveralChapters = <ThrowOnError extends boolean = false>(options: Options<GetSeveralChaptersData, ThrowOnError>): RequestResult<GetSeveralChaptersResponses, GetSeveralChaptersErrors, ThrowOnError> => (options.client ?? client).get<GetSeveralChaptersResponses, GetSeveralChaptersErrors, ThrowOnError>({
+export const getAChapter = <ThrowOnError extends boolean = false>(options: Options<GetAChapterData, ThrowOnError>): RequestResult<GetAChapterResponses, GetAChapterErrors, ThrowOnError> => (options.client ?? client).get<GetAChapterResponses, GetAChapterErrors, ThrowOnError>({
+export const getMultipleEpisodes = <ThrowOnError extends boolean = false>(options: Options<GetMultipleEpisodesData, ThrowOnError>): RequestResult<GetMultipleEpisodesResponses, GetMultipleEpisodesErrors, ThrowOnError> => (options.client ?? client).get<GetMultipleEpisodesResponses, GetMultipleEpisodesErrors, ThrowOnError>({
+export const getAnEpisode = <ThrowOnError extends boolean = false>(options: Options<GetAnEpisodeData, ThrowOnError>): RequestResult<GetAnEpisodeResponses, GetAnEpisodeErrors, ThrowOnError> => (options.client ?? client).get<GetAnEpisodeResponses, GetAnEpisodeErrors, ThrowOnError>({
+export const getAvailableMarkets = <ThrowOnError extends boolean = false>(options?: Options<GetAvailableMarketsData, ThrowOnError>): RequestResult<GetAvailableMarketsResponses, GetAvailableMarketsErrors, ThrowOnError> => (options?.client ?? client).get<GetAvailableMarketsResponses, GetAvailableMarketsErrors, ThrowOnError>({
+export const getCurrentUsersProfile = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentUsersProfileData, ThrowOnError>): RequestResult<GetCurrentUsersProfileResponses, GetCurrentUsersProfileErrors, ThrowOnError> => (options?.client ?? client).get<GetCurrentUsersProfileResponses, GetCurrentUsersProfileErrors, ThrowOnError>({
+export const removeAlbumsUser = <ThrowOnError extends boolean = false>(options: Options<RemoveAlbumsUserData, ThrowOnError>): RequestResult<RemoveAlbumsUserResponses, RemoveAlbumsUserErrors, ThrowOnError> => (options.client ?? client).delete<RemoveAlbumsUserResponses, RemoveAlbumsUserErrors, ThrowOnError>({
+export const getUsersSavedAlbums = <ThrowOnError extends boolean = false>(options?: Options<GetUsersSavedAlbumsData, ThrowOnError>): RequestResult<GetUsersSavedAlbumsResponses, GetUsersSavedAlbumsErrors, ThrowOnError> => (options?.client ?? client).get<GetUsersSavedAlbumsResponses, GetUsersSavedAlbumsErrors, ThrowOnError>({
+export const saveAlbumsUser = <ThrowOnError extends boolean = false>(options: Options<SaveAlbumsUserData, ThrowOnError>): RequestResult<SaveAlbumsUserResponses, SaveAlbumsUserErrors, ThrowOnError> => (options.client ?? client).put<SaveAlbumsUserResponses, SaveAlbumsUserErrors, ThrowOnError>({
+export const checkUsersSavedAlbums = <ThrowOnError extends boolean = false>(options: Options<CheckUsersSavedAlbumsData, ThrowOnError>): RequestResult<CheckUsersSavedAlbumsResponses, CheckUsersSavedAlbumsErrors, ThrowOnError> => (options.client ?? client).get<CheckUsersSavedAlbumsResponses, CheckUsersSavedAlbumsErrors, ThrowOnError>({
+export const removeAudiobooksUser = <ThrowOnError extends boolean = false>(options: Options<RemoveAudiobooksUserData, ThrowOnError>): RequestResult<RemoveAudiobooksUserResponses, RemoveAudiobooksUserErrors, ThrowOnError> => (options.client ?? client).delete<RemoveAudiobooksUserResponses, RemoveAudiobooksUserErrors, ThrowOnError>({
+export const getUsersSavedAudiobooks = <ThrowOnError extends boolean = false>(options?: Options<GetUsersSavedAudiobooksData, ThrowOnError>): RequestResult<GetUsersSavedAudiobooksResponses, GetUsersSavedAudiobooksErrors, ThrowOnError> => (options?.client ?? client).get<GetUsersSavedAudiobooksResponses, GetUsersSavedAudiobooksErrors, ThrowOnError>({
+export const saveAudiobooksUser = <ThrowOnError extends boolean = false>(options: Options<SaveAudiobooksUserData, ThrowOnError>): RequestResult<SaveAudiobooksUserResponses, SaveAudiobooksUserErrors, ThrowOnError> => (options.client ?? client).put<SaveAudiobooksUserResponses, SaveAudiobooksUserErrors, ThrowOnError>({
+export const checkUsersSavedAudiobooks = <ThrowOnError extends boolean = false>(options: Options<CheckUsersSavedAudiobooksData, ThrowOnError>): RequestResult<CheckUsersSavedAudiobooksResponses, CheckUsersSavedAudiobooksErrors, ThrowOnError> => (options.client ?? client).get<CheckUsersSavedAudiobooksResponses, CheckUsersSavedAudiobooksErrors, ThrowOnError>({
+export const removeEpisodesUser = <ThrowOnError extends boolean = false>(options: Options<RemoveEpisodesUserData, ThrowOnError>): RequestResult<RemoveEpisodesUserResponses, RemoveEpisodesUserErrors, ThrowOnError> => (options.client ?? client).delete<RemoveEpisodesUserResponses, RemoveEpisodesUserErrors, ThrowOnError>({
+export const getUsersSavedEpisodes = <ThrowOnError extends boolean = false>(options?: Options<GetUsersSavedEpisodesData, ThrowOnError>): RequestResult<GetUsersSavedEpisodesResponses, GetUsersSavedEpisodesErrors, ThrowOnError> => (options?.client ?? client).get<GetUsersSavedEpisodesResponses, GetUsersSavedEpisodesErrors, ThrowOnError>({
+export const saveEpisodesUser = <ThrowOnError extends boolean = false>(options: Options<SaveEpisodesUserData, ThrowOnError>): RequestResult<SaveEpisodesUserResponses, SaveEpisodesUserErrors, ThrowOnError> => (options.client ?? client).put<SaveEpisodesUserResponses, SaveEpisodesUserErrors, ThrowOnError>({
+export const checkUsersSavedEpisodes = <ThrowOnError extends boolean = false>(options: Options<CheckUsersSavedEpisodesData, ThrowOnError>): RequestResult<CheckUsersSavedEpisodesResponses, CheckUsersSavedEpisodesErrors, ThrowOnError> => (options.client ?? client).get<CheckUsersSavedEpisodesResponses, CheckUsersSavedEpisodesErrors, ThrowOnError>({
+export const unfollowArtistsUsers = <ThrowOnError extends boolean = false>(options: Options<UnfollowArtistsUsersData, ThrowOnError>): RequestResult<UnfollowArtistsUsersResponses, UnfollowArtistsUsersErrors, ThrowOnError> => (options.client ?? client).delete<UnfollowArtistsUsersResponses, UnfollowArtistsUsersErrors, ThrowOnError>({
+export const getFollowed = <ThrowOnError extends boolean = false>(options: Options<GetFollowedData, ThrowOnError>): RequestResult<GetFollowedResponses, GetFollowedErrors, ThrowOnError> => (options.client ?? client).get<GetFollowedResponses, GetFollowedErrors, ThrowOnError>({
+export const followArtistsUsers = <ThrowOnError extends boolean = false>(options: Options<FollowArtistsUsersData, ThrowOnError>): RequestResult<FollowArtistsUsersResponses, FollowArtistsUsersErrors, ThrowOnError> => (options.client ?? client).put<FollowArtistsUsersResponses, FollowArtistsUsersErrors, ThrowOnError>({
+export const checkCurrentUserFollows = <ThrowOnError extends boolean = false>(options: Options<CheckCurrentUserFollowsData, ThrowOnError>): RequestResult<CheckCurrentUserFollowsResponses, CheckCurrentUserFollowsErrors, ThrowOnError> => (options.client ?? client).get<CheckCurrentUserFollowsResponses, CheckCurrentUserFollowsErrors, ThrowOnError>({
+export const getInformationAboutTheUsersCurrentPlayback = <ThrowOnError extends boolean = false>(options?: Options<GetInformationAboutTheUsersCurrentPlaybackData, ThrowOnError>): RequestResult<GetInformationAboutTheUsersCurrentPlaybackResponses, GetInformationAboutTheUsersCurrentPlaybackErrors, ThrowOnError> => (options?.client ?? client).get<GetInformationAboutTheUsersCurrentPlaybackResponses, GetInformationAboutTheUsersCurrentPlaybackErrors, ThrowOnError>({
+export const transferAUsersPlayback = <ThrowOnError extends boolean = false>(options?: Options<TransferAusersPlaybackData, ThrowOnError>): RequestResult<TransferAusersPlaybackResponses, TransferAusersPlaybackErrors, ThrowOnError> => (options?.client ?? client).put<TransferAusersPlaybackResponses, TransferAusersPlaybackErrors, ThrowOnError>({
+export const getTheUsersCurrentlyPlayingTrack = <ThrowOnError extends boolean = false>(options?: Options<GetTheUsersCurrentlyPlayingTrackData, ThrowOnError>): RequestResult<GetTheUsersCurrentlyPlayingTrackResponses, GetTheUsersCurrentlyPlayingTrackErrors, ThrowOnError> => (options?.client ?? client).get<GetTheUsersCurrentlyPlayingTrackResponses, GetTheUsersCurrentlyPlayingTrackErrors, ThrowOnError>({
+export const getAUsersAvailableDevices = <ThrowOnError extends boolean = false>(options?: Options<GetAusersAvailableDevicesData, ThrowOnError>): RequestResult<GetAusersAvailableDevicesResponses, GetAusersAvailableDevicesErrors, ThrowOnError> => (options?.client ?? client).get<GetAusersAvailableDevicesResponses, GetAusersAvailableDevicesErrors, ThrowOnError>({
+export const skipUsersPlaybackToNextTrack = <ThrowOnError extends boolean = false>(options?: Options<SkipUsersPlaybackToNextTrackData, ThrowOnError>): RequestResult<SkipUsersPlaybackToNextTrackResponses, SkipUsersPlaybackToNextTrackErrors, ThrowOnError> => (options?.client ?? client).post<SkipUsersPlaybackToNextTrackResponses, SkipUsersPlaybackToNextTrackErrors, ThrowOnError>({
+export const pauseAUsersPlayback = <ThrowOnError extends boolean = false>(options?: Options<PauseAusersPlaybackData, ThrowOnError>): RequestResult<PauseAusersPlaybackResponses, PauseAusersPlaybackErrors, ThrowOnError> => (options?.client ?? client).put<PauseAusersPlaybackResponses, PauseAusersPlaybackErrors, ThrowOnError>({
+export const startAUsersPlayback = <ThrowOnError extends boolean = false>(options?: Options<StartAusersPlaybackData, ThrowOnError>): RequestResult<StartAusersPlaybackResponses, StartAusersPlaybackErrors, ThrowOnError> => (options?.client ?? client).put<StartAusersPlaybackResponses, StartAusersPlaybackErrors, ThrowOnError>({
+export const skipUsersPlaybackToPreviousTrack = <ThrowOnError extends boolean = false>(options?: Options<SkipUsersPlaybackToPreviousTrackData, ThrowOnError>): RequestResult<SkipUsersPlaybackToPreviousTrackResponses, SkipUsersPlaybackToPreviousTrackErrors, ThrowOnError> => (options?.client ?? client).post<SkipUsersPlaybackToPreviousTrackResponses, SkipUsersPlaybackToPreviousTrackErrors, ThrowOnError>({
+export const getQueue = <ThrowOnError extends boolean = false>(options?: Options<GetQueueData, ThrowOnError>): RequestResult<GetQueueResponses, GetQueueErrors, ThrowOnError> => (options?.client ?? client).get<GetQueueResponses, GetQueueErrors, ThrowOnError>({
+export const addToQueue = <ThrowOnError extends boolean = false>(options: Options<AddToQueueData, ThrowOnError>): RequestResult<AddToQueueResponses, AddToQueueErrors, ThrowOnError> => (options.client ?? client).post<AddToQueueResponses, AddToQueueErrors, ThrowOnError>({
+export const getRecentlyPlayed = <ThrowOnError extends boolean = false>(options?: Options<GetRecentlyPlayedData, ThrowOnError>): RequestResult<GetRecentlyPlayedResponses, GetRecentlyPlayedErrors, ThrowOnError> => (options?.client ?? client).get<GetRecentlyPlayedResponses, GetRecentlyPlayedErrors, ThrowOnError>({
+export const setRepeatModeOnUsersPlayback = <ThrowOnError extends boolean = false>(options: Options<SetRepeatModeOnUsersPlaybackData, ThrowOnError>): RequestResult<SetRepeatModeOnUsersPlaybackResponses, SetRepeatModeOnUsersPlaybackErrors, ThrowOnError> => (options.client ?? client).put<SetRepeatModeOnUsersPlaybackResponses, SetRepeatModeOnUsersPlaybackErrors, ThrowOnError>({
+export const seekToPositionInCurrentlyPlayingTrack = <ThrowOnError extends boolean = false>(options: Options<SeekToPositionInCurrentlyPlayingTrackData, ThrowOnError>): RequestResult<SeekToPositionInCurrentlyPlayingTrackResponses, SeekToPositionInCurrentlyPlayingTrackErrors, ThrowOnError> => (options.client ?? client).put<SeekToPositionInCurrentlyPlayingTrackResponses, SeekToPositionInCurrentlyPlayingTrackErrors, ThrowOnError>({
+export const toggleShuffleForUsersPlayback = <ThrowOnError extends boolean = false>(options: Options<ToggleShuffleForUsersPlaybackData, ThrowOnError>): RequestResult<ToggleShuffleForUsersPlaybackResponses, ToggleShuffleForUsersPlaybackErrors, ThrowOnError> => (options.client ?? client).put<ToggleShuffleForUsersPlaybackResponses, ToggleShuffleForUsersPlaybackErrors, ThrowOnError>({
+export const setVolumeForUsersPlayback = <ThrowOnError extends boolean = false>(options: Options<SetVolumeForUsersPlaybackData, ThrowOnError>): RequestResult<SetVolumeForUsersPlaybackResponses, SetVolumeForUsersPlaybackErrors, ThrowOnError> => (options.client ?? client).put<SetVolumeForUsersPlaybackResponses, SetVolumeForUsersPlaybackErrors, ThrowOnError>({
+export const getAListOfCurrentUsersPlaylists = <ThrowOnError extends boolean = false>(options?: Options<GetAListOfCurrentUsersPlaylistsData, ThrowOnError>): RequestResult<GetAListOfCurrentUsersPlaylistsResponses, GetAListOfCurrentUsersPlaylistsErrors, ThrowOnError> => (options?.client ?? client).get<GetAListOfCurrentUsersPlaylistsResponses, GetAListOfCurrentUsersPlaylistsErrors, ThrowOnError>({
+export const removeShowsUser = <ThrowOnError extends boolean = false>(options: Options<RemoveShowsUserData, ThrowOnError>): RequestResult<RemoveShowsUserResponses, RemoveShowsUserErrors, ThrowOnError> => (options.client ?? client).delete<RemoveShowsUserResponses, RemoveShowsUserErrors, ThrowOnError>({
+export const getUsersSavedShows = <ThrowOnError extends boolean = false>(options?: Options<GetUsersSavedShowsData, ThrowOnError>): RequestResult<GetUsersSavedShowsResponses, GetUsersSavedShowsErrors, ThrowOnError> => (options?.client ?? client).get<GetUsersSavedShowsResponses, GetUsersSavedShowsErrors, ThrowOnError>({
+export const saveShowsUser = <ThrowOnError extends boolean = false>(options: Options<SaveShowsUserData, ThrowOnError>): RequestResult<SaveShowsUserResponses, SaveShowsUserErrors, ThrowOnError> => (options.client ?? client).put<SaveShowsUserResponses, SaveShowsUserErrors, ThrowOnError>({
+export const checkUsersSavedShows = <ThrowOnError extends boolean = false>(options: Options<CheckUsersSavedShowsData, ThrowOnError>): RequestResult<CheckUsersSavedShowsResponses, CheckUsersSavedShowsErrors, ThrowOnError> => (options.client ?? client).get<CheckUsersSavedShowsResponses, CheckUsersSavedShowsErrors, ThrowOnError>({
+export const getUsersTopArtistsAndTracks = <ThrowOnError extends boolean = false>(options: Options<GetUsersTopArtistsAndTracksData, ThrowOnError>): RequestResult<GetUsersTopArtistsAndTracksResponses, GetUsersTopArtistsAndTracksErrors, ThrowOnError> => (options.client ?? client).get<GetUsersTopArtistsAndTracksResponses, GetUsersTopArtistsAndTracksErrors, ThrowOnError>({
+export const removeTracksUser = <ThrowOnError extends boolean = false>(options: Options<RemoveTracksUserData, ThrowOnError>): RequestResult<RemoveTracksUserResponses, RemoveTracksUserErrors, ThrowOnError> => (options.client ?? client).delete<RemoveTracksUserResponses, RemoveTracksUserErrors, ThrowOnError>({
+export const getUsersSavedTracks = <ThrowOnError extends boolean = false>(options?: Options<GetUsersSavedTracksData, ThrowOnError>): RequestResult<GetUsersSavedTracksResponses, GetUsersSavedTracksErrors, ThrowOnError> => (options?.client ?? client).get<GetUsersSavedTracksResponses, GetUsersSavedTracksErrors, ThrowOnError>({
+export const saveTracksUser = <ThrowOnError extends boolean = false>(options: Options<SaveTracksUserData, ThrowOnError>): RequestResult<SaveTracksUserResponses, SaveTracksUserErrors, ThrowOnError> => (options.client ?? client).put<SaveTracksUserResponses, SaveTracksUserErrors, ThrowOnError>({
+export const checkUsersSavedTracks = <ThrowOnError extends boolean = false>(options: Options<CheckUsersSavedTracksData, ThrowOnError>): RequestResult<CheckUsersSavedTracksResponses, CheckUsersSavedTracksErrors, ThrowOnError> => (options.client ?? client).get<CheckUsersSavedTracksResponses, CheckUsersSavedTracksErrors, ThrowOnError>({
+export const getPlaylist = <ThrowOnError extends boolean = false>(options: Options<GetPlaylistData, ThrowOnError>): RequestResult<GetPlaylistResponses, GetPlaylistErrors, ThrowOnError> => (options.client ?? client).get<GetPlaylistResponses, GetPlaylistErrors, ThrowOnError>({
+export const changePlaylistDetails = <ThrowOnError extends boolean = false>(options: Options<ChangePlaylistDetailsData, ThrowOnError>): RequestResult<ChangePlaylistDetailsResponses, ChangePlaylistDetailsErrors, ThrowOnError> => (options.client ?? client).put<ChangePlaylistDetailsResponses, ChangePlaylistDetailsErrors, ThrowOnError>({
+export const unfollowPlaylist = <ThrowOnError extends boolean = false>(options: Options<UnfollowPlaylistData, ThrowOnError>): RequestResult<UnfollowPlaylistResponses, UnfollowPlaylistErrors, ThrowOnError> => (options.client ?? client).delete<UnfollowPlaylistResponses, UnfollowPlaylistErrors, ThrowOnError>({
+export const followPlaylist = <ThrowOnError extends boolean = false>(options: Options<FollowPlaylistData, ThrowOnError>): RequestResult<FollowPlaylistResponses, FollowPlaylistErrors, ThrowOnError> => (options.client ?? client).put<FollowPlaylistResponses, FollowPlaylistErrors, ThrowOnError>({
+export const checkIfUserFollowsPlaylist = <ThrowOnError extends boolean = false>(options: Options<CheckIfUserFollowsPlaylistData, ThrowOnError>): RequestResult<CheckIfUserFollowsPlaylistResponses, CheckIfUserFollowsPlaylistErrors, ThrowOnError> => (options.client ?? client).get<CheckIfUserFollowsPlaylistResponses, CheckIfUserFollowsPlaylistErrors, ThrowOnError>({
+export const getPlaylistCover = <ThrowOnError extends boolean = false>(options: Options<GetPlaylistCoverData, ThrowOnError>): RequestResult<GetPlaylistCoverResponses, GetPlaylistCoverErrors, ThrowOnError> => (options.client ?? client).get<GetPlaylistCoverResponses, GetPlaylistCoverErrors, ThrowOnError>({
+export const uploadCustomPlaylistCover = <ThrowOnError extends boolean = false>(options: Options<UploadCustomPlaylistCoverData, ThrowOnError>): RequestResult<UploadCustomPlaylistCoverResponses, UploadCustomPlaylistCoverErrors, ThrowOnError> => (options.client ?? client).put<UploadCustomPlaylistCoverResponses, UploadCustomPlaylistCoverErrors, ThrowOnError>({
+export const removeTracksPlaylist = <ThrowOnError extends boolean = false>(options: Options<RemoveTracksPlaylistData, ThrowOnError>): RequestResult<RemoveTracksPlaylistResponses, RemoveTracksPlaylistErrors, ThrowOnError> => (options.client ?? client).delete<RemoveTracksPlaylistResponses, RemoveTracksPlaylistErrors, ThrowOnError>({
+export const getPlaylistsTracks = <ThrowOnError extends boolean = false>(options: Options<GetPlaylistsTracksData, ThrowOnError>): RequestResult<GetPlaylistsTracksResponses, GetPlaylistsTracksErrors, ThrowOnError> => (options.client ?? client).get<GetPlaylistsTracksResponses, GetPlaylistsTracksErrors, ThrowOnError>({
+export const addTracksToPlaylist = <ThrowOnError extends boolean = false>(options: Options<AddTracksToPlaylistData, ThrowOnError>): RequestResult<AddTracksToPlaylistResponses, AddTracksToPlaylistErrors, ThrowOnError> => (options.client ?? client).post<AddTracksToPlaylistResponses, AddTracksToPlaylistErrors, ThrowOnError>({
+export const reorderOrReplacePlaylistsTracks = <ThrowOnError extends boolean = false>(options: Options<ReorderOrReplacePlaylistsTracksData, ThrowOnError>): RequestResult<ReorderOrReplacePlaylistsTracksResponses, ReorderOrReplacePlaylistsTracksErrors, ThrowOnError> => (options.client ?? client).put<ReorderOrReplacePlaylistsTracksResponses, ReorderOrReplacePlaylistsTracksErrors, ThrowOnError>({
+export const getRecommendations = <ThrowOnError extends boolean = false>(options: Options<GetRecommendationsData, ThrowOnError>): RequestResult<GetRecommendationsResponses, GetRecommendationsErrors, ThrowOnError> => (options.client ?? client).get<GetRecommendationsResponses, GetRecommendationsErrors, ThrowOnError>({
+export const getRecommendationGenres = <ThrowOnError extends boolean = false>(options?: Options<GetRecommendationGenresData, ThrowOnError>): RequestResult<GetRecommendationGenresResponses, GetRecommendationGenresErrors, ThrowOnError> => (options?.client ?? client).get<GetRecommendationGenresResponses, GetRecommendationGenresErrors, ThrowOnError>({
+export const search = <ThrowOnError extends boolean = false>(options: Options<SearchData, ThrowOnError>): RequestResult<SearchResponses, SearchErrors, ThrowOnError> => (options.client ?? client).get<SearchResponses, SearchErrors, ThrowOnError>({
+export const getMultipleShows = <ThrowOnError extends boolean = false>(options: Options<GetMultipleShowsData, ThrowOnError>): RequestResult<GetMultipleShowsResponses, GetMultipleShowsErrors, ThrowOnError> => (options.client ?? client).get<GetMultipleShowsResponses, GetMultipleShowsErrors, ThrowOnError>({
+export const getAShow = <ThrowOnError extends boolean = false>(options: Options<GetAShowData, ThrowOnError>): RequestResult<GetAShowResponses, GetAShowErrors, ThrowOnError> => (options.client ?? client).get<GetAShowResponses, GetAShowErrors, ThrowOnError>({
+export const getAShowsEpisodes = <ThrowOnError extends boolean = false>(options: Options<GetAShowsEpisodesData, ThrowOnError>): RequestResult<GetAShowsEpisodesResponses, GetAShowsEpisodesErrors, ThrowOnError> => (options.client ?? client).get<GetAShowsEpisodesResponses, GetAShowsEpisodesErrors, ThrowOnError>({
+export const getSeveralTracks = <ThrowOnError extends boolean = false>(options: Options<GetSeveralTracksData, ThrowOnError>): RequestResult<GetSeveralTracksResponses, GetSeveralTracksErrors, ThrowOnError> => (options.client ?? client).get<GetSeveralTracksResponses, GetSeveralTracksErrors, ThrowOnError>({
+export const getTrack = <ThrowOnError extends boolean = false>(options: Options<GetTrackData, ThrowOnError>): RequestResult<GetTrackResponses, GetTrackErrors, ThrowOnError> => (options.client ?? client).get<GetTrackResponses, GetTrackErrors, ThrowOnError>({
+export const getUsersProfile = <ThrowOnError extends boolean = false>(options: Options<GetUsersProfileData, ThrowOnError>): RequestResult<GetUsersProfileResponses, GetUsersProfileErrors, ThrowOnError> => (options.client ?? client).get<GetUsersProfileResponses, GetUsersProfileErrors, ThrowOnError>({
+export const getListUsersPlaylists = <ThrowOnError extends boolean = false>(options: Options<GetListUsersPlaylistsData, ThrowOnError>): RequestResult<GetListUsersPlaylistsResponses, GetListUsersPlaylistsErrors, ThrowOnError> => (options.client ?? client).get<GetListUsersPlaylistsResponses, GetListUsersPlaylistsErrors, ThrowOnError>({
+export const createPlaylist = <ThrowOnError extends boolean = false>(options: Options<CreatePlaylistData, ThrowOnError>): RequestResult<CreatePlaylistResponses, CreatePlaylistErrors, ThrowOnError> => (options.client ?? client).post<CreatePlaylistResponses, CreatePlaylistErrors, ThrowOnError>({
+# types.gen.ts
+export type ClientOptions = {
+export type AlbumBase = {
+export type AlbumObject = AlbumBase & {
+export type AlbumRestrictionObject = {
+export type ArtistObject = {
+export type AudioAnalysisObject = {
+export type AudioFeaturesObject = {
+export type AudiobookBase = {
+export type AudiobookObject = AudiobookBase & {
+export type AuthorObject = {
+export type CategoryObject = {
+export type ChapterBase = {
+export type ChapterObject = ChapterBase & {
+export type ChapterRestrictionObject = {
+export type ContextObject = {
+export type CopyrightObject = {
+export type CurrentlyPlayingContextObject = {
+export type CurrentlyPlayingObject = {
+export type CursorObject = {
+export type CursorPagingObject = {
+export type CursorPagingPlayHistoryObject = CursorPagingObject & {
+export type CursorPagingSimplifiedArtistObject = CursorPagingObject & {
+export type DeviceObject = {
+export type DevicesObject = {
+export type DisallowsObject = {
+export type EpisodeBase = {
+export type EpisodeObject = EpisodeBase & {
+export type EpisodeRestrictionObject = {
+export type ErrorObject = {
+export type ExplicitContentSettingsObject = {
+export type ExternalIdObject = {
+export type ExternalUrlObject = {
+export type FollowersObject = {
+export type ImageObject = {
+export type Key = number;
+export type LinkedTrackObject = {
+export type Loudness = number;
+export type Mode = number;
+export type NarratorObject = {
+export type PagingArtistObject = PagingObject & {
+export type PagingFeaturedPlaylistObject = {
+export type PagingObject = {
+export type PagingPlaylistObject = PagingObject & {
+export type PagingPlaylistTrackObject = PagingObject & {
+export type PagingSavedAlbumObject = PagingObject & {
+export type PagingSavedEpisodeObject = PagingObject & {
+export type PagingSavedShowObject = PagingObject & {
+export type PagingSavedTrackObject = PagingObject & {
+export type PagingSimplifiedAlbumObject = PagingObject & {
+export type PagingSimplifiedArtistObject = PagingObject & {
+export type PagingSimplifiedAudiobookObject = PagingObject & {
+export type PagingSimplifiedChapterObject = PagingObject & {
+export type PagingSimplifiedEpisodeObject = PagingObject & {
+export type PagingSimplifiedShowObject = PagingObject & {
+export type PagingSimplifiedTrackObject = PagingObject & {
+export type PagingTrackObject = PagingObject & {
+export type PlayHistoryObject = {
+export type PlayerErrorObject = {
+export type PlayerErrorReasons = 'NO_PREV_TRACK' | 'NO_NEXT_TRACK' | 'NO_SPECIFIC_TRACK' | 'ALREADY_PAUSED' | 'NOT_PAUSED' | 'NOT_PLAYING_LOCALLY' | 'NOT_PLAYING_TRACK' | 'NOT_PLAYING_CONTEXT' | 'ENDLESS_CONTEXT' | 'CONTEXT_DISALLOW' | 'ALREADY_PLAYING' | 'RATE_LIMITED' | 'REMOTE_CONTROL_DISALLOW' | 'DEVICE_NOT_CONTROLLABLE' | 'VOLUME_CONTROL_DISALLOW' | 'NO_ACTIVE_DEVICE' | 'PREMIUM_REQUIRED' | 'UNKNOWN';
+export type PlaylistObject = {
+export type PlaylistOwnerObject = PlaylistUserObject & {
+export type PlaylistTrackObject = {
+export type PlaylistTracksRefObject = {
+export type PlaylistUserObject = {
+export type PrivateUserObject = {
+export type PublicUserObject = {
+export type QueueObject = {
+export type RecommendationSeedObject = {
+export type RecommendationsObject = {
+export type ResumePointObject = {
+export type SavedAlbumObject = {
+export type SavedEpisodeObject = {
+export type SavedShowObject = {
+export type SavedTrackObject = {
+export type SectionObject = {
+export type SegmentObject = {
+export type ShowBase = {
+export type ShowObject = ShowBase & {
+export type SimplifiedAlbumObject = AlbumBase & {
+export type SimplifiedArtistObject = {
+export type SimplifiedAudiobookObject = AudiobookBase & {
+export type SimplifiedChapterObject = ChapterBase & {
+export type SimplifiedEpisodeObject = EpisodeBase & {
+export type SimplifiedPlaylistObject = {
+export type SimplifiedShowObject = ShowBase & {
+export type SimplifiedTrackObject = {
+export type Tempo = number;
+export type TimeIntervalObject = {
+export type TimeSignature = number;
+export type TrackObject = {
+export type TrackRestrictionObject = {
+export type TuneableTrackObject = {
+export type PathAlbumId = string;
+export type PathArtistId = string;
+export type PathAudiobookId = string;
+export type PathChapterId = string;
+export type PathPlaylistId = string;
+export type PathShowId = string;
+export type PathUserId = string;
+export type QueryAdditionalTypes = string;
+export type QueryAlbumIds = string;
+export type QueryAudiobookIds = string;
+export type QueryChapterIds = string;
+export type QueryIncludeGroups = string;
+export type QueryLimit = number;
+export type QueryMarket = string;
+export type QueryOffset = number;
+export type QueryShowIds = string;
+export type QueryTrackIds = string;
+export type GetMultipleAlbumsData = {
+export type GetMultipleAlbumsErrors = {
+export type GetMultipleAlbumsError = GetMultipleAlbumsErrors[keyof GetMultipleAlbumsErrors];
+export type GetMultipleAlbumsResponses = {
+export type GetMultipleAlbumsResponse = GetMultipleAlbumsResponses[keyof GetMultipleAlbumsResponses];
+export type GetAnAlbumData = {
+export type GetAnAlbumErrors = {
+export type GetAnAlbumError = GetAnAlbumErrors[keyof GetAnAlbumErrors];
+export type GetAnAlbumResponses = {
+export type GetAnAlbumResponse = GetAnAlbumResponses[keyof GetAnAlbumResponses];
+export type GetAnAlbumsTracksData = {
+export type GetAnAlbumsTracksErrors = {
+export type GetAnAlbumsTracksError = GetAnAlbumsTracksErrors[keyof GetAnAlbumsTracksErrors];
+export type GetAnAlbumsTracksResponses = {
+export type GetAnAlbumsTracksResponse = GetAnAlbumsTracksResponses[keyof GetAnAlbumsTracksResponses];
+export type GetMultipleArtistsData = {
+export type GetMultipleArtistsErrors = {
+export type GetMultipleArtistsError = GetMultipleArtistsErrors[keyof GetMultipleArtistsErrors];
+export type GetMultipleArtistsResponses = {
+export type GetMultipleArtistsResponse = GetMultipleArtistsResponses[keyof GetMultipleArtistsResponses];
+export type GetAnArtistData = {
+export type GetAnArtistErrors = {
+export type GetAnArtistError = GetAnArtistErrors[keyof GetAnArtistErrors];
+export type GetAnArtistResponses = {
+export type GetAnArtistResponse = GetAnArtistResponses[keyof GetAnArtistResponses];
+export type GetAnArtistsAlbumsData = {
+export type GetAnArtistsAlbumsErrors = {
+export type GetAnArtistsAlbumsError = GetAnArtistsAlbumsErrors[keyof GetAnArtistsAlbumsErrors];
+export type GetAnArtistsAlbumsResponses = {
+export type GetAnArtistsAlbumsResponse = GetAnArtistsAlbumsResponses[keyof GetAnArtistsAlbumsResponses];
+export type GetAnArtistsRelatedArtistsData = {
+export type GetAnArtistsRelatedArtistsErrors = {
+export type GetAnArtistsRelatedArtistsError = GetAnArtistsRelatedArtistsErrors[keyof GetAnArtistsRelatedArtistsErrors];
+export type GetAnArtistsRelatedArtistsResponses = {
+export type GetAnArtistsRelatedArtistsResponse = GetAnArtistsRelatedArtistsResponses[keyof GetAnArtistsRelatedArtistsResponses];
+export type GetAnArtistsTopTracksData = {
+export type GetAnArtistsTopTracksErrors = {
+export type GetAnArtistsTopTracksError = GetAnArtistsTopTracksErrors[keyof GetAnArtistsTopTracksErrors];
+export type GetAnArtistsTopTracksResponses = {
+export type GetAnArtistsTopTracksResponse = GetAnArtistsTopTracksResponses[keyof GetAnArtistsTopTracksResponses];
+export type GetAudioAnalysisData = {
+export type GetAudioAnalysisErrors = {
+export type GetAudioAnalysisError = GetAudioAnalysisErrors[keyof GetAudioAnalysisErrors];
+export type GetAudioAnalysisResponses = {
+export type GetAudioAnalysisResponse = GetAudioAnalysisResponses[keyof GetAudioAnalysisResponses];
+export type GetSeveralAudioFeaturesData = {
+export type GetSeveralAudioFeaturesErrors = {
+export type GetSeveralAudioFeaturesError = GetSeveralAudioFeaturesErrors[keyof GetSeveralAudioFeaturesErrors];
+export type GetSeveralAudioFeaturesResponses = {
+export type GetSeveralAudioFeaturesResponse = GetSeveralAudioFeaturesResponses[keyof GetSeveralAudioFeaturesResponses];
+export type GetAudioFeaturesData = {
+export type GetAudioFeaturesErrors = {
+export type GetAudioFeaturesError = GetAudioFeaturesErrors[keyof GetAudioFeaturesErrors];
+export type GetAudioFeaturesResponses = {
+export type GetAudioFeaturesResponse = GetAudioFeaturesResponses[keyof GetAudioFeaturesResponses];
+export type GetMultipleAudiobooksData = {
+export type GetMultipleAudiobooksErrors = {
+export type GetMultipleAudiobooksError = GetMultipleAudiobooksErrors[keyof GetMultipleAudiobooksErrors];
+export type GetMultipleAudiobooksResponses = {
+export type GetMultipleAudiobooksResponse = GetMultipleAudiobooksResponses[keyof GetMultipleAudiobooksResponses];
+export type GetAnAudiobookData = {
+export type GetAnAudiobookErrors = {
+export type GetAnAudiobookError = GetAnAudiobookErrors[keyof GetAnAudiobookErrors];
+export type GetAnAudiobookResponses = {
+export type GetAnAudiobookResponse = GetAnAudiobookResponses[keyof GetAnAudiobookResponses];
+export type GetAudiobookChaptersData = {
+export type GetAudiobookChaptersErrors = {
+export type GetAudiobookChaptersError = GetAudiobookChaptersErrors[keyof GetAudiobookChaptersErrors];
+export type GetAudiobookChaptersResponses = {
+export type GetAudiobookChaptersResponse = GetAudiobookChaptersResponses[keyof GetAudiobookChaptersResponses];
+export type GetCategoriesData = {
+export type GetCategoriesErrors = {
+export type GetCategoriesError = GetCategoriesErrors[keyof GetCategoriesErrors];
+export type GetCategoriesResponses = {
+export type GetCategoriesResponse = GetCategoriesResponses[keyof GetCategoriesResponses];
+export type GetACategoryData = {
+export type GetACategoryErrors = {
+export type GetACategoryError = GetACategoryErrors[keyof GetACategoryErrors];
+export type GetACategoryResponses = {
+export type GetACategoryResponse = GetACategoryResponses[keyof GetACategoryResponses];
+export type GetACategoriesPlaylistsData = {
+export type GetACategoriesPlaylistsErrors = {
+export type GetACategoriesPlaylistsError = GetACategoriesPlaylistsErrors[keyof GetACategoriesPlaylistsErrors];
+export type GetACategoriesPlaylistsResponses = {
+export type GetACategoriesPlaylistsResponse = GetACategoriesPlaylistsResponses[keyof GetACategoriesPlaylistsResponses];
+export type GetFeaturedPlaylistsData = {
+export type GetFeaturedPlaylistsErrors = {
+export type GetFeaturedPlaylistsError = GetFeaturedPlaylistsErrors[keyof GetFeaturedPlaylistsErrors];
+export type GetFeaturedPlaylistsResponses = {
+export type GetFeaturedPlaylistsResponse = GetFeaturedPlaylistsResponses[keyof GetFeaturedPlaylistsResponses];
+export type GetNewReleasesData = {
+export type GetNewReleasesErrors = {
+export type GetNewReleasesError = GetNewReleasesErrors[keyof GetNewReleasesErrors];
+export type GetNewReleasesResponses = {
+export type GetNewReleasesResponse = GetNewReleasesResponses[keyof GetNewReleasesResponses];
+export type GetSeveralChaptersData = {
+export type GetSeveralChaptersErrors = {
+export type GetSeveralChaptersError = GetSeveralChaptersErrors[keyof GetSeveralChaptersErrors];
+export type GetSeveralChaptersResponses = {
+export type GetSeveralChaptersResponse = GetSeveralChaptersResponses[keyof GetSeveralChaptersResponses];
+export type GetAChapterData = {
+export type GetAChapterErrors = {
+export type GetAChapterError = GetAChapterErrors[keyof GetAChapterErrors];
+export type GetAChapterResponses = {
+export type GetAChapterResponse = GetAChapterResponses[keyof GetAChapterResponses];
+export type GetMultipleEpisodesData = {
+export type GetMultipleEpisodesErrors = {
+export type GetMultipleEpisodesError = GetMultipleEpisodesErrors[keyof GetMultipleEpisodesErrors];
+export type GetMultipleEpisodesResponses = {
+export type GetMultipleEpisodesResponse = GetMultipleEpisodesResponses[keyof GetMultipleEpisodesResponses];
+export type GetAnEpisodeData = {
+export type GetAnEpisodeErrors = {
+export type GetAnEpisodeError = GetAnEpisodeErrors[keyof GetAnEpisodeErrors];
+export type GetAnEpisodeResponses = {
+export type GetAnEpisodeResponse = GetAnEpisodeResponses[keyof GetAnEpisodeResponses];
+export type GetAvailableMarketsData = {
+export type GetAvailableMarketsErrors = {
+export type GetAvailableMarketsError = GetAvailableMarketsErrors[keyof GetAvailableMarketsErrors];
+export type GetAvailableMarketsResponses = {
+export type GetAvailableMarketsResponse = GetAvailableMarketsResponses[keyof GetAvailableMarketsResponses];
+export type GetCurrentUsersProfileData = {
+export type GetCurrentUsersProfileErrors = {
+export type GetCurrentUsersProfileError = GetCurrentUsersProfileErrors[keyof GetCurrentUsersProfileErrors];
+export type GetCurrentUsersProfileResponses = {
+export type GetCurrentUsersProfileResponse = GetCurrentUsersProfileResponses[keyof GetCurrentUsersProfileResponses];
+export type RemoveAlbumsUserData = {
+export type RemoveAlbumsUserErrors = {
+export type RemoveAlbumsUserError = RemoveAlbumsUserErrors[keyof RemoveAlbumsUserErrors];
+export type RemoveAlbumsUserResponses = {
+export type GetUsersSavedAlbumsData = {
+export type GetUsersSavedAlbumsErrors = {
+export type GetUsersSavedAlbumsError = GetUsersSavedAlbumsErrors[keyof GetUsersSavedAlbumsErrors];
+export type GetUsersSavedAlbumsResponses = {
+export type GetUsersSavedAlbumsResponse = GetUsersSavedAlbumsResponses[keyof GetUsersSavedAlbumsResponses];
+export type SaveAlbumsUserData = {
+export type SaveAlbumsUserErrors = {
+export type SaveAlbumsUserError = SaveAlbumsUserErrors[keyof SaveAlbumsUserErrors];
+export type SaveAlbumsUserResponses = {
+export type CheckUsersSavedAlbumsData = {
+export type CheckUsersSavedAlbumsErrors = {
+export type CheckUsersSavedAlbumsError = CheckUsersSavedAlbumsErrors[keyof CheckUsersSavedAlbumsErrors];
+export type CheckUsersSavedAlbumsResponses = {
+export type CheckUsersSavedAlbumsResponse = CheckUsersSavedAlbumsResponses[keyof CheckUsersSavedAlbumsResponses];
+export type RemoveAudiobooksUserData = {
+export type RemoveAudiobooksUserErrors = {
+export type RemoveAudiobooksUserError = RemoveAudiobooksUserErrors[keyof RemoveAudiobooksUserErrors];
+export type RemoveAudiobooksUserResponses = {
+export type GetUsersSavedAudiobooksData = {
+export type GetUsersSavedAudiobooksErrors = {
+export type GetUsersSavedAudiobooksError = GetUsersSavedAudiobooksErrors[keyof GetUsersSavedAudiobooksErrors];
+export type GetUsersSavedAudiobooksResponses = {
+export type GetUsersSavedAudiobooksResponse = GetUsersSavedAudiobooksResponses[keyof GetUsersSavedAudiobooksResponses];
+export type SaveAudiobooksUserData = {
+export type SaveAudiobooksUserErrors = {
+export type SaveAudiobooksUserError = SaveAudiobooksUserErrors[keyof SaveAudiobooksUserErrors];
+export type SaveAudiobooksUserResponses = {
+export type CheckUsersSavedAudiobooksData = {
+export type CheckUsersSavedAudiobooksErrors = {
+export type CheckUsersSavedAudiobooksError = CheckUsersSavedAudiobooksErrors[keyof CheckUsersSavedAudiobooksErrors];
+export type CheckUsersSavedAudiobooksResponses = {
+export type CheckUsersSavedAudiobooksResponse = CheckUsersSavedAudiobooksResponses[keyof CheckUsersSavedAudiobooksResponses];
+export type RemoveEpisodesUserData = {
+export type RemoveEpisodesUserErrors = {
+export type RemoveEpisodesUserError = RemoveEpisodesUserErrors[keyof RemoveEpisodesUserErrors];
+export type RemoveEpisodesUserResponses = {
+export type GetUsersSavedEpisodesData = {
+export type GetUsersSavedEpisodesErrors = {
+export type GetUsersSavedEpisodesError = GetUsersSavedEpisodesErrors[keyof GetUsersSavedEpisodesErrors];
+export type GetUsersSavedEpisodesResponses = {
+export type GetUsersSavedEpisodesResponse = GetUsersSavedEpisodesResponses[keyof GetUsersSavedEpisodesResponses];
+export type SaveEpisodesUserData = {
+export type SaveEpisodesUserErrors = {
+export type SaveEpisodesUserError = SaveEpisodesUserErrors[keyof SaveEpisodesUserErrors];
+export type SaveEpisodesUserResponses = {
+export type CheckUsersSavedEpisodesData = {
+export type CheckUsersSavedEpisodesErrors = {
+export type CheckUsersSavedEpisodesError = CheckUsersSavedEpisodesErrors[keyof CheckUsersSavedEpisodesErrors];
+export type CheckUsersSavedEpisodesResponses = {
+export type CheckUsersSavedEpisodesResponse = CheckUsersSavedEpisodesResponses[keyof CheckUsersSavedEpisodesResponses];
+export type UnfollowArtistsUsersData = {
+export type UnfollowArtistsUsersErrors = {
+export type UnfollowArtistsUsersError = UnfollowArtistsUsersErrors[keyof UnfollowArtistsUsersErrors];
+export type UnfollowArtistsUsersResponses = {
+export type GetFollowedData = {
+export type GetFollowedErrors = {
+export type GetFollowedError = GetFollowedErrors[keyof GetFollowedErrors];
+export type GetFollowedResponses = {
+export type GetFollowedResponse = GetFollowedResponses[keyof GetFollowedResponses];
+export type FollowArtistsUsersData = {
+export type FollowArtistsUsersErrors = {
+export type FollowArtistsUsersError = FollowArtistsUsersErrors[keyof FollowArtistsUsersErrors];
+export type FollowArtistsUsersResponses = {
+export type FollowArtistsUsersResponse = FollowArtistsUsersResponses[keyof FollowArtistsUsersResponses];
+export type CheckCurrentUserFollowsData = {
+export type CheckCurrentUserFollowsErrors = {
+export type CheckCurrentUserFollowsError = CheckCurrentUserFollowsErrors[keyof CheckCurrentUserFollowsErrors];
+export type CheckCurrentUserFollowsResponses = {
+export type CheckCurrentUserFollowsResponse = CheckCurrentUserFollowsResponses[keyof CheckCurrentUserFollowsResponses];
+export type GetInformationAboutTheUsersCurrentPlaybackData = {
+export type GetInformationAboutTheUsersCurrentPlaybackErrors = {
+export type GetInformationAboutTheUsersCurrentPlaybackError = GetInformationAboutTheUsersCurrentPlaybackErrors[keyof GetInformationAboutTheUsersCurrentPlaybackErrors];
+export type GetInformationAboutTheUsersCurrentPlaybackResponses = {
+export type GetInformationAboutTheUsersCurrentPlaybackResponse = GetInformationAboutTheUsersCurrentPlaybackResponses[keyof GetInformationAboutTheUsersCurrentPlaybackResponses];
+export type TransferAusersPlaybackData = {
+export type TransferAusersPlaybackErrors = {
+export type TransferAusersPlaybackError = TransferAusersPlaybackErrors[keyof TransferAusersPlaybackErrors];
+export type TransferAusersPlaybackResponses = {
+export type TransferAusersPlaybackResponse = TransferAusersPlaybackResponses[keyof TransferAusersPlaybackResponses];
+export type GetTheUsersCurrentlyPlayingTrackData = {
+export type GetTheUsersCurrentlyPlayingTrackErrors = {
+export type GetTheUsersCurrentlyPlayingTrackError = GetTheUsersCurrentlyPlayingTrackErrors[keyof GetTheUsersCurrentlyPlayingTrackErrors];
+export type GetTheUsersCurrentlyPlayingTrackResponses = {
+export type GetTheUsersCurrentlyPlayingTrackResponse = GetTheUsersCurrentlyPlayingTrackResponses[keyof GetTheUsersCurrentlyPlayingTrackResponses];
+export type GetAusersAvailableDevicesData = {
+export type GetAusersAvailableDevicesErrors = {
+export type GetAusersAvailableDevicesError = GetAusersAvailableDevicesErrors[keyof GetAusersAvailableDevicesErrors];
+export type GetAusersAvailableDevicesResponses = {
+export type GetAusersAvailableDevicesResponse = GetAusersAvailableDevicesResponses[keyof GetAusersAvailableDevicesResponses];
+export type SkipUsersPlaybackToNextTrackData = {
+export type SkipUsersPlaybackToNextTrackErrors = {
+export type SkipUsersPlaybackToNextTrackError = SkipUsersPlaybackToNextTrackErrors[keyof SkipUsersPlaybackToNextTrackErrors];
+export type SkipUsersPlaybackToNextTrackResponses = {
+export type SkipUsersPlaybackToNextTrackResponse = SkipUsersPlaybackToNextTrackResponses[keyof SkipUsersPlaybackToNextTrackResponses];
+export type PauseAusersPlaybackData = {
+export type PauseAusersPlaybackErrors = {
+export type PauseAusersPlaybackError = PauseAusersPlaybackErrors[keyof PauseAusersPlaybackErrors];
+export type PauseAusersPlaybackResponses = {
+export type PauseAusersPlaybackResponse = PauseAusersPlaybackResponses[keyof PauseAusersPlaybackResponses];
+export type StartAusersPlaybackData = {
+export type StartAusersPlaybackErrors = {
+export type StartAusersPlaybackError = StartAusersPlaybackErrors[keyof StartAusersPlaybackErrors];
+export type StartAusersPlaybackResponses = {
+export type StartAusersPlaybackResponse = StartAusersPlaybackResponses[keyof StartAusersPlaybackResponses];
+export type SkipUsersPlaybackToPreviousTrackData = {
+export type SkipUsersPlaybackToPreviousTrackErrors = {
+export type SkipUsersPlaybackToPreviousTrackError = SkipUsersPlaybackToPreviousTrackErrors[keyof SkipUsersPlaybackToPreviousTrackErrors];
+export type SkipUsersPlaybackToPreviousTrackResponses = {
+export type SkipUsersPlaybackToPreviousTrackResponse = SkipUsersPlaybackToPreviousTrackResponses[keyof SkipUsersPlaybackToPreviousTrackResponses];
+export type GetQueueData = {
+export type GetQueueErrors = {
+export type GetQueueError = GetQueueErrors[keyof GetQueueErrors];
+export type GetQueueResponses = {
+export type GetQueueResponse = GetQueueResponses[keyof GetQueueResponses];
+export type AddToQueueData = {
+export type AddToQueueErrors = {
+export type AddToQueueError = AddToQueueErrors[keyof AddToQueueErrors];
+export type AddToQueueResponses = {
+export type AddToQueueResponse = AddToQueueResponses[keyof AddToQueueResponses];
+export type GetRecentlyPlayedData = {
+export type GetRecentlyPlayedErrors = {
+export type GetRecentlyPlayedError = GetRecentlyPlayedErrors[keyof GetRecentlyPlayedErrors];
+export type GetRecentlyPlayedResponses = {
+export type GetRecentlyPlayedResponse = GetRecentlyPlayedResponses[keyof GetRecentlyPlayedResponses];
+export type SetRepeatModeOnUsersPlaybackData = {
+export type SetRepeatModeOnUsersPlaybackErrors = {
+export type SetRepeatModeOnUsersPlaybackError = SetRepeatModeOnUsersPlaybackErrors[keyof SetRepeatModeOnUsersPlaybackErrors];
+export type SetRepeatModeOnUsersPlaybackResponses = {
+export type SetRepeatModeOnUsersPlaybackResponse = SetRepeatModeOnUsersPlaybackResponses[keyof SetRepeatModeOnUsersPlaybackResponses];
+export type SeekToPositionInCurrentlyPlayingTrackData = {
+export type SeekToPositionInCurrentlyPlayingTrackErrors = {
+export type SeekToPositionInCurrentlyPlayingTrackError = SeekToPositionInCurrentlyPlayingTrackErrors[keyof SeekToPositionInCurrentlyPlayingTrackErrors];
+export type SeekToPositionInCurrentlyPlayingTrackResponses = {
+export type SeekToPositionInCurrentlyPlayingTrackResponse = SeekToPositionInCurrentlyPlayingTrackResponses[keyof SeekToPositionInCurrentlyPlayingTrackResponses];
+export type ToggleShuffleForUsersPlaybackData = {
+export type ToggleShuffleForUsersPlaybackErrors = {
+export type ToggleShuffleForUsersPlaybackError = ToggleShuffleForUsersPlaybackErrors[keyof ToggleShuffleForUsersPlaybackErrors];
+export type ToggleShuffleForUsersPlaybackResponses = {
+export type ToggleShuffleForUsersPlaybackResponse = ToggleShuffleForUsersPlaybackResponses[keyof ToggleShuffleForUsersPlaybackResponses];
+export type SetVolumeForUsersPlaybackData = {
+export type SetVolumeForUsersPlaybackErrors = {
+export type SetVolumeForUsersPlaybackError = SetVolumeForUsersPlaybackErrors[keyof SetVolumeForUsersPlaybackErrors];
+export type SetVolumeForUsersPlaybackResponses = {
+export type SetVolumeForUsersPlaybackResponse = SetVolumeForUsersPlaybackResponses[keyof SetVolumeForUsersPlaybackResponses];
+export type GetAListOfCurrentUsersPlaylistsData = {
+export type GetAListOfCurrentUsersPlaylistsErrors = {
+export type GetAListOfCurrentUsersPlaylistsError = GetAListOfCurrentUsersPlaylistsErrors[keyof GetAListOfCurrentUsersPlaylistsErrors];
+export type GetAListOfCurrentUsersPlaylistsResponses = {
+export type GetAListOfCurrentUsersPlaylistsResponse = GetAListOfCurrentUsersPlaylistsResponses[keyof GetAListOfCurrentUsersPlaylistsResponses];
+export type RemoveShowsUserData = {
+export type RemoveShowsUserErrors = {
+export type RemoveShowsUserError = RemoveShowsUserErrors[keyof RemoveShowsUserErrors];
+export type RemoveShowsUserResponses = {
+export type GetUsersSavedShowsData = {
+export type GetUsersSavedShowsErrors = {
+export type GetUsersSavedShowsError = GetUsersSavedShowsErrors[keyof GetUsersSavedShowsErrors];
+export type GetUsersSavedShowsResponses = {
+export type GetUsersSavedShowsResponse = GetUsersSavedShowsResponses[keyof GetUsersSavedShowsResponses];
+export type SaveShowsUserData = {
+export type SaveShowsUserErrors = {
+export type SaveShowsUserError = SaveShowsUserErrors[keyof SaveShowsUserErrors];
+export type SaveShowsUserResponses = {
+export type CheckUsersSavedShowsData = {
+export type CheckUsersSavedShowsErrors = {
+export type CheckUsersSavedShowsError = CheckUsersSavedShowsErrors[keyof CheckUsersSavedShowsErrors];
+export type CheckUsersSavedShowsResponses = {
+export type CheckUsersSavedShowsResponse = CheckUsersSavedShowsResponses[keyof CheckUsersSavedShowsResponses];
+export type GetUsersTopArtistsAndTracksData = {
+export type GetUsersTopArtistsAndTracksErrors = {
+export type GetUsersTopArtistsAndTracksError = GetUsersTopArtistsAndTracksErrors[keyof GetUsersTopArtistsAndTracksErrors];
+export type GetUsersTopArtistsAndTracksResponses = {
+export type GetUsersTopArtistsAndTracksResponse = GetUsersTopArtistsAndTracksResponses[keyof GetUsersTopArtistsAndTracksResponses];
+export type RemoveTracksUserData = {
+export type RemoveTracksUserErrors = {
+export type RemoveTracksUserError = RemoveTracksUserErrors[keyof RemoveTracksUserErrors];
+export type RemoveTracksUserResponses = {
+export type GetUsersSavedTracksData = {
+export type GetUsersSavedTracksErrors = {
+export type GetUsersSavedTracksError = GetUsersSavedTracksErrors[keyof GetUsersSavedTracksErrors];
+export type GetUsersSavedTracksResponses = {
+export type GetUsersSavedTracksResponse = GetUsersSavedTracksResponses[keyof GetUsersSavedTracksResponses];
+export type SaveTracksUserData = {
+export type SaveTracksUserErrors = {
+export type SaveTracksUserError = SaveTracksUserErrors[keyof SaveTracksUserErrors];
+export type SaveTracksUserResponses = {
+export type CheckUsersSavedTracksData = {
+export type CheckUsersSavedTracksErrors = {
+export type CheckUsersSavedTracksError = CheckUsersSavedTracksErrors[keyof CheckUsersSavedTracksErrors];
+export type CheckUsersSavedTracksResponses = {
+export type CheckUsersSavedTracksResponse = CheckUsersSavedTracksResponses[keyof CheckUsersSavedTracksResponses];
+export type GetPlaylistData = {
+export type GetPlaylistErrors = {
+export type GetPlaylistError = GetPlaylistErrors[keyof GetPlaylistErrors];
+export type GetPlaylistResponses = {
+export type GetPlaylistResponse = GetPlaylistResponses[keyof GetPlaylistResponses];
+export type ChangePlaylistDetailsData = {
+export type ChangePlaylistDetailsErrors = {
+export type ChangePlaylistDetailsError = ChangePlaylistDetailsErrors[keyof ChangePlaylistDetailsErrors];
+export type ChangePlaylistDetailsResponses = {
+export type UnfollowPlaylistData = {
+export type UnfollowPlaylistErrors = {
+export type UnfollowPlaylistError = UnfollowPlaylistErrors[keyof UnfollowPlaylistErrors];
+export type UnfollowPlaylistResponses = {
+export type FollowPlaylistData = {
+export type FollowPlaylistErrors = {
+export type FollowPlaylistError = FollowPlaylistErrors[keyof FollowPlaylistErrors];
+export type FollowPlaylistResponses = {
+export type CheckIfUserFollowsPlaylistData = {
+export type CheckIfUserFollowsPlaylistErrors = {
+export type CheckIfUserFollowsPlaylistError = CheckIfUserFollowsPlaylistErrors[keyof CheckIfUserFollowsPlaylistErrors];
+export type CheckIfUserFollowsPlaylistResponses = {
+export type CheckIfUserFollowsPlaylistResponse = CheckIfUserFollowsPlaylistResponses[keyof CheckIfUserFollowsPlaylistResponses];
+export type GetPlaylistCoverData = {
+export type GetPlaylistCoverErrors = {
+export type GetPlaylistCoverError = GetPlaylistCoverErrors[keyof GetPlaylistCoverErrors];
+export type GetPlaylistCoverResponses = {
+export type GetPlaylistCoverResponse = GetPlaylistCoverResponses[keyof GetPlaylistCoverResponses];
+export type UploadCustomPlaylistCoverData = {
+export type UploadCustomPlaylistCoverErrors = {
+export type UploadCustomPlaylistCoverError = UploadCustomPlaylistCoverErrors[keyof UploadCustomPlaylistCoverErrors];
+export type UploadCustomPlaylistCoverResponses = {
+export type RemoveTracksPlaylistData = {
+export type RemoveTracksPlaylistErrors = {
+export type RemoveTracksPlaylistError = RemoveTracksPlaylistErrors[keyof RemoveTracksPlaylistErrors];
+export type RemoveTracksPlaylistResponses = {
+export type RemoveTracksPlaylistResponse = RemoveTracksPlaylistResponses[keyof RemoveTracksPlaylistResponses];
+export type GetPlaylistsTracksData = {
+export type GetPlaylistsTracksErrors = {
+export type GetPlaylistsTracksError = GetPlaylistsTracksErrors[keyof GetPlaylistsTracksErrors];
+export type GetPlaylistsTracksResponses = {
+export type GetPlaylistsTracksResponse = GetPlaylistsTracksResponses[keyof GetPlaylistsTracksResponses];
+export type AddTracksToPlaylistData = {
+export type AddTracksToPlaylistErrors = {
+export type AddTracksToPlaylistError = AddTracksToPlaylistErrors[keyof AddTracksToPlaylistErrors];
+export type AddTracksToPlaylistResponses = {
+export type AddTracksToPlaylistResponse = AddTracksToPlaylistResponses[keyof AddTracksToPlaylistResponses];
+export type ReorderOrReplacePlaylistsTracksData = {
+export type ReorderOrReplacePlaylistsTracksErrors = {
+export type ReorderOrReplacePlaylistsTracksError = ReorderOrReplacePlaylistsTracksErrors[keyof ReorderOrReplacePlaylistsTracksErrors];
+export type ReorderOrReplacePlaylistsTracksResponses = {
+export type ReorderOrReplacePlaylistsTracksResponse = ReorderOrReplacePlaylistsTracksResponses[keyof ReorderOrReplacePlaylistsTracksResponses];
+export type GetRecommendationsData = {
+export type GetRecommendationsErrors = {
+export type GetRecommendationsError = GetRecommendationsErrors[keyof GetRecommendationsErrors];
+export type GetRecommendationsResponses = {
+export type GetRecommendationsResponse = GetRecommendationsResponses[keyof GetRecommendationsResponses];
+export type GetRecommendationGenresData = {
+export type GetRecommendationGenresErrors = {
+export type GetRecommendationGenresError = GetRecommendationGenresErrors[keyof GetRecommendationGenresErrors];
+export type GetRecommendationGenresResponses = {
+export type GetRecommendationGenresResponse = GetRecommendationGenresResponses[keyof GetRecommendationGenresResponses];
+export type SearchData = {
+export type SearchErrors = {
+export type SearchError = SearchErrors[keyof SearchErrors];
+export type SearchResponses = {
+export type SearchResponse = SearchResponses[keyof SearchResponses];
+export type GetMultipleShowsData = {
+export type GetMultipleShowsErrors = {
+export type GetMultipleShowsError = GetMultipleShowsErrors[keyof GetMultipleShowsErrors];
+export type GetMultipleShowsResponses = {
+export type GetMultipleShowsResponse = GetMultipleShowsResponses[keyof GetMultipleShowsResponses];
+export type GetAShowData = {
+export type GetAShowErrors = {
+export type GetAShowError = GetAShowErrors[keyof GetAShowErrors];
+export type GetAShowResponses = {
+export type GetAShowResponse = GetAShowResponses[keyof GetAShowResponses];
+export type GetAShowsEpisodesData = {
+export type GetAShowsEpisodesErrors = {
+export type GetAShowsEpisodesError = GetAShowsEpisodesErrors[keyof GetAShowsEpisodesErrors];
+export type GetAShowsEpisodesResponses = {
+export type GetAShowsEpisodesResponse = GetAShowsEpisodesResponses[keyof GetAShowsEpisodesResponses];
+export type GetSeveralTracksData = {
+export type GetSeveralTracksErrors = {
+export type GetSeveralTracksError = GetSeveralTracksErrors[keyof GetSeveralTracksErrors];
+export type GetSeveralTracksResponses = {
+export type GetSeveralTracksResponse = GetSeveralTracksResponses[keyof GetSeveralTracksResponses];
+export type GetTrackData = {
+export type GetTrackErrors = {
+export type GetTrackError = GetTrackErrors[keyof GetTrackErrors];
+export type GetTrackResponses = {
+export type GetTrackResponse = GetTrackResponses[keyof GetTrackResponses];
+export type GetUsersProfileData = {
+export type GetUsersProfileErrors = {
+export type GetUsersProfileError = GetUsersProfileErrors[keyof GetUsersProfileErrors];
+export type GetUsersProfileResponses = {
+export type GetUsersProfileResponse = GetUsersProfileResponses[keyof GetUsersProfileResponses];
+export type GetListUsersPlaylistsData = {
+export type GetListUsersPlaylistsErrors = {
+export type GetListUsersPlaylistsError = GetListUsersPlaylistsErrors[keyof GetListUsersPlaylistsErrors];
+export type GetListUsersPlaylistsResponses = {
+export type GetListUsersPlaylistsResponse = GetListUsersPlaylistsResponses[keyof GetListUsersPlaylistsResponses];
+export type CreatePlaylistData = {
+export type CreatePlaylistErrors = {
+export type CreatePlaylistError = CreatePlaylistErrors[keyof CreatePlaylistErrors];
+export type CreatePlaylistResponses = {
+export type CreatePlaylistResponse = CreatePlaylistResponses[keyof CreatePlaylistResponses];

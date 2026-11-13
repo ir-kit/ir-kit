@@ -1,0 +1,43 @@
+# amqp.gen.ts
+export interface EventDescriptor {
+export interface ConsumerLike {
+export interface AssertExchangesOptions {
+export async function assertExchanges(
+export interface BindAndConsumeOptions {
+export async function bindAndConsume(
+export type SerializeFn = <T>(payload: T) => Buffer;
+const defaultSerialize: SerializeFn = (payload) =>
+export interface PublishOptions {
+export function publish<T>(
+# dispatch.gen.ts
+export type Handler<T> = (msg: T, raw: ConsumeMessage) => Promise<void> | void;
+export interface EventMeta {
+export type ParseFn = (buf: Buffer) => unknown;
+const defaultParse: ParseFn = (buf) => JSON.parse(buf.toString("utf8"));
+export interface RegistryOptions {
+export class Registry<
+> {
+export function createRegistry<
+>(
+function matchRoutingKey(pattern: string, key: string): boolean {
+function matchSegments(
+# event-map.gen.ts
+export type EventMap = {
+export type AnyMessage = EventMap[keyof EventMap];
+export function isMessageOfType<K extends keyof EventMap>(msg: AnyMessage, type: K): msg is EventMap[K] {
+# events.gen.ts
+export const Events = {} as const;
+export type EventName = keyof typeof Events;
+# handlers.gen.ts
+export const handlers = (opts?: RegistryOptions) => createRegistry<EventMap>(Events, opts);
+# index.gen.ts
+export { assertExchanges, bindAndConsume, publish } from './amqp.gen.js';
+export { Registry, createRegistry } from './dispatch.gen.js';
+export { type AnyMessage, type EventMap, isMessageOfType } from './event-map.gen.js';
+export { type EventName, Events } from './events.gen.js';
+export { handlers } from './handlers.gen.js';
+export type * from './types.gen.js';
+# types.gen.ts
+export type ClientOptions = {
+export type ChatMessageMessage = {
+export type HeartbeatMessage = '\r\n';

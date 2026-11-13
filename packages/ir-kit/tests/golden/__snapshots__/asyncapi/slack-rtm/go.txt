@@ -1,0 +1,216 @@
+# api_client.go
+type APIClient struct {
+func NewAPIClient(baseURL string) *APIClient {
+func Execute[T any](client *APIClient, req *http.Request, opts RequestOptions) (T, error) {
+func ExecuteWithResponse[T any](client *APIClient, req *http.Request, opts RequestOptions) (T, *http.Response, error) {
+func ExecuteUnit(client *APIClient, req *http.Request, opts RequestOptions) error {
+func ExecuteUnitWithResponse(client *APIClient, req *http.Request, opts RequestOptions) (*http.Response, error) {
+func ExecuteRaw(client *APIClient, req *http.Request, opts RequestOptions) ([]byte, *http.Response, error) {
+func sendAndDispatch(client *APIClient, req *http.Request, opts RequestOptions) ([]byte, *http.Response, error) {
+# api_error.go
+type APIErrorKind int
+const (
+func (k APIErrorKind) String() string {
+type APIError struct {
+func (e *APIError) Error() string {
+func (e *APIError) Unwrap() error { return e.Cause }
+func Wrap(kind APIErrorKind, cause error) *APIError {
+func HTTPError(statusCode int, body []byte) *APIError {
+func Unexpected(statusCode int, body []byte) *APIError {
+# api_key_location.go
+type APIKeyLocation int
+const (
+# auth.go
+type Auth interface {
+type BearerAuth struct{ Token string }
+func (a BearerAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+type APIKeyAuth struct {
+func (a APIKeyAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+type BasicAuth struct{ Username, Password string }
+func (a BasicAuth) Apply(req *http.Request, u *url.URL) *url.URL {
+# models.go
+type AttachmentFields struct {
+type Attachment struct {
+type OutgoingMessageMessageType string
+const OutgoingMessageMessageTypeMessage OutgoingMessageMessageType = "message"
+type OutgoingMessageMessage struct {
+type HelloMessageType string
+const HelloMessageTypeHello HelloMessageType = "hello"
+type HelloMessage struct {
+type ConnectionErrorMessageType string
+const ConnectionErrorMessageTypeError ConnectionErrorMessageType = "error"
+type ConnectionErrorMessageError struct {
+type ConnectionErrorMessage struct {
+type AccountsChangedMessageType string
+const AccountsChangedMessageTypeAccountsChanged AccountsChangedMessageType = "accounts_changed"
+type AccountsChangedMessage struct {
+type BotAddedMessageType string
+const BotAddedMessageTypeBotAdded BotAddedMessageType = "bot_added"
+type BotAddedMessageBot struct {
+type BotAddedMessage struct {
+type BotChangedMessageType string
+const BotChangedMessageTypeBotAdded BotChangedMessageType = "bot_added"
+type BotChangedMessageBot struct {
+type BotChangedMessage struct {
+type ChannelArchiveMessageType string
+const ChannelArchiveMessageTypeChannelArchive ChannelArchiveMessageType = "channel_archive"
+type ChannelArchiveMessage struct {
+type ChannelCreatedMessageType string
+const ChannelCreatedMessageTypeChannelCreated ChannelCreatedMessageType = "channel_created"
+type ChannelCreatedMessageChannel struct {
+type ChannelCreatedMessage struct {
+type ChannelDeletedMessageType string
+const ChannelDeletedMessageTypeChannelDeleted ChannelDeletedMessageType = "channel_deleted"
+type ChannelDeletedMessage struct {
+type ChannelHistoryChangedMessageType string
+const ChannelHistoryChangedMessageTypeChannelHistoryChanged ChannelHistoryChangedMessageType = "channel_history_changed"
+type ChannelHistoryChangedMessage struct {
+type ChannelJoinedMessageType string
+const ChannelJoinedMessageTypeChannelJoined ChannelJoinedMessageType = "channel_joined"
+type ChannelJoinedMessageChannel struct {
+type ChannelJoinedMessage struct {
+type ChannelLeftMessageType string
+const ChannelLeftMessageTypeChannelLeft ChannelLeftMessageType = "channel_left"
+type ChannelLeftMessage struct {
+type ChannelMarkedMessageType string
+const ChannelMarkedMessageTypeChannelMarked ChannelMarkedMessageType = "channel_marked"
+type ChannelMarkedMessage struct {
+type ChannelRenameMessageType string
+const ChannelRenameMessageTypeChannelRename ChannelRenameMessageType = "channel_rename"
+type ChannelRenameMessageChannel struct {
+type ChannelRenameMessage struct {
+type ChannelUnarchiveMessageType string
+const ChannelUnarchiveMessageTypeChannelUnarchive ChannelUnarchiveMessageType = "channel_unarchive"
+type ChannelUnarchiveMessage struct {
+type CommandsChangedMessageType string
+const CommandsChangedMessageTypeCommandsChanged CommandsChangedMessageType = "commands_changed"
+type CommandsChangedMessage struct {
+type DndUpdatedMessageType string
+const DndUpdatedMessageTypeDndUpdated DndUpdatedMessageType = "dnd_updated"
+type DndUpdatedMessageDndStatus struct {
+type DndUpdatedMessage struct {
+type DndUpdatedUserMessageType string
+const DndUpdatedUserMessageTypeDndUpdatedUser DndUpdatedUserMessageType = "dnd_updated_user"
+type DndUpdatedUserMessageDndStatus struct {
+type DndUpdatedUserMessage struct {
+type EmailDomainChangedMessageType string
+const EmailDomainChangedMessageTypeEmailDomainChanged EmailDomainChangedMessageType = "email_domain_changed"
+type EmailDomainChangedMessage struct {
+type EmojiRemovedMessageType string
+const EmojiRemovedMessageTypeEmojiChanged EmojiRemovedMessageType = "emoji_changed"
+type EmojiRemovedMessageSubtype string
+const EmojiRemovedMessageSubtypeRemove EmojiRemovedMessageSubtype = "remove"
+type EmojiRemovedMessage struct {
+type EmojiAddedMessageType string
+const EmojiAddedMessageTypeEmojiChanged EmojiAddedMessageType = "emoji_changed"
+type EmojiAddedMessageSubtype string
+const EmojiAddedMessageSubtypeAdd EmojiAddedMessageSubtype = "add"
+type EmojiAddedMessage struct {
+type FileChangeMessageType string
+const FileChangeMessageTypeFileChange FileChangeMessageType = "file_change"
+type FileChangeMessageFile struct {
+type FileChangeMessage struct {
+type FileCommentAddedMessageType string
+const FileCommentAddedMessageTypeFileCommentAdded FileCommentAddedMessageType = "file_comment_added"
+type FileCommentAddedMessageFile struct {
+type FileCommentAddedMessage struct {
+type FileCommentDeletedMessageType string
+const FileCommentDeletedMessageTypeFileCommentDeleted FileCommentDeletedMessageType = "file_comment_deleted"
+type FileCommentDeletedMessageFile struct {
+type FileCommentDeletedMessage struct {
+type FileCommentEditedMessageType string
+const FileCommentEditedMessageTypeFileCommentEdited FileCommentEditedMessageType = "file_comment_edited"
+type FileCommentEditedMessageFile struct {
+type FileCommentEditedMessage struct {
+type FileCreatedMessageType string
+const FileCreatedMessageTypeFileCreated FileCreatedMessageType = "file_created"
+type FileCreatedMessageFile struct {
+type FileCreatedMessage struct {
+type FileDeletedMessageType string
+const FileDeletedMessageTypeFileDeleted FileDeletedMessageType = "file_deleted"
+type FileDeletedMessage struct {
+type FilePublicMessageType string
+const FilePublicMessageTypeFilePublic FilePublicMessageType = "file_public"
+type FilePublicMessageFile struct {
+type FilePublicMessage struct {
+type FileSharedMessageType string
+const FileSharedMessageTypeFileShared FileSharedMessageType = "file_shared"
+type FileSharedMessageFile struct {
+type FileSharedMessage struct {
+type FileUnsharedMessageType string
+const FileUnsharedMessageTypeFileUnshared FileUnsharedMessageType = "file_unshared"
+type FileUnsharedMessageFile struct {
+type FileUnsharedMessage struct {
+type GoodbyeMessageType string
+const GoodbyeMessageTypeGoodbye GoodbyeMessageType = "goodbye"
+type GoodbyeMessage struct {
+type GroupArchiveMessageType string
+const GroupArchiveMessageTypeGroupArchive GroupArchiveMessageType = "group_archive"
+type GroupArchiveMessage struct {
+type GroupCloseMessageType string
+const GroupCloseMessageTypeGroupClose GroupCloseMessageType = "group_close"
+type GroupCloseMessage struct {
+type GroupHistoryChangedMessageType string
+const GroupHistoryChangedMessageTypeGroupHistoryChanged GroupHistoryChangedMessageType = "group_history_changed"
+type GroupHistoryChangedMessage struct {
+type GroupJoinedMessageType string
+const GroupJoinedMessageTypeGroupJoined GroupJoinedMessageType = "group_joined"
+type GroupJoinedMessageChannel struct {
+type GroupJoinedMessage struct {
+type GroupLeftMessageType string
+const GroupLeftMessageTypeGroupLeft GroupLeftMessageType = "group_left"
+type GroupLeftMessage struct {
+type GroupMarkedMessageType string
+const GroupMarkedMessageTypeGroupMarked GroupMarkedMessageType = "group_marked"
+type GroupMarkedMessage struct {
+type GroupOpenMessageType string
+const GroupOpenMessageTypeGroupOpen GroupOpenMessageType = "group_open"
+type GroupOpenMessage struct {
+type GroupRenameMessageType string
+const GroupRenameMessageTypeGroupRename GroupRenameMessageType = "group_rename"
+type GroupRenameMessageChannel struct {
+type GroupRenameMessage struct {
+type GroupUnarchiveMessageType string
+const GroupUnarchiveMessageTypeGroupUnarchive GroupUnarchiveMessageType = "group_unarchive"
+type GroupUnarchiveMessage struct {
+type ImCloseMessageType string
+const ImCloseMessageTypeImClose ImCloseMessageType = "im_close"
+type ImCloseMessage struct {
+type ImCreatedMessageType string
+const ImCreatedMessageTypeImCreated ImCreatedMessageType = "im_created"
+type ImCreatedMessageChannel struct {
+type ImCreatedMessage struct {
+type ImMarkedMessageType string
+const ImMarkedMessageTypeImMarked ImMarkedMessageType = "im_marked"
+type ImMarkedMessage struct {
+type ImOpenMessageType string
+const ImOpenMessageTypeImOpen ImOpenMessageType = "im_open"
+type ImOpenMessage struct {
+type ManualPresenceChangeMessageType string
+const ManualPresenceChangeMessageTypeManualPresenceChange ManualPresenceChangeMessageType = "manual_presence_change"
+type ManualPresenceChangeMessage struct {
+type MemberJoinedChannelMessageType string
+const MemberJoinedChannelMessageTypeMemberJoinedChannel MemberJoinedChannelMessageType = "member_joined_channel"
+type MemberJoinedChannelMessageChannelType string
+const (
+type MemberJoinedChannelMessage struct {
+type MessageMessageType string
+const MessageMessageTypeMessage MessageMessageType = "message"
+type MessageMessageEdited struct {
+type MessageMessage struct {
+type MemberLeftChannelMessageType string
+const MemberLeftChannelMessageTypeMemberLeftChannel MemberLeftChannelMessageType = "member_left_channel"
+type MemberLeftChannelMessageChannelType string
+const (
+type MemberLeftChannelMessage struct {
+# query_style.go
+type QueryStyle int
+const (
+# request_options.go
+type RequestOptions struct {
+func (opts RequestOptions) applyTimeout(ctx context.Context) (context.Context, context.CancelFunc) {
+# url_encoding.go
+var URLEncoding = urlEncoding{}
+type urlEncoding struct{}
+func (urlEncoding) AddScalar(q url.Values, name string, value any) {
+func (urlEncoding) AddArray(q url.Values, name string, values any, style QueryStyle, explode bool) {

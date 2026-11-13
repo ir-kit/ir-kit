@@ -1,0 +1,572 @@
+# com/example/api/api/APIClient.kt
+public class APIClient(
+# com/example/api/api/APIError.kt
+public sealed class APIError(
+# com/example/api/api/APIInterceptors.kt
+public class APIInterceptors {
+# com/example/api/api/APIKeyLocation.kt
+public enum class APIKeyLocation {
+# com/example/api/api/AlbumsApi.kt
+public interface AlbumsApi {
+# com/example/api/api/AlbumsApiExtensions.kt
+public suspend fun AlbumsApi.getMultipleAlbums(
+public suspend fun AlbumsApi.getMultipleAlbumsWithResponse(
+public suspend fun AlbumsApi.getAnAlbum(
+public suspend fun AlbumsApi.getAnAlbumWithResponse(
+public suspend fun AlbumsApi.getAnAlbumsTracks(
+public suspend fun AlbumsApi.getAnAlbumsTracksWithResponse(
+public suspend fun AlbumsApi.getNewReleases(
+public suspend fun AlbumsApi.getNewReleasesWithResponse(
+public suspend fun AlbumsApi.getUsersSavedAlbums(
+public suspend fun AlbumsApi.getUsersSavedAlbumsWithResponse(
+public suspend fun AlbumsApi.saveAlbumsUser(
+public suspend fun AlbumsApi.saveAlbumsUserWithResponse(
+public suspend fun AlbumsApi.removeAlbumsUser(
+public suspend fun AlbumsApi.removeAlbumsUserWithResponse(
+public suspend fun AlbumsApi.checkUsersSavedAlbums(ids: String): List<Boolean> =
+public suspend fun AlbumsApi.checkUsersSavedAlbumsWithResponse(ids: String): Pair<List<Boolean>, Response> =
+# com/example/api/api/ArtistsApi.kt
+public interface ArtistsApi {
+# com/example/api/api/ArtistsApiExtensions.kt
+public suspend fun ArtistsApi.getMultipleArtists(ids: String): GetMultipleArtistsResponse =
+public suspend fun ArtistsApi.getMultipleArtistsWithResponse(ids: String): Pair<GetMultipleArtistsResponse, Response> =
+public suspend fun ArtistsApi.getAnArtist(id: String): ArtistObject = this.getAnArtist(id = id, options = RequestOptions())
+public suspend fun ArtistsApi.getAnArtistWithResponse(id: String): Pair<ArtistObject, Response> =
+public suspend fun ArtistsApi.getAnArtistsAlbums(
+public suspend fun ArtistsApi.getAnArtistsAlbumsWithResponse(
+public suspend fun ArtistsApi.getAnArtistsRelatedArtists(id: String): GetAnArtistsRelatedArtistsResponse =
+public suspend fun ArtistsApi.getAnArtistsRelatedArtistsWithResponse(id: String): Pair<GetAnArtistsRelatedArtistsResponse, Response> =
+public suspend fun ArtistsApi.getAnArtistsTopTracks(
+public suspend fun ArtistsApi.getAnArtistsTopTracksWithResponse(
+# com/example/api/api/AudiobooksApi.kt
+public interface AudiobooksApi {
+# com/example/api/api/AudiobooksApiExtensions.kt
+public suspend fun AudiobooksApi.getMultipleAudiobooks(
+public suspend fun AudiobooksApi.getMultipleAudiobooksWithResponse(
+public suspend fun AudiobooksApi.getAnAudiobook(
+public suspend fun AudiobooksApi.getAnAudiobookWithResponse(
+public suspend fun AudiobooksApi.getAudiobookChapters(
+public suspend fun AudiobooksApi.getAudiobookChaptersWithResponse(
+public suspend fun AudiobooksApi.getUsersSavedAudiobooks(
+public suspend fun AudiobooksApi.getUsersSavedAudiobooksWithResponse(
+public suspend fun AudiobooksApi.saveAudiobooksUser(ids: String) {
+public suspend fun AudiobooksApi.saveAudiobooksUserWithResponse(ids: String): Response =
+public suspend fun AudiobooksApi.removeAudiobooksUser(ids: String) {
+public suspend fun AudiobooksApi.removeAudiobooksUserWithResponse(ids: String): Response =
+public suspend fun AudiobooksApi.checkUsersSavedAudiobooks(ids: String): List<Boolean> =
+public suspend fun AudiobooksApi.checkUsersSavedAudiobooksWithResponse(ids: String): Pair<List<Boolean>, Response> =
+# com/example/api/api/Auth.kt
+public sealed class Auth {
+# com/example/api/api/CategoriesApi.kt
+public interface CategoriesApi {
+# com/example/api/api/CategoriesApiExtensions.kt
+public suspend fun CategoriesApi.getCategories(
+public suspend fun CategoriesApi.getCategoriesWithResponse(
+public suspend fun CategoriesApi.getACategory(
+public suspend fun CategoriesApi.getACategoryWithResponse(
+# com/example/api/api/ChaptersApi.kt
+public interface ChaptersApi {
+# com/example/api/api/ChaptersApiExtensions.kt
+public suspend fun ChaptersApi.getSeveralChapters(
+public suspend fun ChaptersApi.getSeveralChaptersWithResponse(
+public suspend fun ChaptersApi.getAChapter(
+public suspend fun ChaptersApi.getAChapterWithResponse(
+# com/example/api/api/EpisodesApi.kt
+public interface EpisodesApi {
+# com/example/api/api/EpisodesApiExtensions.kt
+public suspend fun EpisodesApi.getMultipleEpisodes(
+public suspend fun EpisodesApi.getMultipleEpisodesWithResponse(
+public suspend fun EpisodesApi.getAnEpisode(
+public suspend fun EpisodesApi.getAnEpisodeWithResponse(
+public suspend fun EpisodesApi.getUsersSavedEpisodes(
+public suspend fun EpisodesApi.getUsersSavedEpisodesWithResponse(
+public suspend fun EpisodesApi.saveEpisodesUser(
+public suspend fun EpisodesApi.saveEpisodesUserWithResponse(
+public suspend fun EpisodesApi.removeEpisodesUser(
+public suspend fun EpisodesApi.removeEpisodesUserWithResponse(
+public suspend fun EpisodesApi.checkUsersSavedEpisodes(ids: String): List<Boolean> =
+public suspend fun EpisodesApi.checkUsersSavedEpisodesWithResponse(ids: String): Pair<List<Boolean>, Response> =
+# com/example/api/api/GenresApi.kt
+public interface GenresApi {
+# com/example/api/api/GenresApiExtensions.kt
+public suspend fun GenresApi.getRecommendationGenres(): GetRecommendationGenresResponse =
+public suspend fun GenresApi.getRecommendationGenresWithResponse(): Pair<GetRecommendationGenresResponse, Response> =
+# com/example/api/api/MarketsApi.kt
+public interface MarketsApi {
+# com/example/api/api/MarketsApiExtensions.kt
+public suspend fun MarketsApi.getAvailableMarkets(): GetAvailableMarketsResponse = this.getAvailableMarkets(options = RequestOptions())
+public suspend fun MarketsApi.getAvailableMarketsWithResponse(): Pair<GetAvailableMarketsResponse, Response> =
+# com/example/api/api/OkHttpAlbumsApi.kt
+public class OkHttpAlbumsApi(
+# com/example/api/api/OkHttpArtistsApi.kt
+public class OkHttpArtistsApi(
+# com/example/api/api/OkHttpAudiobooksApi.kt
+public class OkHttpAudiobooksApi(
+# com/example/api/api/OkHttpCategoriesApi.kt
+public class OkHttpCategoriesApi(
+# com/example/api/api/OkHttpChaptersApi.kt
+public class OkHttpChaptersApi(
+# com/example/api/api/OkHttpEpisodesApi.kt
+public class OkHttpEpisodesApi(
+# com/example/api/api/OkHttpGenresApi.kt
+public class OkHttpGenresApi(
+# com/example/api/api/OkHttpMarketsApi.kt
+public class OkHttpMarketsApi(
+# com/example/api/api/OkHttpPlayerApi.kt
+public class OkHttpPlayerApi(
+# com/example/api/api/OkHttpPlaylistsApi.kt
+public class OkHttpPlaylistsApi(
+# com/example/api/api/OkHttpSearchApi.kt
+public class OkHttpSearchApi(
+# com/example/api/api/OkHttpShowsApi.kt
+public class OkHttpShowsApi(
+# com/example/api/api/OkHttpTracksApi.kt
+public class OkHttpTracksApi(
+# com/example/api/api/OkHttpUsersApi.kt
+public class OkHttpUsersApi(
+# com/example/api/api/PlayerApi.kt
+public interface PlayerApi {
+# com/example/api/api/PlayerApiExtensions.kt
+public suspend fun PlayerApi.getInformationAboutTheUsersCurrentPlayback(
+public suspend fun PlayerApi.getInformationAboutTheUsersCurrentPlaybackWithResponse(
+public suspend fun PlayerApi.transferAUsersPlayback(body: TransferAUsersPlaybackBody) {
+public suspend fun PlayerApi.transferAUsersPlaybackWithResponse(body: TransferAUsersPlaybackBody): Response =
+public suspend fun PlayerApi.getTheUsersCurrentlyPlayingTrack(
+public suspend fun PlayerApi.getTheUsersCurrentlyPlayingTrackWithResponse(
+public suspend fun PlayerApi.getAUsersAvailableDevices(): GetAUsersAvailableDevicesResponse =
+public suspend fun PlayerApi.getAUsersAvailableDevicesWithResponse(): Pair<GetAUsersAvailableDevicesResponse, Response> =
+public suspend fun PlayerApi.skipUsersPlaybackToNextTrack(deviceId: String?) {
+public suspend fun PlayerApi.skipUsersPlaybackToNextTrackWithResponse(deviceId: String?): Response =
+public suspend fun PlayerApi.pauseAUsersPlayback(deviceId: String?) {
+public suspend fun PlayerApi.pauseAUsersPlaybackWithResponse(deviceId: String?): Response =
+public suspend fun PlayerApi.startAUsersPlayback(
+public suspend fun PlayerApi.startAUsersPlaybackWithResponse(
+public suspend fun PlayerApi.skipUsersPlaybackToPreviousTrack(deviceId: String?) {
+public suspend fun PlayerApi.skipUsersPlaybackToPreviousTrackWithResponse(deviceId: String?): Response =
+public suspend fun PlayerApi.getQueue(): QueueObject = this.getQueue(options = RequestOptions())
+public suspend fun PlayerApi.getQueueWithResponse(): Pair<QueueObject, Response> = this.getQueueWithResponse(options = RequestOptions())
+public suspend fun PlayerApi.addToQueue(
+public suspend fun PlayerApi.addToQueueWithResponse(
+public suspend fun PlayerApi.getRecentlyPlayed(
+public suspend fun PlayerApi.getRecentlyPlayedWithResponse(
+public suspend fun PlayerApi.setRepeatModeOnUsersPlayback(
+public suspend fun PlayerApi.setRepeatModeOnUsersPlaybackWithResponse(
+public suspend fun PlayerApi.seekToPositionInCurrentlyPlayingTrack(
+public suspend fun PlayerApi.seekToPositionInCurrentlyPlayingTrackWithResponse(
+public suspend fun PlayerApi.toggleShuffleForUsersPlayback(
+public suspend fun PlayerApi.toggleShuffleForUsersPlaybackWithResponse(
+public suspend fun PlayerApi.setVolumeForUsersPlayback(
+public suspend fun PlayerApi.setVolumeForUsersPlaybackWithResponse(
+# com/example/api/api/PlaylistsApi.kt
+public interface PlaylistsApi {
+# com/example/api/api/PlaylistsApiExtensions.kt
+public suspend fun PlaylistsApi.getACategoriesPlaylists(
+public suspend fun PlaylistsApi.getACategoriesPlaylistsWithResponse(
+public suspend fun PlaylistsApi.getFeaturedPlaylists(
+public suspend fun PlaylistsApi.getFeaturedPlaylistsWithResponse(
+public suspend fun PlaylistsApi.getAListOfCurrentUsersPlaylists(
+public suspend fun PlaylistsApi.getAListOfCurrentUsersPlaylistsWithResponse(
+public suspend fun PlaylistsApi.getPlaylist(
+public suspend fun PlaylistsApi.getPlaylistWithResponse(
+public suspend fun PlaylistsApi.changePlaylistDetails(
+public suspend fun PlaylistsApi.changePlaylistDetailsWithResponse(
+public suspend fun PlaylistsApi.getPlaylistCover(playlistId: String): List<ImageObject> =
+public suspend fun PlaylistsApi.getPlaylistCoverWithResponse(playlistId: String): Pair<List<ImageObject>, Response> =
+public suspend fun PlaylistsApi.uploadCustomPlaylistCover(playlistId: String) {
+public suspend fun PlaylistsApi.uploadCustomPlaylistCoverWithResponse(playlistId: String): Response =
+public suspend fun PlaylistsApi.getPlaylistsTracks(
+public suspend fun PlaylistsApi.getPlaylistsTracksWithResponse(
+public suspend fun PlaylistsApi.addTracksToPlaylist(
+public suspend fun PlaylistsApi.addTracksToPlaylistWithResponse(
+public suspend fun PlaylistsApi.reorderOrReplacePlaylistsTracks(
+public suspend fun PlaylistsApi.reorderOrReplacePlaylistsTracksWithResponse(
+public suspend fun PlaylistsApi.removeTracksPlaylist(
+public suspend fun PlaylistsApi.removeTracksPlaylistWithResponse(
+public suspend fun PlaylistsApi.getListUsersPlaylists(
+public suspend fun PlaylistsApi.getListUsersPlaylistsWithResponse(
+public suspend fun PlaylistsApi.createPlaylist(
+public suspend fun PlaylistsApi.createPlaylistWithResponse(
+# com/example/api/api/QueryStyle.kt
+public enum class QueryStyle {
+# com/example/api/api/RequestOptions.kt
+public data class RequestOptions(
+# com/example/api/api/SearchApi.kt
+public interface SearchApi {
+# com/example/api/api/SearchApiExtensions.kt
+public suspend fun SearchApi.search(
+public suspend fun SearchApi.searchWithResponse(
+# com/example/api/api/ShowsApi.kt
+public interface ShowsApi {
+# com/example/api/api/ShowsApiExtensions.kt
+public suspend fun ShowsApi.getUsersSavedShows(
+public suspend fun ShowsApi.getUsersSavedShowsWithResponse(
+public suspend fun ShowsApi.saveShowsUser(ids: String) {
+public suspend fun ShowsApi.saveShowsUserWithResponse(ids: String): Response =
+public suspend fun ShowsApi.removeShowsUser(
+public suspend fun ShowsApi.removeShowsUserWithResponse(
+public suspend fun ShowsApi.checkUsersSavedShows(ids: String): List<Boolean> =
+public suspend fun ShowsApi.checkUsersSavedShowsWithResponse(ids: String): Pair<List<Boolean>, Response> =
+public suspend fun ShowsApi.getMultipleShows(
+public suspend fun ShowsApi.getMultipleShowsWithResponse(
+public suspend fun ShowsApi.getAShow(
+public suspend fun ShowsApi.getAShowWithResponse(
+public suspend fun ShowsApi.getAShowsEpisodes(
+public suspend fun ShowsApi.getAShowsEpisodesWithResponse(
+# com/example/api/api/TracksApi.kt
+public interface TracksApi {
+# com/example/api/api/TracksApiExtensions.kt
+public suspend fun TracksApi.getAudioAnalysis(id: String): AudioAnalysisObject = this.getAudioAnalysis(id = id, options = RequestOptions())
+public suspend fun TracksApi.getAudioAnalysisWithResponse(id: String): Pair<AudioAnalysisObject, Response> =
+public suspend fun TracksApi.getSeveralAudioFeatures(ids: String): GetSeveralAudioFeaturesResponse =
+public suspend fun TracksApi.getSeveralAudioFeaturesWithResponse(ids: String): Pair<GetSeveralAudioFeaturesResponse, Response> =
+public suspend fun TracksApi.getAudioFeatures(id: String): AudioFeaturesObject = this.getAudioFeatures(id = id, options = RequestOptions())
+public suspend fun TracksApi.getAudioFeaturesWithResponse(id: String): Pair<AudioFeaturesObject, Response> =
+public suspend fun TracksApi.getUsersSavedTracks(
+public suspend fun TracksApi.getUsersSavedTracksWithResponse(
+public suspend fun TracksApi.saveTracksUser(
+public suspend fun TracksApi.saveTracksUserWithResponse(
+public suspend fun TracksApi.removeTracksUser(
+public suspend fun TracksApi.removeTracksUserWithResponse(
+public suspend fun TracksApi.checkUsersSavedTracks(ids: String): List<Boolean> =
+public suspend fun TracksApi.checkUsersSavedTracksWithResponse(ids: String): Pair<List<Boolean>, Response> =
+public suspend fun TracksApi.getRecommendations(
+public suspend fun TracksApi.getRecommendationsWithResponse(
+public suspend fun TracksApi.getSeveralTracks(
+public suspend fun TracksApi.getSeveralTracksWithResponse(
+public suspend fun TracksApi.getTrack(
+public suspend fun TracksApi.getTrackWithResponse(
+# com/example/api/api/URLEncoding.kt
+public object URLEncoding {
+# com/example/api/api/UsersApi.kt
+public interface UsersApi {
+# com/example/api/api/UsersApiExtensions.kt
+public suspend fun UsersApi.getCurrentUsersProfile(): PrivateUserObject = this.getCurrentUsersProfile(options = RequestOptions())
+public suspend fun UsersApi.getCurrentUsersProfileWithResponse(): Pair<PrivateUserObject, Response> =
+public suspend fun UsersApi.getFollowed(
+public suspend fun UsersApi.getFollowedWithResponse(
+public suspend fun UsersApi.followArtistsUsers(
+public suspend fun UsersApi.followArtistsUsersWithResponse(
+public suspend fun UsersApi.unfollowArtistsUsers(
+public suspend fun UsersApi.unfollowArtistsUsersWithResponse(
+public suspend fun UsersApi.checkCurrentUserFollows(
+public suspend fun UsersApi.checkCurrentUserFollowsWithResponse(
+public suspend fun UsersApi.getUsersTopArtistsAndTracks(
+public suspend fun UsersApi.getUsersTopArtistsAndTracksWithResponse(
+public suspend fun UsersApi.followPlaylist(
+public suspend fun UsersApi.followPlaylistWithResponse(
+public suspend fun UsersApi.unfollowPlaylist(playlistId: String) {
+public suspend fun UsersApi.unfollowPlaylistWithResponse(playlistId: String): Response =
+public suspend fun UsersApi.checkIfUserFollowsPlaylist(
+public suspend fun UsersApi.checkIfUserFollowsPlaylistWithResponse(
+public suspend fun UsersApi.getUsersProfile(userId: String): PublicUserObject =
+public suspend fun UsersApi.getUsersProfileWithResponse(userId: String): Pair<PublicUserObject, Response> =
+# com/example/api/models/AddTracksToPlaylistBody.kt
+public data class AddTracksToPlaylistBody(
+# com/example/api/models/AddTracksToPlaylistResponse.kt
+public data class AddTracksToPlaylistResponse(
+# com/example/api/models/AlbumBase.kt
+public data class AlbumBase(
+# com/example/api/models/AlbumBaseAlbumType.kt
+public enum class AlbumBaseAlbumType(
+# com/example/api/models/AlbumBaseReleaseDatePrecision.kt
+public enum class AlbumBaseReleaseDatePrecision(
+# com/example/api/models/AlbumBaseType.kt
+public enum class AlbumBaseType(
+# com/example/api/models/AlbumObject.kt
+public typealias AlbumObject = JsonElement
+# com/example/api/models/AlbumRestrictionObject.kt
+public data class AlbumRestrictionObject(
+# com/example/api/models/AlbumRestrictionObjectReason.kt
+public enum class AlbumRestrictionObjectReason(
+# com/example/api/models/ArtistObject.kt
+public data class ArtistObject(
+# com/example/api/models/ArtistObjectType.kt
+public enum class ArtistObjectType(
+# com/example/api/models/AudioAnalysisObject.kt
+public data class AudioAnalysisObject(
+# com/example/api/models/AudioAnalysisObjectMeta.kt
+public data class AudioAnalysisObjectMeta(
+# com/example/api/models/AudioAnalysisObjectTrack.kt
+public data class AudioAnalysisObjectTrack(
+# com/example/api/models/AudioFeaturesObject.kt
+public data class AudioFeaturesObject(
+# com/example/api/models/AudioFeaturesObjectType.kt
+public enum class AudioFeaturesObjectType(
+# com/example/api/models/AudiobookBase.kt
+public data class AudiobookBase(
+# com/example/api/models/AudiobookBaseType.kt
+public enum class AudiobookBaseType(
+# com/example/api/models/AudiobookObject.kt
+public typealias AudiobookObject = JsonElement
+# com/example/api/models/AuthorObject.kt
+public data class AuthorObject(
+# com/example/api/models/CategoryObject.kt
+public data class CategoryObject(
+# com/example/api/models/ChangePlaylistDetailsBody.kt
+public data class ChangePlaylistDetailsBody(
+# com/example/api/models/ChapterBase.kt
+public data class ChapterBase(
+# com/example/api/models/ChapterBaseReleaseDatePrecision.kt
+public enum class ChapterBaseReleaseDatePrecision(
+# com/example/api/models/ChapterBaseType.kt
+public enum class ChapterBaseType(
+# com/example/api/models/ChapterObject.kt
+public typealias ChapterObject = JsonElement
+# com/example/api/models/ChapterRestrictionObject.kt
+public data class ChapterRestrictionObject(
+# com/example/api/models/CheckCurrentUserFollowsParamType.kt
+public enum class CheckCurrentUserFollowsParamType(
+# com/example/api/models/ContextObject.kt
+public data class ContextObject(
+# com/example/api/models/CopyrightObject.kt
+public data class CopyrightObject(
+# com/example/api/models/CreatePlaylistBody.kt
+public data class CreatePlaylistBody(
+# com/example/api/models/CurrentlyPlayingContextObject.kt
+public data class CurrentlyPlayingContextObject(
+# com/example/api/models/CurrentlyPlayingObject.kt
+public data class CurrentlyPlayingObject(
+# com/example/api/models/CursorObject.kt
+public data class CursorObject(
+# com/example/api/models/CursorPagingObject.kt
+public data class CursorPagingObject(
+# com/example/api/models/CursorPagingPlayHistoryObject.kt
+public typealias CursorPagingPlayHistoryObject = JsonElement
+# com/example/api/models/CursorPagingSimplifiedArtistObject.kt
+public typealias CursorPagingSimplifiedArtistObject = JsonElement
+# com/example/api/models/DeviceObject.kt
+public data class DeviceObject(
+# com/example/api/models/DevicesObject.kt
+public data class DevicesObject(
+# com/example/api/models/DisallowsObject.kt
+public data class DisallowsObject(
+# com/example/api/models/EpisodeBase.kt
+public data class EpisodeBase(
+# com/example/api/models/EpisodeBaseReleaseDatePrecision.kt
+public enum class EpisodeBaseReleaseDatePrecision(
+# com/example/api/models/EpisodeBaseType.kt
+public enum class EpisodeBaseType(
+# com/example/api/models/EpisodeObject.kt
+public typealias EpisodeObject = JsonElement
+# com/example/api/models/EpisodeRestrictionObject.kt
+public data class EpisodeRestrictionObject(
+# com/example/api/models/ErrorObject.kt
+public data class ErrorObject(
+# com/example/api/models/ExplicitContentSettingsObject.kt
+public data class ExplicitContentSettingsObject(
+# com/example/api/models/ExternalIdObject.kt
+public data class ExternalIdObject(
+# com/example/api/models/ExternalUrlObject.kt
+public data class ExternalUrlObject(
+# com/example/api/models/FollowArtistsUsersBody.kt
+public data class FollowArtistsUsersBody(
+# com/example/api/models/FollowArtistsUsersParamType.kt
+public enum class FollowArtistsUsersParamType(
+# com/example/api/models/FollowPlaylistBody.kt
+public data class FollowPlaylistBody(
+# com/example/api/models/FollowersObject.kt
+public data class FollowersObject(
+# com/example/api/models/GetAUsersAvailableDevicesResponse.kt
+public data class GetAUsersAvailableDevicesResponse(
+# com/example/api/models/GetAnArtistsRelatedArtistsResponse.kt
+public data class GetAnArtistsRelatedArtistsResponse(
+# com/example/api/models/GetAnArtistsTopTracksResponse.kt
+public data class GetAnArtistsTopTracksResponse(
+# com/example/api/models/GetAvailableMarketsResponse.kt
+public data class GetAvailableMarketsResponse(
+# com/example/api/models/GetCategoriesResponse.kt
+public data class GetCategoriesResponse(
+# com/example/api/models/GetFollowedParamType.kt
+public enum class GetFollowedParamType(
+# com/example/api/models/GetFollowedResponse.kt
+public data class GetFollowedResponse(
+# com/example/api/models/GetInformationAboutTheUsersCurrentPlaybackResponse.kt
+public sealed class GetInformationAboutTheUsersCurrentPlaybackResponse {
+# com/example/api/models/GetMultipleAlbumsResponse.kt
+public data class GetMultipleAlbumsResponse(
+# com/example/api/models/GetMultipleArtistsResponse.kt
+public data class GetMultipleArtistsResponse(
+# com/example/api/models/GetMultipleAudiobooksResponse.kt
+public data class GetMultipleAudiobooksResponse(
+# com/example/api/models/GetMultipleEpisodesResponse.kt
+public data class GetMultipleEpisodesResponse(
+# com/example/api/models/GetMultipleShowsResponse.kt
+public data class GetMultipleShowsResponse(
+# com/example/api/models/GetNewReleasesResponse.kt
+public data class GetNewReleasesResponse(
+# com/example/api/models/GetRecommendationGenresResponse.kt
+public data class GetRecommendationGenresResponse(
+# com/example/api/models/GetSeveralAudioFeaturesResponse.kt
+public data class GetSeveralAudioFeaturesResponse(
+# com/example/api/models/GetSeveralChaptersResponse.kt
+public data class GetSeveralChaptersResponse(
+# com/example/api/models/GetSeveralTracksResponse.kt
+public data class GetSeveralTracksResponse(
+# com/example/api/models/GetUsersTopArtistsAndTracksParamType.kt
+public enum class GetUsersTopArtistsAndTracksParamType(
+# com/example/api/models/ImageObject.kt
+public data class ImageObject(
+# com/example/api/models/Key.kt
+public typealias Key = Int
+# com/example/api/models/LinkedTrackObject.kt
+public data class LinkedTrackObject(
+# com/example/api/models/Loudness.kt
+public typealias Loudness = Float
+# com/example/api/models/Mode.kt
+public typealias Mode = Int
+# com/example/api/models/NarratorObject.kt
+public data class NarratorObject(
+# com/example/api/models/PagingArtistObject.kt
+public typealias PagingArtistObject = JsonElement
+# com/example/api/models/PagingFeaturedPlaylistObject.kt
+public data class PagingFeaturedPlaylistObject(
+# com/example/api/models/PagingObject.kt
+public data class PagingObject(
+# com/example/api/models/PagingPlaylistObject.kt
+public typealias PagingPlaylistObject = JsonElement
+# com/example/api/models/PagingPlaylistTrackObject.kt
+public typealias PagingPlaylistTrackObject = JsonElement
+# com/example/api/models/PagingSavedAlbumObject.kt
+public typealias PagingSavedAlbumObject = JsonElement
+# com/example/api/models/PagingSavedEpisodeObject.kt
+public typealias PagingSavedEpisodeObject = JsonElement
+# com/example/api/models/PagingSavedShowObject.kt
+public typealias PagingSavedShowObject = JsonElement
+# com/example/api/models/PagingSavedTrackObject.kt
+public typealias PagingSavedTrackObject = JsonElement
+# com/example/api/models/PagingSimplifiedAlbumObject.kt
+public typealias PagingSimplifiedAlbumObject = JsonElement
+# com/example/api/models/PagingSimplifiedArtistObject.kt
+public typealias PagingSimplifiedArtistObject = JsonElement
+# com/example/api/models/PagingSimplifiedAudiobookObject.kt
+public typealias PagingSimplifiedAudiobookObject = JsonElement
+# com/example/api/models/PagingSimplifiedChapterObject.kt
+public typealias PagingSimplifiedChapterObject = JsonElement
+# com/example/api/models/PagingSimplifiedEpisodeObject.kt
+public typealias PagingSimplifiedEpisodeObject = JsonElement
+# com/example/api/models/PagingSimplifiedShowObject.kt
+public typealias PagingSimplifiedShowObject = JsonElement
+# com/example/api/models/PagingSimplifiedTrackObject.kt
+public typealias PagingSimplifiedTrackObject = JsonElement
+# com/example/api/models/PagingTrackObject.kt
+public typealias PagingTrackObject = JsonElement
+# com/example/api/models/PlayHistoryObject.kt
+public data class PlayHistoryObject(
+# com/example/api/models/PlayerErrorObject.kt
+public data class PlayerErrorObject(
+# com/example/api/models/PlayerErrorReasons.kt
+public enum class PlayerErrorReasons(
+# com/example/api/models/PlaylistObject.kt
+public data class PlaylistObject(
+# com/example/api/models/PlaylistOwnerObject.kt
+public typealias PlaylistOwnerObject = JsonElement
+# com/example/api/models/PlaylistTrackObject.kt
+public data class PlaylistTrackObject(
+# com/example/api/models/PlaylistTracksRefObject.kt
+public data class PlaylistTracksRefObject(
+# com/example/api/models/PlaylistUserObject.kt
+public data class PlaylistUserObject(
+# com/example/api/models/PlaylistUserObjectType.kt
+public enum class PlaylistUserObjectType(
+# com/example/api/models/PrivateUserObject.kt
+public data class PrivateUserObject(
+# com/example/api/models/PublicUserObject.kt
+public data class PublicUserObject(
+# com/example/api/models/PublicUserObjectType.kt
+public enum class PublicUserObjectType(
+# com/example/api/models/QueueObject.kt
+public data class QueueObject(
+# com/example/api/models/RecommendationSeedObject.kt
+public data class RecommendationSeedObject(
+# com/example/api/models/RecommendationsObject.kt
+public data class RecommendationsObject(
+# com/example/api/models/RemoveAlbumsUserBody.kt
+public data class RemoveAlbumsUserBody(
+# com/example/api/models/RemoveEpisodesUserBody.kt
+public data class RemoveEpisodesUserBody(
+# com/example/api/models/RemoveTracksPlaylistBody.kt
+public data class RemoveTracksPlaylistBody(
+# com/example/api/models/RemoveTracksPlaylistBodyTracks.kt
+public data class RemoveTracksPlaylistBodyTracks(
+# com/example/api/models/RemoveTracksPlaylistResponse.kt
+public data class RemoveTracksPlaylistResponse(
+# com/example/api/models/RemoveTracksUserBody.kt
+public data class RemoveTracksUserBody(
+# com/example/api/models/ReorderOrReplacePlaylistsTracksBody.kt
+public data class ReorderOrReplacePlaylistsTracksBody(
+# com/example/api/models/ReorderOrReplacePlaylistsTracksResponse.kt
+public data class ReorderOrReplacePlaylistsTracksResponse(
+# com/example/api/models/ResumePointObject.kt
+public data class ResumePointObject(
+# com/example/api/models/SaveAlbumsUserBody.kt
+public data class SaveAlbumsUserBody(
+# com/example/api/models/SaveEpisodesUserBody.kt
+public data class SaveEpisodesUserBody(
+# com/example/api/models/SaveTracksUserBody.kt
+public data class SaveTracksUserBody(
+# com/example/api/models/SavedAlbumObject.kt
+public data class SavedAlbumObject(
+# com/example/api/models/SavedEpisodeObject.kt
+public data class SavedEpisodeObject(
+# com/example/api/models/SavedShowObject.kt
+public data class SavedShowObject(
+# com/example/api/models/SavedTrackObject.kt
+public data class SavedTrackObject(
+# com/example/api/models/SearchParamIncludeExternal.kt
+public enum class SearchParamIncludeExternal(
+# com/example/api/models/SearchParamType.kt
+public enum class SearchParamType(
+# com/example/api/models/SearchResponse.kt
+public data class SearchResponse(
+# com/example/api/models/SectionObject.kt
+public data class SectionObject(
+# com/example/api/models/SectionObjectMode.kt
+public typealias SectionObjectMode = Int
+# com/example/api/models/SegmentObject.kt
+public data class SegmentObject(
+# com/example/api/models/ShowBase.kt
+public data class ShowBase(
+# com/example/api/models/ShowBaseType.kt
+public enum class ShowBaseType(
+# com/example/api/models/ShowObject.kt
+public typealias ShowObject = JsonElement
+# com/example/api/models/SimplifiedAlbumObject.kt
+public typealias SimplifiedAlbumObject = JsonElement
+# com/example/api/models/SimplifiedArtistObject.kt
+public data class SimplifiedArtistObject(
+# com/example/api/models/SimplifiedArtistObjectType.kt
+public enum class SimplifiedArtistObjectType(
+# com/example/api/models/SimplifiedAudiobookObject.kt
+public typealias SimplifiedAudiobookObject = JsonElement
+# com/example/api/models/SimplifiedChapterObject.kt
+public typealias SimplifiedChapterObject = JsonElement
+# com/example/api/models/SimplifiedEpisodeObject.kt
+public typealias SimplifiedEpisodeObject = JsonElement
+# com/example/api/models/SimplifiedPlaylistObject.kt
+public data class SimplifiedPlaylistObject(
+# com/example/api/models/SimplifiedShowObject.kt
+public typealias SimplifiedShowObject = JsonElement
+# com/example/api/models/SimplifiedTrackObject.kt
+public data class SimplifiedTrackObject(
+# com/example/api/models/StartAUsersPlaybackBody.kt
+public data class StartAUsersPlaybackBody(
+# com/example/api/models/Tempo.kt
+public typealias Tempo = Float
+# com/example/api/models/TimeIntervalObject.kt
+public data class TimeIntervalObject(
+# com/example/api/models/TimeSignature.kt
+public typealias TimeSignature = Int
+# com/example/api/models/TrackObject.kt
+public data class TrackObject(
+# com/example/api/models/TrackObjectType.kt
+public enum class TrackObjectType(
+# com/example/api/models/TrackRestrictionObject.kt
+public data class TrackRestrictionObject(
+# com/example/api/models/TransferAUsersPlaybackBody.kt
+public data class TransferAUsersPlaybackBody(
+# com/example/api/models/TuneableTrackObject.kt
+public data class TuneableTrackObject(
+# com/example/api/models/UnfollowArtistsUsersBody.kt
+public data class UnfollowArtistsUsersBody(
+# com/example/api/models/UnfollowArtistsUsersParamType.kt
+public enum class UnfollowArtistsUsersParamType(
