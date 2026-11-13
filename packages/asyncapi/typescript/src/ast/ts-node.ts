@@ -2,7 +2,7 @@ import type { TsDsl } from "@hey-api/openapi-ts";
 
 import { ValueNode, type ValueNodeOptions } from "./value-node.js";
 
-/** INode wrapper around a `$` DSL node, or verbatim source the DSL can't express. */
+/** Holds one `$` DSL node, or a string of code the DSL can't build. */
 export class TsStatementNode extends ValueNode<TsDsl | string> {
   constructor(
     statement: TsDsl | string,

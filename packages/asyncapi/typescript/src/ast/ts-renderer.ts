@@ -44,11 +44,11 @@ export class TsStatementRenderer implements Renderer {
     const exports = (this.reexports.get(path) ?? []).map(moduleExport);
 
     const nodes: TsDsl[] = [];
-    const verbatim: string[] = [];
+    const rawCode: string[] = [];
     for (const node of ctx.file.nodes) {
       if (!(node instanceof TsStatementNode)) continue;
       const value = node.toAst();
-      if (typeof value === "string") verbatim.push(value);
+      if (typeof value === "string") rawCode.push(value);
       else nodes.push(value);
     }
 
@@ -58,7 +58,7 @@ export class TsStatementRenderer implements Renderer {
       imports: imports.length ? [imports] : undefined,
       nodes,
     }).trim();
-    const printed = `${[body, ...verbatim].filter(Boolean).join("\n\n")}\n`;
+    const printed = `${[body, ...rawCode].filter(Boolean).join("\n\n")}\n`;
 
     const header = this.headers.get(path);
     if (!header) return printed;

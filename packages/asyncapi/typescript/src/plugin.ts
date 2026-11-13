@@ -94,8 +94,8 @@ export interface PluginInstance<Config = unknown, Api = unknown> {
   emit(file: GeneratedFile): void;
   /**
    * Add a file built with Hey API's `$` DSL; the `TsStatementRenderer`
-   * prints it at render time. Strings are verbatim source for constructs
-   * the DSL has no node for, printed after the DSL nodes. Optional
+   * prints it at render time. Strings are printed as-is after the DSL
+   * nodes, for code the DSL can\'t build. Optional
    * `header` prints above the imports.
    *
    * Cross-file imports go through `options.imports` (graph-driven), not

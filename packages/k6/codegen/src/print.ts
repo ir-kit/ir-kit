@@ -15,7 +15,7 @@ export interface PrintModuleInput {
   imports?: ReadonlyArray<ModuleImport>;
   /** Top-level statements. */
   nodes: ReadonlyArray<TsDsl>;
-  /** Trailing source the DSL has no node for (e.g. `export default`). */
+  /** Code printed after the nodes, for things the DSL can't build (e.g. `export default`). */
   footer?: string;
 }
 

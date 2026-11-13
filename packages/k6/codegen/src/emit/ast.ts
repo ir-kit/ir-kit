@@ -73,7 +73,7 @@ export function reExportConst(
   return $.const(localName).export().assign($(sourceVar).attr(sourceProp));
 }
 
-/** `export default <sourceVar>.<sourceProp>;` — the DSL has no export-assignment node. */
+/** `export default <sourceVar>.<sourceProp>;` as a string, since the DSL can't build `export default`. */
 export function defaultExportProp(
   sourceVar: string,
   sourceProp: string,

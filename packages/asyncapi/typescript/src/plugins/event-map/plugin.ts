@@ -12,7 +12,7 @@ const HEADER =
 
 /**
  * `isMessageOfType` narrows with a type predicate (`msg is EventMap[K]`),
- * which the `$` DSL has no node for, so it is emitted as verbatim source.
+ * which the `$` DSL can't build, so it is written as a plain string.
  */
 const IS_MESSAGE_OF_TYPE = `export function isMessageOfType<K extends keyof EventMap>(msg: AnyMessage, type: K): msg is EventMap[K] {
   return (msg as { type?: string } | null | undefined)?.type === type;

@@ -97,7 +97,7 @@ The `PluginInstance` exposes:
 - `plugin.document` — the parsed `AsyncAPIDocumentInterface`
 - `plugin.files` — files emitted so far (for plugins like `index-barrel` that inspect prior output)
 - `plugin.emit({path, content})` — emit a file as raw text
-- `plugin.emitTs(path, nodes, {header?, imports?, exports?})` — emit a file built with Hey API's `$` DSL (`import { $ } from "@hey-api/openapi-ts"`), rendered by Hey API's TypeScript renderer; strings are verbatim source appended after the nodes
+- `plugin.emitTs(path, nodes, {header?, imports?, exports?})` — emit a file built with Hey API's `$` DSL (`import { $ } from "@hey-api/openapi-ts"`), rendered by Hey API's TypeScript renderer; a string is printed as-is after the nodes
 - `plugin.getApi<T>(name)` — fetch another plugin's exposed api
 - `plugin.forEach('message' | 'channel' | 'operation', ...)` — iterate spec entities
 

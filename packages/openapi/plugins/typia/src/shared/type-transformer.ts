@@ -146,8 +146,8 @@ function transform(ctx: TransformerContext): TypeExpr | undefined {
  * Annotates a schema's generated TypeScript type with typia constraint
  * tag intersections. Register on `@hey-api/transformers.typeTransformers`.
  */
-// why: `TypeTransformer` is typed to return a plain type reference, but the
-// typescript plugin accepts any type node, and tags need an intersection.
+// `TypeTransformer` is typed to return only a type reference, but tags need an
+// intersection, and the typescript plugin accepts any type node.
 export const typiaTypeTransformer = transform as unknown as TypeTransformer;
 
 function collectTags(
