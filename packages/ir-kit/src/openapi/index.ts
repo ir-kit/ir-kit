@@ -1,4 +1,3 @@
-export { fromHeyApi } from "../schema/adapters/heyapi.js";
 export type {
   EnumEntryIdent,
   EnumKind,

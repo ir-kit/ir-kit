@@ -252,7 +252,7 @@ Zero runtime dependencies — the SDK only imports `Foundation`.
 src/ast/                      sw* builders returning ir-kit nodes; SwDecl
 src/sw-compiler/              printFile / printDecl via ir-kit
 src/ir/
-├── type/                     IR.SchemaObject → SwType
+├── type/                     Schema → SwType
 ├── operation/                IR.OperationObject → signature shared by protocol + impl
 ├── impl/                     URLSession body builders (url, request, headers, body, decode)
 ├── runtime/                  Top-level helper decls (APIClient, APIError, RequestOptions, Auth, …)

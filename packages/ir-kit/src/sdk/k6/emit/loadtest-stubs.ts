@@ -1,7 +1,7 @@
 import { $ } from "@hey-api/openapi-ts";
 import { safeIdent } from "../../../codegen/index.js";
 import type { IR } from "../../../ir/index.js";
-import { extractEnumValues, fromHeyApi } from "../../../openapi/index.js";
+import { extractEnumValues } from "../../../openapi/index.js";
 import type { Expr } from "../dsl.js";
 import type { BuiltFile } from "../generate.js";
 import { toIdent, type WalkedOperation, walkOperations } from "../ir/index.js";
@@ -74,7 +74,7 @@ function callArgExpressions(
 }
 
 function placeholder(schema: IR.Schema): Expr {
-  const [first] = extractEnumValues(fromHeyApi(schema)) ?? [];
+  const [first] = extractEnumValues(schema) ?? [];
   if (
     typeof first === "string" ||
     typeof first === "number" ||

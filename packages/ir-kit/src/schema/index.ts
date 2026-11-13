@@ -4,6 +4,8 @@ export {
   type EnumKind,
   type EnumLiteral,
   extractEnumValues,
+  getEnumLiterals,
+  isPlainString,
   uniqueEnumEntries,
 } from "./enum.js";
 export {

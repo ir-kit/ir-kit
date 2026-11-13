@@ -1,7 +1,6 @@
 import type { IR } from "../../../../ir/index.js";
 import {
   collectLocatedParams,
-  fromHeyApi,
   type LocatedParam,
 } from "../../../../openapi/index.js";
 
@@ -19,7 +18,7 @@ export function buildNonBodyParams(
   const params = located.map(({ param: p }) =>
     jParam(
       operationParamIdent(p.name),
-      schemaToType(fromHeyApi(p.schema), {
+      schemaToType(p.schema, {
         ...ctx,
         propPath: ["param", p.name],
       }),

@@ -5,7 +5,7 @@ Language-agnostic IR-walking primitives for OpenAPI codegen. This package owns a
 The shape of the consolidation:
 
 ```
-                 IR.SchemaObject / IR.OperationObject (hey-api shared types)
+                 IR.Model from ir-kit/ir (schemas are JSON Schema 2020-12)
                                     │
                                     ▼
                        ir-kit/openapi (this package)
@@ -67,7 +67,7 @@ interface SchemaToTypeOps<T, D> {
   nullableAnyType(): T;
   wrapForUnionSingle(inner: T, nullable: boolean): T;
   unionFallback(nullable: boolean): T;
-  primitiveType(schema: IR.SchemaObject): T | undefined;
+  primitiveType(schema: Schema): T | undefined;
 
   // Naming
   synthName(ownerName: string, propPath: ReadonlyArray<string>): string;
@@ -77,7 +77,7 @@ interface SchemaToTypeOps<T, D> {
     name: string,
     properties: ReadonlyArray<ObjectProperty>,
     ctx: TypeCtx<D>,
-    dispatch: (s: IR.SchemaObject, c: TypeCtx<D>) => T,
+    dispatch: (s: Schema, c: TypeCtx<D>) => T,
   ): D;
   emitStringEnum(
     name: string,

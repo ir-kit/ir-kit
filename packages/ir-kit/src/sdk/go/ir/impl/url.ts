@@ -5,6 +5,7 @@ import {
   parseTemplatedSegment,
   splitPathSegments,
 } from "../../../../openapi/index.js";
+import { isPlainString } from "../../../../schema/index.js";
 import {
   type GoExpr,
   type GoStmt,
@@ -82,7 +83,7 @@ function segmentExpr(
       ? p.text
       : {
           id: paramIdent(p.param ? p.param.name : p.name),
-          isString: p.param?.schema.type === "string",
+          isString: isPlainString(p.param?.schema),
         },
   );
 

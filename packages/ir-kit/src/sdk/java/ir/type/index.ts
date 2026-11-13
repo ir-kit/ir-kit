@@ -6,7 +6,7 @@ import {
   type Schema,
   schemaToType as sharedSchemaToType,
 } from "../../../../openapi/index.js";
-import { getEnumLiterals } from "../../../../openapi-tools/index.js";
+import { getEnumLiterals } from "../../../../schema/index.js";
 
 import { type JEmitted, type JType, jRef } from "../../ast/index.js";
 import { javaOps } from "../type-ops.js";

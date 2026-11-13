@@ -1,5 +1,4 @@
 import type { IR } from "../../ir/index.js";
-import { fromHeyApi } from "../../schema/adapters/heyapi.js";
 import type { Schema } from "../../schema/index.js";
 
 import { isMeaningless } from "../spec/ref.js";
@@ -48,7 +47,7 @@ export function classifyReturnShape(op: IR.Operation): ReturnShape {
   if (success.length === 1) {
     const [, resp] = success[0]!;
     if (!resp?.schema) return { kind: "void" };
-    const schema = fromHeyApi(resp.schema);
+    const schema = resp.schema;
     if (isMeaningless(schema)) return { kind: "void" };
     return { kind: "single", schema };
   }
@@ -56,7 +55,7 @@ export function classifyReturnShape(op: IR.Operation): ReturnShape {
     kind: "multi",
     cases: success.map(([statusCode, resp]) => {
       if (!resp?.schema) return { statusCode, schema: undefined };
-      const schema = fromHeyApi(resp.schema);
+      const schema = resp.schema;
       return {
         statusCode,
         schema: isMeaningless(schema) ? undefined : schema,

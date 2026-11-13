@@ -1,13 +1,27 @@
 import { Logger, Project } from "@hey-api/codegen-core";
 import { Context, getParser, parseOpenApiSpec } from "@hey-api/shared";
 
-import type { Method, Model, Operation, PathItem, Paths } from "./model.js";
+import { fromHeyApi, type HeyApiSchema } from "../schema/adapters/heyapi.js";
+import type {
+  Body,
+  Components,
+  Method,
+  Model,
+  Operation,
+  Parameter,
+  Parameters,
+  PathItem,
+  Paths,
+  Response,
+  Responses,
+} from "./model.js";
 
 /**
  * Lower an OpenAPI 2.0, 3.0 or 3.1 document into ir-kit's model.
  *
- * Hey API's parser does the schema and parameter work. Its output drops
- * security scheme names, so those are read from the document here.
+ * Hey API's parser does the schema and parameter work. Its schemas are
+ * converted to JSON Schema here, and the security scheme names it drops are
+ * read from the document.
  */
 export function parseOpenAPI(spec: Record<string, unknown>): Model {
   const context = new Context({
@@ -24,23 +38,102 @@ export function parseOpenAPI(spec: Record<string, unknown>): Model {
     spec,
   });
   parseOpenApiSpec(context);
-  const { paths, ...rest } = context.ir;
+  const { paths, components, ...rest }: HeyApiModel = context.ir;
   const lowered: Paths = {};
   for (const [path, item] of Object.entries(paths ?? {})) {
     const ops: PathItem = {};
     for (const [method, op] of Object.entries(item) as [
       Method,
-      Omit<Operation, "securitySchemes"> | undefined,
+      HeyApiOperation | undefined,
     ][]) {
       if (!op) continue;
       ops[method] = {
         ...op,
+        parameters: op.parameters && lowerParameters(op.parameters),
+        body: op.body && { ...op.body, schema: fromHeyApi(op.body.schema) },
+        responses: op.responses && lowerResponses(op.responses),
         securitySchemes: securitySchemes(spec, path, method),
       };
     }
     lowered[path as keyof Paths] = ops;
   }
-  return { ...rest, paths: lowered };
+  return {
+    ...rest,
+    components: components && lowerComponents(components),
+    paths: lowered,
+  };
+}
+
+type WithHeySchema<T> = Omit<T, "schema"> & { schema: HeyApiSchema };
+type HeyApiParameter = WithHeySchema<Parameter>;
+type HeyApiParameters = {
+  [L in keyof Parameters]?: Record<string, HeyApiParameter>;
+};
+type HeyApiOperation = Omit<
+  Operation,
+  "securitySchemes" | "parameters" | "body" | "responses"
+> & {
+  parameters?: HeyApiParameters;
+  body?: WithHeySchema<Body>;
+  responses?: Record<string, WithHeySchema<Response> | undefined>;
+};
+interface HeyApiModel extends Omit<Model, "paths" | "components"> {
+  paths?: { [P in keyof Paths]: { [M in Method]?: HeyApiOperation } };
+  components?: {
+    schemas?: Record<string, HeyApiSchema>;
+    parameters?: Record<string, HeyApiParameter>;
+    requestBodies?: Record<
+      string,
+      WithHeySchema<{ required?: boolean; description?: string }>
+    >;
+  };
+}
+
+function mapValues<A, B>(
+  record: Record<string, A>,
+  fn: (value: A) => B,
+): Record<string, B> {
+  return Object.fromEntries(
+    Object.entries(record).map(([key, value]) => [key, fn(value)]),
+  );
+}
+
+function lowerParameter(param: HeyApiParameter): Parameter {
+  return { ...param, schema: fromHeyApi(param.schema) };
+}
+
+function lowerParameters(params: HeyApiParameters): Parameters {
+  const out: Parameters = {};
+  for (const [location, byName] of Object.entries(params) as [
+    keyof Parameters,
+    Record<string, HeyApiParameter> | undefined,
+  ][]) {
+    if (byName) out[location] = mapValues(byName, lowerParameter);
+  }
+  return out;
+}
+
+function lowerResponses(
+  responses: NonNullable<HeyApiOperation["responses"]>,
+): Responses {
+  return mapValues(
+    responses,
+    (r) => r && { ...r, schema: fromHeyApi(r.schema) },
+  );
+}
+
+function lowerComponents(
+  components: NonNullable<HeyApiModel["components"]>,
+): Components {
+  const { schemas, parameters, requestBodies } = components;
+  return {
+    ...components,
+    schemas: schemas && mapValues(schemas, fromHeyApi),
+    parameters: parameters && mapValues(parameters, lowerParameter),
+    requestBodies:
+      requestBodies &&
+      mapValues(requestBodies, (b) => ({ ...b, schema: fromHeyApi(b.schema) })),
+  };
 }
 
 type Requirement = Record<string, unknown>;
