@@ -48,6 +48,14 @@ describe("fn-schema config", () => {
     expect(await importConfig(file)).toEqual({ n: 2 });
   });
 
+  it("loads a CommonJS .ts config", async () => {
+    const file = join(dir, "cjs.config.ts");
+    await writeFile(file, "const n: number = 3;\nmodule.exports = { n };\n");
+    expect(await importConfig(file)).toEqual({ n: 3 });
+    await writeFile(file, "const n: number = 4;\nmodule.exports = { n };\n");
+    expect(await importConfig(file)).toEqual({ n: 4 });
+  });
+
   it("globs files and skips node_modules", async () => {
     expect(await globFiles(["**/*.ts"], dir)).toEqual([
       join(dir, "src/math.ts"),

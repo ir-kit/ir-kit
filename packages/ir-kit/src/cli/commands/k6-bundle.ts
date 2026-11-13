@@ -16,7 +16,7 @@ const args: Schema = {
     input: { type: "string", description: "Entry .ts file" },
     output: {
       type: "string",
-      description: "Output .js path (default: alongside input)",
+      description: "Output directory (default: dist)",
     },
     minify: {
       type: "boolean",
@@ -39,10 +39,10 @@ export const k6BundleCommand: CommandSpec<Input, void> = {
   handler: async (input) => {
     const result = await bundle({
       entry: input.input,
-      ...(input.output ? { outFile: input.output } : {}),
+      ...(input.output ? { outDir: input.output } : {}),
       minify: input.minify,
       sourcemap: input.sourcemap,
-    } as Parameters<typeof bundle>[0]);
+    });
     log.success(`Bundled to ${result.outfile}`);
   },
 };

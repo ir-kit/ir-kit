@@ -111,6 +111,7 @@ describe("ir generate", () => {
   });
 
   it("writes a starter config and won't replace it", async () => {
+    await writeFile(join(dir, "package.json"), '{ "type": "module" }');
     await writeConfig({ cwd: dir, input: "openapi.yaml", targets: ["go"] });
     expect(await readFile(join(dir, "ir.config.ts"), "utf8")).toBe(
       renderConfig("openapi.yaml", ["go"]),
@@ -118,6 +119,26 @@ describe("ir generate", () => {
     await expect(
       writeConfig({ cwd: dir, input: "x.yaml", targets: ["go"] }),
     ).rejects.toThrow("already exists");
+  });
+
+  it("writes ir.config.mts outside an ES module package", async () => {
+    await writeFile(join(dir, "package.json"), '{ "type": "commonjs" }');
+    expect(
+      await writeConfig({ cwd: dir, input: "openapi.yaml", targets: ["go"] }),
+    ).toBe(join(dir, "ir.config.mts"));
+  });
+
+  it("replaces a CommonJS ir.config.js with ir.config.mts on --force", async () => {
+    await writeFile(join(dir, "package.json"), '{ "type": "commonjs" }');
+    await writeFile(join(dir, "ir.config.js"), "module.exports = {};\n");
+    await writeConfig({
+      cwd: dir,
+      input: "x.yaml",
+      targets: ["go"],
+      force: true,
+    });
+    expect(existsSync(join(dir, "ir.config.js"))).toBe(false);
+    expect(existsSync(join(dir, "ir.config.mts"))).toBe(true);
   });
 });
 

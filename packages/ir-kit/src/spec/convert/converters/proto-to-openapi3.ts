@@ -7,6 +7,13 @@ import type { ConvertOutput } from "../types.js";
 
 type OpenAPISchema = Record<string, unknown>;
 
+// why: proto3 JSON writes these as strings or {}, not as their message fields.
+const WELL_KNOWN = new Map<string, OpenAPISchema>([
+  ["google.protobuf.Timestamp", { type: "string", format: "date-time" }],
+  ["google.protobuf.Duration", { type: "string" }],
+  ["google.protobuf.Empty", { type: "object" }],
+]);
+
 registerConverter({
   from: "proto",
   to: "openapi3",
@@ -15,6 +22,11 @@ registerConverter({
     const text = await readFile(path, "utf8");
     const root = new protobuf.Root();
     const parsed = protobuf.parse(text, root, { keepCase: true });
+    for (const file of parsed.imports ?? []) {
+      const common = protobuf.common.get(file);
+      if (common?.nested) root.addJSON(common.nested);
+    }
+    root.resolveAll();
     const pkg = parsed.package ?? "default";
 
     const schemas: Record<string, OpenAPISchema> = {};
@@ -42,10 +54,11 @@ function walkNamespace(
   if (!ns.nested) return;
   for (const child of Object.values(ns.nested)) {
     if (child instanceof protobuf.Type) {
-      schemas[child.fullName.replace(/^\./, "")] = messageToSchema(child);
+      if (WELL_KNOWN.has(typeName(child))) continue;
+      schemas[typeName(child)] = messageToSchema(child);
       walkNamespace(child, schemas, paths);
     } else if (child instanceof protobuf.Enum) {
-      schemas[child.fullName.replace(/^\./, "")] = enumToSchema(child);
+      schemas[typeName(child)] = enumToSchema(child);
     } else if (child instanceof protobuf.Service) {
       addServicePaths(child, paths);
     } else if (child instanceof protobuf.Namespace) {
@@ -111,10 +124,8 @@ function primitiveOrRef(field: protobuf.Field): OpenAPISchema {
       return { type: "string" };
     case "bytes":
       return { type: "string", format: "byte" };
-    default: {
-      const ref = field.resolvedType?.fullName ?? field.type;
-      return { $ref: `#/components/schemas/${ref.replace(/^\./, "")}` };
-    }
+    default:
+      return schemaRef(field.resolvedType);
   }
 }
 
@@ -122,7 +133,7 @@ function addServicePaths(
   svc: protobuf.Service,
   paths: Record<string, Record<string, unknown>>,
 ): void {
-  const serviceName = svc.fullName.replace(/^\./, "");
+  const serviceName = typeName(svc);
   for (const method of svc.methodsArray) {
     const url = `/${serviceName.replace(/\./g, "/")}/${method.name}`;
     paths[url] = {
@@ -133,9 +144,7 @@ function addServicePaths(
           required: true,
           content: {
             "application/json": {
-              schema: {
-                $ref: `#/components/schemas/${method.resolvedRequestType?.fullName.replace(/^\./, "") ?? method.requestType}`,
-              },
+              schema: schemaRef(method.resolvedRequestType),
             },
           },
         },
@@ -144,9 +153,7 @@ function addServicePaths(
             description: "OK",
             content: {
               "application/json": {
-                schema: {
-                  $ref: `#/components/schemas/${method.resolvedResponseType?.fullName.replace(/^\./, "") ?? method.responseType}`,
-                },
+                schema: schemaRef(method.resolvedResponseType),
               },
             },
           },
@@ -154,4 +161,14 @@ function addServicePaths(
       },
     };
   }
+}
+
+function typeName(obj: protobuf.ReflectionObject): string {
+  return obj.fullName.replace(/^\./, "");
+}
+
+function schemaRef(type: protobuf.ReflectionObject | null): OpenAPISchema {
+  if (!type) throw new Error("unresolved protobuf type");
+  const name = typeName(type);
+  return WELL_KNOWN.get(name) ?? { $ref: `#/components/schemas/${name}` };
 }

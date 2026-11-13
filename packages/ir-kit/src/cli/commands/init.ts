@@ -42,7 +42,7 @@ const args: Schema = {
     },
     force: {
       type: "boolean",
-      description: "Replace an existing ir.config.ts",
+      description: "Replace an existing ir.config file",
       default: false,
     },
   },
