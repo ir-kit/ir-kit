@@ -20,5 +20,8 @@
     "@ir-kit/example-openapi-sdk-petstore",
     "@ir-kit/glean",
     "@ir-kit/tsconfig"
-  ]
+  ],
+  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
+    "onlyUpdatePeerDependentsWhenOutOfRange": true
+  }
 }
