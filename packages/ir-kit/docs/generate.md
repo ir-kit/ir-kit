@@ -39,7 +39,7 @@ npx ir watch          # regenerate when the spec or config changes
 | `docs` | `theme`, `from`; `output` is an HTML file |
 | `asyncapi` | `plugins` (`typescript`, `events`, `event-map`, `dispatch`, `amqplib`, `index`; default all) |
 
-Each target can set its own `input`, for example an AsyncAPI file for `asyncapi` next to an OpenAPI file for the rest. A top-level `normalize: true` applies to every target that supports it. Unknown targets and options are errors.
+Each target can set its own `input`, for example an AsyncAPI file for `asyncapi` next to an OpenAPI file for the rest. Given an AsyncAPI file, the `go`, `kotlin`, `swift`, `java` and `typescript` targets write one model type per message payload and named component schema. A top-level `normalize: true` applies to every target that supports it. Unknown targets and options are errors.
 
 The options are the same ones `ir sdk <target>` takes as flags.
 

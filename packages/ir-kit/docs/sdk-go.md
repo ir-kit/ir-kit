@@ -2,7 +2,7 @@
 
 Generate idiomatic Go client SDKs from an OpenAPI 3.x spec — `encoding/json` structs, typed-string enums, per-tag interfaces with `context.Context` first-arg + `*WithResponse` companions, and a `net/http`-backed impl struct. Per-call `RequestOptions`, composable interceptors, typed `APIError`, multipart + form-urlencoded wire encoding, multi-2xx sealed-style returns, and per-op security auto-wiring all included. Zero runtime dependencies — stdlib only.
 
-Built on the [`@hey-api`](https://github.com/hey-api/openapi-ts) toolchain (`@hey-api/json-schema-ref-parser` for spec loading, `@hey-api/shared` IR for normalization). 2.0 / 3.0 / 3.1 inputs all produce the same output.
+Specs are loaded with `@hey-api/json-schema-ref-parser` and read through ir-kit's own model (`ir-kit/ir`). 2.0 / 3.0 / 3.1 inputs all produce the same output. Through `ir sdk go` or `ir generate`, an AsyncAPI file gives one model type per message.
 
 Sibling package to [`ir-kit/sdk/kotlin`](../openapi-kotlin) and [`ir-kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`openapi-sdk-petstore` example](../../examples/openapi-sdk-petstore).
 

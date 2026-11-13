@@ -23,7 +23,7 @@ All OpenAPI consumers share one normalization layer ([`@hey-api`](https://github
 | Render any spec as standalone HTML docs | [`ir-kit/spec`](./packages/ir-kit/docs/spec-docs.md) | `renderDocs({ input })` or `ir docs` |
 | Diff two specs (cross-family) with breaking-change classification | [`ir-kit/spec`](./packages/ir-kit/docs/spec-diff.md) | `diffSpecs({ before, after })` or `ir spec diff` |
 | Load any spec uniformly (auto-detect OpenAPI / AsyncAPI / TypeSpec) | [`ir-kit/spec`](./packages/ir-kit/docs/spec-load.md) | `loadSpec({ input }) → { kind, document }` |
-| Generate one Go / Kotlin / Swift / Java / TypeScript SDK | `ir-kit/sdk/<lang>` | `generate({ spec, output })` or `ir sdk <lang>` |
+| Generate one Go / Kotlin / Swift / Java / TypeScript SDK, or AsyncAPI message models in those languages | `ir-kit/sdk/<lang>` | `generate({ spec, output })` or `ir sdk <lang>` |
 | Load-test an OpenAPI API | [`ir-kit/k6-toolkit`](./packages/ir-kit/docs/k6-toolkit.md) on top of [`@ir-kit/k6`](./packages/k6/framework) | `sync()`, `runK6()`, `bundle()` |
 | Reverse-engineer a spec from real traffic | [`@ir-kit/glean`](./apps/glean) (browser) or [`ir-kit/recon`](./packages/ir-kit/docs/recon.md) (lib) | DevTools extension / programmatic |
 | Add faker mocks, oRPC clients, route maps, typia validators | hey-api [plugins](#hey-apiopenapi-ts-plugins) | `openapi-ts.config.ts` |
