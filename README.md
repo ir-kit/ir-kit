@@ -33,46 +33,14 @@ All native generators read one model, [`ir-kit/ir`](./packages/ir-kit/docs/ir.md
 
 ## Use with AI coding agents
 
-ir-kit ships six Agent Skills that teach AI coding agents — Claude Code, Cursor, GitHub Copilot, Codex, Cline, Windsurf, and ~50 more — how to drive these packages without you re-explaining the API each session.
-
-<details>
-<summary><strong>Human</strong> — install from the terminal</summary>
+ir-kit ships one Agent Skill, [`skills/ir-kit`](./skills/ir-kit/SKILL.md), that teaches AI coding agents (Claude Code, Cursor, Copilot, Codex and others) how to drive `ir-kit`: the `ir.config.ts` workflow, every `ir` command, k6 loadtests, Hey API plugins, and migrating from the old `@ir-kit/*` packages.
 
 ```bash
-# Install all skills (auto-detects your installed agents)
-npx skills add ahmedrowaihi/ir-kit
-
-# Pick specific skills
-npx skills add ahmedrowaihi/ir-kit --skill k6-loadtest --skill openapi-sdk
-
-# Install globally for every project
-npx skills add ahmedrowaihi/ir-kit -g
+npx skills add ahmedrowaihi/ir-kit        # this project
+npx skills add ahmedrowaihi/ir-kit -g     # every project
 ```
 
-</details>
-
-<details>
-<summary><strong>Agent</strong> — paste this into Claude Code, Cursor, Copilot, …</summary>
-
-> Install the ir-kit Agent Skills from https://github.com/ahmedrowaihi/ir-kit into this project so you can use them in future sessions. Run `npx skills add ahmedrowaihi/ir-kit` — it auto-detects whichever agent I'm using and writes each `SKILL.md` to the right location. If that command isn't available, clone the repo and copy `skills/<name>/SKILL.md` into the skill directory for your agent (Claude Code: `.claude/skills/<name>/SKILL.md`). Then confirm these six are installed: `k6-loadtest`, `openapi-sdk`, `openapi-from-traffic`, `asyncapi-typescript`, `fn-schema`, `heyapi-plugin-author`.
-
-</details>
-
-<details>
-<summary><strong>Skill triggers</strong> — what each one activates on</summary>
-
-| Skill | Triggers on |
-| --- | --- |
-| `k6-loadtest` | "load test", "perf test", "k6", "stress test the API", "spike test", "soak test", "smoke test", "OpenAPI to k6", `defineLoadTest`, `runK6`, `useAuth`, "k6 scenarios", "k6 budgets" |
-| `openapi-sdk` | "Go SDK", "Kotlin client", "Swift SDK", "generate client from OpenAPI", "SDK from spec", "OpenAPI to Go", "OpenAPI to Kotlin", "OpenAPI to Swift", "multi-language SDK" |
-| `openapi-from-traffic` | "reverse engineer API", "OpenAPI from HAR", "discover spec from traffic", "capture API in DevTools", "infer schema from requests", "spec from observed HTTP", "generate spec from network tab" |
-| `asyncapi-typescript` | "AsyncAPI", "event types from spec", "AMQP from spec", "RabbitMQ types", "message types", "pub/sub types", "publish/subscribe TypeScript", "event-driven typing" |
-| `fn-schema` | "JSON Schema from TypeScript", "function signature to schema", "extract schema from TS function", "schemas from existing code", "schemas without rewriting types", "fn-schema", `schemaOf` |
-| `heyapi-plugin-author` | "hey-api plugin", "openapi-ts plugin", "custom codegen plugin", "extend hey-api", "openapi-ts hooks", "openapi-ts plugin author", `definePluginConfig`, `definePlugin` |
-
-</details>
-
-This repo is also a **Claude Code plugin** — `.claude-plugin/plugin.json` + `marketplace.json` are committed at the root, so adding the repo as a marketplace in Claude Code surfaces all six skills automatically.
+The repo is also a Claude Code plugin: `.claude-plugin/` is committed at the root, so adding the repo as a marketplace surfaces the skill.
 
 ## How the pieces fit
 

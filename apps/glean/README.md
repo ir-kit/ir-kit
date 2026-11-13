@@ -14,7 +14,7 @@ Not published to npm — install from source or grab the packaged `.zip` from th
 - Templates paths (`/pets/42` + `/pets/8` → `/pets/{petId}`), detects auth schemes (`Authorization: Bearer`, `X-API-Key`, basic), groups by origin so one panel covers traffic to several backends.
 - One-click copy to clipboard or download as YAML / JSON.
 
-The current limit is one panel state per inspected page — multi-tab capture is on the [polish list](../../IDEAS.md).
+The current limit is one panel state per inspected page.
 
 ## Install (from source)
 
