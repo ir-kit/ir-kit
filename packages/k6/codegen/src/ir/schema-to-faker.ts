@@ -1,4 +1,4 @@
-import { $, type TsDsl } from "@hey-api/openapi-ts";
+import { $, type CallArgs } from "@hey-api/openapi-ts";
 import {
   extractEnumValues,
   isSchemaObject,
@@ -12,9 +12,11 @@ import {
   type PropertyInfo,
   resolveFakerCall,
 } from "@ir-kit/openapi-ts-faker/core";
-import type ts from "typescript";
 
-type Expr = TsDsl<ts.Expression>;
+type Expr = Extract<
+  Parameters<typeof $.array>[number],
+  NonNullable<CallArgs[number]>
+>;
 
 /**
  * Build a faker-backed expression that, when called, produces a value

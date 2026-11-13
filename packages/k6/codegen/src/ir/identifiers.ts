@@ -1,7 +1,4 @@
 import { safeIdent } from "@ir-kit/codegen-core";
-import ts from "typescript";
-
-const IDENTIFIER = /^[A-Za-z_$][\w$]*$/;
 
 /** Legal JS identifier preserving original casing — for fn/param slots. */
 export function toIdent(input: string): string {
@@ -14,9 +11,4 @@ export function toIdent(input: string): string {
 export function refToTypeName(ref: string): string {
   const parts = ref.split("/");
   return safeIdent(parts[parts.length - 1] ?? "Unknown");
-}
-
-/** Object key for a JSON name: a bare identifier when legal, else a string literal (`"page[size]"`). */
-export function propertyKey(name: string): string | ts.StringLiteral {
-  return IDENTIFIER.test(name) ? name : ts.factory.createStringLiteral(name);
 }

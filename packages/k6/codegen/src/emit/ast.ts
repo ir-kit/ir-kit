@@ -1,13 +1,6 @@
-import ts from "typescript";
+import { $, type TsDsl } from "@hey-api/openapi-ts";
 
-const f = ts.factory;
-
-/** Modern factory accepts `SyntaxKind.TypeKeyword` as the phase modifier to express `import type`. */
-function phase(
-  typeOnly: boolean | undefined,
-): ts.SyntaxKind.TypeKeyword | undefined {
-  return typeOnly ? ts.SyntaxKind.TypeKeyword : undefined;
-}
+import type { ModuleImport } from "../print.js";
 
 export interface NamedImportSpec {
   /** Name exported by the module. */
@@ -20,55 +13,49 @@ export interface NamedImportSpec {
 
 /** `import { a, b as c } from "mod";` */
 export function namedImport(
-  specs: ReadonlyArray<NamedImportSpec>,
-  moduleSpecifier: string,
+  specs: ReadonlyArray<string | NamedImportSpec>,
+  modulePath: string,
   options: { typeOnly?: boolean } = {},
-): ts.ImportDeclaration {
-  const elements = specs.map((s) =>
-    f.createImportSpecifier(
-      s.typeOnly ?? false,
-      s.alias ? f.createIdentifier(s.name) : undefined,
-      f.createIdentifier(s.alias ?? s.name),
-    ),
-  );
-  return f.createImportDeclaration(
-    undefined,
-    f.createImportClause(
-      phase(options.typeOnly),
-      undefined,
-      f.createNamedImports(elements),
-    ),
-    f.createStringLiteral(moduleSpecifier),
-  );
+): ModuleImport {
+  return {
+    imports: specs.map((spec) => {
+      const s = typeof spec === "string" ? { name: spec } : spec;
+      return {
+        isTypeOnly: s.typeOnly ?? false,
+        localName: s.alias ?? s.name,
+        sourceName: s.name,
+      };
+    }),
+    isTypeOnly: options.typeOnly ?? false,
+    kind: "named",
+    modulePath,
+  };
 }
 
 /** `import * as name from "mod";` (add `typeOnly: true` for `import type * as name`). */
 export function namespaceImport(
   name: string,
-  moduleSpecifier: string,
+  modulePath: string,
   options: { typeOnly?: boolean } = {},
-): ts.ImportDeclaration {
-  return f.createImportDeclaration(
-    undefined,
-    f.createImportClause(
-      phase(options.typeOnly),
-      undefined,
-      f.createNamespaceImport(f.createIdentifier(name)),
-    ),
-    f.createStringLiteral(moduleSpecifier),
-  );
+): ModuleImport {
+  return {
+    imports: [],
+    isTypeOnly: options.typeOnly ?? false,
+    kind: "namespace",
+    localName: name,
+    modulePath,
+  };
 }
 
 /** `import name from "mod";` */
-export function defaultImport(
-  name: string,
-  moduleSpecifier: string,
-): ts.ImportDeclaration {
-  return f.createImportDeclaration(
-    undefined,
-    f.createImportClause(undefined, f.createIdentifier(name), undefined),
-    f.createStringLiteral(moduleSpecifier),
-  );
+export function defaultImport(name: string, modulePath: string): ModuleImport {
+  return {
+    imports: [],
+    isTypeOnly: false,
+    kind: "default",
+    localName: name,
+    modulePath,
+  };
 }
 
 /** `export const <localName> = <sourceVar>.<sourceProp>;` */
@@ -76,37 +63,14 @@ export function reExportConst(
   localName: string,
   sourceVar: string,
   sourceProp: string,
-): ts.Statement {
-  return f.createVariableStatement(
-    [f.createModifier(ts.SyntaxKind.ExportKeyword)],
-    f.createVariableDeclarationList(
-      [
-        f.createVariableDeclaration(
-          localName,
-          undefined,
-          undefined,
-          f.createPropertyAccessExpression(
-            f.createIdentifier(sourceVar),
-            f.createIdentifier(sourceProp),
-          ),
-        ),
-      ],
-      ts.NodeFlags.Const,
-    ),
-  );
+): TsDsl {
+  return $.const(localName).export().assign($(sourceVar).attr(sourceProp));
 }
 
-/** `export default <sourceVar>.<sourceProp>;` */
+/** `export default <sourceVar>.<sourceProp>;` — the DSL has no export-assignment node. */
 export function defaultExportProp(
   sourceVar: string,
   sourceProp: string,
-): ts.Statement {
-  return f.createExportAssignment(
-    undefined,
-    false,
-    f.createPropertyAccessExpression(
-      f.createIdentifier(sourceVar),
-      f.createIdentifier(sourceProp),
-    ),
-  );
+): string {
+  return `export default ${sourceVar}.${sourceProp};`;
 }

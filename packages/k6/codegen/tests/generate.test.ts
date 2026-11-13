@@ -40,15 +40,15 @@ describe("@ir-kit/k6-gen", () => {
   });
 
   it("client.ts imports framework runtime + k6/http", () => {
-    expect(files["client.ts"]).toMatch(/from "k6\/http"/);
+    expect(files["client.ts"]).toMatch(/from 'k6\/http'/);
     expect(files["client.ts"]).toMatch(
-      /import \{[^}]*applyMiddlewareHeaders[^}]*\} from "@ir-kit\/k6\/runtime"/s,
+      /import \{[^}]*applyMiddlewareHeaders[^}]*\} from '@ir-kit\/k6\/runtime'/s,
     );
   });
 
   it("client.ts pulls buildQuery/parseJson/mergeTags from runtime — no inline helpers", () => {
     expect(files["client.ts"]).toMatch(
-      /import \{[^}]*\bbuildQuery\b[^}]*\bmergeTags\b[^}]*\bparseJson\b[^}]*\} from "@ir-kit\/k6\/runtime"/s,
+      /import \{[^}]*\bbuildQuery\b[^}]*\bmergeTags\b[^}]*\bparseJson\b[^}]*\} from '@ir-kit\/k6\/runtime'/s,
     );
     expect(files["client.ts"]).not.toMatch(/function __buildQuery/);
     expect(files["client.ts"]).not.toMatch(/function __parseJson/);
@@ -67,7 +67,7 @@ describe("@ir-kit/k6-gen", () => {
 
   it("client.ts namespace-imports types as `T`", () => {
     expect(files["client.ts"]).toMatch(
-      /^import type \* as T from "\.\/types\.js";$/m,
+      /^import type \* as T from '\.\/types\.js';$/m,
     );
   });
 
@@ -76,7 +76,7 @@ describe("@ir-kit/k6-gen", () => {
     // method strings are upper-cased verbs (no `http.del` shorthand). The
     // helper itself calls `http.request(spec.method, ...)` once.
     expect(files["client.ts"]).toMatch(
-      /export function deletePet[\s\S]*call<[^>]*>\("DELETE"/,
+      /export function deletePet[\s\S]*call<[^>]*>\('DELETE'/,
     );
     expect(files["client.ts"]).toMatch(/http\.request\(spec\.method/);
   });
@@ -86,10 +86,10 @@ describe("@ir-kit/k6-gen", () => {
     // opId as a string literal that buildSpec forwards to mergeTags.
     expect(files["client.ts"]).toMatch(/mergeTags\(opId, opts\?\.tags\)/);
     expect(files["client.ts"]).toMatch(
-      /export function addPet[\s\S]*call<[^>]*>\("POST",[\s\S]*"addPet"/,
+      /export function addPet[\s\S]*call<[^>]*>\('POST',[\s\S]*'addPet'/,
     );
     expect(files["client.ts"]).toMatch(
-      /export function getPetById[\s\S]*call<[^>]*>\("GET",[\s\S]*"getPetById"/,
+      /export function getPetById[\s\S]*call<[^>]*>\('GET',[\s\S]*'getPetById'/,
     );
   });
 
@@ -102,7 +102,7 @@ describe("@ir-kit/k6-gen", () => {
   it("client.ts calls getBaseUrl(DEFAULT_BASE_URL) — enables defineLoadTest({ baseUrl })", () => {
     expect(files["client.ts"]).toMatch(/getBaseUrl\(DEFAULT_BASE_URL\)/);
     expect(files["client.ts"]).toMatch(
-      /import \{[^}]*\bgetBaseUrl\b[^}]*\} from "@ir-kit\/k6\/runtime"/s,
+      /import \{[^}]*\bgetBaseUrl\b[^}]*\} from '@ir-kit\/k6\/runtime'/s,
     );
   });
 
@@ -208,9 +208,9 @@ describe("@ir-kit/k6-gen — empty schemas", () => {
     const out = Object.fromEntries(
       result.files.map((f) => [f.path, f.content]),
     );
-    expect(out["client.ts"]).toContain('"page[size]": number;');
+    expect(out["client.ts"]).toContain("'page[size]': number;");
     expect(out["loadtests/listItems.ts"]).toContain(
-      'api.listItems("a", { "page[size]": 1, offset: -1 });',
+      "api.listItems('a', { 'page[size]': 1, offset: -1 });",
     );
     await rm(dir, { recursive: true, force: true });
   });
