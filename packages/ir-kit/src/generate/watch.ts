@@ -25,9 +25,11 @@ export async function watch(opts: WatchOptions = {}): Promise<void> {
   let watchers: FSWatcher[] = [];
   let timer: NodeJS.Timeout | undefined;
   let running = Promise.resolve();
+  const stopped = () => opts.signal?.aborted === true;
 
   const run = async () => {
     const { config, file, cwd } = await loadIrConfig(opts);
+    if (stopped()) return;
     const outputs = Object.values(config.targets).map(
       (target) => resolve(cwd, target!.output) + sep,
     );
@@ -57,6 +59,7 @@ export async function watch(opts: WatchOptions = {}): Promise<void> {
   const schedule = () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
+      if (stopped()) return;
       running = running.then(run).catch((error) => opts.onError?.(error));
     }, 100);
   };
@@ -68,5 +71,6 @@ export async function watch(opts: WatchOptions = {}): Promise<void> {
     opts.signal?.addEventListener("abort", () => done(), { once: true });
   });
   clearTimeout(timer);
+  await running;
   for (const watcher of watchers) watcher.close();
 }
