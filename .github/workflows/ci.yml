@@ -34,11 +34,11 @@ jobs:
       - name: Format check
         run: pnpm format:check
 
-      - name: Type check
-        run: pnpm typecheck
-
       - name: Build
         run: pnpm build
+
+      - name: Type check
+        run: pnpm typecheck
 
       - name: Check published entry points load under Node
         run: pnpm check:exports

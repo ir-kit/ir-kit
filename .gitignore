@@ -7,7 +7,6 @@ yarn.lock
 dist
 *.tsbuildinfo
 .next
-.turbo
 .wxt
 .output
 .k6-ts-cache

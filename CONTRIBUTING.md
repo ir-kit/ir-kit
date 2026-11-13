@@ -6,8 +6,8 @@ The fastest way to ship a change here is to copy a sibling package, but the sibl
 
 ```bash
 pnpm install        # links workspace deps via pnpm-workspace.yaml
-pnpm build          # turbo build across all packages
-pnpm typecheck      # all packages
+pnpm build          # builds every workspace package in dependency order
+pnpm typecheck      # all packages (glean reads ir-kit's built types, so build first)
 pnpm test           # all packages (uses --passWithNoTests, so missing tests aren't failures)
 ```
 
@@ -80,17 +80,9 @@ See [`.changeset/README.md`](./.changeset/README.md) — one sentence per change
 
 CodeRabbit's path filter `!**/gen/**` skips reviews on directories named `gen` (intended for generated example output). Don't name a source-code directory `gen` — use `codegen/`, `generator/`, or anything else. Example: the k6 codegen package lives at `packages/ir-kit/docs/sdk-k6.md`, not `packages/k6/gen`.
 
-## Scaffolding a new package
-
-```bash
-pnpm new-package <name> <path>     # see tooling/template/ for what gets copied
-```
-
-The template ships a package.json / tsconfig.json / tsconfig.build.json / src/index.ts pre-wired with everything above. Edit metadata in the resulting `package.json` (description, keywords, repo directory) before committing.
-
 ## Releases
 
-Run on [Changesets](https://github.com/changesets/changesets). Three plugins ship in lockstep — see [`.changeset/README.md`](./.changeset/README.md).
+Run on [Changesets](https://github.com/changesets/changesets). Release notes follow the voice rule in [`.changeset/README.md`](./.changeset/README.md).
 
 ```bash
 pnpm changeset           # describe a change

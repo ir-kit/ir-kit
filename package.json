@@ -18,28 +18,21 @@
   "type": "module",
   "scripts": {
     "prepare": "lefthook install",
-    "build": "turbo run build --filter=!./examples/*",
-    "build:examples": "turbo run build --filter=./examples/*",
-    "dev": "turbo run dev --filter=!./examples/*",
-    "typecheck": "turbo run typecheck --filter=!./examples/*",
-    "test": "turbo run test --filter=!./examples/*",
+    "build": "pnpm -r --filter '!./examples/*' run build",
+    "dev": "pnpm --filter ir-kit run dev",
+    "typecheck": "pnpm -r --filter '!./examples/*' run typecheck",
+    "test": "pnpm -r --filter '!./examples/*' run test",
     "format": "biome check --write .",
     "format:check": "biome ci .",
-    "deps:check": "manypkg check",
     "check:exports": "node scripts/check-exports.mjs",
-    "deps:fix": "manypkg fix",
-    "sync:readme": "node scripts/sync-readme.mjs",
-    "new-package": "node scripts/new-package.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version && pnpm install --lockfile-only",
-    "release": "turbo run build --filter=!./examples/* && changeset publish"
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
     "@changesets/cli": "^2.31.0",
-    "@manypkg/cli": "^0.25.1",
     "lefthook": "^2.1.8",
-    "turbo": "^2.9.14",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.28.2",

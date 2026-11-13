@@ -200,6 +200,6 @@ Two tsconfigs: `tsconfig.json` for IDE/typecheck (`noEmit`, includes `tests/`), 
 
 ## When to add a plugin to the ir-kit repo
 
-If your plugin is useful to other ir-kit consumers and tracks the workspace's quality bar (manypkg-aligned versions, biome formatting, vitest coverage), open a PR adding it under `packages/ir-kit/<name>/`. Maintainer will route it.
+If your plugin is useful to other ir-kit consumers and tracks the workspace's quality bar (biome formatting, vitest coverage), open a PR adding it under `packages/ir-kit/<name>/`. Maintainer will route it.
 
 If it's domain-specific to your team, ship it from your own repo with the four-file shape above. It composes with ir-kit plugins without modification.

@@ -30,7 +30,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build workspace deps of glean
-        run: pnpm turbo run build --filter "@ir-kit/glean^..."
+        run: pnpm -r --filter "@ir-kit/glean^..." run build
 
       - name: Zip extension
         run: pnpm --filter @ir-kit/glean zip
