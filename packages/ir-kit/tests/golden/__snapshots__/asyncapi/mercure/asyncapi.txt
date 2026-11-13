@@ -31,12 +31,12 @@ export type EventName = keyof typeof Events;
 # handlers.gen.ts
 export const handlers = (opts?: RegistryOptions) => createRegistry<EventMap>(Events, opts);
 # index.gen.ts
-export { assertExchanges, bindAndConsume, publish } from './amqp.gen';
-export { Registry, createRegistry } from './dispatch.gen';
-export { type AnyMessage, type EventMap, isMessageOfType } from './event-map.gen';
-export { type EventName, Events } from './events.gen';
-export { handlers } from './handlers.gen';
-export type * from './types.gen';
+export { assertExchanges, bindAndConsume, publish } from './amqp.gen.js';
+export { Registry, createRegistry } from './dispatch.gen.js';
+export { type AnyMessage, type EventMap, isMessageOfType } from './event-map.gen.js';
+export { type EventName, Events } from './events.gen.js';
+export { handlers } from './handlers.gen.js';
+export type * from './types.gen.js';
 # types.gen.ts
 export type ClientOptions = {
 export type BookMessage = {
