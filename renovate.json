@@ -27,9 +27,10 @@
       "description": "Listed before the ecosystem groups so their groupName wins for matching packages."
     },
     {
-      "description": "Plugins track Hey API's 0.x API, so its packages move together and need review.",
+      "description": "Plugins track Hey API's next snapshots (no stable release has the DSL we use), so follow the npm `next` tag; its packages move together and need review.",
       "groupName": "Hey API",
-      "matchPackageNames": ["@hey-api/**"]
+      "matchPackageNames": ["@hey-api/**"],
+      "followTag": "next"
     },
     {
       "groupName": "TypeSpec",
