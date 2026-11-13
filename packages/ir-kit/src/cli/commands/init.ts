@@ -62,7 +62,7 @@ function answer<T>(value: T | symbol): T {
 async function looksLikeAsyncAPI(input: string): Promise<boolean> {
   if (/^https?:\/\//i.test(input)) return false;
   const head = await readFile(input, "utf8").catch(() => "");
-  return /^\s*["']?asyncapi["']?\s*:/m.test(head);
+  return /^\s*\{?\s*["']?asyncapi["']?\s*:/m.test(head);
 }
 
 export const initCommand: CommandSpec<Input, void> = {
