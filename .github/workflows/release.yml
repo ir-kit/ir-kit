@@ -50,6 +50,8 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The pre-push typecheck needs built packages; the release PR's own CI checks it.
+          LEFTHOOK: "0"
           # Only for publishing a package's first version; npm trusted
           # publishing (OIDC) is used whenever this secret is unset.
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
