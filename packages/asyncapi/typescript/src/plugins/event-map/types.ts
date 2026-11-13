@@ -1,6 +1,5 @@
 export interface EventMapPluginConfig {
-  /** @deprecated Ignored; message interface names come from the `typescript` plugin. */
-  messageSuffix?: string;
+  reserved?: never;
 }
 
 export type EventMapResolvedConfig = Record<string, never>;
