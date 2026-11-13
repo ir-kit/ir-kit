@@ -7,7 +7,7 @@ The fastest way to ship a change here is to copy a sibling package, but the sibl
 ```bash
 pnpm install        # links workspace deps via pnpm-workspace.yaml
 pnpm build          # builds every workspace package in dependency order
-pnpm typecheck      # all packages
+pnpm typecheck      # all packages (glean reads ir-kit's built types, so build first)
 pnpm test           # all packages (uses --passWithNoTests, so missing tests aren't failures)
 ```
 
