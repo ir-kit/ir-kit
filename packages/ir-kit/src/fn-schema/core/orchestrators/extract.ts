@@ -90,7 +90,11 @@ export async function runExtract(
 
   try {
     const result = await project.extract(extractOpts);
-    const written = await emitOutputs(result, opts, cwd);
+    const written = await emitOutputs(
+      result,
+      { ...opts, ...configOutputs(opts, config) },
+      cwd,
+    );
     return {
       result,
       diagnostics: result.diagnostics,
@@ -101,6 +105,26 @@ export async function runExtract(
     };
   } finally {
     project.dispose();
+  }
+}
+
+/** The config's `out` and `format`, used when no output was passed. */
+function configOutputs(
+  opts: RunExtractOptions,
+  config: Awaited<ReturnType<typeof loadFnSchemaConfig>>,
+): Partial<RunExtractOptions> {
+  if (opts.outDir || opts.bundlePath || opts.openapiPath || !config.out) {
+    return {};
+  }
+  switch (config.format ?? (config.out.endsWith(".json") ? "bundle" : "json")) {
+    case "openapi":
+      return { openapiPath: config.out };
+    case "bundle":
+      return { bundlePath: config.out };
+    case "json-pretty":
+      return { outDir: config.out, pretty: opts.pretty ?? true };
+    default:
+      return { outDir: config.out };
   }
 }
 

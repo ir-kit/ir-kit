@@ -280,21 +280,15 @@
     "sync-typia-tags": "jiti scripts/sync-typia-tags.ts"
   },
   "dependencies": {
-    "@clack/prompts": "catalog:",
     "@hey-api/json-schema-ref-parser": "catalog:",
     "@scalar/core": "^0.5.9",
     "@types/json-schema": "^7.0.15",
     "api-smart-diff": "^1.0.6",
-    "c12": "catalog:",
-    "chokidar": "catalog:",
     "citty": "catalog:",
-    "consola": "catalog:",
     "js-yaml": "^4.1.0",
     "json-schema-typed": "catalog:",
     "oxc-parser": "^0.158.0",
-    "protobufjs": "^7.4.0",
-    "tinyglobby": "catalog:",
-    "urlpattern-polyfill": "^10.1.0"
+    "protobufjs": "^7.4.0"
   },
   "peerDependencies": {
     "@asyncapi/avro-schema-parser": ">=3.0.0",
@@ -449,7 +443,7 @@
     "vitest": "catalog:"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=24"
   },
   "publishConfig": {
     "access": "public"

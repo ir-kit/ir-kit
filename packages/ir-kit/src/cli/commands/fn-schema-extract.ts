@@ -1,6 +1,5 @@
 import path from "node:path";
-import chokidar from "chokidar";
-import consola from "consola";
+import { watchFiles } from "../../files.js";
 import {
   type Dialect,
   type Naming,
@@ -9,8 +8,8 @@ import {
 } from "../../fn-schema/core/index.js";
 import { loadTypescriptExtractor } from "../../fn-schema/load-typescript.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   patterns?: string;
@@ -123,24 +122,24 @@ export const fnSchemaExtractCommand: CommandSpec<Input, void> = {
     "Extract JSON Schemas from TypeScript function signatures via ts-morph",
   args,
   handler: async (input) => {
-    if (input.quiet) consola.level = 1;
+    if (input.quiet) log.setQuiet(true);
 
     const opts = mapInput(input, await loadTypescriptExtractor());
     const once = async (): Promise<number> => {
-      consola.start("Extracting...");
+      log.start("Extracting...");
       const out = await runExtract(opts);
       if (!out.ok) {
-        consola.warn("No files matched.");
+        log.warn("No files matched.");
         return 0;
       }
       for (const d of out.diagnostics) {
         const msg = d.function ? `[${d.function}] ${d.message}` : d.message;
-        if (d.severity === "error") consola.error(msg);
-        else if (d.severity === "warning") consola.warn(msg);
-        else consola.info(msg);
+        if (d.severity === "error") log.error(msg);
+        else if (d.severity === "warning") log.warn(msg);
+        else log.info(msg);
       }
-      for (const w of out.written) consola.success(`Wrote ${w}`);
-      consola.box(
+      for (const w of out.written) log.success(`Wrote ${w}`);
+      log.box(
         `Found ${out.result.signatures.length} signature(s) in ${out.durationMs}ms` +
           (out.errors > 0 ? ` — ${out.errors} error(s)` : ""),
       );
@@ -155,7 +154,7 @@ export const fnSchemaExtractCommand: CommandSpec<Input, void> = {
 
     const cwd = path.resolve(input.cwd ?? process.cwd());
     await once();
-    consola.info("Watching for changes...");
+    log.info("Watching for changes...");
     const patterns =
       typeof opts.patterns === "string"
         ? [opts.patterns]
@@ -182,19 +181,13 @@ export const fnSchemaExtractCommand: CommandSpec<Input, void> = {
       })();
       void pending;
     };
-    const watcher = chokidar.watch(
+    const watcher = watchFiles(
       patterns.length > 0 ? patterns : ["**/*.ts"],
-      {
-        cwd,
-        ignoreInitial: true,
-        ignored: ["**/node_modules/**", "**/__fn_schema_virtual__/**"],
-      },
+      cwd,
+      trigger,
     );
-    watcher.on("change", () => trigger());
-    watcher.on("add", () => trigger());
-    watcher.on("unlink", () => trigger());
     process.on("SIGINT", () => {
-      void watcher.close();
+      watcher.close();
       process.exit(0);
     });
   },

@@ -1,8 +1,7 @@
-import consola from "consola";
 import { sync } from "../../k6-toolkit/index.js";
 import type { Schema } from "../../schema/index.js";
-
 import type { CommandSpec } from "../command-spec.js";
+import { log } from "../log.js";
 
 interface Input {
   input: string;
@@ -68,14 +67,12 @@ export const k6SyncCommand: CommandSpec<Input, void> = {
       dryRun: input.dryRun,
       reportRenames: input.reportRenames,
     });
-    consola.success(
-      `Synced ${result.files.length} file(s) to ${result.output}`,
-    );
+    log.success(`Synced ${result.files.length} file(s) to ${result.output}`);
     if (
       result.diff &&
       (result.diff.added.length || result.diff.removed.length)
     ) {
-      consola.box(
+      log.box(
         `Renames detected — ${result.diff.added.length} added, ${result.diff.removed.length} removed`,
       );
     }

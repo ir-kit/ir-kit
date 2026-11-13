@@ -1,6 +1,6 @@
-import { intro, isCancel, outro, select, text } from "@clack/prompts";
 import type { ArgsDef } from "citty";
 import { isSchemaObject, type Schema } from "../schema/index.js";
+import { ask, choose, interactive } from "./prompt.js";
 
 /**
  * Convert a JSON Schema 2020-12 object schema into citty's `ArgsDef` map.
@@ -69,49 +69,27 @@ export function schemaToCittyArgs(schema: Schema): ArgsDef {
 export async function fillFromPrompts<T extends Record<string, unknown>>(
   schema: Schema,
   partial: Partial<T>,
-  opts: { title?: string } = {},
 ): Promise<T> {
   const required = new Set(schema.required ?? []);
   const props = Object.entries(schema.properties ?? {});
   const missing = props.filter(
     ([name]) => required.has(name) && partial[name] === undefined,
   );
-  if (missing.length === 0) return partial as T;
+  if (missing.length === 0 || !interactive()) return partial as T;
 
-  if (opts.title) intro(opts.title);
   const filled: Record<string, unknown> = { ...partial };
-
   for (const [name, propUnknown] of missing) {
     if (!isSchemaObject(propUnknown)) continue;
     const prop = propUnknown as Schema;
     const message = prop.description ?? name;
-
-    let value: string | symbol;
-    if (Array.isArray(prop.enum) && prop.enum.length > 0) {
-      const options = prop.enum.map((v) => ({
-        value: String(v),
-        label: String(v),
-      }));
-      value = await select({
-        message,
-        options,
-        initialValue: (prop.default as string | undefined) ?? options[0]?.value,
-      });
-    } else {
-      value = await text({
-        message,
-        placeholder: prop.examples?.[0] != null ? String(prop.examples[0]) : "",
-        initialValue: prop.default as string | undefined,
-        validate: (v) => {
-          if (!v || !v.trim()) return `${name} is required`;
-        },
-      });
-    }
-    if (isCancel(value)) {
-      outro("Cancelled.");
-      process.exit(1);
-    }
-    filled[name] = value;
+    filled[name] =
+      Array.isArray(prop.enum) && prop.enum.length > 0
+        ? await choose(
+            message,
+            prop.enum.map(String),
+            prop.default as string | undefined,
+          )
+        : await ask(message, prop.default as string | undefined);
   }
 
   return filled as T;

@@ -28,7 +28,7 @@ export async function assertPrintedMatchesSnapshot(
 
   const caller = getCallerFile();
   const relPath = path
-    .relative(path.join(process.cwd(), "src", "__tests__"), caller)
+    .relative(path.join(__dirname, ".."), caller)
     .replace(/\.test\.ts$/, "");
   const outputPath = path.join(tmpDir, relPath, filename);
   const outputDir = path.dirname(outputPath);

@@ -1,5 +1,4 @@
-import { loadConfig } from "c12";
-
+import { findConfigFile, importConfig } from "../../../config-file.js";
 import type { ExtractOptions } from "../types.js";
 
 export interface FnSchemaConfig
@@ -11,10 +10,6 @@ export interface FnSchemaConfig
 }
 
 export async function loadFnSchemaConfig(cwd: string): Promise<FnSchemaConfig> {
-  const { config } = await loadConfig<FnSchemaConfig>({
-    cwd,
-    name: "fn-schema",
-    defaults: {},
-  });
-  return config ?? {};
+  const file = findConfigFile(cwd, "fn-schema");
+  return file ? ((await importConfig<FnSchemaConfig>(file)) ?? {}) : {};
 }

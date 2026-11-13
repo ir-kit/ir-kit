@@ -1,7 +1,6 @@
 import { type CommandDef, defineCommand, runMain } from "citty";
-import consola from "consola";
-
 import type { AnyCommandSpec } from "./command-spec.js";
+import { log } from "./log.js";
 import {
   fillFromPrompts,
   schemaToCittyArgs,
@@ -22,14 +21,12 @@ function commandToCitty(spec: AnyCommandSpec): CommandDef {
     args: argsDef,
     run: async ({ args }) => {
       const partial = stripCittyMeta(args);
-      const filled = await fillFromPrompts(spec.args, partial, {
-        title: `ir ${spec.path.join(" ")}`,
-      });
+      const filled = await fillFromPrompts(spec.args, partial);
       try {
         validateInput(spec.args, filled);
         await spec.handler(filled);
       } catch (error) {
-        consola.error(error instanceof Error ? error.message : String(error));
+        log.error(error instanceof Error ? error.message : String(error));
         process.exit(1);
       }
     },

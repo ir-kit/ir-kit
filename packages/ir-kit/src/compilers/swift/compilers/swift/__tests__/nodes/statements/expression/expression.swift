@@ -1,3 +1,0 @@
-func run() {
-  print("hello")
-}
