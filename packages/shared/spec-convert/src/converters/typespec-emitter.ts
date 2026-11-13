@@ -1,7 +1,7 @@
 import { compileTypespecCapture } from "@ir-kit/typespec-loader";
 
 import { registerConverter } from "../registry.js";
-import type { ConvertOutput, SpecDocument } from "../types.js";
+import type { ConvertOutput } from "../types.js";
 
 type Registration = Parameters<typeof registerConverter>[0];
 
@@ -15,21 +15,10 @@ export function registerTypespecEmitter(
     from: "typespec",
     to,
     ...extra,
-    handler: async (
-      document: SpecDocument,
-      options,
-    ): Promise<ConvertOutput> => {
-      const path =
-        typeof document.__path === "string" ? document.__path : undefined;
-      const source =
-        typeof document.__source === "string" ? document.__source : undefined;
-      if (!path && !source) {
-        throw new Error(
-          `typespec→${to} requires a \`__path\` or \`__source\` marker on the input document`,
-        );
-      }
+    input: "file",
+    handler: async (path: string, options): Promise<ConvertOutput> => {
       const { files } = await compileTypespecCapture(
-        path ? { path } : { source: source as string },
+        { path },
         { cwd: options.cwd, emitter, emitterOptions: options.upstream },
       );
       return { kind: "files", files };

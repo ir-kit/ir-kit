@@ -2,6 +2,7 @@ export {
   assertSafeOutputDir,
   defaultProjectName,
   type OutputFile,
+  safeRelativeDir,
   writeOutput,
 } from "./fs.js";
 export {

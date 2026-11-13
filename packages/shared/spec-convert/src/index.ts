@@ -32,6 +32,7 @@ import {
   listConverters,
 } from "./registry.js";
 import type {
+  ConverterPair,
   ConvertHandlerOptions,
   ConvertOutput,
   SpecDocument,
@@ -91,26 +92,26 @@ export async function convertSpec(
     );
   }
 
-  let document = await materializeInput(opts.input, from, opts.cwd);
+  let input = await materializeInput(opts.input, path[0]!, opts.cwd);
   let output: ConvertOutput | undefined;
   let tempDir: string | undefined;
   try {
     for (let i = 0; i < path.length; i++) {
       const edge = path[i]!;
-      output = await edge.handler(document, {
+      output = await runEdge(edge, input, {
         cwd: opts.cwd,
         upstream: opts.upstream,
       });
       if (i < path.length - 1) {
         if (output.kind === "document") {
-          document = output.document;
+          input = { kind: "document", document: output.document };
         } else if (output.kind === "source") {
           tempDir ??= await mkdtemp(
             join(typespecLoaderDir, ".ir-spec-convert-"),
           );
           const tempPath = join(tempDir, `intermediate-${i}.${output.ext}`);
           await writeFile(tempPath, output.source);
-          document = { __path: tempPath };
+          input = { kind: "file", path: tempPath };
         } else {
           throw new Error(
             `Cannot chain through ${edge.to}: intermediate output is '${output.kind}', cannot bridge to next converter`,
@@ -153,18 +154,39 @@ function isPostmanCollection(doc: Record<string, unknown>): boolean {
   );
 }
 
+type EdgeInput =
+  | { kind: "document"; document: SpecDocument }
+  | { kind: "file"; path: string };
+
+function runEdge(
+  edge: ConverterPair,
+  input: EdgeInput,
+  options: ConvertHandlerOptions,
+): Promise<ConvertOutput> {
+  if (edge.input === "file") {
+    if (input.kind !== "file") {
+      throw new Error(`${edge.from}→${edge.to} needs a file input`);
+    }
+    return edge.handler(input.path, options);
+  }
+  if (input.kind !== "document") {
+    throw new Error(`${edge.from}→${edge.to} needs a parsed document`);
+  }
+  return edge.handler(input.document, options);
+}
+
 async function materializeInput(
   input: ConvertSpecInput,
-  from: SpecFormat,
+  first: ConverterPair,
   cwd: string | undefined,
-): Promise<SpecDocument> {
-  if (from === "typespec" || from === "proto" || from === "postman") {
+): Promise<EdgeInput> {
+  if (first.input === "file") {
     if (typeof input !== "string") {
-      throw new Error(`${from} input must be a file path`);
+      throw new Error(`${first.from} input must be a file path`);
     }
-    return { __path: resolve(cwd ?? process.cwd(), input) };
+    return { kind: "file", path: resolve(cwd ?? process.cwd(), input) };
   }
-  return readAsDocument(input, cwd);
+  return { kind: "document", document: await readAsDocument(input, cwd) };
 }
 
 async function readAsDocument(

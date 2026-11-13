@@ -4,6 +4,7 @@ import {
   dirname,
   join,
   parse as parsePath,
+  posix as pathPosix,
   resolve,
 } from "node:path";
 
@@ -21,6 +22,22 @@ export function assertSafeOutputDir(out: string): void {
       `Refusing to clean output directory: ${out} (would wipe cwd or filesystem root). Use a dedicated subdirectory.`,
     );
   }
+}
+
+/**
+ * Normalize a directory relative to the output root, rejecting absolute
+ * paths and anything that climbs out of it with `..`.
+ */
+export function safeRelativeDir(dir: string): string {
+  const normalized = pathPosix.normalize(dir || ".");
+  if (
+    pathPosix.isAbsolute(normalized) ||
+    normalized === ".." ||
+    normalized.startsWith("../")
+  ) {
+    throw new Error(`fileLocation: invalid output directory: ${dir}`);
+  }
+  return normalized;
 }
 
 /**

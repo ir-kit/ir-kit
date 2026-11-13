@@ -108,9 +108,10 @@ function emptyResult(start: number): RunExtractResult {
   return {
     result: {
       signatures: [],
+      definitions: {},
       diagnostics: [],
-      stats: { filesScanned: 0, durationMs: 0 },
-    } as unknown as ExtractResult,
+      stats: { filesScanned: 0, functionsFound: 0, durationMs: 0 },
+    },
     diagnostics: [],
     errors: 0,
     written: [],

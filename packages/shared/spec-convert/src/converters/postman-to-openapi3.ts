@@ -6,14 +6,8 @@ import type { ConvertOutput, SpecDocument } from "../types.js";
 registerConverter({
   from: "postman",
   to: "openapi3",
-  handler: async (document: SpecDocument): Promise<ConvertOutput> => {
-    const path =
-      typeof document.__path === "string" ? document.__path : undefined;
-    if (!path) {
-      throw new Error(
-        "postman→openapi3 requires a file path; pass the collection path as input",
-      );
-    }
+  input: "file",
+  handler: async (path: string): Promise<ConvertOutput> => {
     const json = await postmanToOpenAPI(path, undefined, {
       defaultTag: "General",
       outputFormat: "json",
