@@ -56,10 +56,10 @@ export type ApiResponse = {
   message?: string;
 };
 
-export type SchemaEnum = "available" | "pending" | "sold";
+export type SchemaEnum = 'available' | 'pending' | 'sold';
 
-export type KindEnum = "circle";
+export type KindEnum = 'circle';
 
-export type KindEnum2 = "rect";
+export type KindEnum2 = 'rect';
 
-export type StatusEnum = "placed" | "approved" | "delivered";
+export type StatusEnum = 'placed' | 'approved' | 'delivered';

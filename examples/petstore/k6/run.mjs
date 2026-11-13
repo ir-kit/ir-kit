@@ -10,9 +10,9 @@ const stages = process.env.K6_STAGES;
 const extraArgs = stages ? ["--stage", stages] : [];
 
 const { exitCode } = await runK6({
-  entry: resolve(root, "src/loadtest.ts"),
+  entry: resolve(root, "k6/loadtest.ts"),
   baseUrl: "https://petstore3.swagger.io/api/v3",
-  bundle: { outDir: resolve(root, "dist") },
+  bundle: { outDir: resolve(root, "k6/dist") },
   extraArgs,
 });
 

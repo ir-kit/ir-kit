@@ -2,7 +2,7 @@
 # Checks generated Java with google-java-format and compiles it with javac.
 set -euo pipefail
 
-DIR="${1:-examples/openapi-sdk-petstore/java/sdk}"
+DIR="${1:-examples/petstore/java/sdk}"
 GJF_VERSION="1.22.0"
 JACKSON_VERSION="2.17.2"
 CACHE="${JAVA_LINT_CACHE:-${RUNNER_TEMP:-/tmp}/java-lint}"

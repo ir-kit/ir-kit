@@ -8,7 +8,7 @@ import {
   publish,
   type UserAccountCreatedMessage,
   type UserAccountDeletedMessage,
-} from "../generated/index.gen";
+} from "./generated/index.gen.js";
 
 const URL = process.env.AMQP_URL ?? "amqp://guest:guest@localhost:5672";
 

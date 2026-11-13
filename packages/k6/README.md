@@ -73,4 +73,4 @@ pnpm k6-tools init --spec ./openapi.yaml
 pnpm k6-tools run
 ```
 
-See [examples/k6-petstore](../../examples/k6-petstore/) for a full working setup.
+See [examples/petstore/k6](../../examples/petstore/k6/) for a full working setup.

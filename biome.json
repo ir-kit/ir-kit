@@ -17,7 +17,8 @@
       "!!**/build/**",
       "!!**/Package.resolved",
       "!!examples/**/sdk/**",
-      "!!examples/**/generated/**"
+      "!!examples/**/generated/**",
+      "!!examples/**/k6/gen/**"
     ]
   },
   "formatter": {

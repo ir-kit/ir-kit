@@ -4,14 +4,14 @@
 import PackageDescription
 
 let package = Package(
-  name: "PetstoreSDK",
+  name: "Sdk",
   platforms: [.iOS(.v15), .macOS(.v13)],
   products: [
-    .library(name: "PetstoreSDK", targets: ["PetstoreSDK"])
+    .library(name: "Sdk", targets: ["Sdk"])
   ],
   targets: [
     .target(
-      name: "PetstoreSDK",
+      name: "Sdk",
       path: ".",
       exclude: ["Package.swift"],
       sources: ["API", "Models"]

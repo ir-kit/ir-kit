@@ -1,0 +1,14 @@
+{
+  "extends": "@ir-kit/tsconfig/lib.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": ["ES2022", "DOM"]
+  },
+  "include": [
+    "ir.config.ts",
+    "typescript/sdk/**/*.ts",
+    "typescript/example/src/**/*.ts",
+    "events/**/*.ts"
+  ],
+  "exclude": ["node_modules", "events/dist"]
+}

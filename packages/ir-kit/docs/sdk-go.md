@@ -4,7 +4,7 @@ Generate idiomatic Go client SDKs from an OpenAPI 3.x spec — `encoding/json` s
 
 Specs are loaded with `@hey-api/json-schema-ref-parser` and read through ir-kit's own model (`ir-kit/ir`). 2.0 / 3.0 / 3.1 inputs all produce the same output. Through `ir sdk go` or `ir generate`, an AsyncAPI file gives one model type per message.
 
-Sibling package to [`ir-kit/sdk/kotlin`](../openapi-kotlin) and [`ir-kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`openapi-sdk-petstore` example](../../examples/openapi-sdk-petstore).
+Sibling package to [`ir-kit/sdk/kotlin`](../openapi-kotlin) and [`ir-kit/sdk/swift`](../openapi-swift). Part of [ir-kit](https://github.com/ahmedrowaihi/ir-kit). Companion to the [`petstore` example](../../../examples/petstore).
 
 ## Install
 
