@@ -1,5 +1,18 @@
 # @ir-kit/spec-convert
 
+## 0.4.0
+
+### Minor Changes
+
+- 253ace2: Require the `@hey-api/*` `0.0.0-next-20260930190945` snapshot. Hey API's `next` line builds TypeScript with its own compiler instead of the `typescript` package, so generation now works when TypeScript 7 is installed. Install the same snapshot of `@hey-api/openapi-ts`, `@hey-api/shared`, `@hey-api/codegen-core` and `@hey-api/spec-types` alongside these packages.
+
+### Patch Changes
+
+- Updated dependencies [253ace2]
+  - @ir-kit/openapi@0.6.0
+  - @ir-kit/openapi-tools@0.5.0
+  - @ir-kit/spec-loader@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,22 @@
 # @ir-kit/k6-gen
 
+## 0.5.0
+
+### Minor Changes
+
+- 253ace2: Require the `@hey-api/*` `0.0.0-next-20260930190945` snapshot. Hey API's `next` line builds TypeScript with its own compiler instead of the `typescript` package, so generation now works when TypeScript 7 is installed. Install the same snapshot of `@hey-api/openapi-ts`, `@hey-api/shared`, `@hey-api/codegen-core` and `@hey-api/spec-types` alongside these packages.
+- 253ace2: Build the client, types, data and loadtest scaffolds with Hey API's `$` DSL and renderer, and drop the `typescript` peer dependency. Generated files now use single quotes. `@ir-kit/k6-gen/ast` import helpers return `ModuleImport` objects for the new `printModule`, `printLoadtest` replaces `reExportConst`/`defaultExportProp`, and `Expr`/`TypeExpr` name the DSL value and type shapes.
+
+  Loadtest stub headers now keep multi-line operation summaries on one comment line; before, they broke out of the comment and the stub failed to parse.
+
+### Patch Changes
+
+- Updated dependencies [253ace2]
+  - @ir-kit/openapi-ts-faker@2.0.0
+  - @ir-kit/openapi@0.6.0
+  - @ir-kit/openapi-tools@0.5.0
+  - @ir-kit/openapi-loader@0.4.1
+
 ## 0.4.1
 
 ### Patch Changes

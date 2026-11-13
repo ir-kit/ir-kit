@@ -1,5 +1,12 @@
 # @ir-kit/openapi-loader
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [253ace2]
+  - @ir-kit/openapi@0.6.0
+
 ## 0.4.0
 
 ### Minor Changes
