@@ -1,9 +1,9 @@
 import type { AsyncAPIDocumentInterface } from "@asyncapi/parser";
 import type { Project } from "@hey-api/codegen-core";
-import type ts from "typescript";
 import { RawTextNode } from "../ast/raw-text-node.js";
 import { TsStatementNode } from "../ast/ts-node.js";
 import {
+  type EmitTsExportGroup,
   type ForEachEvent,
   type ForEachKind,
   type GeneratedFile,
@@ -17,11 +17,12 @@ interface BuildOptions {
   files: GeneratedFile[];
   apiRegistry: Map<string, unknown>;
   headers: Map<string, string>;
+  reexports: Map<string, ReadonlyArray<EmitTsExportGroup>>;
 }
 
 /**
  * Build a `PluginInstance` for one plugin run. `emit` registers a file
- * with raw text; `emitTs` registers a file with `ts.Statement`s the
+ * with raw text; `emitTs` registers a file with `$` DSL nodes the
  * `TsStatementRenderer` prints at `project.render()` time.
  */
 export function createPluginInstance(
@@ -30,7 +31,7 @@ export function createPluginInstance(
   pluginApi: unknown,
   options: BuildOptions,
 ): PluginInstance {
-  const { document, project, files, apiRegistry, headers } = options;
+  const { document, project, files, apiRegistry, headers, reexports } = options;
 
   return {
     name: pluginName,
@@ -46,7 +47,7 @@ export function createPluginInstance(
       });
       projectFile.addNode(new RawTextNode(file.content, { name: "content" }));
     },
-    emitTs(path, statements, opts = {}) {
+    emitTs(path, nodes, opts = {}) {
       // `plugin.files` exposes paths (index-barrel reads them); content
       // is rendered later by TsStatementRenderer.
       files.push({ path, content: "" });
@@ -78,9 +79,12 @@ export function createPluginInstance(
       if (opts.header) {
         headers.set(stripTsExtension(path), opts.header);
       }
-      for (const [i, stmt] of statements.entries()) {
+      if (opts.exports?.length) {
+        reexports.set(stripTsExtension(path), opts.exports);
+      }
+      for (const [i, node] of nodes.entries()) {
         projectFile.addNode(
-          new TsStatementNode(stmt as ts.Statement, {
+          new TsStatementNode(node, {
             name: `${pluginName}-${i}`,
           }),
         );

@@ -1,7 +1,7 @@
 {
   "name": "@ir-kit/asyncapi-typescript",
   "version": "2.0.1",
-  "description": "AsyncAPI 3.0 → TypeScript generator. Plugin-compose architecture: a small core orchestrates parser → IR → registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema → TS via @hey-api/openapi-ts, file orchestration via @hey-api/codegen-core.",
+  "description": "AsyncAPI 3.0 \u2192 TypeScript generator. Plugin-compose architecture: a small core orchestrates parser \u2192 IR \u2192 registered plugins, each emitting one slice of generated code (types, Events const, dispatch helpers, AMQP helpers, framework adapters). Parser via @asyncapi/parser, JSON Schema \u2192 TS via @hey-api/openapi-ts, file orchestration via @hey-api/codegen-core.",
   "keywords": [
     "asyncapi",
     "typescript",
@@ -55,8 +55,7 @@
     "@hey-api/openapi-ts": "0.0.0-next-20260930190945",
     "@ir-kit/asyncapi-core": ">=0.2.0",
     "@ir-kit/codegen-core": ">=0.3.0",
-    "amqplib": ">=0.10.0",
-    "typescript": ">=5.0.0 <7"
+    "amqplib": ">=0.10.0"
   },
   "peerDependenciesMeta": {
     "amqplib": {

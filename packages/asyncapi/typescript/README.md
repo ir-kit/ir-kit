@@ -85,7 +85,7 @@ export const myPlugin = definePluginConfig<
       content: "// my custom code\n",
     });
     // or, for AST emission:
-    // plugin.emitTs("my.gen.ts", [ts.factory.createXxx(...), ...], { header: "// ..." });
+    // plugin.emitTs("my.gen.ts", [$.const("x").export().assign($.literal(1))], { header: "// ..." });
   },
 });
 ```
@@ -97,7 +97,7 @@ The `PluginInstance` exposes:
 - `plugin.document` — the parsed `AsyncAPIDocumentInterface`
 - `plugin.files` — files emitted so far (for plugins like `index-barrel` that inspect prior output)
 - `plugin.emit({path, content})` — emit a file as raw text
-- `plugin.emitTs(path, statements, {header?})` — emit a file as `ts.Statement[]` (rendered via TypeScript's printer)
+- `plugin.emitTs(path, nodes, {header?, imports?, exports?})` — emit a file built with Hey API's `$` DSL (`import { $ } from "@hey-api/openapi-ts"`), rendered by Hey API's TypeScript renderer; strings are verbatim source appended after the nodes
 - `plugin.getApi<T>(name)` — fetch another plugin's exposed api
 - `plugin.forEach('message' | 'channel' | 'operation', ...)` — iterate spec entities
 
@@ -110,7 +110,7 @@ asyncapi.yaml
           └─ for each plugin:
                 handler(PluginInstance)
                   ├─ plugin.emit(rawText)   → RawTextNode → Project.files
-                  └─ plugin.emitTs(stmts)   → TsStatementNode → Project.files
+                  └─ plugin.emitTs(nodes)   → TsStatementNode → Project.files
           └─ project.plan() + project.render()
               ├─ TsStatementRenderer → ts.createPrinter
               └─ RawTextRenderer → concat

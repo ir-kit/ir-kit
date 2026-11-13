@@ -1,18 +1,11 @@
 import type { MessageInterface } from "@asyncapi/parser";
+import { $ } from "@hey-api/openapi-ts";
 import {
   getAmqpChannelBinding,
   getAmqpExchange,
 } from "@ir-kit/asyncapi-core/bindings";
 import { camel } from "@ir-kit/codegen-core";
 
-import {
-  asConst,
-  exportConst,
-  exportTypeAlias,
-  lit,
-  obj,
-  tn,
-} from "../../ast/ts-build.js";
 import { definePluginConfig } from "../../plugin.js";
 
 import { defaultConfig } from "./config.js";
@@ -30,7 +23,7 @@ export const events = definePluginConfig<
   name: "events",
   defaultConfig,
   handler(plugin) {
-    const entries: Record<string, ReturnType<typeof obj>> = {};
+    const entries = $.object().pretty();
 
     for (const ev of plugin.forEach("channel")) {
       if (ev.type !== "channel") continue;
@@ -43,21 +36,32 @@ export const events = definePluginConfig<
         const eventType = inferEventType(message);
         const propertyName = camel(message.id());
 
-        entries[propertyName] = obj({
-          type: lit.string(eventType),
-          routingKey: lit.string(channel.address() ?? eventType),
-          exchange: lit.string(exchange.name),
-          exchangeType: lit.string(exchange.type),
-          contentType: lit.string(message.contentType() ?? "application/json"),
-        });
+        entries.prop(
+          propertyName,
+          $.object()
+            .pretty()
+            .prop("type", $.literal(eventType))
+            .prop("routingKey", $.literal(channel.address() ?? eventType))
+            .prop("exchange", $.literal(exchange.name))
+            .prop("exchangeType", $.literal(exchange.type))
+            .prop(
+              "contentType",
+              $.literal(message.contentType() ?? "application/json"),
+            ),
+        );
       }
     }
 
     plugin.emitTs(
       plugin.config.fileName,
       [
-        exportConst("Events", asConst(obj(entries))),
-        exportTypeAlias("EventName", tn.keyOf(tn.typeOf("Events"))),
+        $.const("Events")
+          .export()
+          .assign(entries.as($.type("const"))),
+        $.type
+          .alias("EventName")
+          .export()
+          .type($.type.operator().keyof($.type.query("Events"))),
       ],
       { header: HEADER },
     );
