@@ -101,3 +101,56 @@ describe("AMQP bindings in Events", () => {
     );
   });
 });
+
+const SHARED_CHANNEL = `asyncapi: 3.0.0
+info:
+  title: Shared
+  version: 1.0.0
+channels:
+  users:
+    address: users.*
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: users
+          type: topic
+    messages:
+      created:
+        payload:
+          type: object
+      deleted:
+        payload:
+          type: object
+operations:
+  sendCreated:
+    action: send
+    channel:
+      $ref: '#/channels/users'
+    messages:
+      - $ref: '#/channels/users/messages/created'
+    bindings:
+      amqp:
+        expiration: 1000
+  sendDeleted:
+    action: send
+    channel:
+      $ref: '#/channels/users'
+    messages:
+      - $ref: '#/channels/users/messages/deleted'
+`;
+
+it("takes publish bindings only from operations that send the message", async () => {
+  const input = join(dir, "shared.yaml");
+  await writeFile(input, SHARED_CHANNEL);
+  await generate({
+    input,
+    output: join(dir, "shared"),
+    plugins: [typescript(), events()],
+  });
+  const source = await readFile(join(dir, "shared/events.gen.ts"), "utf8");
+  expect(source).toMatch(
+    /created: \{[^}]*publishOptions: \{\s*expiration: 1000/,
+  );
+  expect(source).toMatch(/deleted: \{[^{}]*\}/);
+});

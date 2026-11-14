@@ -31,33 +31,44 @@ export const events = definePluginConfig<
       const binding = getAmqpChannelBinding(channel);
       const exchange = binding?.exchange;
       if (!exchange) continue;
-      const operation = channel
-        .operations()
-        .all()
-        .map(getAmqpOperationBinding)
-        .find(Boolean);
-      const extras = {
-        exchangeOptions: pick(exchange, ["durable", "autoDelete"]),
-        queue: binding.queue
-          ? pick(binding.queue, ["name", "durable", "exclusive", "autoDelete"])
-          : undefined,
-        publishOptions: operation
-          ? pick(operation, [
-              "deliveryMode",
-              "priority",
-              "expiration",
-              "mandatory",
-              "cc",
-              "bcc",
-              "userId",
-              "timestamp",
-            ])
-          : undefined,
-      };
+      const operations = channel.operations().all();
 
       for (const message of channel.messages().all()) {
+        const id = messageId(message);
+        const operation = operations
+          .filter((op) =>
+            op
+              .messages()
+              .all()
+              .some((m) => messageId(m) === id),
+          )
+          .map(getAmqpOperationBinding)
+          .find(Boolean);
+        const extras = {
+          exchangeOptions: pick(exchange, ["durable", "autoDelete"]),
+          queue: binding.queue
+            ? pick(binding.queue, [
+                "name",
+                "durable",
+                "exclusive",
+                "autoDelete",
+              ])
+            : undefined,
+          publishOptions: operation
+            ? pick(operation, [
+                "deliveryMode",
+                "priority",
+                "expiration",
+                "mandatory",
+                "cc",
+                "bcc",
+                "userId",
+                "timestamp",
+              ])
+            : undefined,
+        };
         const eventType = inferEventType(message);
-        const propertyName = camel(messageId(message));
+        const propertyName = camel(id);
 
         const entry = $.object()
           .pretty()
