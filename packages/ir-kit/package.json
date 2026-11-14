@@ -1,6 +1,6 @@
 {
   "name": "@ir-kit/kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "API spec toolchain: load, convert, diff and document any API spec, and generate SDKs, mocks, validators and k6 load tests from it.",
   "keywords": [
     "openapi",

@@ -1,5 +1,15 @@
 # @ir-kit/kit
 
+## 1.1.0
+
+### Minor Changes
+
+- 4c4d1e0: `Events` now carries the spec's AMQP exchange, queue and operation bindings, and `assertExchanges`, `bindAndConsume` and `publish` apply them unless you pass your own options.
+
+### Patch Changes
+
+- 4c4d1e0: AsyncAPI 2.x messages that have a `name` but no `messageId` no longer crash the `events()` plugin or come out as `UndefinedMessage` in native models.
+
 ## 1.0.0
 
 ### Major Changes
