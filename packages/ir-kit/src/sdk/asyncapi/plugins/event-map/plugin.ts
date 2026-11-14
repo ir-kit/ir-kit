@@ -1,4 +1,5 @@
 import { $ } from "@hey-api/openapi-ts";
+import { messageId } from "../../../../ir/asyncapi.js";
 import { definePluginConfig } from "../../plugin.js";
 import { inferEventType } from "../event-type.js";
 import type { TypescriptApi } from "../typescript/types.js";
@@ -34,7 +35,7 @@ export const eventMap = definePluginConfig<
 
     for (const ev of plugin.forEach("message")) {
       if (ev.type !== "message") continue;
-      const typeName = types?.messageTypeName(ev.message.id());
+      const typeName = types?.messageTypeName(messageId(ev.message));
       if (typeName) importNames.add(typeName);
       eventMap.prop(inferEventType(ev.message), (p) =>
         p.type($.type(typeName ?? "unknown")),

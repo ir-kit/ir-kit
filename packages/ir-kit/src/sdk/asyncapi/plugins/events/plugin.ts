@@ -1,9 +1,10 @@
 import { $ } from "@hey-api/openapi-ts";
 import {
   getAmqpChannelBinding,
-  getAmqpExchange,
+  getAmqpOperationBinding,
 } from "../../../../asyncapi/bindings.js";
 import { camel } from "../../../../codegen/index.js";
+import { messageId } from "../../../../ir/asyncapi.js";
 import { definePluginConfig } from "../../plugin.js";
 import { inferEventType } from "../event-type.js";
 
@@ -27,27 +28,53 @@ export const events = definePluginConfig<
     for (const ev of plugin.forEach("channel")) {
       if (ev.type !== "channel") continue;
       const channel = ev.channel;
-      if (!getAmqpChannelBinding(channel)) continue;
-      const exchange = getAmqpExchange(channel);
+      const binding = getAmqpChannelBinding(channel);
+      const exchange = binding?.exchange;
       if (!exchange) continue;
+      const operation = channel
+        .operations()
+        .all()
+        .map(getAmqpOperationBinding)
+        .find(Boolean);
+      const extras = {
+        exchangeOptions: pick(exchange, ["durable", "autoDelete"]),
+        queue: binding.queue
+          ? pick(binding.queue, ["name", "durable", "exclusive", "autoDelete"])
+          : undefined,
+        publishOptions: operation
+          ? pick(operation, [
+              "deliveryMode",
+              "priority",
+              "expiration",
+              "mandatory",
+              "cc",
+              "bcc",
+              "userId",
+              "timestamp",
+            ])
+          : undefined,
+      };
 
       for (const message of channel.messages().all()) {
         const eventType = inferEventType(message);
-        const propertyName = camel(message.id());
+        const propertyName = camel(messageId(message));
 
-        entries.prop(
-          propertyName,
-          $.object()
-            .pretty()
-            .prop("type", $.literal(eventType))
-            .prop("routingKey", $.literal(channel.address() ?? eventType))
-            .prop("exchange", $.literal(exchange.name))
-            .prop("exchangeType", $.literal(exchange.type))
-            .prop(
-              "contentType",
-              $.literal(message.contentType() ?? "application/json"),
-            ),
-        );
+        const entry = $.object()
+          .pretty()
+          .prop("type", $.literal(eventType))
+          .prop("routingKey", $.literal(channel.address() ?? eventType))
+          .prop("exchange", $.literal(exchange.name))
+          .prop("exchangeType", $.literal(exchange.type))
+          .prop(
+            "contentType",
+            $.literal(message.contentType() ?? "application/json"),
+          );
+        for (const [key, value] of Object.entries(extras)) {
+          if (value && Object.keys(value).length > 0) {
+            entry.prop(key, literal(value));
+          }
+        }
+        entries.prop(propertyName, entry);
       }
     }
 
@@ -66,3 +93,32 @@ export const events = definePluginConfig<
     );
   },
 });
+
+/** The keys of `source` the spec actually sets. */
+function pick<T extends object, K extends keyof T>(
+  source: T,
+  keys: ReadonlyArray<K>,
+): Partial<Pick<T, K>> {
+  const out: Partial<Pick<T, K>> = {};
+  for (const key of keys) {
+    if (source[key] !== undefined) out[key] = source[key];
+  }
+  return out;
+}
+
+type Literal = string | number | boolean | ReadonlyArray<Literal> | object;
+
+type LiteralNode =
+  | ReturnType<typeof $.literal>
+  | ReturnType<typeof $.array>
+  | ReturnType<typeof $.object>;
+
+function literal(value: Literal): LiteralNode {
+  if (Array.isArray(value)) return $.array(...value.map(literal));
+  if (typeof value === "object") {
+    const obj = $.object().pretty();
+    for (const [key, v] of Object.entries(value)) obj.prop(key, literal(v));
+    return obj;
+  }
+  return $.literal(value as string | number | boolean);
+}

@@ -2,11 +2,31 @@
 
 import type { Channel, ConsumeMessage } from "amqplib";
 
+/** One `Events` entry. The optional fields are the AMQP bindings the spec sets. */
 export interface EventDescriptor {
   exchange: string;
   exchangeType: string;
   type: string;
   contentType?: string;
+  exchangeOptions?: { durable?: boolean; autoDelete?: boolean };
+  queue?: QueueDescriptor;
+  publishOptions?: {
+    deliveryMode?: 1 | 2;
+    priority?: number;
+    expiration?: number;
+    mandatory?: boolean;
+    cc?: readonly string[];
+    bcc?: readonly string[];
+    userId?: string;
+    timestamp?: boolean;
+  };
+}
+
+export interface QueueDescriptor {
+  name: string;
+  durable?: boolean;
+  exclusive?: boolean;
+  autoDelete?: boolean;
 }
 
 export interface ConsumerLike {
@@ -14,8 +34,10 @@ export interface ConsumerLike {
   dispatch: (raw: ConsumeMessage | null) => Promise<void> | void;
 }
 
+/** Overrides the spec's exchange bindings. */
 export interface AssertExchangesOptions {
   durable?: boolean;
+  autoDelete?: boolean;
 }
 
 export async function assertExchanges(
@@ -28,11 +50,13 @@ export async function assertExchanges(
     if (seen.has(ev.exchange)) continue;
     seen.add(ev.exchange);
     await channel.assertExchange(ev.exchange, ev.exchangeType, {
-      durable: opts.durable,
+      durable: opts.durable ?? ev.exchangeOptions?.durable,
+      autoDelete: opts.autoDelete ?? ev.exchangeOptions?.autoDelete,
     });
   }
 }
 
+/** Overrides the queue's bindings when `queue` comes from the spec. */
 export interface BindAndConsumeOptions {
   durable?: boolean;
   exclusive?: boolean;
@@ -42,19 +66,20 @@ export interface BindAndConsumeOptions {
 
 export async function bindAndConsume(
   channel: Channel,
-  queue: string,
+  queue: string | QueueDescriptor,
   registry: ConsumerLike,
   opts: BindAndConsumeOptions = {},
 ) {
-  await channel.assertQueue(queue, {
-    durable: opts.durable,
-    exclusive: opts.exclusive,
-    autoDelete: opts.autoDelete,
+  const q = typeof queue === "string" ? { name: queue } : queue;
+  await channel.assertQueue(q.name, {
+    durable: opts.durable ?? q.durable,
+    exclusive: opts.exclusive ?? q.exclusive,
+    autoDelete: opts.autoDelete ?? q.autoDelete,
   });
   for (const { exchange, routingKey } of registry.bindings) {
-    await channel.bindQueue(queue, exchange, routingKey);
+    await channel.bindQueue(q.name, exchange, routingKey);
   }
-  return channel.consume(queue, registry.dispatch, {
+  return channel.consume(q.name, registry.dispatch, {
     noAck: opts.noAck,
   });
 }
@@ -68,6 +93,7 @@ export type SerializeFn = <T>(payload: T) => Buffer;
 const defaultSerialize: SerializeFn = (payload) =>
   Buffer.from(JSON.stringify(payload));
 
+/** Overrides the spec's operation bindings. */
 export interface PublishOptions {
   serialize?: SerializeFn;
   persistent?: boolean;
@@ -86,14 +112,22 @@ export function publish<T>(
   opts: PublishOptions = {},
 ): boolean {
   const serialize = opts.serialize ?? defaultSerialize;
+  const spec = ev.publishOptions ?? {};
+  const persistent =
+    opts.persistent ??
+    (spec.deliveryMode === undefined ? undefined : spec.deliveryMode === 2);
   return channel.publish(ev.exchange, ev.type, serialize(payload), {
     contentType: ev.contentType,
-    persistent: opts.persistent,
-    expiration: opts.expiration?.toString(),
-    priority: opts.priority,
+    persistent,
+    expiration: (opts.expiration ?? spec.expiration)?.toString(),
+    priority: opts.priority ?? spec.priority,
     correlationId: opts.correlationId,
     replyTo: opts.replyTo,
     headers: opts.headers,
-    mandatory: opts.mandatory,
+    mandatory: opts.mandatory ?? spec.mandatory,
+    CC: spec.cc ? [...spec.cc] : undefined,
+    BCC: spec.bcc ? [...spec.bcc] : undefined,
+    userId: spec.userId,
+    timestamp: spec.timestamp ? Date.now() : undefined,
   });
 }

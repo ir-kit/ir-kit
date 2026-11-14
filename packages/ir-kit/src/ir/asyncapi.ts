@@ -1,4 +1,7 @@
-import type { AsyncAPIDocumentInterface } from "@asyncapi/parser";
+import type {
+  AsyncAPIDocumentInterface,
+  MessageInterface,
+} from "@asyncapi/parser";
 
 export interface AsyncAPISchemas {
   /** Component schemas plus one schema per message payload. */
@@ -33,18 +36,24 @@ export function asyncapiSchemas(
 
   const messages = new Map<string, string>();
   for (const message of doc.allMessages().all()) {
-    if (messages.has(message.id())) continue;
+    const id = messageId(message);
+    if (messages.has(id)) continue;
     const payload = message.payload();
     if (!payload) continue;
-    const key = freeKey(`${message.id()}${messageSuffix}`, schemas);
+    const key = freeKey(`${id}${messageSuffix}`, schemas);
     schemas[key] = toOpenApiSchema(
       payloadJsonSchema(payload.json()),
       componentKeys,
     );
-    messages.set(message.id(), key);
+    messages.set(id, key);
   }
 
   return { schemas, messages };
+}
+
+/** A message's id. AsyncAPI 2.x inline messages with a `name` but no `messageId` have none, so they go by their name. */
+export function messageId(message: MessageInterface): string {
+  return message.id() ?? message.name();
 }
 
 /** An OpenAPI 3.1 document with no paths whose component schemas are the AsyncAPI document's message types. */
