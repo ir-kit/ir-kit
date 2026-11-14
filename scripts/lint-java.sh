@@ -11,7 +11,7 @@ MAVEN="https://repo1.maven.org/maven2"
 mkdir -p "$CACHE"
 fetch() {
   local path="$1" out="$CACHE/$(basename "$1")"
-  [ -f "$out" ] || curl -sSfL --retry 3 -o "$out" "$MAVEN/$path"
+  [ -f "$out" ] || curl -sSfL --retry 3 -o "$out" "$MAVEN/$path" || { rm -f "$out"; return 1; }
   echo "$out"
 }
 
