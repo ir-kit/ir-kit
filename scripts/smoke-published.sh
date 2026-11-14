@@ -8,7 +8,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PKG="${1:-ir-kit@latest}"
+PKG="${1:-@ir-kit/kit@latest}"
 case "$PKG" in ./* | ../* | /*) PKG="$(cd "$(dirname "$PKG")" && pwd)/$(basename "$PKG")" ;; esac
 
 WORK="$(mktemp -d)"
@@ -16,9 +16,18 @@ trap 'rm -rf "$WORK"' EXIT
 cd "$WORK"
 step() { printf '\n== %s\n' "$*"; }
 
+case "$PKG" in
+  /*) ;;
+  *)
+    # npm can take several minutes to serve a version it just accepted.
+    step "wait for $PKG on npm"
+    for _ in $(seq 60); do npm view "$PKG" version >/dev/null 2>&1 && break; sleep 15; done
+    ;;
+esac
+
 step "install $PKG"
 npm init -y >/dev/null
-npm install --silent --no-audit --no-fund -D "$PKG" typescript@7 @types/node@24 amqplib @types/amqplib \
+npm install --loglevel=error --no-audit --no-fund -D "$PKG" typescript@7 @types/node@24 amqplib @types/amqplib \
   @asyncapi/parser @asyncapi/avro-schema-parser @asyncapi/openapi-schema-parser \
   @typespec/compiler @typespec/openapi3 @typespec/protobuf ts-morph ts-json-schema-generator tsdown
 cp "$ROOT/fixtures/petstore.yaml" "$ROOT/fixtures/user-events.yaml" .
