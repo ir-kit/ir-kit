@@ -47,40 +47,36 @@ const old = [
   "typespec-loader",
 ].map((n) => `@ir-kit/${n}`);
 
-const npm = (...args) =>
-  execFileSync("npm", args, { encoding: "utf8", stdio: "pipe" });
-const view = (spec, ...fields) => {
-  try {
-    return JSON.parse(npm("view", spec, ...fields, "--json") || "null");
-  } catch (error) {
-    if (String(error.stderr).includes("E404")) return null;
-    throw error;
-  }
+const registry = (
+  process.env.npm_config_registry ?? "https://registry.npmjs.org"
+).replace(/\/$/, "");
+const packument = async (name) => {
+  const res = await fetch(`${registry}/${name.replace("/", "%2f")}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`${name}: npm registry returned ${res.status}`);
+  return res.json();
 };
 
+console.log(`Reading ${old.length} packages from ${registry} ...`);
+const docs = await Promise.all(old.map(packument));
 const deps = new Map();
-for (const name of old) {
-  const versions = view(name, "versions");
-  if (!versions) {
+old.forEach((name, i) => {
+  const versions = Object.values(docs[i]?.versions ?? {});
+  if (!versions.length) {
     console.log(`skip ${name}: not on npm`);
-    continue;
+    return;
   }
   const uses = new Set();
-  for (const v of [].concat(versions)) {
-    const m =
-      view(
-        `${name}@${v}`,
-        "dependencies",
-        "peerDependencies",
-        "optionalDependencies",
-      ) ?? {};
-    for (const field of Object.values(m)) {
+  for (const m of versions)
+    for (const field of [
+      m.dependencies,
+      m.peerDependencies,
+      m.optionalDependencies,
+    ])
       for (const dep of Object.keys(field ?? {}))
         if (old.includes(dep)) uses.add(dep);
-    }
-  }
   deps.set(name, uses);
-}
+});
 
 // Dependents before the packages they use.
 const order = [];
