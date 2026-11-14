@@ -128,6 +128,6 @@ export function publish<T>(
     CC: spec.cc ? [...spec.cc] : undefined,
     BCC: spec.bcc ? [...spec.bcc] : undefined,
     userId: spec.userId,
-    timestamp: spec.timestamp ? Date.now() : undefined,
+    timestamp: spec.timestamp ? Math.floor(Date.now() / 1000) : undefined,
   });
 }
