@@ -47,9 +47,11 @@ const old = [
   "typespec-loader",
 ].map((n) => `@ir-kit/${n}`);
 
-const registry = (
-  process.env.npm_config_registry ?? "https://registry.npmjs.org"
-).replace(/\/$/, "");
+const registry = execFileSync("npm", ["config", "get", "registry"], {
+  encoding: "utf8",
+})
+  .trim()
+  .replace(/\/$/, "");
 const packument = async (name) => {
   const res = await fetch(`${registry}/${name.replace("/", "%2f")}`);
   if (res.status === 404) return null;
