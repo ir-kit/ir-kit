@@ -53,10 +53,10 @@ For a full RabbitMQ run (producer + consumer end-to-end), see `examples/petstore
 | Plugin | File(s) emitted | Description |
 |---|---|---|
 | `typescript()` | `types.gen.ts` | TS types from message payload and component schemas (via `@hey-api/openapi-ts`). Names taken from spec message ids and component names. |
-| `events()` | `events.gen.ts` | `Events` const with `{type, routingKey, exchange, exchangeType, contentType}` per channel/operation, plus an `EventName` type alias |
+| `events()` | `events.gen.ts` | `Events` const with `{type, routingKey, exchange, exchangeType, contentType}` per channel/operation, plus the AMQP bindings the spec sets (`exchangeOptions`, `queue`, `publishOptions`), and an `EventName` type alias |
 | `eventMap()` | `event-map.gen.ts` | `EventMap` keyed by event-type literal → message interface, `AnyMessage` union, `isMessageOfType` discriminator |
 | `dispatch()` | `dispatch.gen.ts` + `handlers.gen.ts` | Generic `Registry` runtime (with `.on(...)`, `.dispatch`, `.toCallback(...)`, `.bindings`) + spec-bound `handlers()` factory |
-| `amqplib()` | `amqp.gen.ts` | `assertExchanges` / `bindAndConsume` / `publish` helpers — pure passthroughs to `amqplib` (no hidden defaults) |
+| `amqplib()` | `amqp.gen.ts` | `assertExchanges` / `bindAndConsume` / `publish` helpers over `amqplib`. They apply the spec's bindings from `Events`; options you pass override them |
 | `indexBarrel()` | `index.gen.ts` | Barrel re-export of every other enabled plugin's surface |
 
 Plugins compose freely. Each plugin's `dependsOn` ensures correct ordering even if the user lists them out of order.

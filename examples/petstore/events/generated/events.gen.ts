@@ -5,14 +5,20 @@ export const Events = {
     routingKey: 'user.account.created.*',
     exchange: 'user.events',
     exchangeType: 'topic',
-    contentType: 'application/cloudevents+json'
+    contentType: 'application/cloudevents+json',
+    exchangeOptions: {
+      durable: true
+    }
   },
   userAccountDeleted: {
     type: 'user.account.deleted.v1',
     routingKey: 'user.account.deleted.*',
     exchange: 'user.events',
     exchangeType: 'topic',
-    contentType: 'application/json'
+    contentType: 'application/json',
+    exchangeOptions: {
+      durable: true
+    }
   }
 } as const;
 
